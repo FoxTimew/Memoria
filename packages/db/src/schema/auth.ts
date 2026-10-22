@@ -1,0 +1,205 @@
+import { sql } from 'drizzle-orm';
+import {
+  bigint,
+  boolean,
+  check,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
+
+const time = (name: string) => timestamp(name, { withTimezone: true });
+const times = () => ({
+  createdAt: time('created_at').defaultNow().notNull(),
+  updatedAt: time('updated_at').defaultNow().notNull(),
+});
+
+// Better Auth property names are preserved; SQL names follow snake_case.
+export const user = pgTable(
+  'auth_users',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    name: text('name').notNull(),
+    email: text('email').notNull(),
+    emailVerified: boolean('email_verified').default(false).notNull(),
+    image: text('image'),
+    twoFactorEnabled: boolean('two_factor_enabled').default(false).notNull(),
+    ...times(),
+  },
+  (t) => [uniqueIndex('users_email_normalized_uq').on(sql`lower(${t.email})`)],
+);
+
+export const organization = pgTable('workspaces', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull().unique(),
+  logo: text('logo'),
+  metadata: text('metadata'),
+  ...times(),
+  deletedAt: time('deleted_at'),
+});
+
+export const session = pgTable(
+  'auth_sessions',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    token: text('token').notNull().unique(),
+    expiresAt: time('expires_at').notNull(),
+    ipAddress: text('ip_address'),
+    userAgent: text('user_agent'),
+    activeOrganizationId: uuid('active_workspace_id').references(() => organization.id, {
+      onDelete: 'set null',
+    }),
+    ...times(),
+  },
+  (t) => [index('sessions_user_idx').on(t.userId), index('sessions_expiry_idx').on(t.expiresAt)],
+);
+
+export const account = pgTable(
+  'auth_accounts',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    accountId: text('account_id').notNull(),
+    providerId: text('provider_id').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    accessToken: text('access_token'),
+    refreshToken: text('refresh_token'),
+    idToken: text('id_token'),
+    accessTokenExpiresAt: time('access_token_expires_at'),
+    refreshTokenExpiresAt: time('refresh_token_expires_at'),
+    scope: text('scope'),
+    password: text('password'),
+    ...times(),
+  },
+  (t) => [
+    unique('accounts_provider_subject_uq').on(t.providerId, t.accountId),
+    index('accounts_user_idx').on(t.userId),
+  ],
+);
+
+export const verification = pgTable(
+  'auth_verifications',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    identifier: text('identifier').notNull(),
+    value: text('value').notNull(),
+    expiresAt: time('expires_at').notNull(),
+    ...times(),
+  },
+  (t) => [
+    index('verifications_identifier_idx').on(t.identifier),
+    index('verifications_expiry_idx').on(t.expiresAt),
+  ],
+);
+
+export const member = pgTable(
+  'workspace_members',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    organizationId: uuid('workspace_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    role: text('role').default('member').notNull(),
+    ...times(),
+    mfaDeadline: time('mfa_deadline'),
+  },
+  (t) => [
+    unique('members_workspace_user_uq').on(t.organizationId, t.userId),
+    unique('members_workspace_id_uq').on(t.organizationId, t.id),
+    check('members_role_ck', sql`${t.role} in ('owner','admin','member','guest')`),
+    index('members_user_idx').on(t.userId),
+  ],
+);
+
+export const invitation = pgTable(
+  'workspace_invitations',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    organizationId: uuid('workspace_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    email: text('email').notNull(),
+    role: text('role'),
+    status: text('status').default('pending').notNull(),
+    inviterId: uuid('inviter_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    expiresAt: time('expires_at').notNull(),
+    ...times(),
+  },
+  (t) => [
+    index('invitations_workspace_idx').on(t.organizationId),
+    index('invitations_email_idx').on(t.email),
+    index('invitations_expiry_idx').on(t.expiresAt),
+    check(
+      'invitation_role_ck',
+      sql`${t.role} is null or ${t.role} in ('owner','admin','member','guest')`,
+    ),
+  ],
+);
+
+export const twoFactor = pgTable('auth_two_factors', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id')
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  secret: text('secret').notNull(),
+  backupCodes: text('backup_codes').notNull(),
+  verified: boolean('verified').default(true).notNull(),
+  failedVerificationCount: integer('failed_verification_count').default(0).notNull(),
+  lockedUntil: time('locked_until'),
+});
+
+export const passkey = pgTable(
+  'auth_passkeys',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    name: text('name'),
+    publicKey: text('public_key').notNull(),
+    credentialID: text('credential_id').notNull().unique(),
+    counter: bigint('counter', { mode: 'number' }).notNull(),
+    deviceType: text('device_type').notNull(),
+    backedUp: boolean('backed_up').notNull(),
+    transports: text('transports'),
+    createdAt: time('created_at').defaultNow(),
+    aaguid: text('aaguid'),
+  },
+  (t) => [index('passkeys_user_idx').on(t.userId)],
+);
+
+export const rateLimit = pgTable('auth_rate_limits', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  key: text('key').notNull().unique(),
+  count: integer('count').notNull(),
+  lastRequest: bigint('last_request', { mode: 'number' }).notNull(),
+});
+
+// Only the server records assurance after successful cryptographic verification.
+export const sessionAssurance = pgTable(
+  'session_assurance',
+  {
+    sessionId: uuid('session_id')
+      .primaryKey()
+      .references(() => session.id, { onDelete: 'cascade' }),
+    method: text('method').notNull(),
+    verifiedAt: time('verified_at').notNull(),
+  },
+  (t) => [check('assurance_method_ck', sql`${t.method} in ('totp','passkey','recovery')`)],
+);
