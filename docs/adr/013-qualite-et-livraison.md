@@ -2,7 +2,7 @@
 
 Statut : accepté — 2026-10-22.
 
-**Décision.** TypeScript strict sans `any`, ESLint + Prettier, Vitest, Lefthook. `pnpm check` lance lint/format, typecheck Turbo, tests unitaires/contrats. `pnpm test:db` applique les migrations au PostgreSQL Compose dans un schéma temporaire unique et teste l'intégrité SQL. Les tests e2e HTTP arriveront avec les routes réelles.
+**Décision.** TypeScript strict sans `any`, ESLint + Prettier, Vitest, Lefthook. `pnpm check` lance lint/format, typecheck Turbo, preuve Nest compilée et tests unitaires/contrats. `pnpm test:db` applique les migrations au PostgreSQL Compose dans un schéma temporaire unique et teste l'intégrité SQL. Depuis la session 1, `pnpm test:e2e` vérifie les routes réelles via Caddy et Mailpit ; les applications et Compose doivent être démarrés.
 
 **Alternatives.** GitHub Actions ; tests simulant uniquement Drizzle ; écrire un MVP complet pendant le cadrage.
 

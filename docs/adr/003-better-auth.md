@@ -2,6 +2,8 @@
 
 Statut : accepté — 2026-10-22.
 
+État après session 1 : email/mot de passe, vérification et plugin organization actifs ; seuls owner/member sont configurés à ce stade. Les autres plugins ci-dessous décrivent la cible, pas des routes déjà ouvertes. Le montage HTTP et la création transactionnelle de workspace sont précisés dans l'ADR 015.
+
 **Décision.** Better Auth 1.7.12 dans NestJS ; plugins `organization`, `twoFactor`, `@better-auth/passkey` et `@better-auth/api-key` à versions exactes. Adaptateur Drizzle, identifiants UUID générés par Better Auth. Le schéma conserve les noms de propriétés attendus par les plugins, avec noms SQL explicites. Le test `schema-contract.test.ts` vérifie les champs des versions installées.
 
 **Alternatives.** Auth, invitations et clés entièrement personnalisées ; fournisseur SaaS obligatoire.

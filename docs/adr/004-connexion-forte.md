@@ -2,6 +2,8 @@
 
 Statut : accepté — 2026-10-22.
 
+État après session 1 : ces mécanismes restent prévus pour la session 3. Seule la connexion email/mot de passe avec email vérifié est active ; aucun utilisateur réel n'est admis avant la fin de la session 3.
+
 **Décision.** Email vérifié + mot de passe, TOTP et codes de secours ; passkeys multiples nommables/supprimables. Pas de SMS ni OTP email comme second facteur. `session_assurance` enregistre côté serveur la méthode réellement vérifiée et son instant, jamais une déclaration du client. Une passkey avec UV vérifié constitue une connexion forte complète.
 
 **Alternatives.** Déduire la force de `twoFactorEnabled` ; considérer toute session récente comme forte ; exiger TOTP même après une passkey vérifiée.
@@ -12,4 +14,4 @@ Statut : accepté — 2026-10-22.
 
 Création de clé, ajout/modification de webhook, changement de rôle/partage sensible et désactivation/suppression de facteur exigent `verified_at` de moins de 600 secondes par défaut. Un code de secours ouvre une session de récupération limitée à la restauration des facteurs ; il ne permet pas ces actions sensibles. Le dernier facteur ne peut être retiré tant qu'une adhésion impose la connexion forte. Ne pas utiliser « trusted device » pour fabriquer une nouvelle preuve fraîche.
 
-**Point d'intégration vérifié.** Le plugin passkey 1.7.12 expose les hooks `registration.afterVerification` et `authentication.afterVerification`, mais utilise `requireUserVerification: false` dans ses vérificateurs et `preferred` pour les options de connexion. Il faudra imposer `userVerification: required` sur les options rendues, puis rejeter dans les hooks tout résultat cryptographiquement vérifié dont `registrationInfo.userVerified` / `authenticationInfo.userVerified` n'est pas strictement vrai, AVANT création de credential/session. `authenticatorSelection` seul ne suffit pas. Aucune route d'auth n'est activée ici. [Plugin et hooks](https://better-auth.com/docs/plugins/passkey).
+**Point d'intégration vérifié.** Le plugin passkey 1.7.12 expose les hooks `registration.afterVerification` et `authentication.afterVerification`, mais utilise `requireUserVerification: false` dans ses vérificateurs et `preferred` pour les options de connexion. Il faudra imposer `userVerification: required` sur les options rendues, puis rejeter dans les hooks tout résultat cryptographiquement vérifié dont `registrationInfo.userVerified` / `authenticationInfo.userVerified` n'est pas strictement vrai, AVANT création de credential/session. `authenticatorSelection` seul ne suffit pas. Aucune route de facteur fort n'est activée en session 1. [Plugin et hooks](https://better-auth.com/docs/plugins/passkey).
