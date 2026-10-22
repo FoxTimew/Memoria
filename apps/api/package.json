@@ -3,10 +3,18 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@nestjs/common": "12.2.0",
+    "@nestjs/core": "12.2.0",
+    "@nestjs/platform-express": "12.2.0",
+    "@memoria/block-catalog": "workspace:*",
     "@memoria/contracts": "workspace:*",
-    "@memoria/db": "workspace:*"
+    "@memoria/db": "workspace:*",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "node ../../scripts/build-server.mjs api",
+    "start": "node --env-file=../../.env dist/main.mjs"
   }
 }
