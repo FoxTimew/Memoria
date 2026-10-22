@@ -12,9 +12,7 @@
     "better-auth": "1.7.12",
     "@better-auth/passkey": "1.7.12",
     "@better-auth/api-key": "1.7.12",
-    "@memoria/db": "workspace:*"
-  },
-  "devDependencies": {
+    "@memoria/db": "workspace:*",
     "drizzle-orm": "0.45.4"
   }
 }

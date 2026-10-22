@@ -8,7 +8,11 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
-    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "dev": "turbo run dev --env-mode=loose",
+    "build": "pnpm typecheck && pnpm test:bootstrap && turbo run build",
+    "start": "turbo run start --env-mode=loose",
+    "test:e2e": "node --env-file=.env scripts/test-session1.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test",
     "lint": "eslint . --max-warnings=0 && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "turbo run typecheck",

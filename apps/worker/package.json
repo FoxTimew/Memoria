@@ -2,7 +2,14 @@
   "name": "@memoria/worker",
   "private": true,
   "type": "module",
+  "dependencies": {
+    "pg-boss": "12.38.0",
+    "zod": "4.6.7"
+  },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "node ../../scripts/build-server.mjs worker",
+    "start": "node --env-file-if-exists=../../.env dist/main.mjs",
+    "dev": "node --env-file-if-exists=../../.env ../../scripts/build-server.mjs worker --watch"
   }
 }
