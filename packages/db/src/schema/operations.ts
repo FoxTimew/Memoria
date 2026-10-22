@@ -43,6 +43,7 @@ export const outboxEvents = pgTable(
     availableAt: time('available_at').defaultNow().notNull(),
     claimedUntil: time('claimed_until'),
     publishedAt: time('published_at'),
+    materializedAt: time('materialized_at'),
     attempts: integer('attempts').default(0).notNull(),
   },
   (t) => [
@@ -92,6 +93,7 @@ export const webhookDeliveries = pgTable(
     status: text('status').default('pending').notNull(),
     attemptCount: integer('attempt_count').default(0).notNull(),
     nextAttemptAt: time('next_attempt_at').defaultNow().notNull(),
+    claimedUntil: time('claimed_until'),
     deliveredAt: time('delivered_at'),
     createdAt: time('created_at').defaultNow().notNull(),
     updatedAt: time('updated_at').defaultNow().notNull(),
