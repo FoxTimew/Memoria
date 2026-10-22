@@ -3,15 +3,15 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./editor": "./src/editor.tsx",
-    "./readonly": "./src/readonly.tsx"
+    "./model": "./src/model.ts",
+    "./ui": "./src/ui.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@memoria/blocks-core": "workspace:*",
+    "@memoria/blocks-ui": "workspace:*",
     "@blocknote/core": "0.56.0",
     "@blocknote/react": "0.56.0",
     "zod": "4.6.7",

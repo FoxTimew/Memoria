@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./editor": "./src/editor.ts"
+    "./server": "./src/server.ts",
+    "./client": "./src/client.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -13,5 +13,9 @@
     "@memoria/blocks-core": "workspace:*",
     "@memoria/block-character-card": "workspace:*",
     "@blocknote/core": "0.56.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "typescript": "5.9.3"
   }
 }

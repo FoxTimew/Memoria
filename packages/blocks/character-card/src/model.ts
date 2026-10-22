@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { BlockModel } from '@memoria/blocks-core';
 
 export const characterCardV1Schema = z.strictObject({
   characterId: z.uuid(),
@@ -47,3 +48,20 @@ export function characterCardToPlainText(data: CharacterCard): string {
     .filter(Boolean)
     .join('\n');
 }
+
+export const characterCardModel = {
+  type: 'gamedev.character-card',
+  version: 2,
+  schema: characterCardSchema,
+  createDefault: (): CharacterCard => ({
+    characterId: globalThis.crypto.randomUUID(),
+    displayName: 'Unnamed character',
+    archetype: 'npc',
+    biography: '',
+    health: 100,
+    attack: 10,
+    tags: [],
+  }),
+  migrate: migrateCharacterCard,
+  toPlainText: characterCardToPlainText,
+} satisfies BlockModel<CharacterCard>;

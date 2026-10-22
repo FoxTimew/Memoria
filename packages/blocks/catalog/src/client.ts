@@ -1,14 +1,18 @@
+'use client';
+
 import {
   BlockNoteSchema,
   defaultBlockSpecs,
   insertOrUpdateBlockForSlashMenu,
 } from '@blocknote/core';
-import { blockDefinitions } from './index.ts';
+import { characterCardUi } from '@memoria/block-character-card/ui';
+
+export const blockUis = [characterCardUi] as const;
 
 /** Load block specs before creating the editor; never mutate a live PM schema. */
 export async function createExampleEditorSchema() {
   // Keep the concrete spec type in this example's composition root.
-  const adapter = await blockDefinitions[0].loadEditor();
+  const adapter = await blockUis[0].loadEditor();
   return BlockNoteSchema.create({
     blockSpecs: { paragraph: defaultBlockSpecs.paragraph, [adapter.editorType]: adapter.spec },
   });
@@ -19,7 +23,7 @@ type ExampleEditor = Awaited<ReturnType<typeof createExampleEditorSchema>>['Bloc
 /** Pass these items to BlockNote's SuggestionMenuController; map icon keys in the UI. */
 export async function createExampleSlashItems(editor: ExampleEditor) {
   return Promise.all(
-    blockDefinitions.map(async (definition) => {
+    blockUis.map(async (definition) => {
       const adapter = await definition.loadEditor();
       return {
         title: definition.menu.label,
@@ -33,7 +37,7 @@ export async function createExampleSlashItems(editor: ExampleEditor) {
             ExampleEditor['schema']['styleSchema']
           >(editor, {
             type: adapter.editorType,
-            props: adapter.toEditorProps(definition.createDefault()),
+            props: adapter.toEditorProps(definition.model.createDefault()),
           }),
       };
     }),

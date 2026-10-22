@@ -1,4 +1,4 @@
-import type { EditorProps } from '@memoria/blocks-core';
+import type { EditorProps } from '@memoria/blocks-ui';
 import { characterCardSchema } from './model.ts';
 import type { CharacterCard } from './model.ts';
 

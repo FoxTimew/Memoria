@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { BlockData, BlockDefinition, BlockType } from './definition.ts';
+import type { BlockData, BlockModel, BlockType } from './definition.ts';
 
 export const blockTypeSchema = z.string().regex(/^[a-z][a-z0-9-]*\.[a-z][a-z0-9-]*$/);
 export const blockEnvelopeSchema = z.strictObject({
@@ -18,7 +18,6 @@ export type BlockEnvelope = z.infer<typeof blockEnvelopeSchema>;
 interface RegisteredBlock {
   readonly type: BlockType;
   readonly version: number;
-  readonly menu: BlockDefinition<BlockData>['menu'];
   parse(data: unknown, fromVersion: number): BlockData;
   toPlainText(data: unknown): string;
 }
@@ -26,7 +25,7 @@ interface RegisteredBlock {
 export class BlockRegistry {
   readonly #definitions = new Map<string, RegisteredBlock>();
 
-  register<Data extends BlockData>(definition: BlockDefinition<Data>): this {
+  register<Data extends BlockData>(definition: BlockModel<Data>): this {
     blockTypeSchema.parse(definition.type);
     z.int().positive().parse(definition.version);
     if (this.#definitions.has(definition.type))
@@ -34,7 +33,6 @@ export class BlockRegistry {
     this.#definitions.set(definition.type, {
       type: definition.type,
       version: definition.version,
-      menu: definition.menu,
       parse: (data, fromVersion) => {
         if (!Number.isInteger(fromVersion) || fromVersion < 1 || fromVersion > definition.version)
           throw new Error(`Unsupported version ${fromVersion} for ${definition.type}`);
@@ -66,9 +64,5 @@ export class BlockRegistry {
   toPlainText(input: unknown): string {
     const block = this.validateWrite(input);
     return this.get(block.type).toPlainText(block.content);
-  }
-
-  menu() {
-    return [...this.#definitions.values()].map(({ type, menu }) => ({ type, ...menu }));
   }
 }

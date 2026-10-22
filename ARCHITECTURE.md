@@ -6,16 +6,16 @@ Version de cadrage : 2026-10-22. Public : développeur solo intermédiaire ; stu
 
 Le MVP cible comptes, workspaces, invitations, arbre de pages, blocs usuels, bases à propriétés typées/vue tableau, recherche PostgreSQL, API publique et webhooks. SaaS et self-hosted partagent le code ; aucune dépendance à un service tiers hébergé obligatoire. Sont exclus : collaboration temps réel, kanban/calendrier, formules/rollups, facturation, mobile et blocs avancés.
 
-| Livré dans cette session                                          | État                                                                               |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| pnpm/Turbo, TypeScript strict, lint/format, hooks et `pnpm check` | Exécutables                                                                        |
-| Compose PostgreSQL, MinIO, Mailpit, Caddy                         | Configurés ; applications Node séparées                                            |
-| Schéma Drizzle, migrations et contraintes SQL                     | 37 tables ; testé sur PostgreSQL                                                   |
-| Contrat de schéma Better Auth                                     | Comparé aux champs des plugins installés                                           |
-| Registry et `gamedev.character-card`                              | Validation, migration, adaptateur BlockNote, rendu lecture seule, loaders et tests |
-| Contrats Zod API, ETag, stockage, interface du writer             | Typés ; pas de service HTTP exécuté                                                |
-| OpenAPI de conception                                             | Généré dans `docs/api/openapi.json`, non servi par une API                         |
-| ADR et architecture                                               | Décisions acceptées, détails d'intégration et limites explicités                   |
+| Livré dans cette session                                              | État                                                                                     |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| pnpm/Turbo, TypeScript strict, lint/format, hooks et `pnpm check`     | Exécutables                                                                              |
+| Compose PostgreSQL, MinIO, Mailpit, Caddy                             | Configurés ; applications Node séparées                                                  |
+| Schéma Drizzle, migrations et contraintes SQL                         | 37 tables ; testé sur PostgreSQL                                                         |
+| Contrat de schéma Better Auth                                         | Comparé aux champs des plugins installés                                                 |
+| Modèles et UI des blocs séparés, registry et `gamedev.character-card` | Validation, migration, adaptateur BlockNote, rendu différé et contrôle du graphe serveur |
+| Contrats Zod API, ETag, stockage, interface du writer                 | Typés ; pas de service HTTP exécuté                                                      |
+| OpenAPI de conception                                                 | Généré dans `docs/api/openapi.json`, non servi par une API                               |
+| ADR et architecture                                                   | Décisions acceptées, détails d'intégration et limites explicités                         |
 
 **Non implémentés** : bootstrap Next/Nest/worker, écrans, hooks d'auth/assurance, autorisations exécutables, repositories métier, writer SQL, blocs standard dans le catalogue, stockage S3, emails, recherche applicative, handlers REST, relais outbox, livraison/SSRF, purge et e2e HTTP. Les commentaires « contract only » et les fichiers `src/index.ts` vides sont intentionnels ; aucun module ne simule une réussite.
 
@@ -72,9 +72,17 @@ packages/
     drizzle/                   # migrations générées + SQL d'intégrité
   contracts/src/               # Zod, ETag, stockage, générateur OpenAPI
   blocks/
-    core/src/                  # contrat et registry, aucun bloc concret
-    catalog/src/               # composition partagée serveur / client
-    character-card/src/        # exemple complet, données séparées de l'UI
+    core/src/                  # BlockModel et registry ; Zod uniquement
+    ui/src/                    # BlockUi et contrat d'adaptateur BlockNote
+    catalog/src/
+      server.ts                # modèles uniquement : API, worker, imports
+      client.ts                # UI, menu et schéma BlockNote
+      server-boundary.test.ts  # contrôle des dépendances transitives
+    character-card/src/
+      model.ts                 # export /model : schéma, migration, texte
+      ui.ts                    # export /ui : menu et loaders
+      adapter.ts               # conversions vers/depuis les props BlockNote
+      editor.tsx, readonly.tsx # modules de rendu chargés à la demande
 infra/
   caddy/Caddyfile
   minio/Dockerfile              # construction locale de la version corrigée
@@ -82,6 +90,7 @@ scripts/                       # génération .env, contrôle index, test Postgr
 docs/
   adr/001-... à 013-...
   api/openapi.json             # contrat de conception généré
+  reviews/                     # résumé de relecture à chaque livraison
 ARCHITECTURE.md
 compose.yaml
 lefthook.yml
@@ -145,9 +154,22 @@ Le front vérifie la version périodiquement (15 s, page visible), au retour de 
 
 ## Contrat des blocs et exemple
 
-[`BlockDefinition`](packages/blocks/core/src/definition.ts) expose `type`, `version`, `schema`, `migrate`, `createDefault`, `toPlainText`, `menu`, `loadEditor`, `loadReadonly`. Le registry refuse doublons, types inconnus, versions futures et données invalides. Un bloc inconnu lu doit être affiché comme élément préservé et non éditable ; ne jamais le remplacer silencieusement par un paragraphe. Les imports de types inconnus sont rejetés ou mis en quarantaine, sans écriture partielle.
+[`BlockModel`](packages/blocks/core/src/definition.ts) expose uniquement `type`, `version`, `schema`, `createDefault`, `migrate`, `toPlainText`. `@memoria/blocks-core` ne dépend que de Zod, sans React ni BlockNote. Le registry refuse doublons, types inconnus, versions futures et données invalides ; il ne connaît ni menus ni loaders.
 
-La convention de contenu des blocs standard à intégrer au prochain module est :
+[`BlockUi`](packages/blocks/ui/src/index.ts), dans le package distinct `@memoria/blocks-ui`, référence le modèle et expose `menu`, `loadEditor`, `loadReadonly`. Le module éditeur chargé fournit l'adaptateur BlockNote : `spec`, `editorType`, `toEditorProps`, `fromEditorProps`. L'UI importe le modèle, jamais l'inverse.
+
+| Consommateur                              | Entrées autorisées                                                                         |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------ |
+| NestJS, worker, recherche, futurs imports | `@memoria/block-catalog/server`, `@memoria/blocks-core`, exports `/model` des blocs        |
+| Éditeur et rendu web                      | `@memoria/block-catalog/client`, `@memoria/blocks-ui`, exports `/ui` et `/model` des blocs |
+
+Chaque package de bloc expose exactement `./model` et `./ui` ; le catalogue expose `./server` et `./client`. Aucun export racine ne mélange les deux. Les anciens `BlockDefinition`, imports racine des blocs/catalogue et `/editor` sont supprimés : les consommateurs doivent choisir leur entrée explicitement.
+
+Le [test de frontière serveur](packages/blocks/catalog/src/server-boundary.test.ts) suit les imports/réexports transitifs et types avec TypeScript, puis les dépendances JavaScript avec esbuild, imports dynamiques inclus et élimination du code inutilisé désactivée. Il échoue si React, ses runtimes, React DOM ou `@blocknote/*` deviennent accessibles depuis l'export public `/server`. Il contrôle aussi le manifeste de `blocks-core`. Des scénarios négatifs vérifient que cette protection détecte une régression indirecte. esbuild sert ici aux tests ; le build NestJS reste à décider en session 1.
+
+Un bloc inconnu lu doit être affiché comme élément préservé et non éditable ; ne jamais le remplacer silencieusement par un paragraphe. Les imports de types inconnus sont rejetés ou mis en quarantaine, sans écriture partielle.
+
+La convention de contenu des blocs standard à intégrer en session 2 est :
 
 | Type API                | Contenu métier                     | Adaptateur BlockNote prévu          |
 | ----------------------- | ---------------------------------- | ----------------------------------- |
@@ -162,7 +184,7 @@ La convention de contenu des blocs standard à intégrer au prochain module est 
 
 Un span est du texte avec styles autorisés (bold, italic, underline, strike, code) ou un lien HTTP(S) contenant des spans texte. Jamais de HTML brut ni de dépendance à un composant React dans les données. Les enfants et leur ordre appartiennent à l'enveloppe, pas au JSON de contenu. Les validateurs/adaptateurs standard ne sont pas implémentés dans cette session.
 
-L'exemple [`gamedev.character-card`](packages/blocks/character-card/src/index.ts) fournit tout le contrat. V1 `{characterId,name,description}` migre vers V2 ; `characterId` est conservé pour les références dans un moteur. Le transport BlockNote utilise une prop primitive sérialisée, immédiatement reconvertie en objet validé avant persistance : l'API ne retourne pas ce JSON encodé dans une chaîne.
+L'exemple `gamedev.character-card` fournit le [modèle](packages/blocks/character-card/src/model.ts) et son [UI](packages/blocks/character-card/src/ui.ts). V1 `{characterId,name,description}` migre vers V2 ; `characterId` est conservé pour les références dans un moteur. Le transport BlockNote utilise une prop primitive sérialisée, immédiatement reconvertie en objet validé avant persistance : l'API ne retourne pas ce JSON encodé dans une chaîne.
 
 ```json
 {
@@ -183,7 +205,9 @@ L'exemple [`gamedev.character-card`](packages/blocks/character-card/src/index.ts
 }
 ```
 
-Pour ajouter un bloc : créer son package, définir schéma/migrations/rendu/adaptateur, puis l'enregistrer dans [`blocks/catalog`](packages/blocks/catalog/src/index.ts) et dans la composition du schéma éditeur. Le cœur ne change pas. Le catalogue d'exemple contient seulement character-card ; `createExampleEditorSchema` réunit le paragraphe natif de BlockNote et la carte pour démontrer l'intégration. L'adaptation des blocs standard au format API Memoria reste à faire. Les modules editor/readonly sont importés dynamiquement ; charger les specs nécessaires avant d'instancier l'éditeur. `createExampleSlashItems` produit les actions d'insertion ; le futur module web les raccordera au contrôleur de menu `/` et rendra les clés d'icône. Voir [ADR 007](docs/adr/007-blocs-registry-yjs.md).
+Pour ajouter un bloc : créer son package avec exports `/model` et `/ui`, définir schéma/migrations et UI/adaptateur séparément, enregistrer le modèle dans le [catalogue serveur](packages/blocks/catalog/src/server.ts), puis son UI et sa spec dans le [catalogue client](packages/blocks/catalog/src/client.ts). Le cœur ne change pas. Un test compare les modèles des deux catalogues pour détecter un oubli.
+
+Le catalogue d'exemple contient seulement character-card ; `createExampleEditorSchema` réunit le paragraphe natif de BlockNote et la carte pour démontrer l'intégration. L'adaptation des blocs standard au format API Memoria reste à faire. Les modules editor/readonly sont importés dynamiquement uniquement depuis `/ui` ; charger les specs nécessaires avant d'instancier l'éditeur. `createExampleSlashItems` produit les actions d'insertion à partir de `blockUis` ; le futur module web les raccordera au contrôleur de menu `/` et rendra les clés d'icône. Voir [ADR 007](docs/adr/007-blocs-registry-yjs.md).
 
 ## API, outbox et intégrations
 
@@ -216,16 +240,25 @@ pnpm openapi:generate
 
 `env:init` refuse d'écraser un `.env` existant et n'affiche aucun secret. Les détails de confiance du certificat Caddy sont dans le [README](README.md). Les tests PostgreSQL utilisent un schéma éphémère nommé aléatoirement et le suppriment ensuite ; `db:migrate` applique volontairement les migrations à la base configurée. Ne pas lancer de reset global de la base pour tester.
 
-Les tests actuels couvrent types/schémas des plugins, registre/migration et transport du bloc, formes API/ETag/idempotence OpenAPI et contraintes PostgreSQL. Les 6 tests SQL sont ignorés par `pnpm test` sans `TEST_DATABASE_URL` ; `pnpm test:db` les lance explicitement. Ils ne sont pas des tests e2e HTTP. À l'arrivée de chaque module, ajouter les tests de ses risques réels : accès guest/clé, course de versions, rollback outbox, retries/dédoublonnage, UV absent, grace et actions sensibles, DNS rebinding et purge. `pnpm check` doit passer avant chaque commit.
+Les tests actuels couvrent types/schémas des plugins, registre/migration et transport du bloc, absence de dépendances UI dans le graphe serveur, cohérence des catalogues, formes API/ETag/idempotence OpenAPI et contraintes PostgreSQL. Les 6 tests SQL sont ignorés par `pnpm test` sans `TEST_DATABASE_URL` ; `pnpm test:db` les lance explicitement. Ils ne sont pas des tests e2e HTTP. À l'arrivée de chaque module, ajouter les tests de ses risques réels : accès guest/clé, course de versions, rollback outbox, retries/dédoublonnage, UV absent, grâce et actions sensibles, DNS rebinding et purge. `pnpm check` doit passer avant chaque commit.
 
 ## Sessions suivantes
 
-1. Auth et workspaces : bootstrap Nest, client web minimal, SMTP, invitations, facteurs, hooks UV/assurance et rôles.
-2. Autorisations et pages : droits hérités, guest edit, arbre, corbeille, verrous et versions.
-3. Éditeur et writer : blocs standard, intégration BlockNote, autosave/polling, recherche synchrone et migrations de contenus.
-4. Bases : propriétés typées, filtres/tris et vue tableau, relations/personnes autorisées.
-5. Fichiers : implémentation S3, signatures, finalisation, limites et nettoyage.
-6. API publique : façades `/v1`, scopes, rate limiting, idempotence, OpenAPI servi et e2e contre Compose.
-7. Jobs/webhooks/rétention : relais, livraisons, protection SSRF, gestion des secrets et suppression de compte/données.
+Objectif : obtenir une tranche verticale utilisable rapidement et vérifier les risques techniques tôt. **Aucun utilisateur réel avant la fin de la session 3.** Les tables et contrats de sécurité déjà présents décrivent la cible ; ils n'activent pas les fonctionnalités des sessions ultérieures.
 
-Chaque session utilise sa branche de module, met à jour cette référence et se termine par des contrôles et petits commits. Le développeur effectue les merges après relecture.
+1. **Socle exécutable et connexion simple.** Vérifier **en premier**, avant les écrans et l'authentification, que NestJS consomme les packages du monorepo exportant du TypeScript source : décorateurs, injection et métadonnées, compilation et démarrage du résultat construit, y compris un import du catalogue `/server`. Consigner la solution retenue, ses réglages de build et les commandes de reproduction dans un nouvel ADR. Puis bootstrap NestJS, Next.js et worker démarrables derrière Caddy ; Better Auth email/mot de passe, vérification d'email via Mailpit, création de workspace et écrans minimaux. Pas encore de TOTP, passkeys ni de logique `session_assurance`.
+2. **Pages et éditeur.** Arbre de pages, implémentation réelle de `BlockWriteService`, blocs standard et recherche synchrone. Adaptateurs BlockNote aller-retour testés, **blocs imbriqués inclus**, identifiants et ordre préservés. Autosave, polling de version et gestion des conflits conservant le brouillon. Autorisations limitées à **owner/member** ; aucun invité ou partage actif à ce stade.
+3. **Connexion forte.** TOTP, passkeys avec contrôle UV côté serveur, `session_assurance`, politique de workspace et délai de grâce, preuve forte récente pour les actions sensibles. Tests d'absence d'UV, de preuves expirées et d'enrôlement sans promotion automatique de session. Cette session doit être terminée avant tout accès d'utilisateurs réels.
+4. **Invités et partages.** Invitations SMTP et liens copiables, rôles de gestion owner/admin, accès explicites read/edit hérités par les descendants, révocation et protection des changements de rôle. Appliquer les mêmes règles à la recherche ; préparer leur réutilisation par l'API publique.
+5. **Bases.** Propriétés typées, filtres/tris et vue tableau, relations/personnes autorisées.
+6. **Fichiers.** Implémentation S3, signatures, finalisation, limites et nettoyage.
+7. **API publique.** Façades `/v1`, scopes, rate limiting, idempotence, ETag/If-Match et 412, OpenAPI servi et e2e contre Compose.
+8. **Jobs, webhooks et rétention.** Relais, livraisons, protection SSRF, gestion des secrets, purge configurable de la corbeille et suppression de compte/données.
+
+Chaque session utilise sa branche de module, met à jour cette référence et se termine par des contrôles et petits commits. Le développeur effectue les merges après relecture. Cette correction reste sur `feat/architecture` ; elle ne démarre pas la session 1 et ne prétend pas avoir validé le build NestJS.
+
+## Relecture de chaque livraison
+
+Ajouter à la fin de chaque session un fichier dans `docs/reviews/`, en langage simple, avec trois repères : **fichiers à lire en priorité**, **ce qui pourrait casser**, **comment tester manuellement**. Préciser les résultats des contrôles et ce qui reste non exécutable. Reprendre ces repères dans la réponse de livraison.
+
+Pour cette correction : [séparation du modèle et de l'interface des blocs](docs/reviews/architecture-block-model-ui.md).

@@ -9,11 +9,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "zod": "4.6.7",
-    "@blocknote/core": "0.56.0",
-    "react": "19.3.1"
-  },
-  "devDependencies": {
-    "@types/react": "19.3.0"
+    "zod": "4.6.7"
   }
 }
