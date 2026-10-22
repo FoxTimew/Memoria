@@ -36,7 +36,14 @@ importers:
         specifier: 5.0.5
         version: 5.0.5(@types/node@24.19.2)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))
 
-  apps/api: {}
+  apps/api:
+    dependencies:
+      '@memoria/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@memoria/db':
+        specifier: workspace:*
+        version: link:../../packages/db
 
   apps/web: {}
 
@@ -97,6 +104,9 @@ importers:
       '@types/react':
         specifier: 19.3.0
         version: 19.3.0
+      '@types/react-dom':
+        specifier: 19.3.0
+        version: 19.3.0(@types/react@19.3.0)
 
   packages/blocks/core:
     dependencies:

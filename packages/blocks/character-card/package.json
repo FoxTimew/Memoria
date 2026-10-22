@@ -1,0 +1,25 @@
+{
+  "name": "@memoria/block-character-card",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./editor": "./src/editor.tsx",
+    "./readonly": "./src/readonly.tsx"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@memoria/blocks-core": "workspace:*",
+    "@blocknote/core": "0.56.0",
+    "@blocknote/react": "0.56.0",
+    "zod": "4.6.7",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0"
+  }
+}

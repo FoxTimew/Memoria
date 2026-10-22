@@ -2,6 +2,10 @@
   "name": "@memoria/api",
   "private": true,
   "type": "module",
+  "dependencies": {
+    "@memoria/contracts": "workspace:*",
+    "@memoria/db": "workspace:*"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit"
   }

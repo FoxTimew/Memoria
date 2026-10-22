@@ -1,0 +1,16 @@
+{
+  "name": "@memoria/contracts",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "openapi": "node --experimental-strip-types src/generate-openapi.ts"
+  },
+  "dependencies": {
+    "zod": "4.6.7",
+    "@asteasolutions/zod-to-openapi": "9.1.0"
+  }
+}

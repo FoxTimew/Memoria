@@ -16,6 +16,7 @@
     "test:db": "node --env-file=.env scripts/test-db.mjs",
     "db:generate": "pnpm --filter @memoria/db generate",
     "db:migrate": "pnpm --filter @memoria/db migrate",
+    "openapi:generate": "pnpm --filter @memoria/contracts openapi && prettier --write docs/api/openapi.json",
     "hooks:install": "lefthook install",
     "secrets:staged": "node scripts/check-staged.mjs",
     "env:init": "node scripts/init-env.mjs",

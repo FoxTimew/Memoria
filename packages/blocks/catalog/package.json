@@ -1,0 +1,17 @@
+{
+  "name": "@memoria/block-catalog",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./editor": "./src/editor.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@memoria/blocks-core": "workspace:*",
+    "@memoria/block-character-card": "workspace:*",
+    "@blocknote/core": "0.56.0"
+  }
+}
