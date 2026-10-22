@@ -1,0 +1,24 @@
+pre-commit:
+  piped: true
+  commands:
+    secrets:
+      priority: 1
+      run: node scripts/check-staged.mjs
+    lint:
+      priority: 2
+      glob: '*.{js,mjs,ts,tsx}'
+      run: node node_modules/eslint/bin/eslint.js --fix --max-warnings=0 {staged_files}
+      stage_fixed: true
+    format:
+      priority: 3
+      run: node node_modules/prettier/bin/prettier.cjs --write --ignore-unknown {staged_files}
+      stage_fixed: true
+pre-push:
+  piped: true
+  commands:
+    typecheck:
+      priority: 1
+      run: node node_modules/turbo/bin/turbo run typecheck
+    tests:
+      priority: 2
+      run: node node_modules/vitest/vitest.mjs run --passWithNoTests

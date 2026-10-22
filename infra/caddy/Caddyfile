@@ -1,0 +1,15 @@
+https://localhost {
+  tls internal
+  @api path /api/* /v1 /v1/* /openapi.json /docs /docs/*
+  handle @api {
+    reverse_proxy host.docker.internal:3001
+  }
+  handle {
+    reverse_proxy host.docker.internal:3000
+  }
+}
+
+https://localhost:9443 {
+  tls internal
+  reverse_proxy minio:9000
+}

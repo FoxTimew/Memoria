@@ -1,0 +1,42 @@
+# Dependencies and build output
+node_modules/
+.pnpm-store/
+.next/
+.turbo/
+dist/
+build/
+out/
+coverage/
+*.tsbuildinfo
+*.log
+test-results/
+playwright-report/
+
+# Secrets, credentials, local databases and generated certificates
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+credentials*
+.aws/
+.local/
+data/
+*.sqlite*
+*.dump
+*.backup
+
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+
+# Local overrides
+lefthook-local.yml
+compose.override.yaml

@@ -1,0 +1,9 @@
+node_modules
+pnpm-lock.yaml
+.next
+.turbo
+dist
+coverage
+packages/db/drizzle/meta
+.env
+.local

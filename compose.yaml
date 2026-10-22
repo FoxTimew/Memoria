@@ -1,0 +1,44 @@
+name: memoria
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-memoria}
+      POSTGRES_DB: ${POSTGRES_DB:-memoria}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run pnpm env:init}
+    ports: ['127.0.0.1:5432:5432']
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  minio:
+    build: ./infra/minio
+    command: server /data --console-address ':9001'
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-memoria-local}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Run pnpm env:init}
+    ports: ['127.0.0.1:9000:9000', '127.0.0.1:9001:9001']
+    volumes: [minio-data:/data]
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports: ['127.0.0.1:1025:1025', '127.0.0.1:8025:8025']
+  caddy:
+    image: caddy:2-alpine
+    ports: ['127.0.0.1:80:80', '127.0.0.1:443:443', '127.0.0.1:9443:9443']
+    extra_hosts: ['host.docker.internal:host-gateway']
+    volumes:
+      - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+volumes:
+  postgres-data:
+  minio-data:
+  caddy-data:
+  caddy-config:
