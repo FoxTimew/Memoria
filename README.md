@@ -2,12 +2,16 @@
 
 Socle d'un outil de documentation et de bases de données pour studios de jeu indépendants.
 Cette étape prépare l'architecture : les applications web, API et worker ne démarrent pas encore.
+La référence pour les prochaines sessions est [ARCHITECTURE.md](ARCHITECTURE.md), accompagnée des [13 ADR](docs/adr/).
 
 ## Prérequis et vérifications
 
 - Node.js 24, pnpm 11.25.0, Docker Compose v2.
 - `pnpm install --frozen-lockfile`, puis `pnpm hooks:install`.
-- `pnpm check` : lint, format, types et tests. Le premier socle ne contient pas encore de tests métier.
+- `pnpm check` : lint, format, types et tests de contrats ; les tests PostgreSQL sont lancés séparément.
+- `pnpm test:db` : applique les migrations dans un schéma de test isolé sur le PostgreSQL Compose et vérifie l'intégrité des données.
+- `pnpm db:migrate` : applique les migrations à la base configurée. `pnpm db:generate` : génère une migration après changement du schéma.
+- `pnpm openapi:generate` : régénère le contrat OpenAPI de conception ; les endpoints HTTP seront implémentés ultérieurement.
 - Hooks locaux Lefthook : lint/format et détection de secrets avant commit ; types/tests avant push.
 - Aucune CI distante. Les hooks restent contournables : lancer `pnpm check` avant toute relecture.
 
@@ -24,7 +28,9 @@ MinIO est limité au développement local. Son dépôt communautaire est archiv�
 
 `pnpm infra:down` conserve les volumes. Ne pas supprimer les volumes contenant des données utiles.
 
-## Organisation initiale
+## Livrables
 
 `apps/web`, `apps/api`, `apps/worker` sont des emplacements typés sans logique applicative.
-Les packages de contrats, de données et de blocs arrivent après le premier commit du socle.
+`packages/db` contient le schéma Drizzle et ses migrations ; `packages/contracts` contient les schémas Zod partagés.
+`packages/blocks` contient le registre et l'exemple complet `gamedev.character-card` avec adaptateur BlockNote, migration et rendu différé.
+`packages/auth` vérifie la compatibilité du schéma avec Better Auth ; il n'active pas de serveur d'authentification.
