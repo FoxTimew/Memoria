@@ -1,32 +1,34 @@
 # Memoria — référence d'architecture
 
-État après session 1 : 2026-10-22. Public : développeur solo intermédiaire ; studios de 5 à 50 personnes. Ce document et les [ADR](docs/adr/) constituent la référence des sessions suivantes. Code en anglais, explications en français. Toute déviation significative demande un ADR mis à jour.
+État après session 2 : 2026-10-23. Public : développeur solo intermédiaire ; studios de 5 à 50 personnes. Ce document et les [ADR](docs/adr/) constituent la référence des sessions suivantes. Code en anglais, explications en français. Toute déviation significative demande un ADR mis à jour.
 
 ## Périmètre et état réel
 
 Le MVP cible comptes, workspaces, invitations, arbre de pages, blocs usuels, bases à propriétés typées/vue tableau, recherche PostgreSQL, API publique et webhooks. SaaS et self-hosted partagent le code ; aucune dépendance à un service tiers hébergé obligatoire. Sont exclus : collaboration temps réel, kanban/calendrier, formules/rollups, facturation, mobile et blocs avancés.
 
-| Livré après la session 1                                              | État                                                                                     |
+| Livré après la session 2                                              | État                                                                                     |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | pnpm/Turbo, TypeScript strict, lint/format, hooks et `pnpm check`     | Exécutables                                                                              |
 | Compose PostgreSQL, MinIO, Mailpit, Caddy                             | Configurés ; applications Node séparées                                                  |
 | Schéma Drizzle, migrations et contraintes SQL                         | 37 tables ; testé sur PostgreSQL                                                         |
 | Contrat de schéma Better Auth                                         | Comparé aux champs des plugins installés                                                 |
 | Modèles et UI des blocs séparés, registry et `gamedev.character-card` | Validation, migration, adaptateur BlockNote, rendu différé et contrôle du graphe serveur |
-| Contrats Zod API, ETag, stockage, interface du writer                 | Typés ; routes de contenu encore absentes                                                |
+| Contrats Zod API, ETag, stockage, writer transactionnel               | Routes de session pages/blocs/recherche actives ; API publique ultérieure                |
+| Pages et éditeur BlockNote                                            | Arbre, corbeille, modèles standard, conversions imbriquées, autosave et conflits         |
+| Autorisations et recherche                                            | Owner/member ; PostgreSQL synchrone ; aucun contenu sous un ancêtre archivé              |
 | Bootstrap NestJS / Next.js / worker pg-boss                           | Build et démarrage derrière Caddy vérifiés ; métadonnées Nest conservées                 |
 | Connexion email/mot de passe et workspaces                            | Email Mailpit, vérification, session et création transactionnelle fonctionnels           |
 | Tests HTTP session 1                                                  | Origine HTTPS réelle, cookies, CSRF, isolation, concurrence et déconnexion               |
 | OpenAPI de conception                                                 | Généré dans `docs/api/openapi.json`, non servi par une API                               |
 | ADR et architecture                                                   | Décisions acceptées, détails d'intégration et limites explicités                         |
 
-**Non implémentés** : pages/éditeur, writer SQL, blocs standard dans le catalogue, recherche applicative, bases, S3, facteurs forts et `session_assurance`, invitations/partages, autorisations de contenu, API publique, relais outbox, livraison/SSRF et purge. Les commentaires « contract only » des contrats futurs restent intentionnels. Le worker initialise pg-boss et vérifie PostgreSQL, sans job métier fictif. Aucun utilisateur réel avant la fin de la session 3.
+**Non implémentés** : bases, livraison des fichiers S3, facteurs forts et `session_assurance`, invitations/partages, API publique, relais outbox, livraison/SSRF et jobs de rétention. Le writer expose une entrée de purge réservée au futur worker ; aucune rétention n'est planifiée à ce stade. L'image est un emplacement avec métadonnées, en attendant la session 6. Le worker initialise pg-boss et vérifie PostgreSQL, sans job métier fictif. Aucun utilisateur réel avant la fin de la session 3.
 
 ## Stack et frontières
 
 - Monorepo pnpm 11.25, Turbo, Node 24, TypeScript 5.9 strict (plage compatible avec le linter), Zod 4.
-- Web : Next.js 16.4.2 App Router, React 19.3.1, Tailwind 4.3.3 et client Better Auth. Formulaires minimaux ; composants shadcn/ui et intégration de l'éditeur à enrichir pendant les sessions correspondantes.
-- API : NestJS 12.2 / Express 5, modules auth/workspaces ; Better Auth hébergé dans ce processus. Transformation TypeScript puis bundling ESM pour consommer les exports source : [ADR 014](docs/adr/014-build-serveur-typescript-source.md).
+- Web : Next.js 16.4.2 App Router, React 19.3.1, Tailwind 4.3.3 et client Better Auth. Éditeur BlockNote 0.56 avec son intégration Mantine, chargé seulement côté client ; arbre et contrôles simples en React.
+- API : NestJS 12.2 / Express 5, modules auth/workspaces/pages/blocs ; Better Auth hébergé dans ce processus. Transformation TypeScript puis bundling ESM pour consommer les exports source : [ADR 014](docs/adr/014-build-serveur-typescript-source.md).
 - Worker : pg-boss 12.38 avec le même PostgreSQL dans son schéma dédié, sans Redis. Sonde de disponibilité sur `/api/health/worker` derrière Caddy.
 - Données : PostgreSQL 17, Drizzle 0.45.4, Drizzle Kit 0.31.11 ; migrations SQL versionnées. Auth 1.7.12 et BlockNote 0.56.0 figés pour les contrats de cette session.
 
@@ -49,7 +51,7 @@ flowchart LR
   Services --> Storage[ObjectStorage / S3]
 ```
 
-Le diagramme décrit la cible : web/API/auth/workspaces et le processus worker existent ; writer, relais, webhooks et stockage restent à implémenter. Les services front et publics seront identiques ; leurs contrôleurs adapteront authentification, DTO et codes HTTP. Un service reçoit un contexte vérifié ; il ne fait jamais confiance à un `workspaceId`, rôle ou acteur provenant du corps client. Les erreurs sont traduites à la frontière HTTP.
+Le diagramme décrit la cible : web/API/auth/workspaces/pages, writer et processus worker existent ; relais, webhooks et stockage restent à implémenter. Les services front et publics seront identiques ; leurs contrôleurs adapteront authentification, DTO et codes HTTP. Un service reçoit un contexte vérifié ; il ne fait jamais confiance à un rôle ou acteur provenant du corps client. Le workspace de l'URL est vérifié contre les droits courants. Les erreurs sont traduites à la frontière HTTP.
 
 ## Arborescence
 
@@ -64,7 +66,9 @@ apps/
     modules/auth/              # guard global, @Public, @CurrentUser, handler et SMTP
     modules/workspaces/        # module, contrôleur et service transactionnel
     modules/blocks/
-      block-write.service.ts   # contrat unique ; implémentation en session 2
+      block-write.service.ts   # écritures SQL uniques, CAS, recherche, audit et outbox
+    modules/pages/            # arbre, autorisations owner/member, corbeille et recherche
+    pages.e2e.ts               # parcours de contenu compilé, PostgreSQL réel
   worker/src/main.ts           # pg-boss, readiness et arrêt ; jobs métier ultérieurs
 packages/
   auth/src/                    # configuration simple, schéma cible et test de compatibilité
@@ -108,7 +112,7 @@ pnpm-workspace.yaml
 turbo.json
 ```
 
-À créer pendant les modules suivants : `apps/api/src/modules/{authorization,pages,databases,files,search,public-api,webhooks,audit}`, `apps/worker/src/jobs`, `packages/blocks/standard` et les tests des nouveaux parcours. Ne créer un package supplémentaire que si une dépendance partagée réelle le justifie.
+À créer pendant les modules suivants : `apps/api/src/modules/{authorization,databases,files,public-api,webhooks,audit}`, `apps/worker/src/jobs` et les tests des nouveaux parcours. La recherche de pages reste dans le module pages tant qu'un service partagé n'est pas nécessaire. Ne créer un package supplémentaire que si une dépendance partagée réelle le justifie.
 
 ## Authentification et autorisation
 
@@ -181,20 +185,20 @@ Le [test de frontière serveur](packages/blocks/catalog/src/server-boundary.test
 
 Un bloc inconnu lu doit être affiché comme élément préservé et non éditable ; ne jamais le remplacer silencieusement par un paragraphe. Les imports de types inconnus sont rejetés ou mis en quarantaine, sans écriture partielle.
 
-La convention de contenu des blocs standard à intégrer en session 2 est :
+La convention de contenu des blocs standard livrés en session 2 est :
 
 | Type API                | Contenu métier                     | Adaptateur BlockNote prévu          |
 | ----------------------- | ---------------------------------- | ----------------------------------- |
 | core.paragraph          | spans texte/liens et styles bornés | paragraph                           |
 | core.heading            | level 1–3, spans                   | heading                             |
 | core.bullet-list-item   | spans                              | bulletListItem                      |
-| core.numbered-list-item | spans                              | numberedListItem                    |
+| core.numbered-list-item | spans, start nullable              | numberedListItem                    |
 | core.todo               | checked, spans                     | checkListItem                       |
 | core.code               | language, code                     | codeBlock                           |
 | core.image              | fileId, alt, caption, largeur      | image via URL de lecture temporaire |
 | core.divider            | objet vide                         | bloc séparateur                     |
 
-Un span est du texte avec styles autorisés (bold, italic, underline, strike, code) ou un lien HTTP(S) contenant des spans texte. Jamais de HTML brut ni de dépendance à un composant React dans les données. Les enfants et leur ordre appartiennent à l'enveloppe, pas au JSON de contenu. Les validateurs/adaptateurs standard ne sont pas implémentés dans cette session.
+Un span est du texte avec styles autorisés (bold, italic, underline, strike, code) ou un lien HTTP(S) contenant des spans texte. Jamais de HTML brut ni de dépendance à un composant React dans les données. Les enfants et leur ordre appartiennent à l'enveloppe, pas au JSON de contenu. Les validateurs/adaptateurs standard sont dans `packages/blocks/standard`, avec des tests d'aller-retour dans le vrai moteur BlockNote. Les segments adjacents de mêmes styles sont normalisés. L'image conserve son ID et ses métadonnées ; le rendu du fichier attend la session 6.
 
 L'exemple `gamedev.character-card` fournit le [modèle](packages/blocks/character-card/src/model.ts) et son [UI](packages/blocks/character-card/src/ui.ts). V1 `{characterId,name,description}` migre vers V2 ; `characterId` est conservé pour les références dans un moteur. Le transport BlockNote utilise une prop primitive sérialisée, immédiatement reconvertie en objet validé avant persistance : l'API ne retourne pas ce JSON encodé dans une chaîne.
 
@@ -219,11 +223,11 @@ L'exemple `gamedev.character-card` fournit le [modèle](packages/blocks/characte
 
 Pour ajouter un bloc : créer son package avec exports `/model` et `/ui`, définir schéma/migrations et UI/adaptateur séparément, enregistrer le modèle dans le [catalogue serveur](packages/blocks/catalog/src/server.ts), puis son UI et sa spec dans le [catalogue client](packages/blocks/catalog/src/client.ts). Le cœur ne change pas. Un test compare les modèles des deux catalogues pour détecter un oubli.
 
-Le catalogue d'exemple contient seulement character-card ; `createExampleEditorSchema` réunit le paragraphe natif de BlockNote et la carte pour démontrer l'intégration. L'adaptation des blocs standard au format API Memoria reste à faire. Les modules editor/readonly sont importés dynamiquement uniquement depuis `/ui` ; charger les specs nécessaires avant d'instancier l'éditeur. `createExampleSlashItems` produit les actions d'insertion à partir de `blockUis` ; le futur module web les raccordera au contrôleur de menu `/` et rendra les clés d'icône. Voir [ADR 007](docs/adr/007-blocs-registry-yjs.md).
+Le catalogue contient les huit modèles standard et character-card. `createEditorKit` compose le schéma concret et convertit les enveloppes en arbre BlockNote, puis en blocs avec parent/voisin. `createExampleEditorSchema` et son menu restent la petite démonstration paragraphe/carte. Les modules editor/readonly sont importés dynamiquement uniquement depuis `/ui` ; les specs sont chargées avant d'instancier l'éditeur. Le front raccorde le catalogue au menu `/` et borne la barre de formatage aux données prises en charge. Voir [ADR 007](docs/adr/007-blocs-registry-yjs.md) et [ADR 016](docs/adr/016-pages-editeur-et-sauvegarde.md).
 
 ## API, outbox et intégrations
 
-[`packages/contracts`](packages/contracts/src/index.ts) contient DTO Zod, format d'erreur, types des valeurs, opérations de blocs, ETag et interface S3. Générer OpenAPI avec `pnpm openapi:generate`, puis `pnpm format`. Les endpoints de base pages/blocs/rows/recherche sont décrits ; les routes fichiers, propriétés et filtres/vues seront précisées pendant leur module. Le document indique explicitement son statut `1.0.0-design`. Aucun endpoint public /v1 n'est encore servi ; les routes de session et /api/internal/workspaces sont actives.
+[`packages/contracts`](packages/contracts/src/index.ts) contient DTO Zod, format d'erreur, types des valeurs, opérations de blocs, ETag et interface S3. Générer OpenAPI avec `pnpm openapi:generate`, puis `pnpm format`. Les endpoints de base pages/blocs/rows/recherche sont décrits ; les routes fichiers, propriétés et filtres/vues seront précisées pendant leur module. Le document indique explicitement son statut `1.0.0-design`. Aucun endpoint public /v1 n'est encore servi ; les routes de session, workspaces et `/api/internal/workspaces/:workspaceId/pages` et `/search` sont actives. Les quotas internes, conflits et bornes sont décrits dans l'ADR 016.
 
 L'API utilise des clés workspace, scopes et droits courants de l'émetteur. Pagination par curseur signé, idempotence transactionnelle des POST, préconditions de page et format d'erreur unique : [ADR 009](docs/adr/009-api-publique.md). Les moteurs reçoivent UUID, noms de types, versions et objets JSON indépendants de BlockNote.
 
@@ -252,30 +256,31 @@ pnpm build
 pnpm start
 # Dans un autre terminal, applications et Compose démarrés :
 pnpm test:e2e
+pnpm test:pages:e2e
 pnpm openapi:generate
 ```
 
 `env:init` refuse d'écraser un `.env` existant et n'affiche aucun secret. Les détails de confiance du certificat Caddy sont dans le [README](README.md). Les tests PostgreSQL utilisent un schéma éphémère nommé aléatoirement et le suppriment ensuite ; `db:migrate` applique volontairement les migrations à la base configurée. Ne pas lancer de reset global de la base pour tester.
 
-Les tests actuels couvrent types/schémas des plugins, registre/migration et transport du bloc, absence de dépendances UI dans le graphe serveur, cohérence des catalogues, formes API/ETag/idempotence OpenAPI et contraintes PostgreSQL. `pnpm check` inclut aussi la preuve Nest compilée et la validation de configuration. Les 6 tests SQL sont ignorés par `pnpm test` sans `TEST_DATABASE_URL` ; `pnpm test:db` les lance explicitement. `pnpm test:e2e` est distinct : il parcourt les routes de session/workspace via HTTPS avec le certificat Caddy, utilise Mailpit et nettoie seulement ses fixtures aléatoires. À l'arrivée de chaque module, ajouter les tests de ses risques réels : accès guest/clé, course de versions, rollback outbox, retries/dédoublonnage, UV absent, grâce et actions sensibles, DNS rebinding et purge. `pnpm check` doit passer avant chaque commit.
+Les tests actuels couvrent types/schémas des plugins, registre/migration et transport du bloc, absence de dépendances UI dans le graphe serveur, cohérence des catalogues, formes API/ETag/idempotence OpenAPI et contraintes PostgreSQL. Les conversions passent dans le vrai moteur BlockNote, enfants imbriqués inclus ; les tests du brouillon couvrent les conflits et la saisie pendant l'envoi. `pnpm check` inclut aussi la preuve Nest compilée et la validation de configuration. Les 6 tests SQL sont ignorés par `pnpm test` sans `TEST_DATABASE_URL` ; `pnpm test:db` les lance explicitement. `pnpm test:e2e` est distinct : suites Nest isolées d'authentification et de pages (droits, concurrence, rollback, recherche), puis routes session/workspace via HTTPS avec Caddy et Mailpit. Seules leurs fixtures aléatoires sont nettoyées. À l'arrivée de chaque module, ajouter les tests de ses risques réels : accès guest/clé, retries/dédoublonnage, UV absent, grâce et actions sensibles, DNS rebinding et purge. `pnpm check` doit passer avant chaque commit.
 
 ## Sessions suivantes
 
 Objectif : obtenir une tranche verticale utilisable rapidement et vérifier les risques techniques tôt. **Aucun utilisateur réel avant la fin de la session 3.** Les tables et contrats de sécurité déjà présents décrivent la cible ; ils n'activent pas les fonctionnalités des sessions ultérieures.
 
 1. **Socle exécutable et connexion simple — implémenté.** Risque NestJS/décorateurs/packages TypeScript source vérifié en premier, y compris `/server` : solution et reproduction dans l'ADR 014. Next.js, NestJS et worker démarrent derrière Caddy. Email/mot de passe, vérification Mailpit, création de workspace et écrans minimaux livrés. Aucun TOTP, passkey ou traitement `session_assurance`. Voir la fiche de relecture pour les contrôles et le prérequis du certificat navigateur.
-2. **Pages et éditeur.** Arbre de pages, implémentation réelle de `BlockWriteService`, blocs standard et recherche synchrone. Adaptateurs BlockNote aller-retour testés, **blocs imbriqués inclus**, identifiants et ordre préservés. Autosave, polling de version et gestion des conflits conservant le brouillon. Autorisations limitées à **owner/member** ; aucun invité ou partage actif à ce stade.
-3. **Connexion forte.** TOTP, passkeys avec contrôle UV côté serveur, `session_assurance`, politique de workspace et délai de grâce, preuve forte récente pour les actions sensibles. Tests d'absence d'UV, de preuves expirées et d'enrôlement sans promotion automatique de session. Cette session doit être terminée avant tout accès d'utilisateurs réels.
+2. **Pages et éditeur — implémenté.** Arbre de pages, `BlockWriteService` transactionnel, blocs standard et recherche synchrone. Adaptateurs BlockNote aller-retour vérifiés en premier, **blocs imbriqués inclus**, identifiants et ordre préservés. Autosave, polling de version et conflits conservant le brouillon. Autorisations limitées à **owner/member** ; aucun invité ou partage actif à ce stade. L'image conserve ses métadonnées ; les fichiers restent en session 6. Limites et preuves : ADR 016 et fiche de relecture session 2.
+3. **Connexion forte.** TOTP, passkeys avec contrôle UV côté serveur, `session_assurance`, politique de workspace et délai de grâce, preuve forte récente pour les actions sensibles. Tests d'absence d'UV, de preuves expirées et d'enrôlement sans promotion automatique de session. Corriger aussi les quotas d'authentification derrière un NAT de bureau : relever les limites par IP pour une équipe de 50 personnes et ajouter une protection par compte contre les tentatives répétées de mot de passe, testée depuis plusieurs IP (limite connue de l'ADR 015). Cette session doit être terminée avant tout accès d'utilisateurs réels.
 4. **Invités et partages.** Invitations SMTP et liens copiables, rôles de gestion owner/admin, accès explicites read/edit hérités par les descendants, révocation et protection des changements de rôle. Appliquer les mêmes règles à la recherche ; préparer leur réutilisation par l'API publique.
-5. **Bases.** Propriétés typées, filtres/tris et vue tableau, relations/personnes autorisées.
+5. **Bases.** Propriétés typées, filtres/tris et vue tableau, relations/personnes autorisées. Les lignes de base de données ne comptent pas dans la limite de pages du workspace et ne sont jamais chargées dans l'arborescence latérale : elles sont paginées. Définir leurs propres bornes (volume, taille et pagination) pendant cette session.
 6. **Fichiers.** Implémentation S3, signatures, finalisation, limites et nettoyage.
 7. **API publique.** Façades `/v1`, scopes, rate limiting, idempotence, ETag/If-Match et 412, OpenAPI servi et e2e contre Compose.
 8. **Jobs, webhooks et rétention.** Relais, livraisons, protection SSRF, gestion des secrets, purge configurable de la corbeille et suppression de compte/données.
 
-Chaque session utilise sa branche de module, met à jour cette référence et se termine par des contrôles et petits commits. Le développeur effectue les merges après relecture. Session 1 : `codex/session-1-bootstrap-auth`. La session 2 est la prochaine tranche ; elle ne démarre pas dans cette livraison.
+Chaque session utilise sa branche de module, met à jour cette référence et se termine par des contrôles et petits commits. Le développeur effectue les merges après relecture. Session 1 : `codex/session-1-bootstrap-auth`, fusionnée dans main avec autorisation explicite. Session 2 : `codex/session-2-pages-editor`, issue de main `29608bd`. La session 3 est la prochaine tranche.
 
 ## Relecture de chaque livraison
 
 Ajouter à la fin de chaque session un fichier dans `docs/reviews/`, en langage simple, avec trois repères : **fichiers à lire en priorité**, **ce qui pourrait casser**, **comment tester manuellement**. Préciser les résultats des contrôles et ce qui reste non exécutable. Reprendre ces repères dans la réponse de livraison.
 
-Relectures : [séparation du modèle et de l'interface des blocs](docs/reviews/architecture-block-model-ui.md), [session 1 — socle exécutable et connexion simple](docs/reviews/session-1-bootstrap-auth.md).
+Relectures : [séparation du modèle et de l'interface des blocs](docs/reviews/architecture-block-model-ui.md), [session 1 — socle exécutable et connexion simple](docs/reviews/session-1-bootstrap-auth.md), [session 2 — pages et éditeur](docs/reviews/session-2-pages-editor.md).

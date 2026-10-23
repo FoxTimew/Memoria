@@ -1,14 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { authClient, authError } from '../lib/auth-client.ts';
 
 export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
   const params = useSearchParams();
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -48,7 +47,8 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
           password: String(form.get('password')),
         });
         if (result.error) setError(authError(result.error.code, result.error.status));
-        else router.replace('/');
+        // A fresh document drops the previous account's client session and editor state.
+        else globalThis.location.replace('/');
       }
     } catch {
       setError('Le service est momentanément indisponible. Réessayez.');

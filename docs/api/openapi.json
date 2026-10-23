@@ -1438,6 +1438,10 @@
                               "type": "string",
                               "format": "uuid"
                             },
+                            "type": {
+                              "type": "string",
+                              "pattern": "^[a-z][a-z0-9-]*\\.[a-z][a-z0-9-]*$"
+                            },
                             "schemaVersion": {
                               "type": "integer",
                               "exclusiveMinimum": 0
@@ -1506,6 +1510,9 @@
                             "afterId": {
                               "type": ["string", "null"],
                               "format": "uuid"
+                            },
+                            "withDescendants": {
+                              "type": "boolean"
                             }
                           },
                           "required": ["op", "id", "parentId", "afterId"],

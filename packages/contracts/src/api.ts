@@ -85,12 +85,18 @@ export const blockOperationSchema = z.discriminatedUnion('op', [
   z.strictObject({
     op: z.literal('update'),
     id: z.uuid(),
+    type: blockSchema.shape.type.optional(),
     schemaVersion: z.int().positive(),
     content: blockSchema.shape.content,
   }),
   z.strictObject({ op: z.literal('move'), id: z.uuid(), ...placement }),
   z.strictObject({ op: z.literal('archive'), id: z.uuid() }),
-  z.strictObject({ op: z.literal('restore'), id: z.uuid(), ...placement }),
+  z.strictObject({
+    op: z.literal('restore'),
+    id: z.uuid(),
+    ...placement,
+    withDescendants: z.boolean().optional(),
+  }),
 ]);
 export const blockBatchSchema = z.strictObject({
   operations: z.array(blockOperationSchema).min(1).max(500),

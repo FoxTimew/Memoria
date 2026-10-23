@@ -3,10 +3,16 @@ https://localhost {
   handle /api/health/worker {
     reverse_proxy host.docker.internal:3002
   }
+  handle /api/auth/* {
+    request_body {
+      max_size 64KB
+    }
+    reverse_proxy host.docker.internal:3001
+  }
   @api path /api/* /v1 /v1/* /openapi.json /docs /docs/*
   handle @api {
     request_body {
-      max_size 64KB
+      max_size 1MB
     }
     reverse_proxy host.docker.internal:3001
   }

@@ -1,5 +1,131 @@
 @import 'tailwindcss';
 
+.workspace-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #fffefa;
+}
+.workspace-sidebar {
+  width: 290px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 22px;
+  border-right: 1px solid #dce2d6;
+  background: #eff2e9;
+}
+.workspace-topbar {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 28px;
+  border-bottom: 1px solid #e0e5d9;
+}
+.page-tree-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 8px;
+  border-radius: 7px;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+.page-tree-item:hover,
+.page-tree-item.selected {
+  background: #dfe7d6;
+}
+.search-result {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  text-align: left;
+  border-bottom: 1px solid #d7ded3;
+}
+.search-result span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #6a7868;
+  overflow-wrap: anywhere;
+}
+.workspace-empty {
+  padding: 110px 35px;
+  text-align: center;
+}
+.page-editor {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.page-title {
+  display: block;
+  width: calc(100% - 48px);
+  margin: 35px 24px 24px;
+  padding: 8px 0;
+  font-size: 36px;
+  font-weight: 600;
+  background: transparent;
+  border: 0;
+  outline-offset: 5px;
+}
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 24px 16px;
+}
+.editor-toolbar button {
+  padding: 5px 9px;
+  font-size: 12px;
+  border: 1px solid #dce2d6;
+  border-radius: 6px;
+  background: #f4f6ef;
+}
+.editor-toolbar button:hover {
+  background: #e4ecdc;
+}
+.page-editor .bn-editor {
+  padding: 16px 28px;
+  background: #fffefa;
+  min-height: 320px;
+}
+.page-editor .bn-block-content figure {
+  padding: 14px;
+  border: 1px dashed #bbc8b3;
+}
+.page-editor fieldset {
+  padding: 18px;
+  border: 1px solid #dce2d6;
+  border-radius: 8px;
+}
+.page-editor fieldset label {
+  display: block;
+  margin-bottom: 10px;
+}
+.page-editor fieldset input,
+.page-editor fieldset textarea,
+.page-editor fieldset select {
+  margin-left: 8px;
+  border: 1px solid #b9c5b2;
+  padding: 4px;
+  border-radius: 4px;
+}
+@media (max-width: 800px) {
+  .workspace-layout {
+    flex-direction: column;
+  }
+  .workspace-sidebar {
+    width: 100%;
+  }
+  .workspace-topbar {
+    flex-wrap: wrap;
+  }
+  .page-title {
+    font-size: 28px;
+  }
+}
+
 :root {
   color-scheme: light;
   --ink: #25372f;

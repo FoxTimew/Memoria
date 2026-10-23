@@ -6,6 +6,7 @@ import type { FormEvent } from 'react';
 import { workspaceListSchema, workspaceSummarySchema } from '@memoria/contracts';
 import type { WorkspaceSummary } from '@memoria/contracts';
 import { authClient } from '../lib/auth-client.ts';
+import { clearDraftsForSignOut } from '../lib/local-drafts.ts';
 
 export default function Home() {
   const router = useRouter();
@@ -80,11 +81,15 @@ export default function Home() {
     setBusy(true);
     setError('');
     try {
+      if (!session) return;
+      await clearDraftsForSignOut(session.user.id, session.session.id);
       const result = await authClient.signOut();
       if (result.error) throw new Error('Sign out failed');
       router.replace('/connexion');
     } catch {
-      setError('La déconnexion a échoué. Réessayez.');
+      setError(
+        'La déconnexion ou l’effacement des brouillons locaux a échoué. Réessayez avant de quitter ce poste.',
+      );
     } finally {
       setBusy(false);
     }
@@ -158,7 +163,11 @@ export default function Home() {
                     {workspace.name.slice(0, 1).toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <h2 className="truncate text-lg font-semibold">{workspace.name}</h2>
+                    <h2 className="truncate text-lg font-semibold">
+                      <a className="quiet-link" href={`/workspaces/${workspace.id}`}>
+                        {workspace.name}
+                      </a>
+                    </h2>
                     <p className="mt-1 text-sm text-[#657267]">
                       {workspace.slug} · {workspace.role === 'owner' ? 'Propriétaire' : 'Membre'}
                     </p>

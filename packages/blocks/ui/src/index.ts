@@ -10,6 +10,9 @@ export interface BlockEditorModule<Data extends BlockData> {
   readonly spec: BlockSpecs[string];
   toEditorProps(data: Data): EditorProps;
   fromEditorProps(props: EditorProps): Data;
+  /** Inline/plain content lives outside primitive BlockNote props. */
+  toEditorContent?(data: Data): unknown;
+  fromEditorContent?(props: EditorProps, content: unknown): Data;
 }
 
 export interface BlockUi<Data extends BlockData> {
