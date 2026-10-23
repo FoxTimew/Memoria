@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import type { RefObject } from 'react';
 import { BlockNoteEditor, insertOrUpdateBlockForSlashMenu } from '@blocknote/core';
 import { fr } from '@blocknote/core/locales';
 import { BlockNoteView } from '@blocknote/mantine';
@@ -9,31 +10,44 @@ import type { PageDocument } from '@memoria/contracts';
 import { pageVersionSchema, pageSaveResultSchema } from '@memoria/contracts';
 import { contentRequest } from '../lib/content-api.ts';
 import { PageDraft } from '../lib/page-draft.ts';
+import { localDrafts, needsRecovery } from '../lib/local-drafts.ts';
+import type { LocalDraft, LocalDraftHandle } from '../lib/local-drafts.ts';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 
 type Kit = Awaited<ReturnType<typeof createEditorKit>>;
 type Editor = Kit['schema']['BlockNoteEditor'];
+export type EditorActions = { discard: () => Promise<unknown> };
 export default function PageEditor({
+  userId,
+  sessionId,
+  actions,
   document,
   endpoint,
   onSaved,
   onDirty,
   reload,
 }: {
+  userId: string;
+  sessionId: string;
+  actions: RefObject<EditorActions | null>;
   document: PageDocument;
   endpoint: string;
   onSaved: () => void;
   onDirty: (dirty: boolean) => void;
   reload: () => void;
 }) {
-  const [loaded, setLoaded] = useState<{ kit: Kit; editor: Editor }>();
+  const [loaded, setLoaded] = useState<{ kit: Kit; editor: Editor; local?: LocalDraftHandle }>();
+  const [recovery, setRecovery] = useState<LocalDraft>();
+  const [restored, setRestored] = useState<LocalDraft>();
+  const [localError, setLocalError] = useState('');
+  const [choosing, setChoosing] = useState(false);
   const [error, setError] = useState('');
   useEffect(() => {
     let cancelled = false;
     let created: Editor | undefined;
     createEditorKit()
-      .then((kit) => {
+      .then(async (kit) => {
         if (cancelled) return;
         const initialContent = kit.toEditor(document.blocks);
         created = BlockNoteEditor.create({
@@ -43,7 +57,24 @@ export default function PageEditor({
             ? initialContent
             : [{ id: globalThis.crypto.randomUUID(), type: 'paragraph', content: [] }],
         });
-        setLoaded({ kit, editor: created });
+        const editor = created;
+        let local: LocalDraftHandle | undefined;
+        try {
+          local = await localDrafts.open(userId, sessionId, document.page.id);
+          const confirmed = {
+            title: document.page.title,
+            blocks: document.blocks.length ? kit.fromEditor(editor.document) : [],
+          };
+          if (local.recovered && needsRecovery(local.recovered, confirmed)) {
+            if (!cancelled) setRecovery(local.recovered);
+          } else if (local.recovered) await local.discard(false);
+        } catch {
+          if (!cancelled)
+            setLocalError(
+              'La sauvegarde locale est indisponible. Exportez votre brouillon avant de quitter la page.',
+            );
+        }
+        if (!cancelled) setLoaded({ kit, editor, ...(local ? { local } : {}) });
       })
       .catch(() =>
         setError(
@@ -54,7 +85,7 @@ export default function PageEditor({
       cancelled = true;
       created?._tiptapEditor.destroy();
     };
-  }, [document]);
+  }, [document, userId, sessionId]);
   if (error)
     return (
       <div className="notice error" role="alert">
@@ -68,9 +99,66 @@ export default function PageEditor({
       </div>
     );
   if (!loaded) return <p role="status">Chargement de l’éditeur…</p>;
+  if (recovery)
+    return (
+      <div role="dialog" aria-label="Brouillon local retrouvé" className="notice m-6">
+        <strong>Un brouillon non enregistré a été retrouvé sur cet appareil.</strong>
+        <p>
+          {recovery.snapshot.draft.title || 'Sans titre'} ·{' '}
+          {new Date(recovery.updatedAt).toLocaleString('fr-FR')}
+        </p>
+        <p>
+          Restaurez-le pour le relire. Si la version serveur a changé, la sauvegarde restera
+          suspendue.
+        </p>
+        {localError && <p role="alert">{localError}</p>}
+        <div className="mt-3 flex gap-4">
+          <button
+            className="primary"
+            disabled={choosing}
+            onClick={() => {
+              try {
+                loaded.editor.replaceBlocks(
+                  loaded.editor.document,
+                  recovery.editorDocument as Parameters<Editor['replaceBlocks']>[1],
+                );
+                setRestored(recovery);
+                setRecovery(undefined);
+              } catch {
+                setLocalError(
+                  'Ce brouillon ne peut pas être ouvert par cet éditeur. Exportez-le pour conserver ses données.',
+                );
+              }
+            }}
+          >
+            Restaurer le brouillon
+          </button>
+          <button
+            className="quiet-link"
+            disabled={choosing}
+            onClick={() => {
+              setChoosing(true);
+              void loaded.local
+                ?.discard(false)
+                .then(() => setRecovery(undefined))
+                .catch(() => setLocalError('Impossible d’effacer le brouillon local. Réessayez.'))
+                .finally(() => setChoosing(false));
+            }}
+          >
+            Abandonner le brouillon local
+          </button>
+          <button className="quiet-link" onClick={() => downloadDraft(document.page.id, recovery)}>
+            Exporter le brouillon
+          </button>
+        </div>
+      </div>
+    );
   return (
     <ActiveEditor
       {...loaded}
+      actions={actions}
+      restored={restored}
+      initialLocalError={localError}
       document={document}
       endpoint={endpoint}
       onSaved={onSaved}
@@ -80,6 +168,10 @@ export default function PageEditor({
   );
 }
 function ActiveEditor({
+  local,
+  restored,
+  initialLocalError,
+  actions,
   kit,
   editor,
   document,
@@ -88,6 +180,10 @@ function ActiveEditor({
   onDirty,
   reload,
 }: {
+  local?: LocalDraftHandle;
+  restored: LocalDraft | undefined;
+  initialLocalError: string;
+  actions: RefObject<EditorActions | null>;
   kit: Kit;
   editor: Editor;
   document: PageDocument;
@@ -97,51 +193,92 @@ function ActiveEditor({
   reload: () => void;
 }) {
   const [, render] = useState(0);
-  const [conversionError, setConversionError] = useState('');
+  const [conversionError, setConversionError] = useState(
+    restored?.invalid
+      ? 'Le brouillon contient des données non prises en charge. Corrigez-les ou exportez-le.'
+      : '',
+  );
+  const invalid = useRef(Boolean(restored?.invalid));
+  const [localError, setLocalError] = useState(initialLocalError);
+  const active = useRef(true);
+  const rawDocument = useRef(editor.document);
   const [link, setLink] = useState('');
   const [linkError, setLinkError] = useState('');
   const [discard, setDiscard] = useState(false);
   const callbacks = useRef({ onSaved, onDirty });
   callbacks.current = { onSaved, onDirty };
-  const [draft] = useState(
-    () =>
-      new PageDraft(
-        document.page.version,
-        {
-          title: document.page.title,
-          blocks: document.blocks.length ? kit.fromEditor(editor.document) : [],
+  const [draft] = useState(() => {
+    const state = new PageDraft(
+      document.page.version,
+      restored?.snapshot.base ?? {
+        title: document.page.title,
+        blocks: document.blocks.length ? kit.fromEditor(editor.document) : [],
+      },
+      {
+        version: async () =>
+          pageVersionSchema.parse(await contentRequest(`${endpoint}/version`)).version,
+        save: async (version, snapshot, operations) => {
+          const saved = pageSaveResultSchema.parse(
+            await contentRequest(endpoint, 'PUT', {
+              expectedVersion: version,
+              title: snapshot.title,
+              operations,
+            }),
+          );
+          callbacks.current.onSaved();
+          return saved.version;
         },
-        {
-          version: async () =>
-            pageVersionSchema.parse(await contentRequest(`${endpoint}/version`)).version,
-          save: async (version, snapshot, operations) => {
-            const saved = pageSaveResultSchema.parse(
-              await contentRequest(endpoint, 'PUT', {
-                expectedVersion: version,
-                title: snapshot.title,
-                operations,
-              }),
-            );
-            callbacks.current.onSaved();
-            return saved.version;
-          },
-        },
-        () => render((n) => n + 1),
-      ),
-  );
+      },
+      () => {
+        void local
+          ?.sync(state.snapshot(), rawDocument.current, invalid.current)
+          .then(() => {
+            if (active.current) setLocalError('');
+          })
+          .catch(() => {
+            if (active.current)
+              setLocalError(
+                'Le brouillon local n’a pas pu être conservé. Gardez cette page ouverte ou exportez-le.',
+              );
+          });
+        if (active.current) render((n) => n + 1);
+      },
+    );
+    // Restore before exposing the editor; persistence resumes in the mount effect.
+    if (restored) state.restore(restored.snapshot, document.page.version, false);
+    return state;
+  });
+  useEffect(() => {
+    active.current = true;
+    actions.current = {
+      discard: async () => {
+        await local?.discard();
+        active.current = false;
+      },
+    };
+    return () => {
+      active.current = false;
+      actions.current = null;
+    };
+  }, [actions, local]);
   // Empty persisted documents start with BlockNote's editable paragraph, which is saved on first edit.
   useEffect(
     () =>
       editor.onChange(() => {
+        rawDocument.current = editor.document;
         try {
           const blocks = kit.fromEditor(editor.document);
+          invalid.current = false;
           setConversionError('');
           draft.change({ title: draft.draft.title, blocks });
         } catch {
+          invalid.current = true;
           setConversionError(
             'Ce contenu ne peut pas être sauvegardé. Retirez les styles ou liens non pris en charge, ou réduisez la page à 500 blocs.',
           );
           callbacks.current.onDirty(true);
+          // Preserve even raw editor data which cannot pass the server model validators.
+          draft.change(draft.draft);
         }
       }),
     [draft, editor, kit],
@@ -175,29 +312,11 @@ function ActiveEditor({
       globalThis.removeEventListener('beforeunload', leave);
     };
   }, [draft, conversionError]);
-  const download = () => {
-    const blob = new Blob(
-      [
-        JSON.stringify(
-          {
-            pageId: document.page.id,
-            expectedVersion: draft.version,
-            draft: draft.draft,
-            editorDocument: editor.document,
-          },
-          null,
-          2,
-        ),
-      ],
-      { type: 'application/json' },
-    );
-    const url = URL.createObjectURL(blob);
-    const a = globalThis.document.createElement('a');
-    a.href = url;
-    a.download = `memoria-brouillon-${document.page.id}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  const download = () =>
+    downloadDraft(document.page.id, {
+      snapshot: draft.snapshot(),
+      editorDocument: editor.document,
+    });
   const items = kit.adapters.map(({ ui }) => ({
     title: ui.menu.label,
     group: ui.menu.category,
@@ -229,6 +348,11 @@ function ActiveEditor({
   };
   return (
     <div className="page-editor">
+      {localError && (
+        <p role="alert" className="notice error mx-6 mt-4">
+          {localError}
+        </p>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e3e6dd] px-6 py-3 text-sm">
         <span role="status" aria-live="polite">
           {statuses[draft.status]} · v{draft.version}
@@ -408,4 +532,13 @@ function ActiveEditor({
       </p>
     </div>
   );
+}
+function downloadDraft(pageId: string, data: unknown) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const anchor = globalThis.document.createElement('a');
+  anchor.href = url;
+  anchor.download = `memoria-brouillon-${pageId}.json`;
+  anchor.click();
+  URL.revokeObjectURL(url);
 }

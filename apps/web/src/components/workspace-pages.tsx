@@ -1,6 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   pageDocumentSchema,
@@ -12,6 +12,8 @@ import {
 import type { PageDocument, PageSummary } from '@memoria/contracts';
 import { authClient } from '../lib/auth-client.ts';
 import { contentRequest } from '../lib/content-api.ts';
+import { onDraftsCleared } from '../lib/local-drafts.ts';
+import type { EditorActions } from './page-editor.tsx';
 const PageEditor = dynamic(() => import('./page-editor.tsx'), {
   ssr: false,
   loading: () => (
@@ -41,6 +43,17 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
   const [parent, setParent] = useState('');
   const [after, setAfter] = useState('');
   const [showMove, setShowMove] = useState(false);
+  const editorActions = useRef<EditorActions | null>(null);
+  const [signedOut, setSignedOut] = useState(false);
+  useEffect(() => {
+    if (!session) return;
+    return onDraftsCleared(session.user.id, () => {
+      setSignedOut(true);
+      setDocument(undefined);
+      setDirty(false);
+      router.replace('/connexion');
+    });
+  }, [session?.user.id, router]);
   useEffect(() => {
     if (!isPending && !session) router.replace('/connexion');
   }, [isPending, session, router]);
@@ -79,6 +92,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
       const next = pageDocumentSchema.parse(await contentRequest(`${base}/pages/${id}`));
       // A conflict reload must also refresh tree titles, parents and mutation versions.
       await refresh();
+      if (discard) await editorActions.current?.discard();
       setDocument(next);
       setDirty(false);
       setGeneration((n) => n + 1);
@@ -167,7 +181,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     );
   }
   const selected = tree.pages.find((p) => p.id === document?.page.id);
-  if (isPending || !session)
+  if (isPending || !session || signedOut)
     return (
       <p role="status" className="p-8">
         Chargement de votre espace…
@@ -351,7 +365,10 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
         )}
         {document ? (
           <PageEditor
-            key={`${document.page.id}-${generation}`}
+            key={`${session.user.id}-${document.page.id}-${generation}`}
+            userId={session.user.id}
+            sessionId={session.session.id}
+            actions={editorActions}
             document={document}
             endpoint={`${base}/pages/${document.page.id}`}
             onDirty={setDirty}

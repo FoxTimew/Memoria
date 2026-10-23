@@ -3,6 +3,7 @@ import type { BlockBatch } from '@memoria/contracts';
 import type { DraftBlock } from '@memoria/block-catalog/client';
 
 export type Draft = { title: string; blocks: DraftBlock[] };
+export type DraftSnapshot = { version: number; base: Draft; draft: Draft; history: DraftBlock[] };
 export type SaveStatus = 'clean' | 'dirty' | 'saving' | 'conflict' | 'error';
 export interface DraftPort {
   version(): Promise<number>;
@@ -84,6 +85,22 @@ export class PageDraft {
   }
   get dirty() {
     return !same(this.base, this.draft);
+  }
+  snapshot(): DraftSnapshot {
+    return structuredClone({
+      version: this.version,
+      base: this.base,
+      draft: this.draft,
+      history: [...this.history.values()],
+    });
+  }
+  restore(snapshot: DraftSnapshot, remoteVersion: number, notify = true) {
+    this.version = snapshot.version;
+    this.base = structuredClone(snapshot.base);
+    this.draft = structuredClone(snapshot.draft);
+    this.history = new Map(snapshot.history.map((block) => [block.id, block]));
+    this.status = remoteVersion !== this.version ? 'conflict' : this.dirty ? 'dirty' : 'clean';
+    if (notify) this.changed();
   }
   private get saving() {
     return this.status === 'saving';
