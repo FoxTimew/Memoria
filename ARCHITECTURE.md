@@ -1,28 +1,28 @@
 # Memoria — référence d'architecture
 
-État après session 2, preuve technique de session 3 : 2026-10-23. Public : développeur solo intermédiaire ; studios de 5 à 50 personnes. Ce document et les [ADR](docs/adr/) constituent la référence des sessions suivantes. Code en anglais, explications en français. Toute déviation significative demande un ADR mis à jour. L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) est accepté ; la preuve isolée précède l'intégration applicative et toute interface collaborative.
+État après session 3a, service collaboratif : 2026-10-23. Public : développeur solo intermédiaire ; studios de 5 à 50 personnes. Ce document et les [ADR](docs/adr/) constituent la référence des sessions suivantes. Code en anglais, explications en français. Toute déviation significative demande un ADR mis à jour. L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) est accepté ; le service collaboratif est intégré ; son interface reste dans 3b/3c.
 
 ## Périmètre et état réel
 
 Le MVP cible comptes, workspaces, collaboration temps réel, invitations, arbre de pages, blocs usuels, bases à propriétés typées/vue tableau, recherche PostgreSQL, API publique et webhooks. SaaS et self-hosted partagent le code ; aucune dépendance à un service tiers hébergé obligatoire. Sont exclus : kanban/calendrier, formules/rollups, facturation, mobile et blocs avancés. La collaboration entre au périmètre en session 3, avant la connexion forte.
 
-| Livré après la session 2                                              | État                                                                                     |
+| Livré après la session 3a                                             | État                                                                                     |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | pnpm/Turbo, TypeScript strict, lint/format, hooks et `pnpm check`     | Exécutables                                                                              |
 | Compose PostgreSQL, MinIO, Mailpit, Caddy                             | Configurés ; applications Node séparées                                                  |
-| Schéma Drizzle, migrations et contraintes SQL                         | 37 tables ; testé sur PostgreSQL                                                         |
+| Schéma Drizzle, migrations et contraintes SQL                         | 44 tables ; testé sur PostgreSQL                                                         |
 | Contrat de schéma Better Auth                                         | Comparé aux champs des plugins installés                                                 |
 | Modèles et UI des blocs séparés, registry et `gamedev.character-card` | Validation, migration, adaptateur BlockNote, rendu différé et contrôle du graphe serveur |
 | Contrats Zod API, ETag, stockage, writer transactionnel               | Routes de session pages/blocs/recherche actives ; API publique ultérieure                |
-| Pages et éditeur BlockNote                                            | Arbre, corbeille, modèles standard, conversions imbriquées, autosave et conflits         |
-| Autorisations et recherche                                            | Owner/member ; PostgreSQL synchrone ; aucun contenu sous un ancêtre archivé              |
+| Pages et éditeur BlockNote                                            | Arbre/corbeille maintenus ; ancien autosave refusé (409), provider attendu en 3b         |
+| Autorisations et recherche                                            | Owner/member ; projection asynchrone ; aucun contenu sous un ancêtre archivé             |
 | Bootstrap NestJS / Next.js / worker pg-boss                           | Build et démarrage derrière Caddy vérifiés ; métadonnées Nest conservées                 |
 | Connexion email/mot de passe et workspaces                            | Email Mailpit, vérification, session et création transactionnelle fonctionnels           |
 | Tests HTTP session 1                                                  | Origine HTTPS réelle, cookies, CSRF, isolation, concurrence et déconnexion               |
 | OpenAPI de conception                                                 | Généré dans `docs/api/openapi.json`, non servi par une API                               |
 | ADR et architecture                                                   | Décisions acceptées, détails d'intégration et limites explicités                         |
 
-**Non implémentés** : collaboration Yjs/Hocuspocus, bases, livraison des fichiers S3, facteurs forts et `session_assurance`, récupération de mot de passe, invitations/partages, API publique, relais outbox, livraison/SSRF et jobs de rétention. Le writer expose une entrée de purge réservée au futur worker ; aucune rétention n'est planifiée à ce stade. L'image est un emplacement avec métadonnées, en attendant la session 7. Le worker initialise pg-boss et vérifie PostgreSQL, sans job métier fictif. Aucun utilisateur réel avant la fin de la session 4.
+**Non implémentés** : provider collaboratif dans le front, WSS Caddy, présence/cache Yjs, bases, livraison des fichiers S3, facteurs forts et `session_assurance`, récupération de mot de passe, invitations/partages, API publique, relais outbox, livraison/SSRF et jobs de rétention. La purge de contenu devra passer par le service collaboratif en session 9 ; aucun job de rétention n'est planifié. L'image est un emplacement avec métadonnées, en attendant la session 7. Le worker initialise pg-boss et vérifie PostgreSQL, sans job métier fictif. Aucun utilisateur réel avant la fin de la session 4.
 
 ## Stack et frontières
 
@@ -43,7 +43,8 @@ flowchart LR
   Services --> Writer[BlockWriteService]
   Auth --> PG[(PostgreSQL)]
   Services --> PG
-  Writer --> PG
+  Writer --> Collab[apps/collab : journal Yjs + projection]
+  Collab --> PG
   PG --> Relay[Relais outbox]
   Relay --> Boss[pg-boss]
   Boss --> Worker[apps/worker]
@@ -51,16 +52,16 @@ flowchart LR
   Services --> Storage[ObjectStorage / S3]
 ```
 
-Le diagramme décrit le socle et les intégrations prévues : web/API/auth/workspaces/pages, writer et processus worker existent ; relais, webhooks et stockage restent à implémenter. Le flux collaboratif accepté ci-dessous n'est pas encore actif dans l'application. Les services front et publics partagent les règles métier ; leurs contrôleurs adaptent authentification, DTO et codes HTTP. Un service reçoit un contexte vérifié ; il ne fait jamais confiance à un rôle ou acteur provenant du corps client. Le workspace de l'URL est vérifié contre les droits courants. Les erreurs sont traduites à la frontière HTTP.
+Le diagramme décrit le socle et les intégrations prévues : web/API/auth/workspaces/pages, writer et processus worker existent ; relais, webhooks et stockage restent à implémenter. Le backend collaboratif est actif ; la connexion de l'éditeur arrive en 3b. Les services front et publics partagent les règles métier ; leurs contrôleurs adaptent authentification, DTO et codes HTTP. Un service reçoit un contexte vérifié ; il ne fait jamais confiance à un rôle ou acteur provenant du corps client. Le workspace de l'URL est vérifié contre les droits courants. Les erreurs sont traduites à la frontière HTTP.
 
-### Collaboration : décisions acceptées, preuve de session 3
+### Collaboration : service livré en 3a
 
-L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) retient un processus `apps/collab` Hocuspocus unique, sans Redis, sur le chemin WSS `/collab` derrière Caddy. La preuve utilise Hocuspocus 4.7.1, Yjs 13.6.33 et le vrai format BlockNote 0.56.0, deux providers sur loopback, Better Auth et des schémas PostgreSQL temporaires. Le branchement Caddy et le parcours navigateur restent à réaliser. Le mode lecture seule est exercé avec une fixture ; les invités restent en session 5.
+L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) retient `apps/collab`, Hocuspocus 4.7.1 mono-instance sans Redis. `pnpm dev/build/start` inclut désormais ce processus. Le backend reçoit les WebSockets sur le port privé 3003 et les commandes HMAC sur 3004. Caddy et le provider front restent en 3b. Le mode read est testé avec une fixture ; les invités arrivent en session 5. Les douze scénarios de la preuve ciblent le service réel ; `proof/` et ses anciens lanceurs ont été supprimés.
 
 ```mermaid
 flowchart LR
   Browser[BlockNote + Yjs + cache local] -->|WSS /collab| Caddy[Caddy : origine unique]
-  Caddy --> Collab[apps/collab : cible acceptée]
+  Caddy --> Collab[apps/collab : service réel]
   API[API et futurs imports] --> Writer[BlockWriteService]
   Writer -->|commande interne| Collab
   Collab --> Validation[Candidat isolé + validation métier]
@@ -70,9 +71,13 @@ flowchart LR
   Projection --> Effects[(blocs / recherche / fichiers / audit agrégé / un événement outbox)]
 ```
 
-Yjs devient la référence du corps dans la cible acceptée. Avant diffusion : droits, limites, candidat codec/Zod et commit du journal sous verrou de page uniquement. Les projections sont regroupées après environ 1 s d'inactivité, au plus 5 s en frappe continue ; leurs erreurs sont réessayées sans suspendre la saisie. Un audit par auteur/page/fenêtre et un seul outbox portant la révision ; le writer hors éditeur attend sa propre projection. Le codec et les modèles serveur restent sans UI. Titre, arbre, déplacements et archivage restent relationnels avec 409. Fiche personnage par champ, saisie hors ligne dans une page déjà ouverte et fermeture de secours sous 5 s sont acceptées. Limites : 20 salles/utilisateur, 500 sockets/instance. Les données de test seront réinitialisées, sans conversion ; les anciens brouillons JSON seront simplement effacés au premier chargement.
+Yjs est la référence du corps. Avant diffusion : droits, limites, candidat codec/Zod et commit du journal sous verrou de page uniquement. Les projections sont regroupées après environ 1 s d'inactivité, au plus 5 s en frappe continue ; leurs erreurs sont réessayées sans suspendre la saisie. Un audit par auteur/page/fenêtre et un seul outbox portant la révision ; le writer hors éditeur attend sa propre projection. Le codec et les modèles serveur restent sans UI. Titre, arbre, déplacements et archivage restent relationnels avec 409. Fiche personnage par champ, saisie hors ligne dans une page déjà ouverte et fermeture de secours sous 5 s sont acceptées. Limites : 20 salles/utilisateur, 500 sockets/instance. Les données de test seront réinitialisées, sans conversion ; les anciens brouillons JSON seront simplement effacés au premier chargement.
 
-`pnpm proof:collab` commence par mesurer 300 blocs et s'arrête si p95 ≥ 50 ms ; un échec impose une proposition de validation incrémentale avant la suite. La nouvelle preuve `pnpm proof:collab:incremental` mesure une réplique persistante : p95 **13,64 ms** sur le profil contenu proche de 1 Mio (500 blocs), **48,86 ms** sur le profil historique proche de 1 Mio ; **152,91 ms** vers 4 Mio, indicatif. Le contenu des blocs touchés repasse codec/Zod, les invariants globaux restent contrôlés à chaque update. Un lot invalide est repris contribution par contribution ; seules les connexions fautives sont fermées. La [fiche incrémentale](docs/reviews/session-3-validation-incrementale.md) détaille mémoire réelle à 100 répliques, rebasage évalué et limites. La [fiche d'étape 2](docs/reviews/session-3-etape-2-preuve.md) distingue les résultats mesurés des garanties restant à prouver. Ce prototype n'est pas lancé par `pnpm dev` et ne modifie aucune table de l'application : les écritures directes de projection sont exclusivement des fixtures isolées, conformément à l'exception de l'ADR 007. Le writer, les migrations et l'interface actifs restent ceux de session 2.
+La validation incrémentale conserve une réplique isolée ; seuls les contenus touchés repassent codec/Zod, les invariants globaux restent contrôlés. Les bornes binaires sont **1 Mio** (document et update), 500 blocs et profondeur 50. Le budget de répliques configurable remplace la borne de 100 documents : **1 Gio par défaut**, réservations prudentes de 192 Mio par salle (donc 5 salles résidentes au réglage par défaut), éviction inactive d'abord et après 5 minutes sans connexion. Une nouvelle salle est refusée explicitement si toutes les réservations sont actives. Ce budget n'est pas un plafond RSS de tout le processus. Voir le [dimensionnement](docs/self-hosting.md).
+
+Les mesures du service sont archivées avec la [fiche 3a](docs/reviews/session-3-3a-service.md) : deux profils proches de 1 Mio, 30 chargements froids et 200 updates chacun. L'historique reste le cas lent ; la capacité de 50 utilisateurs actifs n'est pas démontrée. Taille encodée, taille JSON, révision mesurée et ratio sont conservés en base. Un avertissement apparaît à **768 Kio et ratio ≥ 4**. Aucun rebasage n'est activé.
+
+**Transition explicite :** le front de session 2 reste dans le dépôt, mais son PUT de contenu renvoie maintenant `409 COLLABORATION_REQUIRED`. Les pages anciennes contenant des blocs sans document Yjs renvoient `DOCUMENT_RESET_REQUIRED`. Le reset ciblé des données de test et le provider viennent en 3b ; aucun reset de données applicatives n'a été exécuté en 3a. Aucun utilisateur réel avant la fin de la session 4.
 
 ## Arborescence
 
@@ -87,12 +92,15 @@ apps/
     modules/auth/              # guard global, @Public, @CurrentUser, handler et SMTP
     modules/workspaces/        # module, contrôleur et service transactionnel
     modules/blocks/
-      block-write.service.ts   # écritures SQL uniques, CAS, recherche, audit et outbox
+      block-write.service.ts   # façade HMAC vers la salle Yjs, attente de sa projection
     modules/pages/            # arbre, autorisations owner/member, corbeille et recherche
     pages.e2e.ts               # parcours de contenu compilé, PostgreSQL réel
   worker/src/main.ts           # pg-boss, readiness et arrêt ; jobs métier ultérieurs
-  collab/src/                  # prototype : codec strict, worker de validation et journal
-    proof/                    # fixtures headless, performance, Better Auth, deux providers, projection
+  collab/src/
+    main.ts                   # processus privé 3003/3004
+    codec.ts                  # décodage strict sans UI
+    service/                  # leadership, admission, journal, projection, mémoire
+    testing/                  # vrais tests SQL/HTTP/WebSocket et mesures reproductibles
 packages/
   auth/src/                    # configuration simple, schéma cible et test de compatibilité
   db/
@@ -125,7 +133,7 @@ infra/
   minio/Dockerfile              # construction locale de la version corrigée
 scripts/                       # lanceurs/builds, génération .env, tests SQL et HTTP
 docs/
-  adr/001-... à 017-...        # 017 accepté ; preuve isolée, intégration à venir
+  adr/001-... à 017-...        # 017 accepté ; backend 3a, front 3b/3c à venir
   api/openapi.json             # contrat de conception généré
   reviews/                     # résumé de relecture à chaque livraison
 ARCHITECTURE.md
@@ -161,15 +169,16 @@ L'obligation de connexion forte est configurable par workspace avec délai indiv
 
 Le schéma exécutable fait foi : [index Drizzle](packages/db/src/schema/index.ts). Les noms natifs Better Auth sont conservés côté TypeScript, par exemple `member.organizationId` désigne SQL `workspace_id`.
 
-| Domaine                | Tables SQL                                                                                                                                            |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Identité globale       | auth_users, auth_accounts, auth_sessions, auth_verifications, auth_two_factors, auth_passkeys, auth_rate_limits, session_assurance                    |
-| Workspaces             | workspaces, workspace_members, workspace_invitations, workspace_policies                                                                              |
-| Autorisations et audit | actors, access_subjects, access_grants, api_keys, api_key_policies, audit_logs                                                                        |
-| Contenu                | pages, blocks, search_documents                                                                                                                       |
-| Bases                  | databases, database_rows, database_properties, property_options, property_values, multi_select_values, person_values, relation_values, database_views |
-| Fichiers               | files, file_references                                                                                                                                |
-| Asynchrone             | outbox_events, webhook_endpoints, webhook_deliveries, webhook_attempts, idempotency_records                                                           |
+| Domaine                | Tables SQL                                                                                                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Identité globale       | auth_users, auth_accounts, auth_sessions, auth_verifications, auth_two_factors, auth_passkeys, auth_rate_limits, session_assurance                                                |
+| Workspaces             | workspaces, workspace_members, workspace_invitations, workspace_policies                                                                                                          |
+| Autorisations et audit | actors, access_subjects, access_grants, api_keys, api_key_policies, audit_logs                                                                                                    |
+| Collaboration          | collaboration_documents, collaboration_updates, collaboration_receipts, collaboration_block_ids, collaboration_leadership, collaboration_nonces, collaboration_projection_commits |
+| Contenu                | pages, blocks, search_documents                                                                                                                                                   |
+| Bases                  | databases, database_rows, database_properties, property_options, property_values, multi_select_values, person_values, relation_values, database_views                             |
+| Fichiers               | files, file_references                                                                                                                                                            |
+| Asynchrone             | outbox_events, webhook_endpoints, webhook_deliveries, webhook_attempts, idempotency_records                                                                                       |
 
 pg-boss crée et migre ses propres tables dans un schéma dédié lors de son module. Ne pas les recopier dans Drizzle.
 
@@ -179,19 +188,15 @@ Invariants restant à coder dans les services : aucun ancêtre archivé visible,
 
 Les dates sont des `timestamptz` sauf dates civiles ; nombres exacts en chaînes décimales côté API. Les contenus sont JSON structurés sans HTML exécutable. Les détails sur filtres et tris se trouvent dans [ADR 008](docs/adr/008-proprietes-typees.md).
 
-## Transaction d'écriture et concurrence — fonctionnement livré en session 2
+## Écritures de contenu et opérations relationnelles
 
-1. Authentifier, construire le contexte et vérifier membership/scopes/partage/assurance.
-2. Ouvrir la transaction ; prendre le verrou de workspace pour les changements d'arbre et les verrous de pages dans un ordre stable. Revalider les autorisations sous ces verrous pour sérialiser avec les changements de partages/rôles.
-3. Vérifier idempotence et préconditions ; CAS sur la version de page. Ne pas faire seulement un SELECT de version suivi d'un UPDATE inconditionnel.
-4. Appeler **une seule fois** le writer pour le batch de blocs ; exécuter les autres écritures métier dans la même transaction.
-5. Mettre à jour la projection de recherche, les références de fichiers, l'audit, l'outbox et la réponse d'idempotence ; commit.
+Le journal collaboratif prend uniquement le verrou de sa page et le verrou de fencing du leadership. Il revalide les droits en base, réserve les UUID de blocs, puis écrit update/reçus/révision et échéance de projection dans une même transaction. Le document vivant n'est modifié qu'après commit. Un refus de lot déclenche une revalidation individuelle ; seul le fautif est fermé. Les reçus survivent à la compaction et à l'anonymisation du compte.
 
-Toutes les écritures de blocs passent par ce service, y compris les imports futurs, migrations de contenus et purges. Les migrations SQL de structure et fixtures de tests sont les exceptions. Le worker de rétention appelle le writer ; il n'émet pas un DELETE direct sur `blocks`. Les transactions n'effectuent ni appel HTTP webhook ni upload S3.
+Le front collaboratif passera par ce protocole. Pour toute écriture hors éditeur, `BlockWriteService` valide la commande, injecte la session authentifiée par le guard et signe la requête interne. Le worker de validation produit l'update depuis l'état Yjs courant ; la commande utilise la même file et attend sa projection. Un timeout conserve le reçu et permet un réessai idempotent. Aucun fallback SQL.
 
-Le front vérifie la version périodiquement (15 s, page visible), au retour de focus et avant sauvegarde ; un conflit conserve le brouillon. Le front reçoit 409, l'API publique 412 pour un If-Match périmé et 428 sans précondition. Les rangs sont calculés côté serveur avec fractional indexing et comparés en ordre binaire. Voir [ADR 006](docs/adr/006-arbres-et-versions.md).
+Seul le projecteur interne écrit les tables de blocs et leurs dérivés. Recherche, références, audit agrégé et un événement outbox sont commités ensemble. Une panne laisse le journal et la saisie utilisables ; curseur et retries sont persistés. L'API de lecture et la recherche exposent contentRevision/projectionRevision. Les migrations de structure et fixtures SQL restent les exceptions à la frontière d'écriture. La rétention future appellera cette façade et devra traiter aussi snapshots/journal/reçus.
 
-La session 3 remplacera le chemin de contenu de l'éditeur par Yjs et son cache local. La version relationnelle et la révision de contenu seront séparées ; les commandes hors éditeur passeront par `BlockWriteService` vers le document vivant et attendront leur projection. Le cache JSON, ses conflits et ses protections de déconnexion restent actifs aujourd'hui. Le remplacement, le reset des données de test et l'effacement des anciens brouillons sont décidés dans l'ADR 017, sans déploiement dans cette preuve.
+Titre, arbre, déplacements et archivage conservent `pages.version` et le 409. Leurs effets de recherche partagent le mutex de projection par page, pour éviter d'écraser une projection récente avec un ancien texte. Le verrou de workspace des mutations d'arbre n'est jamais pris par le journal collaboratif. Les titres et le contenu ont donc des versions distinctes.
 
 ## Contrat des blocs et exemple
 
@@ -295,7 +300,9 @@ Objectif : obtenir une tranche verticale utilisable rapidement et vérifier les 
 
 1. **Socle exécutable et connexion simple — implémenté.** Risque NestJS/décorateurs/packages TypeScript source vérifié en premier, y compris `/server` : solution et reproduction dans l'ADR 014. Next.js, NestJS et worker démarrent derrière Caddy. Email/mot de passe, vérification Mailpit, création de workspace et écrans minimaux livrés. Aucun TOTP, passkey ou traitement `session_assurance`. Voir la fiche de relecture pour les contrôles et le prérequis du certificat navigateur.
 2. **Pages et éditeur — implémenté.** Arbre de pages, `BlockWriteService` transactionnel, blocs standard et recherche synchrone. Adaptateurs BlockNote aller-retour vérifiés en premier, **blocs imbriqués inclus**, identifiants et ordre préservés. Autosave, polling de version et conflits conservant le brouillon dans IndexedDB, avec nettoyage à la déconnexion. Autorisations limitées à **owner/member** ; aucun invité ou partage actif à ce stade. L'image conserve ses métadonnées ; les fichiers restent en session 7. Limites et preuves : ADR 016 et fiche de relecture session 2.
-3. **Collaboration temps réel — preuve isolée, intégration en trois livraisons.** Étapes 2 et 2 bis mesurées ; le développeur a choisi une preuve de validation incrémentale avant 3a. Cible < 50 ms atteinte sur les deux profils proches de 1 Mio (contenu 500 blocs et historique) ; 4 Mio reste indicatif et dépasse la cible. Mémoire mesurée à 100 répliques réellement chargées ; rebasage évalué, sans activation. Rejet d'un lot repris par contribution et protection contre les refus répétés ; deux rédacteurs sains restent connectés pendant l'attaque. Voir ADR 017 et fiche de preuve incrémentale. **3a reste non commencée.** Si une future mesure échoue au seuil, arrêter et proposer la plus grande taille mesurée sous 50 ms ; validateur remplaçable et réexamen avant utilisateurs réels. **3a :** service de production à côté du prototype, migrations Drizzle définitives, leadership PostgreSQL, admission et quotas dès réception des octets, triggers de révocation et secours, HMAC interne, raccordement de `BlockWriteService`, projection et compaction automatiques. Porter les douze scénarios sur le service réel puis supprimer `proof/`. **3b :** provider dans le front, statuts de sauvegarde, WSS via Caddy, reset documenté des données de test et champs séparés de character-card ; collaboration testable dans deux navigateurs en fin de livraison. **3c :** présence, cache Yjs IndexedDB, effacement à la déconnexion avec onglets retardataires et suppression des anciens brouillons. Chaque sous-étape est poussée et relue séparément avec sa fiche. Hocuspocus mono-instance sans Redis ; owner/member, futur mode read, 20 salles/utilisateur et 500 sockets/instance ; journal de référence, projection 1 s/5 s, audit agrégé, un événement outbox par fenêtre, writer attendant sa propre projection. Aucun utilisateur réel à ce stade.
+3. **Collaboration temps réel.** La preuve incrémentale est acceptée avec borne à 1 Mio. **3a livré :** migrations, leadership PostgreSQL, quotas avant les files Hocuspocus, révocations, HMAC, BlockWriteService, projection/compaction et budget mémoire. Les douze scénarios sont permanents ; le dossier proof a été supprimé. **3b :** provider front, statuts d'enregistrement, WSS Caddy, reset documenté des données de test, champs séparés de character-card ; collaboration testable dans deux navigateurs. **3c :** présence, cache Yjs IndexedDB, effacement à la déconnexion et onglets retardataires, suppression des anciens brouillons. Chaque livraison est poussée et relue séparément.
+   **Étape obligatoire avant utilisation prolongée en production :** rebasage automatique quand taille ≥ 768 Kio et ratio Yjs/JSON ≥ 4, **uniquement si la page est inoccupée**. Nouvelle génération, refus du replay hors ligne ancien et parcours d'export explicite. Tester l'absence de connexion/commande en cours sous leadership avant bascule. Cette maintenance n'est pas activée en 3a.
+
 4. **Connexion forte, quotas par compte et récupération de mot de passe.** TOTP, passkeys avec contrôle UV côté serveur, `session_assurance`, politique de workspace et délai de grâce, preuve forte récente pour les actions sensibles. Étendre aussi les contrôles et révocations aux connexions collaboratives. Tests d'absence d'UV, de preuves expirées et d'enrôlement sans promotion automatique de session. Corriger les quotas d'authentification derrière un NAT de bureau : relever les limites par IP pour 50 personnes et ajouter une protection par compte contre les tentatives répétées depuis plusieurs IP (ADR 015). Ajouter la récupération de mot de passe par email, les contrôles d'abus et la révocation des sessions concernées. Cette session entière est un prérequis avant tout utilisateur réel.
 5. **Invités et partages.** Invitations SMTP et liens copiables, rôles de gestion owner/admin, accès explicites read/edit hérités par les descendants, révocation et protection des changements de rôle. Appliquer les mêmes règles à la recherche et au document collaboratif, **lecture seule imposée côté serveur**, y compris lors d'une reconnexion avec cache local. Préparer leur réutilisation par l'API publique.
 6. **Bases.** Propriétés typées relationnelles, filtres/tris et vue tableau, relations/personnes autorisées. Les lignes de base de données ne comptent pas dans la limite de pages du workspace et ne sont jamais chargées dans l'arborescence latérale : elles sont paginées. Définir leurs propres bornes (volume, taille et pagination) pendant cette session.
@@ -314,3 +321,5 @@ Relectures : [séparation du modèle et de l'interface des blocs](docs/reviews/a
 Relecture complémentaire : [session 3, étape 2 bis — tailles et dix rédacteurs](docs/reviews/session-3-etape-2bis.md).
 
 Relecture avant 3a : [validation incrémentale, mémoire et isolation des refus](docs/reviews/session-3-validation-incrementale.md).
+
+Relecture 3a : [service collaboratif, mémoire et mesures](docs/reviews/session-3-3a-service.md). Hébergement : [dimensionnement et limites](docs/self-hosting.md).

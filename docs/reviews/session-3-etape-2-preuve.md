@@ -1,13 +1,15 @@
 # Relecture — session 3, étape 2 : première preuve technique
 
+> Document historique : les lanceurs `proof:collab*` ont été retirés en 3a. Voir la [fiche du service réel](session-3-3a-service.md) pour les commandes actuelles.
+
 Branche : `codex/session-3-collaboration-design`. ADR 017 accepté avec les décisions reçues. Cette livraison fournit une preuve exécutable isolée, avant toute interface. Elle ne termine pas la session 3 et ne branche pas le serveur collaboratif sur l'application. Le compte rendu donne le hash poussé après vérification distante ; le commit ne peut pas contenir son propre hash.
 
 ## Fichiers à lire en priorité
 
 1. [ADR 017](../adr/017-collaboration-temps-reel.md) : journal durable avant diffusion, projection différée indépendante, fiche par champ, hors-ligne, bornes acceptées et reset sans conversion.
-2. [Mesure](../../apps/collab/src/proof/performance.ts) et [fixture](../../apps/collab/src/proof/fixture.ts) : véritable schéma BlockNote, 300 blocs, profondeur 3, 33 fiches personnage. Le rendu de la fixture est interdit ; aucune interface n'est créée.
+2. [Mesure](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/performance.ts) et [fixture](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/fixture.ts) : véritable schéma BlockNote, 300 blocs, profondeur 3, 33 fiches personnage. Le rendu de la fixture est interdit ; aucune interface n'est créée.
 3. [Codec](../../apps/collab/src/codec.ts), [worker isolé](../../apps/collab/src/validator.ts) et [journal](../../apps/collab/src/journal.ts) : lecture stricte du format Yjs, modèles Zod, verrou de page `FOR NO KEY UPDATE`, droits actuels, journal et reçu dans la même transaction. Aucun verrou de workspace ni projection dans ce chemin.
-4. [Serveur de preuve](../../apps/collab/src/proof/server.ts), [scénarios réels](../../apps/collab/src/proof/transport.ts) et [projecteur de fixture](../../apps/collab/src/proof/projection.ts) : à relire en gardant leur périmètre de prototype en tête. Ils utilisent des tables temporaires ; le writer de production reste celui de session 2.
+4. [Serveur de preuve](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/server.ts), [scénarios réels](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/transport.ts) et [projecteur de fixture](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/projection.ts) : à relire en gardant leur périmètre de prototype en tête. Ils utilisent des tables temporaires ; le writer de production reste celui de session 2.
 
 ## Mesure bloquante effectuée en premier
 

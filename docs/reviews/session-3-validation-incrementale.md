@@ -1,13 +1,15 @@
 # Session 3 — preuve de validation incrémentale avant 3a
 
+> Document historique : les lanceurs `proof:collab*` ont été retirés en 3a. Voir la [fiche du service réel](session-3-3a-service.md) pour les commandes actuelles.
+
 La cible passe sur les deux profils proches de 1 Mio : **13,64 ms au p95 pour le contenu dense, 48,86 ms pour l'historique**. La marge historique est faible (1,14 ms) ; à presque 4 Mio, le diagnostic reste à **152,91 ms**. Le prototype reste isolé ; **3a n'a pas commencé**.
 
 ## Fichiers à lire en priorité
 
 1. [ADR 017, preuve incrémentale](../adr/017-collaboration-temps-reel.md#preuve-incrémentale-avant-3a--décision-et-résultats) : décisions, chiffres exacts, mémoire, rebasage et limites. [ARCHITECTURE.md](../../ARCHITECTURE.md) situe les trois livraisons suivantes.
-2. [`incremental-replica.ts`](../../apps/collab/src/proof/incremental-replica.ts), [`codec.ts`](../../apps/collab/src/codec.ts) et [tests différentiels](../../apps/collab/src/proof/incremental-replica.test.ts) : cache des contenus validés, blocs touchés, invariants globaux, reconstruction après rejet.
-3. [`incremental-validator.ts`](../../apps/collab/src/proof/incremental-validator.ts) et [worker](../../apps/collab/src/proof/incremental-worker.ts) : séparation prepare/commit/abort et budgets ; [`server.ts`](../../apps/collab/src/proof/server.ts), [file](../../apps/collab/src/proof/room-batch-queue.ts) et [budget de refus](../../apps/collab/src/proof/rejection-budget.ts) : revalidation de chaque contribution après rejet du lot.
-4. [Mesures de performance](../../apps/collab/src/proof/incremental-performance.ts), [fixture contenu](../../apps/collab/src/proof/content-fixture.ts), [mémoire/rebasage](../../apps/collab/src/proof/incremental-memory.ts) et [scénario d'abus](../../apps/collab/src/proof/abuse.ts).
+2. [`incremental-replica.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/incremental-replica.ts), [`codec.ts`](../../apps/collab/src/codec.ts) et [tests différentiels](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/incremental-replica.test.ts) : cache des contenus validés, blocs touchés, invariants globaux, reconstruction après rejet.
+3. [`incremental-validator.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/incremental-validator.ts) et [worker](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/incremental-worker.ts) : séparation prepare/commit/abort et budgets ; [`server.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/server.ts), [file](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/room-batch-queue.ts) et [budget de refus](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/rejection-budget.ts) : revalidation de chaque contribution après rejet du lot.
+4. [Mesures de performance](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/incremental-performance.ts), [fixture contenu](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/content-fixture.ts), [mémoire/rebasage](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/incremental-memory.ts) et [scénario d'abus](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/abuse.ts).
 
 ## Ce qui est démontré
 

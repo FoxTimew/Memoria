@@ -1,5 +1,7 @@
 # Session 3, étape 2 bis — tailles et dix rédacteurs
 
+> Document historique : les lanceurs `proof:collab*` ont été retirés en 3a. Voir la [fiche du service réel](session-3-3a-service.md) pour les commandes actuelles.
+
 Note ultérieure : le développeur a choisi la preuve incrémentale avec cible à 1 Mio ; voir la [nouvelle fiche](session-3-validation-incrementale.md). Les résultats ci-dessous décrivent la livraison 2 bis et sa politique de rejet initiale.
 
 Livraison limitée à la preuve. **L'intégration attend un choix : borne réduite à 192 Kio, ou nouvelle preuve de validation incrémentale pour conserver 4 Mio.** Recommandation : seconde option. Le regroupement des updates en attente est livré dans le prototype. L'application active reste celle de session 2.
@@ -24,9 +26,9 @@ Environnement : Windows 10.0.26300, Ryzen 7 5800H, Node 24.21.0, PostgreSQL 17.1
 ## Fichiers à lire en priorité
 
 1. [ADR 017](../adr/017-collaboration-temps-reel.md), section étape 2 bis : arbitrage et limites ; [ARCHITECTURE.md](../../ARCHITECTURE.md) pour 3a/3b/3c.
-2. [`server.ts`](../../apps/collab/src/proof/server.ts), [`room-batch-queue.ts`](../../apps/collab/src/proof/room-batch-queue.ts), [`batch-journal.ts`](../../apps/collab/src/proof/batch-journal.ts) : fusion, validation avant commit/application, reçu et droits courants de chaque émetteur. Journal unitaire précédent conservé pour comparaison.
-3. [`sized-fixture.ts`](../../apps/collab/src/proof/sized-fixture.ts), [`sizing.ts`](../../apps/collab/src/proof/sizing.ts), [`load.ts`](../../apps/collab/src/proof/load.ts), [`metrics.ts`](../../apps/collab/src/proof/metrics.ts) : génération, chauffe, mesures et files natives comprises.
-4. [`transport.ts`](../../apps/collab/src/proof/transport.ts) : douze scénarios réels renforcés, lot multi-auteur commis une fois et lot invalide sans fuite ; [`projection.ts`](../../apps/collab/src/proof/projection.ts) retrouve tous les auteurs via leurs reçus.
+2. [`server.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/server.ts), [`room-batch-queue.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/room-batch-queue.ts), [`batch-journal.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/batch-journal.ts) : fusion, validation avant commit/application, reçu et droits courants de chaque émetteur. Journal unitaire précédent conservé pour comparaison.
+3. [`sized-fixture.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/sized-fixture.ts), [`sizing.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/sizing.ts), [`load.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/load.ts), [`metrics.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/metrics.ts) : génération, chauffe, mesures et files natives comprises.
+4. [`transport.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/transport.ts) : douze scénarios réels renforcés, lot multi-auteur commis une fois et lot invalide sans fuite ; [`projection.ts`](https://github.com/FoxTimew/Memoria/blob/2e0866eca2574d256d79d7c54beaf080562e9516/apps/collab/src/proof/projection.ts) retrouve tous les auteurs via leurs reçus.
 
 ## Ce qui pourrait casser
 

@@ -1,5 +1,7 @@
 # Relecture — session 3, étape 1 : cadrage de la collaboration
 
+> Document historique : les lanceurs `proof:collab*` ont été retirés en 3a. Voir la [fiche du service réel](session-3-3a-service.md) pour les commandes actuelles.
+
 Note ultérieure : les réponses ont été reçues et l'ADR 017 est désormais accepté. Cette fiche conserve le compte rendu historique du commit de cadrage ; voir la [preuve d'étape 2](session-3-etape-2-preuve.md) pour les décisions ajustées et les premiers résultats exécutés.
 
 Branche : `codex/session-3-collaboration-design`, créée après synchronisation de main `ea9afdf` (fusion de session 2). Cette étape modifie uniquement de la documentation. Aucun serveur de collaboration, paquet, migration, conversion de données ni test collaboratif n'est ajouté. Le hash poussé et sa vérification distante figurent dans le compte rendu de livraison ; un commit ne peut pas contenir son propre hash.
