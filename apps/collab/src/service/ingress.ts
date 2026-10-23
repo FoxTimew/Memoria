@@ -20,12 +20,25 @@ export async function createIngress(
     request: IncomingMessage,
     budget: SocketBudget,
   ) => (bytes: Uint8Array) => void,
+  ready?: () => Promise<void>,
 ) {
   const admission = new Admission(config),
     sockets = new Set<WebSocket>();
-  const http = createServer((_req, res) => {
-    res.writeHead(404);
-    res.end();
+  const http = createServer((req, res) => {
+    if (req.method === 'GET' && req.url === '/api/health/collab' && ready) {
+      void ready()
+        .then(() => {
+          res.writeHead(200, { 'content-type': 'application/json' });
+          res.end('{"status":"ok"}');
+        })
+        .catch(() => {
+          res.writeHead(503);
+          res.end('unavailable');
+        });
+    } else {
+      res.writeHead(404);
+      res.end();
+    }
   });
   const ws = new WebSocketServer({
     noServer: true,

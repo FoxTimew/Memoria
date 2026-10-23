@@ -10,7 +10,7 @@ const schema = z.object({
   COLLAB_INTERNAL_PORT: z.coerce.number().int().min(0).max(65535).default(3004),
   COLLAB_INTERNAL_SECRET: z.string().min(32),
   COLLAB_REPLICA_MEMORY_BYTES: positive(1024 ** 3).refine(
-    (n) => n >= 160 * 1024 ** 2,
+    (n) => n >= 192 * 1024 ** 2,
     'At least one replica reservation',
   ),
   COLLAB_REPLICA_IDLE_MS: positive(300000),

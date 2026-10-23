@@ -1,3 +1,4 @@
+import { ReplicaMemory } from './memory.ts';
 import { randomUUID } from 'node:crypto';
 import { fromNodeHeaders } from 'better-auth/node';
 import type { Pool } from 'pg';
@@ -43,13 +44,15 @@ export async function collaborationServer(
   options: { access?: AccessResolver; report?: (event: object) => void } = {},
 ) {
   let available = true;
+  const physicalSockets = new Set<WebSocket>(),
+    charged = new WeakSet<WebSocket>();
   const connections = new Set<Connection<Context>>(),
     rooms = new Map<string, Room>();
   const refusals = new RejectionBudget(),
     receipts = new WeakMap<Connection<Context>, Receipt>();
   const fail = () => {
     available = false;
-    for (const c of connections) c.context.socket.close(1011, 'CONTROL_UNAVAILABLE');
+    for (const socket of physicalSockets) socket.close(1011, 'CONTROL_UNAVAILABLE');
   };
   const leadership = new Leadership(config.DATABASE_URL, fail);
   await leadership.start();
@@ -59,10 +62,11 @@ export async function collaborationServer(
     if (!available) throw new CollaborationError('SERVICE_UNAVAILABLE', 503);
     void leadership.fence;
   };
+  const evicting = new Set<string>();
   const hocus = new Hocuspocus<Context>({
     quiet: true,
-    maxUnauthenticatedQueueSize: 32768,
-    maxUnauthenticatedQueueMessages: 8,
+    maxUnauthenticatedQueueSize: config.COLLAB_ROOM_QUEUE_BYTES,
+    maxUnauthenticatedQueueMessages: config.COLLAB_ROOM_QUEUE_MESSAGES,
     maxPendingDocuments: 1,
     async onAuthenticate({ context, documentName, connectionConfig }) {
       assertAvailable();
@@ -81,10 +85,18 @@ export async function collaborationServer(
         ])
       ).rows[0];
       if (row?.generation !== identity.generation) throw new Error('GENERATION_CHANGED');
+      const release = await memory.acquire(documentName);
+      context.socket.once('close', release);
+      if (context.socket.readyState !== 1) {
+        release();
+        throw new Error('CONNECTION_CLOSED');
+      }
+      context.budget.ready = true;
       return { identity };
     },
-    async onLoadDocument({ document, documentName }) {
+    async onLoadDocument({ document, documentName, context }) {
       assertAvailable();
+      memory.loading(documentName);
       const identity = roomIdentity(documentName);
       const room = new Room(store, identity.page, identity.generation, document, () => {
         for (const c of connections)
@@ -92,9 +104,13 @@ export async function collaborationServer(
       });
       try {
         await room.load();
+        assertAvailable();
+        if (context?.identity) await store.authorize(context.identity);
         rooms.set(documentName, room);
+        memory.loaded(documentName, room);
       } catch (error) {
         await room.close();
+        memory.failed(documentName);
         throw error;
       }
     },
@@ -109,8 +125,8 @@ export async function collaborationServer(
           c.context.socket.close(1000, 'DOCUMENT_CLOSED');
         }
     },
-    async beforeUnloadDocument() {
-      throw new Error('RESIDENT_REPLICA');
+    async beforeUnloadDocument({ documentName }) {
+      if (!evicting.has(documentName)) throw new Error('RESIDENT_REPLICA');
     },
     async beforeSync({ connection, context, document, documentName, type, payload }) {
       assertAvailable();
@@ -122,8 +138,13 @@ export async function collaborationServer(
         const receipt = await rooms.get(documentName)!.update(context.identity, payload);
         receipts.set(connection, receipt);
       } catch (error) {
-        if (error instanceof CandidateRejected || error instanceof CollaborationError)
+        if (
+          (error instanceof CandidateRejected || error instanceof CollaborationError) &&
+          !charged.has(context.socket)
+        ) {
+          charged.add(context.socket);
           refusals.reject(context.user);
+        }
         context.socket.close(
           1008,
           error instanceof Error ? error.message.slice(0, 100) : 'UPDATE_REJECTED',
@@ -143,6 +164,38 @@ export async function collaborationServer(
       throw new Error('PRESENCE_NOT_ENABLED');
     },
   });
+  const memory = new ReplicaMemory(
+    config.COLLAB_REPLICA_MEMORY_BYTES,
+    config.COLLAB_REPLICA_IDLE_MS,
+    async (name, room) => {
+      // Journal commits always schedule projection in the same transaction. Check before eviction.
+      const state = (
+        await pool.query(
+          'SELECT content_revision,projection_revision,projection_due_at FROM collaboration_documents WHERE page_id=$1 AND generation=$2',
+          [room.page, room.generation],
+        )
+      ).rows[0];
+      if (
+        state &&
+        Number(state.content_revision) > Number(state.projection_revision) &&
+        !state.projection_due_at
+      )
+        throw new Error('UNSCHEDULED_PROJECTION');
+      evicting.add(name);
+      try {
+        const document = hocus.documents.get(name);
+        if (document) {
+          await hocus.debouncer.executeNow('onStoreDocument-' + name);
+          await hocus.unloadDocument(document);
+          if (hocus.documents.has(name)) throw new Error('DOCUMENT_BUSY');
+        }
+        await room.close();
+        rooms.delete(name);
+      } finally {
+        evicting.delete(name);
+      }
+    },
+  );
   const revocations = new Revocations(
     config.DATABASE_URL,
     async () => {
@@ -159,8 +212,8 @@ export async function collaborationServer(
     },
     fail,
   );
-  let ingress: Awaited<ReturnType<typeof createIngress>>;
-  let internal: Awaited<ReturnType<typeof createInternalServer>>;
+  let ingress!: Awaited<ReturnType<typeof createIngress>>;
+  let internal!: Awaited<ReturnType<typeof createInternalServer>>;
   async function command(command: CollaborationCommand) {
     assertAvailable();
     const identity = { key: randomUUID(), ...command };
@@ -174,13 +227,19 @@ export async function collaborationServer(
       };
     if (command.generation !== state.generation) throw new CollaborationError('GENERATION_CHANGED');
     const name = `${command.workspace}:${command.page}:${command.generation}`;
-    await hocus.createDocument(
-      name,
-      new Request(`${config.APP_ORIGIN}/internal/collaboration`),
-      randomUUID(),
-      { readOnly: false, isAuthenticated: true },
-    );
-    const receipt = await rooms.get(name)!.command(identity, command);
+    const release = await memory.acquire(name);
+    let receipt: Receipt;
+    try {
+      await hocus.createDocument(
+        name,
+        new Request(`${config.APP_ORIGIN}/internal/collaboration`),
+        randomUUID(),
+        { readOnly: false, isAuthenticated: true },
+      );
+      receipt = await rooms.get(name)!.command(identity, command);
+    } finally {
+      release();
+    }
     await projections.wait(command.page, command.generation, receipt.revision, receipt.receipt);
     return { ...receipt, contentRevision: receipt.revision, projectionRevision: receipt.revision };
   }
@@ -193,6 +252,8 @@ export async function collaborationServer(
         return authorize(request);
       },
       (socket, identity, request, budget) => {
+        physicalSockets.add(socket);
+        socket.once('close', () => physicalSockets.delete(socket));
         const context = { ...identity, socket, budget } as Context;
         const client = hocus.handleConnection(
           {
@@ -220,11 +281,25 @@ export async function collaborationServer(
           else client.handleMessage(bytes);
         };
       },
+      async () => {
+        assertAvailable();
+        await pool.query('SELECT 1');
+      },
     );
     internal = await createInternalServer(config, pool, command);
     projections.start();
   } catch (error) {
+    // Binding the internal port can fail after the WebSocket listener has started.
+    // Release every resource, including the PostgreSQL leadership, before failing startup.
+    await ingress?.close();
+    await internal?.close();
     await revocations.close();
+    await projections.close();
+    await memory.close();
+    for (const room of rooms.values()) {
+      await room.close();
+      room.doc.destroy();
+    }
     await leadership.close();
     throw error;
   }
@@ -233,6 +308,7 @@ export async function collaborationServer(
     leadership,
     projections,
     rooms,
+    memory,
     hocus,
     connections,
     ingress,
@@ -245,6 +321,7 @@ export async function collaborationServer(
       await internal.close();
       await revocations.close();
       await projections.close();
+      await memory.close();
       for (const room of rooms.values()) {
         while (room.pending) await new Promise((r) => setTimeout(r, 10));
         await room.close();
