@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as Y from 'yjs';
 import { build } from 'esbuild';
 import { decodeDocument, validateCandidate, bounds } from './codec.ts';
-import { representativeDocument, fixtureId } from './proof/fixture.ts';
+import { representativeDocument, fixtureId } from './testing/fixture.ts';
 
 function card(doc: Y.Doc) {
   return [...doc.getXmlFragment('prosemirror').createTreeWalker(() => true)].find(
@@ -115,12 +115,11 @@ describe('collaboration strict codec and isolated candidates', () => {
       doc.destroy();
     }
   });
-  it('keeps React/BlockNote unreachable from the validation worker and journal', async () => {
+  it('keeps React/BlockNote unreachable from the production validation worker and journal', async () => {
     await build({
       entryPoints: [
-        'apps/collab/src/validation-worker.ts',
-        'apps/collab/src/proof/incremental-worker.ts',
-        'apps/collab/src/journal.ts',
+        'apps/collab/src/service/incremental-worker.ts',
+        'apps/collab/src/service/store.ts',
       ],
       outdir: '.local/unused',
       write: false,

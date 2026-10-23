@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import * as Y from 'yjs';
 import { IncrementalReplica } from './incremental-replica.ts';
-import { representativeDocument, fixtureId } from './fixture.ts';
-import { contentFixture } from './content-fixture.ts';
+import { representativeDocument, fixtureId } from '../testing/fixture.ts';
+import { contentFixture } from '../testing/content-fixture.ts';
 import { decodeDocument, validateCandidate, bounds } from '../codec.ts';
 const nodes = (doc: Y.Doc) => [...doc.getXmlFragment('prosemirror').createTreeWalker(() => true)];
 const card = (doc: Y.Doc) =>

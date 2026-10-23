@@ -1,9 +1,9 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createAuth } from '@memoria/auth';
 import { createDatabase } from '@memoria/db';
-import type { ProofDatabase } from './database.ts';
+import type { TestDatabase } from './database.ts';
 
-export async function proofAuth(fixture: ProofDatabase) {
+export async function testAuth(fixture: TestDatabase) {
   const url = new URL(process.env.DATABASE_URL!);
   url.searchParams.set('options', `-c search_path=${fixture.schema}`);
   const { db, pool } = createDatabase(url.toString());

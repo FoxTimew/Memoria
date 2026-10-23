@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { auditLogs, outboxEvents, searchDocuments, blocks } from '@memoria/db';
 import type { WriteTransaction } from '@memoria/db';
 import type { RequestContext, SystemContext } from '@memoria/contracts';
@@ -15,6 +15,9 @@ export async function pageEffects(
   action: string,
   event: 'page.created' | 'page.updated' | 'block.updated' = 'page.updated',
 ) {
+  await tx.execute(
+    sql`SELECT pg_advisory_xact_lock(hashtextextended('projection:' || ${page.id},0))`,
+  );
   const scope = and(
     eq(searchDocuments.workspaceId, ctx.workspaceId),
     eq(searchDocuments.pageId, page.id),

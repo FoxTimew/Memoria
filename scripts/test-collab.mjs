@@ -10,6 +10,15 @@ const files = (await readdir('apps/collab/src/testing'))
   )
   .sort();
 if (!files.length) throw new Error('No matching integration suite');
+await build({
+  entryPoints: ['apps/collab/src/service/incremental-worker.ts'],
+  outfile: 'apps/collab/dist/incremental-worker.mjs',
+  bundle: true,
+  platform: 'node',
+  target: 'node24',
+  format: 'esm',
+  external: ['yjs'],
+});
 for (const file of files) {
   const out = `apps/collab/dist/test-${file.replace('.ts', '.mjs')}`;
   await build({

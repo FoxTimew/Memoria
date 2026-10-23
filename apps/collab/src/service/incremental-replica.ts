@@ -1,5 +1,7 @@
-// Experimental persistent validator. No live document is ever mutated before SQL commit.
+// Persistent isolated validator. No live document is ever mutated before SQL commit.
 import * as Y from 'yjs';
+import { applyCommands } from './commands.ts';
+import type { BlockBatch } from '@memoria/contracts';
 import { bounds, decodeDocument } from '../codec.ts';
 import type { ContentIndex } from '../codec.ts';
 import type { BlockEnvelope } from '@memoria/blocks-core';
@@ -67,6 +69,7 @@ export class IncrementalReplica {
       this.pending = { update: new Uint8Array(update), upper };
       return {
         blocks: this.blocks.filter((b) => b.type === 'core.image'),
+        blockIds: this.blocks.map((b) => b.id),
         checkedBlocks: this.index.checked,
         jsonBytes: this.index.jsonBytes,
         encodedUpperBound: upper,
@@ -81,6 +84,11 @@ export class IncrementalReplica {
     this.accepted.push(this.pending.update);
     this.upper = this.pending.upper;
     this.pending = undefined;
+    if (
+      this.accepted.reduce((sum, u) => sum + u.length, 0) >= 1024 ** 2 ||
+      this.accepted.length >= 500
+    )
+      this.checkpointNow();
   }
   abort() {
     this.reset();
@@ -91,6 +99,23 @@ export class IncrementalReplica {
   snapshot() {
     if (this.pending || this.tainted) throw new Error('Uncommitted replica');
     return Y.encodeStateAsUpdate(this.doc);
+  }
+  command(operations: BlockBatch['operations']) {
+    const candidate = new Y.Doc();
+    candidate.getXmlFragment('prosemirror');
+    try {
+      Y.applyUpdate(candidate, this.snapshot());
+      const before = Y.encodeStateVector(candidate);
+      applyCommands(candidate, operations);
+      const update = Y.encodeStateAsUpdate(candidate, before);
+      return { update, ...this.prepare(update) };
+    } finally {
+      candidate.destroy();
+    }
+  }
+  checkpointNow() {
+    this.checkpoint = this.snapshot();
+    this.accepted = [];
   }
   close() {
     this.doc.destroy();

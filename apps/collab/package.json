@@ -3,7 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "node ../../scripts/build-collab.mjs",
+    "start": "node dist/main.mjs",
+    "dev": "node ../../scripts/build-collab.mjs --watch"
   },
   "dependencies": {
     "@hocuspocus/server": "4.7.1",

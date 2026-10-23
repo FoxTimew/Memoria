@@ -5,8 +5,8 @@ import type { BlockEnvelope } from '@memoria/blocks-core';
 
 const registry = createBlockRegistry();
 export const bounds = {
-  update: 4 * 1024 ** 2,
-  document: 4 * 1024 ** 2,
+  update: 1024 ** 2,
+  document: 1024 ** 2,
   json: 1024 ** 2,
   blocks: 500,
   depth: 50,

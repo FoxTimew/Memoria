@@ -22,9 +22,9 @@ export class IncrementalValidator {
       this.failed = true;
     });
   }
-  async init(snapshot: Uint8Array) {
+  async init(snapshot: Uint8Array, updates: Uint8Array[] = []) {
     await this.online;
-    await this.request('init', { snapshot }, 30000);
+    await this.request('init', { snapshot, updates }, 30000);
   }
   private async request(
     operation: string,
@@ -79,6 +79,16 @@ export class IncrementalValidator {
       ...(result.result as ReturnType<IncrementalReplica['prepare']>),
       validationMs: result.elapsed,
     };
+  }
+  async command(operations: import('@memoria/contracts').BlockBatch['operations']) {
+    return (await this.request('command', { operations }, 5000)).result as ReturnType<
+      IncrementalReplica['command']
+    >;
+  }
+  async inspect() {
+    return (await this.request('inspect', {}, 30000)).result as ReturnType<
+      IncrementalReplica['inspect']
+    >;
   }
   async commit() {
     await this.request('commit');
