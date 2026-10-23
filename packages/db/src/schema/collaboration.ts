@@ -165,3 +165,15 @@ export const collaborationProjectionCommits = pgTable(
     }).onDelete('cascade'),
   ],
 );
+
+// Reserve IDs at journal commit, before the asynchronous block projection exists.
+export const collaborationBlockIds = pgTable(
+  'collaboration_block_ids',
+  {
+    id: uuid('id').primaryKey(),
+    pageId: uuid('page_id')
+      .notNull()
+      .references(() => pages.id, { onDelete: 'cascade' }),
+  },
+  (t) => [index('collab_block_ids_page_idx').on(t.pageId)],
+);
