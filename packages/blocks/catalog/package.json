@@ -12,6 +12,8 @@
   "dependencies": {
     "@memoria/blocks-core": "workspace:*",
     "@memoria/block-character-card": "workspace:*",
+    "@memoria/block-standard": "workspace:*",
+    "@memoria/blocks-ui": "workspace:*",
     "@blocknote/core": "0.56.0"
   },
   "devDependencies": {
