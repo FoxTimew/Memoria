@@ -29,7 +29,9 @@ export async function proofDatabase() {
     await client.query('SET synchronous_commit TO on');
     const migrations = process.env.COLLAB_PROOF_MIGRATIONS;
     if (!migrations) throw new Error('Use scripts/proof-collab.mjs to resolve migrations');
-    for (const name of (await readdir(migrations)).filter((name) => name.endsWith('.sql')).sort()) {
+    for (const name of (await readdir(migrations))
+      .filter((name) => /^000[0-2]_.*\.sql$/.test(name))
+      .sort()) {
       await client.query(
         (await readFile(`${migrations}/${name}`, 'utf8')).replaceAll('"public".', `"${schema}".`),
       );

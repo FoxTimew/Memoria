@@ -31,7 +31,8 @@
     "env:init": "node scripts/init-env.mjs",
     "infra:up": "docker compose up -d --build",
     "infra:down": "docker compose down",
-    "proof:collab:incremental": "node scripts/proof-collab-incremental.mjs"
+    "proof:collab:incremental": "node scripts/proof-collab-incremental.mjs",
+    "test:collab:e2e": "node scripts/test-collab.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
