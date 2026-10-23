@@ -158,7 +158,11 @@ export default function Home() {
                     {workspace.name.slice(0, 1).toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <h2 className="truncate text-lg font-semibold">{workspace.name}</h2>
+                    <h2 className="truncate text-lg font-semibold">
+                      <a className="quiet-link" href={`/workspaces/${workspace.id}`}>
+                        {workspace.name}
+                      </a>
+                    </h2>
                     <p className="mt-1 text-sm text-[#657267]">
                       {workspace.slug} · {workspace.role === 'owner' ? 'Propriétaire' : 'Membre'}
                     </p>

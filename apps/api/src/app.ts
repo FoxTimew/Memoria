@@ -9,6 +9,7 @@ import * as database from './database.module.ts';
 import { AuthModule } from './modules/auth/auth.module.ts';
 import { Public } from './modules/auth/public.decorator.ts';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module.ts';
+import { PagesModule } from './modules/pages/pages.module.ts';
 
 @Controller('api/health')
 class HealthController {
@@ -27,6 +28,15 @@ class SafeExceptionFilter implements ExceptionFilter {
     const response = host.switchToHttp().getResponse<Response>();
     if (error instanceof HttpException) {
       response.status(error.getStatus()).json(error.getResponse());
+    } else if (
+      error &&
+      typeof error === 'object' &&
+      'type' in error &&
+      ['entity.too.large', 'entity.parse.failed'].includes(String(error.type))
+    ) {
+      response
+        .status(error.type === 'entity.too.large' ? 413 : 400)
+        .json({ message: 'Corps JSON invalide ou trop volumineux.' });
     } else {
       console.error('API request failed:', error instanceof Error ? error.name : 'UnknownError');
       response.status(500).json({ message: 'Une erreur est survenue. Réessayez.' });
@@ -35,7 +45,7 @@ class SafeExceptionFilter implements ExceptionFilter {
 }
 
 @Module({
-  imports: [database.DatabaseModule, AuthModule, WorkspacesModule],
+  imports: [database.DatabaseModule, AuthModule, WorkspacesModule, PagesModule],
   controllers: [HealthController],
 })
 export class AppModule {}
@@ -64,7 +74,7 @@ export function configureApplication(app: NestExpressApplication) {
   });
 
   // Better Auth must receive the unconsumed stream; its @Public controller owns parsing.
-  const parseJson = express.json({ limit: '32kb' });
+  const parseJson = express.json({ limit: '1mb' });
   app.use((request: Request, response: Response, next: NextFunction) => {
     if (/^\/api\/auth(?:\/|$)/i.test(request.path)) return next();
     return parseJson(request, response, next);

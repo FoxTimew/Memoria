@@ -13,7 +13,9 @@ const entry = process.argv.includes('--probe')
   ? 'bootstrap-probe'
   : process.argv.includes('--auth-e2e')
     ? 'auth.e2e'
-    : 'main';
+    : process.argv.includes('--pages-e2e')
+      ? 'pages.e2e'
+      : 'main';
 const watching = process.argv.includes('--watch');
 const outfile = resolve(root, `apps/${app}/dist/${entry}.mjs`);
 let child;
