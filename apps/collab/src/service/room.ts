@@ -122,11 +122,11 @@ export class Room {
       committed = true;
       await this.replica.commit();
       Y.applyUpdate(this.doc, update);
-      this.revision = next;
-      return contributions.map((e) => ({
+      this.revision = next.revision;
+      return contributions.map((e, i) => ({
         status: 'durable',
         generation: this.generation,
-        revision: next,
+        revision: next.revisions[i]!,
         receipt: e.receipt,
       }));
     } catch (error) {

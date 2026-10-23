@@ -164,7 +164,7 @@ export class Store {
           throw new CollaborationError('ACCESS_DENIED', 403);
       const state = (
         await client.query<StoredDocument>(
-          'SELECT * FROM collaboration_documents WHERE page_id=$1 AND generation=$2',
+          'SELECT content_revision FROM collaboration_documents WHERE page_id=$1 AND generation=$2',
           [page, generation],
         )
       ).rows[0];
@@ -186,7 +186,7 @@ export class Store {
       )
         throw new CollaborationError('FILE_ACCESS_DENIED', 403);
       await client.query(
-        'INSERT INTO collaboration_block_ids(id,page_id) SELECT unnest($1::uuid[]),$2 ON CONFLICT(id) DO NOTHING',
+        'INSERT INTO collaboration_block_ids(id,page_id) SELECT id,$2 FROM unnest($1::uuid[]) AS input(id) WHERE NOT EXISTS(SELECT 1 FROM collaboration_block_ids known WHERE known.id=input.id AND known.page_id=$2) ON CONFLICT(id) DO NOTHING',
         [blockIds, page],
       );
       if (
@@ -199,10 +199,7 @@ export class Store {
       )
         throw new CollaborationError('BLOCK_ID_CONFLICT');
       const next = expected + 1;
-      await client.query(
-        'INSERT INTO collaboration_updates(workspace_id,page_id,generation,revision,update) VALUES($1,$2,$3,$4,$5)',
-        [workspace, page, generation, next, Buffer.from(merged)],
-      );
+      const revisions: number[] = [];
       for (const entry of entries) {
         const old = (
           await client.query<{ revision: string; update_hash: string }>(
@@ -221,12 +218,18 @@ export class Store {
         ).rows[0]!;
         if (old.update_hash !== digest(entry.update))
           throw new CollaborationError('RECEIPT_REUSED');
+        revisions.push(Number(old.revision));
       }
+      if (revisions.every((r) => r !== next)) return { revision: expected, revisions };
+      await client.query(
+        'INSERT INTO collaboration_updates(workspace_id,page_id,generation,revision,update) VALUES($1,$2,$3,$4,$5)',
+        [workspace, page, generation, next, Buffer.from(merged)],
+      );
       await client.query(
         `UPDATE collaboration_documents SET content_revision=$2,journal_bytes=journal_bytes+$3,updated_at=clock_timestamp(),projection_first_pending_at=coalesce(projection_first_pending_at,clock_timestamp()),projection_due_at=least(clock_timestamp()+interval '1 second',coalesce(projection_first_pending_at,clock_timestamp())+interval '5 seconds') WHERE page_id=$1`,
         [page, next, merged.length],
       );
-      return next;
+      return { revision: next, revisions };
     });
   }
 }

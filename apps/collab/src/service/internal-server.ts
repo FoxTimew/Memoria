@@ -1,3 +1,4 @@
+import { CandidateRejected } from '../validator.ts';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
 import type { Pool } from 'pg';
@@ -89,6 +90,7 @@ export async function createInternalServer(
             respond(error.status, { code: error.code, ...error.details });
           else if (error instanceof Error && error.message === 'INTERNAL_AUTH_DENIED')
             respond(401, { code: 'INTERNAL_AUTH_DENIED' });
+          else if (error instanceof CandidateRejected) respond(400, { code: 'INVALID_CONTENT' });
           else if (error instanceof SyntaxError) respond(400, { code: 'INVALID_JSON' });
           else respond(503, { code: 'COLLAB_UNAVAILABLE' });
         } finally {

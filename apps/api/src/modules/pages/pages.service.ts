@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { and, eq, isNull, sql } from 'drizzle-orm';
-import { blocks, pages, searchDocuments } from '@memoria/db';
+import { blocks, pages, searchDocuments, collaborationDocuments } from '@memoria/db';
 import type { WriteTransaction } from '@memoria/db';
 import {
   internalPageCreateSchema,
@@ -70,6 +70,9 @@ export class PagesService {
     return this.run(userId, workspaceId, false, async (tx, _ctx, all) => {
       const page = requirePage(pageId, all);
       if (versionOnly) return { version: page.version };
+      await tx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended('projection:' || ${pageId},0))`,
+      );
       const content = await tx
         .select({
           id: blocks.id,
@@ -88,7 +91,15 @@ export class PagesService {
           ),
         )
         .orderBy(blocks.position);
-      return { page: pageResponse(page), blocks: content };
+      const [state] = await tx
+        .select({
+          generation: collaborationDocuments.generation,
+          contentRevision: collaborationDocuments.contentRevision,
+          projectionRevision: collaborationDocuments.projectionRevision,
+        })
+        .from(collaborationDocuments)
+        .where(eq(collaborationDocuments.pageId, pageId));
+      return { page: pageResponse(page), blocks: content, collaboration: state ?? null };
     });
   }
   create(userId: string, workspaceId: string, input: unknown) {
@@ -266,8 +277,11 @@ export class PagesService {
           id: pages.id,
           title: pages.title,
           excerpt: sql<string>`left(${searchDocuments.plainText}, 240)`,
+          contentRevision: collaborationDocuments.contentRevision,
+          projectionRevision: collaborationDocuments.projectionRevision,
         })
         .from(searchDocuments)
+        .leftJoin(collaborationDocuments, eq(collaborationDocuments.pageId, searchDocuments.pageId))
         .innerJoin(
           pages,
           and(

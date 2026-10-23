@@ -30,7 +30,7 @@ export class Projections {
   async tick() {
     const rows = (
       await this.store.pool.query<{ page_id: string; generation: string }>(
-        `SELECT page_id,generation FROM collaboration_documents WHERE (projection_due_at<=clock_timestamp() AND (projection_retry_at IS NULL OR projection_retry_at<=clock_timestamp())) OR (content_revision>snapshot_revision AND (journal_bytes>=1048576 OR content_revision-snapshot_revision>=500 OR compacted_at<clock_timestamp()-interval '5 minutes')) ORDER BY projection_due_at NULLS LAST LIMIT 1`,
+        `SELECT page_id,generation FROM collaboration_documents WHERE (projection_retry_at IS NULL OR projection_retry_at<=clock_timestamp()) AND (projection_due_at<=clock_timestamp() OR (content_revision>snapshot_revision AND (journal_bytes>=1048576 OR content_revision-snapshot_revision>=500 OR compacted_at<clock_timestamp()-interval '5 minutes'))) ORDER BY projection_due_at NULLS LAST LIMIT 1`,
       )
     ).rows;
     for (const row of rows) {
@@ -39,7 +39,7 @@ export class Projections {
       } catch {
         await this.store.transaction(async (client) => {
           await client.query(
-            `UPDATE collaboration_documents SET projection_attempts=projection_attempts+1,projection_retry_at=clock_timestamp()+(least(30,power(2,least(projection_attempts,5))) * interval '1 second') WHERE page_id=$1 AND generation=$2`,
+            `UPDATE collaboration_documents SET projection_attempts=projection_attempts+1,projection_retry_at=clock_timestamp()+(least(30,power(2,least(projection_attempts,5))*(1+random()*0.2)) * interval '1 second') WHERE page_id=$1 AND generation=$2`,
             [row.page_id, row.generation],
           );
         });

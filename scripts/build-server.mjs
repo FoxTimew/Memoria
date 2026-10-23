@@ -104,5 +104,14 @@ if (watching) {
   }
   await watcher.watch();
 } else {
+  if (entry === 'pages.e2e')
+    await build({
+      entryPoints: [resolve(root, 'apps/collab/src/service/incremental-worker.ts')],
+      outfile: resolve(root, 'apps/api/dist/incremental-worker.mjs'),
+      bundle: true,
+      platform: 'node',
+      target: 'node24',
+      format: 'esm',
+    });
   await build(options);
 }
