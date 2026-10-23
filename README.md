@@ -1,8 +1,8 @@
 # Memoria
 
 Outil de documentation et de bases de données pour studios de jeu indépendants.
-La session 1 fournit Next.js, NestJS et le worker pg-boss exécutables, l'inscription email/mot de passe, la vérification d'email, la connexion et la création de workspaces.
-La référence est [ARCHITECTURE.md](ARCHITECTURE.md), accompagnée des [ADR](docs/adr/) et de la [relecture de session 1](docs/reviews/session-1-bootstrap-auth.md).
+Les sessions 1 et 2 fournissent Next.js, NestJS et le worker pg-boss exécutables, la connexion vérifiée, les workspaces, un arbre de pages et un éditeur BlockNote avec sauvegarde, recherche et corbeille.
+La référence est [ARCHITECTURE.md](ARCHITECTURE.md), accompagnée des [ADR](docs/adr/) et de la [relecture de session 2](docs/reviews/session-2-pages-editor.md).
 
 Aucun utilisateur réel avant la fin de la session 3 : les facteurs forts et la politique de workspace ne sont pas encore activés.
 
@@ -14,7 +14,8 @@ Aucun utilisateur réel avant la fin de la session 3 : les facteurs forts et la 
 - `pnpm test:bootstrap` : compile puis exécute Nest avec les exports TypeScript du monorepo. Voir [ADR 014](docs/adr/014-build-serveur-typescript-source.md).
 - `pnpm build` : vérifie les types, exécute la preuve Nest et construit les trois applications. `pnpm start` les démarre ; `pnpm dev` active les reconstructions automatiques.
 - `pnpm test:auth:e2e` : compile et démarre une application Nest isolée sur loopback, avec PostgreSQL réel, pour vérifier le guard global et les quotas par route. Aucun besoin de démarrer les trois applications ; les compteurs de test sont isolés et nettoyés.
-- `pnpm test:e2e` : exécute le test d'authentification isolé puis le parcours HTTP réel à travers Caddy, PostgreSQL et Mailpit, après démarrage des applications. Utilise `.local-root.crt` pour vérifier TLS et nettoie uniquement ses comptes/workspaces/emails de test. Le parcours Caddy consomme les quotas de l'IP locale (deux inscriptions) : attendre dix minutes entre deux exécutions rapprochées. Voir [ADR 015](docs/adr/015-authentification-simple-et-workspaces.md).
+- `pnpm test:pages:e2e` : compile Nest et vérifie les pages avec PostgreSQL réel, sessions owner/member, concurrence, rollback, recherche, corbeille et révocation. Peut être relancé immédiatement avec ses fixtures isolées.
+- `pnpm test:e2e` : exécute les suites isolées d'authentification et de pages, puis le parcours HTTP réel à travers Caddy, PostgreSQL et Mailpit, après démarrage des applications. Utilise `.local-root.crt` pour vérifier TLS et nettoie uniquement ses comptes/workspaces/emails de test. Le parcours Caddy consomme les quotas de l'IP locale (deux inscriptions) : attendre dix minutes entre deux exécutions rapprochées. Voir [ADR 015](docs/adr/015-authentification-simple-et-workspaces.md).
 - `pnpm test:db` : applique les migrations dans un schéma de test isolé sur le PostgreSQL Compose et vérifie l'intégrité des données.
 - `pnpm db:migrate` : applique les migrations à la base configurée. `pnpm db:generate` : génère une migration après changement du schéma.
 - `pnpm openapi:generate` : régénère le contrat OpenAPI de conception ; les endpoints HTTP seront implémentés ultérieurement.
@@ -28,7 +29,7 @@ Aucun utilisateur réel avant la fin de la session 3 : les facteurs forts et la 
 3. Exporter le certificat public : `docker compose cp caddy:/data/caddy/pki/authorities/local/root.crt .local-root.crt`.
 4. Faire confiance à ce certificat de développement dans le navigateur/système. Sous Windows, importer dans les autorités racines du compte courant. Ne jamais distribuer la clé privée de Caddy.
 5. `pnpm db:migrate`, puis `pnpm dev`. Ouvrir `https://localhost` ; l'application propose l'inscription ou la connexion. API sur 3001, Next.js sur 3000, disponibilité du worker sur 3002. Les ports Node doivent être joignables par Caddy via `host.docker.internal` ; ils ne doivent pas être exposés publiquement en production.
-6. Créer un compte de test (mot de passe d'au moins 12 caractères), ouvrir l'email dans Mailpit à `http://localhost:8025`, suivre le lien, puis se connecter et créer un workspace.
+6. Créer un compte de test (mot de passe d'au moins 12 caractères), ouvrir l'email dans Mailpit à `http://localhost:8025`, suivre le lien, puis se connecter et créer un workspace. Ouvrir son nom, créer une page et taper `/` dans l'éditeur pour insérer un bloc. La sauvegarde est automatique ; ouvrir la même page dans deux onglets pour vérifier les conflits.
 7. Pour vérifier les exécutables compilés, arrêter `pnpm dev`, exécuter `pnpm build`, puis `pnpm start`. Ne pas lancer `dev` et `start` ensemble sur les mêmes ports. Dans un autre terminal : `pnpm test:e2e`.
 8. Disponibilité : `https://localhost/api/health` et `https://localhost/api/health/worker`. Le worker initialise son schéma pg-boss ; aucun job métier n'est encore enregistré.
 9. Console MinIO : `http://localhost:9001`. Créer le bucket privé `memoria` et renseigner les identifiants S3 dans `.env` lors du module fichiers.
