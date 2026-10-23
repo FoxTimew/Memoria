@@ -2,7 +2,7 @@
 
 Statut : accepté — 2026-10-22.
 
-État après session 1 : ces mécanismes restent prévus pour la session 3. Seule la connexion email/mot de passe avec email vérifié est active ; aucun utilisateur réel n'est admis avant la fin de la session 3.
+État après session 1, calendrier révisé le 2026-10-23 : ces mécanismes sont prévus pour la session 4, après la collaboration temps réel de session 3. Seule la connexion email/mot de passe avec email vérifié est active ; aucun utilisateur réel n'est admis avant la fin de la session 4. Voir l'ordre courant dans [ARCHITECTURE.md](../../ARCHITECTURE.md#sessions-suivantes).
 
 **Décision.** Email vérifié + mot de passe, TOTP et codes de secours ; passkeys multiples nommables/supprimables. Pas de SMS ni OTP email comme second facteur. `session_assurance` enregistre côté serveur la méthode réellement vérifiée et son instant, jamais une déclaration du client. Une passkey avec UV vérifié constitue une connexion forte complète.
 

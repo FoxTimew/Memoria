@@ -1,5 +1,7 @@
 # Relecture — séparation du modèle et de l'interface des blocs
 
+Note de calendrier du 2026-10-23 : cette fiche décrit la correction d'architecture d'origine. Le nouvel ordre place la collaboration en session 3, puis la connexion forte en session 4 avant tout utilisateur réel. [ARCHITECTURE.md](../../ARCHITECTURE.md#sessions-suivantes) fait foi pour l'ordre courant.
+
 Branche : `feat/architecture`. Cette correction prépare le merge du cadrage ; la session 1 ne commence pas ici.
 
 ## Fichiers à lire en priorité

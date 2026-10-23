@@ -1,10 +1,10 @@
 # Memoria — référence d'architecture
 
-État après session 2 : 2026-10-23. Public : développeur solo intermédiaire ; studios de 5 à 50 personnes. Ce document et les [ADR](docs/adr/) constituent la référence des sessions suivantes. Code en anglais, explications en français. Toute déviation significative demande un ADR mis à jour.
+État après session 2, cadrage de session 3 : 2026-10-23. Public : développeur solo intermédiaire ; studios de 5 à 50 personnes. Ce document et les [ADR](docs/adr/) constituent la référence des sessions suivantes. Code en anglais, explications en français. Toute déviation significative demande un ADR mis à jour. Le nouvel ordre produit est décidé ; l'[ADR 017](docs/adr/017-collaboration-temps-reel.md) est une proposition à valider avant toute implémentation collaborative.
 
 ## Périmètre et état réel
 
-Le MVP cible comptes, workspaces, invitations, arbre de pages, blocs usuels, bases à propriétés typées/vue tableau, recherche PostgreSQL, API publique et webhooks. SaaS et self-hosted partagent le code ; aucune dépendance à un service tiers hébergé obligatoire. Sont exclus : collaboration temps réel, kanban/calendrier, formules/rollups, facturation, mobile et blocs avancés.
+Le MVP cible comptes, workspaces, collaboration temps réel, invitations, arbre de pages, blocs usuels, bases à propriétés typées/vue tableau, recherche PostgreSQL, API publique et webhooks. SaaS et self-hosted partagent le code ; aucune dépendance à un service tiers hébergé obligatoire. Sont exclus : kanban/calendrier, formules/rollups, facturation, mobile et blocs avancés. La collaboration entre au périmètre en session 3, avant la connexion forte.
 
 | Livré après la session 2                                              | État                                                                                     |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -22,7 +22,7 @@ Le MVP cible comptes, workspaces, invitations, arbre de pages, blocs usuels, bas
 | OpenAPI de conception                                                 | Généré dans `docs/api/openapi.json`, non servi par une API                               |
 | ADR et architecture                                                   | Décisions acceptées, détails d'intégration et limites explicités                         |
 
-**Non implémentés** : bases, livraison des fichiers S3, facteurs forts et `session_assurance`, invitations/partages, API publique, relais outbox, livraison/SSRF et jobs de rétention. Le writer expose une entrée de purge réservée au futur worker ; aucune rétention n'est planifiée à ce stade. L'image est un emplacement avec métadonnées, en attendant la session 6. Le worker initialise pg-boss et vérifie PostgreSQL, sans job métier fictif. Aucun utilisateur réel avant la fin de la session 3.
+**Non implémentés** : collaboration Yjs/Hocuspocus, bases, livraison des fichiers S3, facteurs forts et `session_assurance`, récupération de mot de passe, invitations/partages, API publique, relais outbox, livraison/SSRF et jobs de rétention. Le writer expose une entrée de purge réservée au futur worker ; aucune rétention n'est planifiée à ce stade. L'image est un emplacement avec métadonnées, en attendant la session 7. Le worker initialise pg-boss et vérifie PostgreSQL, sans job métier fictif. Aucun utilisateur réel avant la fin de la session 4.
 
 ## Stack et frontières
 
@@ -51,7 +51,24 @@ flowchart LR
   Services --> Storage[ObjectStorage / S3]
 ```
 
-Le diagramme décrit la cible : web/API/auth/workspaces/pages, writer et processus worker existent ; relais, webhooks et stockage restent à implémenter. Les services front et publics seront identiques ; leurs contrôleurs adapteront authentification, DTO et codes HTTP. Un service reçoit un contexte vérifié ; il ne fait jamais confiance à un rôle ou acteur provenant du corps client. Le workspace de l'URL est vérifié contre les droits courants. Les erreurs sont traduites à la frontière HTTP.
+Le diagramme décrit le socle et les intégrations prévues : web/API/auth/workspaces/pages, writer et processus worker existent ; relais, webhooks et stockage restent à implémenter. Le flux collaboratif proposé ci-dessous n'est pas encore actif. Les services front et publics partagent les règles métier ; leurs contrôleurs adaptent authentification, DTO et codes HTTP. Un service reçoit un contexte vérifié ; il ne fait jamais confiance à un rôle ou acteur provenant du corps client. Le workspace de l'URL est vérifié contre les droits courants. Les erreurs sont traduites à la frontière HTTP.
+
+### Collaboration : proposition de session 3
+
+L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) propose un processus `apps/collab` Hocuspocus unique, sans Redis, sur le chemin WSS `/collab` derrière Caddy. Better Auth et les droits owner/member sont vérifiés avant la synchronisation ; révocation, déconnexion et archivage ferment les connexions concernées. Le mode lecture seule sera testé avant son ouverture aux invités en session 5.
+
+```mermaid
+flowchart LR
+  Browser[BlockNote + Yjs + cache local] -->|WSS /collab| Caddy[Caddy : origine unique]
+  Caddy --> Collab[apps/collab : proposé]
+  API[API et futurs imports] --> Writer[BlockWriteService]
+  Writer -->|commande interne| Collab
+  Collab --> Validation[Candidat isolé + validation métier]
+  Validation --> PG[(Transaction PostgreSQL : Yjs + projection + audit/outbox)]
+  PG -->|commit puis diffusion| Collab
+```
+
+Le document Yjs persisté deviendrait la référence du corps ; les tables de blocs resteraient une projection écrite uniquement par la partie interne de `BlockWriteService`. Proposition : journal et projection synchrones, avant diffusion, avec arrêt de l'enregistrement en cas d'échec. Le codec et les modèles serveur resteraient sans UI. L'arbre, les déplacements, l'archivage et les futures propriétés de base conserveraient leurs versions et erreurs 409. Le titre, la granularité collaborative de la fiche, le hors-ligne et le délai de révocation font partie des questions ouvertes de l'ADR. Les fichiers applicatifs, routes, tables et garanties actuels restent ceux de session 2 jusqu'à validation puis réalisation de cette proposition.
 
 ## Arborescence
 
@@ -102,7 +119,7 @@ infra/
   minio/Dockerfile              # construction locale de la version corrigée
 scripts/                       # lanceurs/builds, génération .env, tests SQL et HTTP
 docs/
-  adr/001-... à 015-...
+  adr/001-... à 017-...        # 017 proposé ; les autres décrivent les décisions précédentes
   api/openapi.json             # contrat de conception généré
   reviews/                     # résumé de relecture à chaque livraison
 ARCHITECTURE.md
@@ -156,7 +173,7 @@ Invariants restant à coder dans les services : aucun ancêtre archivé visible,
 
 Les dates sont des `timestamptz` sauf dates civiles ; nombres exacts en chaînes décimales côté API. Les contenus sont JSON structurés sans HTML exécutable. Les détails sur filtres et tris se trouvent dans [ADR 008](docs/adr/008-proprietes-typees.md).
 
-## Transaction d'écriture et concurrence
+## Transaction d'écriture et concurrence — fonctionnement livré en session 2
 
 1. Authentifier, construire le contexte et vérifier membership/scopes/partage/assurance.
 2. Ouvrir la transaction ; prendre le verrou de workspace pour les changements d'arbre et les verrous de pages dans un ordre stable. Revalider les autorisations sous ces verrous pour sérialiser avec les changements de partages/rôles.
@@ -167,6 +184,8 @@ Les dates sont des `timestamptz` sauf dates civiles ; nombres exacts en chaînes
 Toutes les écritures de blocs passent par ce service, y compris les imports futurs, migrations de contenus et purges. Les migrations SQL de structure et fixtures de tests sont les exceptions. Le worker de rétention appelle le writer ; il n'émet pas un DELETE direct sur `blocks`. Les transactions n'effectuent ni appel HTTP webhook ni upload S3.
 
 Le front vérifie la version périodiquement (15 s, page visible), au retour de focus et avant sauvegarde ; un conflit conserve le brouillon. Le front reçoit 409, l'API publique 412 pour un If-Match périmé et 428 sans précondition. Les rangs sont calculés côté serveur avec fractional indexing et comparés en ordre binaire. Voir [ADR 006](docs/adr/006-arbres-et-versions.md).
+
+La session 3 propose de remplacer uniquement le chemin de contenu de l'éditeur par Yjs et son cache local. La version relationnelle et la révision de contenu seraient séparées ; les commandes hors éditeur continueraient de passer par `BlockWriteService` vers le document vivant. Le cache JSON, ses conflits et ses protections de déconnexion restent actifs aujourd'hui. Leurs remplacements et la migration sont décrits, sans être implémentés, dans l'ADR 017.
 
 ## Contrat des blocs et exemple
 
@@ -198,7 +217,7 @@ La convention de contenu des blocs standard livrés en session 2 est :
 | core.image              | fileId, alt, caption, largeur      | image via URL de lecture temporaire |
 | core.divider            | objet vide                         | bloc séparateur                     |
 
-Un span est du texte avec styles autorisés (bold, italic, underline, strike, code) ou un lien HTTP(S) contenant des spans texte. Jamais de HTML brut ni de dépendance à un composant React dans les données. Les enfants et leur ordre appartiennent à l'enveloppe, pas au JSON de contenu. Les validateurs/adaptateurs standard sont dans `packages/blocks/standard`, avec des tests d'aller-retour dans le vrai moteur BlockNote. Les segments adjacents de mêmes styles sont normalisés. L'image conserve son ID et ses métadonnées ; le rendu du fichier attend la session 6.
+Un span est du texte avec styles autorisés (bold, italic, underline, strike, code) ou un lien HTTP(S) contenant des spans texte. Jamais de HTML brut ni de dépendance à un composant React dans les données. Les enfants et leur ordre appartiennent à l'enveloppe, pas au JSON de contenu. Les validateurs/adaptateurs standard sont dans `packages/blocks/standard`, avec des tests d'aller-retour dans le vrai moteur BlockNote. Les segments adjacents de mêmes styles sont normalisés. L'image conserve son ID et ses métadonnées ; le rendu du fichier attend la session 7.
 
 L'exemple `gamedev.character-card` fournit le [modèle](packages/blocks/character-card/src/model.ts) et son [UI](packages/blocks/character-card/src/ui.ts). V1 `{characterId,name,description}` migre vers V2 ; `characterId` est conservé pour les références dans un moteur. Le transport BlockNote utilise une prop primitive sérialisée, immédiatement reconvertie en objet validé avant persistance : l'API ne retourne pas ce JSON encodé dans une chaîne.
 
@@ -266,21 +285,22 @@ Les tests actuels couvrent types/schémas des plugins, registre/migration et tra
 
 ## Sessions suivantes
 
-Objectif : obtenir une tranche verticale utilisable rapidement et vérifier les risques techniques tôt. **Aucun utilisateur réel avant la fin de la session 3.** Les tables et contrats de sécurité déjà présents décrivent la cible ; ils n'activent pas les fonctionnalités des sessions ultérieures.
+Objectif : obtenir une tranche verticale utilisable rapidement et vérifier les risques techniques tôt. **Aucun utilisateur réel avant la fin de la session 4**, connexion forte, quotas NAT/par compte et récupération de mot de passe inclus. Les tables et contrats de sécurité déjà présents décrivent la cible ; ils n'activent pas les fonctionnalités des sessions ultérieures.
 
 1. **Socle exécutable et connexion simple — implémenté.** Risque NestJS/décorateurs/packages TypeScript source vérifié en premier, y compris `/server` : solution et reproduction dans l'ADR 014. Next.js, NestJS et worker démarrent derrière Caddy. Email/mot de passe, vérification Mailpit, création de workspace et écrans minimaux livrés. Aucun TOTP, passkey ou traitement `session_assurance`. Voir la fiche de relecture pour les contrôles et le prérequis du certificat navigateur.
-2. **Pages et éditeur — implémenté.** Arbre de pages, `BlockWriteService` transactionnel, blocs standard et recherche synchrone. Adaptateurs BlockNote aller-retour vérifiés en premier, **blocs imbriqués inclus**, identifiants et ordre préservés. Autosave, polling de version et conflits conservant le brouillon. Autorisations limitées à **owner/member** ; aucun invité ou partage actif à ce stade. L'image conserve ses métadonnées ; les fichiers restent en session 6. Limites et preuves : ADR 016 et fiche de relecture session 2.
-3. **Connexion forte.** TOTP, passkeys avec contrôle UV côté serveur, `session_assurance`, politique de workspace et délai de grâce, preuve forte récente pour les actions sensibles. Tests d'absence d'UV, de preuves expirées et d'enrôlement sans promotion automatique de session. Corriger aussi les quotas d'authentification derrière un NAT de bureau : relever les limites par IP pour une équipe de 50 personnes et ajouter une protection par compte contre les tentatives répétées de mot de passe, testée depuis plusieurs IP (limite connue de l'ADR 015). Cette session doit être terminée avant tout accès d'utilisateurs réels.
-4. **Invités et partages.** Invitations SMTP et liens copiables, rôles de gestion owner/admin, accès explicites read/edit hérités par les descendants, révocation et protection des changements de rôle. Appliquer les mêmes règles à la recherche ; préparer leur réutilisation par l'API publique.
-5. **Bases.** Propriétés typées, filtres/tris et vue tableau, relations/personnes autorisées. Les lignes de base de données ne comptent pas dans la limite de pages du workspace et ne sont jamais chargées dans l'arborescence latérale : elles sont paginées. Définir leurs propres bornes (volume, taille et pagination) pendant cette session.
-6. **Fichiers.** Implémentation S3, signatures, finalisation, limites et nettoyage.
-7. **API publique.** Façades `/v1`, scopes, rate limiting, idempotence, ETag/If-Match et 412, OpenAPI servi et e2e contre Compose.
-8. **Jobs, webhooks et rétention.** Relais, livraisons, protection SSRF, gestion des secrets, purge configurable de la corbeille et suppression de compte/données.
+2. **Pages et éditeur — implémenté.** Arbre de pages, `BlockWriteService` transactionnel, blocs standard et recherche synchrone. Adaptateurs BlockNote aller-retour vérifiés en premier, **blocs imbriqués inclus**, identifiants et ordre préservés. Autosave, polling de version et conflits conservant le brouillon dans IndexedDB, avec nettoyage à la déconnexion. Autorisations limitées à **owner/member** ; aucun invité ou partage actif à ce stade. L'image conserve ses métadonnées ; les fichiers restent en session 7. Limites et preuves : ADR 016 et fiche de relecture session 2.
+3. **Collaboration temps réel — cadrage en cours, aucune implémentation.** Étape 1 : proposition ADR 017 et questions, puis attente des réponses. Après accord, prouver d'abord convergence des blocs standard imbriqués et de character-card, validation avant diffusion, persistance/projection et révocation. Hocuspocus mono-instance sans Redis, authentification Better Auth, droits owner/member, fermeture des connexions révoquées/archivées, mode read préparé. Yjs devient la référence du corps, blocs/recherche une projection ; commandes hors éditeur via `BlockWriteService`. Remplacement des conflits de contenu et brouillons JSON, présence, journal/snapshots PostgreSQL, migration documentée des données de test et effacement des caches à la déconnexion. Signaler un blocage de fond avant de construire le reste ; ne pas considérer les preuves de session 2 comme des tests de collaboration.
+4. **Connexion forte, quotas par compte et récupération de mot de passe.** TOTP, passkeys avec contrôle UV côté serveur, `session_assurance`, politique de workspace et délai de grâce, preuve forte récente pour les actions sensibles. Étendre aussi les contrôles et révocations aux connexions collaboratives. Tests d'absence d'UV, de preuves expirées et d'enrôlement sans promotion automatique de session. Corriger les quotas d'authentification derrière un NAT de bureau : relever les limites par IP pour 50 personnes et ajouter une protection par compte contre les tentatives répétées depuis plusieurs IP (ADR 015). Ajouter la récupération de mot de passe par email, les contrôles d'abus et la révocation des sessions concernées. Cette session entière est un prérequis avant tout utilisateur réel.
+5. **Invités et partages.** Invitations SMTP et liens copiables, rôles de gestion owner/admin, accès explicites read/edit hérités par les descendants, révocation et protection des changements de rôle. Appliquer les mêmes règles à la recherche et au document collaboratif, **lecture seule imposée côté serveur**, y compris lors d'une reconnexion avec cache local. Préparer leur réutilisation par l'API publique.
+6. **Bases.** Propriétés typées relationnelles, filtres/tris et vue tableau, relations/personnes autorisées. Les lignes de base de données ne comptent pas dans la limite de pages du workspace et ne sont jamais chargées dans l'arborescence latérale : elles sont paginées. Définir leurs propres bornes (volume, taille et pagination) pendant cette session.
+7. **Fichiers.** Implémentation S3, signatures, finalisation, limites et nettoyage.
+8. **API publique.** Façades `/v1`, scopes, rate limiting, idempotence, ETag/If-Match et 412, commandes vers le document Yjs par le writer unique, OpenAPI servi et e2e contre Compose.
+9. **Jobs, webhooks et rétention.** Relais, livraisons, protection SSRF, gestion des secrets, purge configurable de la corbeille et suppression de compte/données. Inclure les journaux/snapshots Yjs et les sauvegardes dans les règles de conservation.
 
-Chaque session utilise sa branche de module, met à jour cette référence et se termine par des contrôles et petits commits. Le développeur effectue les merges après relecture. Session 1 : `codex/session-1-bootstrap-auth`, fusionnée dans main avec autorisation explicite. Session 2 : `codex/session-2-pages-editor`, issue de main `29608bd`. La session 3 est la prochaine tranche.
+Chaque session utilise sa branche de module, met à jour cette référence et se termine par des contrôles et petits commits. Le développeur effectue les merges après relecture, sauf autorisation explicite. Session 1 : `codex/session-1-bootstrap-auth`, fusionnée dans main. Session 2 : `codex/session-2-pages-editor`, fusionnée par la PR #2 au commit `ea9afdf`. Session 3, étape 1 : `codex/session-3-collaboration-design`, créée depuis ce main synchronisé. Chaque compte rendu d'étape fournit le hash du commit poussé, vérifié sur le dépôt distant. L'étape de cadrage se termine sans débuter l'implémentation tant que les réponses ne sont pas reçues.
 
 ## Relecture de chaque livraison
 
 Ajouter à la fin de chaque session un fichier dans `docs/reviews/`, en langage simple, avec trois repères : **fichiers à lire en priorité**, **ce qui pourrait casser**, **comment tester manuellement**. Préciser les résultats des contrôles et ce qui reste non exécutable. Reprendre ces repères dans la réponse de livraison.
 
-Relectures : [séparation du modèle et de l'interface des blocs](docs/reviews/architecture-block-model-ui.md), [session 1 — socle exécutable et connexion simple](docs/reviews/session-1-bootstrap-auth.md), [session 2 — pages et éditeur](docs/reviews/session-2-pages-editor.md).
+Relectures : [séparation du modèle et de l'interface des blocs](docs/reviews/architecture-block-model-ui.md), [session 1 — socle exécutable et connexion simple](docs/reviews/session-1-bootstrap-auth.md), [session 2 — pages et éditeur](docs/reviews/session-2-pages-editor.md), [session 3, étape 1 — cadrage de la collaboration](docs/reviews/session-3-etape-1-cadrage.md).

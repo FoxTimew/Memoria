@@ -4,7 +4,7 @@ Outil de documentation et de bases de données pour studios de jeu indépendants
 Les sessions 1 et 2 fournissent Next.js, NestJS et le worker pg-boss exécutables, la connexion vérifiée, les workspaces, un arbre de pages et un éditeur BlockNote avec sauvegarde, recherche et corbeille.
 La référence est [ARCHITECTURE.md](ARCHITECTURE.md), accompagnée des [ADR](docs/adr/) et de la [relecture de session 2](docs/reviews/session-2-pages-editor.md).
 
-Aucun utilisateur réel avant la fin de la session 3 : les facteurs forts et la politique de workspace ne sont pas encore activés.
+Aucun utilisateur réel avant la fin de la session 4 : la collaboration est avancée en session 3 ; les facteurs forts, les quotas NAT/par compte et la récupération de mot de passe restent à livrer en session 4. L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) propose le cadrage collaboratif ; il n'est pas encore implémenté.
 
 ## Prérequis et vérifications
 
