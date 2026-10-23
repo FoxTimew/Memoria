@@ -45,6 +45,12 @@ await test('Real collaboration migrations: scope, bounds, revisions, receipts an
         .count,
       1,
     );
+    await db.pool.query('DELETE FROM workspaces WHERE id=$1', [db.workspace]);
+    assert.equal(
+      (await db.pool.query('SELECT count(*)::int AS count FROM collaboration_receipts')).rows[0]
+        .count,
+      0,
+    );
     console.log(
       'PASS migrations: foreign workspace/generation, >1 MiB and impossible revisions rejected; receipts survive personal account deletion',
     );
