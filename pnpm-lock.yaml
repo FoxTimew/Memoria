@@ -111,6 +111,9 @@ importers:
       '@memoria/blocks-core':
         specifier: workspace:*
         version: link:../../packages/blocks/core
+      '@memoria/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@memoria/db':
         specifier: workspace:*
         version: link:../../packages/db

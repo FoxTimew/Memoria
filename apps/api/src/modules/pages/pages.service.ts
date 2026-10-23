@@ -123,10 +123,62 @@ export class PagesService {
   }
   save(userId: string, workspaceId: string, pageId: string, input: unknown) {
     const data = parse(pageSaveSchema, input);
-    return this.run(userId, workspaceId, true, async (tx, ctx, all) => {
-      requirePage(pageId, all);
-      return this.writer.apply(ctx, tx, { ...data, pageId });
+    if (data.operations.length)
+      throw new ConflictException({
+        code: 'COLLABORATION_REQUIRED',
+        message:
+          'Le contenu utilise maintenant la collaboration ; utilisez la commande de contenu avec sa révision.',
+      });
+    return this.rename(userId, workspaceId, pageId, {
+      expectedVersion: data.expectedVersion,
+      title: data.title,
     });
+  }
+  rename(userId: string, workspaceId: string, pageId: string, input: unknown) {
+    const data = parse(
+      z.strictObject({ expectedVersion: z.int().positive(), title: z.string().max(500) }),
+      input,
+    );
+    return this.run(userId, workspaceId, true, async (tx, ctx, all) => {
+      const page = requirePage(pageId, all);
+      if (page.version !== data.expectedVersion)
+        throw new ConflictException({ code: 'VERSION_CONFLICT' });
+      const [updated] = await tx
+        .update(pages)
+        .set({ title: data.title, version: sql`${pages.version} + 1`, updatedBy: ctx.actorId })
+        .where(
+          and(
+            eq(pages.id, pageId),
+            eq(pages.workspaceId, workspaceId),
+            eq(pages.version, data.expectedVersion),
+          ),
+        )
+        .returning();
+      if (!updated) throw new ConflictException({ code: 'VERSION_CONFLICT' });
+      await pageEffects(
+        ctx,
+        tx,
+        updated,
+        all.map((p) => (p.id === pageId ? updated : p)),
+        'page.renamed',
+      );
+      return { pageId, version: updated.version, changedBlockIds: [] };
+    });
+  }
+  openCollaboration(
+    session: import('../auth/current-user.decorator.ts').AuthenticatedSession,
+    workspace: string,
+    page: string,
+  ) {
+    return this.writer.open(session, workspace, page);
+  }
+  writeCollaboration(
+    session: import('../auth/current-user.decorator.ts').AuthenticatedSession,
+    workspace: string,
+    page: string,
+    input: unknown,
+  ) {
+    return this.writer.write(session, workspace, page, input);
   }
   mutate(
     userId: string,

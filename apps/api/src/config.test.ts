@@ -3,6 +3,7 @@ import { readConfig } from './config.ts';
 
 const environment = {
   NODE_ENV: 'test',
+  COLLAB_INTERNAL_SECRET: 'only-for-config-validation-not-a-credential',
   APP_ORIGIN: 'https://localhost',
   BETTER_AUTH_SECRET: 'only-for-config-validation-not-a-credential',
   DATABASE_URL: 'postgresql://localhost/memoria',
