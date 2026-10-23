@@ -1,0 +1,171 @@
+MEMORY content-1M: 1 replicas, retained heap 4.6 MiB, process RSS 83.7 MiB, free 2079.1 MiB
+MEMORY content-1M: 5 replicas, retained heap 19.1 MiB, process RSS 119.9 MiB, free 2041.2 MiB
+MEMORY content-1M: 10 replicas, retained heap 37.0 MiB, process RSS 170.7 MiB, free 1957.5 MiB
+MEMORY content-1M: 25 replicas, retained heap 90.5 MiB, process RSS 293.9 MiB, free 1763.9 MiB
+MEMORY content-1M: 50 replicas, retained heap 179.4 MiB, process RSS 409.6 MiB, free 1633.8 MiB
+MEMORY content-1M: 75 replicas, retained heap 268.5 MiB, process RSS 530.4 MiB, free 1707.4 MiB
+MEMORY content-1M: 100 replicas, retained heap 357.4 MiB, process RSS 646.6 MiB, free 1591.4 MiB
+{
+  "profile": "content-1M",
+  "encodedBytes": 1045110,
+  "baseline": {
+    "rss": 75038720,
+    "heapTotal": 31567872,
+    "heapUsed": 12801936,
+    "external": 6238537,
+    "arrayBuffers": 2266783
+  },
+  "availableAtStart": 2196856832,
+  "totalPhysical": 14877257728,
+  "loaded": 100,
+  "retained": {
+    "heapUsed": 374762000,
+    "external": 104533355,
+    "arrayBuffers": 104511000,
+    "rss": 603099136
+  },
+  "samples": [
+    {
+      "count": 1,
+      "heapUsed": 4841256,
+      "external": 1067465,
+      "arrayBuffers": 1045110,
+      "rss": 12681216,
+      "absoluteRss": 87719936,
+      "freePhysical": 2180071424
+    },
+    {
+      "count": 5,
+      "heapUsed": 19990568,
+      "external": 5247905,
+      "arrayBuffers": 5225550,
+      "rss": 50716672,
+      "absoluteRss": 125755392,
+      "freePhysical": 2140340224
+    },
+    {
+      "count": 10,
+      "heapUsed": 38776688,
+      "external": 10473455,
+      "arrayBuffers": 10451100,
+      "rss": 103956480,
+      "absoluteRss": 178995200,
+      "freePhysical": 2052620288
+    },
+    {
+      "count": 25,
+      "heapUsed": 94905168,
+      "external": 26150105,
+      "arrayBuffers": 26127750,
+      "rss": 233140224,
+      "absoluteRss": 308178944,
+      "freePhysical": 1849565184
+    },
+    {
+      "count": 50,
+      "heapUsed": 188152384,
+      "external": 52277855,
+      "arrayBuffers": 52255500,
+      "rss": 354414592,
+      "absoluteRss": 429453312,
+      "freePhysical": 1713172480
+    },
+    {
+      "count": 75,
+      "heapUsed": 281495784,
+      "external": 78405605,
+      "arrayBuffers": 78383250,
+      "rss": 481107968,
+      "absoluteRss": 556146688,
+      "freePhysical": 1790291968
+    },
+    {
+      "count": 100,
+      "heapUsed": 374774320,
+      "external": 104533355,
+      "arrayBuffers": 104511000,
+      "rss": 602923008,
+      "absoluteRss": 677961728,
+      "freePhysical": 1668743168
+    }
+  ]
+}
+MEMORY history-1M: 1 replicas, retained heap 19.0 MiB, process RSS 568.1 MiB, free 1654.7 MiB
+MEMORY history-1M: 5 replicas, retained heap 94.4 MiB, process RSS 578.7 MiB, free 1645.0 MiB
+MEMORY history-1M: 10 replicas, retained heap 188.3 MiB, process RSS 591.4 MiB, free 1642.6 MiB
+MEMORY history-1M: 25 replicas, retained heap 471.0 MiB, process RSS 1007.9 MiB, free 1217.6 MiB
+MEMORY history-1M: 50 replicas, retained heap 941.5 MiB, process RSS 1396.1 MiB, free 719.5 MiB
+{
+  "profile": "history-1M",
+  "encodedBytes": 1042470,
+  "baseline": {
+    "rss": 571396096,
+    "heapTotal": 155299840,
+    "heapUsed": 17997280,
+    "external": 7366258,
+    "arrayBuffers": 3372149
+  },
+  "availableAtStart": 1756880896,
+  "totalPhysical": 14877257728,
+  "loaded": 68,
+  "stopReason": "Physical memory reserve below 384 MiB; no forced paging/OOM",
+  "retained": {
+    "heapUsed": 1342596144,
+    "external": 70887960,
+    "arrayBuffers": 70887960,
+    "rss": 1415327744
+  },
+  "samples": [
+    {
+      "count": 1,
+      "heapUsed": 19898008,
+      "external": 2680770,
+      "arrayBuffers": 2680770,
+      "rss": 24317952,
+      "absoluteRss": 595714048,
+      "freePhysical": 1735045120
+    },
+    {
+      "count": 5,
+      "heapUsed": 98968872,
+      "external": 6850650,
+      "arrayBuffers": 6850650,
+      "rss": 35364864,
+      "absoluteRss": 606760960,
+      "freePhysical": 1724940288
+    },
+    {
+      "count": 10,
+      "heapUsed": 197487776,
+      "external": 10424700,
+      "arrayBuffers": 10424700,
+      "rss": 48738304,
+      "absoluteRss": 620134400,
+      "freePhysical": 1722413056
+    },
+    {
+      "count": 25,
+      "heapUsed": 493837944,
+      "external": 27700050,
+      "arrayBuffers": 27700050,
+      "rss": 485474304,
+      "absoluteRss": 1056870400,
+      "freePhysical": 1276743680
+    },
+    {
+      "count": 50,
+      "heapUsed": 987214240,
+      "external": 52123500,
+      "arrayBuffers": 52123500,
+      "rss": 892522496,
+      "absoluteRss": 1463918592,
+      "freePhysical": 754409472
+    }
+  ]
+}
+REBASE EVALUATION {"profile":"content-1M","beforeBytes":1045110,"businessBytes":1040382,"afterBytes":1043860,"ratio":1.0045444846219946,"iterations":10,"warmup":2,"milliseconds":{"p50":31.100000000000364,"p95":40.59020000000237,"p99":40.59020000000237,"max":40.59020000000237},"samples":[31.100000000000364,36.381099999998696,31.208800000000338,36.26729999999952,40.59020000000237,32.81069999999818,27.38260000000082,30.1237000000001,28.016700000000128,28.49880000000121]}
+REBASE EVALUATION {"profile":"history-1M","beforeBytes":1042470,"businessBytes":100802,"afterBytes":103111,"ratio":10.341759092081507,"iterations":10,"warmup":2,"milliseconds":{"p50":12.980600000002596,"p95":24.727900000001682,"p99":24.727900000001682,"max":24.727900000001682},"samples":[24.727900000001682,13.004799999998795,13.124600000002829,14.161299999999756,12.029699999999139,12.980600000002596,13.9487999999983,11.945299999999406,12.051699999999983,11.976800000000367]}
+REBASE EVALUATION {"profile":"history-4M","beforeBytes":4126752,"businessBytes":100802,"afterBytes":103111,"ratio":40.939187714529474,"iterations":10,"warmup":2,"milliseconds":{"p50":14.679400000000896,"p95":22.41489999999976,"p99":22.41489999999976,"max":22.41489999999976},"samples":[15.741500000000087,15.555900000003021,22.41489999999976,13.99750000000131,14.371899999998277,13.907200000001467,13.641999999999825,14.679400000000896,14.973100000002887,17.38600000000224]}
+MEMORY AND REBASE EVALUATION COMPLETE
+Incremental incremental-memory exit code: 0
+EXIT_CODE=0

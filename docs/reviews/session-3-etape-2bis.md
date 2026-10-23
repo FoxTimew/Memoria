@@ -1,5 +1,7 @@
 # Session 3, étape 2 bis — tailles et dix rédacteurs
 
+Note ultérieure : le développeur a choisi la preuve incrémentale avec cible à 1 Mio ; voir la [nouvelle fiche](session-3-validation-incrementale.md). Les résultats ci-dessous décrivent la livraison 2 bis et sa politique de rejet initiale.
+
 Livraison limitée à la preuve. **L'intégration attend un choix : borne réduite à 192 Kio, ou nouvelle preuve de validation incrémentale pour conserver 4 Mio.** Recommandation : seconde option. Le regroupement des updates en attente est livré dans le prototype. L'application active reste celle de session 2.
 
 ## Résultats

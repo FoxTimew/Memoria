@@ -28,7 +28,9 @@ await db.client.query(
   'INSERT INTO collaboration_documents(page_id,generation,snapshot) VALUES ($1,$2,$3)',
   [db.page, generation, Buffer.from(Y.encodeStateAsUpdate(fixture.doc))],
 );
-const host = await proofServer(db, authentication, room, Y.encodeStateAsUpdate(fixture.doc));
+const host = await proofServer(db, authentication, room, Y.encodeStateAsUpdate(fixture.doc), {
+  incremental: process.argv.includes('--incremental'),
+});
 const projector = new ProofProjector(authentication.pool, db.workspace, db.page);
 host.setOnCommitted(() => projector.changed());
 interface Peer {
@@ -389,22 +391,26 @@ try {
   text(a.doc).insert(0, 'accepted barrier');
   await delay(50);
   card(invalidBatch.doc).setAttribute('health', -2 as unknown as string);
-  card(validBatch.doc).setAttribute('biography', 'must not leak from rejected batch');
+  card(validBatch.doc).setAttribute('biography', 'valid contribution survives rejected batch');
   await until(() => host.pendingBatchCount === 2, 'two pending candidates');
   releaseBatch();
-  await until(() => invalidBatch.closed && validBatch.closed, 'whole invalid batch rejected');
-  assert.equal(await revision(), validBefore + 1);
+  await until(
+    () => invalidBatch.closed && validBatch.received.length === 1,
+    'only invalid contributor rejected',
+  );
+  assert(!validBatch.closed);
+  assert.equal(await revision(), validBefore + 2);
   assert.equal(invalidBatch.received.length, 0);
-  assert.equal(validBatch.received.length, 0);
+  assert.equal(validBatch.received.length, 1);
   assert(matches(a.doc, b.doc));
-  assert.notEqual(card(b.doc).getAttribute('biography'), 'must not leak from rejected batch');
+  assert.equal(card(b.doc).getAttribute('biography'), 'valid contribution survives rejected batch');
   text(b.doc).insert(0, 'after rejected batch');
   await until(
-    async () => (await revision()) === validBefore + 2 && matches(a.doc, b.doc),
+    async () => (await revision()) === validBefore + 3 && matches(a.doc, b.doc),
     'healthy room continues after rejected batch',
   );
   passed(
-    'Invalid data, SQL failure and invalid multi-author batch never leak or receive receipts; healthy room continues',
+    'Invalid data/SQL failure never leak; rejected batch is retried per contribution, valid peer receives receipt and remains connected',
   );
 
   const a2 = peer(alice.cookie);

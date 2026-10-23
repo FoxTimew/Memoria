@@ -2,6 +2,8 @@ import { Worker } from 'node:worker_threads';
 import { once } from 'node:events';
 import type { BlockEnvelope } from '@memoria/blocks-core';
 
+export class CandidateRejected extends Error {}
+
 export class CandidateValidator {
   private readonly worker: Worker;
   private busy = false;
@@ -50,7 +52,7 @@ export class CandidateValidator {
           validationMs: number;
         }) => {
           finish();
-          if (result.error) reject(new Error(result.error));
+          if (result.error) reject(new CandidateRejected(result.error));
           else resolve(result);
         };
         const timer = setTimeout(() => {

@@ -1,0 +1,159 @@
+{
+  "date": "2026-10-23T18:59:07.878Z",
+  "scope": "Actual simultaneously retained persistent replicas in one isolated process, independent checkpoint copy and full indexes per document. Forced GC. Excludes Hocuspocus live documents, sockets, SQL, and worker-per-room overhead. external includes arrayBuffers; do not add them twice.",
+  "reports": [
+    {
+      "profile": "content-1M",
+      "encodedBytes": 1045110,
+      "baseline": {
+        "rss": 75038720,
+        "heapTotal": 31567872,
+        "heapUsed": 12801936,
+        "external": 6238537,
+        "arrayBuffers": 2266783
+      },
+      "availableAtStart": 2196856832,
+      "totalPhysical": 14877257728,
+      "loaded": 100,
+      "retained": {
+        "heapUsed": 374762000,
+        "external": 104533355,
+        "arrayBuffers": 104511000,
+        "rss": 603099136
+      },
+      "samples": [
+        {
+          "count": 1,
+          "heapUsed": 4841256,
+          "external": 1067465,
+          "arrayBuffers": 1045110,
+          "rss": 12681216,
+          "absoluteRss": 87719936,
+          "freePhysical": 2180071424
+        },
+        {
+          "count": 5,
+          "heapUsed": 19990568,
+          "external": 5247905,
+          "arrayBuffers": 5225550,
+          "rss": 50716672,
+          "absoluteRss": 125755392,
+          "freePhysical": 2140340224
+        },
+        {
+          "count": 10,
+          "heapUsed": 38776688,
+          "external": 10473455,
+          "arrayBuffers": 10451100,
+          "rss": 103956480,
+          "absoluteRss": 178995200,
+          "freePhysical": 2052620288
+        },
+        {
+          "count": 25,
+          "heapUsed": 94905168,
+          "external": 26150105,
+          "arrayBuffers": 26127750,
+          "rss": 233140224,
+          "absoluteRss": 308178944,
+          "freePhysical": 1849565184
+        },
+        {
+          "count": 50,
+          "heapUsed": 188152384,
+          "external": 52277855,
+          "arrayBuffers": 52255500,
+          "rss": 354414592,
+          "absoluteRss": 429453312,
+          "freePhysical": 1713172480
+        },
+        {
+          "count": 75,
+          "heapUsed": 281495784,
+          "external": 78405605,
+          "arrayBuffers": 78383250,
+          "rss": 481107968,
+          "absoluteRss": 556146688,
+          "freePhysical": 1790291968
+        },
+        {
+          "count": 100,
+          "heapUsed": 374774320,
+          "external": 104533355,
+          "arrayBuffers": 104511000,
+          "rss": 602923008,
+          "absoluteRss": 677961728,
+          "freePhysical": 1668743168
+        }
+      ]
+    },
+    {
+      "profile": "history-1M",
+      "encodedBytes": 1042470,
+      "baseline": {
+        "rss": 571396096,
+        "heapTotal": 155299840,
+        "heapUsed": 17997280,
+        "external": 7366258,
+        "arrayBuffers": 3372149
+      },
+      "availableAtStart": 1756880896,
+      "totalPhysical": 14877257728,
+      "loaded": 68,
+      "stopReason": "Physical memory reserve below 384 MiB; no forced paging/OOM",
+      "retained": {
+        "heapUsed": 1342596144,
+        "external": 70887960,
+        "arrayBuffers": 70887960,
+        "rss": 1415327744
+      },
+      "samples": [
+        {
+          "count": 1,
+          "heapUsed": 19898008,
+          "external": 2680770,
+          "arrayBuffers": 2680770,
+          "rss": 24317952,
+          "absoluteRss": 595714048,
+          "freePhysical": 1735045120
+        },
+        {
+          "count": 5,
+          "heapUsed": 98968872,
+          "external": 6850650,
+          "arrayBuffers": 6850650,
+          "rss": 35364864,
+          "absoluteRss": 606760960,
+          "freePhysical": 1724940288
+        },
+        {
+          "count": 10,
+          "heapUsed": 197487776,
+          "external": 10424700,
+          "arrayBuffers": 10424700,
+          "rss": 48738304,
+          "absoluteRss": 620134400,
+          "freePhysical": 1722413056
+        },
+        {
+          "count": 25,
+          "heapUsed": 493837944,
+          "external": 27700050,
+          "arrayBuffers": 27700050,
+          "rss": 485474304,
+          "absoluteRss": 1056870400,
+          "freePhysical": 1276743680
+        },
+        {
+          "count": 50,
+          "heapUsed": 987214240,
+          "external": 52123500,
+          "arrayBuffers": 52123500,
+          "rss": 892522496,
+          "absoluteRss": 1463918592,
+          "freePhysical": 754409472
+        }
+      ]
+    }
+  ]
+}

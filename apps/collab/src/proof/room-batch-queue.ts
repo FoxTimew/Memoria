@@ -8,7 +8,7 @@ export class RoomBatchQueue<T, R> {
     return this.pending.length;
   }
   constructor(
-    private readonly process: (values: T[]) => Promise<R[]>,
+    private readonly process: (values: T[]) => Promise<(R | Error)[]>,
     private readonly maximum = 100,
   ) {}
   enqueue(value: T): Promise<R> {
@@ -25,7 +25,11 @@ export class RoomBatchQueue<T, R> {
       try {
         const results = await this.process(batch.map((e) => e.value));
         if (results.length !== batch.length) throw new Error('Incomplete batch receipts');
-        batch.forEach((e, i) => e.resolve(results[i]!));
+        batch.forEach((e, i) => {
+          const result = results[i]!;
+          if (result instanceof Error) e.reject(result);
+          else e.resolve(result);
+        });
       } catch (error) {
         for (const entry of batch) entry.reject(error);
       }

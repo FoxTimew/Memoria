@@ -117,7 +117,11 @@ describe('collaboration strict codec and isolated candidates', () => {
   });
   it('keeps React/BlockNote unreachable from the validation worker and journal', async () => {
     await build({
-      entryPoints: ['apps/collab/src/validation-worker.ts', 'apps/collab/src/journal.ts'],
+      entryPoints: [
+        'apps/collab/src/validation-worker.ts',
+        'apps/collab/src/proof/incremental-worker.ts',
+        'apps/collab/src/journal.ts',
+      ],
       outdir: '.local/unused',
       write: false,
       bundle: true,

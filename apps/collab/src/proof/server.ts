@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { Server } from '@hocuspocus/server';
 import type { Connection } from '@hocuspocus/server';
 import * as Y from 'yjs';
-import { CandidateValidator } from '../validator.ts';
+import { CandidateValidator, CandidateRejected } from '../validator.ts';
 import { appendUpdate } from '../journal.ts';
 import type { WriteIdentity } from '../journal.ts';
 import type { ProofDatabase } from './database.ts';
@@ -15,16 +15,23 @@ import { RoomBatchQueue } from './room-batch-queue.ts';
 import { appendBatch } from './batch-journal.ts';
 import type { Document } from '@hocuspocus/server';
 
+import { IncrementalValidator } from './incremental-validator.ts';
+import { RejectionBudget } from './rejection-budget.ts';
+
 type Context = WriteIdentity & { name: string };
 export async function proofServer(
   db: ProofDatabase,
   authentication: Awaited<ReturnType<typeof proofAuth>>,
   room: string,
   initial: Uint8Array,
-  options: { measure?: boolean; batching?: boolean } = {},
+  options: { measure?: boolean; batching?: boolean; incremental?: boolean } = {},
 ) {
   const batching = options.batching ?? true;
   const metrics = new QueueMetrics();
+  let incremental: IncrementalValidator | undefined;
+  let fatal = false;
+  const refusalBudget = new RejectionBudget();
+  const charged = new WeakSet<Connection<Context>>();
   const validator = new CandidateValidator(new URL('./validation-worker.mjs', import.meta.url));
   await validator.ready();
   const connections = new Set<Connection<Context>>();
@@ -41,52 +48,88 @@ export async function proofServer(
   let onCommitted = () => {};
   const rejected: string[] = [];
   const batchSizes: number[] = [];
-  const batches = new RoomBatchQueue<
-    { connection: Connection<Context>; document: Document; payload: Uint8Array },
-    { revision: number; receipt: string; update: Uint8Array }
-  >(async (entries) => {
+  type Entry = { connection: Connection<Context>; document: Document; payload: Uint8Array };
+  type Receipt = { revision: number; receipt: string; update: Uint8Array };
+  const recoverable = (error: unknown) =>
+    error instanceof CandidateRejected ||
+    (error instanceof Error &&
+      ['Access denied', 'File access denied', 'Read only'].includes(error.message));
+  async function attempt(entries: Entry[]): Promise<Receipt[]> {
+    if (fatal) throw new Error('Room requires durable reload');
     const document = entries[0]!.document;
     for (const entry of entries) {
-      metrics.enter(entry.payload);
       if (
         entry.document !== document ||
+        entry.connection.webSocket.readyState !== 1 ||
         entry.connection.readOnly ||
+        refusalBudget.blocked(entry.connection.context.user) ||
         !(await authorized(entry.connection.context))
       )
         throw new Error('Access denied');
     }
     const merged = Y.mergeUpdates(entries.map((e) => e.payload));
-    const validated = await validator.validate(Y.encodeStateAsUpdate(document), merged);
-    const hold = holdNext;
-    holdNext = undefined;
-    if (hold) await hold();
-    if (rejectNextJournal) {
-      rejectNextJournal = false;
-      await db.client.query("SET memoria.proof_fail_journal TO 'on'");
-    }
-    let revisions: Map<string, number>;
+    let committed = false;
     try {
-      revisions = await appendBatch(
-        db.client,
-        entries.map((e) => ({
-          identity: e.connection.context,
-          receipt: updateReceipt(e.payload),
-          update: e.payload,
-        })),
-        merged,
-        validated.blocks,
-      );
-    } finally {
-      await db.client.query("SET memoria.proof_fail_journal TO 'off'");
+      const validated = incremental
+        ? await incremental.prepare(merged)
+        : await validator.validate(Y.encodeStateAsUpdate(document), merged);
+      const hold = holdNext;
+      holdNext = undefined;
+      if (hold) await hold();
+      if (rejectNextJournal) {
+        rejectNextJournal = false;
+        await db.client.query("SET memoria.proof_fail_journal TO 'on'");
+      }
+      let revisions: Map<string, number>;
+      try {
+        revisions = await appendBatch(
+          db.client,
+          entries.map((e) => ({
+            identity: e.connection.context,
+            receipt: updateReceipt(e.payload),
+            update: e.payload,
+          })),
+          merged,
+          validated.blocks,
+        );
+        committed = true;
+      } finally {
+        await db.client.query("SET memoria.proof_fail_journal TO 'off'");
+      }
+      if (incremental) await incremental.commit();
+      Y.applyUpdate(document, merged);
+      batchSizes.push(entries.length);
+      return entries.map((e) => ({
+        revision: revisions.get(updateReceipt(e.payload))!,
+        receipt: updateReceipt(e.payload),
+        update: e.payload,
+      }));
+    } catch (error) {
+      if (committed) {
+        fatal = true;
+        for (const c of connections) c.webSocket.close(1011, 'Durable reload required');
+      } else if (incremental) await incremental.abort();
+      throw error;
     }
-    // Commit first. Native Hocuspocus application of each original is then idempotent.
-    Y.applyUpdate(document, merged);
-    batchSizes.push(entries.length);
-    return entries.map((e) => ({
-      revision: revisions.get(updateReceipt(e.payload))!,
-      receipt: updateReceipt(e.payload),
-      update: e.payload,
-    }));
+  }
+  const batches = new RoomBatchQueue<Entry, Receipt>(async (entries) => {
+    for (const entry of entries) metrics.enter(entry.payload);
+    try {
+      return await attempt(entries);
+    } catch (error) {
+      if (!recoverable(error) || entries.length === 1) throw error;
+      const results: (Receipt | Error)[] = [];
+      // Each accepted individual advances the durable state before evaluating the next.
+      for (const entry of entries) {
+        try {
+          results.push((await attempt([entry]))[0]!);
+        } catch (individual) {
+          if (!recoverable(individual)) throw individual;
+          results.push(individual instanceof Error ? individual : new Error('Rejected'));
+        }
+      }
+      return results;
+    }
   });
   async function authorized(identity: WriteIdentity) {
     const result = await authentication.pool.query(
@@ -137,7 +180,8 @@ export async function proofServer(
         session: session.session.id,
         name: session.user.name,
       };
-      if (!(await authorized(identity))) throw new Error('Access denied');
+      if (refusalBudget.blocked(identity.user) || !(await authorized(identity)))
+        throw new Error('Access denied');
       if (
         connections.size >= 500 ||
         [...connections].filter((c) => c.context.user === identity.user).length >= 20
@@ -160,6 +204,11 @@ export async function proofServer(
         [db.page, stored.rows[0]?.snapshot_revision ?? 0],
       );
       for (const row of rows.rows) Y.applyUpdate(document, row.update);
+      if (options.incremental) {
+        await incremental?.close();
+        incremental = new IncrementalValidator();
+        await incremental.init(Y.encodeStateAsUpdate(document));
+      }
     },
     async connected({ connection }) {
       connections.add(connection);
@@ -187,7 +236,8 @@ export async function proofServer(
       if (type === 0) return;
       if (!batching) metrics.enter(payload);
       try {
-        if (!(await authorized(context))) throw new Error('Access denied');
+        if (refusalBudget.blocked(context.user) || !(await authorized(context)))
+          throw new Error('Access denied');
         if (Y.snapshotContainsUpdate(Y.snapshot(document), payload)) return;
         if (connection.readOnly) throw new Error('Read only');
         if (batching) {
@@ -213,6 +263,10 @@ export async function proofServer(
         receipts.set(connection, { revision, receipt, update: payload });
       } catch (error) {
         rejected.push(error instanceof Error ? error.message : 'Rejected');
+        if (recoverable(error) && !charged.has(connection)) {
+          charged.add(connection);
+          refusalBudget.reject(context.user);
+        }
         connection.webSocket.close(1008, 'Update rejected');
         throw error;
       }
@@ -255,6 +309,7 @@ export async function proofServer(
     recheck,
     metrics,
     batchSizes,
+    refusalBudget,
     get pendingBatchCount() {
       return batches.waiting;
     },
@@ -272,6 +327,7 @@ export async function proofServer(
       for (const c of connections) c.webSocket.close(1001, 'Proof ended');
       await server.destroy();
       await validator.close();
+      await incremental?.close();
     },
   };
 }

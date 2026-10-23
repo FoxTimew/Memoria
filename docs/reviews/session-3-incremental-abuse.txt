@@ -1,0 +1,97 @@
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 769178de-6f31-4715-bd61-4a7b8b8daef1 (while handling 18360e09-b01e-4f06-b4f0-bd1ef0ab784f:2db2b53f-d143-4309-8ab1-402a5dfc53ea:8cb4da1c-d365-4ec2-a301-1f79b4c254b7) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.receive (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/abuse.mjs:117546:36)
+    at Worker.wrapper (node:events:639:12)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+PASS: rejected merged candidate split; valid contribution committed and only faulty connection closed
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 8d62cf4a-91b9-40ad-9f5d-02c07da23bff (while handling 18360e09-b01e-4f06-b4f0-bd1ef0ab784f:2db2b53f-d143-4309-8ab1-402a5dfc53ea:8cb4da1c-d365-4ec2-a301-1f79b4c254b7) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.receive (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/abuse.mjs:117546:36)
+    at Worker.wrapper (node:events:639:12)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 8e5e9f66-b6b2-400f-b576-6b80701e9ec9 (while handling 18360e09-b01e-4f06-b4f0-bd1ef0ab784f:2db2b53f-d143-4309-8ab1-402a5dfc53ea:8cb4da1c-d365-4ec2-a301-1f79b4c254b7) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.receive (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/abuse.mjs:117546:36)
+    at Worker.wrapper (node:events:639:12)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[onAuthenticate] Access denied
+[onAuthenticate] Access denied
+{"scenario":"invalid loop while two healthy writers type","attackerConnections":3,"invalidUpdatesSent":13,"blockedReconnects":2,"healthyReceipts":[81,81],"healthyDisconnections":[0,0],"sqlReceipts":162,"revision":162,"converged":true}
+ABUSE PROOF COMPLETE: valid contributors never disconnected; all 162 healthy updates have durable receipts; attacker throttled across sockets.
+Incremental abuse exit code: 0
+EXIT_CODE=0

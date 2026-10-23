@@ -35,7 +35,7 @@ Un `Y.Doc` par page devient la référence du **corps** de la page. Sa représen
 Pipeline à démontrer avant l'intégration de l'interface :
 
 1. Mettre les messages et commandes dans une file bornée **par document**, partagée entre toutes ses connexions. Décoder l'enveloppe Hocuspocus, identifier les messages qui contiennent réellement une update et contrôler leurs tailles avant allocation importante.
-2. Construire une copie isolée du dernier état accepté et lui appliquer l'update. Valider le résultat entier, y compris les structures cachées, avant de toucher au document vivant. La file reste détenue jusqu'à l'application finale ; deux candidats ne peuvent être validés sur la même base puis appliqués sans revalidation.
+2. Préparer le candidat dans une réplique isolée persistante du dernier état accepté. Revalider le contenu des blocs touchés avec codec/Zod et contrôler systématiquement les invariants globaux, y compris les structures cachées, avant de toucher au document vivant (preuve incrémentale ci-dessous). La file reste détenue jusqu'à l'application finale ; deux candidats ne peuvent être validés sur la même base puis appliqués sans revalidation.
 3. Ouvrir une transaction courte, prendre le verrou de la **page uniquement**, vérifier leadership, session/droits et visibilité, puis ajouter l'update, son auteur, son reçu idempotent et sa `contentRevision`. Aucun verrou de workspace, projection de blocs, audit agrégé ou outbox dans cette transaction. Aucun appel réseau. La révision durable non projetée constitue aussi le signal de travail persistant pour le projecteur.
 4. Appliquer exactement l'update validée au document vivant, diffuser puis envoyer une confirmation applicative de persistance. Un crash après commit mais avant diffusion se répare en rechargeant PostgreSQL ; une erreur d'application met la salle en pause et force ce rechargement, sans laisser continuer un état divergent.
 
@@ -49,7 +49,7 @@ Un projecteur par page regroupe les updates : environ **1 seconde après la dern
 
 ## 4. Validation, schéma et bornes
 
-**Réserve issue de l'étape 2 bis : la borne de 4 Mio ne respecte pas la cible p95 de 50 ms avec la validation complète. Elle reste inchangée dans le prototype ; son intégration attend l'arbitrage décrit en fin d'ADR.**
+**Décision après 2 bis : preuve incrémentale autorisée, cible p95 < 50 ms à 1 Mio sur deux profils ; 4 Mio indicatif seulement.** Les deux profils à 1 Mio passent dans la mesure ci-dessous ; 4 Mio reste au-dessus de 50 ms. Les bornes de sécurité du prototype restent inchangées. Ce résultat ne valide pas une capacité de production à 4 Mio ni 100 salles actives simultanément.
 
 Les octets Yjs ne sont pas un DTO Zod, mais **le contenu obtenu doit toujours passer les modèles Zod serveur**. Prévoir un codec sans rendu entre le fragment XML Yjs/ProseMirror et les enveloppes métier. Il utilise Yjs/ProseMirror et les exports `/model`, sans charger `/ui`, React ou BlockNote dans NestJS, le worker ou le catalogue serveur. Le schéma structurel est partagé et testé contre le vrai moteur BlockNote 0.56.0. Les conversions actuelles situées dans le catalogue client ne sont pas importables telles quelles côté serveur.
 
@@ -160,7 +160,7 @@ Application séparée, journal synchrone sous verrou de page uniquement, project
 
 Les résultats effectifs, l'environnement, les journaux et les limites restantes figurent dans la [fiche d'étape 2](../reviews/session-3-etape-2-preuve.md). Le prototype reste headless et isolé : ni l'interface, ni Caddy, ni les tables actives, ni `BlockWriteService` ne sont remplacés. Une décision acceptée ne vaut pas validation de toutes les lignes de la matrice ci-dessus.
 
-## Étape 2 bis — résultats et arbitrage en attente
+## Étape 2 bis — résultats initiaux et propositions historiques
 
 La demande du développeur autorise les mesures complémentaires et le regroupement si la file augmente. Elle ne lance pas l'intégration. Résultats du 23 octobre 2026 et journaux complets dans la [fiche de relecture](../reviews/session-3-etape-2bis.md).
 
@@ -175,7 +175,7 @@ La demande du développeur autorise les mesures complémentaires et le regroupem
 
 Les percentiles des composantes ne s'additionnent pas : la dernière colonne est calculée sur les sommes individuelles. Les tailles gardent quelques Kio pour les updates ; les valeurs exactes priment sur les noms de profils. Les profils 1/4 Mio dépassent aussi le délai normal de 250 ms dès leur première validation. Pour mesurer leur coût complet, le diagnostic utilise explicitement 10 s/512 Mio de vieille génération V8 ; le serveur conserve **250 ms/128 Mio**. Le profil réduit est mesuré entièrement avec ces limites normales. Le seuil de 50 ms porte sur candidat + transaction, sans réseau, file ou projection.
 
-**Arbitrage demandé, aucune des deux options n'est appliquée :**
+**Propositions soumises à la fin de 2 bis. Le développeur a depuis choisi la seconde, avec une cible ramenée à 1 Mio et 4 Mio indicatif (section suivante) :**
 
 - Borne provisoire de **192 Kio encodés, historique inclus**, avec validation complète. Le profil proche de cette borne passe avec les limites normales ; 256 Kio échoue déjà. Solution courte mais très restrictive : même un petit contenu peut finir par saturer avec l'historique. Ce résultat local ne garantit pas 50 ms pour toute structure admissible ni tout serveur.
 - **Validation incrémentale limitée aux blocs touchés, recommandée pour conserver l'objectif de 4 Mio.** Nouvelle preuve avant 3a : réplique de validation isolée et persistante, suivi des types/blocs modifiés, validation Zod des blocs concernés et index globaux pour unicité, arbre, profondeur, références et budgets. Il faut aussi supprimer copie et réencodage complets à chaque frappe ; vérifier moins de blocs tout en recopiant le document ne suffit pas. Le document vivant reste intact jusqu'au commit. Sur rejet ou erreur SQL, jeter la réplique candidate et la reconstruire depuis l'état accepté avant de reprendre, sans rollback Yjs par ancien snapshot. Inclure descendants/ancêtres affectés et suppressions ; aucune racine cachée ou dépendance non résolue ne peut être ignorée. Rejouer profils 1/4 Mio, attaques, lots et tests différentiels contre le validateur complet. La tenue de 50 ms reste à démontrer.
@@ -191,11 +191,72 @@ Le cumul initial augmente de 21 à 104 messages aux points 1 s et 12 s. Avec les
 
 La file native est par connexion. La variante unitaire conserve la sérialisation entre `beforeHandleMessage` et `afterHandleMessage` décrite plus haut. Le nouveau processeur de salle, appelé par `beforeSync`, prend tous les candidats déjà en attente quand le lot précédent termine, sans délai ajouté à une salle vide. `Y.mergeUpdates` fusionne leurs binaires ; une validation et une transaction sous verrou de page suivent. Les droits de **tous** les émetteurs sont contrôlés dans la transaction ; chaque reçu, empreinte et auteur est conservé avec la révision commune. Après commit, appliquer le lot avant de libérer les promesses ; l'application native ultérieure de chaque original est idempotente. `afterHandleMessage` confirme chaque reçu.
 
-La projection lit les auteurs dans `collaboration_receipts`, non dans la colonne historique du premier auteur du journal. La compaction conserve ces métadonnées jusqu'à projection/audit. Aucun webhook par frappe. Un lot refusé est atomique : aucune de ses updates n'est persistée, diffusée ou confirmée. Le prototype ferme les connexions participantes, y compris celle dont la contribution était valide ; les autres clients poursuivent. Les tests réels couvrent ce cas multi-auteur et une panne SQL. Le parcours de reprise après rejet reste à intégrer.
+La projection lit les auteurs dans `collaboration_receipts`, non dans la colonne historique du premier auteur du journal. La compaction conserve ces métadonnées jusqu'à projection/audit. Aucun webhook par frappe. Le premier prototype rejetait le lot entier et fermait tous ses participants. Cette politique est remplacée par la revalidation individuelle décrite ci-dessous : aucune contribution invalide ne devient durable, mais les contributions valides sont appliquées et confirmées. La panne SQL reste distincte du refus métier.
 
 Les limites d'admission de production doivent compter les files **avant** les files natives Hocuspocus : borner la file applicative seule ne les couvre pas. Ce travail appartient à 3a.
 
-## Intégration après arbitrage, en trois relectures
+## Preuve incrémentale avant 3a — décision et résultats
+
+**Cadre accepté :** prototype dans `proof/`, avant tout code de production. Cible p95 < 50 ms pour validation + transaction à 1 Mio, sur un profil contenu proche des bornes métier et un profil riche en historique. Mesure 4 Mio indicative ; mémoire réelle à 100 documents ; rebasage évalué sans l'activer ; isolation des contributions refusées. En cas d'échec d'un profil requis, arrêt et proposition de la plus grande taille mesurée sous 50 ms, avec validateur remplaçable en 3a et réexamen avant utilisateurs réels. Les deux profils requis passent ici ; cette sortie de secours n'est pas activée.
+
+### Réplique et validation
+
+Une réplique candidate persistante vit dans un worker isolé ; le document Hocuspocus reste intact avant commit. `prepare` applique l'update à cette réplique, valide, puis la transaction PostgreSQL du journal se termine avant `commit` de la réplique, application au document vivant et confirmation. Ni snapshot complet, ni copie de tout le contenu vers le thread SQL à chaque frappe : seuls les blocs image nécessaires au contrôle des références de fichiers sont retournés. La projection complète conserve son propre chemin asynchrone.
+
+Le cache conserve uniquement le **contenu déjà validé** de chaque nœud de bloc. `transaction.changed` invalide les blocs touchés (texte, marques, props, insertions/suppressions). Les suppressions et remplacements de sous-arbres sont inclus. Le codec parcourt toujours le squelette complet, borné à 500 blocs : racine unique, groupes/conteneurs, attributs autorisés, UUID uniques, ordre/parents, profondeur. Les racines cachées, attributs de racine et dépendances non résolues sont toujours refusés. Un compteur des horloges Yjs maintient le nombre logique de structures, suppressions comprises ; les duplications d'update ne l'incrémentent pas. Les octets JSON sont recalculés exactement à partir de la structure fraîche et des tailles de contenus validés en cache. Les tests différentiels comparent au validateur complet, y compris dépassements 500 blocs, profondeur 50, structures et JSON.
+
+Pour l'encodage, une majoration conservative ajoute la taille de l'update au dernier majorant accepté. Si elle dépasse la borne de 4 Mio, un encodage exact tranche ; ce chemin peut être plus lent près de la limite. Sur refus ou rollback SQL, reconstruire la réplique depuis son checkpoint accepté et ses updates commises, puis reprendre. **Aucun rollback par fusion d'un ancien snapshot.** Cette reconstruction froide coûte plus qu'une frappe et reste hors percentile du chemin accepté. Le prototype conserve les updates depuis le checkpoint ; la rotation de ce checkpoint et la mémoire de travail sous charge sont à intégrer/borner en 3a, en lien avec la compaction.
+
+L'accès à `transaction.changed`, `doc.store.clients` et `_map` est lié à Yjs 13.6.33. Toute mise à niveau devra repasser les tests différentiels et les mesures. Les parcours de validation restent sans React/BlockNote ; seule la fixture headless utilise BlockNote pour générer ses documents. Les objets Yjs complets restent coûteux lorsque beaucoup d'identifiants de clients s'accumulent, même avec peu de blocs à revalider.
+
+### Performances mesurées
+
+20 updates de chauffe puis **200 échantillons non filtrés** par série complète, mélange texte, suppression seule et champ de fiche. PostgreSQL réel avec `fsync=on` et `synchronous_commit=on`, verrous et contrôle des droits dans la transaction. Windows 10.0.26300, Ryzen 7 5800H, Node 24.21.0, PostgreSQL 17.11 en conteneur. Les percentiles ci-dessous ne s'additionnent pas : le total est calculé sur chaque somme, incluant l'aller-retour du worker et l'accusé `commit` de la réplique. Réseau, file, chargement froid et projection exclus.
+
+| Profil                                  | Yjs initial / final (octets) | JSON métier initial | p95 validation isolée | p95 SQL   | p95 total      | Chargement froid |
+| --------------------------------------- | ---------------------------- | ------------------- | --------------------- | --------- | -------------- | ---------------- |
+| Contenu, proche de 1 Mio                | 1 045 110 / 1 047 323        | 1 040 382           | 2,337 ms              | 11,223 ms | **13,638 ms**  | 265 ms           |
+| Historique, proche de 1 Mio             | 1 042 470 / 1 044 947        | 100 802             | 35,640 ms             | 12,839 ms | **48,859 ms**  | 434 ms           |
+| Historique, proche de 4 Mio, diagnostic | 4 126 752 / 4 129 229        | 100 802             | 143,290 ms            | 10,012 ms | **152,908 ms** | 1 058 ms         |
+
+Le profil contenu contient **500 blocs**, profondeur 3, les neuf types du catalogue et 55 fiches. Ses biographies UTF-8 denses approchent la limite JSON tout en respectant les limites de champ et de structures ; ce n'est pas 1 Mio de texte ASCII ProseMirror ni une preuve à profondeur 50. Les profils historiques ont respectivement **41 129 et 176 619 identifiants clients** ; contenu modeste, GC activé, taille stable après rechargement. Une marge de quelques Kio (64 Kio pour 4 Mio) permet la frappe ; les tailles exactes priment sur les noms des profils.
+
+Les deux séries 1 Mio utilisent le budget normal **250 ms/128 Mio** de vieille génération V8. Le profil historique ne garde que **1,14 ms de marge au p95**, avec p99 57,26 ms : résultat local, pas un SLO de production. Le premier essai 4 Mio a dépassé 250 ms avant le premier échantillon mesuré ; il est conservé dans le journal. La série indicative complète est explicitement réalisée à **10 s/512 Mio**, sans relever les bornes métier/structures/binaires ni celles du serveur de preuve. Le chargement/rechargement froid possède un délai distinct de 30 s. Ni le budget élargi de diagnostic ni le coût à 4 Mio ne sont présentés comme validés en production.
+
+### Mémoire réelle des répliques
+
+Mesure avec GC forcé et **100 répliques réellement retenues simultanément**, chacune possédant son document, son cache de validation et sa copie indépendante du checkpoint. Un processus isolé accueille ces répliques pour mesurer leurs données ; il ne simule pas 100 workers, les documents vivants Hocuspocus, sockets, pools SQL, projections ou files en vol. `external` inclut les buffers : ne pas les additionner deux fois.
+
+| Profil           | Tas à 1 réplique | Tas / document moyen à 100 | Tas total à 100 | Buffers à 100 | RSS absolue du processus à 100 |
+| ---------------- | ---------------- | -------------------------- | --------------- | ------------- | ------------------------------ |
+| Contenu 1 Mio    | 4,62 Mio         | 3,57 Mio                   | 357,40 Mio      | 99,67 Mio     | 646,55 Mio                     |
+| Historique 1 Mio | 19,94 Mio        | 18,83 Mio                  | 1 883,19 Mio    | 99,42 Mio     | 2 634,58 Mio                   |
+
+La première réplique inclut des coûts fixes ; la RSS inclut le runtime et la mémoire réservée par V8, elle n'est pas la somme des seules données retenues. Deux essais historiques ont atteint la réserve de sécurité de 384 Mio disponibles à 68 puis 49 documents. Après libération de RAM, un processus neuf a atteint **100**, avec encore environ 3,1 Gio physiques disponibles ; aucune extrapolation pour la ligne historique du tableau. Le journal de la première série conserve son arrêt à 68 ; la série historique finale fait foi pour 100. La borne de 100 documents exige donc un budget de plusieurs Gio **avant** de compter le reste du service. Dimensionnement global, éviction des salles inactives et politique de workers à prouver en 3a.
+
+### Rebasage évalué, non activé
+
+Proposition de déclenchement à vérifier lors d'une compaction : **encodage ≥ 768 Kio et ratio encodage Yjs / JSON métier ≥ 4**. C'est un signal de maintenance pour l'historique disproportionné, pas une action à chaque frappe. Le profil dense ne le déclenche pas ; les profils historiques le déclenchent. Un rebasage se distinguerait de la compaction ordinaire : valider le contenu, reconstruire un document neuf avec de nouveaux identifiants CRDT (UUID métier conservés), créer une **nouvelle génération** atomiquement et forcer les clients à la recharger. Les clients ayant des écritures hors ligne de l'ancienne génération suivent le parcours d'export local déjà spécifié dans cet ADR ; aucun replay intergénérations. Ce parcours navigateur n'est pas encore implémenté.
+
+Évaluation seulement : source déjà chargée, décodage complet/validation, reconstruction du XML visible, encodage neuf puis égalité du contenu vérifiée. Deux chauffes et dix mesures, p95 calculé sans filtrage :
+
+| Profil           | Avant / après (octets) | Ratio initial | p95 reconstruction et vérification |
+| ---------------- | ---------------------- | ------------- | ---------------------------------- |
+| Contenu 1 Mio    | 1 045 110 / 1 043 860  | 1,00          | 40,59 ms                           |
+| Historique 1 Mio | 1 042 470 / 103 111    | 10,34         | 24,73 ms                           |
+| Historique 4 Mio | 4 126 752 / 103 111    | 40,94         | 22,41 ms                           |
+
+Le coût du chargement de l'ancien historique, du commit de génération et des reconnexions est exclu. Cette petite série mesure le mécanisme en mémoire, pas une opération de maintenance complète. **Aucun rebasage de production, changement de génération ou reset applicatif ajouté**, puisque les profils requis passent avec la validation incrémentale.
+
+### Rejet d'un lot et protection des autres rédacteurs
+
+Si le candidat fusionné échoue sur le contenu ou les droits, reconstruire le dernier état accepté puis revalider **chaque contribution séparément**, dans l'ordre de la file. Chaque contribution valide avance l'état durable et reçoit son reçu ; la suivante est validée sur ce nouvel état. Fermer uniquement les connexions fautives. Un échec d'infrastructure (worker/SQL) reste une indisponibilité, pas un refus imputé à l'utilisateur ; si le commit est fait mais l'application échoue, bloquer la salle et exiger son rechargement durable.
+
+Une connexion est fermée dès son refus. Pour éviter les reconnexions abusives : **trois connexions refusées du même utilisateur dans cette salle en 60 s entraînent 60 s de blocage**, état conservé au-delà des sockets. Une seule pénalité par connexion physique, même si plusieurs messages y sont déjà en file ; compteurs expirants. Le contrôle s'applique à l'authentification et avant validation. Cela complète, sans remplacer, les quotas d'admission dès réception prévus pour 3a.
+
+Le scénario réel force un lot mêlant un client invalide et un rédacteur valide, puis fait boucler le fautif pendant que deux autres écrivent. Résultat : **162 confirmations vérifiées en SQL, 0 déconnexion pour chacun des deux rédacteurs, convergence**, aucun reçu pour le fautif, trois connexions fautives fermées puis deux reconnexions refusées avant tout contenu. Les douze scénarios de transport passent avec le validateur incrémental et restent rejoués avec le validateur complet. Journaux, échantillons et relecture : [preuve incrémentale](../reviews/session-3-validation-incrementale.md). **3a reste non commencée.**
+
+## Intégration après relecture de la preuve, en trois livraisons
 
 - **3a — service de production.** Code à côté du prototype ; migrations Drizzle définitives, leadership PostgreSQL, admission et quotas dès réception, triggers de révocation et contrôle de secours, HMAC interne, `BlockWriteService`, projection et compaction automatiques. Porter les douze scénarios sur le service réel en tests permanents puis supprimer `proof/`.
 - **3b — éditeur.** Provider front, statuts d'enregistrement, routage WSS Caddy, réinitialisation documentée des données de test et champs séparés de character-card. Collaboration testable dans deux navigateurs à la fin.

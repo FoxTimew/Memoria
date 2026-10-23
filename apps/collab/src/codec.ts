@@ -73,14 +73,109 @@ function inline(node: Y.XmlElement) {
 }
 
 /** Strict raw Yjs codec: no ProseMirror schema coercion/defaulting and no UI dependency. */
-export function decodeDocument(doc: Y.Doc): BlockEnvelope[] {
+export interface ContentIndex {
+  content: WeakMap<
+    Y.XmlElement,
+    { value: Pick<BlockEnvelope, 'type' | 'schemaVersion' | 'content'>; bytes: number }
+  >;
+  structures: number;
+  checked: number;
+  jsonBytes: number;
+}
+function decodeContent(node: Y.XmlElement) {
+  let type: string;
+  let data: unknown;
+  if (node.nodeName === 'gamedevCharacterCard') {
+    const props = attributes(node, [
+      'schemaVersion',
+      'characterId',
+      'displayName',
+      'archetype',
+      'biography',
+      'health',
+      'attack',
+      'tags',
+    ]);
+    requireShape(props.schemaVersion === 2, 'Unsupported character-card version');
+    requireShape(typeof props.tags === 'string', 'Invalid tags');
+    const { schemaVersion, tags, ...fields } = props;
+    void schemaVersion;
+    type = 'gamedev.character-card';
+    data = { ...fields, tags: JSON.parse(tags) as unknown };
+    requireShape(node.length === 0, 'Unexpected character content');
+  } else if (node.nodeName === 'memoriaImage') {
+    const props = attributes(node, ['fileId', 'alt', 'caption', 'width']);
+    type = 'core.image';
+    data = { ...props, fileId: props.fileId === '' ? null : props.fileId };
+    requireShape(node.length === 0, 'Unexpected image content');
+  } else if (node.nodeName === 'divider') {
+    attributes(node, []);
+    type = 'core.divider';
+    data = {};
+    requireShape(node.length === 0, 'Unexpected divider content');
+  } else if (node.nodeName === 'codeBlock') {
+    const props = attributes(node, ['language']);
+    type = 'core.code';
+    const spans = inline(node) as { type: string; text: string; styles: object }[];
+    requireShape(
+      spans.every((s) => s.type === 'text' && Object.keys(s.styles).length === 0),
+      'Styled code',
+    );
+    data = { language: props.language, code: spans.map((s) => s.text).join('') };
+  } else {
+    const mapping: Record<string, string> = {
+      paragraph: 'core.paragraph',
+      heading: 'core.heading',
+      bulletListItem: 'core.bullet-list-item',
+      numberedListItem: 'core.numbered-list-item',
+      checkListItem: 'core.todo',
+    };
+    type = mapping[node.nodeName] ?? '';
+    requireShape(type, 'Unknown block type');
+    const extra =
+      node.nodeName === 'heading'
+        ? ['level', 'isToggleable']
+        : node.nodeName === 'numberedListItem'
+          ? ['start']
+          : node.nodeName === 'checkListItem'
+            ? ['checked']
+            : [];
+    const props = attributes(node, [...common, ...extra]);
+    requireShape(
+      props.backgroundColor === 'default' &&
+        props.textColor === 'default' &&
+        props.textAlignment === 'left',
+      'Unsupported presentation',
+    );
+    if (node.nodeName === 'heading')
+      requireShape(props.isToggleable === false, 'Toggle heading unsupported');
+    data = {
+      spans: inline(node),
+      ...(node.nodeName === 'heading' ? { level: props.level } : {}),
+      ...(node.nodeName === 'numberedListItem' ? { start: props.start ?? null } : {}),
+      ...(node.nodeName === 'checkListItem' ? { checked: props.checked } : {}),
+    };
+  }
+  const model = registry.get(type);
+
+  return {
+    type: model.type,
+    schemaVersion: model.version,
+    content: model.parse(data, model.version),
+  };
+}
+export function decodeDocument(doc: Y.Doc, index?: ContentIndex): BlockEnvelope[] {
   requireShape(doc.share.size === 1 && doc.share.has('prosemirror'), 'Unknown shared root');
   requireShape(!doc.store.pendingStructs && !doc.store.pendingDs, 'Unresolved Yjs dependencies');
-  let structures = 0;
-  for (const entries of doc.store.clients.values())
-    for (const item of entries) structures += item.length;
+  let structures = index?.structures ?? 0;
+  if (!index)
+    for (const entries of doc.store.clients.values())
+      for (const item of entries) structures += item.length;
+  if (index) index.checked = 0;
   requireShape(structures <= bounds.structs, 'Too many Yjs structures');
   const root = doc.getXmlFragment('prosemirror');
+  requireShape(root._map.size === 0, 'Unexpected root attributes');
+  let jsonBytes = 2;
   requireShape(root.length === 1, 'Expected one block group');
   const output: BlockEnvelope[] = [];
   const ids = new Set<string>();
@@ -89,7 +184,7 @@ export function decodeDocument(doc: Y.Doc): BlockEnvelope[] {
     const group = element(rawGroup, 'blockGroup');
     attributes(group, []);
     requireShape(group.length > 0, 'Empty block group');
-    for (const [index, rawContainer] of group.toArray().entries()) {
+    for (const [positionIndex, rawContainer] of group.toArray().entries()) {
       requireShape(output.length < bounds.blocks, 'Maximum block count');
       const container = element(rawContainer, 'blockContainer');
       const id = uuid.parse(attributes(container, ['id']).id);
@@ -97,96 +192,30 @@ export function decodeDocument(doc: Y.Doc): BlockEnvelope[] {
       ids.add(id);
       requireShape(container.length === 1 || container.length === 2, 'Invalid block container');
       const node = element(container.get(0));
-      let type: string;
-      let data: unknown;
-      if (node.nodeName === 'gamedevCharacterCard') {
-        const props = attributes(node, [
-          'schemaVersion',
-          'characterId',
-          'displayName',
-          'archetype',
-          'biography',
-          'health',
-          'attack',
-          'tags',
-        ]);
-        requireShape(props.schemaVersion === 2, 'Unsupported character-card version');
-        requireShape(typeof props.tags === 'string', 'Invalid tags');
-        const { schemaVersion, tags, ...fields } = props;
-        void schemaVersion;
-        type = 'gamedev.character-card';
-        data = { ...fields, tags: JSON.parse(tags) as unknown };
-        requireShape(node.length === 0, 'Unexpected character content');
-      } else if (node.nodeName === 'memoriaImage') {
-        const props = attributes(node, ['fileId', 'alt', 'caption', 'width']);
-        type = 'core.image';
-        data = { ...props, fileId: props.fileId === '' ? null : props.fileId };
-        requireShape(node.length === 0, 'Unexpected image content');
-      } else if (node.nodeName === 'divider') {
-        attributes(node, []);
-        type = 'core.divider';
-        data = {};
-        requireShape(node.length === 0, 'Unexpected divider content');
-      } else if (node.nodeName === 'codeBlock') {
-        const props = attributes(node, ['language']);
-        type = 'core.code';
-        const spans = inline(node) as { type: string; text: string; styles: object }[];
-        requireShape(
-          spans.every((s) => s.type === 'text' && Object.keys(s.styles).length === 0),
-          'Styled code',
-        );
-        data = { language: props.language, code: spans.map((s) => s.text).join('') };
-      } else {
-        const mapping: Record<string, string> = {
-          paragraph: 'core.paragraph',
-          heading: 'core.heading',
-          bulletListItem: 'core.bullet-list-item',
-          numberedListItem: 'core.numbered-list-item',
-          checkListItem: 'core.todo',
-        };
-        type = mapping[node.nodeName] ?? '';
-        requireShape(type, 'Unknown block type');
-        const extra =
-          node.nodeName === 'heading'
-            ? ['level', 'isToggleable']
-            : node.nodeName === 'numberedListItem'
-              ? ['start']
-              : node.nodeName === 'checkListItem'
-                ? ['checked']
-                : [];
-        const props = attributes(node, [...common, ...extra]);
-        requireShape(
-          props.backgroundColor === 'default' &&
-            props.textColor === 'default' &&
-            props.textAlignment === 'left',
-          'Unsupported presentation',
-        );
-        if (node.nodeName === 'heading')
-          requireShape(props.isToggleable === false, 'Toggle heading unsupported');
-        data = {
-          spans: inline(node),
-          ...(node.nodeName === 'heading' ? { level: props.level } : {}),
-          ...(node.nodeName === 'numberedListItem' ? { start: props.start ?? null } : {}),
-          ...(node.nodeName === 'checkListItem' ? { checked: props.checked } : {}),
-        };
+      let parsed = index?.content.get(node);
+      if (!parsed) {
+        const value = decodeContent(node);
+        parsed = { value, bytes: Buffer.byteLength(JSON.stringify(value.content)) };
+        if (index) {
+          index.content.set(node, parsed);
+          index.checked++;
+        }
       }
-      const model = registry.get(type);
       output.push({
         id,
         parentId,
-        position: `a${String(index).padStart(4, '0')}`,
-        type: model.type,
-        schemaVersion: model.version,
-        content: model.parse(data, model.version),
+        position: `a${String(positionIndex).padStart(4, '0')}`,
+        ...parsed.value,
       });
+      jsonBytes +=
+        Buffer.byteLength(JSON.stringify({ ...output.at(-1)!, content: null })) - 4 + parsed.bytes;
       if (container.length === 2) walk(container.get(1), id, depth + 1);
     }
   }
   walk(root.get(0), null, 1);
-  requireShape(
-    Buffer.byteLength(JSON.stringify(output)) <= bounds.json,
-    'Maximum business JSON size',
-  );
+  jsonBytes += Math.max(0, output.length - 1);
+  if (index) index.jsonBytes = jsonBytes;
+  requireShape(jsonBytes <= bounds.json, 'Maximum business JSON size');
   return output;
 }
 

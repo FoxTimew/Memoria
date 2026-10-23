@@ -1,0 +1,139 @@
+INCREMENTAL preparing content-1M
+content-1M: 0/200 measured
+content-1M: 20/200 measured
+content-1M: 40/200 measured
+content-1M: 60/200 measured
+content-1M: 80/200 measured
+content-1M: 100/200 measured
+content-1M: 120/200 measured
+content-1M: 140/200 measured
+content-1M: 160/200 measured
+content-1M: 180/200 measured
+content-1M: 200/200 measured
+{
+  "name": "content-1M",
+  "profile": {
+    "encodedBytes": 1045110,
+    "businessBytes": 1040382,
+    "blocks": 500,
+    "characterCards": 55,
+    "historyClients": 1,
+    "nestingDepth": 3
+  },
+  "coldMs": 265.2567,
+  "workerMemoryMiB": 128,
+  "warmup": 20,
+  "iterations": 200,
+  "finalBytes": 1047323,
+  "passed": true,
+  "milliseconds": {
+    "validation": {
+      "p50": 1.484599999999773,
+      "p95": 2.0041000000001077,
+      "p99": 2.4302999999999884,
+      "max": 2.4976999999998952
+    },
+    "validationWithIsolation": {
+      "p50": 1.730199999999968,
+      "p95": 2.337300000000141,
+      "p99": 2.8672999999998865,
+      "max": 2.9992999999999483
+    },
+    "transaction": {
+      "p50": 7.929300000000239,
+      "p95": 11.222600000000057,
+      "p99": 12.591199999999844,
+      "max": 14.364799999999832
+    },
+    "total": {
+      "p50": 9.914499999999862,
+      "p95": 13.637699999999768,
+      "p99": 15.229100000000017,
+      "max": 17.150499999999738
+    }
+  },
+  "samples": "200 unfiltered samples saved"
+}
+INCREMENTAL preparing history-1M
+history-1M: 0/200 measured
+history-1M: 20/200 measured
+history-1M: 40/200 measured
+history-1M: 60/200 measured
+history-1M: 80/200 measured
+history-1M: 100/200 measured
+history-1M: 120/200 measured
+history-1M: 140/200 measured
+history-1M: 160/200 measured
+history-1M: 180/200 measured
+history-1M: 200/200 measured
+{
+  "name": "history-1M",
+  "profile": {
+    "targetBytes": 1044480,
+    "encodedBytes": 1042470,
+    "historyClients": 41129,
+    "gc": true,
+    "blocks": 300,
+    "businessBytes": 100802,
+    "logicalElements": 54732,
+    "structRecords": 44729,
+    "reencodedBytes": 1042470
+  },
+  "coldMs": 433.9403999999995,
+  "workerMemoryMiB": 128,
+  "warmup": 20,
+  "iterations": 200,
+  "finalBytes": 1044947,
+  "passed": true,
+  "milliseconds": {
+    "validation": {
+      "p50": 23.577000000001135,
+      "p95": 35.24619999999777,
+      "p99": 43.01810000000114,
+      "max": 43.89129999999932
+    },
+    "validationWithIsolation": {
+      "p50": 23.868899999997666,
+      "p95": 35.640299999999115,
+      "p99": 43.345799999999144,
+      "max": 44.22780000000057
+    },
+    "transaction": {
+      "p50": 8.170799999999872,
+      "p95": 12.838999999999942,
+      "p99": 15.577000000001135,
+      "max": 23.173000000002503
+    },
+    "total": {
+      "p50": 32.33640000000014,
+      "p95": 48.85920000000078,
+      "p99": 57.26429999999891,
+      "max": 57.95290000000023
+    }
+  },
+  "samples": "200 unfiltered samples saved"
+}
+INCREMENTAL preparing history-4M
+{
+  "name": "history-4M",
+  "profile": {
+    "targetBytes": 4128768,
+    "encodedBytes": 4126752,
+    "historyClients": 176619,
+    "gc": true,
+    "blocks": 300,
+    "businessBytes": 100802,
+    "logicalElements": 190222,
+    "structRecords": 180219,
+    "reencodedBytes": 4126752
+  },
+  "coldMs": 1326.3724000000002,
+  "workerMemoryMiB": 512,
+  "warmup": 20,
+  "iterations": 0,
+  "failure": "Replica budget exceeded (250 ms)",
+  "passed": false,
+  "samples": "0 unfiltered samples saved"
+}
+Incremental incremental-performance exit code: 0
+EXIT_CODE=0
