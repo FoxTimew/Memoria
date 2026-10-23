@@ -49,6 +49,8 @@ Un projecteur par page regroupe les updates : environ **1 seconde après la dern
 
 ## 4. Validation, schéma et bornes
 
+**Réserve issue de l'étape 2 bis : la borne de 4 Mio ne respecte pas la cible p95 de 50 ms avec la validation complète. Elle reste inchangée dans le prototype ; son intégration attend l'arbitrage décrit en fin d'ADR.**
+
 Les octets Yjs ne sont pas un DTO Zod, mais **le contenu obtenu doit toujours passer les modèles Zod serveur**. Prévoir un codec sans rendu entre le fragment XML Yjs/ProseMirror et les enveloppes métier. Il utilise Yjs/ProseMirror et les exports `/model`, sans charger `/ui`, React ou BlockNote dans NestJS, le worker ou le catalogue serveur. Le schéma structurel est partagé et testé contre le vrai moteur BlockNote 0.56.0. Les conversions actuelles situées dans le catalogue client ne sont pas importables telles quelles côté serveur.
 
 À contrôler sur le candidat : racines et types partagés autorisés, nœuds/attributs/marks autorisés, UUID uniques, ordre/parents, profondeur, type/version connus, propriétés de chaque modèle, références de fichiers du même workspace. Rejeter toute structure non décodable, tout bloc inconnu/version future, champ inattendu ou contenu invalide de character-card. Aucun nettoyage silencieux de contenu invalide. Vérifier les structures Yjs en attente de dépendances ; un état partiel non inspectable n'est ni persisté ni acquitté et impose une resynchronisation complète bornée.
@@ -157,3 +159,46 @@ Application séparée, journal synchrone sous verrou de page uniquement, project
 ## État de la preuve
 
 Les résultats effectifs, l'environnement, les journaux et les limites restantes figurent dans la [fiche d'étape 2](../reviews/session-3-etape-2-preuve.md). Le prototype reste headless et isolé : ni l'interface, ni Caddy, ni les tables actives, ni `BlockWriteService` ne sont remplacés. Une décision acceptée ne vaut pas validation de toutes les lignes de la matrice ci-dessus.
+
+## Étape 2 bis — résultats et arbitrage en attente
+
+La demande du développeur autorise les mesures complémentaires et le regroupement si la file augmente. Elle ne lance pas l'intégration. Résultats du 23 octobre 2026 et journaux complets dans la [fiche de relecture](../reviews/session-3-etape-2bis.md).
+
+**Taille : la validation complète ne tient pas 50 ms sur les gros historiques.** Chaque profil contient 300 blocs, 33 fiches, des enfants imbriqués, 100 802 octets de contenu métier et un historique réel de modifications de champs. GC reste activé ; aucune racine de remplissage ni limite du codec désactivée. L'historique répartit des clients Yjs distincts sur les champs de fiches : stress de métadonnées admissibles, pas simulation d'une journée ordinaire. L'encodage après rechargement garde exactement sa taille. Chaque série compte 20 updates de chauffe puis 200 updates non filtrées (texte, suppression seule, champ de fiche).
+
+| Profil            | Taille Yjs initiale → finale (octets) | p95 candidat avec isolation | p95 transaction | p95 total/update |
+| ----------------- | ------------------------------------- | --------------------------- | --------------- | ---------------- |
+| Proche de 192 Kio | 191 175 → 193 652                     | 29,625 ms                   | 11,052 ms       | **38,734 ms**    |
+| Proche de 256 Kio | 257 222 → 259 699                     | 42,427 ms                   | 9,723 ms        | **51,636 ms**    |
+| Proche de 1 Mio   | 1 042 477 → 1 044 954                 | 317,033 ms                  | 11,474 ms       | **327,797 ms**   |
+| Proche de 4 Mio   | 4 188 187 → 4 190 664                 | 1 597,463 ms                | 14,832 ms       | **1 608,796 ms** |
+
+Les percentiles des composantes ne s'additionnent pas : la dernière colonne est calculée sur les sommes individuelles. Les tailles gardent quelques Kio pour les updates ; les valeurs exactes priment sur les noms de profils. Les profils 1/4 Mio dépassent aussi le délai normal de 250 ms dès leur première validation. Pour mesurer leur coût complet, le diagnostic utilise explicitement 10 s/512 Mio de vieille génération V8 ; le serveur conserve **250 ms/128 Mio**. Le profil réduit est mesuré entièrement avec ces limites normales. Le seuil de 50 ms porte sur candidat + transaction, sans réseau, file ou projection.
+
+**Arbitrage demandé, aucune des deux options n'est appliquée :**
+
+- Borne provisoire de **192 Kio encodés, historique inclus**, avec validation complète. Le profil proche de cette borne passe avec les limites normales ; 256 Kio échoue déjà. Solution courte mais très restrictive : même un petit contenu peut finir par saturer avec l'historique. Ce résultat local ne garantit pas 50 ms pour toute structure admissible ni tout serveur.
+- **Validation incrémentale limitée aux blocs touchés, recommandée pour conserver l'objectif de 4 Mio.** Nouvelle preuve avant 3a : réplique de validation isolée et persistante, suivi des types/blocs modifiés, validation Zod des blocs concernés et index globaux pour unicité, arbre, profondeur, références et budgets. Il faut aussi supprimer copie et réencodage complets à chaque frappe ; vérifier moins de blocs tout en recopiant le document ne suffit pas. Le document vivant reste intact jusqu'au commit. Sur rejet ou erreur SQL, jeter la réplique candidate et la reconstruire depuis l'état accepté avant de reprendre, sans rollback Yjs par ancien snapshot. Inclure descendants/ancêtres affectés et suppressions ; aucune racine cachée ou dépendance non résolue ne peut être ignorée. Rejouer profils 1/4 Mio, attaques, lots et tests différentiels contre le validateur complet. La tenue de 50 ms reste à démontrer.
+
+**Dix rédacteurs : regroupement implémenté dans la preuve.** Dix sessions Better Auth, un provider/socket par compte, document représentatif de 178 904 octets/300 blocs. Cinq frappes/s/personne, intervalles déterministes de 180–220 ms, départs décalés ; 60 frappes chacun, 600 confirmations mesurées après 20 écritures de chauffe. Les envois n'attendent pas leurs reçus. La latence va de l'émission client au reçu applicatif durable ; la file inclut les messages retenus par Hocuspocus dès réception WebSocket.
+
+| Variante         | p95 confirmation | Maximum non confirmé / en attente | Non confirmées en fin de frappe | Vidange finale |
+| ---------------- | ---------------- | --------------------------------- | ------------------------------- | -------------- |
+| Journal unitaire | 2 223,526 ms     | 106 / 105                         | 106                             | 2 327,592 ms   |
+| Lots en attente  | **53,022 ms**    | **5 / 4**                         | 3                               | 46,477 ms      |
+
+Le cumul initial augmente de 21 à 104 messages aux points 1 s et 12 s. Avec les lots il reste entre 0 et 2 aux points d'une seconde : aucun accroissement durable observé sur ces 12 s. Les 600 reçus par variante correspondent à PostgreSQL, tous les clients convergent. Chauffe incluse, 620 reçus pour 456 lignes de journal en mode regroupé, contre 620 auparavant. Ce p95 de confirmation n'est pas le seuil serveur de 50 ms de la mesure de taille.
+
+La file native est par connexion. La variante unitaire conserve la sérialisation entre `beforeHandleMessage` et `afterHandleMessage` décrite plus haut. Le nouveau processeur de salle, appelé par `beforeSync`, prend tous les candidats déjà en attente quand le lot précédent termine, sans délai ajouté à une salle vide. `Y.mergeUpdates` fusionne leurs binaires ; une validation et une transaction sous verrou de page suivent. Les droits de **tous** les émetteurs sont contrôlés dans la transaction ; chaque reçu, empreinte et auteur est conservé avec la révision commune. Après commit, appliquer le lot avant de libérer les promesses ; l'application native ultérieure de chaque original est idempotente. `afterHandleMessage` confirme chaque reçu.
+
+La projection lit les auteurs dans `collaboration_receipts`, non dans la colonne historique du premier auteur du journal. La compaction conserve ces métadonnées jusqu'à projection/audit. Aucun webhook par frappe. Un lot refusé est atomique : aucune de ses updates n'est persistée, diffusée ou confirmée. Le prototype ferme les connexions participantes, y compris celle dont la contribution était valide ; les autres clients poursuivent. Les tests réels couvrent ce cas multi-auteur et une panne SQL. Le parcours de reprise après rejet reste à intégrer.
+
+Les limites d'admission de production doivent compter les files **avant** les files natives Hocuspocus : borner la file applicative seule ne les couvre pas. Ce travail appartient à 3a.
+
+## Intégration après arbitrage, en trois relectures
+
+- **3a — service de production.** Code à côté du prototype ; migrations Drizzle définitives, leadership PostgreSQL, admission et quotas dès réception, triggers de révocation et contrôle de secours, HMAC interne, `BlockWriteService`, projection et compaction automatiques. Porter les douze scénarios sur le service réel en tests permanents puis supprimer `proof/`.
+- **3b — éditeur.** Provider front, statuts d'enregistrement, routage WSS Caddy, réinitialisation documentée des données de test et champs séparés de character-card. Collaboration testable dans deux navigateurs à la fin.
+- **3c — présence et stockage local.** Présence, cache Yjs IndexedDB, effacement à la déconnexion et protection contre les onglets retardataires ; effacement des anciens brouillons.
+
+Chaque sous-étape fournit sa fiche, ses contrôles et le hash du commit poussé vérifié à distance. Aucune n'est commencée par la livraison 2 bis. Aucun utilisateur réel avant la fin de la session 4.

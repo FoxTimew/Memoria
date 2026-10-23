@@ -1,0 +1,189 @@
+SIZE: preparing 262144 byte profile (up to 12 KiB headroom)
+SIZE 262144: default budget: completed within default 250 ms / 128 MiB on first update
+SIZE 262144: 1/200 measured updates; latest 53.90 ms
+SIZE 262144: 21/200 measured updates; latest 46.37 ms
+SIZE 262144: 41/200 measured updates; latest 44.06 ms
+SIZE 262144: 61/200 measured updates; latest 45.42 ms
+SIZE 262144: 81/200 measured updates; latest 47.28 ms
+SIZE 262144: 101/200 measured updates; latest 47.05 ms
+SIZE 262144: 121/200 measured updates; latest 47.37 ms
+SIZE 262144: 141/200 measured updates; latest 45.66 ms
+SIZE 262144: 161/200 measured updates; latest 48.28 ms
+SIZE 262144: 181/200 measured updates; latest 52.75 ms
+SIZE 262144: 201/200 measured updates; latest 46.14 ms
+{
+  "target": 262144,
+  "profile": {
+    "targetBytes": 258048,
+    "encodedBytes": 257222,
+    "historyClients": 6760,
+    "gc": true,
+    "blocks": 300,
+    "businessBytes": 100802,
+    "logicalElements": 20363,
+    "structRecords": 10360,
+    "reencodedBytes": 257222
+  },
+  "diagnosticBudget": {
+    "milliseconds": 10000,
+    "memoryMiB": 512
+  },
+  "normalBudgetResult": "completed within default 250 ms / 128 MiB on first update",
+  "warmup": 20,
+  "iterations": 200,
+  "finalBytes": 259699,
+  "milliseconds": {
+    "validation": {
+      "p50": 36.74619999999959,
+      "p95": 40.647899999999936,
+      "p99": 42.83460000000014,
+      "max": 44.46810000000005
+    },
+    "validationWithIsolation": {
+      "p50": 38.47960000000057,
+      "p95": 42.42669999999998,
+      "p99": 44.83109999999988,
+      "max": 46.265699999999924
+    },
+    "transaction": {
+      "p50": 8.68579999999929,
+      "p95": 9.72309999999925,
+      "p99": 10.964200000000346,
+      "max": 12.820600000000923
+    },
+    "total": {
+      "p50": 47.280800000000454,
+      "p95": 51.63550000000032,
+      "p99": 54.05809999999974,
+      "max": 55.482599999999366
+    }
+  },
+  "samples": "200 raw samples in report"
+}
+SIZE: preparing 1048576 byte profile (up to 12 KiB headroom)
+SIZE 1048576: default budget: Validation budget exceeded (250 ms)
+SIZE 1048576: 1/200 measured updates; latest 332.20 ms
+SIZE 1048576: 21/200 measured updates; latest 331.30 ms
+SIZE 1048576: 41/200 measured updates; latest 313.08 ms
+SIZE 1048576: 61/200 measured updates; latest 278.37 ms
+SIZE 1048576: 81/200 measured updates; latest 351.27 ms
+SIZE 1048576: 101/200 measured updates; latest 292.40 ms
+SIZE 1048576: 121/200 measured updates; latest 305.89 ms
+SIZE 1048576: 141/200 measured updates; latest 273.55 ms
+SIZE 1048576: 161/200 measured updates; latest 244.78 ms
+SIZE 1048576: 181/200 measured updates; latest 267.36 ms
+SIZE 1048576: 201/200 measured updates; latest 293.73 ms
+{
+  "target": 1048576,
+  "profile": {
+    "targetBytes": 1044480,
+    "encodedBytes": 1042477,
+    "historyClients": 41190,
+    "gc": true,
+    "blocks": 300,
+    "businessBytes": 100802,
+    "logicalElements": 54793,
+    "structRecords": 44790,
+    "reencodedBytes": 1042477
+  },
+  "diagnosticBudget": {
+    "milliseconds": 10000,
+    "memoryMiB": 512
+  },
+  "normalBudgetResult": "Validation budget exceeded (250 ms)",
+  "warmup": 20,
+  "iterations": 200,
+  "finalBytes": 1044954,
+  "milliseconds": {
+    "validation": {
+      "p50": 259.2451000000001,
+      "p95": 314.366399999999,
+      "p99": 328.2525000000023,
+      "max": 353.45470000000205
+    },
+    "validationWithIsolation": {
+      "p50": 262.33989999999903,
+      "p95": 317.03310000000056,
+      "p99": 331.98479999999836,
+      "max": 356.8564000000042
+    },
+    "transaction": {
+      "p50": 8.934799999995448,
+      "p95": 11.474099999999453,
+      "p99": 12.678599999999278,
+      "max": 13.179000000003725
+    },
+    "total": {
+      "p50": 271.4881000000023,
+      "p95": 327.7965999999942,
+      "p99": 341.30399999999645,
+      "max": 365.2639000000054
+    }
+  },
+  "samples": "200 raw samples in report"
+}
+SIZE: preparing 4194304 byte profile (up to 12 KiB headroom)
+SIZE 4194304: default budget: Validation budget exceeded (250 ms)
+SIZE 4194304: 1/200 measured updates; latest 2038.10 ms
+SIZE 4194304: 21/200 measured updates; latest 1277.98 ms
+SIZE 4194304: 41/200 measured updates; latest 1160.53 ms
+SIZE 4194304: 61/200 measured updates; latest 1205.99 ms
+SIZE 4194304: 81/200 measured updates; latest 1342.83 ms
+SIZE 4194304: 101/200 measured updates; latest 1170.61 ms
+SIZE 4194304: 121/200 measured updates; latest 1328.42 ms
+SIZE 4194304: 141/200 measured updates; latest 1426.35 ms
+SIZE 4194304: 161/200 measured updates; latest 1418.21 ms
+SIZE 4194304: 181/200 measured updates; latest 1422.64 ms
+SIZE 4194304: 201/200 measured updates; latest 2447.07 ms
+{
+  "target": 4194304,
+  "profile": {
+    "targetBytes": 4190208,
+    "encodedBytes": 4188187,
+    "historyClients": 179548,
+    "gc": true,
+    "blocks": 300,
+    "businessBytes": 100802,
+    "logicalElements": 193151,
+    "structRecords": 183148,
+    "reencodedBytes": 4188187
+  },
+  "diagnosticBudget": {
+    "milliseconds": 10000,
+    "memoryMiB": 512
+  },
+  "normalBudgetResult": "Validation budget exceeded (250 ms)",
+  "warmup": 20,
+  "iterations": 200,
+  "finalBytes": 4190664,
+  "milliseconds": {
+    "validation": {
+      "p50": 1305.734300000011,
+      "p95": 1590.676299999992,
+      "p99": 1827.3489999999874,
+      "max": 2869.2539000000106
+    },
+    "validationWithIsolation": {
+      "p50": 1310.7455999999656,
+      "p95": 1597.4629999999888,
+      "p99": 1835.0304999999935,
+      "max": 2875.2198999999964
+    },
+    "transaction": {
+      "p50": 8.40520000003744,
+      "p95": 14.831899999990128,
+      "p99": 16.15460000000894,
+      "max": 16.830000000016298
+    },
+    "total": {
+      "p50": 1318.6820999999763,
+      "p95": 1608.795700000017,
+      "p99": 1846.5057999999844,
+      "max": 2884.5535999999847
+    }
+  },
+  "samples": "200 raw samples in report"
+}
+SIZE MEASUREMENTS COMPLETE; >=50 ms requires a product decision before integration.
+Step 2 bis sizing exit code: 0
+EXIT_CODE=0

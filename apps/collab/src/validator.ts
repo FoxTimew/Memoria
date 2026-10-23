@@ -6,9 +6,13 @@ export class CandidateValidator {
   private readonly worker: Worker;
   private busy = false;
   private failed = false;
-  constructor(workerFile: URL) {
+  // Overrides are only used by the sizing diagnostic; the proof server keeps 250 ms/128 MiB.
+  constructor(
+    workerFile: URL,
+    private readonly budget = { milliseconds: 250, memoryMiB: 128 },
+  ) {
     this.worker = new Worker(workerFile, {
-      resourceLimits: { maxOldGenerationSizeMb: 128, maxYoungGenerationSizeMb: 16 },
+      resourceLimits: { maxOldGenerationSizeMb: budget.memoryMiB, maxYoungGenerationSizeMb: 16 },
     });
     this.worker.on('error', () => {
       this.failed = true;
@@ -52,8 +56,8 @@ export class CandidateValidator {
         const timer = setTimeout(() => {
           this.failed = true;
           void this.worker.terminate();
-          fail(new Error('Validation budget exceeded (250 ms)'));
-        }, 250);
+          fail(new Error(`Validation budget exceeded (${this.budget.milliseconds} ms)`));
+        }, this.budget.milliseconds);
         this.worker.once('message', receive);
         this.worker.once('error', fail);
         this.worker.once('exit', exit);

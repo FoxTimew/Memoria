@@ -8,6 +8,12 @@ import { appendUpdate } from '../journal.ts';
 import type { WriteIdentity } from '../journal.ts';
 import type { ProofDatabase } from './database.ts';
 import type { proofAuth } from './auth.ts';
+import type WebSocket from 'ws';
+import { QueueMetrics, ordinaryUpdate } from './metrics.ts';
+import { updateReceipt } from './metrics.ts';
+import { RoomBatchQueue } from './room-batch-queue.ts';
+import { appendBatch } from './batch-journal.ts';
+import type { Document } from '@hocuspocus/server';
 
 type Context = WriteIdentity & { name: string };
 export async function proofServer(
@@ -15,7 +21,10 @@ export async function proofServer(
   authentication: Awaited<ReturnType<typeof proofAuth>>,
   room: string,
   initial: Uint8Array,
+  options: { measure?: boolean; batching?: boolean } = {},
 ) {
+  const batching = options.batching ?? true;
+  const metrics = new QueueMetrics();
   const validator = new CandidateValidator(new URL('./validation-worker.mjs', import.meta.url));
   await validator.ready();
   const connections = new Set<Connection<Context>>();
@@ -31,6 +40,54 @@ export async function proofServer(
   let holdNext: (() => Promise<void>) | undefined;
   let onCommitted = () => {};
   const rejected: string[] = [];
+  const batchSizes: number[] = [];
+  const batches = new RoomBatchQueue<
+    { connection: Connection<Context>; document: Document; payload: Uint8Array },
+    { revision: number; receipt: string; update: Uint8Array }
+  >(async (entries) => {
+    const document = entries[0]!.document;
+    for (const entry of entries) {
+      metrics.enter(entry.payload);
+      if (
+        entry.document !== document ||
+        entry.connection.readOnly ||
+        !(await authorized(entry.connection.context))
+      )
+        throw new Error('Access denied');
+    }
+    const merged = Y.mergeUpdates(entries.map((e) => e.payload));
+    const validated = await validator.validate(Y.encodeStateAsUpdate(document), merged);
+    const hold = holdNext;
+    holdNext = undefined;
+    if (hold) await hold();
+    if (rejectNextJournal) {
+      rejectNextJournal = false;
+      await db.client.query("SET memoria.proof_fail_journal TO 'on'");
+    }
+    let revisions: Map<string, number>;
+    try {
+      revisions = await appendBatch(
+        db.client,
+        entries.map((e) => ({
+          identity: e.connection.context,
+          receipt: updateReceipt(e.payload),
+          update: e.payload,
+        })),
+        merged,
+        validated.blocks,
+      );
+    } finally {
+      await db.client.query("SET memoria.proof_fail_journal TO 'off'");
+    }
+    // Commit first. Native Hocuspocus application of each original is then idempotent.
+    Y.applyUpdate(document, merged);
+    batchSizes.push(entries.length);
+    return entries.map((e) => ({
+      revision: revisions.get(updateReceipt(e.payload))!,
+      receipt: updateReceipt(e.payload),
+      update: e.payload,
+    }));
+  });
   async function authorized(identity: WriteIdentity) {
     const result = await authentication.pool.query(
       `WITH RECURSIVE ancestors AS (
@@ -106,11 +163,16 @@ export async function proofServer(
     },
     async connected({ connection }) {
       connections.add(connection);
+      if (options.measure)
+        (connection.webSocket as unknown as WebSocket).on('message', (data: Buffer) =>
+          metrics.receive(data),
+        );
     },
     async onDisconnect({ socketId }) {
       for (const c of connections) if (c.socketId === socketId) connections.delete(c);
     },
     async beforeHandleMessage({ connection }) {
+      if (batching) return;
       if (++queued > 100) {
         queued--;
         throw new Error('Room queue full');
@@ -123,10 +185,15 @@ export async function proofServer(
     },
     async beforeSync({ connection, context, document, type, payload }) {
       if (type === 0) return;
+      if (!batching) metrics.enter(payload);
       try {
         if (!(await authorized(context))) throw new Error('Access denied');
         if (Y.snapshotContainsUpdate(Y.snapshot(document), payload)) return;
         if (connection.readOnly) throw new Error('Read only');
+        if (batching) {
+          receipts.set(connection, await batches.enqueue({ connection, document, payload }));
+          return;
+        }
         const validated = await validator.validate(Y.encodeStateAsUpdate(document), payload);
         const hold = holdNext;
         holdNext = undefined;
@@ -150,7 +217,7 @@ export async function proofServer(
         throw error;
       }
     },
-    async afterHandleMessage({ connection, document }) {
+    async afterHandleMessage({ connection, document, update }) {
       try {
         const durable = receipts.get(connection);
         if (durable) {
@@ -167,9 +234,11 @@ export async function proofServer(
           receipts.delete(connection);
         }
       } finally {
+        const payload = ordinaryUpdate(update);
+        if (payload) metrics.finish(payload);
         releases.get(connection)?.();
         releases.delete(connection);
-        queued--;
+        if (!batching) queued--;
       }
     },
     // Presence is excluded from this transport proof; reject instead of trusting supplied names.
@@ -184,6 +253,11 @@ export async function proofServer(
     connections,
     rejected,
     recheck,
+    metrics,
+    batchSizes,
+    get pendingBatchCount() {
+      return batches.waiting;
+    },
     setOnCommitted(callback: () => void) {
       onCommitted = callback;
     },

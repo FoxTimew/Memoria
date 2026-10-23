@@ -13,7 +13,10 @@ export async function proofAuth(fixture: ProofDatabase) {
     secret: randomBytes(32).toString('hex'),
     sendVerificationEmail: async () => {},
   });
+  let accountIndex = 0;
   async function account(name: string) {
+    // Valid, distinct documentation-range IPs. This proof does not exercise NAT quotas.
+    const address = `192.0.2.${++accountIndex}`;
     const email = `${randomUUID()}@example.test`,
       password = `Proof!${randomBytes(20).toString('hex')}`;
     const call = (path: string, body: object) =>
@@ -23,7 +26,7 @@ export async function proofAuth(fixture: ProofDatabase) {
           headers: {
             'content-type': 'application/json',
             origin,
-            'x-memoria-client-ip': randomUUID(),
+            'x-memoria-client-ip': address,
           },
           body: JSON.stringify(body),
         }),

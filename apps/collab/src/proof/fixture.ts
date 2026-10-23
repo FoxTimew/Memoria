@@ -11,7 +11,7 @@ import { loadStandardSpecs } from '../../../../packages/blocks/standard/src/ui.t
 
 export const fixtureId = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 
-export async function representativeDocument(count = 300) {
+export async function representativeDocument(count = 300, textRepeats = 8) {
   // Field props are separate Y.XmlElement attributes, not one JSON blob.
   // This headless spec deliberately has no interactive rendering.
   const card = createBlockSpec(
@@ -53,7 +53,7 @@ export async function representativeDocument(count = 300) {
   const roots: Input[] = [];
   let parent = roots;
   for (let i = 0; i < count; i++) {
-    const text = `Bloc ${i} — conception du monde et objectifs 👾. `.repeat(8);
+    const text = `Bloc ${i} — conception du monde et objectifs 👾. `.repeat(textRepeats);
     const content = [
       { type: 'text' as const, text, styles: { bold: true as const } },
       {

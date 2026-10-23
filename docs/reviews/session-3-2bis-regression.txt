@@ -1,0 +1,216 @@
+$ node scripts/proof-collab.mjs
+{
+  "date": "2026-10-23T18:33:06.573Z",
+  "scope": "Full candidate clone + strict raw Yjs codec + Zod in isolated worker, page lock + current SQL rights + durable journal commit. Excludes WebSocket/auth handshake, room queue wait and projection.",
+  "environment": {
+    "node": "v24.21.0",
+    "os": "win32 10.0.26300",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "postgres": {
+      "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "fsync": "on",
+      "synchronous_commit": "on"
+    },
+    "yjs": "13.6.33",
+    "blocknote": "0.56.0"
+  },
+  "fixture": {
+    "blocks": 300,
+    "nestingDepth": 3,
+    "characterCards": 33,
+    "types": [
+      "core.paragraph",
+      "core.heading",
+      "core.bullet-list-item",
+      "core.numbered-list-item",
+      "core.todo",
+      "core.code",
+      "core.image",
+      "core.divider",
+      "gamedev.character-card"
+    ],
+    "businessBytes": 174909,
+    "initialYjsBytes": 178904,
+    "finalYjsBytes": 181538
+  },
+  "warmup": 20,
+  "iterations": 200,
+  "milliseconds": {
+    "candidate": {
+      "p50": 10.084,
+      "p95": 12.822,
+      "p99": 14.97,
+      "max": 16.249
+    },
+    "candidateWithIsolation": {
+      "p50": 12.097,
+      "p95": 15.212,
+      "p99": 17.855,
+      "max": 18.724
+    },
+    "transaction": {
+      "p50": 8.409,
+      "p95": 11.085,
+      "p99": 11.914,
+      "max": 12.459
+    },
+    "total": {
+      "p50": 20.536,
+      "p95": 25.868,
+      "p99": 28.467,
+      "max": 29.711
+    }
+  },
+  "passed": true,
+  "samples": "200 unfiltered samples in .local/session-3-performance.json"
+}
+PERFORMANCE GATE PASSED (p95 < 50 ms).
+Collaboration performance proof exit code: 0
+PASS 1: Better Auth cookie sessions, two real Hocuspocus providers, nested document loaded
+PASS 2: No broadcast/receipt during held commit; pending updates merge into one durable revision with separate receipts/authors
+PASS 3: Concurrent text and independent character fields preserved; same field converges
+PASS 4: Offline edits merge after reauthentication; journal replay reproduces deletions and content
+Projection incident (injected or SQL); content journal remains writable
+PASS 5: Async projection exact; SQL failure rolls back effects, typing remains durable, retry aggregates two authors/one outbox and unblocks own-revision wait
+PASS 6: Yjs checkpoint preserves client identities; snapshot+journal reload and idempotent receipt survive compaction
+[onAuthenticate] Access denied
+[onAuthenticate] Access denied
+[onAuthenticate] Access denied
+PASS 7: Absent cookie, foreign origin and foreign room rejected before content
+[beforeSync] Read only
+closing connection b3a5ff2f-00f7-44d1-920b-2b54cc57e213 (while handling 7c56e4a0-78e6-4c19-af52-2d962874e2c4:f8038fe7-d843-4ce3-abbf-dc4422c7ca61:705f4ca5-97c3-41ae-9580-d80c1d62125b) because of exception Error: Read only
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117643:40)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] Read only
+closing connection 15b4025f-5d66-47cd-8a66-fd076838303a (while handling 7c56e4a0-78e6-4c19-af52-2d962874e2c4:f8038fe7-d843-4ce3-abbf-dc4422c7ca61:705f4ca5-97c3-41ae-9580-d80c1d62125b) because of exception Error: Read only
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117643:40)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+PASS 8: Read-only fixture receives content; Update and reconnect SyncStep2 cannot persist
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 2d612ca4-30d2-4ceb-a900-5307c9684688 (while handling 7c56e4a0-78e6-4c19-af52-2d962874e2c4:f8038fe7-d843-4ce3-abbf-dc4422c7ca61:705f4ca5-97c3-41ae-9580-d80c1d62125b) because of exception Error: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.receive (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117213:36)
+    at Worker.wrapper (node:events:639:12)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[beforeSync] Injected SQL journal failure
+closing connection c53f34a9-69a3-4004-a54c-d0ef6dcff73f (while handling 7c56e4a0-78e6-4c19-af52-2d962874e2c4:f8038fe7-d843-4ce3-abbf-dc4422c7ca61:705f4ca5-97c3-41ae-9580-d80c1d62125b) because of exception error: Injected SQL journal failure
+    at C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg@8.23.1\node_modules\pg\lib\client.js:694:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async appendBatch (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117475:7)
+    at async RoomBatchQueue.process (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117530:19)
+    at async RoomBatchQueue.drain (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117386:25) {
+  length: 146,
+  severity: 'ERROR',
+  code: 'P0001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'PL/pgSQL function proof_fail_journal() line 3 at RAISE',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'pl_exec.c',
+  line: '3897',
+  routine: 'exec_stmt_raise'
+}
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection f36fa0c7-562b-48db-ae00-5bcfa37b9f7e (while handling 7c56e4a0-78e6-4c19-af52-2d962874e2c4:f8038fe7-d843-4ce3-abbf-dc4422c7ca61:705f4ca5-97c3-41ae-9580-d80c1d62125b) because of exception Error: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.receive (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117213:36)
+    at Worker.wrapper (node:events:639:12)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+closing connection 3a91fb06-dfe4-48f6-8d52-7b15b9b06e9f (while handling 7c56e4a0-78e6-4c19-af52-2d962874e2c4:f8038fe7-d843-4ce3-abbf-dc4422c7ca61:705f4ca5-97c3-41ae-9580-d80c1d62125b) because of exception Error: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.receive (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117213:36)
+    at Worker.wrapper (node:events:639:12)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+PASS 9: Invalid data, SQL failure and invalid multi-author batch never leak or receive receipts; healthy room continues
+PASS 10: Session revocation closes both tabs through 5-second fallback; other session stays open
+PASS 11: Membership removal closes its remaining room
+PASS 12: Archiving an ancestor closes the descendant collaborative room
+Transport proof: 12 scenarios passed. Presence, browser cache, Caddy and production integration are not exercised here.
+Collaboration transport proof exit code: 0
+EXIT_CODE=0

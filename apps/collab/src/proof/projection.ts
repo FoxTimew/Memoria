@@ -80,7 +80,7 @@ export class ProofProjector {
       const blocks = decodeDocument(doc);
       const authors = (
         await client.query<{ author_id: string }>(
-          'SELECT DISTINCT author_id FROM collaboration_updates WHERE page_id=$1 AND revision>$2 AND revision<=$3',
+          'SELECT DISTINCT author_id FROM collaboration_receipts WHERE page_id=$1 AND revision>$2 AND revision<=$3',
           [this.page, previous, target],
         )
       ).rows;

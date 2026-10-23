@@ -136,6 +136,10 @@ try {
   assert(matches(a.doc, b.doc));
   passed('Better Auth cookie sessions, two real Hocuspocus providers, nested document loaded');
 
+  const thirdAccount = await authentication.account('Batch author');
+  const third = peer(thirdAccount.cookie);
+  await until(() => third.provider.synced, 'third batch writer');
+
   let unblock!: () => void;
   const barrier = new Promise<void>((resolve) => {
     unblock = resolve;
@@ -143,6 +147,9 @@ try {
   host.holdNextUpdate(() => barrier);
   const before = text(b.doc).toString();
   text(a.doc).insert(0, 'A');
+  await delay(50);
+  card(b.doc).setAttribute('health', 66 as unknown as string);
+  card(third.doc).setAttribute('biography', 'Third author in queued batch');
   await delay(150);
   assert.equal(text(b.doc).toString(), before);
   assert.equal(await revision(), 0);
@@ -152,8 +159,24 @@ try {
     () => a.received.length === 1 && text(b.doc).toString().startsWith('A'),
     'commit before broadcast',
   );
-  assert.equal(a.received[0]!.revision, await revision());
-  passed('No broadcast/receipt during held commit; durable receipt after journal and application');
+  assert.equal(a.received[0]!.revision, 1);
+  await until(
+    () => b.received.length === 1 && third.received.length === 1,
+    'all queued batch receipts',
+  );
+  assert.equal(b.received[0]!.revision, third.received[0]!.revision);
+  assert.equal(await revision(), 2);
+  const contributors = await authentication.pool.query(
+    'SELECT count(*) FROM collaboration_receipts WHERE revision=$1',
+    [b.received[0]!.revision],
+  );
+  assert.equal(Number(contributors.rows[0].count), 2);
+  third.destroy();
+  peers.splice(peers.indexOf(third), 1);
+  await until(() => host.connections.size === 2, 'third writer closed');
+  passed(
+    'No broadcast/receipt during held commit; pending updates merge into one durable revision with separate receipts/authors',
+  );
 
   card(a.doc).setAttribute('displayName', 'A shared name');
   card(b.doc).setAttribute('biography', 'B shared biography');
@@ -202,9 +225,13 @@ try {
   );
   projector.fail = true;
   const incidentBefore = projector.incidents;
+  const receiptsBefore = a.received.length + b.received.length;
   card(a.doc).setAttribute('displayName', 'Projection A');
   card(b.doc).setAttribute('biography', 'Projection B');
-  await until(async () => (await revision()) >= projectedBefore + 2, 'two durable authors');
+  await until(
+    () => a.received.length + b.received.length >= receiptsBefore + 2,
+    'two durable authors',
+  );
   const ownRevision = await revision();
   let ownWriteReturned = false;
   const ownWrite = until(() => projector.revision >= ownRevision, 'read own projected write').then(
@@ -348,7 +375,37 @@ try {
   await until(() => broken.closed, 'journal failure closed');
   assert.equal(await revision(), validBefore);
   assert(matches(a.doc, b.doc));
-  passed('Invalid character data and injected journal failure never reach peers or journal');
+  const invalidBatch = peer(bob.cookie),
+    validBatch = peer(thirdAccount.cookie);
+  await until(
+    () => invalidBatch.provider.synced && validBatch.provider.synced,
+    'batch rejection peers',
+  );
+  let releaseBatch!: () => void;
+  const batchBarrier = new Promise<void>((resolve) => {
+    releaseBatch = resolve;
+  });
+  host.holdNextUpdate(() => batchBarrier);
+  text(a.doc).insert(0, 'accepted barrier');
+  await delay(50);
+  card(invalidBatch.doc).setAttribute('health', -2 as unknown as string);
+  card(validBatch.doc).setAttribute('biography', 'must not leak from rejected batch');
+  await until(() => host.pendingBatchCount === 2, 'two pending candidates');
+  releaseBatch();
+  await until(() => invalidBatch.closed && validBatch.closed, 'whole invalid batch rejected');
+  assert.equal(await revision(), validBefore + 1);
+  assert.equal(invalidBatch.received.length, 0);
+  assert.equal(validBatch.received.length, 0);
+  assert(matches(a.doc, b.doc));
+  assert.notEqual(card(b.doc).getAttribute('biography'), 'must not leak from rejected batch');
+  text(b.doc).insert(0, 'after rejected batch');
+  await until(
+    async () => (await revision()) === validBefore + 2 && matches(a.doc, b.doc),
+    'healthy room continues after rejected batch',
+  );
+  passed(
+    'Invalid data, SQL failure and invalid multi-author batch never leak or receive receipts; healthy room continues',
+  );
 
   const a2 = peer(alice.cookie);
   await until(() => a2.provider.synced, 'second tab');
