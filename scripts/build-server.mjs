@@ -9,7 +9,11 @@ import ts from 'typescript';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const app = process.argv[2];
 if (app !== 'api' && app !== 'worker') throw new Error('Expected api or worker');
-const entry = process.argv.includes('--probe') ? 'bootstrap-probe' : 'main';
+const entry = process.argv.includes('--probe')
+  ? 'bootstrap-probe'
+  : process.argv.includes('--auth-e2e')
+    ? 'auth.e2e'
+    : 'main';
 const watching = process.argv.includes('--watch');
 const outfile = resolve(root, `apps/${app}/dist/${entry}.mjs`);
 let child;

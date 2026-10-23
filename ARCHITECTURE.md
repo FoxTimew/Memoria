@@ -57,9 +57,11 @@ Le diagramme décrit la cible : web/API/auth/workspaces et le processus worker e
 apps/
   web/src/app/                 # connexion, inscription, vérification et workspaces
   api/src/
-    main.ts                    # bootstrap Express, origine, handler Better Auth
+    main.ts                    # démarrage du processus Nest
+    app.ts                     # module racine, origine, parsing et erreurs HTTP
+    auth.e2e.ts                # tests HTTP isolés, exclus du build de production
     bootstrap-probe.ts         # preuve compilée décorateurs + packages source
-    modules/auth/              # AuthModule / AuthService, SMTP et session vérifiée
+    modules/auth/              # guard global, @Public, @CurrentUser, handler et SMTP
     modules/workspaces/        # module, contrôleur et service transactionnel
     modules/blocks/
       block-write.service.ts   # contrat unique ; implémentation en session 2

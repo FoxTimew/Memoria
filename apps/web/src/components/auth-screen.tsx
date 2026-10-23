@@ -31,7 +31,7 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
           email,
           callbackURL: '/connexion?verified=1',
         });
-        if (result.error) setError(authError(result.error.code));
+        if (result.error) setError(authError(result.error.code, result.error.status));
         else setSent(true);
       } else if (mode === 'signup') {
         const result = await authClient.signUp.email({
@@ -40,14 +40,14 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
           password: String(form.get('password')),
           callbackURL: '/connexion?verified=1',
         });
-        if (result.error) setError(authError(result.error.code));
+        if (result.error) setError(authError(result.error.code, result.error.status));
         else setSent(true);
       } else {
         const result = await authClient.signIn.email({
           email,
           password: String(form.get('password')),
         });
-        if (result.error) setError(authError(result.error.code));
+        if (result.error) setError(authError(result.error.code, result.error.status));
         else router.replace('/');
       }
     } catch {

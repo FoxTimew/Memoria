@@ -49,7 +49,7 @@ export class AuthService {
     return createAuth(transaction, this.options);
   }
 
-  async requireUser(headers: IncomingHttpHeaders) {
+  async authenticate(headers: IncomingHttpHeaders) {
     const session = await this.auth.api.getSession({ headers: fromNodeHeaders(headers) });
     if (!session) throw new UnauthorizedException('Connectez-vous pour continuer.');
     if (!session.user.emailVerified) throw new ForbiddenException('Vérifiez votre adresse email.');

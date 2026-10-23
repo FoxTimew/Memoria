@@ -41,7 +41,18 @@ export function createAuth(database: Database | WriteTransaction, options: AuthO
       updateAge: 60 * 60 * 24,
       cookieCache: { enabled: false },
     },
-    rateLimit: { enabled: true, storage: 'database', window: 60, max: 100 },
+    rateLimit: {
+      enabled: true,
+      storage: 'database',
+      window: 60,
+      max: 100,
+      // Paths are relative to basePath, not prefixed with /api/auth.
+      customRules: {
+        '/sign-in/email': { window: 60, max: 5 },
+        '/sign-up/email': { window: 600, max: 3 },
+        '/send-verification-email': { window: 300, max: 3 },
+      },
+    },
     advanced: {
       database: { generateId: 'uuid' },
       useSecureCookies: true,

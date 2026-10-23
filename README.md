@@ -13,7 +13,8 @@ Aucun utilisateur réel avant la fin de la session 3 : les facteurs forts et la 
 - `pnpm check` : lint, format, types, preuve de build/injection Nest et tests unitaires/contrats.
 - `pnpm test:bootstrap` : compile puis exécute Nest avec les exports TypeScript du monorepo. Voir [ADR 014](docs/adr/014-build-serveur-typescript-source.md).
 - `pnpm build` : vérifie les types, exécute la preuve Nest et construit les trois applications. `pnpm start` les démarre ; `pnpm dev` active les reconstructions automatiques.
-- `pnpm test:e2e` : parcours HTTP réel à travers Caddy, PostgreSQL et Mailpit, après démarrage des applications. Utilise `.local-root.crt` pour vérifier TLS et nettoie uniquement ses comptes/workspaces/emails de test.
+- `pnpm test:auth:e2e` : compile et démarre une application Nest isolée sur loopback, avec PostgreSQL réel, pour vérifier le guard global et les quotas par route. Aucun besoin de démarrer les trois applications ; les compteurs de test sont isolés et nettoyés.
+- `pnpm test:e2e` : exécute le test d'authentification isolé puis le parcours HTTP réel à travers Caddy, PostgreSQL et Mailpit, après démarrage des applications. Utilise `.local-root.crt` pour vérifier TLS et nettoie uniquement ses comptes/workspaces/emails de test. Le parcours Caddy consomme les quotas de l'IP locale (deux inscriptions) : attendre dix minutes entre deux exécutions rapprochées. Voir [ADR 015](docs/adr/015-authentification-simple-et-workspaces.md).
 - `pnpm test:db` : applique les migrations dans un schéma de test isolé sur le PostgreSQL Compose et vérifie l'intégrité des données.
 - `pnpm db:migrate` : applique les migrations à la base configurée. `pnpm db:generate` : génère une migration après changement du schéma.
 - `pnpm openapi:generate` : régénère le contrat OpenAPI de conception ; les endpoints HTTP seront implémentés ultérieurement.

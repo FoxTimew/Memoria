@@ -6,7 +6,9 @@ export const authClient = createAuthClient({
   fetchOptions: { credentials: 'include' },
 });
 
-export function authError(code?: string): string {
+export function authError(code?: string, status?: number): string {
+  if (status === 429 || code === 'TOO_MANY_REQUESTS')
+    return 'Trop de tentatives. Patientez avant de réessayer.';
   switch (code) {
     case 'EMAIL_NOT_VERIFIED':
       return 'Vérifiez votre adresse email avant de vous connecter.';
@@ -15,8 +17,6 @@ export function authError(code?: string): string {
     case 'USER_ALREADY_EXISTS':
     case 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL':
       return 'Cette adresse est déjà utilisée. Connectez-vous ou renvoyez le lien de vérification.';
-    case 'TOO_MANY_REQUESTS':
-      return 'Trop de tentatives. Patientez une minute avant de réessayer.';
     default:
       return 'La demande n’a pas abouti. Vérifiez votre connexion et réessayez.';
   }
