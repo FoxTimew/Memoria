@@ -21,6 +21,7 @@
     "test:bootstrap": "node scripts/build-server.mjs api --probe && node apps/api/dist/bootstrap-probe.mjs",
     "test": "vitest run",
     "test:db": "node --env-file=.env scripts/test-db.mjs",
+    "proof:collab": "node scripts/proof-collab.mjs",
     "db:generate": "pnpm --filter @memoria/db generate",
     "db:migrate": "pnpm --filter @memoria/db migrate",
     "openapi:generate": "pnpm --filter @memoria/contracts openapi && prettier --write docs/api/openapi.json",

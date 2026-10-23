@@ -2,7 +2,7 @@
 
 Statut : accepté — 2026-10-22.
 
-**Proposition du 2026-10-23, non implémentée :** la migration Yjs est avancée en session 3. L'[ADR 017](017-collaboration-temps-reel.md) propose le document de référence, la validation avant diffusion et le rôle du writer pour les commandes/projections. Il attend les réponses du développeur ; les invariants et le fonctionnement SQL décrits ici restent actifs jusque-là. La séparation des modèles et de l'UI reste obligatoire.
+**Décision du 2026-10-23, intégration à venir :** l'[ADR 017](017-collaboration-temps-reel.md) est accepté : Yjs en session 3, journal synchrone et projection asynchrone, writer unique hors éditeur attendant sa propre projection. La preuve isolée n'altère pas le fonctionnement SQL actif décrit ici. La séparation des modèles et de l'UI reste obligatoire ; les projections directes du prototype n'écrivent que ses fixtures temporaires.
 
 **Complément session 2 (2026-10-23).** Les huit modèles standard sont enregistrés dans `/server` et leurs UI dans `/client`. Le texte riche utilise le contenu BlockNote, via les fonctions optionnelles `toEditorContent/fromEditorContent`, en plus du transport de props. Les tests d'aller-retour utilisent le vrai moteur ProseMirror, y compris les enfants imbriqués ; le writer SQL est implémenté. Normalisation du texte, limites et sauvegarde : [ADR 016](016-pages-editeur-et-sauvegarde.md). La future migration Yjs reste concentrée dans `BlockWriteService` ; aucun autre code applicatif n'écrit les tables de blocs.
 

@@ -4,7 +4,7 @@ Outil de documentation et de bases de données pour studios de jeu indépendants
 Les sessions 1 et 2 fournissent Next.js, NestJS et le worker pg-boss exécutables, la connexion vérifiée, les workspaces, un arbre de pages et un éditeur BlockNote avec sauvegarde, recherche et corbeille.
 La référence est [ARCHITECTURE.md](ARCHITECTURE.md), accompagnée des [ADR](docs/adr/) et de la [relecture de session 2](docs/reviews/session-2-pages-editor.md).
 
-Aucun utilisateur réel avant la fin de la session 4 : la collaboration est avancée en session 3 ; les facteurs forts, les quotas NAT/par compte et la récupération de mot de passe restent à livrer en session 4. L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) propose le cadrage collaboratif ; il n'est pas encore implémenté.
+Aucun utilisateur réel avant la fin de la session 4 : la collaboration est avancée en session 3 ; les facteurs forts, les quotas NAT/par compte et la récupération de mot de passe restent à livrer en session 4. L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) est accepté. Une preuve technique isolée existe dans `apps/collab` ; elle ne remplace pas encore le parcours applicatif de session 2.
 
 ## Prérequis et vérifications
 
@@ -17,6 +17,7 @@ Aucun utilisateur réel avant la fin de la session 4 : la collaboration est avan
 - `pnpm test:pages:e2e` : compile Nest et vérifie les pages avec PostgreSQL réel, sessions owner/member, concurrence, rollback, recherche, corbeille et révocation. Peut être relancé immédiatement avec ses fixtures isolées.
 - `pnpm test:e2e` : exécute les suites isolées d'authentification et de pages, puis le parcours HTTP réel à travers Caddy, PostgreSQL et Mailpit, après démarrage des applications. Utilise `.local-root.crt` pour vérifier TLS et nettoie uniquement ses comptes/workspaces/emails de test. Le parcours Caddy consomme les quotas de l'IP locale (deux inscriptions) : attendre dix minutes entre deux exécutions rapprochées. Voir [ADR 015](docs/adr/015-authentification-simple-et-workspaces.md).
 - `pnpm test:db` : applique les migrations dans un schéma de test isolé sur le PostgreSQL Compose et vérifie l'intégrité des données.
+- `pnpm proof:collab` : mesure d'abord le seuil p95 < 50 ms sur 300 blocs, puis teste deux providers Hocuspocus et PostgreSQL. Arrêt immédiat si le seuil échoue. Exige le `.env` et PostgreSQL local ; crée/supprime uniquement ses schémas aléatoires, sans reset des données existantes. Aucun écran n'est ajouté. Voir la [relecture de la preuve](docs/reviews/session-3-etape-2-preuve.md).
 - `pnpm db:migrate` : applique les migrations à la base configurée. `pnpm db:generate` : génère une migration après changement du schéma.
 - `pnpm openapi:generate` : régénère le contrat OpenAPI de conception ; les endpoints HTTP seront implémentés ultérieurement.
 - Hooks locaux Lefthook : lint/format et détection de secrets avant commit ; types/tests avant push.

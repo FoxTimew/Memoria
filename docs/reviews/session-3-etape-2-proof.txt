@@ -1,0 +1,158 @@
+$ node scripts/proof-collab.mjs
+{
+  "date": "2026-10-23T17:47:54.164Z",
+  "scope": "Full candidate clone + strict raw Yjs codec + Zod in isolated worker, page lock + current SQL rights + durable journal commit. Excludes WebSocket/auth handshake, room queue wait and projection.",
+  "environment": {
+    "node": "v24.21.0",
+    "os": "win32 10.0.26300",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "postgres": {
+      "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "fsync": "on",
+      "synchronous_commit": "on"
+    },
+    "yjs": "13.6.33",
+    "blocknote": "0.56.0"
+  },
+  "fixture": {
+    "blocks": 300,
+    "nestingDepth": 3,
+    "characterCards": 33,
+    "types": [
+      "core.paragraph",
+      "core.heading",
+      "core.bullet-list-item",
+      "core.numbered-list-item",
+      "core.todo",
+      "core.code",
+      "core.image",
+      "core.divider",
+      "gamedev.character-card"
+    ],
+    "businessBytes": 174909,
+    "initialYjsBytes": 178904,
+    "finalYjsBytes": 181538
+  },
+  "warmup": 20,
+  "iterations": 200,
+  "milliseconds": {
+    "candidate": {
+      "p50": 8.851,
+      "p95": 15.027,
+      "p99": 16.348,
+      "max": 17.212
+    },
+    "candidateWithIsolation": {
+      "p50": 10.712,
+      "p95": 17.308,
+      "p99": 18.599,
+      "max": 19.903
+    },
+    "transaction": {
+      "p50": 7.577,
+      "p95": 8.63,
+      "p99": 8.871,
+      "max": 9.374
+    },
+    "total": {
+      "p50": 18.337,
+      "p95": 25.361,
+      "p99": 26.78,
+      "max": 28.534
+    }
+  },
+  "passed": true,
+  "samples": "200 unfiltered samples in .local/session-3-performance.json"
+}
+PERFORMANCE GATE PASSED (p95 < 50 ms).
+Collaboration performance proof exit code: 0
+PASS 1: Better Auth cookie sessions, two real Hocuspocus providers, nested document loaded
+PASS 2: No broadcast/receipt during held commit; durable receipt after journal and application
+PASS 3: Concurrent text and independent character fields preserved; same field converges
+PASS 4: Offline edits merge after reauthentication; journal replay reproduces deletions and content
+Projection incident (injected or SQL); content journal remains writable
+PASS 5: Async projection exact; SQL failure rolls back effects, typing remains durable, retry aggregates two authors/one outbox and unblocks own-revision wait
+PASS 6: Yjs checkpoint preserves client identities; snapshot+journal reload and idempotent receipt survive compaction
+[onAuthenticate] Access denied
+[onAuthenticate] Access denied
+[onAuthenticate] Access denied
+PASS 7: Absent cookie, foreign origin and foreign room rejected before content
+[beforeSync] Read only
+closing connection cf2d740c-19d8-4a9f-856b-bce89d90a29b (while handling bea88608-99ee-45a5-ac1a-e56c984116ba:5b882a9f-edbb-431d-8721-52a5cf20a79a:d7eacb77-f1c1-4d1b-8ae6-433ac3c4779b) because of exception Error: Read only
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117400:40)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] Read only
+closing connection 5f9072dc-7da7-48bb-bd65-5ddad36cca4e (while handling bea88608-99ee-45a5-ac1a-e56c984116ba:5b882a9f-edbb-431d-8721-52a5cf20a79a:d7eacb77-f1c1-4d1b-8ae6-433ac3c4779b) because of exception Error: Read only
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117400:40)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+PASS 8: Read-only fixture receives content; Update and reconnect SyncStep2 cannot persist
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection db099a52-f0f0-4187-8bbe-a7ccff999511 (while handling bea88608-99ee-45a5-ac1a-e56c984116ba:5b882a9f-edbb-431d-8721-52a5cf20a79a:d7eacb77-f1c1-4d1b-8ae6-433ac3c4779b) because of exception Error: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.receive (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117208:36)
+    at Worker.wrapper (node:events:639:12)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[beforeSync] Injected SQL journal failure
+closing connection 94584aba-4eee-47f3-a42a-743e2faa4999 (while handling bea88608-99ee-45a5-ac1a-e56c984116ba:5b882a9f-edbb-431d-8721-52a5cf20a79a:d7eacb77-f1c1-4d1b-8ae6-433ac3c4779b) because of exception error: Injected SQL journal failure
+    at C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg@8.23.1\node_modules\pg\lib\client.js:694:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async appendUpdate (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117284:5)
+    at async Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/transport.mjs:117413:23)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6) {
+  length: 146,
+  severity: 'ERROR',
+  code: 'P0001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'PL/pgSQL function proof_fail_journal() line 3 at RAISE',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'pl_exec.c',
+  line: '3897',
+  routine: 'exec_stmt_raise'
+}
+PASS 9: Invalid character data and injected journal failure never reach peers or journal
+PASS 10: Session revocation closes both tabs through 5-second fallback; other session stays open
+PASS 11: Membership removal closes its remaining room
+PASS 12: Archiving an ancestor closes the descendant collaborative room
+Transport proof: 12 scenarios passed. Presence, browser cache, Caddy and production integration are not exercised here.
+Collaboration transport proof exit code: 0
+pnpm proof:collab exit code: 0
