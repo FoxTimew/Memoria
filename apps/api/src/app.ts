@@ -1,0 +1,72 @@
+import 'reflect-metadata';
+import { Catch, Controller, Get, HttpException, Module } from '@nestjs/common';
+import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import express from 'express';
+import type { Request, Response, NextFunction } from 'express';
+import { readConfig } from './config.ts';
+import * as database from './database.module.ts';
+import { AuthModule } from './modules/auth/auth.module.ts';
+import { Public } from './modules/auth/public.decorator.ts';
+import { WorkspacesModule } from './modules/workspaces/workspaces.module.ts';
+
+@Controller('api/health')
+class HealthController {
+  constructor(private readonly database: database.DatabaseService) {}
+  @Public()
+  @Get()
+  async health() {
+    await this.database.ready();
+    return { status: 'ok', service: 'api' };
+  }
+}
+
+@Catch()
+class SafeExceptionFilter implements ExceptionFilter {
+  catch(error: unknown, host: ArgumentsHost) {
+    const response = host.switchToHttp().getResponse<Response>();
+    if (error instanceof HttpException) {
+      response.status(error.getStatus()).json(error.getResponse());
+    } else {
+      console.error('API request failed:', error instanceof Error ? error.name : 'UnknownError');
+      response.status(500).json({ message: 'Une erreur est survenue. Réessayez.' });
+    }
+  }
+}
+
+@Module({
+  imports: [database.DatabaseModule, AuthModule, WorkspacesModule],
+  controllers: [HealthController],
+})
+export class AppModule {}
+
+export function configureApplication(app: NestExpressApplication) {
+  const config = readConfig();
+  app.set(
+    'trust proxy',
+    config.TRUSTED_PROXY_CIDRS.split(',').map((cidr) => cidr.trim()),
+  );
+  app.disable('x-powered-by');
+  app.useGlobalFilters(new SafeExceptionFilter());
+  app.enableShutdownHooks();
+  app.use((request: Request, response: Response, next: NextFunction) => {
+    request.headers['x-memoria-client-ip'] =
+      request.ip ?? request.socket.remoteAddress ?? 'unknown';
+    response.setHeader('Cache-Control', 'no-store');
+    if (
+      !['GET', 'HEAD', 'OPTIONS'].includes(request.method) &&
+      request.headers.origin !== config.APP_ORIGIN
+    ) {
+      response.status(403).json({ message: 'Origine non autorisée.' });
+      return;
+    }
+    next();
+  });
+
+  // Better Auth must receive the unconsumed stream; its @Public controller owns parsing.
+  const parseJson = express.json({ limit: '32kb' });
+  app.use((request: Request, response: Response, next: NextFunction) => {
+    if (/^\/api\/auth(?:\/|$)/i.test(request.path)) return next();
+    return parseJson(request, response, next);
+  });
+}

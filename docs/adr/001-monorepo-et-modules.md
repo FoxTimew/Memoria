@@ -8,4 +8,4 @@ Statut : accepté — 2026-10-22.
 
 **Raison.** La séparation web/API/worker répond aux clients moteurs de jeu et aux tâches différées sans imposer au développeur solo plusieurs systèmes distribués. Les contrats Zod sont partagés ; les dépendances serveur restent hors des composants client.
 
-**Conséquences.** Cette session livre des emplacements typés, des contrats et un schéma, pas les applications exécutables. Les modules Nest, routes Next, Tailwind et composants shadcn/ui seront ajoutés lors des sessions correspondantes. Aucun service hébergé externe obligatoire. Cache Turbo local uniquement ; aucun workflow GitHub Actions.
+**Conséquences.** Le cadrage a livré des emplacements typés, des contrats et un schéma. La session 1 ajoute le bootstrap Nest, les routes Next, les formulaires Tailwind et le worker pg-boss ; les composants d'éditeur et le reste des modules viendront ensuite. Le build des packages TypeScript source est décrit dans l'ADR 014. Aucun service hébergé externe obligatoire. Cache Turbo local uniquement ; aucun workflow GitHub Actions.

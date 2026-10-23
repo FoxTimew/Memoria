@@ -1,30 +1,33 @@
 # Memoria — référence d'architecture
 
-Version de cadrage : 2026-10-22. Public : développeur solo intermédiaire ; studios de 5 à 50 personnes. Ce document et les [ADR](docs/adr/) constituent la référence des sessions suivantes. Code en anglais, explications en français. Toute déviation significative demande un ADR mis à jour.
+État après session 1 : 2026-10-22. Public : développeur solo intermédiaire ; studios de 5 à 50 personnes. Ce document et les [ADR](docs/adr/) constituent la référence des sessions suivantes. Code en anglais, explications en français. Toute déviation significative demande un ADR mis à jour.
 
 ## Périmètre et état réel
 
 Le MVP cible comptes, workspaces, invitations, arbre de pages, blocs usuels, bases à propriétés typées/vue tableau, recherche PostgreSQL, API publique et webhooks. SaaS et self-hosted partagent le code ; aucune dépendance à un service tiers hébergé obligatoire. Sont exclus : collaboration temps réel, kanban/calendrier, formules/rollups, facturation, mobile et blocs avancés.
 
-| Livré dans cette session                                              | État                                                                                     |
+| Livré après la session 1                                              | État                                                                                     |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | pnpm/Turbo, TypeScript strict, lint/format, hooks et `pnpm check`     | Exécutables                                                                              |
 | Compose PostgreSQL, MinIO, Mailpit, Caddy                             | Configurés ; applications Node séparées                                                  |
 | Schéma Drizzle, migrations et contraintes SQL                         | 37 tables ; testé sur PostgreSQL                                                         |
 | Contrat de schéma Better Auth                                         | Comparé aux champs des plugins installés                                                 |
 | Modèles et UI des blocs séparés, registry et `gamedev.character-card` | Validation, migration, adaptateur BlockNote, rendu différé et contrôle du graphe serveur |
-| Contrats Zod API, ETag, stockage, interface du writer                 | Typés ; pas de service HTTP exécuté                                                      |
+| Contrats Zod API, ETag, stockage, interface du writer                 | Typés ; routes de contenu encore absentes                                                |
+| Bootstrap NestJS / Next.js / worker pg-boss                           | Build et démarrage derrière Caddy vérifiés ; métadonnées Nest conservées                 |
+| Connexion email/mot de passe et workspaces                            | Email Mailpit, vérification, session et création transactionnelle fonctionnels           |
+| Tests HTTP session 1                                                  | Origine HTTPS réelle, cookies, CSRF, isolation, concurrence et déconnexion               |
 | OpenAPI de conception                                                 | Généré dans `docs/api/openapi.json`, non servi par une API                               |
 | ADR et architecture                                                   | Décisions acceptées, détails d'intégration et limites explicités                         |
 
-**Non implémentés** : bootstrap Next/Nest/worker, écrans, hooks d'auth/assurance, autorisations exécutables, repositories métier, writer SQL, blocs standard dans le catalogue, stockage S3, emails, recherche applicative, handlers REST, relais outbox, livraison/SSRF, purge et e2e HTTP. Les commentaires « contract only » et les fichiers `src/index.ts` vides sont intentionnels ; aucun module ne simule une réussite.
+**Non implémentés** : pages/éditeur, writer SQL, blocs standard dans le catalogue, recherche applicative, bases, S3, facteurs forts et `session_assurance`, invitations/partages, autorisations de contenu, API publique, relais outbox, livraison/SSRF et purge. Les commentaires « contract only » des contrats futurs restent intentionnels. Le worker initialise pg-boss et vérifie PostgreSQL, sans job métier fictif. Aucun utilisateur réel avant la fin de la session 3.
 
 ## Stack et frontières
 
 - Monorepo pnpm 11.25, Turbo, Node 24, TypeScript 5.9 strict (plage compatible avec le linter), Zod 4.
-- Web prévu : Next.js App Router, Tailwind, shadcn/ui, client Better Auth et BlockNote. Les dépendances d'UI applicative seront installées lors du module web.
-- API prévue : NestJS Express, modules métier standards ; Better Auth hébergé dans ce processus.
-- Worker prévu : pg-boss avec le même PostgreSQL, sans Redis. Les paquets d'exécution Nest/Next/pg-boss ne sont pas artificiellement installés avant leur usage.
+- Web : Next.js 16.4.2 App Router, React 19.3.1, Tailwind 4.3.3 et client Better Auth. Formulaires minimaux ; composants shadcn/ui et intégration de l'éditeur à enrichir pendant les sessions correspondantes.
+- API : NestJS 12.2 / Express 5, modules auth/workspaces ; Better Auth hébergé dans ce processus. Transformation TypeScript puis bundling ESM pour consommer les exports source : [ADR 014](docs/adr/014-build-serveur-typescript-source.md).
+- Worker : pg-boss 12.38 avec le même PostgreSQL dans son schéma dédié, sans Redis. Sonde de disponibilité sur `/api/health/worker` derrière Caddy.
 - Données : PostgreSQL 17, Drizzle 0.45.4, Drizzle Kit 0.31.11 ; migrations SQL versionnées. Auth 1.7.12 et BlockNote 0.56.0 figés pour les contrats de cette session.
 
 ```mermaid
@@ -46,18 +49,25 @@ flowchart LR
   Services --> Storage[ObjectStorage / S3]
 ```
 
-Le diagramme décrit l'architecture cible, pas des processus applicatifs déjà livrés. Les services front et publics sont identiques ; leurs contrôleurs adaptent authentification, DTO et codes HTTP. Un service reçoit un `RequestContext` vérifié ; il ne fait jamais confiance à un `workspaceId`, rôle ou acteur provenant du corps client. Les erreurs sont traduites à la frontière HTTP.
+Le diagramme décrit la cible : web/API/auth/workspaces et le processus worker existent ; writer, relais, webhooks et stockage restent à implémenter. Les services front et publics seront identiques ; leurs contrôleurs adapteront authentification, DTO et codes HTTP. Un service reçoit un contexte vérifié ; il ne fait jamais confiance à un `workspaceId`, rôle ou acteur provenant du corps client. Les erreurs sont traduites à la frontière HTTP.
 
 ## Arborescence
 
 ```text
 apps/
-  web/                         # emplacement Next.js, sans routes à ce stade
-  api/src/modules/blocks/
-    block-write.service.ts     # contrat unique ; implémentation future
-  worker/                      # emplacement des consommateurs pg-boss
+  web/src/app/                 # connexion, inscription, vérification et workspaces
+  api/src/
+    main.ts                    # démarrage du processus Nest
+    app.ts                     # module racine, origine, parsing et erreurs HTTP
+    auth.e2e.ts                # tests HTTP isolés, exclus du build de production
+    bootstrap-probe.ts         # preuve compilée décorateurs + packages source
+    modules/auth/              # guard global, @Public, @CurrentUser, handler et SMTP
+    modules/workspaces/        # module, contrôleur et service transactionnel
+    modules/blocks/
+      block-write.service.ts   # contrat unique ; implémentation en session 2
+  worker/src/main.ts           # pg-boss, readiness et arrêt ; jobs métier ultérieurs
 packages/
-  auth/src/                    # schéma des plugins et test de compatibilité
+  auth/src/                    # configuration simple, schéma cible et test de compatibilité
   db/
     src/schema/
       auth.ts                  # comptes, sessions, facteurs, workspaces
@@ -86,9 +96,9 @@ packages/
 infra/
   caddy/Caddyfile
   minio/Dockerfile              # construction locale de la version corrigée
-scripts/                       # génération .env, contrôle index, test PostgreSQL
+scripts/                       # lanceurs/builds, génération .env, tests SQL et HTTP
 docs/
-  adr/001-... à 013-...
+  adr/001-... à 015-...
   api/openapi.json             # contrat de conception généré
   reviews/                     # résumé de relecture à chaque livraison
 ARCHITECTURE.md
@@ -98,9 +108,11 @@ pnpm-workspace.yaml
 turbo.json
 ```
 
-À créer pendant les modules suivants : `apps/api/src/modules/{auth,workspaces,authorization,pages,databases,files,search,public-api,webhooks,audit}`, `apps/web/src/app`, `apps/web/src/components`, `apps/worker/src/jobs`, `packages/blocks/standard` et tests e2e. Ne créer un package supplémentaire que si une dépendance partagée réelle le justifie.
+À créer pendant les modules suivants : `apps/api/src/modules/{authorization,pages,databases,files,search,public-api,webhooks,audit}`, `apps/worker/src/jobs`, `packages/blocks/standard` et les tests des nouveaux parcours. Ne créer un package supplémentaire que si une dépendance partagée réelle le justifie.
 
 ## Authentification et autorisation
+
+**Actif en session 1.** Email/mot de passe (12–128 caractères), email vérifié obligatoire, lien valable une heure, renvoi depuis le front, connexion/déconnexion. Routes de gestion organization fermées au HTTP direct ; création/listage via Nest, avec membership propriétaire et références initialisés dans une transaction. Seuls owner/member sont configurés dans le plugin. Voir [ADR 015](docs/adr/015-authentification-simple-et-workspaces.md). La politique ci-dessous décrit la cible des sessions suivantes ; TOTP, passkeys, assurance, clés et partages ne sont pas activés.
 
 Better Auth gère email/mot de passe avec vérification, TOTP/codes de secours, passkeys et memberships. Les passkeys peuvent être multiples, nommées et supprimées. Le plugin organization est utilisé avec rôles personnalisés, pas avec des rôles fournis par le client. Le plugin api-key est utilisé pour les credentials ; les politiques complémentaires appartiennent à Memoria. Voir [ADR 003](docs/adr/003-better-auth.md).
 
@@ -165,7 +177,7 @@ Le front vérifie la version périodiquement (15 s, page visible), au retour de 
 
 Chaque package de bloc expose exactement `./model` et `./ui` ; le catalogue expose `./server` et `./client`. Aucun export racine ne mélange les deux. Les anciens `BlockDefinition`, imports racine des blocs/catalogue et `/editor` sont supprimés : les consommateurs doivent choisir leur entrée explicitement.
 
-Le [test de frontière serveur](packages/blocks/catalog/src/server-boundary.test.ts) suit les imports/réexports transitifs et types avec TypeScript, puis les dépendances JavaScript avec esbuild, imports dynamiques inclus et élimination du code inutilisé désactivée. Il échoue si React, ses runtimes, React DOM ou `@blocknote/*` deviennent accessibles depuis l'export public `/server`. Il contrôle aussi le manifeste de `blocks-core`. Des scénarios négatifs vérifient que cette protection détecte une régression indirecte. esbuild sert ici aux tests ; le build NestJS reste à décider en session 1.
+Le [test de frontière serveur](packages/blocks/catalog/src/server-boundary.test.ts) suit les imports/réexports transitifs et types avec TypeScript, puis les dépendances JavaScript avec esbuild, imports dynamiques inclus et élimination du code inutilisé désactivée. Il échoue si React, ses runtimes, React DOM ou `@blocknote/*` deviennent accessibles depuis l'export public `/server`. Il contrôle aussi le manifeste de `blocks-core`. Des scénarios négatifs vérifient que cette protection détecte une régression indirecte. Le build serveur ajoute le même refus des imports UI à l'exécution ; son pipeline est décrit dans l'ADR 014.
 
 Un bloc inconnu lu doit être affiché comme élément préservé et non éditable ; ne jamais le remplacer silencieusement par un paragraphe. Les imports de types inconnus sont rejetés ou mis en quarantaine, sans écriture partielle.
 
@@ -211,7 +223,7 @@ Le catalogue d'exemple contient seulement character-card ; `createExampleEditorS
 
 ## API, outbox et intégrations
 
-[`packages/contracts`](packages/contracts/src/index.ts) contient DTO Zod, format d'erreur, types des valeurs, opérations de blocs, ETag et interface S3. Générer OpenAPI avec `pnpm openapi:generate`, puis `pnpm format`. Les endpoints de base pages/blocs/rows/recherche sont décrits ; les routes fichiers, propriétés et filtres/vues seront précisées pendant leur module. Le document indique explicitement son statut `1.0.0-design`. Aucun endpoint n'est servi pour l'instant.
+[`packages/contracts`](packages/contracts/src/index.ts) contient DTO Zod, format d'erreur, types des valeurs, opérations de blocs, ETag et interface S3. Générer OpenAPI avec `pnpm openapi:generate`, puis `pnpm format`. Les endpoints de base pages/blocs/rows/recherche sont décrits ; les routes fichiers, propriétés et filtres/vues seront précisées pendant leur module. Le document indique explicitement son statut `1.0.0-design`. Aucun endpoint public /v1 n'est encore servi ; les routes de session et /api/internal/workspaces sont actives.
 
 L'API utilise des clés workspace, scopes et droits courants de l'émetteur. Pagination par curseur signé, idempotence transactionnelle des POST, préconditions de page et format d'erreur unique : [ADR 009](docs/adr/009-api-publique.md). Les moteurs reçoivent UUID, noms de types, versions et objets JSON indépendants de BlockNote.
 
@@ -233,20 +245,25 @@ pnpm hooks:install
 pnpm env:init
 pnpm infra:up
 pnpm check
+pnpm test:bootstrap
 pnpm test:db
 pnpm db:migrate
+pnpm build
+pnpm start
+# Dans un autre terminal, applications et Compose démarrés :
+pnpm test:e2e
 pnpm openapi:generate
 ```
 
 `env:init` refuse d'écraser un `.env` existant et n'affiche aucun secret. Les détails de confiance du certificat Caddy sont dans le [README](README.md). Les tests PostgreSQL utilisent un schéma éphémère nommé aléatoirement et le suppriment ensuite ; `db:migrate` applique volontairement les migrations à la base configurée. Ne pas lancer de reset global de la base pour tester.
 
-Les tests actuels couvrent types/schémas des plugins, registre/migration et transport du bloc, absence de dépendances UI dans le graphe serveur, cohérence des catalogues, formes API/ETag/idempotence OpenAPI et contraintes PostgreSQL. Les 6 tests SQL sont ignorés par `pnpm test` sans `TEST_DATABASE_URL` ; `pnpm test:db` les lance explicitement. Ils ne sont pas des tests e2e HTTP. À l'arrivée de chaque module, ajouter les tests de ses risques réels : accès guest/clé, course de versions, rollback outbox, retries/dédoublonnage, UV absent, grâce et actions sensibles, DNS rebinding et purge. `pnpm check` doit passer avant chaque commit.
+Les tests actuels couvrent types/schémas des plugins, registre/migration et transport du bloc, absence de dépendances UI dans le graphe serveur, cohérence des catalogues, formes API/ETag/idempotence OpenAPI et contraintes PostgreSQL. `pnpm check` inclut aussi la preuve Nest compilée et la validation de configuration. Les 6 tests SQL sont ignorés par `pnpm test` sans `TEST_DATABASE_URL` ; `pnpm test:db` les lance explicitement. `pnpm test:e2e` est distinct : il parcourt les routes de session/workspace via HTTPS avec le certificat Caddy, utilise Mailpit et nettoie seulement ses fixtures aléatoires. À l'arrivée de chaque module, ajouter les tests de ses risques réels : accès guest/clé, course de versions, rollback outbox, retries/dédoublonnage, UV absent, grâce et actions sensibles, DNS rebinding et purge. `pnpm check` doit passer avant chaque commit.
 
 ## Sessions suivantes
 
 Objectif : obtenir une tranche verticale utilisable rapidement et vérifier les risques techniques tôt. **Aucun utilisateur réel avant la fin de la session 3.** Les tables et contrats de sécurité déjà présents décrivent la cible ; ils n'activent pas les fonctionnalités des sessions ultérieures.
 
-1. **Socle exécutable et connexion simple.** Vérifier **en premier**, avant les écrans et l'authentification, que NestJS consomme les packages du monorepo exportant du TypeScript source : décorateurs, injection et métadonnées, compilation et démarrage du résultat construit, y compris un import du catalogue `/server`. Consigner la solution retenue, ses réglages de build et les commandes de reproduction dans un nouvel ADR. Puis bootstrap NestJS, Next.js et worker démarrables derrière Caddy ; Better Auth email/mot de passe, vérification d'email via Mailpit, création de workspace et écrans minimaux. Pas encore de TOTP, passkeys ni de logique `session_assurance`.
+1. **Socle exécutable et connexion simple — implémenté.** Risque NestJS/décorateurs/packages TypeScript source vérifié en premier, y compris `/server` : solution et reproduction dans l'ADR 014. Next.js, NestJS et worker démarrent derrière Caddy. Email/mot de passe, vérification Mailpit, création de workspace et écrans minimaux livrés. Aucun TOTP, passkey ou traitement `session_assurance`. Voir la fiche de relecture pour les contrôles et le prérequis du certificat navigateur.
 2. **Pages et éditeur.** Arbre de pages, implémentation réelle de `BlockWriteService`, blocs standard et recherche synchrone. Adaptateurs BlockNote aller-retour testés, **blocs imbriqués inclus**, identifiants et ordre préservés. Autosave, polling de version et gestion des conflits conservant le brouillon. Autorisations limitées à **owner/member** ; aucun invité ou partage actif à ce stade.
 3. **Connexion forte.** TOTP, passkeys avec contrôle UV côté serveur, `session_assurance`, politique de workspace et délai de grâce, preuve forte récente pour les actions sensibles. Tests d'absence d'UV, de preuves expirées et d'enrôlement sans promotion automatique de session. Cette session doit être terminée avant tout accès d'utilisateurs réels.
 4. **Invités et partages.** Invitations SMTP et liens copiables, rôles de gestion owner/admin, accès explicites read/edit hérités par les descendants, révocation et protection des changements de rôle. Appliquer les mêmes règles à la recherche ; préparer leur réutilisation par l'API publique.
@@ -255,10 +272,10 @@ Objectif : obtenir une tranche verticale utilisable rapidement et vérifier les 
 7. **API publique.** Façades `/v1`, scopes, rate limiting, idempotence, ETag/If-Match et 412, OpenAPI servi et e2e contre Compose.
 8. **Jobs, webhooks et rétention.** Relais, livraisons, protection SSRF, gestion des secrets, purge configurable de la corbeille et suppression de compte/données.
 
-Chaque session utilise sa branche de module, met à jour cette référence et se termine par des contrôles et petits commits. Le développeur effectue les merges après relecture. Cette correction reste sur `feat/architecture` ; elle ne démarre pas la session 1 et ne prétend pas avoir validé le build NestJS.
+Chaque session utilise sa branche de module, met à jour cette référence et se termine par des contrôles et petits commits. Le développeur effectue les merges après relecture. Session 1 : `codex/session-1-bootstrap-auth`. La session 2 est la prochaine tranche ; elle ne démarre pas dans cette livraison.
 
 ## Relecture de chaque livraison
 
 Ajouter à la fin de chaque session un fichier dans `docs/reviews/`, en langage simple, avec trois repères : **fichiers à lire en priorité**, **ce qui pourrait casser**, **comment tester manuellement**. Préciser les résultats des contrôles et ce qui reste non exécutable. Reprendre ces repères dans la réponse de livraison.
 
-Pour cette correction : [séparation du modèle et de l'interface des blocs](docs/reviews/architecture-block-model-ui.md).
+Relectures : [séparation du modèle et de l'interface des blocs](docs/reviews/architecture-block-model-ui.md), [session 1 — socle exécutable et connexion simple](docs/reviews/session-1-bootstrap-auth.md).
