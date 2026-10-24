@@ -21,6 +21,8 @@ export class IncrementalReplica {
     this.checkpoint = new Uint8Array(snapshot);
     this.accepted = updates.map((update) => new Uint8Array(update));
     this.reset();
+    // The SQL tail can be long after projection failures. Retain only its compact state.
+    if (this.accepted.length) this.checkpointNow();
   }
   private reset() {
     this.doc?.destroy();
