@@ -1,0 +1,50 @@
+{
+  "source": {
+    "commit": "875c63f76783e5d28c875bd954d646d8fac31fae",
+    "diff": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "untracked": {}
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "metrics": {
+    "warm:content-1M": {
+      "values": [21.266900000000533, 21.900799999999435, 21.295399999999972],
+      "median": 21.295399999999972,
+      "baseline": 13.688199999999597,
+      "changePercent": 55.57487470960827
+    },
+    "warm:history-1M": {
+      "values": [83.42640000000029, 76.72739999999976, 81.27310000000216],
+      "median": 81.27310000000216,
+      "baseline": 55.159200000000055,
+      "changePercent": 47.34278234637572
+    },
+    "cold:content-1M": {
+      "values": [383.12940000000026, 398.62930000000006, 368.9201000000003],
+      "median": 383.12940000000026,
+      "baseline": 230.56440000000111,
+      "changePercent": 66.17023269854255
+    },
+    "cold:history-1M": {
+      "values": [500.15350000000035, 454.07760000000053, 437.48909999999887],
+      "median": 454.07760000000053,
+      "baseline": 433.23149999999805,
+      "changePercent": 4.811769227307483
+    }
+  },
+  "failures": [
+    "warm:content-1M: regression 55.57% > 10%",
+    "warm:history-1M: regression 47.34% > 10%",
+    "cold:content-1M: regression 66.17% > 10%"
+  ],
+  "failedSeries": ["cold-1"],
+  "scope": "Three independent series per configuration; every p95 and complete log retained. Per-series assertions remain visible; acceptance uses medians and the supplied baseline."
+}

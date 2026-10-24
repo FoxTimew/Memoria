@@ -1,0 +1,38 @@
+{
+  "source": {
+    "commit": "665a82986e0dbb7bbcae5e487627089c0f529de7",
+    "diff": "48fc8cd30c669aa1593e574d1587a534697e1a18c30cee7c4fed635dbd2c7293",
+    "untracked": "scripts/measure-collab.mjs"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "metrics": {
+    "warm:content-1M": {
+      "values": [12.90339999999992, 14.259199999999964, 13.688199999999597],
+      "median": 13.688199999999597
+    },
+    "warm:history-1M": {
+      "values": [49.63670000000093, 55.159200000000055, 55.17989999999918],
+      "median": 55.159200000000055
+    },
+    "cold:content-1M": {
+      "values": [221.47319999999945, 264.88890000000083, 230.56440000000111],
+      "median": 230.56440000000111
+    },
+    "cold:history-1M": {
+      "values": [427.9412999999986, 503.52469999999994, 433.23149999999805],
+      "median": 433.23149999999805
+    }
+  },
+  "failures": [],
+  "failedSeries": ["cold-2"],
+  "scope": "Three independent series per configuration; every p95 and complete log retained. Per-series assertions remain visible; acceptance uses medians and the supplied baseline."
+}

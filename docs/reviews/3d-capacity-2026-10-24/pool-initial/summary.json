@@ -1,0 +1,46 @@
+{
+  "source": {
+    "commit": "665a82986e0dbb7bbcae5e487627089c0f529de7",
+    "diff": "b1d8032f7e9f7dc4b3c1a3d3c4f313c783937e94112dfc7172ec3ad0ab2740e7",
+    "untracked": "apps/collab/src/service/validation-pool.ts\nscripts/measure-collab.mjs"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "metrics": {
+    "warm:content-1M": {
+      "values": [14.572299999999814, 14.275900000000092, 14.202099999999973],
+      "median": 14.275900000000092,
+      "baseline": 13.688199999999597,
+      "changePercent": 4.293479054956184
+    },
+    "warm:history-1M": {
+      "values": [56.148300000000745, 51.568599999999606, 53.806800000000294],
+      "median": 53.806800000000294,
+      "baseline": 55.159200000000055,
+      "changePercent": -2.4518122090236294
+    },
+    "cold:content-1M": {
+      "values": [201.80380000000014, 197.32320000000004, 198.90089999999987],
+      "median": 198.90089999999987,
+      "baseline": 230.56440000000111,
+      "changePercent": -13.733039445812578
+    },
+    "cold:history-1M": {
+      "values": [325.3919999999998, 349.27950000000055, 327.8824000000004],
+      "median": 327.8824000000004,
+      "baseline": 433.23149999999805,
+      "changePercent": -24.31704527486993
+    }
+  },
+  "failures": [],
+  "failedSeries": [],
+  "scope": "Three independent series per configuration; every p95 and complete log retained. Per-series assertions remain visible; acceptance uses medians and the supplied baseline."
+}
