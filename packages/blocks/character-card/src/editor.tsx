@@ -1,9 +1,9 @@
 'use client';
 
 import { createReactBlockSpec } from '@blocknote/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
-import { fromEditorProps, toEditorProps } from './adapter.ts';
+import { fromEditorProps, changedEditorProps, characterCardProps } from './adapter.ts';
 import { characterCardSchema } from './model.ts';
 import type { CharacterCard } from './model.ts';
 
@@ -17,9 +17,14 @@ function CharacterCardForm({
 }: {
   value: CharacterCard;
   disabled: boolean;
-  onChange: (next: CharacterCard) => void;
+  onChange: (patch: Partial<CharacterCard>) => void;
 }): ReactElement {
   const [error, setError] = useState('');
+  const [tags, setTags] = useState(value.tags.join(', '));
+  const [editingTags, setEditingTags] = useState(false);
+  useEffect(() => {
+    if (!editingTags) setTags(value.tags.join(', '));
+  }, [value.tags, editingTags]);
   const update = (patch: Partial<CharacterCard>) => {
     const parsed = characterCardSchema.safeParse({ ...value, ...patch });
     if (!parsed.success) {
@@ -27,7 +32,7 @@ function CharacterCardForm({
       return;
     }
     setError('');
-    onChange(parsed.data);
+    onChange(patch);
   };
   return (
     <fieldset disabled={disabled} contentEditable={false} aria-label="Character card">
@@ -86,8 +91,11 @@ function CharacterCardForm({
         Tags (comma separated){' '}
         <input
           key={value.characterId}
-          defaultValue={value.tags.join(', ')}
-          onBlur={(event) =>
+          value={tags}
+          onFocus={() => setEditingTags(true)}
+          onChange={(event) => setTags(event.target.value)}
+          onBlur={(event) => {
+            setEditingTags(false);
             update({
               tags: [
                 ...new Set(
@@ -97,8 +105,8 @@ function CharacterCardForm({
                     .filter(Boolean),
                 ),
               ],
-            })
-          }
+            });
+          }}
         />
       </label>
       <small>Engine ID: {value.characterId}</small>
@@ -110,7 +118,7 @@ function CharacterCardForm({
 export const spec = createReactBlockSpec(
   {
     type: editorType,
-    propSchema: { data: { default: '' } },
+    propSchema: characterCardProps,
     content: 'none',
   },
   {
@@ -129,7 +137,9 @@ export const spec = createReactBlockSpec(
         <CharacterCardForm
           value={value}
           disabled={!editor.isEditable}
-          onChange={(next) => editor.updateBlock(block, { props: toEditorProps(next) })}
+          onChange={(patch) =>
+            editor.updateBlock(block, { props: changedEditorProps(value, patch) })
+          }
         />
       );
     },

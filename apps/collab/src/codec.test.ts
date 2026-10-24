@@ -3,6 +3,9 @@ import * as Y from 'yjs';
 import { build } from 'esbuild';
 import { decodeDocument, validateCandidate, bounds } from './codec.ts';
 import { representativeDocument, fixtureId } from './testing/fixture.ts';
+import { BlockNoteEditor } from '@blocknote/core';
+import { blocksToYDoc } from '@blocknote/core/yjs';
+import { createEditorKit } from '@memoria/block-catalog/client';
 
 function card(doc: Y.Doc) {
   return [...doc.getXmlFragment('prosemirror').createTreeWalker(() => true)].find(
@@ -11,6 +14,23 @@ function card(doc: Y.Doc) {
   )!;
 }
 describe('collaboration strict codec and isolated candidates', () => {
+  it('accepts the actual front schema through Yjs, including nested standard blocks and character props', async () => {
+    const { doc } = await representativeDocument(9);
+    const source = decodeDocument(doc);
+    const kit = await createEditorKit();
+    const editor = BlockNoteEditor.create({
+      schema: kit.schema,
+      initialContent: kit.toEditor(source),
+    });
+    const encoded = blocksToYDoc(editor, editor.document, 'prosemirror');
+    try {
+      expect(decodeDocument(encoded)).toEqual(source);
+    } finally {
+      encoded.destroy();
+      editor._tiptapEditor.destroy();
+      doc.destroy();
+    }
+  });
   it('decodes real BlockNote output: 300 blocks, nine types, nesting, links/styles and separate card fields', async () => {
     const { doc } = await representativeDocument();
     try {

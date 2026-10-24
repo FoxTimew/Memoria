@@ -2,6 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { characterCardUi, fromEditorProps, toEditorProps } from '@memoria/block-character-card/ui';
+import { changedEditorProps } from './adapter.ts';
 
 describe('character-card UI', () => {
   const model = characterCardUi.model;
@@ -25,5 +26,11 @@ describe('character-card UI', () => {
     const data = { ...model.createDefault(), displayName: 'Mira', tags: ['boss', 'forest'] };
     expect(fromEditorProps(toEditorProps(data))).toEqual(data);
     expect(model.toPlainText(data)).toContain('boss, forest');
+    expect(toEditorProps(data)).not.toHaveProperty('data');
+    expect(changedEditorProps(data, { displayName: 'Nouveau nom' })).toEqual({
+      displayName: 'Nouveau nom',
+    });
+    expect(changedEditorProps(data, { health: 25 })).toEqual({ health: 25 });
+    expect(changedEditorProps(data, { tags: ['a'] })).toEqual({ tags: '["a"]' });
   });
 });

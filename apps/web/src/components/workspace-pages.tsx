@@ -304,10 +304,10 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
           </p>
         )}
         {pendingPage && (
-          <div role="dialog" aria-label="Brouillon non enregistré" className="notice m-6">
+          <div role="dialog" aria-label="Modifications non enregistrées" className="notice m-6">
             <p>
-              Cette page contient un brouillon non enregistré. Vous pouvez le conserver ou le
-              quitter.
+              Cette page contient des modifications non enregistrées. Restez sur la page jusqu’à
+              confirmation, ou exportez le contenu affiché avant de l’abandonner.
             </p>
             <button className="quiet-link mr-5" onClick={() => setPendingPage(undefined)}>
               Rester sur la page
@@ -366,8 +366,6 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
         {document ? (
           <PageEditor
             key={`${session.user.id}-${document.page.id}-${generation}`}
-            userId={session.user.id}
-            sessionId={session.session.id}
             actions={editorActions}
             document={document}
             endpoint={`${base}/pages/${document.page.id}`}

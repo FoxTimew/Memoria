@@ -1,5 +1,11 @@
 https://localhost {
   tls internal
+  handle /collab {
+    reverse_proxy host.docker.internal:3003
+  }
+  handle /api/health/collab {
+    reverse_proxy host.docker.internal:3003
+  }
   handle /api/health/worker {
     reverse_proxy host.docker.internal:3002
   }

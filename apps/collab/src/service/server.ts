@@ -10,7 +10,7 @@ import * as Y from 'yjs';
 import type { CollaborationCommand } from '@memoria/contracts';
 import type { Auth } from '@memoria/auth';
 import { Leadership } from './leadership.ts';
-import { Store } from './store.ts';
+import { Store, receiptFor } from './store.ts';
 import type { AccessResolver } from './store.ts';
 import type { AccessRequest } from './access.ts';
 import { Revocations } from './revocations.ts';
@@ -133,7 +133,20 @@ export async function collaborationServer(
       if (type === 0) return;
       try {
         await store.authorize(context.identity);
-        if (type === 1 && Y.snapshotContainsUpdate(Y.snapshot(document), payload)) return;
+        if (type === 1 && Y.snapshotContainsUpdate(Y.snapshot(document), payload)) {
+          // Reconnection may resend an already durable state (including deletions).
+          // Explicitly confirm it without creating a revision or an audit/outbox event.
+          connection.sendStateless(
+            JSON.stringify({
+              status: 'durable',
+              kind: 'sync',
+              generation: rooms.get(documentName)!.generation,
+              revision: rooms.get(documentName)!.revision,
+              receipt: receiptFor(payload),
+            }),
+          );
+          return;
+        }
         if (connection.readOnly) throw new CollaborationError('READ_ONLY', 403);
         const receipt = await rooms.get(documentName)!.update(context.identity, payload);
         receipts.set(connection, receipt);

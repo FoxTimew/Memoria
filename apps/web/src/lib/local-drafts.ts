@@ -1,5 +1,5 @@
 import { canonicalJson } from '@memoria/contracts';
-import type { Draft, DraftSnapshot } from './page-draft.ts';
+import type { Draft, DraftSnapshot } from './legacy-draft-types.ts';
 
 export interface LocalDraft {
   userId: string;

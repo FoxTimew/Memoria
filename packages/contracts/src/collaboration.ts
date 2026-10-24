@@ -1,5 +1,11 @@
 import { z } from 'zod';
 import { blockOperationSchema } from './api.ts';
+export const collaborationOpenSchema = z.strictObject({
+  generation: z.uuid(),
+  contentRevision: z.int().nonnegative(),
+  projectionRevision: z.int().nonnegative(),
+  room: z.string().max(160),
+});
 export const collaborationWriteSchema = z.strictObject({
   generation: z.uuid(),
   expectedRevision: z.int().nonnegative(),

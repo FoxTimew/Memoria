@@ -5,8 +5,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "node ../../scripts/build-collab.mjs",
-    "start": "node dist/main.mjs",
-    "dev": "node ../../scripts/build-collab.mjs --watch"
+    "start": "node --env-file-if-exists=../../.env dist/main.mjs",
+    "dev": "node --env-file-if-exists=../../.env ../../scripts/build-collab.mjs --watch"
   },
   "dependencies": {
     "@hocuspocus/server": "4.7.1",

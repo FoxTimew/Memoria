@@ -97,7 +97,8 @@ test(
           closed = false;
         },
         onStateless: ({ payload }) => {
-          received.push(JSON.parse(payload) as (typeof received)[number]);
+          const receipt = JSON.parse(payload) as (typeof received)[number] & { kind?: string };
+          if (receipt.kind !== 'sync') received.push(receipt);
         },
         onAuthenticationFailed: () => {
           failed = true;

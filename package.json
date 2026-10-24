@@ -29,13 +29,16 @@
     "env:init": "node scripts/init-env.mjs",
     "infra:up": "docker compose up -d --build",
     "infra:down": "docker compose down",
-    "test:collab:e2e": "node scripts/test-collab.mjs"
+    "test:collab:e2e": "node scripts/test-collab.mjs",
+    "dev:collab": "node --env-file=.env scripts/dev-collaboration.mjs",
+    "test:collab:browser": "node --env-file=.env --use-system-ca scripts/test-collab-browser.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
-    "eslint": "10.13.0",
     "esbuild": "0.28.2",
+    "eslint": "10.13.0",
     "lefthook": "2.2.2",
     "prettier": "3.9.10",
     "turbo": "2.11.10",
