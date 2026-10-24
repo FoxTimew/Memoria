@@ -1,0 +1,62 @@
+INCREMENTAL preparing history-4M
+history-4M: 0/200 measured
+history-4M: 20/200 measured
+history-4M: 40/200 measured
+history-4M: 60/200 measured
+history-4M: 80/200 measured
+history-4M: 100/200 measured
+history-4M: 120/200 measured
+history-4M: 140/200 measured
+history-4M: 160/200 measured
+history-4M: 180/200 measured
+history-4M: 200/200 measured
+{
+  "name": "history-4M",
+  "profile": {
+    "targetBytes": 4128768,
+    "encodedBytes": 4126752,
+    "historyClients": 176619,
+    "gc": true,
+    "blocks": 300,
+    "businessBytes": 100802,
+    "logicalElements": 190222,
+    "structRecords": 180219,
+    "reencodedBytes": 4126752
+  },
+  "coldMs": 1058.2798,
+  "deadlineMs": 10000,
+  "workerMemoryMiB": 512,
+  "warmup": 20,
+  "iterations": 200,
+  "finalBytes": 4129229,
+  "passed": false,
+  "milliseconds": {
+    "validation": {
+      "p50": 113.0160999999971,
+      "p95": 142.96200000000135,
+      "p99": 152.18109999999797,
+      "max": 155.89809999999852
+    },
+    "validationWithIsolation": {
+      "p50": 113.3002000000015,
+      "p95": 143.28960000000006,
+      "p99": 152.46789999999964,
+      "max": 156.1730000000025
+    },
+    "transaction": {
+      "p50": 8.232000000003609,
+      "p95": 10.012300000002142,
+      "p99": 20.004500000000917,
+      "max": 24.121399999996356
+    },
+    "total": {
+      "p50": 122.20969999999943,
+      "p95": 152.90830000000096,
+      "p99": 161.51250000000073,
+      "max": 164.47050000000127
+    }
+  },
+  "samples": "200 unfiltered samples saved"
+}
+Incremental incremental-performance exit code: 0
+EXIT_CODE=0

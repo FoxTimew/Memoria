@@ -14,6 +14,14 @@ export const pageMoveSchema = z.strictObject({
 export const pageVersionInputSchema = z.strictObject({ expectedVersion: z.int().positive() });
 export const pageDocumentSchema = z.strictObject({
   page: pageSchema,
+  collaboration: z
+    .strictObject({
+      generation: z.uuid(),
+      contentRevision: z.int().nonnegative(),
+      projectionRevision: z.int().nonnegative(),
+    })
+    .nullable()
+    .optional(),
   blocks: z.array(blockSchema.extend({ content: z.record(z.string(), z.json()) })).max(500),
 });
 export const pageTreeSchema = z.strictObject({
@@ -27,7 +35,13 @@ export const pageSaveResultSchema = z.strictObject({
   changedBlockIds: z.array(z.uuid()),
 });
 export const searchResultsSchema = z.array(
-  z.strictObject({ id: z.uuid(), title: z.string(), excerpt: z.string() }),
+  z.strictObject({
+    id: z.uuid(),
+    title: z.string(),
+    excerpt: z.string(),
+    contentRevision: z.int().nonnegative().nullable().optional(),
+    projectionRevision: z.int().nonnegative().nullable().optional(),
+  }),
 );
 export type PageDocument = z.infer<typeof pageDocumentSchema>;
 export type PageSummary = z.infer<typeof pageSchema>;

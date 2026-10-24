@@ -7,6 +7,7 @@ const values = {
   POSTGRES_PASSWORD: password,
   DATABASE_URL: `postgresql://memoria:${password}@127.0.0.1:5432/memoria`,
   BETTER_AUTH_SECRET: randomBytes(32).toString('hex'),
+  COLLAB_INTERNAL_SECRET: randomBytes(32).toString('hex'),
   DATA_ENCRYPTION_KEY: randomBytes(32).toString('hex'),
   MINIO_ROOT_PASSWORD: randomBytes(24).toString('hex'),
 };

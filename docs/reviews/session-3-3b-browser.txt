@@ -1,0 +1,15 @@
+$ node --env-file=.env --use-system-ca scripts/test-collab-browser.mjs
+PASS HTTPS login, second membership, two WSS connections and durable initial load
+PASS simultaneous text and independent character fields
+PASS offline typing and reconnection merge, confirmed by server receipts
+PASS relational title conflict, page reload preserves body, private HMAC not routed; no browser errors
+✔ Two isolated browsers through Caddy WSS: editing, card fields, offline merge and title CAS (7223.0523ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7226.9588
+EXIT_CODE=0

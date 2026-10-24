@@ -1,0 +1,95 @@
+MEMORY history-1M: 1 replicas, retained heap 19.9 MiB, process RSS 158.8 MiB, free 5651.6 MiB
+MEMORY history-1M: 5 replicas, retained heap 95.5 MiB, process RSS 333.5 MiB, free 5487.9 MiB
+MEMORY history-1M: 10 replicas, retained heap 189.5 MiB, process RSS 453.3 MiB, free 5377.1 MiB
+MEMORY history-1M: 25 replicas, retained heap 471.8 MiB, process RSS 938.6 MiB, free 4908.6 MiB
+MEMORY history-1M: 50 replicas, retained heap 942.3 MiB, process RSS 1602.5 MiB, free 4219.8 MiB
+MEMORY history-1M: 75 replicas, retained heap 1412.7 MiB, process RSS 2124.1 MiB, free 3653.1 MiB
+MEMORY history-1M: 100 replicas, retained heap 1883.2 MiB, process RSS 2634.6 MiB, free 3198.9 MiB
+{
+  "profile": "history-1M",
+  "encodedBytes": 1042470,
+  "baseline": {
+    "rss": 75120640,
+    "heapTotal": 31567872,
+    "heapUsed": 12803144,
+    "external": 6233257,
+    "arrayBuffers": 2261503
+  },
+  "availableAtStart": 6027915264,
+  "totalPhysical": 14877257728,
+  "loaded": 100,
+  "retained": {
+    "heapUsed": 1974667368,
+    "external": 104269355,
+    "arrayBuffers": 104247000,
+    "rss": 2687307776
+  },
+  "samples": [
+    {
+      "count": 1,
+      "heapUsed": 20911528,
+      "external": 2703125,
+      "arrayBuffers": 2680770,
+      "rss": 91353088,
+      "absoluteRss": 166473728,
+      "freePhysical": 5926105088
+    },
+    {
+      "count": 5,
+      "heapUsed": 100146728,
+      "external": 6873005,
+      "arrayBuffers": 6850650,
+      "rss": 274599936,
+      "absoluteRss": 349720576,
+      "freePhysical": 5754441728
+    },
+    {
+      "count": 10,
+      "heapUsed": 198705352,
+      "external": 10447055,
+      "arrayBuffers": 10424700,
+      "rss": 400236544,
+      "absoluteRss": 475357184,
+      "freePhysical": 5638283264
+    },
+    {
+      "count": 25,
+      "heapUsed": 494712384,
+      "external": 26084105,
+      "arrayBuffers": 26061750,
+      "rss": 909037568,
+      "absoluteRss": 984158208,
+      "freePhysical": 5147033600
+    },
+    {
+      "count": 50,
+      "heapUsed": 988108960,
+      "external": 52145855,
+      "arrayBuffers": 52123500,
+      "rss": 1605197824,
+      "absoluteRss": 1680318464,
+      "freePhysical": 4424790016
+    },
+    {
+      "count": 75,
+      "heapUsed": 1481357192,
+      "external": 78207605,
+      "arrayBuffers": 78185250,
+      "rss": 2152132608,
+      "absoluteRss": 2227253248,
+      "freePhysical": 3830571008
+    },
+    {
+      "count": 100,
+      "heapUsed": 1974703952,
+      "external": 104269355,
+      "arrayBuffers": 104247000,
+      "rss": 2687434752,
+      "absoluteRss": 2762555392,
+      "freePhysical": 3354300416
+    }
+  ]
+}
+MEMORY AND REBASE EVALUATION COMPLETE
+Incremental incremental-memory exit code: 0
+EXIT_CODE=0

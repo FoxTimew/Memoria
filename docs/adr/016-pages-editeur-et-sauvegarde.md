@@ -2,6 +2,8 @@
 
 Statut : accepté — 2026-10-23. Session 2 ; précise les ADR 006, 007 et 011.
 
+**Évolution acceptée, intégration à venir :** l'[ADR 017](017-collaboration-temps-reel.md) avance Yjs en session 3 et remplace les conflits de contenu et le brouillon JSON. Décision : reset des données de test sans conversion, effacement des anciens brouillons au premier chargement, puis cache Yjs effacé à la déconnexion. Le présent ADR décrit toujours le parcours applicatif actif ; l'étape 2 reste une preuve isolée. Fichiers = session 7, jobs/webhooks/rétention = session 9, connexion forte = session 4 avant tout utilisateur réel ; les numéros ci-dessous rappellent le calendrier de livraison de session 2.
+
 ## Risque vérifié en premier
 
 Les tests `packages/blocks/catalog/src/roundtrip.test.ts` instancient **BlockNote 0.56.0 et son vrai document ProseMirror**, sans simuler leur sérialisation. Les huit modèles standard et character-card passent modèle → éditeur → modèle → rechargement. UUID, parents, ordre des frères, liens, styles, Unicode, sauts de ligne, code, image et blocs vides sont contrôlés, y compris tous les types comme enfants imbriqués. Un second scénario change le type d'un bloc et déplace un bloc en conservant son identité. Aucun problème de fond n'a été constaté sur ce périmètre.

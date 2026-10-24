@@ -7,6 +7,8 @@ const envSchema = z.object({
     return url.protocol === 'https:' && url.origin === value;
   }, 'Expected an HTTPS origin without a trailing slash'),
   BETTER_AUTH_SECRET: z.string().min(32),
+  COLLAB_INTERNAL_SECRET: z.string().min(32),
+  COLLAB_INTERNAL_URL: z.url().default('http://127.0.0.1:3004/internal/collaboration'),
   DATABASE_URL: z.string().regex(/^postgres(?:ql)?:\/\//),
   API_HOST: z.string().default('0.0.0.0'),
   API_PORT: z.coerce.number().int().min(1).max(65535).default(3001),

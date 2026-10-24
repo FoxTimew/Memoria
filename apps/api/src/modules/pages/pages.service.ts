@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { and, eq, isNull, sql } from 'drizzle-orm';
-import { blocks, pages, searchDocuments } from '@memoria/db';
+import { blocks, pages, searchDocuments, collaborationDocuments } from '@memoria/db';
 import type { WriteTransaction } from '@memoria/db';
 import {
   internalPageCreateSchema,
@@ -70,6 +70,9 @@ export class PagesService {
     return this.run(userId, workspaceId, false, async (tx, _ctx, all) => {
       const page = requirePage(pageId, all);
       if (versionOnly) return { version: page.version };
+      await tx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended('projection:' || ${pageId},0))`,
+      );
       const content = await tx
         .select({
           id: blocks.id,
@@ -88,7 +91,15 @@ export class PagesService {
           ),
         )
         .orderBy(blocks.position);
-      return { page: pageResponse(page), blocks: content };
+      const [state] = await tx
+        .select({
+          generation: collaborationDocuments.generation,
+          contentRevision: collaborationDocuments.contentRevision,
+          projectionRevision: collaborationDocuments.projectionRevision,
+        })
+        .from(collaborationDocuments)
+        .where(eq(collaborationDocuments.pageId, pageId));
+      return { page: pageResponse(page), blocks: content, collaboration: state ?? null };
     });
   }
   create(userId: string, workspaceId: string, input: unknown) {
@@ -123,10 +134,62 @@ export class PagesService {
   }
   save(userId: string, workspaceId: string, pageId: string, input: unknown) {
     const data = parse(pageSaveSchema, input);
-    return this.run(userId, workspaceId, true, async (tx, ctx, all) => {
-      requirePage(pageId, all);
-      return this.writer.apply(ctx, tx, { ...data, pageId });
+    if (data.operations.length)
+      throw new ConflictException({
+        code: 'COLLABORATION_REQUIRED',
+        message:
+          'Le contenu utilise maintenant la collaboration ; utilisez la commande de contenu avec sa révision.',
+      });
+    return this.rename(userId, workspaceId, pageId, {
+      expectedVersion: data.expectedVersion,
+      title: data.title,
     });
+  }
+  rename(userId: string, workspaceId: string, pageId: string, input: unknown) {
+    const data = parse(
+      z.strictObject({ expectedVersion: z.int().positive(), title: z.string().max(500) }),
+      input,
+    );
+    return this.run(userId, workspaceId, true, async (tx, ctx, all) => {
+      const page = requirePage(pageId, all);
+      if (page.version !== data.expectedVersion)
+        throw new ConflictException({ code: 'VERSION_CONFLICT' });
+      const [updated] = await tx
+        .update(pages)
+        .set({ title: data.title, version: sql`${pages.version} + 1`, updatedBy: ctx.actorId })
+        .where(
+          and(
+            eq(pages.id, pageId),
+            eq(pages.workspaceId, workspaceId),
+            eq(pages.version, data.expectedVersion),
+          ),
+        )
+        .returning();
+      if (!updated) throw new ConflictException({ code: 'VERSION_CONFLICT' });
+      await pageEffects(
+        ctx,
+        tx,
+        updated,
+        all.map((p) => (p.id === pageId ? updated : p)),
+        'page.renamed',
+      );
+      return { pageId, version: updated.version, changedBlockIds: [] };
+    });
+  }
+  openCollaboration(
+    session: import('../auth/current-user.decorator.ts').AuthenticatedSession,
+    workspace: string,
+    page: string,
+  ) {
+    return this.writer.open(session, workspace, page);
+  }
+  writeCollaboration(
+    session: import('../auth/current-user.decorator.ts').AuthenticatedSession,
+    workspace: string,
+    page: string,
+    input: unknown,
+  ) {
+    return this.writer.write(session, workspace, page, input);
   }
   mutate(
     userId: string,
@@ -214,8 +277,11 @@ export class PagesService {
           id: pages.id,
           title: pages.title,
           excerpt: sql<string>`left(${searchDocuments.plainText}, 240)`,
+          contentRevision: collaborationDocuments.contentRevision,
+          projectionRevision: collaborationDocuments.projectionRevision,
         })
         .from(searchDocuments)
+        .leftJoin(collaborationDocuments, eq(collaborationDocuments.pageId, searchDocuments.pageId))
         .innerJoin(
           pages,
           and(

@@ -53,7 +53,7 @@ export class AuthService {
     const session = await this.auth.api.getSession({ headers: fromNodeHeaders(headers) });
     if (!session) throw new UnauthorizedException('Connectez-vous pour continuer.');
     if (!session.user.emailVerified) throw new ForbiddenException('Vérifiez votre adresse email.');
-    return session.user;
+    return session;
   }
 
   onApplicationShutdown() {

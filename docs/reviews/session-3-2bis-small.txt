@@ -1,0 +1,65 @@
+SIZE: preparing 196608 byte profile (up to 12 KiB headroom)
+SIZE 196608: default budget: completed within default 250 ms / 128 MiB on first update
+SIZE 196608: 0/200 measured updates; latest 33.36 ms
+SIZE 196608: 20/200 measured updates; latest 38.75 ms
+SIZE 196608: 40/200 measured updates; latest 34.16 ms
+SIZE 196608: 60/200 measured updates; latest 35.19 ms
+SIZE 196608: 80/200 measured updates; latest 36.23 ms
+SIZE 196608: 100/200 measured updates; latest 30.56 ms
+SIZE 196608: 120/200 measured updates; latest 34.95 ms
+SIZE 196608: 140/200 measured updates; latest 37.25 ms
+SIZE 196608: 160/200 measured updates; latest 37.08 ms
+SIZE 196608: 180/200 measured updates; latest 33.72 ms
+SIZE 196608: 200/200 measured updates; latest 38.05 ms
+{
+  "target": 196608,
+  "profile": {
+    "targetBytes": 192512,
+    "encodedBytes": 191175,
+    "historyClients": 3869,
+    "gc": true,
+    "blocks": 300,
+    "businessBytes": 100802,
+    "logicalElements": 17472,
+    "structRecords": 7469,
+    "reencodedBytes": 191175
+  },
+  "diagnosticBudget": {
+    "milliseconds": 250,
+    "memoryMiB": 128
+  },
+  "normalBudgetResult": "completed within default 250 ms / 128 MiB on first update",
+  "warmup": 20,
+  "iterations": 200,
+  "finalBytes": 193652,
+  "milliseconds": {
+    "validation": {
+      "p50": 23.322299999999814,
+      "p95": 27.801300000000992,
+      "p99": 31.18859999999995,
+      "max": 34.3700000000008
+    },
+    "validationWithIsolation": {
+      "p50": 25.059000000000196,
+      "p95": 29.625299999999697,
+      "p99": 33.38640000000032,
+      "max": 36.671299999999974
+    },
+    "transaction": {
+      "p50": 8.59060000000045,
+      "p95": 11.052300000000287,
+      "p99": 12.237700000000586,
+      "max": 12.553899999999885
+    },
+    "total": {
+      "p50": 33.605899999998655,
+      "p95": 38.73409999999967,
+      "p99": 42.22160000000031,
+      "max": 48.90900000000056
+    }
+  },
+  "samples": "200 raw samples in report"
+}
+SIZE MEASUREMENTS COMPLETE; >=50 ms requires a product decision before integration.
+Step 2 bis sizing exit code: 0
+EXIT_CODE=0

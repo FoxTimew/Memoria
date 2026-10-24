@@ -1,0 +1,1666 @@
+{
+  "date": "2026-10-23T17:47:54.164Z",
+  "scope": "Full candidate clone + strict raw Yjs codec + Zod in isolated worker, page lock + current SQL rights + durable journal commit. Excludes WebSocket/auth handshake, room queue wait and projection.",
+  "environment": {
+    "node": "v24.21.0",
+    "os": "win32 10.0.26300",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "postgres": {
+      "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "fsync": "on",
+      "synchronous_commit": "on"
+    },
+    "yjs": "13.6.33",
+    "blocknote": "0.56.0"
+  },
+  "fixture": {
+    "blocks": 300,
+    "nestingDepth": 3,
+    "characterCards": 33,
+    "types": [
+      "core.paragraph",
+      "core.heading",
+      "core.bullet-list-item",
+      "core.numbered-list-item",
+      "core.todo",
+      "core.code",
+      "core.image",
+      "core.divider",
+      "gamedev.character-card"
+    ],
+    "businessBytes": 174909,
+    "initialYjsBytes": 178904,
+    "finalYjsBytes": 181538
+  },
+  "warmup": 20,
+  "iterations": 200,
+  "milliseconds": {
+    "candidate": {
+      "p50": 8.851,
+      "p95": 15.027,
+      "p99": 16.348,
+      "max": 17.212
+    },
+    "candidateWithIsolation": {
+      "p50": 10.712,
+      "p95": 17.308,
+      "p99": 18.599,
+      "max": 19.903
+    },
+    "transaction": {
+      "p50": 7.577,
+      "p95": 8.63,
+      "p99": 8.871,
+      "max": 9.374
+    },
+    "total": {
+      "p50": 18.337,
+      "p95": 25.361,
+      "p99": 26.78,
+      "max": 28.534
+    }
+  },
+  "passed": true,
+  "samples": [
+    {
+      "validation": 10.03690000000006,
+      "validationWithIsolation": 11.74090000000001,
+      "transaction": 7.422900000000027,
+      "total": 19.163800000000037,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 9.188400000000001,
+      "validationWithIsolation": 11.085700000000088,
+      "transaction": 7.649699999999939,
+      "total": 18.735400000000027,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.753400000000056,
+      "validationWithIsolation": 10.374199999999973,
+      "transaction": 7.359699999999975,
+      "total": 17.73389999999995,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 8.776900000000069,
+      "validationWithIsolation": 10.552900000000136,
+      "transaction": 8.130499999999984,
+      "total": 18.68340000000012,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 9.18179999999984,
+      "validationWithIsolation": 10.757699999999886,
+      "transaction": 7.338799999999992,
+      "total": 18.096499999999878,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.650900000000092,
+      "validationWithIsolation": 10.268600000000106,
+      "transaction": 7.2297000000000935,
+      "total": 17.4983000000002,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.796299999999974,
+      "validationWithIsolation": 10.2817,
+      "transaction": 8.568199999999933,
+      "total": 18.849899999999934,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 9.033400000000029,
+      "validationWithIsolation": 10.884199999999964,
+      "transaction": 7.490000000000009,
+      "total": 18.374199999999973,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 8.213400000000092,
+      "validationWithIsolation": 9.922300000000178,
+      "transaction": 7.365699999999833,
+      "total": 17.28800000000001,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.26559999999995,
+      "validationWithIsolation": 10.076099999999997,
+      "transaction": 7.332499999999982,
+      "total": 17.40859999999998,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.362699999999904,
+      "validationWithIsolation": 10.170900000000074,
+      "transaction": 7.08849999999984,
+      "total": 17.259399999999914,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 8.572200000000066,
+      "validationWithIsolation": 10.519900000000007,
+      "transaction": 7.321800000000167,
+      "total": 17.841700000000174,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 9.121499999999969,
+      "validationWithIsolation": 10.946199999999862,
+      "transaction": 7.362600000000157,
+      "total": 18.30880000000002,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.788499999999885,
+      "validationWithIsolation": 9.520999999999958,
+      "transaction": 7.487700000000132,
+      "total": 17.00870000000009,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.856899999999996,
+      "validationWithIsolation": 9.866999999999962,
+      "transaction": 7.505699999999933,
+      "total": 17.372699999999895,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 7.670599999999922,
+      "validationWithIsolation": 9.624099999999999,
+      "transaction": 7.483600000000024,
+      "total": 17.107700000000023,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 7.979099999999789,
+      "validationWithIsolation": 9.893400000000156,
+      "transaction": 7.209899999999834,
+      "total": 17.10329999999999,
+      "bytes": 32,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.592100000000073,
+      "validationWithIsolation": 9.537999999999784,
+      "transaction": 8.049600000000055,
+      "total": 17.58759999999984,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 9.860000000000127,
+      "validationWithIsolation": 11.647500000000036,
+      "transaction": 7.04099999999994,
+      "total": 18.688499999999976,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 8.04690000000005,
+      "validationWithIsolation": 9.77579999999989,
+      "transaction": 7.080899999999929,
+      "total": 16.85669999999982,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 8.125800000000027,
+      "validationWithIsolation": 9.930200000000013,
+      "transaction": 7.192000000000007,
+      "total": 17.12220000000002,
+      "bytes": 32,
+      "kind": "character-field"
+    },
+    {
+      "validation": 10.480299999999943,
+      "validationWithIsolation": 12.305200000000013,
+      "transaction": 8.805399999999963,
+      "total": 21.110599999999977,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.871799999999894,
+      "validationWithIsolation": 10.801100000000133,
+      "transaction": 7.975599999999986,
+      "total": 18.77670000000012,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 8.544900000000098,
+      "validationWithIsolation": 10.391100000000051,
+      "transaction": 7.576699999999846,
+      "total": 17.967799999999897,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 8.44010000000003,
+      "validationWithIsolation": 10.387199999999893,
+      "transaction": 7.594900000000052,
+      "total": 17.982099999999946,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.416799999999967,
+      "validationWithIsolation": 10.288100000000213,
+      "transaction": 7.533699999999953,
+      "total": 17.821800000000167,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.722500000000082,
+      "validationWithIsolation": 10.764400000000023,
+      "transaction": 7.649999999999864,
+      "total": 18.414399999999887,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 9.235600000000204,
+      "validationWithIsolation": 11.234000000000151,
+      "transaction": 7.281700000000001,
+      "total": 18.51570000000015,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 9.070899999999938,
+      "validationWithIsolation": 10.848100000000159,
+      "transaction": 8.572799999999916,
+      "total": 19.420900000000074,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 9.577299999999923,
+      "validationWithIsolation": 11.53189999999995,
+      "transaction": 7.856899999999996,
+      "total": 19.388799999999947,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 9.153299999999945,
+      "validationWithIsolation": 10.489599999999882,
+      "transaction": 7.537600000000111,
+      "total": 18.027199999999993,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.167599999999993,
+      "validationWithIsolation": 9.757599999999911,
+      "transaction": 7.153500000000122,
+      "total": 16.911100000000033,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.851499999999987,
+      "validationWithIsolation": 10.412900000000036,
+      "transaction": 8.029800000000023,
+      "total": 18.44270000000006,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.613599999999906,
+      "validationWithIsolation": 10.228799999999865,
+      "transaction": 7.229400000000169,
+      "total": 17.458200000000033,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.34920000000011,
+      "validationWithIsolation": 9.918999999999869,
+      "transaction": 7.866400000000112,
+      "total": 17.78539999999998,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.10329999999999,
+      "validationWithIsolation": 9.704799999999977,
+      "transaction": 8.257799999999861,
+      "total": 17.96259999999984,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.296100000000024,
+      "validationWithIsolation": 10.038299999999936,
+      "transaction": 7.660100000000057,
+      "total": 17.698399999999992,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.130699999999933,
+      "validationWithIsolation": 10.052000000000135,
+      "transaction": 7.410999999999831,
+      "total": 17.462999999999965,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.30359999999996,
+      "validationWithIsolation": 9.824399999999969,
+      "transaction": 7.560100000000148,
+      "total": 17.384500000000116,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.76520000000005,
+      "validationWithIsolation": 10.442799999999806,
+      "transaction": 8.805700000000115,
+      "total": 19.248499999999922,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 9.719000000000051,
+      "validationWithIsolation": 11.395199999999932,
+      "transaction": 7.6013000000000375,
+      "total": 18.99649999999997,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 9.629100000000108,
+      "validationWithIsolation": 11.20069999999987,
+      "transaction": 7.380699999999933,
+      "total": 18.581399999999803,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 9.982299999999896,
+      "validationWithIsolation": 11.582299999999805,
+      "transaction": 8.014200000000073,
+      "total": 19.596499999999878,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 9.552399999999807,
+      "validationWithIsolation": 11.229299999999967,
+      "transaction": 8.016599999999926,
+      "total": 19.245899999999892,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.425100000000384,
+      "validationWithIsolation": 12.372100000000046,
+      "transaction": 7.599299999999857,
+      "total": 19.971399999999903,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.092200000000048,
+      "validationWithIsolation": 9.928699999999935,
+      "transaction": 7.551899999999932,
+      "total": 17.480599999999868,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.780799999999999,
+      "validationWithIsolation": 9.903900000000249,
+      "transaction": 7.442500000000109,
+      "total": 17.346400000000358,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.8375999999998385,
+      "validationWithIsolation": 9.6878999999999,
+      "transaction": 7.3034999999999854,
+      "total": 16.991399999999885,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.684899999999743,
+      "validationWithIsolation": 10.281599999999798,
+      "transaction": 7.617999999999938,
+      "total": 17.899599999999737,
+      "bytes": 32,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.581699999999728,
+      "validationWithIsolation": 10.168199999999615,
+      "transaction": 7.315200000000004,
+      "total": 17.48339999999962,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.420000000000073,
+      "validationWithIsolation": 8.800200000000132,
+      "transaction": 8.411200000000008,
+      "total": 17.21140000000014,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.449599999999919,
+      "validationWithIsolation": 9.916799999999967,
+      "transaction": 7.165199999999913,
+      "total": 17.08199999999988,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.63740000000007,
+      "validationWithIsolation": 10.498399999999947,
+      "transaction": 8.046699999999873,
+      "total": 18.54509999999982,
+      "bytes": 32,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.049600000000282,
+      "validationWithIsolation": 9.739700000000084,
+      "transaction": 6.884399999999914,
+      "total": 16.6241,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.643099999999777,
+      "validationWithIsolation": 9.03819999999996,
+      "transaction": 7.045599999999922,
+      "total": 16.083799999999883,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.927999999999884,
+      "validationWithIsolation": 9.312800000000152,
+      "transaction": 6.88189999999986,
+      "total": 16.19470000000001,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.708799999999883,
+      "validationWithIsolation": 9.171299999999974,
+      "transaction": 7.774900000000343,
+      "total": 16.946200000000317,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 9.3429000000001,
+      "validationWithIsolation": 10.89529999999968,
+      "transaction": 7.108000000000175,
+      "total": 18.003299999999854,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.549199999999928,
+      "validationWithIsolation": 9.092499999999745,
+      "transaction": 7.088300000000345,
+      "total": 16.18080000000009,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.032600000000002,
+      "validationWithIsolation": 9.6882999999998,
+      "transaction": 7.3443999999999505,
+      "total": 17.03269999999975,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.436100000000351,
+      "validationWithIsolation": 10.21979999999985,
+      "transaction": 7.350100000000111,
+      "total": 17.56989999999996,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.731999999999971,
+      "validationWithIsolation": 9.235999999999876,
+      "transaction": 7.846300000000156,
+      "total": 17.082300000000032,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.431999999999789,
+      "validationWithIsolation": 9.946800000000167,
+      "transaction": 7.160600000000159,
+      "total": 17.107400000000325,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.750900000000001,
+      "validationWithIsolation": 10.319700000000012,
+      "transaction": 6.997400000000198,
+      "total": 17.31710000000021,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.076700000000073,
+      "validationWithIsolation": 9.849700000000212,
+      "transaction": 8.224299999999857,
+      "total": 18.07400000000007,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.961399999999685,
+      "validationWithIsolation": 9.690200000000004,
+      "transaction": 7.1995999999999185,
+      "total": 16.889799999999923,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.807900000000245,
+      "validationWithIsolation": 9.29989999999998,
+      "transaction": 7.0581999999999425,
+      "total": 16.358099999999922,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.621599999999944,
+      "validationWithIsolation": 9.052299999999832,
+      "transaction": 6.968299999999999,
+      "total": 16.02059999999983,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.5832000000000335,
+      "validationWithIsolation": 9.212399999999889,
+      "transaction": 7.366500000000087,
+      "total": 16.578899999999976,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.785100000000057,
+      "validationWithIsolation": 9.293900000000122,
+      "transaction": 7.225800000000163,
+      "total": 16.519700000000284,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.959100000000035,
+      "validationWithIsolation": 9.376200000000154,
+      "transaction": 7.198199999999815,
+      "total": 16.57439999999997,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.596499999999651,
+      "validationWithIsolation": 9.078399999999874,
+      "transaction": 7.45010000000002,
+      "total": 16.528499999999894,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.128400000000056,
+      "validationWithIsolation": 9.77619999999979,
+      "transaction": 8.870600000000195,
+      "total": 18.646799999999985,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.99330000000009,
+      "validationWithIsolation": 10.720499999999902,
+      "transaction": 7.309999999999945,
+      "total": 18.030499999999847,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 9.17009999999982,
+      "validationWithIsolation": 10.7158000000004,
+      "transaction": 7.097999999999956,
+      "total": 17.813800000000356,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.034099999999853,
+      "validationWithIsolation": 9.564300000000003,
+      "transaction": 7.231399999999667,
+      "total": 16.79569999999967,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.913199999999961,
+      "validationWithIsolation": 9.525500000000193,
+      "transaction": 7.38110000000006,
+      "total": 16.906600000000253,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.214199999999892,
+      "validationWithIsolation": 9.809299999999894,
+      "transaction": 7.158900000000358,
+      "total": 16.96820000000025,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.545599999999922,
+      "validationWithIsolation": 9.253799999999956,
+      "transaction": 7.466000000000349,
+      "total": 16.719800000000305,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.416000000000167,
+      "validationWithIsolation": 8.757700000000114,
+      "transaction": 7.769200000000183,
+      "total": 16.526900000000296,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.504300000000057,
+      "validationWithIsolation": 10.21770000000015,
+      "transaction": 7.263500000000022,
+      "total": 17.48120000000017,
+      "bytes": 32,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.6271999999999025,
+      "validationWithIsolation": 9.330000000000382,
+      "transaction": 6.938200000000052,
+      "total": 16.268200000000434,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.563900000000103,
+      "validationWithIsolation": 9.209100000000035,
+      "transaction": 7.078199999999924,
+      "total": 16.28729999999996,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.134399999999914,
+      "validationWithIsolation": 9.796299999999974,
+      "transaction": 7.910199999999804,
+      "total": 17.706499999999778,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.585500000000138,
+      "validationWithIsolation": 10.169300000000021,
+      "transaction": 7.054000000000087,
+      "total": 17.22330000000011,
+      "bytes": 32,
+      "kind": "character-field"
+    },
+    {
+      "validation": 9.08140000000003,
+      "validationWithIsolation": 10.625999999999749,
+      "transaction": 7.0460000000002765,
+      "total": 17.672000000000025,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.265600000000177,
+      "validationWithIsolation": 9.930699999999888,
+      "transaction": 7.085500000000138,
+      "total": 17.016200000000026,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.790300000000116,
+      "validationWithIsolation": 9.279300000000148,
+      "transaction": 7.198499999999967,
+      "total": 16.477800000000116,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.82569999999987,
+      "validationWithIsolation": 9.287900000000263,
+      "transaction": 7.10129999999981,
+      "total": 16.389200000000073,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.842399999999998,
+      "validationWithIsolation": 9.375800000000254,
+      "transaction": 6.930100000000039,
+      "total": 16.305900000000292,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.74389999999994,
+      "validationWithIsolation": 9.161299999999756,
+      "transaction": 7.074399999999969,
+      "total": 16.235699999999724,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 7.9953999999997905,
+      "validationWithIsolation": 9.411699999999655,
+      "transaction": 7.029700000000048,
+      "total": 16.441399999999703,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.132700000000114,
+      "validationWithIsolation": 9.921299999999974,
+      "transaction": 6.976500000000215,
+      "total": 16.89780000000019,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.578200000000379,
+      "validationWithIsolation": 10.395400000000336,
+      "transaction": 7.012199999999666,
+      "total": 17.407600000000002,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 7.774400000000242,
+      "validationWithIsolation": 9.670399999999972,
+      "transaction": 8.094900000000052,
+      "total": 17.765300000000025,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.485299999999825,
+      "validationWithIsolation": 10.255699999999706,
+      "transaction": 6.925600000000031,
+      "total": 17.181299999999737,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.557999999999993,
+      "validationWithIsolation": 10.102800000000116,
+      "transaction": 7.129699999999957,
+      "total": 17.232500000000073,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.815000000000055,
+      "validationWithIsolation": 9.32510000000002,
+      "transaction": 7.186999999999898,
+      "total": 16.51209999999992,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.40249999999969,
+      "validationWithIsolation": 9.978399999999965,
+      "transaction": 7.289200000000164,
+      "total": 17.26760000000013,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.263600000000224,
+      "validationWithIsolation": 10.001099999999951,
+      "transaction": 7.101500000000215,
+      "total": 17.102600000000166,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.301699999999983,
+      "validationWithIsolation": 9.832100000000082,
+      "transaction": 7.22420000000011,
+      "total": 17.056300000000192,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.38510000000042,
+      "validationWithIsolation": 9.928699999999935,
+      "transaction": 7.2193999999999505,
+      "total": 17.148099999999886,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.169400000000223,
+      "validationWithIsolation": 9.979299999999967,
+      "transaction": 7.034300000000258,
+      "total": 17.013600000000224,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.672900000000027,
+      "validationWithIsolation": 10.460099999999784,
+      "transaction": 6.798500000000331,
+      "total": 17.258600000000115,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.28819999999996,
+      "validationWithIsolation": 10.094100000000253,
+      "transaction": 7.237999999999829,
+      "total": 17.332100000000082,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.80869999999959,
+      "validationWithIsolation": 10.829200000000128,
+      "transaction": 7.871599999999944,
+      "total": 18.700800000000072,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 11.884700000000066,
+      "validationWithIsolation": 13.563500000000204,
+      "transaction": 7.18939999999975,
+      "total": 20.752899999999954,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.782300000000305,
+      "validationWithIsolation": 10.898599999999988,
+      "transaction": 6.9375,
+      "total": 17.836099999999988,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.06690000000026,
+      "validationWithIsolation": 11.7496000000001,
+      "transaction": 7.133299999999963,
+      "total": 18.882900000000063,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 9.798099999999977,
+      "validationWithIsolation": 11.486300000000028,
+      "transaction": 7.058300000000145,
+      "total": 18.544600000000173,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.33809999999994,
+      "validationWithIsolation": 10.29280000000017,
+      "transaction": 7.086899999999787,
+      "total": 17.379699999999957,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.192199999999957,
+      "validationWithIsolation": 9.838300000000345,
+      "transaction": 6.967499999999745,
+      "total": 16.80580000000009,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.222000000000207,
+      "validationWithIsolation": 9.79260000000022,
+      "transaction": 7.259299999999712,
+      "total": 17.051899999999932,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 7.933700000000044,
+      "validationWithIsolation": 9.511800000000221,
+      "transaction": 6.930499999999938,
+      "total": 16.44230000000016,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.539499999999862,
+      "validationWithIsolation": 10.108799999999974,
+      "transaction": 7.141200000000026,
+      "total": 17.25,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.153800000000047,
+      "validationWithIsolation": 9.70089999999982,
+      "transaction": 6.9384000000000015,
+      "total": 16.63929999999982,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.14529999999968,
+      "validationWithIsolation": 10.230000000000018,
+      "transaction": 8.13779999999997,
+      "total": 18.36779999999999,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 13.551699999999983,
+      "validationWithIsolation": 15.797700000000077,
+      "transaction": 7.057600000000093,
+      "total": 22.85530000000017,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.561300000000301,
+      "validationWithIsolation": 10.23739999999998,
+      "transaction": 7.024700000000394,
+      "total": 17.262100000000373,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.19419999999991,
+      "validationWithIsolation": 9.76989999999978,
+      "transaction": 7.057099999999991,
+      "total": 16.82699999999977,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.467399999999998,
+      "validationWithIsolation": 10.057999999999993,
+      "transaction": 7.305399999999736,
+      "total": 17.36339999999973,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.316299999999956,
+      "validationWithIsolation": 9.869799999999941,
+      "transaction": 7.565100000000257,
+      "total": 17.434900000000198,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 9.154500000000098,
+      "validationWithIsolation": 11.518000000000029,
+      "transaction": 7.449300000000221,
+      "total": 18.96730000000025,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.634599999999864,
+      "validationWithIsolation": 10.378500000000258,
+      "transaction": 7.209399999999732,
+      "total": 17.58789999999999,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 9.637700000000223,
+      "validationWithIsolation": 11.238200000000234,
+      "transaction": 7.099099999999908,
+      "total": 18.33730000000014,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 8.422300000000178,
+      "validationWithIsolation": 10.059099999999944,
+      "transaction": 7.68100000000004,
+      "total": 17.740099999999984,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 8.606899999999769,
+      "validationWithIsolation": 10.179799999999886,
+      "transaction": 7.149499999999989,
+      "total": 17.329299999999876,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.884800000000268,
+      "validationWithIsolation": 11.178399999999783,
+      "transaction": 7.8697000000001935,
+      "total": 19.048099999999977,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 11.80520000000024,
+      "validationWithIsolation": 13.864300000000185,
+      "transaction": 7.4070999999999,
+      "total": 21.271400000000085,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 14.83120000000008,
+      "validationWithIsolation": 17.30849999999964,
+      "transaction": 8.314900000000307,
+      "total": 25.623399999999947,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 11.976700000000164,
+      "validationWithIsolation": 14.229899999999816,
+      "transaction": 8.77330000000029,
+      "total": 23.003200000000106,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 14.285800000000108,
+      "validationWithIsolation": 16.665899999999965,
+      "transaction": 8.619200000000092,
+      "total": 25.285100000000057,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 9.802400000000034,
+      "validationWithIsolation": 11.61200000000008,
+      "transaction": 7.777600000000348,
+      "total": 19.389600000000428,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 14.04509999999982,
+      "validationWithIsolation": 16.028400000000147,
+      "transaction": 8.558799999999792,
+      "total": 24.58719999999994,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 12.783199999999852,
+      "validationWithIsolation": 15.089500000000044,
+      "transaction": 7.012200000000121,
+      "total": 22.101700000000164,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 13.48759999999993,
+      "validationWithIsolation": 15.457899999999881,
+      "transaction": 7.642499999999927,
+      "total": 23.10039999999981,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 11.046499999999924,
+      "validationWithIsolation": 13.022600000000239,
+      "transaction": 7.850399999999809,
+      "total": 20.873000000000047,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 11.366100000000188,
+      "validationWithIsolation": 14.026100000000042,
+      "transaction": 8.142499999999927,
+      "total": 22.16859999999997,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 9.306999999999789,
+      "validationWithIsolation": 11.449500000000171,
+      "transaction": 8.751399999999649,
+      "total": 20.20089999999982,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 12.932999999999993,
+      "validationWithIsolation": 15.314899999999852,
+      "transaction": 7.811700000000201,
+      "total": 23.126600000000053,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.50799999999981,
+      "validationWithIsolation": 12.653800000000047,
+      "transaction": 8.06750000000011,
+      "total": 20.721300000000156,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 10.848899999999958,
+      "validationWithIsolation": 12.630300000000261,
+      "transaction": 7.621799999999894,
+      "total": 20.252100000000155,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 11.163900000000012,
+      "validationWithIsolation": 13.567000000000007,
+      "transaction": 8.007499999999709,
+      "total": 21.574499999999716,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.286599999999908,
+      "validationWithIsolation": 12.184899999999743,
+      "transaction": 8.040300000000116,
+      "total": 20.22519999999986,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.694600000000264,
+      "validationWithIsolation": 12.879199999999855,
+      "transaction": 8.207800000000134,
+      "total": 21.08699999999999,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 12.78819999999996,
+      "validationWithIsolation": 15.058700000000044,
+      "transaction": 8.195099999999911,
+      "total": 23.253799999999956,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 9.791200000000117,
+      "validationWithIsolation": 12.468600000000151,
+      "transaction": 8.106599999999617,
+      "total": 20.575199999999768,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 11.239199999999983,
+      "validationWithIsolation": 13.452699999999822,
+      "transaction": 8.334100000000035,
+      "total": 21.786799999999857,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.478200000000015,
+      "validationWithIsolation": 12.94609999999966,
+      "transaction": 7.890900000000329,
+      "total": 20.83699999999999,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 13.961700000000292,
+      "validationWithIsolation": 16.452499999999873,
+      "transaction": 8.732100000000173,
+      "total": 25.184600000000046,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 13.73339999999962,
+      "validationWithIsolation": 15.995100000000093,
+      "transaction": 8.017299999999977,
+      "total": 24.01240000000007,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 11.689899999999852,
+      "validationWithIsolation": 13.513699999999972,
+      "transaction": 8.059699999999793,
+      "total": 21.573399999999765,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 13.34940000000006,
+      "validationWithIsolation": 15.639200000000073,
+      "transaction": 7.903299999999945,
+      "total": 23.542500000000018,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 13.93979999999965,
+      "validationWithIsolation": 16.076300000000174,
+      "transaction": 7.983400000000074,
+      "total": 24.059700000000248,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 14.481499999999869,
+      "validationWithIsolation": 16.938599999999497,
+      "transaction": 8.010600000000522,
+      "total": 24.94920000000002,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 9.475900000000365,
+      "validationWithIsolation": 11.641699999999219,
+      "transaction": 8.266900000000533,
+      "total": 19.90859999999975,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 9.908400000000256,
+      "validationWithIsolation": 12.166699999999764,
+      "transaction": 7.9650000000001455,
+      "total": 20.13169999999991,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 10.765699999999924,
+      "validationWithIsolation": 12.569000000000415,
+      "transaction": 8.279599999999846,
+      "total": 20.84860000000026,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 12.482600000000275,
+      "validationWithIsolation": 14.665399999999863,
+      "transaction": 7.925900000000183,
+      "total": 22.591300000000047,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.542199999999866,
+      "validationWithIsolation": 12.336299999999937,
+      "transaction": 8.079999999999927,
+      "total": 20.416299999999865,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.696399999999812,
+      "validationWithIsolation": 12.444700000000012,
+      "transaction": 9.373999999999796,
+      "total": 21.818699999999808,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 16.347600000000057,
+      "validationWithIsolation": 18.598800000000665,
+      "transaction": 8.181399999999485,
+      "total": 26.78020000000015,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 10.842200000000048,
+      "validationWithIsolation": 12.899699999999939,
+      "transaction": 7.760399999999208,
+      "total": 20.660099999999147,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.18329999999969,
+      "validationWithIsolation": 12.429699999999684,
+      "transaction": 8.08010000000013,
+      "total": 20.509799999999814,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.428799999999683,
+      "validationWithIsolation": 12.279499999999643,
+      "transaction": 8.118800000000192,
+      "total": 20.398299999999836,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 10.703099999999722,
+      "validationWithIsolation": 12.585000000000036,
+      "transaction": 8.204399999999623,
+      "total": 20.78939999999966,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 10.382500000000618,
+      "validationWithIsolation": 12.040599999999358,
+      "transaction": 7.745300000000498,
+      "total": 19.785899999999856,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 11.720400000000154,
+      "validationWithIsolation": 13.842000000000553,
+      "transaction": 8.422899999999572,
+      "total": 22.264900000000125,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 13.745100000000093,
+      "validationWithIsolation": 16.166400000000067,
+      "transaction": 8.09139999999934,
+      "total": 24.257799999999406,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 15.697400000000016,
+      "validationWithIsolation": 18.26010000000042,
+      "transaction": 8.128899999999703,
+      "total": 26.389000000000124,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 10.56919999999991,
+      "validationWithIsolation": 12.427400000000489,
+      "transaction": 8.221399999999448,
+      "total": 20.648799999999937,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 15.639400000000023,
+      "validationWithIsolation": 17.76970000000074,
+      "transaction": 8.90899999999965,
+      "total": 26.67870000000039,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 15.73660000000018,
+      "validationWithIsolation": 18.247299999999996,
+      "transaction": 8.061599999999999,
+      "total": 26.308899999999994,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 10.092900000000554,
+      "validationWithIsolation": 12.178600000000188,
+      "transaction": 7.913000000000466,
+      "total": 20.091600000000653,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 13.353099999999358,
+      "validationWithIsolation": 15.282100000000355,
+      "transaction": 8.79699999999957,
+      "total": 24.079099999999926,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 8.872200000000703,
+      "validationWithIsolation": 10.712399999999434,
+      "transaction": 7.967500000000655,
+      "total": 18.67990000000009,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 15.437799999999697,
+      "validationWithIsolation": 17.473800000000665,
+      "transaction": 8.049099999999271,
+      "total": 25.522899999999936,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 12.116399999999885,
+      "validationWithIsolation": 14.578100000000632,
+      "transaction": 8.27809999999954,
+      "total": 22.85620000000017,
+      "bytes": 12,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 14.199399999999514,
+      "validationWithIsolation": 16.342099999999846,
+      "transaction": 8.375699999999597,
+      "total": 24.717799999999443,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 10.189400000000205,
+      "validationWithIsolation": 12.269999999999527,
+      "transaction": 7.813600000000406,
+      "total": 20.083599999999933,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 14.716800000000148,
+      "validationWithIsolation": 16.807400000000598,
+      "transaction": 7.916299999999865,
+      "total": 24.723700000000463,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 9.610500000000684,
+      "validationWithIsolation": 12.342199999999139,
+      "transaction": 8.546700000000783,
+      "total": 20.88889999999992,
+      "bytes": 10,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 13.182700000000295,
+      "validationWithIsolation": 16.092399999999543,
+      "transaction": 8.637000000000626,
+      "total": 24.72940000000017,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 15.026700000000346,
+      "validationWithIsolation": 17.13469999999961,
+      "transaction": 8.226200000000063,
+      "total": 25.360899999999674,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 11.6875,
+      "validationWithIsolation": 14.337799999999334,
+      "transaction": 8.354500000000371,
+      "total": 22.692299999999705,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 17.21219999999994,
+      "validationWithIsolation": 19.903299999999945,
+      "transaction": 8.630400000000009,
+      "total": 28.533699999999953,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 14.528699999999844,
+      "validationWithIsolation": 16.739299999999275,
+      "transaction": 8.063000000000102,
+      "total": 24.802299999999377,
+      "bytes": 28,
+      "kind": "text"
+    },
+    {
+      "validation": 12.589100000000144,
+      "validationWithIsolation": 14.40440000000035,
+      "transaction": 8.227799999999661,
+      "total": 22.63220000000001,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 12.567399999999907,
+      "validationWithIsolation": 14.815400000000409,
+      "transaction": 7.8804999999993015,
+      "total": 22.69589999999971,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 15.535899999999856,
+      "validationWithIsolation": 17.824900000000525,
+      "transaction": 8.372199999999793,
+      "total": 26.19710000000032,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 16.680999999999585,
+      "validationWithIsolation": 18.98279999999977,
+      "transaction": 8.246600000000399,
+      "total": 27.22940000000017,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 15.597199999999248,
+      "validationWithIsolation": 17.794200000000274,
+      "transaction": 7.502400000000307,
+      "total": 25.29660000000058,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 13.561300000000301,
+      "validationWithIsolation": 16.200300000000425,
+      "transaction": 8.527299999999741,
+      "total": 24.727600000000166,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 10.367799999999988,
+      "validationWithIsolation": 12.247599999999693,
+      "transaction": 7.764200000000528,
+      "total": 20.01180000000022,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 11.002000000000407,
+      "validationWithIsolation": 12.911199999999553,
+      "transaction": 7.657200000000557,
+      "total": 20.56840000000011,
+      "bytes": 21,
+      "kind": "text"
+    },
+    {
+      "validation": 12.014400000000023,
+      "validationWithIsolation": 14.306300000000192,
+      "transaction": 7.258300000000418,
+      "total": 21.56460000000061,
+      "bytes": 22,
+      "kind": "text"
+    },
+    {
+      "validation": 15.671800000000076,
+      "validationWithIsolation": 18.329100000000835,
+      "transaction": 7.856199999999262,
+      "total": 26.185300000000097,
+      "bytes": 34,
+      "kind": "character-field"
+    },
+    {
+      "validation": 11.885800000000017,
+      "validationWithIsolation": 13.826300000000629,
+      "transaction": 7.650899999999638,
+      "total": 21.477200000000266,
+      "bytes": 11,
+      "kind": "deletion-only"
+    },
+    {
+      "validation": 11.987100000000282,
+      "validationWithIsolation": 14.389799999999923,
+      "transaction": 8.081500000000233,
+      "total": 22.471300000000156,
+      "bytes": 28,
+      "kind": "text"
+    },
+    {
+      "validation": 9.168099999999868,
+      "validationWithIsolation": 10.785100000000057,
+      "transaction": 7.243500000000495,
+      "total": 18.02860000000055,
+      "bytes": 22,
+      "kind": "text"
+    }
+  ]
+}

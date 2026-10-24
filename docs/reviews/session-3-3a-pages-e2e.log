@@ -1,0 +1,20 @@
+$ node scripts/build-server.mjs api --pages-e2e && node --env-file=.env apps/api/dist/pages.e2e.mjs
+▶ Production Nest + BlockWriteService + collaboration + PostgreSQL
+  ✔ owner/member share content; guests, outsiders and anonymous requests are denied (64.3975ms)
+  ✔ Nest session injection and BlockWriteService wait for projected nested content (1325.5569ms)
+  ✔ command idempotency and stale content revision do not change relational version (1344.8196ms)
+  ✔ invalid candidates, foreign files and cross-page IDs cannot reach the journal (274.6895ms)
+  ✔ rename retains relational 409 and legacy content PUT cannot bypass Yjs (69.2981ms)
+  ✔ archive/restore hides descendants from search and retains document generation (97.3138ms)
+  ✔ tree cycles and revoked membership remain denied (49.8689ms)
+✔ Production Nest + BlockWriteService + collaboration + PostgreSQL (4090.5164ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4437.7551
+EXIT_CODE=0

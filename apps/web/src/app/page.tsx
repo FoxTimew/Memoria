@@ -6,7 +6,7 @@ import type { FormEvent } from 'react';
 import { workspaceListSchema, workspaceSummarySchema } from '@memoria/contracts';
 import type { WorkspaceSummary } from '@memoria/contracts';
 import { authClient } from '../lib/auth-client.ts';
-import { clearDraftsForSignOut } from '../lib/local-drafts.ts';
+import { signOutAndClear } from '../lib/local-sign-out.ts';
 
 export default function Home() {
   const router = useRouter();
@@ -17,10 +17,17 @@ export default function Home() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [reload, setReload] = useState(0);
+  const [confirmLogout, setConfirmLogout] = useState(false);
+  const [logout, setLogout] = useState<{
+    user: string;
+    session: string;
+    cacheCleared: boolean;
+    serverSignedOut: boolean;
+  }>();
 
   useEffect(() => {
-    if (!isPending && !session && !sessionError) router.replace('/connexion');
-  }, [isPending, session, sessionError, router]);
+    if (!isPending && !session && !sessionError && !logout) router.replace('/connexion');
+  }, [isPending, session, sessionError, router, logout]);
 
   useEffect(() => {
     if (!session) return;
@@ -80,20 +87,48 @@ export default function Home() {
   async function signOut() {
     setBusy(true);
     setError('');
-    try {
-      if (!session) return;
-      await clearDraftsForSignOut(session.user.id, session.session.id);
-      const result = await authClient.signOut();
-      if (result.error) throw new Error('Sign out failed');
-      router.replace('/connexion');
-    } catch {
-      setError(
-        'La déconnexion ou l’effacement des brouillons locaux a échoué. Réessayez avant de quitter ce poste.',
-      );
-    } finally {
+    const identity =
+      logout ??
+      (session
+        ? {
+            user: session.user.id,
+            session: session.session.id,
+            cacheCleared: false,
+            serverSignedOut: false,
+          }
+        : undefined);
+    if (!identity) {
       setBusy(false);
+      return;
     }
+    setLogout(identity);
+    setWorkspaces([]);
+    const result = await signOutAndClear(identity.user, identity.session, async () => {
+      if (identity.serverSignedOut) return;
+      const response = await authClient.signOut();
+      if (response.error) throw new Error('Sign out failed');
+    });
+    setLogout({ ...identity, ...result });
+    setBusy(false);
+    if (result.cacheCleared && result.serverSignedOut) globalThis.location.replace('/connexion');
   }
+
+  if (logout)
+    return (
+      <main className="mx-auto max-w-lg p-8">
+        <h1 className="text-2xl">Déconnexion</h1>
+        <p role={busy ? 'status' : 'alert'} className="notice mt-4">
+          {busy
+            ? 'Fermeture de la session et effacement des copies locales…'
+            : `${logout.serverSignedOut ? 'Session serveur fermée.' : 'La fermeture de la session serveur a échoué.'} ${logout.cacheCleared ? 'Copies locales effacées.' : 'Le cache local n’a pas pu être effacé. Ne quittez pas ce poste partagé avant de réessayer.'}`}
+        </p>
+        {!busy && (
+          <button className="primary mt-4" onClick={() => void signOut()}>
+            Réessayer la déconnexion et le nettoyage
+          </button>
+        )}
+      </main>
+    );
 
   if (sessionError)
     return (
@@ -121,11 +156,27 @@ export default function Home() {
         </span>
         <div className="flex items-center gap-5 text-sm">
           <span>{session.user.name}</span>
-          <button className="quiet-link" disabled={busy} onClick={signOut}>
+          <button className="quiet-link" disabled={busy} onClick={() => setConfirmLogout(true)}>
             Se déconnecter
           </button>
         </div>
       </header>
+      {confirmLogout && (
+        <section role="dialog" aria-label="Effacer les copies locales" className="notice mx-6 mt-6">
+          <p>
+            La déconnexion efface les copies locales de vos pages dans tous les onglets de ce
+            navigateur, y compris les modifications hors ligne. Si une page n’est pas enregistrée
+            sur le serveur, revenez-y pour attendre la confirmation ou exporter son contenu avant de
+            continuer.
+          </p>
+          <button className="quiet-link mr-5" onClick={() => setConfirmLogout(false)}>
+            Revenir à mes pages
+          </button>
+          <button className="primary" disabled={busy} onClick={() => void signOut()}>
+            Effacer les copies locales et se déconnecter
+          </button>
+        </section>
+      )}
       <div className="mx-auto max-w-6xl px-6 py-12 lg:py-20">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[.2em] text-[#7b877c]">
           Votre atelier

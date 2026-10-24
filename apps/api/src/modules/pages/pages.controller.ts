@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { CurrentUser } from '../auth/current-user.decorator.ts';
-import type { AuthenticatedUser } from '../auth/current-user.decorator.ts';
+import { CurrentUser, CurrentSession } from '../auth/current-user.decorator.ts';
+import type { AuthenticatedUser, AuthenticatedSession } from '../auth/current-user.decorator.ts';
 import * as pages from './pages.service.ts';
 
 @Controller('api/internal/workspaces/:workspaceId')
@@ -40,6 +40,29 @@ export class PagesController {
     @Body() body: unknown,
   ) {
     return this.pages.save(user.id, workspace, id, body);
+  }
+  @Post('pages/:pageId/collaboration') openCollaboration(
+    @CurrentSession() session: AuthenticatedSession,
+    @Param('workspaceId') workspace: string,
+    @Param('pageId') page: string,
+  ) {
+    return this.pages.openCollaboration(session, workspace, page);
+  }
+  @Put('pages/:pageId/content') content(
+    @CurrentSession() session: AuthenticatedSession,
+    @Param('workspaceId') workspace: string,
+    @Param('pageId') page: string,
+    @Body() input: unknown,
+  ) {
+    return this.pages.writeCollaboration(session, workspace, page, input);
+  }
+  @Post('pages/:pageId/rename') rename(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('workspaceId') workspace: string,
+    @Param('pageId') page: string,
+    @Body() input: unknown,
+  ) {
+    return this.pages.rename(user.id, workspace, page, input);
   }
   @Post('pages/:pageId/move') move(
     @CurrentUser() user: AuthenticatedUser,

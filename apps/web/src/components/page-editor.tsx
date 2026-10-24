@@ -2,16 +2,20 @@
 import { useEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { BlockNoteEditor, insertOrUpdateBlockForSlashMenu } from '@blocknote/core';
+import { withCollaboration } from '@blocknote/core/yjs';
 import { fr } from '@blocknote/core/locales';
 import { BlockNoteView } from '@blocknote/mantine';
 import { SuggestionMenuController } from '@blocknote/react';
 import { createEditorKit } from '@memoria/block-catalog/client';
+import { collaborationAccessSchema, presenceUser } from '@memoria/contracts';
 import type { PageDocument } from '@memoria/contracts';
-import { pageVersionSchema, pageSaveResultSchema } from '@memoria/contracts';
 import { contentRequest } from '../lib/content-api.ts';
-import { PageDraft } from '../lib/page-draft.ts';
-import { localDrafts, needsRecovery } from '../lib/local-drafts.ts';
-import type { LocalDraft, LocalDraftHandle } from '../lib/local-drafts.ts';
+import { CollaborationClient } from '../lib/collaboration-client.ts';
+import type { CollaborationStatus } from '../lib/collaboration-client.ts';
+import { PageTitle } from './page-title.tsx';
+import { LocalRecovery } from './local-recovery.tsx';
+import { LocalSessionRevoked, yjsCache } from '../lib/yjs-cache.ts';
+import type { CachePage, CacheTicket } from '../lib/yjs-cache.ts';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 
@@ -19,312 +23,235 @@ type Kit = Awaited<ReturnType<typeof createEditorKit>>;
 type Editor = Kit['schema']['BlockNoteEditor'];
 export type EditorActions = { discard: () => Promise<unknown> };
 export default function PageEditor({
-  userId,
-  sessionId,
   actions,
   document,
   endpoint,
   onSaved,
   onDirty,
+  onLocalRevoked,
   reload,
+  userId,
+  userName,
+  sessionId,
 }: {
-  userId: string;
-  sessionId: string;
   actions: RefObject<EditorActions | null>;
   document: PageDocument;
   endpoint: string;
   onSaved: () => void;
   onDirty: (dirty: boolean) => void;
+  onLocalRevoked: (message?: string) => void;
   reload: () => void;
+  userId: string;
+  userName: string;
+  sessionId: string;
 }) {
-  const [loaded, setLoaded] = useState<{ kit: Kit; editor: Editor; local?: LocalDraftHandle }>();
-  const [recovery, setRecovery] = useState<LocalDraft>();
-  const [restored, setRestored] = useState<LocalDraft>();
-  const [localError, setLocalError] = useState('');
-  const [choosing, setChoosing] = useState(false);
+  const [loaded, setLoaded] = useState<{ kit: Kit; editor: Editor; client: CollaborationClient }>();
   const [error, setError] = useState('');
+  const [connection, setConnection] = useState<CollaborationStatus>();
+  const [recovery, setRecovery] = useState<{ ticket: CacheTicket; pages: CachePage[] }>();
   useEffect(() => {
-    let cancelled = false;
-    let created: Editor | undefined;
-    createEditorKit()
-      .then(async (kit) => {
+    let cancelled = false,
+      editor: Editor | undefined,
+      client: CollaborationClient | undefined;
+    let unsubscribe: (() => void) | undefined;
+    void (async () => {
+      try {
+        const ticket = await yjsCache.ticket(userId, sessionId);
+        const [kit, opened] = await Promise.all([
+          createEditorKit(),
+          contentRequest(`${endpoint}/collaboration`, 'POST'),
+        ]);
+        const meta = collaborationAccessSchema.parse(opened);
+        if (meta.identity.user !== userId || meta.identity.session !== sessionId)
+          throw new LocalSessionRevoked();
+        const cached = await yjsCache.open(
+          ticket,
+          document.page.workspaceId,
+          document.page.id,
+          meta.generation,
+        );
         if (cancelled) return;
-        const initialContent = kit.toEditor(document.blocks);
-        created = BlockNoteEditor.create({
-          schema: kit.schema,
-          dictionary: fr,
-          initialContent: initialContent.length
-            ? initialContent
-            : [{ id: globalThis.crypto.randomUUID(), type: 'paragraph', content: [] }],
+        setRecovery({ ticket, pages: cached.older });
+        const url = new URL('/collab', location.origin);
+        url.protocol = 'wss:';
+        client = new CollaborationClient(
+          meta.room,
+          meta.generation,
+          { url: url.href },
+          async () => {
+            await contentRequest(`${endpoint}/version`);
+          },
+          presenceUser(userId, userName),
+          sessionId,
+        );
+        client.attachCache(ticket, cached.page, cached.updates, (message) => {
+          editor?._tiptapEditor.destroy();
+          setLoaded(undefined);
+          onLocalRevoked(message);
         });
-        const editor = created;
-        let local: LocalDraftHandle | undefined;
-        try {
-          local = await localDrafts.open(userId, sessionId, document.page.id);
-          const confirmed = {
-            title: document.page.title,
-            blocks: document.blocks.length ? kit.fromEditor(editor.document) : [],
-          };
-          if (local.recovered && needsRecovery(local.recovered, confirmed)) {
-            if (!cancelled) setRecovery(local.recovered);
-          } else if (local.recovered) await local.discard(false);
-        } catch {
-          if (!cancelled)
-            setLocalError(
-              'La sauvegarde locale est indisponible. Exportez votre brouillon avant de quitter la page.',
-            );
+        const activeClient = client;
+        unsubscribe = client.subscribe((state) => {
+          if (cancelled) return;
+          setConnection(state);
+          // Mount only after the server document arrived: never seed from a stale SQL projection.
+          if (state.loaded && !editor && state.phase !== 'blocked') {
+            try {
+              editor = BlockNoteEditor.create(
+                withCollaboration({
+                  schema: kit.schema,
+                  dictionary: fr,
+                  collaboration: {
+                    fragment: activeClient.doc.getXmlFragment('prosemirror'),
+                    provider: { awareness: activeClient.provider.awareness! },
+                    user: presenceUser(userId, userName),
+                    showCursorLabels: 'always',
+                  },
+                }),
+              );
+              setLoaded({ kit, editor, client: activeClient });
+            } catch {
+              activeClient.stop('EDITOR_SCHEMA');
+            }
+          }
+        });
+        client.connect();
+      } catch (e) {
+        if (!cancelled) {
+          if (e instanceof LocalSessionRevoked) onLocalRevoked();
+          else setError(e instanceof Error ? e.message : 'Chargement impossible.');
         }
-        if (!cancelled) setLoaded({ kit, editor, ...(local ? { local } : {}) });
-      })
-      .catch(() =>
-        setError(
-          'Un bloc de cette page est inconnu, invalide ou plus récent. Le contenu original est conservé ; l’édition est désactivée.',
-        ),
-      );
+      }
+    })();
     return () => {
       cancelled = true;
-      created?._tiptapEditor.destroy();
+      unsubscribe?.();
+      editor?._tiptapEditor.destroy();
+      client?.destroy();
     };
-  }, [document, userId, sessionId]);
-  if (error)
+  }, [endpoint, userId, sessionId, userName, onLocalRevoked]);
+  if (error || (!loaded && connection?.phase === 'blocked'))
     return (
-      <div className="notice error" role="alert">
-        <p>{error}</p>
-        <details>
-          <summary>Afficher les données préservées</summary>
-          <pre className="overflow-auto whitespace-pre-wrap">
-            {JSON.stringify(document.blocks, null, 2)}
-          </pre>
-        </details>
+      <div role="alert" className="notice error m-6">
+        <p>{error || connection?.message}</p>
+        <button className="quiet-link" onClick={reload}>
+          Réessayer
+        </button>
       </div>
     );
-  if (!loaded) return <p role="status">Chargement de l’éditeur…</p>;
-  if (recovery)
+  if (!loaded)
     return (
-      <div role="dialog" aria-label="Brouillon local retrouvé" className="notice m-6">
-        <strong>Un brouillon non enregistré a été retrouvé sur cet appareil.</strong>
-        <p>
-          {recovery.snapshot.draft.title || 'Sans titre'} ·{' '}
-          {new Date(recovery.updatedAt).toLocaleString('fr-FR')}
-        </p>
-        <p>
-          Restaurez-le pour le relire. Si la version serveur a changé, la sauvegarde restera
-          suspendue.
-        </p>
-        {localError && <p role="alert">{localError}</p>}
-        <div className="mt-3 flex gap-4">
-          <button
-            className="primary"
-            disabled={choosing}
-            onClick={() => {
-              try {
-                loaded.editor.replaceBlocks(
-                  loaded.editor.document,
-                  recovery.editorDocument as Parameters<Editor['replaceBlocks']>[1],
-                );
-                setRestored(recovery);
-                setRecovery(undefined);
-              } catch {
-                setLocalError(
-                  'Ce brouillon ne peut pas être ouvert par cet éditeur. Exportez-le pour conserver ses données.',
-                );
-              }
-            }}
-          >
-            Restaurer le brouillon
-          </button>
-          <button
-            className="quiet-link"
-            disabled={choosing}
-            onClick={() => {
-              setChoosing(true);
-              void loaded.local
-                ?.discard(false)
-                .then(() => setRecovery(undefined))
-                .catch(() => setLocalError('Impossible d’effacer le brouillon local. Réessayez.'))
-                .finally(() => setChoosing(false));
-            }}
-          >
-            Abandonner le brouillon local
-          </button>
-          <button className="quiet-link" onClick={() => downloadDraft(document.page.id, recovery)}>
-            Exporter le brouillon
-          </button>
-        </div>
-      </div>
+      <p role="status" className="p-6">
+        {connection?.phase === 'offline'
+          ? 'Connexion au service interrompue. Nouvelle tentative en cours…'
+          : 'Chargement du document collaboratif…'}
+      </p>
     );
   return (
-    <ActiveEditor
-      {...loaded}
-      actions={actions}
-      restored={restored}
-      initialLocalError={localError}
-      document={document}
-      endpoint={endpoint}
-      onSaved={onSaved}
-      onDirty={onDirty}
-      reload={reload}
-    />
+    <>
+      {recovery && <LocalRecovery {...recovery} />}
+      <ActiveEditor
+        {...loaded}
+        actions={actions}
+        state={connection!}
+        document={document}
+        onSaved={onSaved}
+        onDirty={onDirty}
+        endpoint={endpoint}
+        reload={reload}
+      />
+    </>
   );
 }
 function ActiveEditor({
-  local,
-  restored,
-  initialLocalError,
-  actions,
   kit,
   editor,
+  client,
+  actions,
+  state,
   document,
   endpoint,
   onSaved,
   onDirty,
   reload,
 }: {
-  local?: LocalDraftHandle;
-  restored: LocalDraft | undefined;
-  initialLocalError: string;
-  actions: RefObject<EditorActions | null>;
   kit: Kit;
   editor: Editor;
+  client: CollaborationClient;
+  actions: RefObject<EditorActions | null>;
+  state: CollaborationStatus;
   document: PageDocument;
   endpoint: string;
   onSaved: () => void;
   onDirty: (dirty: boolean) => void;
   reload: () => void;
 }) {
-  const [, render] = useState(0);
-  const [conversionError, setConversionError] = useState(
-    restored?.invalid
-      ? 'Le brouillon contient des données non prises en charge. Corrigez-les ou exportez-le.'
-      : '',
-  );
-  const invalid = useRef(Boolean(restored?.invalid));
-  const [localError, setLocalError] = useState(initialLocalError);
-  const active = useRef(true);
-  const rawDocument = useRef(editor.document);
-  const [link, setLink] = useState('');
-  const [linkError, setLinkError] = useState('');
-  const [discard, setDiscard] = useState(false);
-  const callbacks = useRef({ onSaved, onDirty });
-  callbacks.current = { onSaved, onDirty };
-  const [draft] = useState(() => {
-    const state = new PageDraft(
-      document.page.version,
-      restored?.snapshot.base ?? {
-        title: document.page.title,
-        blocks: document.blocks.length ? kit.fromEditor(editor.document) : [],
-      },
-      {
-        version: async () =>
-          pageVersionSchema.parse(await contentRequest(`${endpoint}/version`)).version,
-        save: async (version, snapshot, operations) => {
-          const saved = pageSaveResultSchema.parse(
-            await contentRequest(endpoint, 'PUT', {
-              expectedVersion: version,
-              title: snapshot.title,
-              operations,
-            }),
-          );
-          callbacks.current.onSaved();
-          return saved.version;
-        },
-      },
-      () => {
-        void local
-          ?.sync(state.snapshot(), rawDocument.current, invalid.current)
-          .then(() => {
-            if (active.current) setLocalError('');
-          })
-          .catch(() => {
-            if (active.current)
-              setLocalError(
-                'Le brouillon local n’a pas pu être conservé. Gardez cette page ouverte ou exportez-le.',
-              );
-          });
-        if (active.current) render((n) => n + 1);
-      },
-    );
-    // Restore before exposing the editor; persistence resumes in the mount effect.
-    if (restored) state.restore(restored.snapshot, document.page.version, false);
-    return state;
-  });
+  const [titleDirty, setTitleDirty] = useState(false),
+    [discard, setDiscard] = useState(false);
+  const [titleValue, setTitleValue] = useState(document.page.title);
+  const [link, setLink] = useState(''),
+    [linkError, setLinkError] = useState('');
+  const dirty = (state.dirty && state.local.phase !== 'saved') || titleDirty,
+    blocked = state.phase === 'blocked';
+  const latest = useRef({ dirty });
+  latest.current = { dirty };
   useEffect(() => {
-    active.current = true;
+    onDirty(dirty);
+  }, [dirty, onDirty]);
+  useEffect(() => {
     actions.current = {
       discard: async () => {
-        await local?.discard();
-        active.current = false;
+        await client.cache?.discard();
+        client.destroy();
       },
     };
-    return () => {
-      active.current = false;
-      actions.current = null;
-    };
-  }, [actions, local]);
-  // Empty persisted documents start with BlockNote's editable paragraph, which is saved on first edit.
-  useEffect(
-    () =>
-      editor.onChange(() => {
-        rawDocument.current = editor.document;
-        try {
-          const blocks = kit.fromEditor(editor.document);
-          invalid.current = false;
-          setConversionError('');
-          draft.change({ title: draft.draft.title, blocks });
-        } catch {
-          invalid.current = true;
-          setConversionError(
-            'Ce contenu ne peut pas être sauvegardé. Retirez les styles ou liens non pris en charge, ou réduisez la page à 500 blocs.',
-          );
-          callbacks.current.onDirty(true);
-          // Preserve even raw editor data which cannot pass the server model validators.
-          draft.change(draft.draft);
-        }
-      }),
-    [draft, editor, kit],
-  );
-  useEffect(() => {
-    callbacks.current.onDirty(draft.dirty || Boolean(conversionError));
-    if (draft.status !== 'dirty' || conversionError) return;
-    const timer = globalThis.setTimeout(() => {
-      void draft.flush();
-    }, 900);
-    return () => globalThis.clearTimeout(timer);
-  }, [draft, draft.status, draft.draft, conversionError]);
-  useEffect(() => {
-    const check = () => {
-      if (globalThis.document.visibilityState === 'visible') void draft.poll();
-    };
-    const interval = globalThis.setInterval(check, 15000);
-    globalThis.addEventListener('focus', check);
-    globalThis.document.addEventListener('visibilitychange', check);
     const leave = (event: BeforeUnloadEvent) => {
-      if (draft.dirty || conversionError) {
+      if (latest.current.dirty) {
         event.preventDefault();
         event.returnValue = '';
       }
     };
     globalThis.addEventListener('beforeunload', leave);
     return () => {
-      globalThis.clearInterval(interval);
-      globalThis.removeEventListener('focus', check);
-      globalThis.document.removeEventListener('visibilitychange', check);
+      actions.current = null;
       globalThis.removeEventListener('beforeunload', leave);
     };
-  }, [draft, conversionError]);
-  const download = () =>
-    downloadDraft(document.page.id, {
-      snapshot: draft.snapshot(),
-      editorDocument: editor.document,
-    });
+  }, [actions, client]);
+  useEffect(() => {
+    editor.isEditable = !blocked;
+  }, [editor, blocked]);
+  const download = () => {
+    const blob = new Blob(
+      [
+        JSON.stringify(
+          {
+            pageId: document.page.id,
+            generation: client.generation,
+            exportedAt: new Date().toISOString(),
+            title: titleValue,
+            blocks: editor.document,
+          },
+          null,
+          2,
+        ),
+      ],
+      { type: 'application/json' },
+    );
+    const url = URL.createObjectURL(blob),
+      anchor = globalThis.document.createElement('a');
+    anchor.href = url;
+    anchor.download = `memoria-contenu-${document.page.id}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
   const items = kit.adapters.map(({ ui }) => ({
     title: ui.menu.label,
     group: ui.menu.category,
     aliases: [...ui.menu.keywords],
     onItemClick: () => {
+      if (blocked) return;
       const block = kit.toEditor([
         {
-          id: globalThis.crypto.randomUUID(),
+          id: crypto.randomUUID(),
           parentId: null,
           position: 'a0',
           type: ui.model.type,
@@ -340,205 +267,201 @@ function ActiveEditor({
     },
   }));
   const statuses = {
-    clean: 'Enregistré',
-    dirty: 'Modifications en attente…',
-    saving: 'Enregistrement…',
-    conflict: 'Version modifiée ailleurs',
-    error: 'Enregistrement interrompu',
+    connecting: 'Connexion…',
+    saved: 'Enregistré sur le serveur',
+    saving: 'Enregistrement sur le serveur…',
+    offline:
+      state.local.phase === 'saved'
+        ? 'Hors ligne — modifications conservées sur cet appareil'
+        : 'Hors ligne — copie locale en attente',
+    blocked: 'Édition arrêtée',
   };
   return (
     <div className="page-editor">
-      {localError && (
-        <p role="alert" className="notice error mx-6 mt-4">
-          {localError}
-        </p>
-      )}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e3e6dd] px-6 py-3 text-sm">
-        <span role="status" aria-live="polite">
-          {statuses[draft.status]} · v{draft.version}
+        <span role="status" aria-live="polite" data-testid="save-status">
+          {statuses[state.phase]}
         </span>
-        <div className="flex gap-3">
-          <button className="quiet-link" onClick={download}>
-            Exporter le brouillon
-          </button>
-          <button
-            className="quiet-link"
-            disabled={
-              Boolean(conversionError) ||
-              !draft.dirty ||
-              ['saving', 'conflict'].includes(draft.status)
-            }
-            onClick={() => void draft.flush()}
-          >
-            Enregistrer
+        <button className="quiet-link" onClick={download}>
+          Exporter le contenu affiché
+        </button>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-2 text-sm">
+        <span role="status" data-testid="local-save-status">
+          {state.local.phase === 'saved'
+            ? 'Copie locale à jour'
+            : state.local.phase === 'error'
+              ? 'Copie locale indisponible'
+              : 'Copie locale en cours…'}
+        </span>
+        <ul aria-label="Personnes connectées" className="flex flex-wrap gap-3">
+          {state.people.map((person) => (
+            <li key={person.id} data-user-id={person.id} style={{ color: person.color }}>
+              {person.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {state.local.phase === 'error' && (
+        <div role="alert" className="notice error mx-6 mt-4">
+          <p>
+            {state.local.message} Gardez cet onglet ouvert ou exportez le contenu tant que la copie
+            locale ou l’enregistrement serveur ne sont pas confirmés.
+          </p>
+          <button className="quiet-link" onClick={() => void client.cache?.retry()}>
+            Réessayer la copie locale
           </button>
         </div>
-      </div>
-      {draft.status === 'conflict' && (
-        <div role="alert" className="notice mx-6 mt-4">
-          <strong>Cette page a changé dans une autre session.</strong>
-          <p>
-            La sauvegarde est suspendue et votre brouillon reste ici. Exportez-le avant de charger
-            la version serveur.
-          </p>
+      )}
+      {state.phase === 'offline' && (
+        <p className="notice mx-6 mt-4">
+          Vous pouvez continuer à écrire. Attendez « Copie locale à jour » avant de fermer cet
+          onglet. Pour le rouvrir, rétablissez la connexion : vos droits seront vérifiés avant de
+          récupérer les modifications. Le titre non enregistré reste uniquement dans cet onglet.
+        </p>
+      )}
+      {blocked && (
+        <div role="alert" className="notice error mx-6 mt-4">
+          <p>{state.message}</p>
           <button className="quiet-link" onClick={() => setDiscard(true)}>
             Charger la version serveur
           </button>
         </div>
       )}
-      {draft.status === 'error' && (
-        <p role="alert" className="notice error mx-6 mt-4">
-          {draft.error}{' '}
-          <button className="quiet-link" onClick={() => void draft.flush()}>
-            Réessayer
-          </button>
-        </p>
-      )}
-      {conversionError && (
-        <p role="alert" className="notice error mx-6 mt-4">
-          {conversionError}
-        </p>
-      )}
       {discard && (
         <div role="dialog" aria-label="Recharger la page" className="notice mx-6 mt-4">
-          <p>Le rechargement abandonne le brouillon affiché.</p>
-          <button className="quiet-link mr-5" onClick={() => setDiscard(false)}>
-            Conserver le brouillon
+          <p>
+            Exportez d’abord le contenu souhaité. Le rechargement abandonne les modifications non
+            enregistrées.
+          </p>
+          <button className="quiet-link mr-4" onClick={() => setDiscard(false)}>
+            Annuler
           </button>
-          <button
-            className="primary"
-            onClick={() => {
-              callbacks.current.onDirty(false);
-              reload();
-            }}
-          >
+          <button className="primary" onClick={reload}>
             Abandonner et recharger
           </button>
         </div>
       )}
-      <input
-        aria-label="Titre de la page"
-        className="page-title"
-        maxLength={500}
-        placeholder="Sans titre"
-        value={draft.draft.title}
-        onChange={(event) => draft.change({ ...draft.draft, title: event.target.value })}
+      <PageTitle
+        title={document.page.title}
+        version={document.page.version}
+        endpoint={endpoint}
+        disabled={blocked}
+        onDirty={setTitleDirty}
+        onSaved={onSaved}
+        onValue={setTitleValue}
       />
-      <div className="editor-toolbar" role="toolbar" aria-label="Mise en forme">
-        {(['bold', 'italic', 'underline', 'strike', 'code'] as const).map((style, i) => (
+      <fieldset disabled={blocked} className="contents">
+        <div className="editor-toolbar" role="toolbar" aria-label="Mise en forme">
+          {(['bold', 'italic', 'underline', 'strike', 'code'] as const).map((style, i) => (
+            <button
+              key={style}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                editor.toggleStyles({ [style]: true });
+                editor.focus();
+              }}
+            >
+              {['Gras', 'Italique', 'Souligné', 'Barré', 'Code inline'][i]}
+            </button>
+          ))}
+          {([1, 2, 3] as const).map((level) => (
+            <button
+              key={level}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() =>
+                editor.updateBlock(editor.getTextCursorPosition().block, {
+                  type: 'heading',
+                  props: { level },
+                })
+              }
+            >
+              H{level}
+            </button>
+          ))}
+          <button onMouseDown={(e) => e.preventDefault()} onClick={() => editor.moveBlocksUp()}>
+            Monter
+          </button>
+          <button onMouseDown={(e) => e.preventDefault()} onClick={() => editor.moveBlocksDown()}>
+            Descendre
+          </button>
           <button
-            key={style}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => {
-              editor.toggleStyles({ [style]: true });
-              editor.focus();
+              if (editor.canNestBlock()) editor.nestBlock();
             }}
           >
-            {['Gras', 'Italique', 'Souligné', 'Barré', 'Code inline'][i]}
+            Indenter
           </button>
-        ))}
-        {([1, 2, 3] as const).map((level) => (
           <button
-            key={level}
             onMouseDown={(e) => e.preventDefault()}
-            onClick={() =>
-              editor.updateBlock(editor.getTextCursorPosition().block, {
-                type: 'heading',
-                props: { level },
-              })
-            }
+            onClick={() => {
+              if (editor.canUnnestBlock()) editor.unnestBlock();
+            }}
           >
-            H{level}
+            Désindenter
           </button>
-        ))}
-        <button onMouseDown={(e) => e.preventDefault()} onClick={() => editor.moveBlocksUp()}>
-          Monter
-        </button>
-        <button onMouseDown={(e) => e.preventDefault()} onClick={() => editor.moveBlocksDown()}>
-          Descendre
-        </button>
-        <button
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={() => {
-            if (editor.canNestBlock()) editor.nestBlock();
+        </div>
+        <form
+          className="mx-6 mb-3 flex gap-2 text-sm"
+          onSubmit={(event) => {
+            event.preventDefault();
+            try {
+              const url = new URL(link);
+              if (!['http:', 'https:'].includes(url.protocol)) throw new Error();
+              editor.createLink(url.href);
+              editor.focus();
+              setLink('');
+              setLinkError('');
+            } catch {
+              setLinkError('Le lien doit commencer par https:// ou http://.');
+            }
           }}
         >
-          Indenter
-        </button>
-        <button
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={() => {
-            if (editor.canUnnestBlock()) editor.unnestBlock();
-          }}
+          <input
+            className="field"
+            aria-label="Adresse du lien"
+            placeholder="https://… (sur le texte sélectionné)"
+            value={link}
+            maxLength={2048}
+            onChange={(e) => setLink(e.target.value)}
+          />
+          <button type="submit" className="quiet-link">
+            Ajouter le lien
+          </button>
+        </form>
+        {linkError && (
+          <p role="alert" className="notice error mx-6 mb-3">
+            {linkError}
+          </p>
+        )}
+        <BlockNoteView
+          editor={editor}
+          editable={!blocked}
+          theme="light"
+          formattingToolbar={false}
+          linkToolbar={false}
+          sideMenu={false}
+          slashMenu={false}
+          filePanel={false}
+          tableHandles={false}
         >
-          Désindenter
-        </button>
-      </div>
-      <form
-        className="mx-6 mb-3 flex gap-2 text-sm"
-        onSubmit={(event) => {
-          event.preventDefault();
-          try {
-            const url = new URL(link);
-            if (!['http:', 'https:'].includes(url.protocol)) throw new Error();
-            editor.createLink(url.href);
-            editor.focus();
-            setLink('');
-            setLinkError('');
-          } catch {
-            setLinkError('Le lien doit commencer par https:// ou http://.');
-          }
-        }}
-      >
-        <input
-          className="field"
-          aria-label="Adresse du lien"
-          placeholder="https://… (sur le texte sélectionné)"
-          value={link}
-          maxLength={2048}
-          onChange={(e) => setLink(e.target.value)}
-        />
-        <button type="submit" className="quiet-link">
-          Ajouter le lien
-        </button>
-      </form>
-      {linkError && (
-        <p role="alert" className="notice error mx-6 mb-3">
-          {linkError}
-        </p>
-      )}
-      <BlockNoteView
-        editor={editor}
-        theme="light"
-        formattingToolbar={false}
-        linkToolbar={false}
-        sideMenu={false}
-        slashMenu={false}
-        filePanel={false}
-        tableHandles={false}
-      >
-        <SuggestionMenuController
-          triggerCharacter="/"
-          getItems={async (query) =>
-            items.filter((item) =>
-              `${item.title} ${item.aliases.join(' ')}`.toLowerCase().includes(query.toLowerCase()),
-            )
-          }
-        />
-      </BlockNoteView>
+          <SuggestionMenuController
+            triggerCharacter="/"
+            getItems={async (query) =>
+              items.filter((item) =>
+                `${item.title} ${item.aliases.join(' ')}`
+                  .toLowerCase()
+                  .includes(query.toLowerCase()),
+              )
+            }
+          />
+        </BlockNoteView>
+      </fieldset>
       <p className="px-6 py-5 text-xs text-[#73806f]">
         Tapez / pour ajouter un bloc. Tab et Maj+Tab règlent l’imbrication. Ctrl+Z annule une
         modification.
       </p>
     </div>
   );
-}
-function downloadDraft(pageId: string, data: unknown) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const anchor = globalThis.document.createElement('a');
-  anchor.href = url;
-  anchor.download = `memoria-brouillon-${pageId}.json`;
-  anchor.click();
-  URL.revokeObjectURL(url);
 }

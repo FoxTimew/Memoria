@@ -1,0 +1,19 @@
+$ node --env-file=.env --use-system-ca scripts/test-collab-browser.mjs
+PASS HTTPS login, second membership, two WSS connections and durable initial load
+PASS verified names, stable per-user colors and visible remote cursor
+PASS simultaneous text and independent character fields
+PASS offline typing and reconnection merge, confirmed by server receipts
+PASS relational title conflict, page reload preserves body, private HMAC not routed; no browser errors
+PASS offline update retained in real IndexedDB after tab close, restored after online authorization, merged and acknowledged
+PASS first-load legacy purge; logout erases all Yjs content and pending metadata, frozen tab cannot resurrect it; other account retained
+PASS server session revocation closes the cached editor and erases its page updates
+✔ Two browsers: collaboration, presence, persistent offline recovery and fenced sign-out (12147.6392ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12155.2769
+EXIT_CODE=0

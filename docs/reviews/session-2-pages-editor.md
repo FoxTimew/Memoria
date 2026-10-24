@@ -1,5 +1,7 @@
 # Relecture — session 2 : pages et éditeur
 
+Note de calendrier du 2026-10-23 : cette fiche conserve les résultats de la livraison de session 2. La collaboration est désormais la session 3 ; connexion forte, quotas NAT/par compte et récupération de mot de passe passent en session 4, avant tout utilisateur réel. Les fichiers passent en session 7. L'ordre courant et le cadrage sont dans [ARCHITECTURE.md](../../ARCHITECTURE.md#sessions-suivantes) et l'[ADR 017 proposé](../adr/017-collaboration-temps-reel.md).
+
 Branche : `codex/session-2-pages-editor`, créée depuis main à jour (`29608bd`, fusion de la PR #1 autorisée par le développeur). La limite NAT a été ajoutée à l'ADR 015 avant le développement. Les quotas n'ont pas changé : leur adaptation à 50 personnes et la protection par compte sont des prérequis de session 3.
 
 ## Ce que l'on peut utiliser

@@ -1,0 +1,65 @@
+import { build } from 'esbuild';
+import { readdir } from 'node:fs/promises';
+import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+const requested = process.argv[process.argv.indexOf('--suite') + 1];
+const files = (await readdir('apps/collab/src/testing'))
+  .filter(
+    (n) =>
+      n.endsWith('.e2e.ts') && (!process.argv.includes('--suite') || n === `${requested}.e2e.ts`),
+  )
+  .sort();
+if (!files.length) throw new Error('No matching integration suite');
+await build({
+  entryPoints: ['apps/collab/src/service/incremental-worker.ts'],
+  outfile: 'apps/collab/dist/incremental-worker.mjs',
+  bundle: true,
+  platform: 'node',
+  target: 'node24',
+  format: 'esm',
+  external: ['yjs'],
+});
+for (const file of files) {
+  const out = `apps/collab/dist/test-${file.replace('.ts', '.mjs')}`;
+  await build({
+    entryPoints: [`apps/collab/src/testing/${file}`],
+    outfile: out,
+    bundle: true,
+    platform: 'node',
+    target: 'node24',
+    format: 'esm',
+    sourcemap: true,
+    external: [
+      'yjs',
+      'pg',
+      'ws',
+      '@hocuspocus/server',
+      '@hocuspocus/provider',
+      'better-auth',
+      '@nestjs/*',
+      'reflect-metadata',
+      'rxjs',
+    ],
+  });
+  const code = await new Promise((resolve) => {
+    const child = spawn(process.execPath, ['--env-file=.env', out], {
+      env: {
+        ...process.env,
+        COLLAB_TEST_MIGRATIONS: fileURLToPath(new URL('../packages/db/drizzle/', import.meta.url)),
+      },
+      stdio: 'inherit',
+      windowsHide: true,
+      timeout: 180000,
+    });
+    child.on('error', (e) => {
+      console.error(e.message);
+      resolve(1);
+    });
+    child.on('exit', (code) => resolve(code ?? 1));
+  });
+  console.log(`Collaboration ${file}: EXIT_CODE=${code}`);
+  if (code !== 0) {
+    process.exitCode = code;
+    break;
+  }
+}

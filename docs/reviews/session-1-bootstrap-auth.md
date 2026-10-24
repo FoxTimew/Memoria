@@ -1,5 +1,7 @@
 # Relecture — session 1, socle exécutable et connexion simple
 
+Note de calendrier du 2026-10-23 : les résultats ci-dessous décrivent la livraison de session 1. Le nouvel ordre place la collaboration en session 3 et la connexion forte en session 4, avant tout utilisateur réel. Voir [ARCHITECTURE.md](../../ARCHITECTURE.md#sessions-suivantes).
+
 Branche : `codex/session-1-bootstrap-auth`, depuis le cadrage fusionné dans `main`.
 
 ## Fichiers à lire en priorité

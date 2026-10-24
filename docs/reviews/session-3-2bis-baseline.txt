@@ -1,0 +1,137 @@
+LOAD: 10 writers, 5 edits/s each, 60 edits/client, open loop; no waiting for confirmations
+LOAD: 63 confirmed, 38 client-pending, 37 received/unconfirmed
+LOAD: 137 confirmed, 64 client-pending, 63 received/unconfirmed
+LOAD: 226 confirmed, 75 client-pending, 75 received/unconfirmed
+LOAD: 317 confirmed, 85 client-pending, 85 received/unconfirmed
+LOAD: 404 confirmed, 97 client-pending, 97 received/unconfirmed
+LOAD: 496 confirmed, 104 client-pending, 103 received/unconfirmed
+LOAD: 588 confirmed, 12 client-pending, 12 received/unconfirmed
+{
+  "date": "2026-10-23T18:28:29.204Z",
+  "batching": false,
+  "batchSizes": [],
+  "writers": 10,
+  "editsPerWriter": 60,
+  "targetEditsPerSecond": 50,
+  "initialYjsBytes": 178904,
+  "blocks": 300,
+  "warmup": 20,
+  "offered": 600,
+  "confirmed": 600,
+  "pendingAtTypingEnd": 106,
+  "typingMs": 11953.654899999998,
+  "drainMs": 2327.5915999999997,
+  "totalMs": 14281.246499999997,
+  "latencyMs": {
+    "p50": 1642.8060000000005,
+    "p95": 2223.525599999997,
+    "p99": 2281.4458000000013,
+    "max": 2306.9958000000006
+  },
+  "schedulerLatenessMs": {
+    "p50": 0.24330000000009022,
+    "p95": 7.50420000000031,
+    "p99": 9.681099999999788,
+    "max": 15.5621000000001
+  },
+  "queue": {
+    "scope": "all ordinary updates received on raw WebSocket until durable acknowledgement, including Hocuspocus per-connection queues",
+    "maxOutstanding": 106,
+    "maxWaiting": 105,
+    "seconds": [
+      {
+        "second": 1,
+        "outstanding": 21,
+        "waiting": 20,
+        "active": 1
+      },
+      {
+        "second": 2,
+        "outstanding": 37,
+        "waiting": 36,
+        "active": 1
+      },
+      {
+        "second": 3,
+        "outstanding": 54,
+        "waiting": 53,
+        "active": 1
+      },
+      {
+        "second": 4,
+        "outstanding": 63,
+        "waiting": 62,
+        "active": 1
+      },
+      {
+        "second": 5,
+        "outstanding": 70,
+        "waiting": 69,
+        "active": 1
+      },
+      {
+        "second": 6,
+        "outstanding": 75,
+        "waiting": 74,
+        "active": 1
+      },
+      {
+        "second": 7,
+        "outstanding": 80,
+        "waiting": 79,
+        "active": 1
+      },
+      {
+        "second": 8,
+        "outstanding": 84,
+        "waiting": 83,
+        "active": 1
+      },
+      {
+        "second": 9,
+        "outstanding": 92,
+        "waiting": 91,
+        "active": 1
+      },
+      {
+        "second": 10,
+        "outstanding": 97,
+        "waiting": 96,
+        "active": 1
+      },
+      {
+        "second": 11,
+        "outstanding": 101,
+        "waiting": 100,
+        "active": 1
+      },
+      {
+        "second": 12,
+        "outstanding": 104,
+        "waiting": 103,
+        "active": 1
+      },
+      {
+        "second": 13,
+        "outstanding": 58,
+        "waiting": 57,
+        "active": 1
+      },
+      {
+        "second": 14,
+        "outstanding": 12,
+        "waiting": 11,
+        "active": 1
+      }
+    ]
+  },
+  "counts": {
+    "journal_rows": "620",
+    "receipts": "620"
+  },
+  "samples": "600 raw samples in report",
+  "queueTransitions": "1801 transitions in report"
+}
+LOAD MEASUREMENT COMPLETE: all receipts verified and 10 documents converged.
+Step 2 bis load exit code: 0
+EXIT_CODE=0

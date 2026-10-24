@@ -1,0 +1,69 @@
+$ node scripts/test-collab.mjs "--suite" "presence"
+[onAuthenticate] SESSION_CHANGED
+[beforeHandleAwareness] PRESENCE_FOREIGN_CLIENT
+closing connection 19f0f7b1-2c33-41f3-aba6-702540952a6c (while handling d104a850-1231-4476-b245-cc0c49279f9e:9f12ffc2-fe9f-4893-857f-f2a2961d0584:363afa4a-9b22-4b0f-b61e-30d9740b959d) because of exception Error: PRESENCE_FOREIGN_CLIENT
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:31578:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeHandleAwareness] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "cursor",
+      "anchor",
+      "item",
+      "client"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection d8c2fcf7-d03e-4a48-b0a0-fdf1a49e313b (while handling d104a850-1231-4476-b245-cc0c49279f9e:9f12ffc2-fe9f-4893-857f-f2a2961d0584:363afa4a-9b22-4b0f-b61e-30d9740b959d) because of exception ZodError: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "cursor",
+      "anchor",
+      "item",
+      "client"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:31583:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+PASS real awareness identity, HTTP/WS session binding, stable color, reconnect, foreign removal, remote timeout, cursor validation, byte/client/rate bounds, no journal revision and revoked presence
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeHandleAwareness] SERVICE_UNAVAILABLE
+closing connection 770646c0-bdd2-4b43-bc84-bc2d191907b6 (while handling d104a850-1231-4476-b245-cc0c49279f9e:9f12ffc2-fe9f-4893-857f-f2a2961d0584:363afa4a-9b22-4b0f-b61e-30d9740b959d) because of exception CollaborationError: SERVICE_UNAVAILABLE
+    at assertAvailable (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:31450:27)
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:31571:9)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:1579:46
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:1070:4 {
+  code: 'SERVICE_UNAVAILABLE',
+  status: 503,
+  details: {}
+}
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Real presence: verified names/colors, cursor bounds, no impersonation, no persistence and revoke cleanup (4092.5659ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4099.1373
+Collaboration presence.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0
