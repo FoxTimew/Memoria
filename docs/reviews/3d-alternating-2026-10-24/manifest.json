@@ -1,0 +1,278 @@
+{
+  "commits": {
+    "reference": "665a82986e0dbb7bbcae5e487627089c0f529de7",
+    "candidate": "875c63f76783e5d28c875bd954d646d8fac31fae"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "protocolHash": "259de76a85cbd54b9d57ee3daa7dba160a86a5338f0c7d1684242606d04c8e89",
+  "lockfileHash": "f1c5002dbd583c7f010f5837a95230ead0c43b163599f5f749b17d8132764b2d",
+  "startedAt": "2026-10-24T17:03:29.706Z",
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "node": "v24.21.0",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "availableCpus": 16,
+    "totalBytes": 14877257728
+  },
+  "protocol": "Three paired series, order AB / BA / AB for each suite; fresh Node process per suite. Both builds completed before any measurements. Same fixtures, migrations, dependencies and common harness; only validator construction/cleanup differ outside timed regions. No samples discarded.",
+  "artifacts": {
+    "reference": {
+      "archiveHash": "ba1ae730c732b73d58565ca6c30b27a7647c093b926f017240d07d63a2bb9fdb",
+      "adapter": "import { IncrementalValidator } from '../service/incremental-validator.ts';\nexport function createValidationContext() { return { create: () => new IncrementalValidator(), close: async () => {} }; }",
+      "bundles": {
+        "incremental-worker": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-24T17-03-29-701Z\\reference\\incremental-worker.mjs",
+          "sha256": "46e1c3e71bd6ba03da16a8c104242515406de23e5a390f7718143eca7f824ccd"
+        },
+        "warm": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-24T17-03-29-701Z\\reference\\warm.mjs",
+          "sha256": "665424ac81aa6d88047743bdcf48da72d9ae93e92f134fa2ac15dfe2ca6da1b8"
+        },
+        "cold": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-24T17-03-29-701Z\\reference\\cold.mjs",
+          "sha256": "96fc9a5db20ea488be0a7548638f7773bc8fab9c99eee5856226c937a4f8e424"
+        }
+      }
+    },
+    "candidate": {
+      "archiveHash": "6021866d031b1ce3c9a6ee8d4bd3e59b5460db7b4186d63513ec658a17ec1f38",
+      "adapter": "import { IncrementalValidator } from '../service/incremental-validator.ts';\nimport { ValidationPool } from '../service/validation-pool.ts';\nimport { readCollabConfig } from '../service/config.ts';\nexport function createValidationContext() {\n  const pool = new ValidationPool(readCollabConfig().COLLAB_VALIDATION_WORKERS);\n  return { create: () => new IncrementalValidator(pool), close: () => pool.close() };\n}",
+      "bundles": {
+        "incremental-worker": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-24T17-03-29-701Z\\candidate\\incremental-worker.mjs",
+          "sha256": "7951d7e085673b6c89506503f75a15f03d37ce5d662470e9bd833efc9c1b54f3"
+        },
+        "warm": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-24T17-03-29-701Z\\candidate\\warm.mjs",
+          "sha256": "bdbbf454fb5c9f4f6f47290ade3988b8442c6d7fd4433edd01efc797c9f6695d"
+        },
+        "cold": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-24T17-03-29-701Z\\candidate\\cold.mjs",
+          "sha256": "19cb2d286999936f7692dae89d145ce71ab7de62890802e7e1bfeffa245ad3c1"
+        }
+      }
+    }
+  },
+  "series": [
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 1,
+      "startedAt": "2026-10-24T17:03:30.854Z",
+      "freeBytes": 4038762496,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 26
+      },
+      "endedFreeBytes": 4068626432,
+      "code": 0,
+      "p95": {
+        "content-1M": 7.983400000000074,
+        "history-1M": 33.25290000000132
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 1,
+      "startedAt": "2026-10-24T17:03:46.396Z",
+      "freeBytes": 4064571392,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 27
+      },
+      "endedFreeBytes": 4099289088,
+      "code": 0,
+      "p95": {
+        "content-1M": 7.7650000000001,
+        "history-1M": 33.85199999999895
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 1,
+      "startedAt": "2026-10-24T17:04:02.171Z",
+      "freeBytes": 4094210048,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 27
+      },
+      "endedFreeBytes": 4106186752,
+      "code": 0,
+      "p95": {
+        "content-1M": 145.9611,
+        "history-1M": 310.4283000000014
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 1,
+      "startedAt": "2026-10-24T17:04:20.577Z",
+      "freeBytes": 4097097728,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 27
+      },
+      "endedFreeBytes": 4090224640,
+      "code": 0,
+      "p95": {
+        "content-1M": 153.82359999999994,
+        "history-1M": 260.669100000001
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 2,
+      "startedAt": "2026-10-24T17:04:33.901Z",
+      "freeBytes": 4082249728,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 28
+      },
+      "endedFreeBytes": 4096032768,
+      "code": 0,
+      "p95": {
+        "content-1M": 7.752800000000093,
+        "history-1M": 33.06840000000011
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 2,
+      "startedAt": "2026-10-24T17:04:49.542Z",
+      "freeBytes": 4095729664,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 28
+      },
+      "endedFreeBytes": 4083982336,
+      "code": 0,
+      "p95": {
+        "content-1M": 7.7730999999999995,
+        "history-1M": 33.54160000000047
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 2,
+      "startedAt": "2026-10-24T17:05:05.098Z",
+      "freeBytes": 4067483648,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 28
+      },
+      "endedFreeBytes": 4155928576,
+      "code": 0,
+      "p95": {
+        "content-1M": 147.95299999999997,
+        "history-1M": 266.4300999999996
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 2,
+      "startedAt": "2026-10-24T17:05:18.151Z",
+      "freeBytes": 4142837760,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 29
+      },
+      "endedFreeBytes": 4182908928,
+      "code": 0,
+      "p95": {
+        "content-1M": 147.5317,
+        "history-1M": 322.5162999999993
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 3,
+      "startedAt": "2026-10-24T17:05:36.656Z",
+      "freeBytes": 4191469568,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 29
+      },
+      "endedFreeBytes": 4214591488,
+      "code": 0,
+      "p95": {
+        "content-1M": 8.397199999999884,
+        "history-1M": 34.716699999999946
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 3,
+      "startedAt": "2026-10-24T17:05:52.311Z",
+      "freeBytes": 4203253760,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 29
+      },
+      "endedFreeBytes": 4213510144,
+      "code": 0,
+      "p95": {
+        "content-1M": 7.963400000000092,
+        "history-1M": 32.58220000000074
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 3,
+      "startedAt": "2026-10-24T17:06:07.986Z",
+      "freeBytes": 4205006848,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 30
+      },
+      "endedFreeBytes": 4311289856,
+      "code": 0,
+      "p95": {
+        "content-1M": 155.47260000000006,
+        "history-1M": 311.96229999999923
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 3,
+      "startedAt": "2026-10-24T17:06:26.571Z",
+      "freeBytes": 4302741504,
+      "battery": {
+        "BatteryStatus": 2,
+        "EstimatedChargeRemaining": 30
+      },
+      "endedFreeBytes": 4323344384,
+      "code": 0,
+      "p95": {
+        "content-1M": 150.49199999999996,
+        "history-1M": 246.73030000000017
+      }
+    }
+  ],
+  "harness": {
+    "warm.e2e.ts": "263e7029e1ead93797c238c599e70f2796de6cf7eb27263c5c252f4f3c3d711c",
+    "cold.e2e.ts": "883c1a52b4583969bb38d8950c9b9f63020c6f7ff9634b94ce1c6e4b68cded2f",
+    "database.ts": "46c7c7fc33416488ab79abb91ff92851cbfa1b5f860d4036daafe58d12e0b378",
+    "profiles.ts": "fde9ad38dbdb48099b896165851a2c3bf59f42782837718863bdb37bfb218e87"
+  }
+}
