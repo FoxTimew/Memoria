@@ -1,6 +1,6 @@
 # ADR 017 — Collaboration temps réel : session 3
 
-Statut : **accepté avec les ajustements du développeur** — 2026-10-23. 3a intègre le service de production ; 3b/3c restent à faire. Les mesures historiques ci-dessous restent identifiées comme telles. Base : main `ea9afdf`, branche `codex/session-3-collaboration-design`. Le statut accepté décrit les décisions, pas leur niveau d'implémentation ; les preuves effectives sont consignées dans la fiche d'étape.
+Statut : **accepté avec les ajustements du développeur** — 2026-10-24. Service 3a et éditeur 3b intégrés ; présence/cache 3c et capacité 3d restent à faire. Les mesures historiques ci-dessous restent identifiées comme telles. Base : main `ea9afdf`, branche `codex/session-3-collaboration-design`. Le statut accepté décrit les décisions, pas leur niveau d'implémentation ; les preuves effectives sont consignées dans la fiche d'étape.
 
 La décision produit avance la collaboration avant la connexion forte. L'ordre est accepté : collaboration en session 3 ; connexion forte, quotas NAT/par compte et récupération de mot de passe en session 4 ; invités/partages en session 5 ; bases, fichiers, API publique et webhooks/rétention en sessions 6 à 9. **Aucun utilisateur réel avant la fin de la session 4.** Les ADR 007 et 016 décrivent le fonctionnement livré de session 2 ; cet ADR gouverne son remplacement.
 
@@ -256,13 +256,14 @@ Une connexion est fermée dès son refus. Pour éviter les reconnexions abusives
 
 Le scénario réel force un lot mêlant un client invalide et un rédacteur valide, puis fait boucler le fautif pendant que deux autres écrivent. Résultat : **162 confirmations vérifiées en SQL, 0 déconnexion pour chacun des deux rédacteurs, convergence**, aucun reçu pour le fautif, trois connexions fautives fermées puis deux reconnexions refusées avant tout contenu. Les douze scénarios de transport passent avec le validateur incrémental et restent rejoués avec le validateur complet. Journaux, échantillons et relecture : [preuve incrémentale](../reviews/session-3-validation-incrementale.md). **État historique à la fin de la preuve : 3a non commencée ; livraison actuelle ci-dessous.**
 
-## Intégration après relecture de la preuve, en trois livraisons
+## Intégration après relecture de la preuve, en quatre livraisons
 
 - **3a — service de production livré.** Migrations, leadership, admission, révocation, HMAC/BlockWriteService, projection/compaction et mémoire exécutables. Les douze scénarios ciblent le service réel ; `proof/` est supprimé. Voir la fiche 3a pour les limites des tests.
-- **3b — éditeur.** Provider front, statuts d'enregistrement, routage WSS Caddy, réinitialisation documentée des données de test et champs séparés de character-card. Collaboration testable dans deux navigateurs à la fin.
+- **3b — éditeur livré.** Provider front, statuts d'enregistrement, routage WSS Caddy, réinitialisation documentée des données de test et champs séparés de character-card. Parcours navigateur exécuté avec deux sessions isolées.
 - **3c — présence et stockage local.** Présence, cache Yjs IndexedDB, effacement à la déconnexion et protection contre les onglets retardataires ; effacement des anciens brouillons.
+- **3d — capacité mémoire, obligatoire avant 4.** Classes de réservation selon taille encodée/facteur d'expansion mesuré, pleine réservation seulement près de 1 Mio ; pool de workers partagé selon les cœurs, plusieurs répliques par worker, rechargées depuis PostgreSQL après défaillance. Cible : ≥ 30 pages ≤ 200 Kio dans le budget par défaut de 1 Gio ; pile complète pour 50 personnes sur 4 vCPU / 8 Gio. Refaire le guide d'hébergement avec les mesures. Les 5 salles/Gio et les 32 Gio proposés en 3a sont refusés comme cible produit ; leur remplacement n'est pas implémenté en 3b.
 
-Chaque sous-étape fournit sa fiche, ses contrôles et le hash du commit poussé vérifié à distance. La livraison 3a n'entame pas 3b/3c. Aucun utilisateur réel avant la fin de la session 4.
+Chaque sous-étape fournit sa fiche, ses contrôles et le hash du commit poussé vérifié à distance. Aucun utilisateur réel avant la fin de la session 4.
 
 ## Livraison 3a — mémoire, historique et exploitation
 
@@ -287,4 +288,16 @@ Le chargement froid du service réel comprend admission mémoire, lecture SQL co
 - Une panne durable du projecteur peut faire croître le journal SQL : surveiller disque/retard. Le percentile froid ne couvre pas ce journal long. Rétention des reçus/événements, charge simultanée de 50 personnes et pannes machine restent des validations distinctes.
 - Au plus une pénalité par socket fautive ; trois sockets refusées du même utilisateur en 60 s entraînent 60 s de blocage dans cette instance. Les erreurs SQL/worker ne consomment pas ce budget.
 
-Les tests interdisent React/BlockNote dans le worker et le journal. Les douze scénarios permanents utilisent le service réel, Better Auth et des providers Hocuspocus sur WebSocket local. Les tests SQL/HTTP créent et suppriment des schémas temporaires ; aucune donnée applicative n'a été réinitialisée. La sonde privée `/api/health/collab` contrôle disponibilité/leadership et SQL ; son routage Caddy, le provider, les statuts visuels et le reset restent en 3b.
+Les tests interdisent React/BlockNote dans le worker et le journal. Les douze scénarios permanents utilisent le service réel, Better Auth et des providers Hocuspocus sur WebSocket local. Les tests SQL/HTTP créent et suppriment des schémas temporaires ; aucune donnée applicative n'a été réinitialisée en 3a. La sonde privée `/api/health/collab` contrôle disponibilité/leadership et SQL.
+
+## Livraison 3b — éditeur, reçus et transition
+
+Le front charge le document Yjs du serveur avant de monter BlockNote avec `withCollaboration`. Il ne réinjecte jamais la projection SQL comme contenu initial. Hocuspocus utilise WSS `/collab`, même origine et cookie Better Auth ; Caddy route aussi `/api/health/collab`, jamais le port HMAC 3004. Aucune awareness n'est envoyée avant 3c.
+
+La synchronisation Hocuspocus n'est pas une preuve de durabilité. Le client calcule le reçu SHA-256 des octets Yjs effectivement envoyés, en le liant au compteur de modifications locales et à la connexion courante. Seul son reçu `durable` correspondant permet « Enregistré sur le serveur ». Un reçu ancien ne couvre pas une saisie plus récente. Pour un SyncStep2 déjà contenu dans l'état durable, le serveur confirme sans réécrire le journal ; cela couvre aussi les suppressions, qu'un simple vecteur d'état ne permettrait pas d'acquitter correctement. Le compteur est indépendant de la projection asynchrone.
+
+L'ancien autosave JSON et le conflit de corps sont supprimés. Le titre reste relationnel : bouton explicite, polling 15 s/retour au premier plan, CAS et choix en cas de 409. Chaque modification de fiche personnage ne transmet que ses champs modifiés ; ses attributs Yjs restent séparés. Deux champs indépendants se conservent ; le même champ converge vers une valeur gagnante, sans fusion caractère par caractère.
+
+En 3b, « Hors ligne — modifications conservées dans cet onglet » décrit une réplique **en mémoire seulement**. Les événements navigateur offline/online ferment puis reconnectent le provider ; l'authentification et les droits sont revérifiés. Une déconnexion non signalée par le navigateur est détectée par le transport. Aucun buffer de messages réseau non borné n'est conservé : le prochain échange transmet le diff Yjs. Ne pas recharger/fermer avant confirmation ; l'interface avertit et permet d'exporter le contenu actuellement affiché (titre et blocs), puis d'abandonner explicitement après refus. Cet export de secours n'est pas un export des anciens brouillons session 2. Le cache Yjs et l'effacement initial des anciens brouillons restent **3c** ; le nouvel éditeur ne les lit ni ne les écrit.
+
+`pnpm dev:collab reset-legacy` fournit un aperçu puis une application explicitement confirmée par UUID de workspace, uniquement en développement local et service collab arrêté. Il retire les corps et projections dérivées des seules pages contenant des blocs sans document Yjs ; comptes, membres, arbre, titres et documents déjà collaboratifs restent en place. Il n'exécute aucune conversion. `add-member` rattache un second compte déjà vérifié pour la relecture en attendant les invitations de session 5. Portée, commandes et tests réels : [fiche 3b](../reviews/session-3-3b-editor.md).

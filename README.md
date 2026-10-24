@@ -1,10 +1,10 @@
 # Memoria
 
 Outil de documentation et de bases de données pour studios de jeu indépendants.
-Les sessions 1 et 2 fournissent Next.js, NestJS et le worker pg-boss exécutables, la connexion vérifiée, les workspaces, un arbre de pages et un éditeur BlockNote avec sauvegarde, recherche et corbeille.
-La référence est [ARCHITECTURE.md](ARCHITECTURE.md), accompagnée des [ADR](docs/adr/) et de la [relecture de session 2](docs/reviews/session-2-pages-editor.md).
+Les sessions 1 à 3b fournissent Next.js, NestJS, le worker pg-boss et Hocuspocus exécutables, la connexion vérifiée, les workspaces, un arbre de pages et un éditeur BlockNote collaboratif avec recherche et corbeille.
+La référence est [ARCHITECTURE.md](ARCHITECTURE.md), accompagnée des [ADR](docs/adr/) et de la [relecture 3b et son guide à deux navigateurs](docs/reviews/session-3-3b-editor.md).
 
-Aucun utilisateur réel avant la fin de la session 4 : la collaboration est avancée en session 3 ; les facteurs forts, les quotas NAT/par compte et la récupération de mot de passe restent à livrer en session 4. L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) est accepté. Une preuve technique isolée existe dans `apps/collab` ; elle ne remplace pas encore le parcours applicatif de session 2.
+Aucun utilisateur réel avant la fin de la session 4 : la collaboration est avancée en session 3 ; les facteurs forts, les quotas NAT/par compte et la récupération de mot de passe restent à livrer en session 4. L'[ADR 017](docs/adr/017-collaboration-temps-reel.md) est accepté. Le service réel et le provider front communiquent en WSS. Présence/cache restent en 3c, capacité mémoire en 3d (obligatoire avant 4).
 
 ## Prérequis et vérifications
 
@@ -12,12 +12,13 @@ Aucun utilisateur réel avant la fin de la session 4 : la collaboration est avan
 - `pnpm install --frozen-lockfile`, puis `pnpm hooks:install`.
 - `pnpm check` : lint, format, types, preuve de build/injection Nest et tests unitaires/contrats.
 - `pnpm test:bootstrap` : compile puis exécute Nest avec les exports TypeScript du monorepo. Voir [ADR 014](docs/adr/014-build-serveur-typescript-source.md).
-- `pnpm build` : vérifie les types, exécute la preuve Nest et construit les trois applications. `pnpm start` les démarre ; `pnpm dev` active les reconstructions automatiques.
-- `pnpm test:auth:e2e` : compile et démarre une application Nest isolée sur loopback, avec PostgreSQL réel, pour vérifier le guard global et les quotas par route. Aucun besoin de démarrer les trois applications ; les compteurs de test sont isolés et nettoyés.
+- `pnpm build` : vérifie les types, exécute la preuve Nest et construit les quatre applications. `pnpm start` les démarre ; `pnpm dev` active les reconstructions automatiques.
+- `pnpm test:auth:e2e` : compile et démarre une application Nest isolée sur loopback, avec PostgreSQL réel, pour vérifier le guard global et les quotas par route. Aucun besoin de démarrer les applications ; les compteurs de test sont isolés et nettoyés.
 - `pnpm test:pages:e2e` : compile Nest et vérifie les pages avec PostgreSQL réel, sessions owner/member, concurrence, rollback, recherche, corbeille et révocation. Peut être relancé immédiatement avec ses fixtures isolées.
 - `pnpm test:e2e` : exécute les suites isolées d'authentification et de pages, puis le parcours HTTP réel à travers Caddy, PostgreSQL et Mailpit, après démarrage des applications. Utilise `.local-root.crt` pour vérifier TLS et nettoie uniquement ses comptes/workspaces/emails de test. Le parcours Caddy consomme les quotas de l'IP locale (deux inscriptions) : attendre dix minutes entre deux exécutions rapprochées. Voir [ADR 015](docs/adr/015-authentification-simple-et-workspaces.md).
 - `pnpm test:db` : applique les migrations dans un schéma de test isolé sur le PostgreSQL Compose et vérifie l'intégrité des données.
-- `pnpm proof:collab` : mesure d'abord le seuil p95 < 50 ms sur 300 blocs, puis teste deux providers Hocuspocus et PostgreSQL. Arrêt immédiat si le seuil échoue. Exige le `.env` et PostgreSQL local ; crée/supprime uniquement ses schémas aléatoires, sans reset des données existantes. Aucun écran n'est ajouté. Voir la [relecture de la preuve](docs/reviews/session-3-etape-2-preuve.md).
+- `pnpm test:collab:e2e` : tests permanents SQL/WebSocket du service réel ; sélection avec `--suite frontend`, `transport` ou `development`. Les mesures de capacité restent distinctes du parcours navigateur.
+- `pnpm test:collab:browser` : deux contextes Edge isolés via HTTPS/WSS Caddy, avec comptes de test Mailpit. Prérequis et journaux : fiche 3b.
 - `pnpm db:migrate` : applique les migrations à la base configurée. `pnpm db:generate` : génère une migration après changement du schéma.
 - `pnpm openapi:generate` : régénère le contrat OpenAPI de conception ; les endpoints HTTP seront implémentés ultérieurement.
 - Hooks locaux Lefthook : lint/format et détection de secrets avant commit ; types/tests avant push.
@@ -29,10 +30,10 @@ Aucun utilisateur réel avant la fin de la session 4 : la collaboration est avan
 2. `pnpm infra:up` démarre PostgreSQL, MinIO, Mailpit et Caddy. La première compilation MinIO prend quelques minutes.
 3. Exporter le certificat public : `docker compose cp caddy:/data/caddy/pki/authorities/local/root.crt .local-root.crt`.
 4. Faire confiance à ce certificat de développement dans le navigateur/système. Sous Windows, importer dans les autorités racines du compte courant. Ne jamais distribuer la clé privée de Caddy.
-5. `pnpm db:migrate`, puis `pnpm dev`. Ouvrir `https://localhost` ; l'application propose l'inscription ou la connexion. API sur 3001, Next.js sur 3000, disponibilité du worker sur 3002. Les ports Node doivent être joignables par Caddy via `host.docker.internal` ; ils ne doivent pas être exposés publiquement en production.
-6. Créer un compte de test (mot de passe d'au moins 12 caractères), ouvrir l'email dans Mailpit à `http://localhost:8025`, suivre le lien, puis se connecter et créer un workspace. Ouvrir son nom, créer une page et taper `/` dans l'éditeur pour insérer un bloc. La sauvegarde est automatique ; ouvrir la même page dans deux onglets pour vérifier les conflits.
+5. `pnpm db:migrate`, puis `pnpm dev`. Ouvrir `https://localhost` ; l'application propose l'inscription ou la connexion. API sur 3001, Next.js sur 3000, disponibilité du worker sur 3002, collaboration WSS sur 3003 et commandes HMAC privées sur 3004. Les ports Node doivent être joignables par Caddy via `host.docker.internal` ; ils ne doivent pas être exposés publiquement en production.
+6. Créer un compte de test (mot de passe d'au moins 12 caractères), ouvrir l'email dans Mailpit à `http://localhost:8025`, suivre le lien, puis se connecter et créer un workspace. Ouvrir son nom, créer une page et taper `/` dans l'éditeur pour insérer un bloc. Le corps est collaboratif et enregistré automatiquement ; le titre possède son bouton séparé. Suivre la fiche 3b pour deux comptes, les anciennes pages et la coupure réseau.
 7. Pour vérifier les exécutables compilés, arrêter `pnpm dev`, exécuter `pnpm build`, puis `pnpm start`. Ne pas lancer `dev` et `start` ensemble sur les mêmes ports. Dans un autre terminal : `pnpm test:e2e`.
-8. Disponibilité : `https://localhost/api/health` et `https://localhost/api/health/worker`. Le worker initialise son schéma pg-boss ; aucun job métier n'est encore enregistré.
+8. Disponibilité : `https://localhost/api/health`, `https://localhost/api/health/worker` et `https://localhost/api/health/collab`. Le worker initialise son schéma pg-boss ; aucun job métier n'est encore enregistré.
 9. Console MinIO : `http://localhost:9001`. Créer le bucket privé `memoria` et renseigner les identifiants S3 dans `.env` lors du module fichiers.
 
 MinIO est limité au développement local. Son dépôt communautaire est archivé ; l'image est construite depuis la version corrigée `RELEASE.2025-10-15T17-29-55Z`, les anciennes images publiques ne contenant pas ce correctif. Voir la [publication officielle](https://github.com/minio/minio/releases/tag/RELEASE.2025-10-15T17-29-55Z). La production utilisera un endpoint S3 maintenu et des identifiants dédiés.
@@ -45,7 +46,7 @@ Next.js impose son environnement selon la commande (`development` pour `dev`, `p
 
 ## Livrables
 
-`apps/web`, `apps/api`, `apps/worker` contiennent les applications exécutables.
+`apps/web`, `apps/api`, `apps/worker`, `apps/collab` contiennent les applications exécutables.
 `packages/db` contient le schéma Drizzle et ses migrations ; `packages/contracts` contient les schémas Zod partagés.
 `packages/blocks` contient le registre et l'exemple complet `gamedev.character-card` avec adaptateur BlockNote, migration et rendu différé.
 `packages/auth` configure l'authentification simple et conserve le test de compatibilité du schéma cible. Seul le plugin organization est actif ; les facteurs forts, clés publiques, invitations et partages restent dans leurs sessions prévues.

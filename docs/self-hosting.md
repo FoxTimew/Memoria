@@ -1,6 +1,8 @@
 # Auto-hébergement — base de dimensionnement après 3a
 
-Les chiffres ci-dessous sont des **propositions extrapolées pour un studio de 50 personnes**, pas une certification de charge. Aucune utilisation réelle avant la fin de la session 4 ; le rebasage automatique sur page inoccupée est obligatoire avant une exploitation prolongée.
+**Décision produit du 24 octobre 2026 : ce dimensionnement est refusé comme cible.** Les valeurs ci-dessous décrivent l'état transitoire de 3a. L'étape **3d**, obligatoire avant la session 4, doit prouver au moins 30 pages typiques (≤ 200 Kio) ouvertes avec 1 Gio de budget, via réservations proportionnelles et pool partagé de workers. Cible minimale pour toute la pile de 50 personnes : 4 vCPU / 8 Gio. Ce guide sera redimensionné avec les mesures de 3d ; aucune optimisation 3d n'est réalisée dans 3b.
+
+Les chiffres ci-dessous sont les **anciennes propositions extrapolées de 3a, conservées comme historique**, pas des recommandations actuelles ni une certification de charge. Aucune utilisation réelle avant la fin de la session 4 ; le rebasage automatique sur page inoccupée est obligatoire avant une exploitation prolongée.
 
 | Configuration                                                   | CPU                                            | RAM physique | Disque                               | Budget répliques proposé               |
 | --------------------------------------------------------------- | ---------------------------------------------- | ------------ | ------------------------------------ | -------------------------------------- |
