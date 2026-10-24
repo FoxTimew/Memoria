@@ -1,0 +1,2 @@
+$ node ../../scripts/build-collab.mjs
+EXIT_CODE=0

@@ -1,0 +1,31 @@
+$ node scripts/test-collab.mjs "--suite" "warm"
+{"profile":"content-1M","p95":15.955499999999574,"max":38.984300000000076,"iterations":200,"warmup":20,"samples":200}
+{"profile":"history-1M","p95":57.55119999999988,"max":75.20410000000084,"iterations":200,"warmup":20,"samples":200}
+✖ Production incremental validation and journal, 1 MiB profiles (22782.4067ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22788.5146
+
+✖ failing tests:
+
+test at apps\collab\dist\test-warm.e2e.mjs:109365:1
+✖ Production incremental validation and journal, 1 MiB profiles (22782.4067ms)
+  AssertionError [ERR_ASSERTION]: history-1M: p95=57.55119999999988
+      at TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-warm.e2e.mjs:109450:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+Collaboration warm.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.
+EXIT_CODE=1
