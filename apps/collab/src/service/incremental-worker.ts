@@ -1,4 +1,3 @@
-import * as Y from 'yjs';
 import { parentPort } from 'node:worker_threads';
 import { IncrementalReplica } from './incremental-replica.ts';
 let replica: IncrementalReplica | undefined;
@@ -22,17 +21,7 @@ parentPort!.on(
       let result: unknown;
       if (operation === 'init') {
         replica?.close();
-        if (updates.length) {
-          const loaded = new Y.Doc();
-          loaded.getXmlFragment('prosemirror');
-          try {
-            Y.applyUpdate(loaded, snapshot);
-            for (const u of updates) Y.applyUpdate(loaded, u);
-            replica = new IncrementalReplica(Y.encodeStateAsUpdate(loaded));
-          } finally {
-            loaded.destroy();
-          }
-        } else replica = new IncrementalReplica(snapshot);
+        replica = new IncrementalReplica(snapshot, updates);
       } else if (operation === 'prepare') result = replica!.prepare(update);
       else if (operation === 'command') result = replica!.command(operations);
       else if (operation === 'inspect') result = replica!.inspect();

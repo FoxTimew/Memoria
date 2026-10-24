@@ -35,8 +35,12 @@ export class Room {
     const loaded = await this.store.load(this.page, this.generation);
     const init = this.replica.init(loaded.snapshot, loaded.updates);
     this.doc.getXmlFragment('prosemirror');
-    Y.applyUpdate(this.doc, loaded.snapshot);
-    for (const update of loaded.updates) Y.applyUpdate(this.doc, update);
+    Y.applyUpdate(
+      this.doc,
+      loaded.updates.length
+        ? Y.mergeUpdates([loaded.snapshot, ...loaded.updates])
+        : loaded.snapshot,
+    );
     await init;
     this.revision = Number(loaded.state.content_revision);
   }
@@ -117,7 +121,7 @@ export class Room {
         contributions,
         update,
         validation.blocks,
-        validation.blockIds,
+        validation.blockIdsToReserve,
       );
       committed = true;
       await this.replica.commit();

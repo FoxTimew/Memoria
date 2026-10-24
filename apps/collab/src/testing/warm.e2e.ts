@@ -69,7 +69,7 @@ test(
               [{ identity: { ...db, key: db.user }, receipt: randomUUID(), update }],
               update,
               validated.blocks,
-              validated.blockIds,
+              validated.blockIdsToReserve,
             );
             const committedAt = performance.now();
             await replica.commit();
@@ -82,7 +82,20 @@ test(
           }
           const totals = (samples as { total: number }[]).map((s) => s.total).sort((a, b) => a - b),
             p95 = totals[189]!;
-          const report = { profile, p95, max: totals.at(-1), iterations: 200, warmup: 20, samples };
+          const preparedPlans = (
+            await db.pool.query(
+              'SELECT name,generic_plans,custom_plans FROM pg_prepared_statements ORDER BY name',
+            )
+          ).rows;
+          const report = {
+            profile,
+            p95,
+            max: totals.at(-1),
+            iterations: 200,
+            warmup: 20,
+            preparedPlans,
+            samples,
+          };
           reports.push(report);
           console.log(JSON.stringify({ ...report, samples: 200 }));
         } finally {

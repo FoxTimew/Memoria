@@ -1,12 +1,10 @@
 import { Worker } from 'node:worker_threads';
-import { once } from 'node:events';
 import type { IncrementalReplica } from './incremental-replica.ts';
 import { CandidateRejected } from '../validator.ts';
 export class IncrementalValidator {
   private worker: Worker;
   private failed = false;
   private busy = false;
-  private online: Promise<unknown[]>;
   constructor(
     private readonly budgetMs = 250,
     memoryMiB = 128,
@@ -14,7 +12,6 @@ export class IncrementalValidator {
     this.worker = new Worker(new URL('./incremental-worker.mjs', import.meta.url), {
       resourceLimits: { maxOldGenerationSizeMb: memoryMiB, maxYoungGenerationSizeMb: 16 },
     });
-    this.online = once(this.worker, 'online');
     this.worker.on('error', () => {
       this.failed = true;
     });
@@ -23,7 +20,7 @@ export class IncrementalValidator {
     });
   }
   async init(snapshot: Uint8Array, updates: Uint8Array[] = []) {
-    await this.online;
+    // postMessage queues during startup. Dispatch before the main thread loads its live Y.Doc.
     await this.request('init', { snapshot, updates }, 30000);
   }
   private async request(
