@@ -6,7 +6,11 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { internalSignature } from '@memoria/auth/collaboration';
-import { collaborationWriteSchema, canonicalJson } from '@memoria/contracts';
+import {
+  collaborationOpenSchema,
+  collaborationWriteSchema,
+  canonicalJson,
+} from '@memoria/contracts';
 import type { CollaborationCommand } from '@memoria/contracts';
 import type { AuthenticatedSession } from '../auth/current-user.decorator.ts';
 import { readConfig } from '../../config.ts';
@@ -14,13 +18,17 @@ import { readConfig } from '../../config.ts';
 @Injectable()
 export class BlockWriteService {
   async open(session: AuthenticatedSession, workspace: string, page: string) {
-    return this.forward({
+    const opened = await this.forward({
       action: 'open',
       user: session.userId,
       session: session.id,
       workspace,
       page,
     });
+    return {
+      ...collaborationOpenSchema.parse(opened),
+      identity: { user: session.userId, session: session.id },
+    };
   }
   async write(session: AuthenticatedSession, workspace: string, page: string, input: unknown) {
     const parsed = collaborationWriteSchema.safeParse(input);

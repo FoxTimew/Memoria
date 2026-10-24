@@ -9,6 +9,8 @@ export interface SocketBudget {
   pending: Map<Uint8Array, number>;
   handshakeCount: number;
   handshakeBytes: number;
+  presenceTokens: number;
+  presenceAt: number;
 }
 interface Bucket {
   tokens: number;
@@ -59,6 +61,8 @@ export class Admission {
       pending: new Map(),
       handshakeCount: 0,
       handshakeBytes: 0,
+      presenceTokens: 20,
+      presenceAt: this.now(),
     };
   }
   receive(socket: SocketBudget, bytes: Uint8Array) {
@@ -78,6 +82,12 @@ export class Admission {
       return { type: 10 };
     }
     const parsed = envelope(bytes);
+    if (parsed.type === 1) {
+      socket.presenceTokens = Math.min(20, socket.presenceTokens + (now - socket.presenceAt) / 100);
+      socket.presenceAt = now;
+      if (socket.presenceTokens < 1) throw new Error('PRESENCE_RATE_LIMIT');
+      socket.presenceTokens--;
+    }
     if (socket.address && socket.address !== parsed.address)
       throw new Error('MULTIPLEXING_DISABLED');
     socket.address = parsed.address;

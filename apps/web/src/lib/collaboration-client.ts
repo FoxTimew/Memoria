@@ -2,6 +2,26 @@ import { HocuspocusProvider, HocuspocusProviderWebsocket } from '@hocuspocus/pro
 import type { HocuspocusProviderWebsocketConfiguration } from '@hocuspocus/provider';
 import * as Y from 'yjs';
 import { DurableState } from './collaboration-state.ts';
+import { presenceUserSchema } from '@memoria/contracts';
+import { CollaborationCache } from './collaboration-cache.ts';
+import type { CachePage, CacheTicket } from './yjs-cache.ts';
+
+class OwnPresenceProvider extends HocuspocusProvider {
+  override awarenessUpdateHandler(
+    change: { added: number[]; updated: number[]; removed: number[] },
+    origin: unknown,
+  ) {
+    // Remote timeout cleanup must never be sent as an attempt to remove another user's cursor.
+    const own = (ids: number[]) => ids.filter((id) => id === this.document.clientID);
+    const filtered = {
+      added: own(change.added),
+      updated: own(change.updated),
+      removed: own(change.removed),
+    };
+    if (filtered.added.length + filtered.updated.length + filtered.removed.length)
+      super.awarenessUpdateHandler(filtered, origin);
+  }
+}
 
 export type CollaborationStatus = {
   phase: 'connecting' | 'saved' | 'saving' | 'offline' | 'blocked';
@@ -9,6 +29,8 @@ export type CollaborationStatus = {
   dirty: boolean;
   revision: number;
   message: string;
+  local: { phase: 'none' | 'saving' | 'saved' | 'error'; message: string };
+  people: { id: string; name: string; color: string }[];
 };
 export function collaborationError(code: string) {
   if (code.includes('MEMORY_CAPACITY'))
@@ -22,12 +44,13 @@ export function collaborationError(code: string) {
   return 'Le serveur a refusé une modification. Exportez le contenu avant de recharger la version enregistrée.';
 }
 
-/** Offline changes stay in this Y.Doc only in 3b. No local persistence until 3c. */
+/** Network receipts and local persistence are independent guarantees. */
 export class CollaborationClient {
   readonly doc = new Y.Doc();
   readonly durable: DurableState;
   readonly socket: HocuspocusProviderWebsocket;
   readonly provider: HocuspocusProvider;
+  cache?: CollaborationCache;
   private connected = false;
   private disconnected = false;
   private loaded = false;
@@ -52,6 +75,8 @@ export class CollaborationClient {
     readonly generation: string,
     config: HocuspocusProviderWebsocketConfiguration,
     private readonly verifyAccess?: () => Promise<void>,
+    readonly user?: { id: string; name: string; color: string },
+    expectedSession?: string,
   ) {
     this.doc.getXmlFragment('prosemirror');
     this.durable = new DurableState(generation, () => this.emit());
@@ -71,18 +96,20 @@ export class CollaborationClient {
       maxDelay: 5000,
       messageReconnectTimeout: 45000,
     });
-    this.provider = new HocuspocusProvider({
+    this.provider = new OwnPresenceProvider({
       name: room,
       document: this.doc,
       websocketProvider: this.socket,
-      awareness: null,
-      token: '',
+      ...(user ? {} : { awareness: null }),
+      token:
+        expectedSession && user ? JSON.stringify({ user: user.id, session: expectedSession }) : '',
       flushDelay: 100,
       forceSyncInterval: 15000,
       onOpen: () => {
         this.connected = true;
         this.disconnected = false;
         this.durable.reconnect();
+        if (this.user) this.provider.awareness?.setLocalStateField('user', this.user);
         this.emit();
       },
       onSynced: ({ state }) => {
@@ -90,6 +117,7 @@ export class CollaborationClient {
         this.emit();
       },
       onStateless: ({ payload }) => this.durable.received(payload),
+      onAwarenessChange: () => this.emit(),
       onAuthenticationFailed: ({ reason }) => this.stop(reason),
       onClose: ({ event }) => {
         this.connected = false;
@@ -112,6 +140,12 @@ export class CollaborationClient {
     }, 15000);
   }
   get state(): CollaborationStatus {
+    const people = new Map<string, { id: string; name: string; color: string }>();
+    if (this.connected)
+      for (const state of this.provider?.awareness?.getStates().values() ?? []) {
+        const user = presenceUserSchema.safeParse(state.user);
+        if (user.success) people.set(user.data.id, user.data);
+      }
     return {
       phase: this.blocked
         ? 'blocked'
@@ -128,6 +162,8 @@ export class CollaborationClient {
       dirty: this.durable.dirty,
       revision: this.durable.revision,
       message: this.blocked,
+      local: this.cache?.state ?? { phase: 'none', message: '' },
+      people: [...people.values()].sort((a, b) => a.id.localeCompare(b.id)),
     };
   }
   subscribe(listener: (state: CollaborationStatus) => void) {
@@ -138,6 +174,7 @@ export class CollaborationClient {
     };
   }
   private emit() {
+    this.cache?.acknowledge(this.durable.acknowledged);
     if (!this.destroyed) for (const listener of this.listeners) listener(this.state);
   }
   private async recheck() {
@@ -156,6 +193,10 @@ export class CollaborationClient {
   }
   stop(reason: string) {
     if (this.destroyed) return;
+    if (this.cache && /ACCESS|SESSION|permission/i.test(reason)) {
+      this.cache.revokeAccess();
+      return;
+    }
     this.blocked = collaborationError(reason);
     this.socket.disconnect();
     this.emit();
@@ -170,6 +211,7 @@ export class CollaborationClient {
   destroy() {
     if (this.destroyed) return;
     this.destroyed = true;
+    this.cache?.close();
     if (typeof window !== 'undefined') {
       window.removeEventListener('offline', this.offline);
       window.removeEventListener('online', this.online);
@@ -182,5 +224,23 @@ export class CollaborationClient {
     this.provider.destroy();
     this.socket.destroy();
     this.doc.destroy();
+  }
+  attachCache(
+    ticket: CacheTicket,
+    page: CachePage,
+    updates: Uint8Array[],
+    onRevoked: (message?: string) => void,
+  ) {
+    this.cache = new CollaborationCache(
+      this,
+      ticket,
+      page,
+      updates,
+      () => this.emit(),
+      (message) => {
+        this.destroy();
+        onRevoked(message);
+      },
+    );
   }
 }

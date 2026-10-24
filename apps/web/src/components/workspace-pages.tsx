@@ -1,6 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   pageDocumentSchema,
@@ -12,7 +12,7 @@ import {
 import type { PageDocument, PageSummary } from '@memoria/contracts';
 import { authClient } from '../lib/auth-client.ts';
 import { contentRequest } from '../lib/content-api.ts';
-import { onDraftsCleared } from '../lib/local-drafts.ts';
+import { onLocalSignOut } from '../lib/local-sign-out.ts';
 import type { EditorActions } from './page-editor.tsx';
 const PageEditor = dynamic(() => import('./page-editor.tsx'), {
   ssr: false,
@@ -44,21 +44,31 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
   const [after, setAfter] = useState('');
   const [showMove, setShowMove] = useState(false);
   const editorActions = useRef<EditorActions | null>(null);
-  const [signedOut, setSignedOut] = useState(false);
+  const locallyClosed = useRef(false);
+  const [signedOut, setSignedOut] = useState('');
+  const closeLocalSession = useCallback((message = 'Session fermée sur ce poste.') => {
+    locallyClosed.current = true;
+    setSignedOut(message);
+    setDocument(undefined);
+    setDirty(false);
+    setTree({ pages: [], trash: [] });
+    setResults([]);
+  }, []);
   useEffect(() => {
     if (!session) return;
-    return onDraftsCleared(session.user.id, () => {
-      setSignedOut(true);
-      setDocument(undefined);
-      setDirty(false);
-      router.replace('/connexion');
-    });
-  }, [session?.user.id, router]);
+    return onLocalSignOut(session.user.id, closeLocalSession);
+  }, [session?.user.id, closeLocalSession]);
   useEffect(() => {
-    if (!isPending && !session) router.replace('/connexion');
-  }, [isPending, session, router]);
+    setDocument(undefined);
+    setDirty(false);
+  }, [session?.user.id, session?.session.id]);
+  useEffect(() => {
+    if (!isPending && !session && !signedOut) router.replace('/connexion');
+  }, [isPending, session, signedOut, router]);
   async function refresh() {
+    if (locallyClosed.current) return;
     const data = pageTreeSchema.parse(await contentRequest(`${base}/pages`));
+    if (locallyClosed.current) return;
     setTree(data);
     setSearchRevision((n) => n + 1);
   }
@@ -67,7 +77,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     let cancelled = false;
     Promise.all([contentRequest(`${base}/pages`), contentRequest('/api/internal/workspaces')])
       .then(([pages, workspaces]) => {
-        if (cancelled) return;
+        if (cancelled || locallyClosed.current) return;
         setTree(pageTreeSchema.parse(pages));
         setName(
           workspaceListSchema.parse(workspaces).find((w) => w.id === workspaceId)?.name ??
@@ -82,6 +92,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     };
   }, [base, workspaceId, session?.user.id]);
   async function open(id: string, discard = false) {
+    if (locallyClosed.current) return;
     if (dirty && !discard) {
       setPendingPage(id);
       return;
@@ -93,6 +104,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
       // A conflict reload must also refresh tree titles, parents and mutation versions.
       await refresh();
       if (discard) await editorActions.current?.discard();
+      if (locallyClosed.current) return;
       setDocument(next);
       setDirty(false);
       setGeneration((n) => n + 1);
@@ -105,6 +117,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     }
   }
   async function create(parentId: string | null) {
+    if (locallyClosed.current) return;
     setBusy(true);
     setError('');
     try {
@@ -120,6 +133,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     }
   }
   async function mutate(page: PageSummary, action: 'move' | 'archive' | 'restore') {
+    if (locallyClosed.current) return;
     setBusy(true);
     setError('');
     try {
@@ -149,7 +163,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     const timer = globalThis.setTimeout(() => {
       contentRequest(`${base}/search?q=${encodeURIComponent(query.trim())}`)
         .then((data) => {
-          if (!cancelled) setResults(searchResultsSchema.parse(data));
+          if (!cancelled && !locallyClosed.current) setResults(searchResultsSchema.parse(data));
         })
         .catch((e: unknown) => {
           if (!cancelled) setError(e instanceof Error ? e.message : 'Recherche impossible.');
@@ -181,7 +195,17 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     );
   }
   const selected = tree.pages.find((p) => p.id === document?.page.id);
-  if (isPending || !session || signedOut)
+  if (signedOut)
+    return (
+      <main className="p-8">
+        <p role="status">{signedOut}</p>
+        <p className="my-4">Reconnectez-vous pour accéder à votre espace.</p>
+        <a className="primary" href="/connexion">
+          Se reconnecter
+        </a>
+      </main>
+    );
+  if (isPending || !session)
     return (
       <p role="status" className="p-8">
         Chargement de votre espace…
@@ -365,11 +389,15 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
         )}
         {document ? (
           <PageEditor
+            userId={session.user.id}
+            userName={session.user.name}
+            sessionId={session.session.id}
             key={`${session.user.id}-${document.page.id}-${generation}`}
             actions={editorActions}
             document={document}
             endpoint={`${base}/pages/${document.page.id}`}
             onDirty={setDirty}
+            onLocalRevoked={closeLocalSession}
             onSaved={() => {
               void refresh().catch(() => {});
             }}

@@ -7,7 +7,9 @@ import { Hocuspocus } from '@hocuspocus/server';
 import type { Connection } from '@hocuspocus/server';
 import type WebSocket from 'ws';
 import * as Y from 'yjs';
+import { removeAwarenessStates } from 'y-protocols/awareness';
 import type { CollaborationCommand } from '@memoria/contracts';
+import { collaborationSessionSchema, presenceInputSchema, presenceUser } from '@memoria/contracts';
 import type { Auth } from '@memoria/auth';
 import { Leadership } from './leadership.ts';
 import { Store, receiptFor } from './store.ts';
@@ -29,6 +31,7 @@ type Context = VerifiedSession & {
   socket: WebSocket;
   budget: SocketBudget;
   identity: AccessRequest;
+  presenceId?: number;
 };
 export function sessionVerifier(auth: Auth) {
   return async (request: IncomingMessage): Promise<VerifiedSession> => {
@@ -50,6 +53,7 @@ export async function collaborationServer(
     rooms = new Map<string, Room>();
   const refusals = new RejectionBudget(),
     receipts = new WeakMap<Connection<Context>, Receipt>();
+  const presenceOwners = new Map<string, WebSocket>();
   const fail = () => {
     available = false;
     for (const socket of physicalSockets) socket.close(1011, 'CONTROL_UNAVAILABLE');
@@ -68,8 +72,15 @@ export async function collaborationServer(
     maxUnauthenticatedQueueSize: config.COLLAB_ROOM_QUEUE_BYTES,
     maxUnauthenticatedQueueMessages: config.COLLAB_ROOM_QUEUE_MESSAGES,
     maxPendingDocuments: 1,
-    async onAuthenticate({ context, documentName, connectionConfig }) {
+    async onAuthenticate({ context, documentName, connectionConfig, token }) {
       assertAvailable();
+      // Cached editors bind their HTTP identity to this cookie, including on reconnect.
+      // Empty tokens remain supported for clients without local persistence (3a/3b).
+      if (token) {
+        const expected = collaborationSessionSchema.parse(JSON.parse(token));
+        if (expected.user !== context.user || expected.session !== context.session)
+          throw new Error('SESSION_CHANGED');
+      }
       if (refusals.blocked(context.user)) throw new Error('REJECTION_LIMIT');
       const identity = {
         ...roomIdentity(documentName),
@@ -122,6 +133,13 @@ export async function collaborationServer(
       for (const c of connections)
         if (c.socketId === socketId) {
           connections.delete(c);
+          if (c.context.presenceId !== undefined) {
+            const key = `${c.document.name}:${c.context.presenceId}`;
+            if (presenceOwners.get(key) === c.context.socket) {
+              removeAwarenessStates(c.document.awareness, [c.context.presenceId], null);
+              presenceOwners.delete(key);
+            }
+          }
           c.context.socket.close(1000, 'DOCUMENT_CLOSED');
         }
     },
@@ -173,8 +191,37 @@ export async function collaborationServer(
       }
       ingress.admission.finish(connection.context.budget, update);
     },
-    async beforeHandleAwareness() {
-      throw new Error('PRESENCE_NOT_ENABLED');
+    async beforeHandleAwareness({ context, connection, documentName, states, removedClients }) {
+      try {
+        assertAvailable();
+        if (!context || !connection) throw new Error('PRESENCE_SESSION_REQUIRED');
+        await store.authorize(context.identity);
+        const ids = [...states.keys(), ...removedClients];
+        if (ids.length !== 1) throw new Error('PRESENCE_ONE_CLIENT');
+        const id = ids[0]!,
+          key = `${documentName}:${id}`,
+          owner = presenceOwners.get(key);
+        if (
+          (context.presenceId !== undefined && context.presenceId !== id) ||
+          (owner && owner !== context.socket)
+        )
+          throw new Error('PRESENCE_FOREIGN_CLIENT');
+        if (context.presenceId === undefined && removedClients.size)
+          throw new Error('PRESENCE_FOREIGN_REMOVAL');
+        const state = states.get(id);
+        if (state) {
+          const parsed = presenceInputSchema.parse(state);
+          states.set(id, {
+            user: presenceUser(context.user, context.name),
+            ...(parsed.cursor === undefined ? {} : { cursor: parsed.cursor }),
+          });
+        }
+        context.presenceId = id;
+        presenceOwners.set(key, context.socket);
+      } catch (error) {
+        context?.socket.close(1008, 'PRESENCE_REJECTED');
+        throw error;
+      }
     },
   });
   const memory = new ReplicaMemory(

@@ -42,7 +42,7 @@ async function verificationLink(email) {
   throw new Error('Verification email missing');
 }
 await test(
-  'Two isolated browsers through Caddy WSS: editing, card fields, offline merge and title CAS',
+  'Two browsers: collaboration, presence, persistent offline recovery and fenced sign-out',
   { timeout: 120000 },
   async () => {
     const browser = await chromium.launch({
@@ -86,6 +86,28 @@ await test(
         pages.push(page);
         page.on('pageerror', (error) => errors.push(error.message));
         page.on('websocket', (socket) => sockets.push(socket.url()));
+        if (i === 0) {
+          await page.goto(origin + '/api/health');
+          await page.evaluate(
+            () =>
+              new Promise((resolve, reject) => {
+                const r = globalThis.indexedDB.open('memoria-local-drafts-v1', 1);
+                r.onupgradeneeded = () => {
+                  r.result.createObjectStore('drafts');
+                  r.result.createObjectStore('sessions');
+                };
+                r.onerror = () => reject(r.error);
+                r.onsuccess = () => {
+                  const tx = r.result.transaction('drafts', 'readwrite');
+                  tx.objectStore('drafts').put('OLD PRIVATE DRAFT', 'old-user');
+                  tx.oncomplete = () => {
+                    r.result.close();
+                    resolve();
+                  };
+                };
+              }),
+          );
+        }
         await page.goto(origin + '/connexion');
         await page.getByLabel('Adresse email').fill(account.email);
         await page.getByLabel('Mot de passe').fill(account.password);
@@ -137,6 +159,15 @@ await test(
         });
       }
       assert(sockets.length >= 2 && sockets.every((url) => url === 'wss://localhost/collab'));
+      for (const page of pages)
+        for (const account of fixture.accounts)
+          await expect(page.getByRole('list', { name: 'Personnes connectées' })).toContainText(
+            account.name,
+          );
+      const color = await a
+        .getByRole('list', { name: 'Personnes connectées' })
+        .getByText(fixture.accounts[0].name, { exact: true })
+        .evaluate((el) => globalThis.getComputedStyle(el).color);
       console.log(
         'PASS HTTPS login, second membership, two WSS connections and durable initial load',
       );
@@ -151,6 +182,12 @@ await test(
         await expect(page.locator('.bn-editor')).toContainText('Alpha');
         await expect(page.locator('.bn-editor')).toContainText('Bravo');
       }
+      await editors[0].click();
+      await editors[0].press('ArrowLeft');
+      await expect(
+        b.locator('.bn-collaboration-cursor__label').filter({ hasText: fixture.accounts[0].name }),
+      ).toBeVisible();
+      console.log('PASS verified names, stable per-user colors and visible remote cursor');
       await editors[0].press('Control+End');
       await editors[0].press('Enter');
       await editors[0].pressSequentially('/character');
@@ -207,9 +244,143 @@ await test(
         404,
       );
       assert.deepEqual(errors, []);
-      await a.screenshot({ path: '.local/3b-browser.png', fullPage: true });
+      await a.screenshot({ path: '.local/3c-browser.png', fullPage: true });
       console.log(
         'PASS relational title conflict, page reload preserves body, private HMAC not routed; no browser errors',
+      );
+      const openPage = async (page) => {
+        page.on('pageerror', (error) => errors.push(error.message));
+        await page.goto(`${origin}/workspaces/${fixture.workspace}`);
+        await page
+          .getByRole('navigation', { name: 'Arbre des pages' })
+          .getByRole('button', { name: new RegExp('Bob ' + title) })
+          .click();
+        await expect(page.getByTestId('save-status')).toHaveText('Enregistré sur le serveur', {
+          timeout: 15000,
+        });
+        await expect(page.getByTestId('local-save-status')).toHaveText('Copie locale à jour');
+      };
+      const cache = (page) =>
+        page.evaluate(
+          () =>
+            new Promise((resolve, reject) => {
+              const r = globalThis.indexedDB.open('memoria-yjs-cache-v1');
+              r.onerror = () => reject(r.error);
+              r.onsuccess = () => {
+                const tx = r.result.transaction(['documents', 'updates'], 'readonly');
+                const documents = tx.objectStore('documents').getAll(),
+                  updates = tx.objectStore('updates').count();
+                tx.oncomplete = () => {
+                  r.result.close();
+                  resolve({ documents: documents.result, updates: updates.result });
+                };
+              };
+            }),
+        );
+      await contexts[0].setOffline(true);
+      await expect(a.getByTestId('save-status')).toContainText('Hors ligne');
+      await a.locator('.bn-editor').press('Control+Home');
+      await a.keyboard.insertText('Fermeture3c ');
+      await expect(a.getByTestId('local-save-status')).toHaveText('Copie locale à jour');
+      assert((await cache(a)).documents.some((p) => p.pending.length > 0));
+      await expect(b.locator('.bn-editor')).not.toContainText('Fermeture3c');
+      await a.close();
+      await contexts[0].setOffline(false);
+      const reopened = await contexts[0].newPage();
+      await openPage(reopened);
+      for (const page of [reopened, b])
+        await expect(page.locator('.bn-editor')).toContainText('Fermeture3c');
+      await expect(reopened.getByLabel('Health', { exact: true })).toHaveValue('42');
+      await expect
+        .poll(
+          async () =>
+            (await cache(reopened)).documents
+              .filter((p) => p.page === fixture.page)
+              .flatMap((p) => p.pending).length,
+        )
+        .toBe(0);
+      assert.equal(
+        await reopened
+          .getByRole('list', { name: 'Personnes connectées' })
+          .getByText(fixture.accounts[0].name, { exact: true })
+          .evaluate((el) => globalThis.getComputedStyle(el).color),
+        color,
+      );
+      console.log(
+        'PASS offline update retained in real IndexedDB after tab close, restored after online authorization, merged and acknowledged',
+      );
+      const sleeper = await contexts[0].newPage();
+      await openPage(sleeper);
+      const cdp = await contexts[0].newCDPSession(sleeper);
+      await cdp.send('Network.enable');
+      await cdp.send('Network.emulateNetworkConditions', {
+        offline: true,
+        latency: 0,
+        downloadThroughput: -1,
+        uploadThroughput: -1,
+      });
+      await expect(sleeper.getByTestId('save-status')).toContainText('Hors ligne');
+      await sleeper.locator('.bn-editor').press('Control+Home');
+      await sleeper.keyboard.insertText('LatePrivate3c ');
+      await expect(sleeper.getByTestId('local-save-status')).toHaveText('Copie locale à jour');
+      await expect(b.locator('.bn-editor')).not.toContainText('LatePrivate3c');
+      await reopened.bringToFront();
+      await cdp.send('Page.setWebLifecycleState', { state: 'frozen' });
+      await reopened.goto(origin);
+      await reopened.getByRole('button', { name: 'Se déconnecter', exact: true }).click();
+      await reopened
+        .getByRole('button', { name: 'Effacer les copies locales et se déconnecter', exact: true })
+        .click();
+      await expect(reopened).toHaveURL(/\/connexion$/);
+      assert.deepEqual(await cache(reopened), { documents: [], updates: 0 });
+      await cdp.send('Network.emulateNetworkConditions', {
+        offline: false,
+        latency: 0,
+        downloadThroughput: -1,
+        uploadThroughput: -1,
+      });
+      await cdp.send('Page.setWebLifecycleState', { state: 'active' });
+      await expect(sleeper.getByText('Session fermée sur ce poste.', { exact: true })).toBeVisible({
+        timeout: 10000,
+      });
+      await expect(sleeper.locator('.bn-editor')).toHaveCount(0);
+      assert.deepEqual(await cache(reopened), { documents: [], updates: 0 });
+      await expect(b.locator('.bn-editor')).not.toContainText('LatePrivate3c');
+      assert((await cache(b)).updates > 0);
+      const legacy = await reopened.evaluate(
+        () =>
+          new Promise((resolve, reject) => {
+            const r = globalThis.indexedDB.open('memoria-local-drafts-v1');
+            r.onerror = () => reject(r.error);
+            r.onsuccess = () => {
+              const result = {
+                version: r.result.version,
+                stores: Array.from(r.result.objectStoreNames),
+              };
+              r.result.close();
+              resolve(result);
+            };
+          }),
+      );
+      assert.deepEqual(legacy, { version: 2, stores: ['retired'] });
+      assert.deepEqual(errors, []);
+      console.log(
+        'PASS first-load legacy purge; logout erases all Yjs content and pending metadata, frozen tab cannot resurrect it; other account retained',
+      );
+      const revoked = await contexts[1].request.post(origin + '/api/auth/sign-out', {
+        headers: { Origin: origin },
+        data: {},
+      });
+      assert(revoked.ok());
+      await expect(
+        b.getByText('Votre accès a changé. Le document a été fermé.', { exact: true }),
+      ).toBeVisible({ timeout: 10000 });
+      await expect(b.locator('.bn-editor')).toHaveCount(0);
+      await expect.poll(async () => (await cache(b)).updates).toBe(0);
+      assert((await cache(b)).documents.every((p) => p.pending.length === 0 && p.count === 0));
+      assert.deepEqual(errors, []);
+      console.log(
+        'PASS server session revocation closes the cached editor and erases its page updates',
       );
     } finally {
       for (const context of contexts) await context.close();

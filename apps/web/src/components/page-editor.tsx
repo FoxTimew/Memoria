@@ -7,12 +7,15 @@ import { fr } from '@blocknote/core/locales';
 import { BlockNoteView } from '@blocknote/mantine';
 import { SuggestionMenuController } from '@blocknote/react';
 import { createEditorKit } from '@memoria/block-catalog/client';
-import { collaborationOpenSchema } from '@memoria/contracts';
+import { collaborationAccessSchema, presenceUser } from '@memoria/contracts';
 import type { PageDocument } from '@memoria/contracts';
 import { contentRequest } from '../lib/content-api.ts';
 import { CollaborationClient } from '../lib/collaboration-client.ts';
 import type { CollaborationStatus } from '../lib/collaboration-client.ts';
 import { PageTitle } from './page-title.tsx';
+import { LocalRecovery } from './local-recovery.tsx';
+import { LocalSessionRevoked, yjsCache } from '../lib/yjs-cache.ts';
+import type { CachePage, CacheTicket } from '../lib/yjs-cache.ts';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 
@@ -25,18 +28,27 @@ export default function PageEditor({
   endpoint,
   onSaved,
   onDirty,
+  onLocalRevoked,
   reload,
+  userId,
+  userName,
+  sessionId,
 }: {
   actions: RefObject<EditorActions | null>;
   document: PageDocument;
   endpoint: string;
   onSaved: () => void;
   onDirty: (dirty: boolean) => void;
+  onLocalRevoked: (message?: string) => void;
   reload: () => void;
+  userId: string;
+  userName: string;
+  sessionId: string;
 }) {
   const [loaded, setLoaded] = useState<{ kit: Kit; editor: Editor; client: CollaborationClient }>();
   const [error, setError] = useState('');
   const [connection, setConnection] = useState<CollaborationStatus>();
+  const [recovery, setRecovery] = useState<{ ticket: CacheTicket; pages: CachePage[] }>();
   useEffect(() => {
     let cancelled = false,
       editor: Editor | undefined,
@@ -44,12 +56,22 @@ export default function PageEditor({
     let unsubscribe: (() => void) | undefined;
     void (async () => {
       try {
+        const ticket = await yjsCache.ticket(userId, sessionId);
         const [kit, opened] = await Promise.all([
           createEditorKit(),
           contentRequest(`${endpoint}/collaboration`, 'POST'),
         ]);
-        const meta = collaborationOpenSchema.parse(opened);
+        const meta = collaborationAccessSchema.parse(opened);
+        if (meta.identity.user !== userId || meta.identity.session !== sessionId)
+          throw new LocalSessionRevoked();
+        const cached = await yjsCache.open(
+          ticket,
+          document.page.workspaceId,
+          document.page.id,
+          meta.generation,
+        );
         if (cancelled) return;
+        setRecovery({ ticket, pages: cached.older });
         const url = new URL('/collab', location.origin);
         url.protocol = 'wss:';
         client = new CollaborationClient(
@@ -59,7 +81,14 @@ export default function PageEditor({
           async () => {
             await contentRequest(`${endpoint}/version`);
           },
+          presenceUser(userId, userName),
+          sessionId,
         );
+        client.attachCache(ticket, cached.page, cached.updates, (message) => {
+          editor?._tiptapEditor.destroy();
+          setLoaded(undefined);
+          onLocalRevoked(message);
+        });
         const activeClient = client;
         unsubscribe = client.subscribe((state) => {
           if (cancelled) return;
@@ -73,7 +102,9 @@ export default function PageEditor({
                   dictionary: fr,
                   collaboration: {
                     fragment: activeClient.doc.getXmlFragment('prosemirror'),
-                    user: { name: '', color: '#53704c' },
+                    provider: { awareness: activeClient.provider.awareness! },
+                    user: presenceUser(userId, userName),
+                    showCursorLabels: 'always',
                   },
                 }),
               );
@@ -85,7 +116,10 @@ export default function PageEditor({
         });
         client.connect();
       } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : 'Chargement impossible.');
+        if (!cancelled) {
+          if (e instanceof LocalSessionRevoked) onLocalRevoked();
+          else setError(e instanceof Error ? e.message : 'Chargement impossible.');
+        }
       }
     })();
     return () => {
@@ -94,7 +128,7 @@ export default function PageEditor({
       editor?._tiptapEditor.destroy();
       client?.destroy();
     };
-  }, [endpoint]);
+  }, [endpoint, userId, sessionId, userName, onLocalRevoked]);
   if (error || (!loaded && connection?.phase === 'blocked'))
     return (
       <div role="alert" className="notice error m-6">
@@ -113,16 +147,19 @@ export default function PageEditor({
       </p>
     );
   return (
-    <ActiveEditor
-      {...loaded}
-      actions={actions}
-      state={connection!}
-      document={document}
-      onSaved={onSaved}
-      onDirty={onDirty}
-      endpoint={endpoint}
-      reload={reload}
-    />
+    <>
+      {recovery && <LocalRecovery {...recovery} />}
+      <ActiveEditor
+        {...loaded}
+        actions={actions}
+        state={connection!}
+        document={document}
+        onSaved={onSaved}
+        onDirty={onDirty}
+        endpoint={endpoint}
+        reload={reload}
+      />
+    </>
   );
 }
 function ActiveEditor({
@@ -153,7 +190,7 @@ function ActiveEditor({
   const [titleValue, setTitleValue] = useState(document.page.title);
   const [link, setLink] = useState(''),
     [linkError, setLinkError] = useState('');
-  const dirty = state.dirty || titleDirty,
+  const dirty = (state.dirty && state.local.phase !== 'saved') || titleDirty,
     blocked = state.phase === 'blocked';
   const latest = useRef({ dirty });
   latest.current = { dirty };
@@ -163,6 +200,7 @@ function ActiveEditor({
   useEffect(() => {
     actions.current = {
       discard: async () => {
+        await client.cache?.discard();
         client.destroy();
       },
     };
@@ -232,7 +270,10 @@ function ActiveEditor({
     connecting: 'Connexion…',
     saved: 'Enregistré sur le serveur',
     saving: 'Enregistrement sur le serveur…',
-    offline: 'Hors ligne — modifications conservées dans cet onglet',
+    offline:
+      state.local.phase === 'saved'
+        ? 'Hors ligne — modifications conservées sur cet appareil'
+        : 'Hors ligne — copie locale en attente',
     blocked: 'Édition arrêtée',
   };
   return (
@@ -245,11 +286,38 @@ function ActiveEditor({
           Exporter le contenu affiché
         </button>
       </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-2 text-sm">
+        <span role="status" data-testid="local-save-status">
+          {state.local.phase === 'saved'
+            ? 'Copie locale à jour'
+            : state.local.phase === 'error'
+              ? 'Copie locale indisponible'
+              : 'Copie locale en cours…'}
+        </span>
+        <ul aria-label="Personnes connectées" className="flex flex-wrap gap-3">
+          {state.people.map((person) => (
+            <li key={person.id} data-user-id={person.id} style={{ color: person.color }}>
+              {person.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {state.local.phase === 'error' && (
+        <div role="alert" className="notice error mx-6 mt-4">
+          <p>
+            {state.local.message} Gardez cet onglet ouvert ou exportez le contenu tant que la copie
+            locale ou l’enregistrement serveur ne sont pas confirmés.
+          </p>
+          <button className="quiet-link" onClick={() => void client.cache?.retry()}>
+            Réessayer la copie locale
+          </button>
+        </div>
+      )}
       {state.phase === 'offline' && (
         <p className="notice mx-6 mt-4">
-          Vous pouvez continuer à écrire. Gardez cet onglet ouvert : le contenu non enregistré
-          serait perdu en le fermant ou en le rechargeant. La fusion reprendra automatiquement après
-          reconnexion.
+          Vous pouvez continuer à écrire. Attendez « Copie locale à jour » avant de fermer cet
+          onglet. Pour le rouvrir, rétablissez la connexion : vos droits seront vérifiés avant de
+          récupérer les modifications. Le titre non enregistré reste uniquement dans cet onglet.
         </p>
       )}
       {blocked && (

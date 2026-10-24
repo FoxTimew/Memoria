@@ -25,7 +25,18 @@ export function envelope(bytes: Uint8Array) {
     if (payload.length > documentBytes) throw new Error('UPDATE_TOO_LARGE');
     return { address, name, type, update: subtype !== 0, payload };
   }
-  // Presence intentionally disabled until 3c; query-awareness is harmless.
+  if (type === 1) {
+    const payload = m.readVarUint8Array();
+    if (payload.length > 1024 || m.decoder.pos !== bytes.length)
+      throw new Error('PRESENCE_TOO_LARGE');
+    const state = new IncomingMessage(payload);
+    if (state.readVarUint() !== 1) throw new Error('PRESENCE_ONE_CLIENT');
+    if (!Number.isSafeInteger(state.readVarUint()) || !Number.isSafeInteger(state.readVarUint()))
+      throw new Error('PRESENCE_INVALID_CLOCK');
+    state.readVarString();
+    if (state.decoder.pos !== payload.length) throw new Error('PRESENCE_TRAILING_DATA');
+    return { address, name, type, update: false };
+  }
   if (![2, 3, 7].includes(type)) throw new Error('MESSAGE_UNSUPPORTED');
   if (bytes.length > 32768) throw new Error('HANDSHAKE_TOO_LARGE');
   return { address, name, type, update: false };

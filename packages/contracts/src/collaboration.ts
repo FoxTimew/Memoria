@@ -6,6 +6,11 @@ export const collaborationOpenSchema = z.strictObject({
   projectionRevision: z.int().nonnegative(),
   room: z.string().max(160),
 });
+export const collaborationSessionSchema = z.strictObject({ user: z.uuid(), session: z.uuid() });
+/** Fresh HTTP identity, bound again to the cookie on WebSocket authentication. */
+export const collaborationAccessSchema = collaborationOpenSchema.extend({
+  identity: collaborationSessionSchema,
+});
 export const collaborationWriteSchema = z.strictObject({
   generation: z.uuid(),
   expectedRevision: z.int().nonnegative(),

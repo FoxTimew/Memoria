@@ -14,6 +14,7 @@ import {
   pageSchema,
   pageTreeSchema,
   searchResultsSchema,
+  collaborationAccessSchema,
 } from '@memoria/contracts';
 import { AppModule, configureApplication } from './app.ts';
 import { readConfig } from './config.ts';
@@ -162,10 +163,20 @@ try {
       await t.test(
         'Nest session injection and BlockWriteService wait for projected nested content',
         async () => {
-          const opened = (await json(
-            await request(`${base}/pages/${child.id}/collaboration`, 0, 'POST', {}),
-            201,
-          )) as { generation: string; contentRevision: number };
+          const opened = collaborationAccessSchema.parse(
+            await json(
+              await request(`${base}/pages/${child.id}/collaboration`, 0, 'POST', {}),
+              201,
+            ),
+          );
+          const authenticated = (await json(await request('/api/auth/get-session'))) as {
+            session: { id: string; userId: string };
+          };
+          assert.deepEqual(opened.identity, {
+            user: authenticated.session.userId,
+            session: authenticated.session.id,
+          });
+          assert.equal(opened.identity.user, users[0]!.id);
           generation = opened.generation;
           contentRevision = opened.contentRevision;
           const result = (await json(
