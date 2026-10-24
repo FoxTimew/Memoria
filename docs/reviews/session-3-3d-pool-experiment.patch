@@ -1,0 +1,463 @@
+diff --git a/apps/collab/src/service/incremental-validator.ts b/apps/collab/src/service/incremental-validator.ts
+index 5ab2352..482016b 100644
+--- a/apps/collab/src/service/incremental-validator.ts
++++ b/apps/collab/src/service/incremental-validator.ts
+@@ -1,74 +1,23 @@
+-import { Worker } from 'node:worker_threads';
+-import { once } from 'node:events';
+ import type { IncrementalReplica } from './incremental-replica.ts';
+-import { CandidateRejected } from '../validator.ts';
++import { ValidationPool } from './validation-pool.ts';
+ export class IncrementalValidator {
+-  private worker: Worker;
+-  private failed = false;
++  private readonly pool: ValidationPool;
++  private readonly handle: ReturnType<ValidationPool['allocate']>;
+   private busy = false;
+-  private online: Promise<unknown[]>;
+-  constructor(
+-    private readonly budgetMs = 250,
+-    memoryMiB = 128,
+-  ) {
+-    this.worker = new Worker(new URL('./incremental-worker.mjs', import.meta.url), {
+-      resourceLimits: { maxOldGenerationSizeMb: memoryMiB, maxYoungGenerationSizeMb: 16 },
+-    });
+-    this.online = once(this.worker, 'online');
+-    this.worker.on('error', () => {
+-      this.failed = true;
+-    });
+-    this.worker.on('exit', () => {
+-      this.failed = true;
+-    });
++  private readonly owned: boolean;
++  constructor(pool?: ValidationPool, onFault: () => void = () => {}) {
++    this.owned = !pool;
++    this.pool = pool ?? new ValidationPool(1, 128);
++    this.handle = this.pool.allocate(onFault);
+   }
+   async init(snapshot: Uint8Array, updates: Uint8Array[] = []) {
+-    await this.online;
+     await this.request('init', { snapshot, updates }, 30000);
+   }
+-  private async request(
+-    operation: string,
+-    data: object = {},
+-    deadline = this.budgetMs,
+-  ): Promise<{ result: unknown; elapsed: number }> {
+-    if (this.busy || this.failed) throw new Error('Replica worker unavailable');
++  private async request(operation: string, data: object = {}, deadline = 250) {
++    if (this.busy) throw new Error('Replica worker busy');
+     this.busy = true;
+     try {
+-      return await new Promise((resolve, reject) => {
+-        const finish = () => {
+-          clearTimeout(timer);
+-          this.worker.off('message', receive);
+-          this.worker.off('error', fail);
+-          this.worker.off('exit', exit);
+-        };
+-        const fail = (error: Error) => {
+-          finish();
+-          reject(error);
+-        };
+-        const exit = () => fail(new Error('Replica worker exited'));
+-        const receive = (message: {
+-          result: unknown;
+-          elapsed: number;
+-          error?: string;
+-          validation?: boolean;
+-        }) => {
+-          finish();
+-          if (message.error)
+-            reject(
+-              message.validation ? new CandidateRejected(message.error) : new Error(message.error),
+-            );
+-          else resolve(message);
+-        };
+-        const timer = setTimeout(() => {
+-          this.failed = true;
+-          void this.worker.terminate();
+-          fail(new Error(`Replica budget exceeded (${deadline} ms)`));
+-        }, deadline);
+-        this.worker.once('message', receive);
+-        this.worker.once('error', fail);
+-        this.worker.once('exit', exit);
+-        this.worker.postMessage({ operation, ...data });
+-      });
++      return await this.handle.request(operation, data, deadline);
+     } finally {
+       this.busy = false;
+     }
+@@ -100,6 +49,7 @@ export class IncrementalValidator {
+     return (await this.request('snapshot', {}, 30000)).result as Uint8Array;
+   }
+   async close() {
+-    await this.worker.terminate();
++    await this.handle.close();
++    if (this.owned) await this.pool.close();
+   }
+ }
+diff --git a/apps/collab/src/service/incremental-worker.ts b/apps/collab/src/service/incremental-worker.ts
+index 5e11941..c4a5cb2 100644
+--- a/apps/collab/src/service/incremental-worker.ts
++++ b/apps/collab/src/service/incremental-worker.ts
+@@ -1,16 +1,20 @@
+ import * as Y from 'yjs';
+ import { parentPort } from 'node:worker_threads';
+ import { IncrementalReplica } from './incremental-replica.ts';
+-let replica: IncrementalReplica | undefined;
++const replicas = new Map<number, IncrementalReplica>();
+ parentPort!.on(
+   'message',
+   ({
++    id,
++    replicaId,
+     operation,
+     snapshot,
+     updates,
+     update,
+     operations,
+   }: {
++    id: number;
++    replicaId: number;
+     operation: string;
+     snapshot: Uint8Array;
+     updates: Uint8Array[];
+@@ -20,6 +24,7 @@ parentPort!.on(
+     const started = performance.now();
+     try {
+       let result: unknown;
++      let replica = replicas.get(replicaId);
+       if (operation === 'init') {
+         replica?.close();
+         if (updates.length) {
+@@ -33,16 +38,21 @@ parentPort!.on(
+             loaded.destroy();
+           }
+         } else replica = new IncrementalReplica(snapshot);
++        replicas.set(replicaId, replica);
+       } else if (operation === 'prepare') result = replica!.prepare(update);
+       else if (operation === 'command') result = replica!.command(operations);
+       else if (operation === 'inspect') result = replica!.inspect();
+       else if (operation === 'commit') replica!.commit();
+       else if (operation === 'abort') replica!.abort();
+       else if (operation === 'snapshot') result = replica!.snapshot();
+-      else throw new Error('Unknown worker operation');
+-      parentPort!.postMessage({ result, elapsed: performance.now() - started });
++      else if (operation === 'dispose') {
++        replica?.close();
++        replicas.delete(replicaId);
++      } else throw new Error('Unknown worker operation');
++      parentPort!.postMessage({ id, result, elapsed: performance.now() - started });
+     } catch (error) {
+       parentPort!.postMessage({
++        id,
+         error: error instanceof Error ? error.message : 'Rejected',
+         validation: operation === 'prepare' || operation === 'command',
+         elapsed: performance.now() - started,
+diff --git a/apps/collab/src/service/room.ts b/apps/collab/src/service/room.ts
+index a1c8b04..546ff25 100644
+--- a/apps/collab/src/service/room.ts
++++ b/apps/collab/src/service/room.ts
+@@ -3,6 +3,7 @@ import type { CollaborationCommand } from '@memoria/contracts';
+ import type { AccessRequest } from './access.ts';
+ import { CandidateRejected } from '../validator.ts';
+ import { IncrementalValidator } from './incremental-validator.ts';
++import type { ValidationPool } from './validation-pool.ts';
+ import { RoomBatchQueue } from './room-batch-queue.ts';
+ import { Store, receiptFor, digest } from './store.ts';
+ import { CollaborationError } from './internal-server.ts';
+@@ -17,7 +18,7 @@ export interface Receipt {
+   receipt: string;
+ }
+ export class Room {
+-  readonly replica = new IncrementalValidator();
++  readonly replica: IncrementalValidator;
+   readonly queue: RoomBatchQueue<Entry, Receipt>;
+   revision = 0;
+   pending = 0;
+@@ -28,7 +29,12 @@ export class Room {
+     readonly generation: string,
+     readonly doc: Y.Doc,
+     private readonly onFatal: () => void,
++    pool?: ValidationPool,
+   ) {
++    this.replica = new IncrementalValidator(pool, () => {
++      this.fatal = true;
++      this.onFatal();
++    });
+     this.queue = new RoomBatchQueue((entries) => this.process(entries));
+   }
+   async load() {
+diff --git a/apps/collab/src/service/server.ts b/apps/collab/src/service/server.ts
+index ff3710c..a9fb4c4 100644
+--- a/apps/collab/src/service/server.ts
++++ b/apps/collab/src/service/server.ts
+@@ -1,4 +1,5 @@
+ import { ReplicaMemory } from './memory.ts';
++import { ValidationPool } from './validation-pool.ts';
+ import { randomUUID } from 'node:crypto';
+ import { fromNodeHeaders } from 'better-auth/node';
+ import type { Pool } from 'pg';
+@@ -67,6 +68,7 @@ export async function collaborationServer(
+     void leadership.fence;
+   };
+   const evicting = new Set<string>();
++  const validators = new ValidationPool();
+   const hocus = new Hocuspocus<Context>({
+     quiet: true,
+     maxUnauthenticatedQueueSize: config.COLLAB_ROOM_QUEUE_BYTES,
+@@ -109,10 +111,17 @@ export async function collaborationServer(
+       assertAvailable();
+       memory.loading(documentName);
+       const identity = roomIdentity(documentName);
+-      const room = new Room(store, identity.page, identity.generation, document, () => {
+-        for (const c of connections)
+-          if (c.document === document) c.context.socket.close(1011, 'ROOM_RELOAD_REQUIRED');
+-      });
++      const room = new Room(
++        store,
++        identity.page,
++        identity.generation,
++        document,
++        () => {
++          for (const c of connections)
++            if (c.document === document) c.context.socket.close(1011, 'ROOM_RELOAD_REQUIRED');
++        },
++        validators,
++      );
+       try {
+         await room.load();
+         assertAvailable();
+@@ -361,6 +370,7 @@ export async function collaborationServer(
+       room.doc.destroy();
+     }
+     await leadership.close();
++    await validators.close();
+     throw error;
+   }
+   return {
+@@ -375,6 +385,7 @@ export async function collaborationServer(
+     internal,
+     command,
+     refusals,
++    validators,
+     async close() {
+       available = false;
+       await ingress.close();
+@@ -388,6 +399,7 @@ export async function collaborationServer(
+         room.doc.destroy();
+       }
+       rooms.clear();
++      await validators.close();
+       await leadership.close();
+     },
+   };
+diff --git a/apps/collab/src/service/validation-pool.ts b/apps/collab/src/service/validation-pool.ts
+new file mode 100644
+index 0000000..dba8437
+--- /dev/null
++++ b/apps/collab/src/service/validation-pool.ts
+@@ -0,0 +1,137 @@
++import { Worker } from 'node:worker_threads';
++import { availableParallelism } from 'node:os';
++import { CandidateRejected } from '../validator.ts';
++
++export const defaultValidationWorkers = () =>
++  Math.max(1, Math.min(4, Math.floor(availableParallelism() / 2)));
++type Reply = { result: unknown; elapsed: number };
++type Job = {
++  id: number;
++  replica: number;
++  operation: string;
++  data: object;
++  deadline: number;
++  resolve: (reply: Reply) => void;
++  reject: (error: Error) => void;
++};
++type Slot = {
++  worker: Worker;
++  online: boolean;
++  failed: boolean;
++  replicas: Map<number, () => void>;
++  queue: Job[];
++  active?: Job;
++  timer?: ReturnType<typeof setTimeout>;
++};
++
++/** Page affinity; one dispatched operation per worker, bounded host-side queue. */
++export class ValidationPool {
++  private slots: Slot[] = [];
++  private nextId = 0;
++  private stopped = false;
++  constructor(
++    readonly size = defaultValidationWorkers(),
++    readonly memoryMiB = 256,
++  ) {
++    if (!Number.isInteger(size) || size < 1 || size > 16)
++      throw new Error('Invalid worker pool size');
++  }
++  private createSlot() {
++    const worker = new Worker(new URL('./incremental-worker.mjs', import.meta.url), {
++      resourceLimits: { maxOldGenerationSizeMb: this.memoryMiB, maxYoungGenerationSizeMb: 16 },
++    });
++    const slot: Slot = { worker, online: false, failed: false, replicas: new Map(), queue: [] };
++    this.slots.push(slot);
++    worker.once('online', () => {
++      slot.online = true;
++      this.dispatch(slot);
++    });
++    worker.on('error', (error) => this.fail(slot, error));
++    worker.on('exit', () => this.fail(slot, new Error('Replica worker exited')));
++    worker.on(
++      'message',
++      (message: Reply & { id: number; error?: string; validation?: boolean }) => {
++        const job = slot.active;
++        if (!job || job.id !== message.id) {
++          this.fail(slot, new Error('Worker reply mismatch'));
++          return;
++        }
++        clearTimeout(slot.timer);
++        delete slot.active;
++        if (message.error)
++          job.reject(
++            message.validation ? new CandidateRejected(message.error) : new Error(message.error),
++          );
++        else job.resolve(message);
++        this.dispatch(slot);
++      },
++    );
++    return slot;
++  }
++  private fail(slot: Slot, error: Error) {
++    if (slot.failed) return;
++    slot.failed = true;
++    clearTimeout(slot.timer);
++    slot.active?.reject(error);
++    delete slot.active;
++    for (const job of slot.queue.splice(0)) job.reject(error);
++    for (const fault of slot.replicas.values()) fault();
++    slot.replicas.clear();
++    void slot.worker.terminate();
++  }
++  private dispatch(slot: Slot) {
++    if (!slot.online || slot.failed || slot.active) return;
++    const job = slot.queue.shift();
++    if (!job) return;
++    slot.active = job;
++    slot.timer = setTimeout(
++      () => this.fail(slot, new Error(`Replica budget exceeded (${job.deadline} ms)`)),
++      job.deadline,
++    );
++    slot.worker.postMessage({
++      id: job.id,
++      replicaId: job.replica,
++      operation: job.operation,
++      ...job.data,
++    });
++  }
++  allocate(onFault: () => void) {
++    if (this.stopped) throw new Error('Worker pool closed');
++    const live = this.slots.filter((s) => !s.failed);
++    const slot =
++      live.length < this.size
++        ? this.createSlot()
++        : live.sort((a, b) => a.replicas.size - b.replicas.size)[0]!;
++    const replica = ++this.nextId;
++    let closed = false;
++    slot.replicas.set(replica, onFault);
++    const request = (operation: string, data: object = {}, deadline = 250): Promise<Reply> => {
++      if (closed || this.stopped || slot.failed)
++        return Promise.reject(new Error('Replica worker unavailable'));
++      if (slot.queue.length >= 128)
++        return Promise.reject(new Error('Validation worker queue full'));
++      return new Promise((resolve, reject) => {
++        slot.queue.push({ id: ++this.nextId, replica, operation, data, deadline, resolve, reject });
++        this.dispatch(slot);
++      });
++    };
++    return {
++      request,
++      async close() {
++        if (closed) return;
++        try {
++          if (!slot.failed) await request('dispose', {}, 30000);
++        } finally {
++          closed = true;
++          slot.replicas.delete(replica);
++        }
++      },
++    };
++  }
++  async close() {
++    this.stopped = true;
++    for (const slot of this.slots) this.fail(slot, new Error('Worker pool closed'));
++    await Promise.all(this.slots.map((slot) => slot.worker.terminate()));
++    this.slots = [];
++  }
++}
+diff --git a/apps/collab/src/testing/cold.e2e.ts b/apps/collab/src/testing/cold.e2e.ts
+index ef47960..ace3c7a 100644
+--- a/apps/collab/src/testing/cold.e2e.ts
++++ b/apps/collab/src/testing/cold.e2e.ts
+@@ -90,12 +90,12 @@ test(
+       }
+       await mkdir('.local', { recursive: true });
+       await writeFile(
+-        '.local/3a-cold-production.json',
++        '.local/3d-pool-cold-production.json',
+         JSON.stringify(
+           {
+             date: new Date().toISOString(),
+             scope:
+-              'Real Hocuspocus cold room: memory admission, consistent PostgreSQL snapshot read, live Yjs document and fresh incremental worker. No journal tail, session check, network or concurrent typing.',
++              'Real Hocuspocus cold room: memory admission, consistent PostgreSQL snapshot read, live Yjs document and replica in shared worker pool. Pool persists between rooms; two warmup loads excluded. No journal tail, session check, network or concurrent typing.',
+             reports,
+           },
+           null,
+diff --git a/apps/collab/src/testing/warm.e2e.ts b/apps/collab/src/testing/warm.e2e.ts
+index 73e98c5..b642bda 100644
+--- a/apps/collab/src/testing/warm.e2e.ts
++++ b/apps/collab/src/testing/warm.e2e.ts
+@@ -9,6 +9,7 @@ import { decodeDocument } from '../codec.ts';
+ import { Leadership } from '../service/leadership.ts';
+ import { Store } from '../service/store.ts';
+ import { IncrementalValidator } from '../service/incremental-validator.ts';
++import { ValidationPool } from '../service/validation-pool.ts';
+ test(
+   'Production incremental validation and journal, 1 MiB profiles',
+   { timeout: 120000 },
+@@ -18,6 +19,7 @@ test(
+     await leader.start();
+     const store = new Store(db.pool, leader),
+       reports: object[] = [];
++    const validators = new ValidationPool();
+     try {
+       for (const profile of ['content-1M', 'history-1M']) {
+         const snapshot = await loadProfile(profile),
+@@ -37,7 +39,7 @@ test(
+             Buffer.byteLength(JSON.stringify(decodeDocument(doc))),
+           ],
+         );
+-        const replica = new IncrementalValidator(),
++        const replica = new IncrementalValidator(validators),
+           samples: object[] = [];
+         await replica.init(snapshot);
+         const nodes = [...doc.getXmlFragment('prosemirror').createTreeWalker(() => true)],
+@@ -91,7 +93,7 @@ test(
+         }
+       }
+       await writeFile(
+-        '.local/3a-warm-production.json',
++        '.local/3d-pool-warm-production.json',
+         JSON.stringify(
+           {
+             date: new Date().toISOString(),
+@@ -106,6 +108,7 @@ test(
+       for (const report of reports as { profile: string; p95: number }[])
+         assert(report.p95 < 50, `${report.profile}: p95=${report.p95}`);
+     } finally {
++      await validators.close();
+       await leader.close();
+       await db.close();
+     }
