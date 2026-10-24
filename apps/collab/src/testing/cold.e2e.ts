@@ -95,7 +95,7 @@ test(
           {
             date: new Date().toISOString(),
             scope:
-              'Real Hocuspocus cold room: memory admission, consistent PostgreSQL snapshot read, live Yjs document and fresh incremental worker. No journal tail, session check, network or concurrent typing.',
+              'Real Hocuspocus cold room: memory admission, consistent PostgreSQL snapshot read, live Yjs document and fresh replica in the shared pool (worker processes can be reused). No journal tail, session check, network or concurrent typing.',
             reports,
           },
           null,

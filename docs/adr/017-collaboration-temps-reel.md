@@ -333,3 +333,18 @@ Une réplique nouvellement chargée fait réserver tous ses UUID à sa première
 Le chargement et le rollback rejouent snapshot + journal par un update fusionné, avec les mêmes identités CRDT. Pas de document temporaire ni de réencodage complet lorsque la somme des tailles garantit déjà la borne. La réplique valide toujours le contenu chargé ; l'initialisation du worker est envoyée avant le décodage de l'arbre vivant.
 
 Résultat final : contenu/historique p95 **16,16 / 55,68 ms par update** et **296,24 / 438,81 ms au chargement froid**, mêmes fixtures de 1 Mio. Le chaud historique **échoue encore** à < 50 ms ; 3d reste suspendue. Douze suites fonctionnelles passent, ainsi que `pnpm check` (92 tests Vitest / 6 ignorés). Méthode, séries intermédiaires, risques, preuves et compromis dans la [fiche d'optimisations](../reviews/session-3-3d-optimisations.md). Aucun résultat de capacité pour trente pages ni certification 4 vCPU / 8 Gio n'en découle.
+
+## 3d — nouvelle règle acceptée et reprise locale, 24 octobre 2026
+
+Le développeur remplace explicitement l'arrêt précédent par la règle suivante, sans changer la borne de 1 Mio :
+
+- Profil contenu 1 Mio : p95 update **strictement inférieur à 50 ms**, bloquant.
+- Chargement froid, contenu et historique : p95 **strictement inférieur à 500 ms**, bloquant.
+- Update historique 1 Mio : indicateur surveillé sur la machine de développement, non bloquant jusqu'à **100 ms inclus** ; au-delà, arrêt et présentation des compromis.
+- Pool et réservation proportionnelle : **pas de régression supérieure à 10 %**. Référence : code de `665a829` remesuré en trois séries ; comparaison des médianes des p95 de chaque métrique. Les quatre valeurs de la série antérieure restent visibles comme historique, sans sélection du meilleur essai.
+
+Chaque configuration produit trois séries indépendantes, chacune conservant tous les échantillons, son p95 et son code de sortie. Publier les trois p95 et leur médiane ; les critères de comparaison portent sur cette médiane. Une assertion échouée dans une série individuelle reste signalée dans les journaux, même si la médiane passe. Relever la RAM libre avant chaque lancement chaud ou froid, et avant les séries de capacité : **au moins 3 Gio**, sinon demander au développeur de fermer des applications avant toute mesure. Aucun build simultané. L'alimentation et le matériel sont documentés ; rester sur batterie n'est pas une cause démontrée des écarts.
+
+Justification : le profil historique comporte plus de 41 000 identifiants clients pour environ 100 Kio de contenu métier. Son coût Yjs reste un pire cas synthétique surveillé. La réponse structurelle est le rebasage sur page inoccupée, déjà obligatoire avant l'utilisation prolongée en production ; il n'est pas activé par cette décision. Le profil contenu et le chargement froid conservent leurs exigences. La marge de 10 % interdit de masquer une dégradation du pool derrière le nouveau plafond historique.
+
+La qualification dédiée **4 vCPU / 8 Gio** est déplacée avant les premiers utilisateurs réels, couplée à une charge de **50 comptes sur toute la pile**. Réutiliser le paquet reproductible de la référence (fixtures exactes et empreintes), comparer à la version livrée, conserver les résultats même en cas d'échec. Aucun hôte n'est encore disponible ; les mesures locales ne certifient pas cette cible.

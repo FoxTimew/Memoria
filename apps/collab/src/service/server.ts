@@ -1,4 +1,5 @@
-import { ReplicaMemory } from './memory.ts';
+import { ReplicaMemory, poolReservation } from './memory.ts';
+import { ValidationPool } from './validation-pool.ts';
 import { randomUUID } from 'node:crypto';
 import { fromNodeHeaders } from 'better-auth/node';
 import type { Pool } from 'pg';
@@ -46,6 +47,7 @@ export async function collaborationServer(
   authorize: (request: IncomingMessage) => Promise<VerifiedSession>,
   options: { access?: AccessResolver; report?: (event: object) => void } = {},
 ) {
+  const report = options.report ?? ((event: object) => console.warn(JSON.stringify(event)));
   let available = true;
   const physicalSockets = new Set<WebSocket>(),
     charged = new WeakSet<WebSocket>();
@@ -60,8 +62,10 @@ export async function collaborationServer(
   };
   const leadership = new Leadership(config.DATABASE_URL, fail);
   await leadership.start();
+  const validators = new ValidationPool(config.COLLAB_VALIDATION_WORKERS),
+    recoveries = new Set<Promise<void>>();
   const store = new Store(pool, leadership, options.access),
-    projections = new Projections(store, options.report);
+    projections = new Projections(store, options.report, validators);
   const assertAvailable = () => {
     if (!available) throw new CollaborationError('SERVICE_UNAVAILABLE', 503);
     void leadership.fence;
@@ -109,10 +113,28 @@ export async function collaborationServer(
       assertAvailable();
       memory.loading(documentName);
       const identity = roomIdentity(documentName);
-      const room = new Room(store, identity.page, identity.generation, document, () => {
-        for (const c of connections)
-          if (c.document === document) c.context.socket.close(1011, 'ROOM_RELOAD_REQUIRED');
-      });
+      const room = new Room(
+        store,
+        identity.page,
+        identity.generation,
+        document,
+        () => {
+          for (const c of connections)
+            if (c.document === document) c.context.socket.close(1011, 'ROOM_RELOAD_REQUIRED');
+          if (!available || !rooms.has(documentName) || room.recovering) return;
+          const recovery = room.recover();
+          recoveries.add(recovery);
+          void recovery
+            .then(
+              () => report({ event: 'collaboration.replica.reloaded', page: room.page }),
+              () => report({ event: 'collaboration.replica.reload.failed', page: room.page }),
+            )
+            .finally(() => recoveries.delete(recovery));
+        },
+        validators,
+        (bytes) => memory.resize(documentName, bytes),
+        memory.reservation(documentName),
+      );
       try {
         await room.load();
         assertAvailable();
@@ -150,6 +172,7 @@ export async function collaborationServer(
       assertAvailable();
       if (type === 0) return;
       try {
+        if (rooms.get(documentName)?.fatal) throw new Error('ROOM_RELOAD_REQUIRED');
         await store.authorize(context.identity);
         if (type === 1 && Y.snapshotContainsUpdate(Y.snapshot(document), payload)) {
           // Reconnection may resend an already durable state (including deletions).
@@ -255,6 +278,19 @@ export async function collaborationServer(
         evicting.delete(name);
       }
     },
+    async (name) => {
+      const identity = roomIdentity(name);
+      // Metrics may lag projection; snapshot + complete journal is a conservative bound.
+      const row = (
+        await pool.query<{ bytes: string }>(
+          'SELECT octet_length(snapshot)+journal_bytes AS bytes FROM collaboration_documents WHERE page_id=$1 AND generation=$2',
+          [identity.page, identity.generation],
+        )
+      ).rows[0];
+      if (!row) throw new CollaborationError('GENERATION_CHANGED');
+      return Number(row.bytes);
+    },
+    poolReservation(config.COLLAB_VALIDATION_WORKERS),
   );
   const revocations = new Revocations(
     config.DATABASE_URL,
@@ -361,6 +397,7 @@ export async function collaborationServer(
       room.doc.destroy();
     }
     await leadership.close();
+    await validators.close();
     throw error;
   }
   return {
@@ -375,12 +412,14 @@ export async function collaborationServer(
     internal,
     command,
     refusals,
+    validators,
     async close() {
       available = false;
       await ingress.close();
       await internal.close();
       await revocations.close();
       await projections.close();
+      await Promise.allSettled(recoveries);
       await memory.close();
       for (const room of rooms.values()) {
         while (room.pending) await new Promise((r) => setTimeout(r, 10));
@@ -388,6 +427,7 @@ export async function collaborationServer(
         room.doc.destroy();
       }
       rooms.clear();
+      await validators.close();
       await leadership.close();
     },
   };

@@ -110,6 +110,9 @@ export class IncrementalReplica {
   inspect() {
     return this.blocks;
   }
+  get encodedUpperBound() {
+    return this.upper;
+  }
   snapshot() {
     if (this.pending || this.tainted) throw new Error('Uncommitted replica');
     return Y.encodeStateAsUpdate(this.doc);
@@ -129,6 +132,7 @@ export class IncrementalReplica {
   }
   checkpointNow() {
     this.checkpoint = this.snapshot();
+    this.upper = this.checkpoint.length;
     this.accepted = [];
   }
   close() {
