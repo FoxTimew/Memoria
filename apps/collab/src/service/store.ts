@@ -35,17 +35,36 @@ export interface Contribution {
   requestHash?: string;
 }
 export type AccessResolver = typeof resolveAccess;
+/** Drain every queued query before rollback/release, including after an early rejection. */
+async function drainQueries<T extends unknown[]>(queries: { [K in keyof T]: Promise<T[K]> }) {
+  const results = await Promise.allSettled(queries);
+  for (const result of results) if (result.status === 'rejected') throw result.reason;
+  return results.map((result) => (result as PromiseFulfilledResult<unknown>).value) as T;
+}
 export class Store {
   constructor(
     readonly pool: Pool,
     readonly leadership: Leadership,
     readonly access: AccessResolver = resolveAccess,
   ) {}
-  async transaction<T>(work: (client: PoolClient) => Promise<T>) {
+  async transaction<T>(
+    work: (client: PoolClient) => Promise<T>,
+    pageLock?: { page: string; workspace: string },
+  ) {
     const client = await this.pool.connect();
     try {
-      await client.query('BEGIN');
-      await assertFence(client, this.leadership.fence);
+      const fence = this.leadership.fence;
+      // PostgreSQL executes this ordered pipeline serially. No data write precedes its checks.
+      await drainQueries([
+        client.query('BEGIN'),
+        assertFence(client, fence),
+        pageLock
+          ? client.query('SELECT id FROM pages WHERE id=$1 AND workspace_id=$2 FOR NO KEY UPDATE', [
+              pageLock.page,
+              pageLock.workspace,
+            ])
+          : Promise.resolve(),
+      ]);
       const result = await work(client);
       await client.query('COMMIT');
       return result;
@@ -150,86 +169,99 @@ export class Store {
     blockIds: string[],
   ) {
     const { page, workspace } = entries[0]!.identity;
-    return this.transaction(async (client) => {
-      await client.query('SELECT id FROM pages WHERE id=$1 AND workspace_id=$2 FOR NO KEY UPDATE', [
-        page,
-        workspace,
-      ]);
-      const access = await this.access(
-        client,
-        entries.map((e) => e.identity),
-      );
-      for (const entry of entries)
-        if (access.get(entry.identity.key)?.level !== 'edit')
-          throw new CollaborationError('ACCESS_DENIED', 403);
-      const state = (
-        await client.query<StoredDocument>(
-          'SELECT content_revision FROM collaboration_documents WHERE page_id=$1 AND generation=$2',
-          [page, generation],
+    return this.transaction(
+      async (client) => {
+        // These reads start only AFTER the page lock. A waiting writer must see the new revision.
+        const [access, revision] = await drainQueries([
+          this.access(
+            client,
+            entries.map((e) => e.identity),
+          ),
+          client.query<StoredDocument>(
+            'SELECT content_revision FROM collaboration_documents WHERE page_id=$1 AND generation=$2',
+            [page, generation],
+          ),
+        ]);
+        for (const entry of entries)
+          if (access.get(entry.identity.key)?.level !== 'edit')
+            throw new CollaborationError('ACCESS_DENIED', 403);
+        const state = revision.rows[0];
+        if (!state || Number(state.content_revision) !== expected)
+          throw new CollaborationError('REVISION_CHANGED');
+        const fileIds = [
+          ...new Set(
+            images.map((b) => b.content.fileId).filter((v): v is string => typeof v === 'string'),
+          ),
+        ];
+        if (
+          fileIds.length &&
+          (
+            await client.query(
+              "SELECT id FROM files WHERE id=ANY($1::uuid[]) AND workspace_id=$2 AND deleted_at IS NULL AND state='ready'",
+              [fileIds, workspace],
+            )
+          ).rowCount !== fileIds.length
         )
-      ).rows[0];
-      if (!state || Number(state.content_revision) !== expected)
-        throw new CollaborationError('REVISION_CHANGED');
-      const fileIds = [
-        ...new Set(
-          images.map((b) => b.content.fileId).filter((v): v is string => typeof v === 'string'),
-        ),
-      ];
-      if (
-        fileIds.length &&
-        (
-          await client.query(
-            "SELECT id FROM files WHERE id=ANY($1::uuid[]) AND workspace_id=$2 AND deleted_at IS NULL AND state='ready'",
-            [fileIds, workspace],
-          )
-        ).rowCount !== fileIds.length
-      )
-        throw new CollaborationError('FILE_ACCESS_DENIED', 403);
-      await client.query(
-        'INSERT INTO collaboration_block_ids(id,page_id) SELECT id,$2 FROM unnest($1::uuid[]) AS input(id) WHERE NOT EXISTS(SELECT 1 FROM collaboration_block_ids known WHERE known.id=input.id AND known.page_id=$2) ON CONFLICT(id) DO NOTHING',
-        [blockIds, page],
-      );
-      if (
-        (
-          await client.query(
-            'SELECT id FROM collaboration_block_ids WHERE id=ANY($1::uuid[]) AND page_id=$2',
-            [blockIds, page],
-          )
-        ).rowCount !== blockIds.length
-      )
-        throw new CollaborationError('BLOCK_ID_CONFLICT');
-      const next = expected + 1;
-      const revisions: number[] = [];
-      for (const entry of entries) {
-        const old = (
-          await client.query<{ revision: string; update_hash: string }>(
-            `INSERT INTO collaboration_receipts(workspace_id,page_id,generation,actor_id,receipt,revision,update_hash,request_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(page_id,generation,actor_id,receipt) DO UPDATE SET receipt=EXCLUDED.receipt RETURNING revision,update_hash`,
-            [
-              workspace,
-              page,
-              generation,
-              access.get(entry.identity.key)!.actor,
-              entry.receipt,
-              next,
-              digest(entry.update),
-              entry.requestHash ?? null,
-            ],
-          )
-        ).rows[0]!;
-        if (old.update_hash !== digest(entry.update))
-          throw new CollaborationError('RECEIPT_REUSED');
-        revisions.push(Number(old.revision));
-      }
-      if (revisions.every((r) => r !== next)) return { revision: expected, revisions };
-      await client.query(
-        'INSERT INTO collaboration_updates(workspace_id,page_id,generation,revision,update) VALUES($1,$2,$3,$4,$5)',
-        [workspace, page, generation, next, Buffer.from(merged)],
-      );
-      await client.query(
-        `UPDATE collaboration_documents SET content_revision=$2,journal_bytes=journal_bytes+$3,updated_at=clock_timestamp(),projection_first_pending_at=coalesce(projection_first_pending_at,clock_timestamp()),projection_due_at=least(clock_timestamp()+interval '1 second',coalesce(projection_first_pending_at,clock_timestamp())+interval '5 seconds') WHERE page_id=$1`,
-        [page, next, merged.length],
-      );
-      return { revision: next, revisions };
-    });
+          throw new CollaborationError('FILE_ACCESS_DENIED', 403);
+        // A CTE sees the statement's snapshot: newly reserved IDs are obtained through RETURNING.
+        // A concurrent conflicting owner remains absent from both sets and is rejected.
+        const next = expected + 1;
+        const hashes = entries.map((entry) => digest(entry.update));
+        const [reserved, receipts] = await drainQueries([
+          blockIds.length
+            ? client.query<{ count: string }>({
+                name: 'collaboration-reserve-block-ids-v1',
+                text: `WITH reserved AS (
+          INSERT INTO collaboration_block_ids(id,page_id)
+          SELECT id,$2 FROM unnest($1::uuid[]) AS input(id)
+          WHERE NOT EXISTS(SELECT 1 FROM collaboration_block_ids known WHERE known.id=input.id AND known.page_id=$2)
+          ON CONFLICT(id) DO NOTHING RETURNING id
+        ) SELECT count(*) AS count FROM (
+          SELECT id FROM collaboration_block_ids WHERE id=ANY($1::uuid[]) AND page_id=$2
+          UNION SELECT id FROM reserved
+        ) valid`,
+                values: [blockIds, page],
+              })
+            : Promise.resolve({ rows: [{ count: '0' }] }),
+          drainQueries(
+            entries.map((entry, index) =>
+              client.query<{ revision: string; update_hash: string }>({
+                name: 'collaboration-receipt-v1',
+                text: `INSERT INTO collaboration_receipts(workspace_id,page_id,generation,actor_id,receipt,revision,update_hash,request_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(page_id,generation,actor_id,receipt) DO UPDATE SET receipt=EXCLUDED.receipt RETURNING revision,update_hash`,
+                values: [
+                  workspace,
+                  page,
+                  generation,
+                  access.get(entry.identity.key)!.actor,
+                  entry.receipt,
+                  next,
+                  hashes[index],
+                  entry.requestHash ?? null,
+                ],
+              }),
+            ),
+          ),
+        ]);
+        if (Number(reserved.rows[0]!.count) !== blockIds.length)
+          throw new CollaborationError('BLOCK_ID_CONFLICT');
+        const revisions: number[] = [];
+        for (const [index, receipt] of receipts.entries()) {
+          const old = receipt.rows[0]!;
+          if (old.update_hash !== hashes[index]) throw new CollaborationError('RECEIPT_REUSED');
+          revisions.push(Number(old.revision));
+        }
+        if (revisions.every((r) => r !== next)) return { revision: expected, revisions };
+        await client.query({
+          name: 'collaboration-append-update-v1',
+          text: `WITH journal AS (
+          INSERT INTO collaboration_updates(workspace_id,page_id,generation,revision,update)
+          VALUES($1,$2,$3,$4,$5) RETURNING page_id
+        ) UPDATE collaboration_documents SET content_revision=$4,journal_bytes=journal_bytes+octet_length($5::bytea),updated_at=clock_timestamp(),projection_first_pending_at=coalesce(projection_first_pending_at,clock_timestamp()),projection_due_at=least(clock_timestamp()+interval '1 second',coalesce(projection_first_pending_at,clock_timestamp())+interval '5 seconds') WHERE page_id IN (SELECT page_id FROM journal)`,
+          values: [workspace, page, generation, next, Buffer.from(merged)],
+        });
+        return { revision: next, revisions };
+      },
+      { page, workspace },
+    );
   }
 }

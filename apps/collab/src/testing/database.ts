@@ -22,6 +22,7 @@ export async function testDatabase() {
     max: 12,
     query_timeout: 10000,
     connectionTimeoutMillis: 5000,
+    pipeline: true,
   });
   const client = await pool.connect();
   try {

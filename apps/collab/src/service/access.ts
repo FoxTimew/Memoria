@@ -16,8 +16,9 @@ export async function resolveAccess(
   requests: readonly AccessRequest[],
 ): Promise<Map<string, Access>> {
   if (!requests.length) return new Map();
-  const result = await database.query<{ key: string; actor: string }>(
-    `WITH RECURSIVE candidates AS (
+  const result = await database.query<{ key: string; actor: string }>({
+    name: 'collaboration-resolve-access-v1',
+    text: `WITH RECURSIVE candidates AS (
  SELECT * FROM jsonb_to_recordset($1::jsonb) AS c(key text,userid uuid,session uuid,workspace uuid,page uuid)
  ), ancestors AS (
  SELECT c.key,p.id,p.parent_id,p.deleted_at,p.workspace_id,1 AS depth FROM candidates c JOIN pages p ON p.id=c.page AND p.workspace_id=c.workspace
@@ -28,7 +29,7 @@ export async function resolveAccess(
  JOIN LATERAL(SELECT id FROM actors WHERE workspace_id=c.workspace AND user_id=c.userid AND kind='user' ORDER BY created_at,id LIMIT 1) actor ON true
  WHERE s.expires_at>clock_timestamp() AND u.email_verified AND EXISTS(SELECT 1 FROM workspace_members m WHERE m.workspace_id=c.workspace AND m.user_id=c.userid AND m.role IN ('owner','member'))
  AND EXISTS(SELECT 1 FROM ancestors a WHERE a.key=c.key) AND NOT EXISTS(SELECT 1 FROM ancestors a WHERE a.key=c.key AND (a.deleted_at IS NOT NULL OR a.depth>50))`,
-    [
+    values: [
       JSON.stringify(
         requests.map((r) => ({
           key: r.key,
@@ -39,7 +40,7 @@ export async function resolveAccess(
         })),
       ),
     ],
-  );
+  });
   const byKey = new Map(requests.map((r) => [r.key, r]));
   return new Map(
     result.rows.map((r) => [
