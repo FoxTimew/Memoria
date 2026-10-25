@@ -2,6 +2,7 @@
 export interface SecurityStatus {
   userId: string;
   sessionId: string;
+  sharedComputer: boolean;
   strong: boolean;
   recent: boolean;
   requiresStrongAuth: boolean;

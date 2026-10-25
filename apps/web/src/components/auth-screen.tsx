@@ -6,6 +6,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { authClient, authError } from '../lib/auth-client.ts';
 import { securityStatus, securityError } from '../lib/security-client.ts';
+import { refreshCachePolicy } from '../lib/cache-policy.ts';
 
 export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
   const params = useSearchParams();
@@ -13,6 +14,21 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [sent, setSent] = useState(false);
+  const [sharedComputer, setSharedComputer] = useState(false);
+  const loginHeaders = { 'x-memoria-shared-computer': String(sharedComputer) };
+  function confirmShared() {
+    return (
+      !sharedComputer ||
+      globalThis.confirm(
+        'Poste partagé : toutes vos copies locales sur ce navigateur seront effacées, y compris dans les autres onglets. Des changements non envoyés peuvent être perdus. Annulez pour les synchroniser ou les exporter d’abord ; continuez pour confirmer l’effacement.',
+      )
+    );
+  }
+  async function finishLogin() {
+    const status = await securityStatus();
+    await refreshCachePolicy(status.userId, status.sessionId);
+    globalThis.location.replace(status.requiresStrongAuth ? '/securite' : '/');
+  }
   const title =
     mode === 'signin'
       ? 'Heureux de vous retrouver.'
@@ -43,16 +59,15 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
         if (result.error) setError(authError(result.error.code, result.error.status));
         else setSent(true);
       } else {
+        if (!confirmShared()) return;
         const result = await authClient.signIn.email({
           email,
           password: String(form.get('password')),
+          fetchOptions: { headers: loginHeaders },
         });
         if (result.error) setError(authError(result.error.code, result.error.status));
         // A fresh document drops the previous account's client session and editor state.
-        else
-          globalThis.location.replace(
-            (await securityStatus()).requiresStrongAuth ? '/securite' : '/',
-          );
+        else await finishLogin();
       }
     } catch {
       setError('Le service est momentanément indisponible. Réessayez.');
@@ -164,6 +179,17 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
                 )}
               </label>
             )}
+            {mode === 'signin' && (
+              <label className="block text-sm">
+                <input
+                  type="checkbox"
+                  checked={sharedComputer}
+                  disabled={busy}
+                  onChange={(event) => setSharedComputer(event.target.checked)}
+                />{' '}
+                Poste partagé — ne pas conserver mes pages sur cet appareil
+              </label>
+            )}
             {error && (
               <p role="alert" className="notice error">
                 {error}
@@ -186,18 +212,19 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
               className="quiet-link mt-5 w-full"
               disabled={busy}
               onClick={() => {
+                if (!confirmShared()) return;
                 setBusy(true);
                 setError('');
                 void authClient.signIn
-                  .passkey()
-                  .then((result) => {
+                  .passkey({ fetchOptions: { headers: loginHeaders } })
+                  .then(async (result) => {
                     if (result.error)
                       setError(
                         securityError(
                           'code' in result.error ? String(result.error.code) : undefined,
                         ),
                       );
-                    else globalThis.location.replace('/');
+                    else await finishLogin();
                   })
                   .catch(() => setError('La connexion a échoué. Réessayez.'))
                   .finally(() => setBusy(false));

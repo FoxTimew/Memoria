@@ -1,5 +1,19 @@
 # Auto-hébergement — capacité locale 3d et qualification dédiée à réaliser
 
+## Avant toute offre SaaS publique
+
+Le MVP auto-hébergé conserve une limite de disponibilité : une attaque soutenue peut occuper les huit réservations de connexion par mot de passe d'un compte. Passkey et récupération restent les recours. Le développeur prévoit d'accepter ce risque pour ce MVP ; il reste explicitement inscrit dans la revue 4f.
+
+Avant toute offre publique, ajouter une file réservée aux appareils reconnus par cookie protégé, selon la [proposition OWASP](https://community.owasp.org/Slow_Down_Online_Guessing_Attacks_with_Device_Cookies), ainsi qu'une protection en amont contre la saturation globale (WAF ou équivalent). Documenter alors les seuils, la conservation de l'adresse client depuis le proxy de confiance, la surveillance et la conduite à tenir en cas d'attaque. Ces protections ne sont pas livrées en 4e et ne remplacent jamais la vérification des facteurs.
+
+## Copies locales — livraison 4e
+
+Appliquer `pnpm db:migrate` avant de démarrer cette version (colonne additive `allow_persistent_cache`, autorisée par défaut). Le navigateur met IndexedDB à niveau à l'ouverture ; un ancien client qui demande la version 1 ne peut plus rouvrir cette base. Si une connexion IndexedDB ancienne bloque la mise à niveau, fermer cet ancien onglet puis réessayer. Aucun reset des données serveur n'est demandé.
+
+Sur un poste commun, cocher « Poste partagé » à la connexion puis confirmer l'effacement des anciennes copies de ce compte. Avant de confirmer, synchroniser ou exporter le travail hors ligne des autres onglets. Le propriétaire peut aussi interdire les copies locales dans « Sécurité de l'espace », après vérification forte récente. Cette règle s'applique aussi à lui. L'éditeur reste utilisable en mémoire, mais fermer un onglet hors ligne perd ses modifications non envoyées. Après réautorisation, rouvrir la page pour réactiver sa copie locale.
+
+Les onglets actifs consultent la politique toutes les quatre secondes ; une décision est partagée entre onglets. Un ordinateur déconnecté ou suspendu ne peut être effacé à distance immédiatement. Les copies sont purgées à réception ; tout nouvel accès après rechargement nécessite un contrôle en ligne. Les marqueurs sans contenu restent pour neutraliser les anciens onglets. Pour nettoyer un poste, terminer par la déconnexion explicite et vérifier son succès. Une erreur de nettoyage ne signifie jamais que le poste est propre.
+
 ## Secret d'authentification et TOTP — sauvegarde indispensable
 
 **`BETTER_AUTH_SECRET` chiffre les secrets TOTP dans PostgreSQL. Sauvegardez-le hors du serveur**, dans un coffre protégé avec accès restreint, en complément de la sauvegarde de la base. Ne le commitez pas et ne l'inscrivez pas dans les journaux. Une sauvegarde SQL seule ne suffit pas : **la perte de ce secret rend les TOTP enregistrés inutilisables**. Générer une nouvelle valeur ne permet pas de déchiffrer les anciennes données.

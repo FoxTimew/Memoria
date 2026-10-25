@@ -13,6 +13,7 @@ const authRoutes = new Set([
   'GET /get-session',
   'POST /verify-password',
   'GET /security/status',
+  'GET /security/cache-policy',
   'POST /security/challenge',
   'POST /security/recovery-codes',
   'POST /two-factor/enable',

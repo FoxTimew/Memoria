@@ -26,9 +26,10 @@ export class WorkspaceSecurityService {
       strong_auth_enabled_at: Date | null;
       mfa_deadline: Date | null;
       allowed: boolean;
+      allow_persistent_cache: boolean;
     }>(sql`
       SELECT m.role,coalesce(p.require_strong_auth,false) AS require_strong_auth,coalesce(p.grace_days,7) AS grace_days,
-      coalesce(p.security_version,1) AS security_version,p.strong_auth_enabled_at,m.mfa_deadline,
+      coalesce(p.security_version,1) AS security_version,coalesce(p.allow_persistent_cache,true) AS allow_persistent_cache,p.strong_auth_enabled_at,m.mfa_deadline,
       auth_session_can_access_workspace(${session.id}::uuid,${workspace}::uuid) AS allowed
       FROM workspace_members m JOIN workspaces w ON w.id=m.workspace_id AND w.deleted_at IS NULL
       LEFT JOIN workspace_policies p ON p.workspace_id=w.id
@@ -37,6 +38,7 @@ export class WorkspaceSecurityService {
     if (!row) throw new NotFoundException('Espace inaccessible.');
     return {
       role: row.role,
+      allowPersistentCache: row.allow_persistent_cache,
       requireStrongAuth: row.require_strong_auth,
       graceDays: row.grace_days,
       version: row.security_version,
@@ -79,6 +81,7 @@ export class WorkspaceSecurityService {
         .update(workspacePolicies)
         .set({
           requireStrongAuth: data.requireStrongAuth,
+          allowPersistentCache: data.allowPersistentCache ?? previous!.allowPersistentCache,
           graceDays: data.graceDays,
           strongAuthEnabledAt:
             data.requireStrongAuth && !previous!.requireStrongAuth
@@ -99,6 +102,7 @@ export class WorkspaceSecurityService {
           requireStrongAuth: data.requireStrongAuth,
           graceDays: data.graceDays,
           version: data.expectedVersion + 1,
+          allowPersistentCache: data.allowPersistentCache ?? previous!.allowPersistentCache,
         },
       });
     });

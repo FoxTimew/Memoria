@@ -23,6 +23,7 @@ export const workspacePolicies = pgTable(
     strongAuthEnabledAt: time('strong_auth_enabled_at'),
     graceDays: integer('grace_days').default(7).notNull(),
     securityVersion: integer('security_version').default(1).notNull(),
+    allowPersistentCache: boolean('allow_persistent_cache').default(true).notNull(),
     trashRetentionDays: integer('trash_retention_days').default(30).notNull(),
     eventRetentionDays: integer('event_retention_days').default(30).notNull(),
     deliveryRetentionDays: integer('delivery_retention_days').default(30).notNull(),

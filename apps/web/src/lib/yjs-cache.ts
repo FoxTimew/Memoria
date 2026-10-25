@@ -2,14 +2,34 @@ import * as Y from 'yjs';
 
 export const cacheDatabase = 'memoria-yjs-cache-v1';
 export const legacyDatabase = 'memoria-local-drafts-v1';
-const stores = ['users', 'sessions', 'documents', 'updates'];
+const stores = ['users', 'sessions', 'documents', 'updates', 'policies'];
 const maxBytes = 8 * 1024 ** 2;
 export class LocalSessionRevoked extends Error {
   constructor() {
     super('Cette session a été déconnectée sur ce poste.');
   }
 }
-export type CacheTicket = { user: string; session: string; epoch: number; marker: string };
+export class CacheForbidden extends Error {
+  constructor() {
+    super(
+      'Copie locale désactivée. Les changements restent dans cet onglet jusqu’à leur enregistrement sur le serveur.',
+    );
+  }
+}
+export type CacheTicket = {
+  user: string;
+  session: string;
+  epoch: number;
+  marker: string;
+  policies: Record<string, number>;
+};
+export type CachePolicy = {
+  user: string;
+  session: string;
+  sharedComputer: boolean;
+  workspaces: { workspace: string; version: number; allowed: boolean }[];
+};
+type Policy = { user: string; workspace: string; version: number; allowed: boolean; epoch: number };
 export type CachePage = {
   key: string;
   user: string;
@@ -21,7 +41,7 @@ export type CachePage = {
   bytes: number;
   pending: string[];
 };
-type Session = { user: string; session: string; revoked: boolean };
+type Session = { user: string; session: string; revoked: boolean; disabled?: boolean };
 type Update = { id?: number; user: string; key: string; data: Uint8Array };
 export const logoutMarkerKey = (user: string) => `memoria-local-logout:${user}`;
 export function logoutMarker(user: string) {
@@ -70,7 +90,10 @@ export class YjsCache {
   private async run<T>(
     work: (tx: IDBTransaction, done: (value: T) => void, fail: (error: Error) => void) => void,
   ): Promise<T> {
-    const db = await openDatabase(this.factory(), this.name, 1, (db) => {
+    const db = await openDatabase(this.factory(), this.name, 2, (db) => {
+      const policies = db.createObjectStore('policies', { keyPath: ['user', 'workspace'] });
+      policies.createIndex('user', 'user');
+      if (db.objectStoreNames.contains('users')) return;
       db.createObjectStore('users', { keyPath: 'user' });
       const sessions = db.createObjectStore('sessions', { keyPath: ['user', 'session'] });
       sessions.createIndex('user', 'user');
@@ -129,6 +152,10 @@ export class YjsCache {
             fail(new LocalSessionRevoked());
             return;
           }
+          if ((session.result as Session).disabled) {
+            fail(new CacheForbidden());
+            return;
+          }
           next();
         } catch (error) {
           fail(error as Error);
@@ -147,14 +174,127 @@ export class YjsCache {
           fail(new LocalSessionRevoked());
           return;
         }
-        sessions.put({ user, session, revoked: false } satisfies Session);
+        if (!request.result) sessions.put({ user, session, revoked: false } satisfies Session);
         const epoch = tx.objectStore('users').get(user);
-        epoch.onsuccess = () => done({ user, session, marker, epoch: epoch.result?.epoch ?? 0 });
+        epoch.onsuccess = () =>
+          done({ user, session, marker, epoch: epoch.result?.epoch ?? 0, policies: {} });
       };
     });
   }
-  assertActive(ticket: CacheTicket) {
-    return this.run<void>((tx, done, fail) => this.allowed(tx, ticket, () => done(), fail));
+  assertActive(ticket: CacheTicket, workspace?: string) {
+    return this.run<void>((tx, done, fail) =>
+      this.allowed(
+        tx,
+        ticket,
+        () => (workspace ? this.policyAllowed(tx, ticket, workspace, () => done(), fail) : done()),
+        fail,
+      ),
+    );
+  }
+  private policyAllowed(
+    tx: IDBTransaction,
+    ticket: CacheTicket,
+    workspace: string,
+    next: () => void,
+    fail: (error: Error) => void,
+  ) {
+    const read = tx.objectStore('policies').get([ticket.user, workspace]);
+    read.onsuccess = () => {
+      const policy = read.result as Policy | undefined;
+      if (!policy?.allowed || ticket.policies[workspace] !== policy.epoch) {
+        fail(new CacheForbidden());
+        return;
+      }
+      next();
+    };
+  }
+  /** Consume a fresh server decision. The pre-request ticket fences delayed HTTP responses. */
+  applyPolicy(ticket: CacheTicket, snapshot: CachePolicy) {
+    if (snapshot.user !== ticket.user || snapshot.session !== ticket.session)
+      return Promise.reject(new LocalSessionRevoked());
+    if (snapshot.sharedComputer)
+      return this.disableUser(ticket).then(() => ({ ...ticket, policies: {} }));
+    return this.run<CacheTicket>((tx, done, fail) =>
+      this.allowed(
+        tx,
+        ticket,
+        () => {
+          const store = tx.objectStore('policies');
+          const read = store.index('user').getAll(ticket.user);
+          read.onsuccess = () => {
+            const known = new Map((read.result as Policy[]).map((p) => [p.workspace, p]));
+            const policies: Record<string, number> = {};
+            for (const proposed of snapshot.workspaces) {
+              const old = known.get(proposed.workspace);
+              known.delete(proposed.workspace);
+              if (old && old.version > proposed.version) continue;
+              const current: Policy = {
+                ...proposed,
+                user: ticket.user,
+                epoch: (old?.epoch ?? 0) + (old && old.allowed !== proposed.allowed ? 1 : 0),
+              };
+              store.put(current);
+              if (current.allowed) policies[current.workspace] = current.epoch;
+              else this.purgeWorkspace(tx, ticket.user, current.workspace);
+            }
+            // Membership disappearance revokes local copies too; this is never an authorization source.
+            for (const old of known.values()) {
+              store.put({ ...old, allowed: false, epoch: old.epoch + (old.allowed ? 1 : 0) });
+              this.purgeWorkspace(tx, ticket.user, old.workspace);
+            }
+            done({ ...ticket, policies });
+          };
+        },
+        fail,
+      ),
+    );
+  }
+  private purgeWorkspace(tx: IDBTransaction, user: string, workspace: string) {
+    const read = tx.objectStore('documents').index('user').openCursor(user);
+    read.onsuccess = () => {
+      const cursor = read.result;
+      if (!cursor) return;
+      const page = cursor.value as CachePage;
+      if (page.workspace === workspace) {
+        this.remove(tx.objectStore('updates').index('key').openCursor(page.key));
+        cursor.delete();
+      }
+      cursor.continue();
+    };
+  }
+  private disableUser(ticket: CacheTicket) {
+    // Idempotent, including after the shared session's first purge. Never re-enable old sessions.
+    return this.run<void>((tx, done, fail) => {
+      const read = tx.objectStore('sessions').get([ticket.user, ticket.session]);
+      read.onsuccess = () => {
+        if (!read.result || read.result.revoked || this.marker(ticket.user) !== ticket.marker) {
+          fail(new LocalSessionRevoked());
+          return;
+        }
+        const cursor = tx.objectStore('sessions').index('user').openCursor(ticket.user);
+        cursor.onsuccess = () => {
+          const c = cursor.result;
+          if (c) {
+            c.update({ ...c.value, disabled: true });
+            c.continue();
+          }
+        };
+        this.remove(tx.objectStore('documents').index('user').openCursor(ticket.user));
+        this.remove(tx.objectStore('updates').index('user').openCursor(ticket.user));
+        done();
+      };
+    });
+  }
+  pending(user: string, workspace?: string) {
+    return this.run<number>((tx, done) => {
+      const read = tx.objectStore('documents').index('user').getAll(user);
+      read.onsuccess = () =>
+        done(
+          (read.result as CachePage[]).filter(
+            (p) => (!workspace || p.workspace === workspace) && p.pending.length > 0,
+          ).length,
+        );
+    });
   }
   open(ticket: CacheTicket, workspace: string, page: string, generation: string) {
     const key = JSON.stringify([ticket.user, workspace, page, generation]);
@@ -164,38 +304,46 @@ export class YjsCache {
           tx,
           ticket,
           () => {
-            const documents = tx.objectStore('documents'),
-              request = documents.get(key);
-            request.onsuccess = () => {
-              const record: CachePage = request.result ?? {
-                key,
-                user: ticket.user,
-                workspace,
-                page,
-                generation,
-                epoch: 0,
-                count: 0,
-                bytes: 0,
-                pending: [],
-              };
-              documents.put(record);
-              const updates = tx.objectStore('updates').index('key').getAll(key);
-              updates.onsuccess = () => {
-                const others = documents.index('user').getAll(ticket.user);
-                others.onsuccess = () =>
-                  done({
-                    page: record,
-                    updates: (updates.result as Update[]).map((u) => u.data),
-                    older: (others.result as CachePage[]).filter(
-                      (p) =>
-                        p.workspace === workspace &&
-                        p.page === page &&
-                        p.generation !== generation &&
-                        p.count > 0,
-                    ),
-                  });
-              };
-            };
+            this.policyAllowed(
+              tx,
+              ticket,
+              workspace,
+              () => {
+                const documents = tx.objectStore('documents'),
+                  request = documents.get(key);
+                request.onsuccess = () => {
+                  const record: CachePage = request.result ?? {
+                    key,
+                    user: ticket.user,
+                    workspace,
+                    page,
+                    generation,
+                    epoch: 0,
+                    count: 0,
+                    bytes: 0,
+                    pending: [],
+                  };
+                  documents.put(record);
+                  const updates = tx.objectStore('updates').index('key').getAll(key);
+                  updates.onsuccess = () => {
+                    const others = documents.index('user').getAll(ticket.user);
+                    others.onsuccess = () =>
+                      done({
+                        page: record,
+                        updates: (updates.result as Update[]).map((u) => u.data),
+                        older: (others.result as CachePage[]).filter(
+                          (p) =>
+                            p.workspace === workspace &&
+                            p.page === page &&
+                            p.generation !== generation &&
+                            p.count > 0,
+                        ),
+                      });
+                  };
+                };
+              },
+              fail,
+            );
           },
           fail,
         );
@@ -205,26 +353,35 @@ export class YjsCache {
   private document(
     tx: IDBTransaction,
     page: CachePage,
+    ticket: CacheTicket,
     next: (current: CachePage) => void,
     fail: (e: Error) => void,
   ) {
-    const request = tx.objectStore('documents').get(page.key);
-    request.onsuccess = () => {
-      const current = request.result as CachePage | undefined;
-      if (!current || current.epoch !== page.epoch) {
-        fail(
-          new Error(
-            'Le cache de cette page a été abandonné dans un autre onglet. Rechargez la page.',
-          ),
-        );
-        return;
-      }
-      try {
-        next(current);
-      } catch (error) {
-        fail(error as Error);
-      }
-    };
+    this.policyAllowed(
+      tx,
+      ticket,
+      page.workspace,
+      () => {
+        const request = tx.objectStore('documents').get(page.key);
+        request.onsuccess = () => {
+          const current = request.result as CachePage | undefined;
+          if (!current || current.epoch !== page.epoch) {
+            fail(
+              new Error(
+                'Le cache de cette page a été abandonné dans un autre onglet. Rechargez la page.',
+              ),
+            );
+            return;
+          }
+          try {
+            next(current);
+          } catch (error) {
+            fail(error as Error);
+          }
+        };
+      },
+      fail,
+    );
   }
   append(ticket: CacheTicket, page: CachePage, data: Uint8Array, token?: string) {
     return this.run<void>((tx, done, fail) =>
@@ -235,6 +392,7 @@ export class YjsCache {
           this.document(
             tx,
             page,
+            ticket,
             (current) => {
               if (current.bytes + data.byteLength > maxBytes) {
                 fail(
@@ -288,6 +446,7 @@ export class YjsCache {
           this.document(
             tx,
             page,
+            ticket,
             (current) => {
               // A receipt from tab A must not erase pending work added by tab B.
               current.pending = current.pending.filter((token) => !known.has(token));
@@ -309,6 +468,7 @@ export class YjsCache {
           this.document(
             tx,
             page,
+            ticket,
             (current) => {
               current.epoch++;
               current.pending = [];

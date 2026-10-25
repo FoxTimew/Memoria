@@ -4,9 +4,13 @@ import { useEffect, useState } from 'react';
 import { workspaceSecuritySchema, workspaceMembersSchema } from '@memoria/contracts';
 import type { WorkspaceSecurity } from '@memoria/contracts';
 import { contentRequest } from '../lib/content-api.ts';
+import { authClient } from '../lib/auth-client.ts';
+import { refreshCachePolicy } from '../lib/cache-policy.ts';
 export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: string }) {
   const base = `/api/internal/workspaces/${encodeURIComponent(workspaceId)}`;
   const [policy, setPolicy] = useState<WorkspaceSecurity>();
+  const { data: session } = authClient.useSession();
+  const [allowCache, setAllowCache] = useState(true);
   const [members, setMembers] = useState<ReturnType<typeof workspaceMembersSchema.parse>>([]);
   const [required, setRequired] = useState(false),
     [days, setDays] = useState(7),
@@ -17,6 +21,7 @@ export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: st
     const data = workspaceSecuritySchema.parse(await contentRequest(base + '/security'));
     setPolicy(data);
     setRequired(data.requireStrongAuth);
+    setAllowCache(data.allowPersistentCache);
     setDays(data.graceDays);
     setMembers(
       data.role === 'owner' && data.contentAllowed
@@ -90,16 +95,38 @@ export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: st
               onSubmit={(e) => {
                 e.preventDefault();
                 void run(async () => {
+                  if (
+                    policy.allowPersistentCache &&
+                    !allowCache &&
+                    !globalThis.confirm(
+                      'Interdire les copies locales efface celles de cet espace dans les navigateurs dès qu’ils reçoivent la décision. Des changements non envoyés risquent d’être perdus à la fermeture. Annulez pour synchroniser ou exporter votre travail d’abord. Confirmer l’interdiction ?',
+                    )
+                  )
+                    return;
                   await contentRequest(base + '/security', 'PUT', {
                     expectedVersion: policy.version,
                     requireStrongAuth: required,
                     graceDays: days,
+                    allowPersistentCache: allowCache,
                   });
+                  if (session) await refreshCachePolicy(session.user.id, session.session.id);
                   setNotice('Politique enregistrée. Les échéances existantes sont conservées.');
                 });
               }}
             >
               <h2 className="text-xl font-semibold">Politique de connexion</h2>
+              <label className="block">
+                <input
+                  type="checkbox"
+                  checked={allowCache}
+                  onChange={(event) => setAllowCache(event.target.checked)}
+                />{' '}
+                Autoriser les copies locales des pages pour les membres
+              </label>
+              <p>
+                L’interdiction s’applique aussi au propriétaire. Sans copie locale, les
+                modifications hors ligne sont perdues si l’onglet est fermé avant leur envoi.
+              </p>
               {!policy.recentStrong && (
                 <p>
                   Avant de modifier cette politique, vérifiez votre identité dans « Sécurité du

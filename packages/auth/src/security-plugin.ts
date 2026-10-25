@@ -23,7 +23,9 @@ import { resetAccountAttempts } from './throttle.ts';
 type Context = Parameters<typeof getSessionFromCtx>[0];
 export type Identity = NonNullable<Awaited<ReturnType<typeof getSessionFromCtx>>>;
 export interface SecurityFlow {
+  sharedComputer?: boolean;
   initial?: Identity | null;
+  initialSettings?: typeof tables.sessionSecurity.$inferSelect;
   lockedUser?: string;
   firstFactor?: boolean;
   step?: number;
@@ -89,6 +91,12 @@ export function securityIntegration(
         ),
       );
     if (!alive.length) throw denied('SESSION_REVOKED');
+    // Native TOTP enrollment may delete the old session (and its sidecar) before after-hooks.
+    const [settings] = await db
+      .select()
+      .from(tables.sessionSecurity)
+      .where(eq(tables.sessionSecurity.sessionId, value.session.id));
+    if (flow && settings) flow.initialSettings ??= settings;
     const [assurance] = await db
       .select()
       .from(tables.sessionAssurance)
@@ -222,8 +230,13 @@ export function securityIntegration(
       securityVersion: security.version,
     });
     if (previous && previous !== sessionId) {
-      if (settings) await db.insert(tables.sessionSecurity).values({ ...settings, sessionId });
+      const preserved = flow?.initialSettings ?? settings;
+      if (preserved) await db.insert(tables.sessionSecurity).values({ ...preserved, sessionId });
       await db.delete(tables.session).where(eq(tables.session.id, previous));
+    } else if (!previous) {
+      await db
+        .insert(tables.sessionSecurity)
+        .values({ sessionId, sharedComputer: flow?.sharedComputer === true });
     }
     await resetAccountAttempts(db, secret, proof.userId);
     await audit(proof.userId, 'strong_session_verified');
@@ -333,6 +346,7 @@ export function securityIntegration(
         flow.recovering &&
         ![
           '/security/status',
+          '/security/cache-policy',
           '/security/challenge',
           '/security/recovery-remove-factor',
           '/security/recovery-finish',
@@ -437,9 +451,11 @@ export function securityIntegration(
           return;
         }
         await lock(value.user.id);
-        await db
-          .insert(tables.sessionSecurity)
-          .values({ sessionId: value.session.id, passwordVerifiedAt: new Date() });
+        await db.insert(tables.sessionSecurity).values({
+          sessionId: value.session.id,
+          passwordVerifiedAt: new Date(),
+          sharedComputer: flow.sharedComputer === true,
+        });
         const requiresStrongAuth =
           (await factors(value.user.id)).active ||
           (
@@ -474,6 +490,12 @@ export function securityIntegration(
       ) {
         const value = ctx.context.newSession ?? flow.initial;
         if (!value) throw denied('SESSION_REQUIRED');
+        if (flow.initialSettings && flow.initialSettings.sessionId !== value.session.id) {
+          await db
+            .insert(tables.sessionSecurity)
+            .values({ ...flow.initialSettings, sessionId: value.session.id })
+            .onConflictDoNothing();
+        }
         if (flow.recovering) {
           if (!flow.recoveryExpiry) throw new Error('RECOVERY_EXPIRY_MISSING');
           await db
@@ -549,6 +571,33 @@ export function securityIntegration(
     id: 'memoria-security',
     endpoints: {
       ...recoveryEndpoints(db, secret, flow, identity, codes),
+      cachePolicy: createAuthEndpoint(
+        '/security/cache-policy',
+        { method: 'GET', use: [sessionMiddleware] },
+        async (ctx) => {
+          const value = await identity(ctx);
+          const [settings] = await db
+            .select()
+            .from(tables.sessionSecurity)
+            .where(eq(tables.sessionSecurity.sessionId, value.session.id));
+          const policies = await db.execute<{
+            workspace: string;
+            version: number;
+            allowed: boolean;
+          }>(sql`
+            SELECT m.workspace_id AS workspace,coalesce(p.security_version,1) AS version,
+              coalesce(p.allow_persistent_cache,true) AS allowed
+            FROM workspace_members m JOIN workspaces w ON w.id=m.workspace_id AND w.deleted_at IS NULL
+            LEFT JOIN workspace_policies p ON p.workspace_id=m.workspace_id
+            WHERE m.user_id=${value.user.id}::uuid AND m.role IN ('owner','member')`);
+          return ctx.json({
+            user: value.user.id,
+            session: value.session.id,
+            sharedComputer: settings?.sharedComputer === true || flow?.recovering === true,
+            workspaces: policies.rows,
+          });
+        },
+      ),
       securityStatus: createAuthEndpoint(
         '/security/status',
         { method: 'GET', use: [sessionMiddleware] },
@@ -568,6 +617,7 @@ export function securityIntegration(
             ...assurance,
             userId: value.user.id,
             sessionId: value.session.id,
+            sharedComputer: settings?.sharedComputer === true,
             totpEnabled: all.totp?.verified === true,
             totpPending: all.totp?.verified === false,
             passkeys: all.keys.map(({ id, name, createdAt }) => ({ id, name, createdAt })),

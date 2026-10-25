@@ -1,5 +1,6 @@
 import * as Y from 'yjs';
-import { LocalSessionRevoked, logoutMarker, yjsCache } from './yjs-cache.ts';
+import { CacheForbidden, LocalSessionRevoked, logoutMarker, yjsCache } from './yjs-cache.ts';
+import { cachePolicyEvent } from './cache-policy.ts';
 import type { CachePage, CacheTicket, YjsCache } from './yjs-cache.ts';
 import { onLocalSignOut } from './local-sign-out.ts';
 import type { CollaborationClient } from './collaboration-client.ts';
@@ -13,6 +14,7 @@ export class CollaborationCache {
   private timer: ReturnType<typeof setInterval>;
   private unlisten: () => void;
   private acknowledgements = new Set<string>();
+  private channel: BroadcastChannel | undefined;
   private changed = (update: Uint8Array, origin: unknown) => {
     const local = origin !== this.client.provider;
     const token = local ? crypto.randomUUID() : undefined;
@@ -29,7 +31,9 @@ export class CollaborationCache {
     } catch {
       /* The transactional check also catches revoked epochs. */
     }
-    void this.store.assertActive(this.ticket).catch((error: unknown) => this.error(error));
+    void this.store
+      .assertActive(this.ticket, this.page.workspace)
+      .catch((error: unknown) => this.error(error));
   };
   constructor(
     private readonly client: CollaborationClient,
@@ -48,6 +52,11 @@ export class CollaborationCache {
     }
     client.doc.on('update', this.changed);
     this.unlisten = onLocalSignOut(ticket.user, () => this.revoked());
+    globalThis.addEventListener(cachePolicyEvent, this.wake);
+    if (typeof BroadcastChannel !== 'undefined') {
+      this.channel = new BroadcastChannel(cachePolicyEvent);
+      this.channel.onmessage = this.wake;
+    }
     for (const event of ['focus', 'pageshow', 'visibilitychange'])
       globalThis.addEventListener(event, this.wake);
     this.timer = setInterval(this.wake, 2000);
@@ -63,7 +72,10 @@ export class CollaborationCache {
     };
   }
   private error(error: unknown) {
-    if (error instanceof LocalSessionRevoked) this.revoked();
+    if (error instanceof CacheForbidden) {
+      this.close();
+      this.client.disableCache();
+    } else if (error instanceof LocalSessionRevoked) this.revoked();
     else {
       this.failed = error instanceof Error ? error.message : 'Stockage local indisponible.';
       this.onChange();
@@ -141,6 +153,8 @@ export class CollaborationCache {
     if (this.closed) return;
     this.closed = true;
     clearInterval(this.timer);
+    this.channel?.close();
+    globalThis.removeEventListener(cachePolicyEvent, this.wake);
     this.unlisten();
     this.client.doc.off('update', this.changed);
     for (const event of ['focus', 'pageshow', 'visibilitychange'])

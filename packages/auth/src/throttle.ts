@@ -23,6 +23,8 @@ export class Throttled extends Error {
 }
 export function routeQuota(path: string): [number, number] {
   if (path === '/security/status') return [600, 60];
+  // Read-only policy heartbeat: 50 people × 4 tabs × 15 polls/min plus headroom.
+  if (path === '/security/cache-policy') return [3600, 60];
   if (path === '/sign-in/email') return [150, 60];
   if (
     path === '/sign-up/email' ||

@@ -131,7 +131,12 @@ export async function handleAuthRequest(
       return Response.json({ status: true });
     }
     const response = await database.transaction(async (transaction) => {
-      const auth = createAuth(transaction, { ...options, securityFlow: {} });
+      const auth = createAuth(transaction, {
+        ...options,
+        securityFlow: {
+          sharedComputer: request.headers.get('x-memoria-shared-computer') === 'true',
+        },
+      });
       const response = await auth.handler(request);
       // Library error handlers return HTTP responses; force SQL rollback on an internal failure.
       if (response.status >= 500) throw new FailedAuthTransaction();

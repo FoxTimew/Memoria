@@ -1,0 +1,1 @@
+ALTER TABLE "workspace_policies" ADD COLUMN "allow_persistent_cache" boolean DEFAULT true NOT NULL;
