@@ -4,6 +4,7 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { mkdir } from 'node:fs/promises';
 import { chromium, expect } from '@playwright/test';
+import jsQR from 'jsqr';
 import { testOtp } from '../packages/auth/src/testing/otp.ts';
 
 const origin = process.env.APP_ORIGIN;
@@ -37,7 +38,7 @@ async function verificationLink(email) {
   throw new Error('Verification email missing');
 }
 await test(
-  '4a HTTPS UI: TOTP, common codes, WebAuthn UV, naming and restricted password sign-in',
+  '4a/4b HTTPS UI: local TOTP QR, strong factors, workspace policy and role protection',
   { timeout: 120000 },
   async () => {
     const browser = await chromium.launch({
@@ -47,7 +48,7 @@ await test(
     });
     const email = `security4a-${randomUUID()}@example.test`,
       password = randomBytes(24).toString('base64url');
-    let userId;
+    let userId, workspaceId;
     try {
       const context = await browser.newContext({ viewport: { width: 1440, height: 1100 } });
       const signup = await context.request.post(origin + '/api/auth/sign-up/email', {
@@ -81,8 +82,29 @@ await test(
       ).toBeVisible();
       await page.getByRole('link', { name: 'Sécurité du compte' }).click();
       await page.getByLabel('Mot de passe actuel', { exact: true }).fill(password);
+      const enrollmentResponse = page.waitForResponse((response) =>
+        response.url().endsWith('/api/auth/two-factor/enable'),
+      );
+      const enrollmentUrls = [];
+      const recordUrl = (request) => enrollmentUrls.push(request.url());
+      page.on('request', recordUrl);
       await page.getByRole('button', { name: 'Configurer une application de codes' }).click();
       await expect(page.locator('code')).toBeVisible();
+      const uri = (await (await enrollmentResponse).json()).totpURI;
+      const canvas = page.getByRole('img', { name: 'QR code d’enrôlement TOTP' });
+      await expect(canvas).toHaveAttribute('width', '280');
+      const pixels = await canvas.evaluate((element) => ({
+        width: element.width,
+        height: element.height,
+        data: Array.from(
+          element.getContext('2d').getImageData(0, 0, element.width, element.height).data,
+        ),
+      }));
+      assert.equal(
+        jsQR(Uint8ClampedArray.from(pixels.data), pixels.width, pixels.height)?.data,
+        uri,
+        'independent decoding must match the exact enrollment URI',
+      );
       const otp = testOtp(
         'otpauth://totp/test?secret=' + (await page.locator('code').textContent()),
       );
@@ -96,6 +118,19 @@ await test(
         page.getByText('Vérifiez votre identité pour ouvrir vos espaces.', { exact: true }),
       ).toBeVisible();
       await page.getByRole('button', { name: 'J’ai conservé mes codes' }).click();
+      await expect(canvas).toHaveCount(0);
+      page.off('request', recordUrl);
+      const secret = new URL(uri).searchParams.get('secret');
+      assert(
+        enrollmentUrls.every(
+          (url) =>
+            new URL(url).origin === origin && !url.includes(secret) && !url.includes('otpauth'),
+        ),
+        'QR enrollment must not send the secret to any URL or external service',
+      );
+      console.log(
+        'PASS QR canvas decoded independently, exact otpauth URI, no external requests/secret URLs, canvas removed after enrollment',
+      );
       await page.getByLabel('Code de l’application').fill(await otp.totp());
       await page.getByRole('button', { name: 'Vérifier le code', exact: true }).click();
       await expect(
@@ -118,10 +153,36 @@ await test(
       await expect(page.getByRole('button', { name: 'Renommer', exact: true })).toBeEnabled();
       await page.reload();
       await expect(page.getByLabel('Nom de la passkey enregistrée')).toHaveValue('Clé renommée');
-      await page.screenshot({ path: '.local/session-4a-security.png', fullPage: true });
+      await page.screenshot({ path: '.local/session-4b-security.png', fullPage: true });
       console.log(
         'PASS virtual WebAuthn UV registration, explicit proof, rename persisted and secret-free screen',
       );
+      const workspace = await context.request.post(origin + '/api/internal/workspaces', {
+        headers: { Origin: origin },
+        data: { name: 'Politique test navigateur', slug: 'policy-' + randomUUID() },
+      });
+      assert.equal(workspace.status(), 201);
+      workspaceId = (await workspace.json()).id;
+      await page.goto(`${origin}/workspaces/${workspaceId}`);
+      await page.getByRole('link', { name: 'Sécurité de l’espace', exact: true }).click();
+      await page.getByLabel('Exiger un facteur fort').check();
+      await page.getByLabel('Délai de grâce pour les membres déjà présents (jours)').fill('7');
+      await page.getByRole('button', { name: 'Enregistrer la politique', exact: true }).click();
+      await expect(
+        page.getByText('Politique enregistrée. Les échéances existantes sont conservées.', {
+          exact: true,
+        }),
+      ).toBeVisible();
+      await page.reload();
+      await expect(page.getByLabel('Exiger un facteur fort')).toBeChecked();
+      page.once('dialog', (dialog) => dialog.accept());
+      await page.getByRole('button', { name: 'Passer membre', exact: true }).click();
+      await expect(page.locator('main').getByRole('alert')).toContainText('propriétaire');
+      await page.screenshot({ path: '.local/session-4b-workspace.png', fullPage: true });
+      console.log(
+        'PASS workspace security navigation, policy saved/reloaded, last-owner demotion refused through UI',
+      );
+      await page.getByRole('link', { name: 'Sécurité du compte', exact: true }).click();
       await page.getByRole('button', { name: 'Se déconnecter', exact: true }).click();
       await page.getByRole('button', { name: 'Effacer les copies et se déconnecter' }).click();
       await expect(page).toHaveURL(origin + '/connexion');
@@ -145,6 +206,7 @@ await test(
     } finally {
       await browser.close();
       // Delete only this run's random test account; normal application accounts are untouched.
+      if (workspaceId) await pool.query('DELETE FROM workspaces WHERE id=$1', [workspaceId]);
       if (userId)
         await pool.query('DELETE FROM auth_users WHERE id=$1 AND email=$2', [userId, email]);
       await pool.end();

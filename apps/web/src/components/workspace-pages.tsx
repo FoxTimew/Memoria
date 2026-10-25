@@ -218,6 +218,9 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
           m<span className="text-[#b58641]">.</span> memoria
         </a>
         <h1 className="mb-5 text-lg font-semibold">{name}</h1>
+        <a className="quiet-link mb-5 block text-sm" href={`/workspaces/${workspaceId}/securite`}>
+          Sécurité de l’espace
+        </a>
         <label className="block text-xs font-medium uppercase tracking-wider">
           Recherche
           <input

@@ -2,7 +2,7 @@
 
 Statut : accepté — 2026-10-22.
 
-État en 4a, le 25 octobre 2026 : email/mot de passe, vérification, organization, TOTP et passkeys actifs ; seuls owner/member sont configurés. API key reste une cible. Le montage HTTP et la création transactionnelle de workspace sont précisés dans l'ADR 015 ; l'intégration forte livrée est décrite en fin de cet ADR.
+État en 4b, le 25 octobre 2026 : email/mot de passe, vérification, organization, TOTP, passkeys et politique de workspace actifs ; seuls owner/member sont configurés. API key reste une cible. Le montage HTTP et la création transactionnelle de workspace sont précisés dans l'ADR 015 ; les intégrations fortes livrées sont décrites en fin de cet ADR.
 
 **Décision.** Better Auth 1.7.12 dans NestJS ; plugins `organization`, `twoFactor`, `@better-auth/passkey` et `@better-auth/api-key` à versions exactes. Adaptateur Drizzle, identifiants UUID générés par Better Auth. Le schéma conserve les noms de propriétés attendus par les plugins, avec noms SQL explicites. Le test `schema-contract.test.ts` vérifie les champs des versions installées.
 
@@ -55,3 +55,15 @@ Les versions restent 1.7.12. `security-plugin.ts` laisse aux bibliothèques la v
 **Frontière de build.** `@better-auth/passkey` est une dépendance d'exécution externe des apps API/collab, comme Better Auth. Le bundler ne doit pas embarquer une seconde copie du runtime Better Auth via le plugin : cela casse notamment l'identité des erreurs API et leurs handlers. L'ADR 014 précise cette contrainte, révélée par le test UV négatif.
 
 Preuves : [fiche 4a](../reviews/session-4-4a-facteurs-assurance.md), vraie application Nest/SQL, signatures P-256 et tests de concurrence, puis navigateur HTTPS. Pas d'API key, politique de grâce, reset de mot de passe, consommation de code de récupération ou politique de cache dans cette livraison.
+
+## 4b — politique de workspace et effets sensibles
+
+Les façades Nest `GET/PUT /api/internal/workspaces/:workspaceId/security` et `PUT /members/:memberId/role` utilisent l'identité de session injectée par le guard. Les mutations organization natives restent fermées par la liste HTTP ; les rôles autorisés sont owner/member. Une modification compare la version de politique ou le rôle attendu (409 sinon), conserve au moins un propriétaire et inscrit l'audit dans la même transaction.
+
+Le service commun `requireSensitiveAction` verrouille le compte, puis la session, puis le workspace ; les changements de politique/rôle attendent aussi les écritures de pages déjà engagées. Après ces attentes, il relit rôle et preuve forte récente avant l'effet, dans la même transaction. Il ne fournit aucun permis réutilisable. Une session supprimée, un facteur absent ou une génération ancienne ne vaut pas preuve. L'API relationnelle verrouille la session puis le workspace avant le contrôle d'accès ; le journal collaboratif garde son verrou de page seul.
+
+La frontière SQL `auth_session_can_access_workspace` compose identité vérifiée, assurance du compte, appartenance owner/member, workspace vivant et politique/grâce individuelle. Elle est utilisée par les transactions de pages et le résolveur collaboratif. Triggers de politique, échéance, génération, assurance et facteurs : sérialisation avec les écritures de page et NOTIFY après commit ; recontrôle à quatre secondes pour l'expiration sans notification ou les notifications perdues. La cible de fermeture reste cinq secondes, démontrée localement sans surcharge ; aucune garantie de latence sous saturation n'est déduite de ces tests.
+
+Les futures créations de clés demandent owner/member + preuve récente ; les futurs webhooks demandent owner + preuve récente (admin en session 5). Les tests de contrat utilisent ce même service dans des contrôleurs présents **uniquement dans l'exécutable de test**, avec effet SQL observable. Les produits clé API/webhook restent absents ; leurs futures façades devront appeler ce service dans la transaction de leur effet. Le test de bout en bout 4b vérifie maintenant enrôlement et suppression de passkey par HTTP, jusqu'à la fermeture effective des sockets authentifiées.
+
+La suppression d'un facteur prend aussi les verrous partagés des workspaces d'adhésion, en ordre stable, puis attend les écritures de pages avant de relire fraîcheur et obligation de dernier facteur. Une activation concurrente de politique est ainsi observée avant la suppression. Les mutations du compte prennent ses sessions avant les verrous de pages pour respecter l'ordre des transactions relationnelles. Ce cas d'attente est testé avec une transaction PostgreSQL réelle.

@@ -13,7 +13,7 @@ export class Revocations {
     url: string,
     private readonly recheck: () => Promise<void>,
     private readonly fail: () => void,
-    private readonly fallbackMs = 5000,
+    private readonly fallbackMs = 4000,
   ) {
     this.control = new pg.Client({
       connectionString: url,

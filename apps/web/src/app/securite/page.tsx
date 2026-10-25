@@ -6,6 +6,7 @@ import { authClient } from '../../lib/auth-client.ts';
 import { securityError, securityRequest, securityStatus } from '../../lib/security-client.ts';
 import type { SecurityStatus } from '../../lib/security-client.ts';
 import { onLocalSignOut, signOutAndClear } from '../../lib/local-sign-out.ts';
+import { TotpQr } from '../../components/totp-qr.tsx';
 
 export default function SecurityPage() {
   const [status, setStatus] = useState<SecurityStatus>();
@@ -197,9 +198,11 @@ export default function SecurityPage() {
               </h2>
               {uri && (
                 <div className="notice">
+                  <p>Scannez ce QR code avec votre application d’authentification.</p>
+                  <TotpQr uri={uri} />
                   <p>
-                    Dans votre application d’authentification, ajoutez un compte avec cette clé (six
-                    chiffres, toutes les trente secondes).
+                    Vous pouvez aussi ajouter un compte avec cette clé (six chiffres, toutes les
+                    trente secondes).
                   </p>
                   <code className="mt-3 block break-all select-all">{setupSecret}</code>
                 </div>

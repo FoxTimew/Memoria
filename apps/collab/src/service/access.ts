@@ -17,7 +17,7 @@ export async function resolveAccess(
 ): Promise<Map<string, Access>> {
   if (!requests.length) return new Map();
   const result = await database.query<{ key: string; actor: string }>({
-    name: 'collaboration-resolve-access-v2',
+    name: 'collaboration-resolve-access-v3',
     text: `WITH RECURSIVE candidates AS (
  SELECT * FROM jsonb_to_recordset($1::jsonb) AS c(key text,userid uuid,session uuid,workspace uuid,page uuid)
  ), ancestors AS (
@@ -27,7 +27,7 @@ export async function resolveAccess(
  JOIN auth_sessions s ON s.id=c.session AND s.user_id=c.userid JOIN auth_users u ON u.id=s.user_id
  JOIN workspaces w ON w.id=c.workspace AND w.deleted_at IS NULL
  JOIN LATERAL(SELECT id FROM actors WHERE workspace_id=c.workspace AND user_id=c.userid AND kind='user' ORDER BY created_at,id LIMIT 1) actor ON true
- WHERE s.expires_at>clock_timestamp() AND u.email_verified AND auth_session_can_access_content(s.id) AND EXISTS(SELECT 1 FROM workspace_members m WHERE m.workspace_id=c.workspace AND m.user_id=c.userid AND m.role IN ('owner','member'))
+ WHERE s.expires_at>clock_timestamp() AND u.email_verified AND auth_session_can_access_workspace(s.id,c.workspace) AND EXISTS(SELECT 1 FROM workspace_members m WHERE m.workspace_id=c.workspace AND m.user_id=c.userid AND m.role IN ('owner','member'))
  AND EXISTS(SELECT 1 FROM ancestors a WHERE a.key=c.key) AND NOT EXISTS(SELECT 1 FROM ancestors a WHERE a.key=c.key AND (a.deleted_at IS NOT NULL OR a.depth>50))`,
     values: [
       JSON.stringify(

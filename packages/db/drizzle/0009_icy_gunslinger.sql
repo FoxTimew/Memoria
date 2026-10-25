@@ -1,0 +1,3 @@
+ALTER TABLE "workspace_policies" DROP CONSTRAINT "policies_retention_ck";--> statement-breakpoint
+ALTER TABLE "workspace_policies" ADD COLUMN "security_version" integer DEFAULT 1 NOT NULL;--> statement-breakpoint
+ALTER TABLE "workspace_policies" ADD CONSTRAINT "policies_retention_ck" CHECK ("workspace_policies"."grace_days" between 0 and 30 and "workspace_policies"."security_version" > 0 and "workspace_policies"."trash_retention_days" > 0 and "workspace_policies"."event_retention_days" > 0 and "workspace_policies"."delivery_retention_days" > 0 and "workspace_policies"."audit_retention_days" > 0);

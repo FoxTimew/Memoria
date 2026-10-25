@@ -1,0 +1,139 @@
+$ node scripts/test-collab.mjs "--suite" "transport"
+▶ Production service: twelve transport and durability scenarios
+  ✔ 01 Better Auth and nested BlockNote document (183.8413ms)
+  ✔ 02 SQL commit precedes broadcast and confirms every merged contributor (275.296ms)
+  ✔ 03 simultaneous text and independent character fields converge (124.085ms)
+  ✔ 04 offline edits merge after session recheck and durable replay (184.02ms)
+  ✔ 05 projection failure rolls back effects while typing remains durable, then retries (3849.212ms)
+  ✔ 06 signed API command waits own projection; retry survives automatic compaction (1266.9581ms)
+[onAuthenticate] GENERATION_CHANGED
+  ✔ 07 no cookie, foreign origin and generation refused before document load (31.0219ms)
+[beforeSync] READ_ONLY
+closing connection 7de67cc9-750c-4eca-ada7-178ffa07de78 (while handling 329161f8-d903-4274-9cf6-b03eca694d04:2a25bad9-44a1-49b9-9ce2-01d9ffd3f15a:dc958a93-8877-4a3f-bc55-6664adc41e71) because of exception CollaborationError: READ_ONLY
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:119848:40)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6) {
+  code: 'READ_ONLY',
+  status: 403,
+  details: {}
+}
+[beforeSync] READ_ONLY
+closing connection b3815b17-3f49-4e53-b7ed-e0faad30526b (while handling 329161f8-d903-4274-9cf6-b03eca694d04:2a25bad9-44a1-49b9-9ce2-01d9ffd3f15a:dc958a93-8877-4a3f-bc55-6664adc41e71) because of exception CollaborationError: READ_ONLY
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:119848:40)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6) {
+  code: 'READ_ONLY',
+  status: 403,
+  details: {}
+}
+  ✔ 08 read-only access rejects live updates and offline SyncStep2 (262.5376ms)
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 9cb86da7-add1-47c4-95f3-531f34d521d6 (while handling 329161f8-d903-4274-9cf6-b03eca694d04:2a25bad9-44a1-49b9-9ce2-01d9ffd3f15a:dc958a93-8877-4a3f-bc55-6664adc41e71) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:117891:34)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 95630eff-1f9f-46f1-a592-97e978a9c9b1 (while handling 329161f8-d903-4274-9cf6-b03eca694d04:2a25bad9-44a1-49b9-9ce2-01d9ffd3f15a:dc958a93-8877-4a3f-bc55-6664adc41e71) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:117891:34)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 2e3905f8-76be-4533-b0e9-b492243f0f52 (while handling 329161f8-d903-4274-9cf6-b03eca694d04:2a25bad9-44a1-49b9-9ce2-01d9ffd3f15a:dc958a93-8877-4a3f-bc55-6664adc41e71) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:117891:34)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[onAuthenticate] REJECTION_LIMIT
+  ✔ 09 rejected batch isolates invalid loop while two healthy writers continue (1346.3046ms)
+  ✔ 10 session deletion closes every tab via fallback within five seconds (3975.4587ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ 11 membership deletion closes only affected user (38.0654ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ 12 ancestor archive revokes descendants and leader loss closes remaining sockets (284.6542ms)
+✔ Production service: twelve transport and durability scenarios (13253.9162ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13257.5691
+Collaboration transport.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

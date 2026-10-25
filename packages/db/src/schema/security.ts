@@ -22,6 +22,7 @@ export const workspacePolicies = pgTable(
     requireStrongAuth: boolean('require_strong_auth').default(false).notNull(),
     strongAuthEnabledAt: time('strong_auth_enabled_at'),
     graceDays: integer('grace_days').default(7).notNull(),
+    securityVersion: integer('security_version').default(1).notNull(),
     trashRetentionDays: integer('trash_retention_days').default(30).notNull(),
     eventRetentionDays: integer('event_retention_days').default(30).notNull(),
     deliveryRetentionDays: integer('delivery_retention_days').default(30).notNull(),
@@ -32,7 +33,7 @@ export const workspacePolicies = pgTable(
     ...auditReferences(t),
     check(
       'policies_retention_ck',
-      sql`${t.graceDays} >= 0 and ${t.trashRetentionDays} > 0 and ${t.eventRetentionDays} > 0 and ${t.deliveryRetentionDays} > 0 and ${t.auditRetentionDays} > 0`,
+      sql`${t.graceDays} between 0 and 30 and ${t.securityVersion} > 0 and ${t.trashRetentionDays} > 0 and ${t.eventRetentionDays} > 0 and ${t.deliveryRetentionDays} > 0 and ${t.auditRetentionDays} > 0`,
     ),
   ],
 );

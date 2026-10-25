@@ -15,9 +15,11 @@ const entry = process.argv.includes('--probe')
     ? 'auth.e2e'
     : process.argv.includes('--strong-auth-e2e')
       ? 'strong-auth.e2e'
-      : process.argv.includes('--pages-e2e')
-        ? 'pages.e2e'
-        : 'main';
+      : process.argv.includes('--workspace-security-e2e')
+        ? 'workspace-security.e2e'
+        : process.argv.includes('--pages-e2e')
+          ? 'pages.e2e'
+          : 'main';
 const watching = process.argv.includes('--watch');
 const outfile = resolve(root, `apps/${app}/dist/${entry}.mjs`);
 let child;
@@ -107,7 +109,7 @@ if (watching) {
   }
   await watcher.watch();
 } else {
-  if (entry === 'pages.e2e')
+  if (entry === 'pages.e2e' || entry === 'workspace-security.e2e')
     await build({
       entryPoints: [resolve(root, 'apps/collab/src/service/incremental-worker.ts')],
       outfile: resolve(root, 'apps/api/dist/incremental-worker.mjs'),

@@ -64,6 +64,20 @@
       "when": 1792911431050,
       "tag": "0008_session_assurance_boundary",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792920975059,
+      "tag": "0009_icy_gunslinger",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792920975060,
+      "tag": "0010_workspace_security_boundary",
+      "breakpoints": true
     }
   ]
 }

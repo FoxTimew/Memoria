@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module.ts';
 import { Public } from './modules/auth/public.decorator.ts';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module.ts';
 import { PagesModule } from './modules/pages/pages.module.ts';
+import { SecurityPolicyError } from '@memoria/auth';
 
 @Controller('api/health')
 class HealthController {
@@ -26,7 +27,9 @@ class HealthController {
 class SafeExceptionFilter implements ExceptionFilter {
   catch(error: unknown, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<Response>();
-    if (error instanceof HttpException) {
+    if (error instanceof SecurityPolicyError) {
+      response.status(error.status).json({ code: error.code, message: error.code });
+    } else if (error instanceof HttpException) {
       response.status(error.getStatus()).json(error.getResponse());
     } else if (
       error &&

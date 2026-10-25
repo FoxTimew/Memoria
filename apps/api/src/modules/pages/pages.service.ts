@@ -10,6 +10,7 @@ import {
 } from '@memoria/contracts';
 import type { RequestContext } from '@memoria/contracts';
 import { z } from 'zod';
+import type { SessionIdentity } from '@memoria/auth';
 import * as database from '../../database.module.ts';
 import * as writer from '../blocks/block-write.service.ts';
 import { contentContext, descendants, requirePage, visible } from './content-access.ts';
@@ -42,13 +43,13 @@ export class PagesService {
     private readonly writer: writer.BlockWriteService,
   ) {}
   private run<T>(
-    userId: string,
+    session: SessionIdentity,
     workspaceId: string,
     write: boolean,
     work: (tx: WriteTransaction, ctx: RequestContext, all: StoredPage[]) => Promise<T>,
   ) {
     return this.database.db.transaction(async (tx) => {
-      const ctx = await contentContext(tx, userId, workspaceId, write);
+      const ctx = await contentContext(tx, session, workspaceId, write);
       const all = await tx
         .select()
         .from(pages)
@@ -57,8 +58,8 @@ export class PagesService {
       return work(tx, ctx, all);
     });
   }
-  list(userId: string, workspaceId: string) {
-    return this.run(userId, workspaceId, false, async (_tx, _ctx, all) => ({
+  list(session: SessionIdentity, workspaceId: string) {
+    return this.run(session, workspaceId, false, async (_tx, _ctx, all) => ({
       pages: all
         .filter((p) => visible(p, all))
         .sort(compareRank)
@@ -66,8 +67,8 @@ export class PagesService {
       trash: all.filter((p) => p.deletedAt).map(pageResponse),
     }));
   }
-  get(userId: string, workspaceId: string, pageId: string, versionOnly = false) {
-    return this.run(userId, workspaceId, false, async (tx, _ctx, all) => {
+  get(session: SessionIdentity, workspaceId: string, pageId: string, versionOnly = false) {
+    return this.run(session, workspaceId, false, async (tx, _ctx, all) => {
       const page = requirePage(pageId, all);
       if (versionOnly) return { version: page.version };
       await tx.execute(
@@ -102,9 +103,9 @@ export class PagesService {
       return { page: pageResponse(page), blocks: content, collaboration: state ?? null };
     });
   }
-  create(userId: string, workspaceId: string, input: unknown) {
+  create(session: SessionIdentity, workspaceId: string, input: unknown) {
     const data = parse(internalPageCreateSchema, input);
-    return this.run(userId, workspaceId, true, async (tx, ctx, all) => {
+    return this.run(session, workspaceId, true, async (tx, ctx, all) => {
       if (all.length >= 1000)
         throw new BadRequestException('Maximum 1000 pages par espace pour cette tranche.');
       if (data.parentId) requirePage(data.parentId, all);
@@ -132,7 +133,7 @@ export class PagesService {
       return pageResponse(page);
     });
   }
-  save(userId: string, workspaceId: string, pageId: string, input: unknown) {
+  save(session: SessionIdentity, workspaceId: string, pageId: string, input: unknown) {
     const data = parse(pageSaveSchema, input);
     if (data.operations.length)
       throw new ConflictException({
@@ -140,17 +141,17 @@ export class PagesService {
         message:
           'Le contenu utilise maintenant la collaboration ; utilisez la commande de contenu avec sa révision.',
       });
-    return this.rename(userId, workspaceId, pageId, {
+    return this.rename(session, workspaceId, pageId, {
       expectedVersion: data.expectedVersion,
       title: data.title,
     });
   }
-  rename(userId: string, workspaceId: string, pageId: string, input: unknown) {
+  rename(session: SessionIdentity, workspaceId: string, pageId: string, input: unknown) {
     const data = parse(
       z.strictObject({ expectedVersion: z.int().positive(), title: z.string().max(500) }),
       input,
     );
-    return this.run(userId, workspaceId, true, async (tx, ctx, all) => {
+    return this.run(session, workspaceId, true, async (tx, ctx, all) => {
       const page = requirePage(pageId, all);
       if (page.version !== data.expectedVersion)
         throw new ConflictException({ code: 'VERSION_CONFLICT' });
@@ -192,7 +193,7 @@ export class PagesService {
     return this.writer.write(session, workspace, page, input);
   }
   mutate(
-    userId: string,
+    session: SessionIdentity,
     workspaceId: string,
     pageId: string,
     action: 'move' | 'archive' | 'restore',
@@ -203,7 +204,7 @@ export class PagesService {
       action === 'move' ? { expectedVersion: parse(pageMoveSchema, input).expectedVersion } : input,
     );
     const move = action === 'move' ? parse(pageMoveSchema, input) : undefined;
-    return this.run(userId, workspaceId, true, async (tx, ctx, all) => {
+    return this.run(session, workspaceId, true, async (tx, ctx, all) => {
       const page = requirePage(pageId, all, action === 'restore');
       if (page.version !== data.expectedVersion)
         throw new ConflictException({ code: 'VERSION_CONFLICT', message: 'La page a changé.' });
@@ -268,10 +269,10 @@ export class PagesService {
       return pageResponse(page);
     });
   }
-  search(userId: string, workspaceId: string, query: string) {
+  search(session: SessionIdentity, workspaceId: string, query: string) {
     if (typeof query !== 'string' || query.trim().length < 1 || query.length > 200)
       throw new BadRequestException('Recherche attendue : 1 à 200 caractères.');
-    return this.run(userId, workspaceId, false, async (tx, _ctx, all) => {
+    return this.run(session, workspaceId, false, async (tx, _ctx, all) => {
       const matches = await tx
         .select({
           id: pages.id,

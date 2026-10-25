@@ -1,45 +1,45 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { CurrentUser, CurrentSession } from '../auth/current-user.decorator.ts';
-import type { AuthenticatedUser, AuthenticatedSession } from '../auth/current-user.decorator.ts';
+import { CurrentSession } from '../auth/current-user.decorator.ts';
+import type { AuthenticatedSession } from '../auth/current-user.decorator.ts';
 import * as pages from './pages.service.ts';
 
 @Controller('api/internal/workspaces/:workspaceId')
 export class PagesController {
   constructor(private readonly pages: pages.PagesService) {}
   @Get('pages') list(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
   ) {
-    return this.pages.list(user.id, workspace);
+    return this.pages.list(session, workspace);
   }
   @Post('pages') create(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Body() body: unknown,
   ) {
-    return this.pages.create(user.id, workspace, body);
+    return this.pages.create(session, workspace, body);
   }
   @Get('pages/:pageId') get(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Param('pageId') id: string,
   ) {
-    return this.pages.get(user.id, workspace, id);
+    return this.pages.get(session, workspace, id);
   }
   @Get('pages/:pageId/version') version(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Param('pageId') id: string,
   ) {
-    return this.pages.get(user.id, workspace, id, true);
+    return this.pages.get(session, workspace, id, true);
   }
   @Put('pages/:pageId') save(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Param('pageId') id: string,
     @Body() body: unknown,
   ) {
-    return this.pages.save(user.id, workspace, id, body);
+    return this.pages.save(session, workspace, id, body);
   }
   @Post('pages/:pageId/collaboration') openCollaboration(
     @CurrentSession() session: AuthenticatedSession,
@@ -57,42 +57,42 @@ export class PagesController {
     return this.pages.writeCollaboration(session, workspace, page, input);
   }
   @Post('pages/:pageId/rename') rename(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Param('pageId') page: string,
     @Body() input: unknown,
   ) {
-    return this.pages.rename(user.id, workspace, page, input);
+    return this.pages.rename(session, workspace, page, input);
   }
   @Post('pages/:pageId/move') move(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Param('pageId') id: string,
     @Body() body: unknown,
   ) {
-    return this.pages.mutate(user.id, workspace, id, 'move', body);
+    return this.pages.mutate(session, workspace, id, 'move', body);
   }
   @Post('pages/:pageId/archive') archive(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Param('pageId') id: string,
     @Body() body: unknown,
   ) {
-    return this.pages.mutate(user.id, workspace, id, 'archive', body);
+    return this.pages.mutate(session, workspace, id, 'archive', body);
   }
   @Post('pages/:pageId/restore') restore(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Param('pageId') id: string,
     @Body() body: unknown,
   ) {
-    return this.pages.mutate(user.id, workspace, id, 'restore', body);
+    return this.pages.mutate(session, workspace, id, 'restore', body);
   }
   @Get('search') search(
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
     @Query('q') query: string,
   ) {
-    return this.pages.search(user.id, workspace, query);
+    return this.pages.search(session, workspace, query);
   }
 }

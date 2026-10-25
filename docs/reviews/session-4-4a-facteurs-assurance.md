@@ -88,3 +88,7 @@ Le résumé final de `pnpm check` est **108 tests réussis, 6 ignorés**, dans 2
 | CSRF ou secrets dans réponses/logs                                           | Origines absente/erronée refusées ; pas de backup codes natifs exposés ; empreintes seules en DB ; panne SQL sans détail sensible dans le journal | Revue globale des logs, audit, reset et cache en 4f ; pas de preuve exhaustive d'absence de fuite                                                             |
 
 Cette liste n'est pas la validation finale de session 4. En 4f, chaque absence doit être corrigée ou acceptée explicitement par le développeur avant merge, avec trace datée. Aucune de ces absences n'est considérée comme acceptée ici.
+
+## Suite de la relecture
+
+4a validée par le développeur après son test manuel sur **Android, Windows Hello et YubiKey**. Les limites matérielles ci-dessus décrivent la campagne automatisée de livraison ; ce retour utilisateur les complète. Le QR et le parcours HTTP→fermeture WS sont livrés/testés dans la [fiche 4b](session-4-4b-politique-actions.md). Pas de PR intermédiaire : session 4 fusionnée en une seule fois après 4f ; conserver les descriptions de chaque sous-étape pour la description finale.

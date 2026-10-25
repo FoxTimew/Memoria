@@ -69,6 +69,11 @@ export function securityIntegration(
     await db.execute(
       sql`SELECT user_id FROM account_security WHERE user_id=${userId}::uuid FOR UPDATE`,
     );
+    // Account mutations can revoke every session. Acquire them before the page locks
+    // taken by revocation triggers, matching relational requests' session -> page order.
+    await db.execute(
+      sql`SELECT id FROM auth_sessions WHERE user_id=${userId}::uuid ORDER BY id FOR UPDATE`,
+    );
     if (flow) flow.lockedUser = userId;
   }
   async function identity(ctx: Context) {
@@ -269,6 +274,18 @@ export function securityIntegration(
       )
         await fresh(value);
       if (path === '/two-factor/disable' || path === '/passkey/delete-passkey') {
+        const memberships = await db
+          .select({ workspace: tables.member.organizationId })
+          .from(tables.member)
+          .where(eq(tables.member.userId, value.user.id))
+          .orderBy(tables.member.organizationId);
+        for (const membership of memberships)
+          await db.execute(
+            sql`SELECT pg_advisory_xact_lock_shared(hashtextextended(${membership.workspace}::text,0))`,
+          );
+        await db.execute(sql`SELECT collab_lock_user_pages(${value.user.id}::uuid)`);
+        // A policy activation or in-flight page write may have held us past freshness.
+        await fresh(value);
         const all = await factors(value.user.id);
         const remaining =
           path === '/two-factor/disable'

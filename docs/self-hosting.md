@@ -1,5 +1,13 @@
 # Auto-hébergement — capacité locale 3d et qualification dédiée à réaliser
 
+## Secret d'authentification et TOTP — sauvegarde indispensable
+
+**`BETTER_AUTH_SECRET` chiffre les secrets TOTP dans PostgreSQL. Sauvegardez-le hors du serveur**, dans un coffre protégé avec accès restreint, en complément de la sauvegarde de la base. Ne le commitez pas et ne l'inscrivez pas dans les journaux. Une sauvegarde SQL seule ne suffit pas : **la perte de ce secret rend les TOTP enregistrés inutilisables**. Générer une nouvelle valeur ne permet pas de déchiffrer les anciennes données.
+
+Conservez la valeur correspondant à chaque sauvegarde et testez une restauration isolée avec cette même valeur. La remplacer invalide aussi des éléments d'authentification signés ; ne faites pas de rotation improvisée. Les parcours de récupération par code et commande d'administration sont prévus en 4c, pas livrés en 4b. Une passkey de secours préalablement enregistrée reste un autre facteur ; elle ne remplace pas la sauvegarde des secrets d'exploitation.
+
+Après déploiement 4b : appliquer `pnpm db:migrate` (0009/0010), puis redémarrer API et collab ensemble. Aucun reset des données n'est nécessaire. Les réglages de connexion forte sont accessibles dans **Sécurité de l’espace** ; voir le [guide de test 4b](reviews/session-4-4b-politique-actions.md).
+
 ## État actuel, 25 octobre 2026
 
 La branche `codex/session-3d-collaboration-capacity` est fusionnée dans main par la PR #4 (`0b8c0f0`) : pool partagé et réservations proportionnelles. **Les critères locaux de 3d passent et la livraison est validée.** La comparaison alternée de la candidate `875c63f` à `665a829`, sans changement applicatif, respecte les plafonds absolus et la marge de 10 %. La forte régression de la campagne non alternée n'est pas reproduite ; les conditions d'exécution ont changé et leur cause exacte n'est pas isolée. Tous les essais, les trois p95 par configuration et les limites sont dans la [fiche 3d](reviews/session-3-3d-capacite.md).
