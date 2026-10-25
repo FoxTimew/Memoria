@@ -6,6 +6,7 @@ import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { availableParallelism, cpus, freemem, platform, release, totalmem } from 'node:os';
 import { resolve, relative } from 'node:path';
 import { finished } from 'node:stream/promises';
+import { readMeasurementPower, POWER_REQUIRED_MESSAGE } from './measurement-power.mjs';
 
 // Immutable application snapshots, one common harness, no compiler during measurements.
 const repo = resolve('.');
@@ -41,25 +42,12 @@ for (const name of ['content-1M', 'history-1M']) {
   const bytes = await readFile(`.local/incremental/${name}.bin`);
   profiles[name] = { bytes: bytes.length, sha256: hash(bytes) };
 }
-const protocolHash = hash(await readFile(import.meta.filename));
-const power = () => {
-  if (platform() !== 'win32') return { unavailable: 'Windows battery observation only' };
-  try {
-    return JSON.parse(
-      execFileSync(
-        'powershell.exe',
-        [
-          '-NoProfile',
-          '-Command',
-          'Get-CimInstance Win32_Battery | Select-Object BatteryStatus,EstimatedChargeRemaining | ConvertTo-Json -Compress',
-        ],
-        { encoding: 'utf8', windowsHide: true, timeout: 10000 },
-      ),
-    );
-  } catch {
-    return { unavailable: true };
-  }
-};
+const protocolHash = hash(
+  Buffer.concat([
+    await readFile(import.meta.filename),
+    await readFile(new URL('./measurement-power.mjs', import.meta.url)),
+  ]),
+);
 let manifest;
 const manifestPath = `${directory}/manifest.json`;
 const save = () => writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
@@ -205,8 +193,22 @@ for (let iteration = 1; iteration <= 3; iteration++) {
       for (const [name, profile] of Object.entries(profiles))
         if (hash(await readFile(`.local/incremental/${name}.bin`)) !== profile.sha256)
           throw new Error('Fixture changed');
-      const battery = power(),
+      const battery = readMeasurementPower(),
         freeBytes = freemem();
+      console.log(`Power: ${JSON.stringify(battery)}`);
+      if (!battery.allowed) {
+        manifest.stopped = {
+          reason: battery.reason,
+          configuration,
+          suite,
+          iteration,
+          battery,
+          freeBytes,
+        };
+        await save();
+        console.error(POWER_REQUIRED_MESSAGE);
+        process.exit(3);
+      }
       if (freeBytes < 3 * 1024 ** 3) {
         manifest.stopped = {
           reason: 'FREE_RAM_BELOW_3_GIB',
@@ -215,6 +217,7 @@ for (let iteration = 1; iteration <= 3; iteration++) {
           suite,
           iteration,
           freeBytes,
+          battery,
         };
         await save();
         console.error(
