@@ -24,7 +24,7 @@ class OwnPresenceProvider extends HocuspocusProvider {
 }
 
 export type CollaborationStatus = {
-  phase: 'connecting' | 'saved' | 'saving' | 'offline' | 'blocked';
+  phase: 'connecting' | 'checking' | 'saved' | 'saving' | 'offline' | 'blocked';
   loaded: boolean;
   dirty: boolean;
   revision: number;
@@ -51,6 +51,8 @@ export class CollaborationClient {
   readonly socket: HocuspocusProviderWebsocket;
   readonly provider: HocuspocusProvider;
   cache?: CollaborationCache;
+  onAccessRevoked?: () => void;
+  private suspended = false;
   private connected = false;
   private disconnected = false;
   private loaded = false;
@@ -65,7 +67,17 @@ export class CollaborationClient {
     this.emit();
   };
   private online = () => {
-    void this.recheck().then(() => this.connect());
+    this.connect();
+  };
+  private visibility = () => {
+    if (document.hidden) {
+      this.suspended = true;
+      this.offline();
+    } else this.connect();
+  };
+  private freeze = () => {
+    this.suspended = true;
+    this.offline();
   };
   private edit = (_update: Uint8Array, origin: unknown) => {
     if (origin !== this.provider && !this.destroyed) this.durable.edit();
@@ -77,12 +89,25 @@ export class CollaborationClient {
     private readonly verifyAccess?: () => Promise<void>,
     readonly user?: { id: string; name: string; color: string },
     expectedSession?: string,
+    readonly accessVersion?: number,
+    readonly readOnly = false,
   ) {
     this.doc.getXmlFragment('prosemirror');
     this.durable = new DurableState(generation, () => this.emit());
     this.doc.on('update', this.edit);
     const tracker = this.durable;
+    const beforeConnect = async () => {
+      await this.recheck(true);
+      if (this.destroyed || this.blocked || (typeof document !== 'undefined' && document.hidden))
+        throw new Error('ACCESS_CHECK_REQUIRED');
+      this.suspended = false;
+    };
     this.socket = new (class extends HocuspocusProviderWebsocket {
+      override async createWebSocketConnection() {
+        // The provider's own retry loop MUST pass the same gate; onClose alone is too late.
+        await beforeConnect();
+        return super.createWebSocketConnection();
+      }
       override send(message: Uint8Array) {
         // Do not keep an unbounded offline wire queue. Reconnection sends the Yjs diff.
         if (this.webSocket?.readyState !== 1) return;
@@ -102,7 +127,9 @@ export class CollaborationClient {
       websocketProvider: this.socket,
       ...(user ? {} : { awareness: null }),
       token:
-        expectedSession && user ? JSON.stringify({ user: user.id, session: expectedSession }) : '',
+        expectedSession && user
+          ? JSON.stringify({ user: user.id, session: expectedSession, accessVersion })
+          : '',
       flushDelay: 100,
       forceSyncInterval: 15000,
       onOpen: () => {
@@ -133,6 +160,9 @@ export class CollaborationClient {
     if (typeof window !== 'undefined') {
       window.addEventListener('offline', this.offline);
       window.addEventListener('online', this.online);
+      document.addEventListener('visibilitychange', this.visibility);
+      document.addEventListener('freeze', this.freeze);
+      document.addEventListener('resume', this.online);
     }
     this.timer = setInterval(() => {
       // Also covers a missed close event and cookie expiry during a network interruption.
@@ -149,15 +179,17 @@ export class CollaborationClient {
     return {
       phase: this.blocked
         ? 'blocked'
-        : !this.connected
-          ? this.disconnected
-            ? 'offline'
-            : 'connecting'
-          : !this.loaded
-            ? 'connecting'
-            : this.durable.dirty || !this.durable.confirmed
-              ? 'saving'
-              : 'saved',
+        : this.suspended
+          ? 'checking'
+          : !this.connected
+            ? this.disconnected
+              ? 'offline'
+              : 'connecting'
+            : !this.loaded
+              ? 'connecting'
+              : this.durable.dirty || !this.durable.confirmed
+                ? 'saving'
+                : 'saved',
       loaded: this.loaded,
       dirty: this.durable.dirty,
       revision: this.durable.revision,
@@ -177,8 +209,12 @@ export class CollaborationClient {
     this.cache?.acknowledge(this.durable.acknowledged);
     if (!this.destroyed) for (const listener of this.listeners) listener(this.state);
   }
-  private async recheck() {
-    if (this.destroyed || this.blocked || !this.verifyAccess) return;
+  private async recheck(required = false) {
+    if (this.destroyed || this.blocked) {
+      if (required) throw new Error('ACCESS_CLOSED');
+      return;
+    }
+    if (!this.verifyAccess) return;
     try {
       await this.verifyAccess();
     } catch (error) {
@@ -189,16 +225,21 @@ export class CollaborationClient {
         [401, 403, 404, 409].includes(Number(error.status))
       )
         this.stop('ACCESS_DENIED');
+      if (required) throw error;
     }
   }
   stop(reason: string) {
     if (this.destroyed) return;
+    this.blocked = collaborationError(reason);
+    this.socket.disconnect();
+    if (/ACCESS|SESSION|permission/i.test(reason) && this.onAccessRevoked) {
+      this.onAccessRevoked();
+      return;
+    }
     if (this.cache && /ACCESS|SESSION|permission/i.test(reason)) {
       this.cache.revokeAccess();
       return;
     }
-    this.blocked = collaborationError(reason);
-    this.socket.disconnect();
     this.emit();
   }
   connect() {
@@ -215,6 +256,9 @@ export class CollaborationClient {
     if (typeof window !== 'undefined') {
       window.removeEventListener('offline', this.offline);
       window.removeEventListener('online', this.online);
+      document.removeEventListener('visibilitychange', this.visibility);
+      document.removeEventListener('freeze', this.freeze);
+      document.removeEventListener('resume', this.online);
     }
     clearInterval(this.timer);
     this.doc.off('update', this.edit);
@@ -238,8 +282,8 @@ export class CollaborationClient {
       updates,
       () => this.emit(),
       (message) => {
-        this.destroy();
         onRevoked(message);
+        this.destroy();
       },
     );
   }

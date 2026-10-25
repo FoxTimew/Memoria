@@ -40,6 +40,7 @@ export const paginationSchema = z.object({
   cursor: z.string().max(4096).optional(),
 });
 export const pageSchema = z.strictObject({
+  level: z.enum(['read', 'edit']).optional(),
   id: z.uuid(),
   workspaceId: z.uuid(),
   parentId: z.uuid().nullable(),

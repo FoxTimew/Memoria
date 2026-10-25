@@ -22,6 +22,7 @@ import { authClient } from '../lib/auth-client.ts';
 import { ContentError, contentRequest } from '../lib/content-api.ts';
 import { accessDraft, securityDestination } from '../lib/access-flow.ts';
 import { onLocalSignOut } from '../lib/local-sign-out.ts';
+import { PageShares } from './page-shares.tsx';
 const labels = {
   owner: 'Propriétaire',
   admin: 'Administrateur',
@@ -285,6 +286,7 @@ export default function WorkspaceAccess({ workspaceId }: { workspaceId: string }
       {!loaded && !error && <p>Chargement des accès…</p>}
       {loaded && (
         <>
+          {session && <PageShares workspace={workspaceId} user={session.user.id} pages={pages} />}
           <form onSubmit={invite} className="space-y-4 rounded border p-5">
             <h2 className="text-xl font-semibold">Inviter une personne</h2>
             <label className="block">

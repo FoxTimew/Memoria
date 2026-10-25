@@ -74,6 +74,22 @@ export class PagesController {
   ) {
     return this.pages.mutate(session, workspace, id, 'move', body);
   }
+  @Post('pages/:pageId/move/preview') previewMove(
+    @CurrentSession() session: AuthenticatedSession,
+    @Param('workspaceId') workspace: string,
+    @Param('pageId') id: string,
+    @Body() body: unknown,
+  ) {
+    return this.pages.mutate(session, workspace, id, 'move', body, true);
+  }
+  @Post('pages/:pageId/restore/preview') previewRestore(
+    @CurrentSession() session: AuthenticatedSession,
+    @Param('workspaceId') workspace: string,
+    @Param('pageId') id: string,
+    @Body() body: unknown,
+  ) {
+    return this.pages.mutate(session, workspace, id, 'restore', body, true);
+  }
   @Post('pages/:pageId/archive') archive(
     @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,

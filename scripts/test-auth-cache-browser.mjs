@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
-import { chromium, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { lifecycleBrowser } from './browser-lifecycle.mjs';
 import { testOtp } from '../packages/auth/src/testing/otp.ts';
 
 const origin = process.env.APP_ORIGIN;
@@ -14,12 +15,8 @@ await test(
   '4e HTTPS: three tabs, offline frozen tab, policy purge, shared login and logout',
   { timeout: 180000 },
   async () => {
-    const browser = await chromium.launch({
-      channel:
-        process.env.BROWSER_CHANNEL ?? (process.platform === 'win32' ? 'msedge' : 'chromium'),
-      headless: true,
-    });
-    const context = await browser.newContext({ viewport: { width: 1440, height: 1080 } });
+    const lifecycle = await lifecycleBrowser();
+    const { browser, context } = lifecycle;
     const email = `cache4e-${randomUUID()}@example.test`,
       password = randomBytes(24).toString('base64url');
     let user, workspace;
@@ -97,7 +94,7 @@ await test(
       const base = `/api/internal/workspaces/${workspace}`,
         title = 'Cache 4e ' + randomUUID().slice(0, 8);
       await request(base + '/pages', { title, parentId: null });
-      const tabs = await Promise.all([context.newPage(), context.newPage(), context.newPage()]);
+      const tabs = await Promise.all([lifecycle.page(), lifecycle.page(), lifecycle.page()]);
       const [a, b, c] = tabs;
       const open = async (page) => {
         await page.goto(origin + `/workspaces/${workspace}`);
@@ -156,8 +153,7 @@ await test(
       await editor(c).pressSequentially(' Travail hors ligne 4e');
       await expect(c.getByTestId('save-status')).toContainText('Hors ligne');
       await expect(c.getByTestId('local-save-status')).toHaveText('Copie locale à jour');
-      const cdp = await context.newCDPSession(c);
-      await cdp.send('Page.setWebLifecycleState', { state: 'frozen' });
+      const resume = await lifecycle.freeze(c);
       // Independent browser storage: the administrator cannot notify the editors locally.
       const administrator = await browser.newContext();
       await administrator.addCookies(await context.cookies());
@@ -186,12 +182,17 @@ await test(
       console.log(
         `Remote policy purge observed in ${observedPurge} ms (functional deadline, not a performance benchmark).`,
       );
-      await cdp.send('Page.setWebLifecycleState', { state: 'active' });
-      await expect(c.getByTestId('local-save-status')).toContainText('Copie locale désactivée');
-      await editor(c).pressSequentially(' après réveil');
+      await resume();
+      // 5c requires an online access check before displaying a resumed frozen editor.
+      await expect(
+        c.getByText('Vérification de vos accès avant de reprendre.', { exact: false }),
+      ).toBeVisible();
       assert.equal((await records(a)).updates.filter((d) => d.user === user).length, 0);
       await c.unroute('**/api/**');
       await c.evaluate(() => globalThis.dispatchEvent(new globalThis.Event('online')));
+      await expect(c.getByTestId('local-save-status')).toContainText('Copie locale désactivée');
+      await expect(editor(c)).toBeVisible();
+      await editor(c).pressSequentially(' après réveil');
       await expect(a.locator('.bn-editor')).toContainText('Travail hors ligne 4e', {
         timeout: 15000,
       });
@@ -260,7 +261,7 @@ await test(
         'PASS shared checkbox warning, server choice, TOTP rotation, memory-only offline editing, logout and other-account preservation; no page errors',
       );
     } finally {
-      await browser.close();
+      await lifecycle.close();
       if (workspace) await pool.query('DELETE FROM workspaces WHERE id=$1', [workspace]);
       if (user) await pool.query('DELETE FROM auth_users WHERE id=$1 AND email=$2', [user, email]);
       await pool.end();

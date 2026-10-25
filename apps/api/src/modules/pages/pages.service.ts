@@ -24,6 +24,7 @@ import {
 import type { StoredPage, PageRights } from './content-access.ts';
 import { compareRank, positionAfter } from '../blocks/block-plan.ts';
 import { pageEffects } from './page-effects.ts';
+import { accessPreview } from './share-preview.ts';
 
 function parse<T>(schema: z.ZodType<T>, input: unknown): T {
   const result = schema.safeParse(input);
@@ -49,7 +50,7 @@ function visibleResponse(
   rights: PageRights,
   all: StoredPage[],
 ) {
-  const result = pageResponse(page);
+  const result = { ...pageResponse(page), level: rights.get(page.id) };
   if (ctx.principal.role !== 'guest') return result;
   // No hidden parent ID or global sibling rank escapes through list, get or create.
   const parent = page.parentId && rights.has(page.parentId) ? page.parentId : null;
@@ -241,27 +242,16 @@ export class PagesService {
     pageId: string,
     action: 'move' | 'archive' | 'restore',
     input: unknown,
+    previewOnly = false,
   ) {
     const data = parse(
       pageVersionInputSchema,
       action === 'move' ? { expectedVersion: parse(pageMoveSchema, input).expectedVersion } : input,
     );
     const move = action === 'move' ? parse(pageMoveSchema, input) : undefined;
-    return this.run(session, workspaceId, true, async (tx, ctx, all) => {
+    return this.run(session, workspaceId, !previewOnly, async (tx, ctx, all) => {
       requireTreeManager(ctx);
-      // Until 5c supplies a rights-versioned preview, a move must not silently alter shares.
-      if (
-        action === 'move' &&
-        (
-          await tx.execute(
-            sql`SELECT 1 FROM access_grants WHERE workspace_id=${workspaceId}::uuid AND deleted_at IS NULL LIMIT 1`,
-          )
-        ).rows.length
-      )
-        throw new ConflictException({
-          code: 'SHARING_PREVIEW_REQUIRED',
-          message: 'Le déplacement de pages partagées nécessite un aperçu des accès.',
-        });
+      const before = all.map((p) => ({ ...p }));
       const page = requirePage(pageId, all, action === 'restore');
       if (page.version !== data.expectedVersion)
         throw new ConflictException({ code: 'VERSION_CONFLICT', message: 'La page a changé.' });
@@ -288,6 +278,33 @@ export class PagesService {
           all.filter((p) => p.id !== page.id && p.parentId === page.parentId && !p.deletedAt),
           move.afterId,
         );
+      }
+      if (action !== 'archive') {
+        const preview = await accessPreview(tx, workspaceId, before, all, affected, {
+          user: session.userId,
+          session: session.id,
+          page: pageId,
+          action,
+          version: data.expectedVersion,
+          parentId: move?.parentId ?? page.parentId,
+          afterId: move?.afterId ?? null,
+        });
+        if (previewOnly) return preview;
+        // Non-shared legacy clients can still move. Any supplied preview must match,
+        // and a workspace with shares always requires one, even for zero net effects.
+        const supplied = move?.previewToken ?? data.previewToken;
+        const shared =
+          (
+            await tx.execute(
+              sql`SELECT 1 FROM access_grants WHERE workspace_id=${workspaceId}::uuid AND deleted_at IS NULL LIMIT 1`,
+            )
+          ).rows.length > 0;
+        if ((shared || supplied) && supplied !== preview.token)
+          throw new ConflictException({
+            code: 'ACCESS_PREVIEW_STALE',
+            message:
+              'Les accès ou la page ont changé. Vérifiez le nouvel aperçu avant de confirmer.',
+          });
       }
       // Ranks rebalanced on unaffected siblings are observable too.
       // Vacate the target rank first when moving within the same sibling list.

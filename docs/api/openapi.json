@@ -22,6 +22,10 @@
       "Page": {
         "type": "object",
         "properties": {
+          "level": {
+            "type": "string",
+            "enum": ["read", "edit"]
+          },
           "id": {
             "type": "string",
             "format": "uuid"

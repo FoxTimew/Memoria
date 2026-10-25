@@ -1,6 +1,24 @@
 # ADR 019 — Partages de pages et accès collaboratif
 
-Statut : **accepté**, 25 octobre 2026. Cadrage complet et valeurs validés par le développeur ; implémentation autorisée pour 5a. Les sections ci-dessous décrivent la cible, pas des preuves acquises avant exécution.
+Statut : **accepté**, 25 octobre 2026. 5a et 5b validées par le développeur ; 5c livrée pour relecture. Les preuves et absences figurent dans les fiches de chaque étape.
+
+## Réalisation 5c
+
+La gestion des partages est disponible dans « Membres, invitations et partages ». Elle distingue partage direct, sources héritées et droit effectif. Le PUT exige une preuve forte récente et la version d'accès du workspace ; owner/admin sans preuve sont guidés vers la configuration/vérification puis reviennent à leur choix, sans enregistrement automatique. Liste paginée 50/max 100, plafonds de l'ADR 018, audit sans email. Le navigateur invité ouvre l'arbre déjà filtré côté serveur ; le titre et les champs personnalisés, ainsi que BlockNote lui-même, sont désactivés en lecture seule.
+
+La migration **0019** ajoute `workspaces.access_version` et `workspace_members.access_version`. Les triggers avancent le compteur global et attribuent sa nouvelle valeur aux appartenances concernées. Retrait/réadhésion ne réutilise ainsi pas l'époque précédente. Une modification de grant/sujet invalide le membre ciblé ; un changement de rôle invalide ce membre. Un déplacement invalide conservativement tous les guests du workspace ; archivage/restauration/suppression invalident tous ses membres. La création de page périme les aperçus sans invalider les copies existantes. Cette couverture conservatrice peut fermer des pages dont le droit effectif est inchangé ; sa réduction et son coût restent à examiner en 5d, sans retirer les contrôles.
+
+L'ouverture HTTP retourne niveau et époque, après une nouvelle vérification suivant l'appel interne. Le provider navigateur transmet l'époque avec son identité ; `content_resolve_access` la revérifie dans le même contrôle que la session et les grants, à la connexion puis lors des écritures et du contrôle de secours. Une ancienne époque est refusée même après retour du droit edit. Un ancien jeton navigateur sans époque doit recharger le client. Les clients filaires sans persistance des preuves 3a/3b gardent le chemin sans jeton : leurs permissions courantes restent vérifiées, aucune garantie de cache navigateur n'est déduite de ce chemin.
+
+Chaque tentative du mécanisme de reconnexion Hocuspocus passe désormais par le contrôle HTTP, y compris ses retries internes. Une erreur réseau ne donne jamais le droit d'envoyer le diff. Au réveil d'un onglet caché/figé, arbre et éditeur sont masqués jusqu'au contrôle en ligne. Le suivi des époques reste actif sur un poste partagé ou quand la copie locale est interdite ; les tombstones n'autorisent pas pour autant une écriture de contenu dans IndexedDB.
+
+IndexedDB passe au schéma **v3**, sans supprimer la base ni les tombstones de déconnexion. Les anciennes copies v1/v2, dépourvues d'époque de droits, sont retirées à la mise à niveau ; **synchroniser ou exporter les travaux de test avant de charger 5c**. Les brouillons JSON de session 2 restent retirés par leur tombstone v2. Une époque nouvelle purge atomiquement toutes les copies du compte dans ce workspace et invalide les tickets des anciens documents. Réponses tardives et écritures déjà en file ne peuvent rétablir les anciennes copies. Un ancien onglet ne peut pas non plus purger une copie fraîche déjà créée sous une époque plus récente. Les autres comptes/workspaces ne sont pas concernés.
+
+Le travail refusé déjà ouvert reste exportable en mémoire, y compris après edit→read→edit pendant une coupure ; aucun replay automatique. Une déconnexion efface aussi cet export en mémoire. Une page entièrement hors ligne ne peut apprendre immédiatement une révocation : le contrôle est obligatoire avant reprise/affichage/envoi. Une copie exportée ou volontairement conservée par une personne reste hors contrôle de l'application.
+
+Le refus provisoire `SHARING_PREVIEW_REQUIRED` est levé. Les routes de preview move/restore calculent les transitions de niveau par invité et leur nombre de pages. La confirmation porte un HMAC liant acteur/session, page/action/destination, version de page et version des droits. Le serveur recalcule l'aperçu sous les verrous de mutation ; toute divergence renvoie `409 ACCESS_PREVIEW_STALE`. Le calcul explicatif utilise l'arbre/grants relationnels indexés, pas la projection Yjs ; il ne remplace jamais le prédicat d'autorisation SQL. Les essais comparent pertes, gains, descendants, grants directs et restauration aux droits effectivement observés après mutation. Un workspace sans grant conserve la compatibilité des anciennes commandes sans preview ; l'interface présente toujours l'aperçu.
+
+Voir la [fiche 5c](../reviews/session-5-5c-partages.md) pour la matrice R12, les journaux complets, le déploiement et le guide à deux navigateurs. La comparaison de performance et la revue adverse consolidée restent en 5d.
 
 ## Réalisation 5a
 

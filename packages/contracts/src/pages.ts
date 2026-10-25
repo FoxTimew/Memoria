@@ -10,8 +10,12 @@ export const pageMoveSchema = z.strictObject({
   expectedVersion: z.int().positive(),
   parentId: z.uuid().nullable(),
   afterId: z.uuid().nullable(),
+  previewToken: z.string().max(128).optional(),
 });
-export const pageVersionInputSchema = z.strictObject({ expectedVersion: z.int().positive() });
+export const pageVersionInputSchema = z.strictObject({
+  expectedVersion: z.int().positive(),
+  previewToken: z.string().max(128).optional(),
+});
 export const pageDocumentSchema = z.strictObject({
   page: pageSchema,
   collaboration: z

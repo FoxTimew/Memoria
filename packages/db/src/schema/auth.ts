@@ -35,6 +35,7 @@ export const user = pgTable(
 );
 
 export const organization = pgTable('workspaces', {
+  accessVersion: integer('access_version').default(1).notNull(),
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
@@ -113,6 +114,7 @@ export const member = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
     role: text('role').default('member').notNull(),
+    accessVersion: integer('access_version').default(1).notNull(),
     ...times(),
     mfaDeadline: time('mfa_deadline'),
   },

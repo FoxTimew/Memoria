@@ -51,7 +51,12 @@ export const cachePolicySchema = z.strictObject({
   session: z.uuid(),
   sharedComputer: z.boolean(),
   workspaces: z.array(
-    z.strictObject({ workspace: z.uuid(), version: z.int().positive(), allowed: z.boolean() }),
+    z.strictObject({
+      workspace: z.uuid(),
+      version: z.int().positive(),
+      accessVersion: z.int().positive(),
+      allowed: z.boolean(),
+    }),
   ),
 });
 export const workspaceMembersSchema = z.array(

@@ -5,6 +5,7 @@ export interface PageAccessRequest {
   session: string;
   workspace: string;
   page: string;
+  accessVersion?: number | undefined;
 }
 export interface PageAccess extends PageAccessRequest {
   actor: string;
@@ -19,7 +20,8 @@ export function accessRequests(requests: readonly PageAccessRequest[]) {
       (previous.user !== r.user ||
         previous.session !== r.session ||
         previous.workspace !== r.workspace ||
-        previous.page !== r.page)
+        previous.page !== r.page ||
+        previous.accessVersion !== r.accessVersion)
     )
       throw new Error('Conflicting access request key');
     unique.set(r.key, r);
@@ -32,6 +34,7 @@ export function accessRequests(requests: readonly PageAccessRequest[]) {
       session: r.session,
       workspace: r.workspace,
       page: r.page,
+      accessversion: r.accessVersion,
     })),
   );
 }

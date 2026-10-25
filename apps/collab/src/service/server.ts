@@ -10,7 +10,11 @@ import type WebSocket from 'ws';
 import * as Y from 'yjs';
 import { removeAwarenessStates } from 'y-protocols/awareness';
 import type { CollaborationCommand } from '@memoria/contracts';
-import { collaborationSessionSchema, presenceInputSchema, presenceUser } from '@memoria/contracts';
+import {
+  collaborationClientTokenSchema,
+  presenceInputSchema,
+  presenceUser,
+} from '@memoria/contracts';
 import type { Auth } from '@memoria/auth';
 import { Leadership } from './leadership.ts';
 import { Store, receiptFor } from './store.ts';
@@ -80,10 +84,13 @@ export async function collaborationServer(
     async onAuthenticate({ context, documentName, connectionConfig, token }) {
       try {
         assertAvailable();
-        // Cached editors bind their HTTP identity to this cookie, including on reconnect.
-        // Empty tokens remain supported for clients without local persistence (3a/3b).
-        if (token) {
-          const expected = collaborationSessionSchema.parse(JSON.parse(token));
+        // Cached editors bind identity AND access epoch, including on reconnect.
+        // Old browser tokens without an epoch must reload the client. Empty tokens
+        // remain supported only for non-persistent wire clients (3a/3b).
+        const expected = token
+          ? collaborationClientTokenSchema.parse(JSON.parse(token))
+          : undefined;
+        if (expected) {
           if (expected.user !== context.user || expected.session !== context.session)
             throw new Error('SESSION_CHANGED');
         }
@@ -93,6 +100,7 @@ export async function collaborationServer(
           user: context.user,
           session: context.session,
           key: randomUUID(),
+          accessVersion: expected?.accessVersion,
         };
         const access = await store.authorize(identity);
         connectionConfig.readOnly = access.level === 'read';

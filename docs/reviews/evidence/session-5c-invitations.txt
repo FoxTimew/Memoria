@@ -1,0 +1,28 @@
+$ node scripts/build-server.mjs api --invitations-e2e && node --env-file=.env apps/api/dist/invitations.e2e.mjs
+▶ 5b real HTTP: invitations, current authority, transactional acceptance and MFA arrival
+  ✔ I04: no factor/recent proof blocks even optional workspace; enrollment alone is not assurance (635.0855ms)
+  ✔ I01/I04: exact verified recipient, strict roles/roots and native route denial (320.861ms)
+API request failed: Error
+  ✔ I03: real HTTP audit failure rolls back native accepted status, membership, actor, grants and mail (250.4509ms)
+  ✔ I02/I03: resend rotates link, duplicate creation and terminal/expired links do not create access (895.3452ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ I04/A03: admin cannot target privileged roles; owner promotion clears grants; removal closes actual sockets (1054.6241ms)
+  ✔ I03: inviter loses authority and pending invitations are canceled; archived roots roll back acceptance (868.2709ms)
+  ✔ I05: newly accepted guest has no grace; enrollment alone exposes no content and verified factor restores access (1428.8989ms)
+PASS NAT: 50 real password logins, creations and acceptances; same trusted source IP
+  ✔ Q01: fifty real accounts behind one office IP can receive and accept fifty invitations (20798.3236ms)
+  ✔ Q01/R12: all new routes require authentication; proxy forgery and UUID rotation cannot reset quotas (451.4964ms)
+  ✔ Q02: pending/member/share capacities remain atomic under concurrent requests (1229.3838ms)
+  ✔ Q02: sixteen concurrent creations finish without borrowing a second pooled connection (988.3426ms)
+  ✔ I06/Q02: encrypted mail, destination budgets, bounded retries, cancellation and at-least-once delivery (481.7463ms)
+  ✔ I02: worker expiration/retention, immutable terminal time and independent runtime expiry (131.8467ms)
+✔ 5b real HTTP: invitations, current authority, transactional acceptance and MFA arrival (32629.8015ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32634.328
+EXIT_CODE=0

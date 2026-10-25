@@ -4,7 +4,11 @@ import type { Database } from '@memoria/db';
 export const CONTENT_QUOTA = 'memoria:content-quota';
 export const ContentQuota = () => SetMetadata(CONTENT_QUOTA, true);
 export function contentQuotaRead(method: string, route: string) {
-  return ['GET', 'HEAD'].includes(method) || route.endsWith('/collaboration');
+  return (
+    ['GET', 'HEAD'].includes(method) ||
+    route.endsWith('/collaboration') ||
+    route.endsWith('/preview')
+  );
 }
 export async function admitContentIp(
   db: Database,

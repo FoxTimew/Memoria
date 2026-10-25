@@ -47,13 +47,9 @@ export default function WorkspaceArrival({ workspaceId }: { workspaceId: string 
         arrival?.contentAllowed && (
           <>
             <p>Votre accès au studio est prêt.</p>
-            {arrival.role === 'guest' ? (
-              <p>L’ouverture des pages invitées sera disponible prochainement.</p>
-            ) : (
-              <Link className="primary inline-block" href={`/workspaces/${workspaceId}`}>
-                Ouvrir le studio
-              </Link>
-            )}
+            <Link className="primary inline-block" href={`/workspaces/${workspaceId}`}>
+              Ouvrir le studio
+            </Link>
           </>
         )
       )}

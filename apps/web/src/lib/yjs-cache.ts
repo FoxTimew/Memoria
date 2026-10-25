@@ -5,6 +5,7 @@ export const legacyDatabase = 'memoria-local-drafts-v1';
 const stores = ['users', 'sessions', 'documents', 'updates', 'policies'];
 const maxBytes = 8 * 1024 ** 2;
 export class LocalSessionRevoked extends Error {
+  readonly status = 401;
   constructor() {
     super('Cette session a été déconnectée sur ce poste.');
   }
@@ -16,6 +17,12 @@ export class CacheForbidden extends Error {
     );
   }
 }
+export class AccessChanged extends Error {
+  readonly status = 409;
+  constructor() {
+    super('Vos accès ont changé. Rechargez la page pour continuer.');
+  }
+}
 export type CacheTicket = {
   user: string;
   session: string;
@@ -23,14 +30,23 @@ export type CacheTicket = {
   marker: string;
   policies: Record<string, number>;
   observedPolicyEpochs: Record<string, number>;
+  accessVersions: Record<string, number>;
 };
 export type CachePolicy = {
   user: string;
   session: string;
   sharedComputer: boolean;
-  workspaces: { workspace: string; version: number; allowed: boolean }[];
+  workspaces: { workspace: string; version: number; accessVersion?: number; allowed: boolean }[];
 };
-type Policy = { user: string; workspace: string; version: number; allowed: boolean; epoch: number };
+type Policy = {
+  user: string;
+  workspace: string;
+  version: number;
+  accessVersion: number;
+  revoked?: boolean;
+  allowed: boolean;
+  epoch: number;
+};
 export type CachePage = {
   key: string;
   user: string;
@@ -91,13 +107,17 @@ export class YjsCache {
   private async run<T>(
     work: (tx: IDBTransaction, done: (value: T) => void, fail: (error: Error) => void) => void,
   ): Promise<T> {
-    const db = await openDatabase(this.factory(), this.name, 2, (db) => {
+    const db = await openDatabase(this.factory(), this.name, 3, (db) => {
+      // Old copies have no access epoch. Retain logout tombstones, retire only content/policies.
+      for (const store of ['documents', 'updates', 'policies'])
+        if (db.objectStoreNames.contains(store)) db.deleteObjectStore(store);
       const policies = db.createObjectStore('policies', { keyPath: ['user', 'workspace'] });
       policies.createIndex('user', 'user');
-      if (db.objectStoreNames.contains('users')) return;
-      db.createObjectStore('users', { keyPath: 'user' });
-      const sessions = db.createObjectStore('sessions', { keyPath: ['user', 'session'] });
-      sessions.createIndex('user', 'user');
+      if (!db.objectStoreNames.contains('users')) {
+        db.createObjectStore('users', { keyPath: 'user' });
+        const sessions = db.createObjectStore('sessions', { keyPath: ['user', 'session'] });
+        sessions.createIndex('user', 'user');
+      }
       const documents = db.createObjectStore('documents', { keyPath: 'key' });
       documents.createIndex('user', 'user');
       const updates = db.createObjectStore('updates', { keyPath: 'id', autoIncrement: true });
@@ -138,6 +158,7 @@ export class YjsCache {
     ticket: CacheTicket,
     next: () => void,
     fail: (e: Error) => void,
+    policyOnly = false,
   ) {
     const user = tx.objectStore('users').get(ticket.user);
     user.onsuccess = () => {
@@ -153,7 +174,7 @@ export class YjsCache {
             fail(new LocalSessionRevoked());
             return;
           }
-          if ((session.result as Session).disabled) {
+          if ((session.result as Session).disabled && !policyOnly) {
             fail(new CacheForbidden());
             return;
           }
@@ -186,6 +207,7 @@ export class YjsCache {
               marker,
               epoch: epoch.result?.epoch ?? 0,
               policies: {},
+              accessVersions: {},
               observedPolicyEpochs: Object.fromEntries(
                 (observed.result as Policy[]).map((p) => [p.workspace, p.epoch]),
               ),
@@ -214,6 +236,15 @@ export class YjsCache {
     const read = tx.objectStore('policies').get([ticket.user, workspace]);
     read.onsuccess = () => {
       const policy = read.result as Policy | undefined;
+      if (
+        policy &&
+        (policy.revoked ||
+          (ticket.accessVersions[workspace] !== undefined &&
+            ticket.accessVersions[workspace] !== policy.accessVersion))
+      ) {
+        fail(new AccessChanged());
+        return;
+      }
       if (!policy?.allowed || ticket.policies[workspace] !== policy.epoch) {
         fail(new CacheForbidden());
         return;
@@ -222,11 +253,10 @@ export class YjsCache {
     };
   }
   /** Consume a fresh server decision. The pre-request ticket fences delayed HTTP responses. */
-  applyPolicy(ticket: CacheTicket, snapshot: CachePolicy) {
+  async applyPolicy(ticket: CacheTicket, snapshot: CachePolicy) {
     if (snapshot.user !== ticket.user || snapshot.session !== ticket.session)
       return Promise.reject(new LocalSessionRevoked());
-    if (snapshot.sharedComputer)
-      return this.disableUser(ticket).then(() => ({ ...ticket, policies: {} }));
+    if (snapshot.sharedComputer) await this.disableUser(ticket);
     return this.run<CacheTicket>((tx, done, fail) =>
       this.allowed(
         tx,
@@ -237,10 +267,13 @@ export class YjsCache {
           read.onsuccess = () => {
             const known = new Map((read.result as Policy[]).map((p) => [p.workspace, p]));
             const policies: Record<string, number> = {};
+            const accessVersions: Record<string, number> = {};
             for (const proposed of snapshot.workspaces) {
               const old = known.get(proposed.workspace);
               known.delete(proposed.workspace);
-              if (old && old.version > proposed.version) continue;
+              const accessVersion = proposed.accessVersion ?? 1;
+              if (old && (old.version > proposed.version || old.accessVersion > accessVersion))
+                continue;
               // Membership removal does not change the workspace's policy version.
               // A response begun before that local revocation cannot undo its tombstone.
               if (
@@ -253,22 +286,36 @@ export class YjsCache {
                 continue;
               const current: Policy = {
                 ...proposed,
+                accessVersion,
                 user: ticket.user,
-                epoch: (old?.epoch ?? 0) + (old && old.allowed !== proposed.allowed ? 1 : 0),
+                epoch:
+                  (old?.epoch ?? 0) +
+                  (old && (old.allowed !== proposed.allowed || old.accessVersion !== accessVersion)
+                    ? 1
+                    : 0),
               };
               store.put(current);
+              accessVersions[current.workspace] = accessVersion;
+              if (old && old.accessVersion !== accessVersion)
+                this.purgeWorkspace(tx, ticket.user, current.workspace);
               if (current.allowed) policies[current.workspace] = current.epoch;
               else this.purgeWorkspace(tx, ticket.user, current.workspace);
             }
             // Membership disappearance revokes local copies too; this is never an authorization source.
             for (const old of known.values()) {
-              store.put({ ...old, allowed: false, epoch: old.epoch + (old.allowed ? 1 : 0) });
+              store.put({
+                ...old,
+                revoked: true,
+                allowed: false,
+                epoch: old.epoch + (old.allowed ? 1 : 0),
+              });
               this.purgeWorkspace(tx, ticket.user, old.workspace);
             }
-            done({ ...ticket, policies });
+            done({ ...ticket, policies, accessVersions });
           };
         },
         fail,
+        true,
       ),
     );
   }
@@ -284,6 +331,38 @@ export class YjsCache {
       }
       cursor.continue();
     };
+  }
+  /** Purge the whole affected workspace and fence delayed reads/writes, even without a cache. */
+  revokeWorkspace(ticket: CacheTicket, workspace: string) {
+    return this.run<void>((tx, done) => {
+      const store = tx.objectStore('policies'),
+        read = store.get([ticket.user, workspace]);
+      read.onsuccess = () => {
+        const old = read.result as Policy | undefined;
+        // A delayed old tab must not revoke a freshly opened replica at a newer epoch.
+        // That epoch already purged the old bytes atomically in applyPolicy.
+        if (
+          old &&
+          ticket.accessVersions[workspace] !== undefined &&
+          old.accessVersion !== ticket.accessVersions[workspace]
+        ) {
+          done();
+          return;
+        }
+        if (old) store.put({ ...old, revoked: true, allowed: false, epoch: old.epoch + 1 });
+        this.purgeWorkspace(tx, ticket.user, workspace);
+        done();
+      };
+    });
+  }
+  accessStamp(user: string, workspace: string) {
+    return this.run<string>((tx, done) => {
+      const r = tx.objectStore('policies').get([user, workspace]);
+      r.onsuccess = () => {
+        const p = r.result as Policy | undefined;
+        done(p ? `${p.accessVersion}:${p.revoked === true}` : '');
+      };
+    });
   }
   private disableUser(ticket: CacheTicket) {
     // Idempotent, including after the shared session's first purge. Never re-enable old sessions.

@@ -7,3 +7,4 @@ export * from './collaboration.ts';
 export * from './presence.ts';
 
 export * from './invitations.ts';
+export * from './shares.ts';
