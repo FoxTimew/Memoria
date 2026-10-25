@@ -1,6 +1,6 @@
 # Session 5a — moteur de droits et preuve des frontières
 
-Livraison du 25 octobre 2026, sur `codex/session-5-guests-sharing`, après le cadrage `b1d3bf2`. **À relire ; 5b non commencée.** ADR 018 et 019 acceptés, valeurs retenues sans modification. Les deux précisions produit sont intégrées : retour guidé vers l’enrôlement pour les mutations d’accès en 5b, et propriétés de lignes modifiables par un guest edit sans modification du schéma en session 6.
+Livraison du 25 octobre 2026, sur `codex/session-5-guests-sharing`, après le cadrage `b1d3bf2`. **5a validée par le développeur.** Cette fiche conserve les preuves et limites au moment de 5a ; les invitations et la gestion des membres sont ensuite livrées dans la [fiche 5b](session-5-5b-invitations.md). ADR 018 et 019 acceptés, valeurs retenues sans modification. Les deux précisions produit sont intégrées : retour guidé vers l’enrôlement pour les mutations d’accès en 5b, et propriétés de lignes modifiables par un guest edit sans modification du schéma en session 6.
 
 ## Ce qui fonctionne
 

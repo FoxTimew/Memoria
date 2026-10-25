@@ -20,7 +20,7 @@ export async function lockAccount(db: AuthDb, user: string) {
 export async function queueAuthMail(
   db: AuthDb,
   secret: string,
-  kind: 'password-request' | 'verification-request' | 'delivery',
+  kind: 'password-request' | 'verification-request' | 'delivery' | 'invitation',
   payload: { email: string; subject?: string; text?: string },
   userId?: string,
   expiresAt = new Date(Date.now() + 1800000),
@@ -29,13 +29,20 @@ export async function queueAuthMail(
     : kind === 'verification-request'
       ? 'verification'
       : 'security',
+  invitationId?: string,
 ) {
   if (budgetType && !(await emailBudget(db, secret, budgetType, payload.email))) return;
   await db.insert(tables.authMailJobs).values({
     kind,
     userId,
-    expiresAt,
+    // created_at defaults to PostgreSQL transaction time, which can precede the
+    // application clock after lock waits. Keep the invitation TTL strictly bounded.
+    expiresAt:
+      kind === 'invitation'
+        ? sql`least(${expiresAt.toISOString()}::timestamptz, now() + interval '24 hours')`
+        : expiresAt,
     payload: await symmetricEncrypt({ key: secret, data: JSON.stringify(payload) }),
+    invitationId,
   });
 }
 export const readMailPayload = async (secret: string, payload: string) =>

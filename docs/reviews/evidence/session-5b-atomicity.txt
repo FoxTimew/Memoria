@@ -1,0 +1,17 @@
+COMMAND: pnpm test:invitations:atomicity
+Recorded: 2026-10-25; functional verification (not benchmark)
+
+$ node scripts/build-server.mjs api --invitations-atomicity-e2e && node --env-file=.env apps/api/dist/invitations-atomicity.e2e.mjs
+PASS atomic rollback after accepted: invitation pending, no member/actor/grant/audit/mail
+PASS atomic rollback after sidecars: invitation pending, no member/actor/grant/audit/mail
+✔ 5b prerequisite: installed Better Auth shares the facade transaction and rolls back all effects (1274.1555ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1277.9171
+
+EXIT_CODE: 0

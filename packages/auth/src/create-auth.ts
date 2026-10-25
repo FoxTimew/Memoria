@@ -7,6 +7,7 @@ import type { Database, WriteTransaction } from '@memoria/db';
 import { securityIntegration } from './security-plugin.ts';
 import type { SecurityFlow } from './security-plugin.ts';
 import { queueAuthMail } from './recovery-core.ts';
+import { invitationPolicy } from './invitation-policy.ts';
 
 export interface AuthOptions {
   origin: string;
@@ -19,6 +20,7 @@ export interface AuthOptions {
 }
 
 export function createAuth(database: Database | WriteTransaction, options: AuthOptions) {
+  const limits = invitationPolicy();
   const security = securityIntegration(
     database,
     options.origin,
@@ -111,6 +113,9 @@ export function createAuth(database: Database | WriteTransaction, options: AuthO
         creatorRole: 'owner',
         roles: { owner: ownerAc, admin: adminAc, member: memberAc, guest: defaultAc.newRole({}) },
         requireEmailVerificationOnInvitation: true,
+        invitationExpiresIn: limits.INVITATION_VALIDITY_DAYS * 86400,
+        invitationLimit: limits.WORKSPACE_MAX_PENDING_INVITATIONS,
+        membershipLimit: limits.WORKSPACE_MAX_MEMBERS,
         allowUserToCreateOrganization: async (user) => user.emailVerified,
       }),
     ],

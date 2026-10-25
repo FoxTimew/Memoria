@@ -243,6 +243,9 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
         <a className="quiet-link mb-5 block text-sm" href={`/workspaces/${workspaceId}/securite`}>
           Sécurité de l’espace
         </a>
+        <a className="quiet-link mb-5 block text-sm" href={`/workspaces/${workspaceId}/acces`}>
+          Membres et invitations
+        </a>
         <label className="block text-xs font-medium uppercase tracking-wider">
           Recherche
           <input

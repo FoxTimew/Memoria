@@ -1,6 +1,6 @@
 # Session 5 — étape 1 : invités et partages
 
-Note de suivi : le développeur a ensuite accepté intégralement le cadrage et les valeurs des ADR 018/019. Cette fiche conserve l’état historique de l’étape 1 ; les preuves exécutées depuis sont consignées dans la [fiche 5a](session-5-5a-droits.md) et sa [matrice](session-5-5a-frontieres.md).
+Note de suivi : le développeur a ensuite accepté intégralement le cadrage et les valeurs des ADR 018/019. Cette fiche conserve l’état historique de l’étape 1 ; les preuves exécutées depuis sont consignées dans la [fiche 5a](session-5-5a-droits.md) et sa [matrice](session-5-5a-frontieres.md), puis dans la [fiche 5b](session-5-5b-invitations.md).
 
 25 octobre 2026. Branche `codex/session-5-guests-sharing`, créée depuis main synchronisé `1fc393eb8778dad9a6480620597ef239d322ab22`, après fusion de la [PR de session 4 #5](https://github.com/FoxTimew/Memoria/pull/5). La création/fusion de cette PR a été explicitement demandée par le développeur ; ce n'est pas une autorisation générale pour les suivantes.
 

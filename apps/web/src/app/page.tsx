@@ -161,6 +161,9 @@ export default function Home() {
         </span>
         <div className="flex items-center gap-5 text-sm">
           <span>{session.user.name}</span>
+          <Link className="quiet-link" href="/invitation">
+            Mes invitations
+          </Link>
           <Link className="quiet-link" href="/securite">
             Sécurité du compte
           </Link>
@@ -223,12 +226,20 @@ export default function Home() {
                   </div>
                   <div className="min-w-0">
                     <h2 className="truncate text-lg font-semibold">
-                      <a className="quiet-link" href={`/workspaces/${workspace.id}`}>
+                      <a className="quiet-link" href={`/workspaces/${workspace.id}/arrivee`}>
                         {workspace.name}
                       </a>
                     </h2>
                     <p className="mt-1 text-sm text-[#657267]">
-                      {workspace.slug} · {workspace.role === 'owner' ? 'Propriétaire' : 'Membre'}
+                      {workspace.slug} ·{' '}
+                      {
+                        {
+                          owner: 'Propriétaire',
+                          admin: 'Administrateur',
+                          member: 'Membre',
+                          guest: 'Invité',
+                        }[workspace.role]
+                      }
                     </p>
                   </div>
                 </article>

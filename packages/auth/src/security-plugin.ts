@@ -589,7 +589,7 @@ export function securityIntegration(
               coalesce(p.allow_persistent_cache,true) AS allowed
             FROM workspace_members m JOIN workspaces w ON w.id=m.workspace_id AND w.deleted_at IS NULL
             LEFT JOIN workspace_policies p ON p.workspace_id=m.workspace_id
-            WHERE m.user_id=${value.user.id}::uuid AND m.role IN ('owner','member')`);
+            WHERE m.user_id=${value.user.id}::uuid AND m.role IN ('owner','admin','member')`);
           return ctx.json({
             user: value.user.id,
             session: value.session.id,

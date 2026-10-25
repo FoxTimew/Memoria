@@ -1,6 +1,6 @@
 # ADR 018 — Invitations, rôles et arrivée dans un workspace
 
-Statut : **accepté**, 25 octobre 2026. Cadrage complet et valeurs validés par le développeur ; implémentation autorisée pour 5a. Les sections ci-dessous décrivent la cible, pas des preuves acquises avant exécution.
+Statut : **accepté**, 25 octobre 2026. Cadrage complet et valeurs validés par le développeur ; 5a validée et 5b livrée pour relecture. Les sections ci-dessous décrivent la cible, pas des preuves acquises avant exécution.
 
 ## Contexte et décisions déjà validées
 
@@ -19,7 +19,7 @@ Le rôle d'invitation est exactement `admin`, `member` ou `guest` ; pas d'invita
 
 Conserver le plugin organization, son schéma et ses API serveur. Les façades Nest possèdent autorisation, quotas, assurance et transaction ; **aucune route native organization n'est ouverte**. Configurer explicitement les quatre rôles, les permissions minimales du guest et `requireEmailVerificationOnInvitation: true`. Ne pas ajouter de dépendance ou mettre à jour Better Auth pour cette session.
 
-Lecture du code installé : `crud-invites.mjs` compare l'adresse de la session au destinataire, vérifie statut/expiration et fait un changement conditionnel pending→accepted. Avec la génération UUID actuelle, l'email vérifié n'est pas exigé par défaut dans ce chemin : notre option explicite et le guard restent indispensables. Le changement de statut précède une partie de la création du membre : la preuve 5b devra montrer le rollback de l'ensemble avec notre adaptateur transactionnel, y compris acteur, sujet, partages, audit et file d'email. Le simple succès du plugin ne prouve pas cette atomicité.
+Lecture du code installé : `crud-invites.mjs` compare l'adresse de la session au destinataire, vérifie statut/expiration et fait un changement conditionnel pending→accepted. Avec la génération UUID actuelle, l'email vérifié n'est pas exigé par défaut dans ce chemin : notre option explicite et le guard restent indispensables. Le changement de statut précède une partie de la création du membre : la preuve 5b montre le rollback de l'ensemble avec notre adaptateur transactionnel, y compris acteur, sujet, partages, audit et file d'email. Le simple succès du plugin ne prouve pas cette atomicité.
 
 La [documentation officielle organization](https://better-auth.com/docs/plugins/organization#email-verification-requirement) confirme l'option d'email vérifié et décrit les hooks. La politique retenue ci-dessous est applicative, pas une garantie supplémentaire de la bibliothèque.
 
@@ -69,8 +69,20 @@ Emails : type séparé `invitation`, **3/15 min et 10/jour/destinataire** comme 
 
 Laisser les routes natives ouvertes simplifierait le front mais contournerait transactions, assurance et R12. Créer un système de memberships parallèle dupliquerait le plugin. Les deux options sont écartées dans cette décision. Pas de lien public anonyme, de domaine auto-admis ni de création de compte par l'administrateur.
 
-Preuves bloquantes prévues en 5b : bon/mauvais destinataire, email non vérifié, rôle forgé/multiple/owner, acteur révoqué avant acceptation, lien expiré/annulé/renvoyé/rejoué, double acceptation, panne SQL après statut accepted, collision d'invitation, capacité concurrente, cinquante comptes sous NAT, job SMTP doublé/annulé, arrivée MFA sans accès anticipé. Chaque route réelle entre dans la [matrice de session 5](../reviews/session-5-etape-1-cadrage.md) avant d'être déclarée sécurisée. **Aucun de ces nouveaux scénarios n'est encore exécuté à cette étape.**
+Preuves bloquantes prévues en 5b : bon/mauvais destinataire, email non vérifié, rôle forgé/multiple/owner, acteur révoqué avant acceptation, lien expiré/annulé/renvoyé/rejoué, double acceptation, panne SQL après statut accepted, collision d'invitation, capacité concurrente, cinquante comptes sous NAT, job SMTP doublé/annulé, arrivée MFA sans accès anticipé. Chaque route réelle entre dans la [matrice de session 5](../reviews/session-5-etape-1-cadrage.md) avant d'être déclarée sécurisée. Les résultats exécutés et les absences restantes sont distingués dans la [fiche 5b](../reviews/session-5-5b-invitations.md).
 
 ## Précision validée pour 5b
 
 Un owner/admin sans facteur qui tente une mutation d’accès reçoit un parcours guidé de configuration, puis de vérification forte, avec un message simple : « Pour gérer les accès au studio, ajoutez une seconde vérification à votre compte. » Revenir ensuite à son formulaire, sans exécuter automatiquement une ancienne demande ni contourner la revérification transactionnelle. Cela vaut aussi sans obligation forte du workspace ; pas de refus brut dans l’interface.
+
+## Réalisation 5b
+
+La preuve préalable contre Better Auth installé confirme le rollback après son changement de statut, puis après les écritures métier et le job chiffré. Les façades utilisent `AuthService.inTransaction(tx)` ; les headers sont transmis au plugin, mais l'identité et l'autorisation restent celles du guard et de la relecture SQL. Aucun endpoint organization natif n'est ouvert. Migration 0018 : intentions de partage, unicité pending/email normalisé, date terminale immuable, annulation des invitations incompatibles après retrait/rétrogradation de leur émetteur. Les grants n'existent qu'après acceptation, dans le même commit que l'acteur et le sujet.
+
+Les budgets IP/compte sont consommés par le guard indépendamment du résultat métier. Les budgets d'envoi workspace/destinataire sont committés avec l'invitation et le job : un rollback ne produit ni email ni consommation d'envoi. Ils utilisent la même connexion SQL que la mutation, pour éviter une attente circulaire quand le pool est occupé par des transactions en attente de verrous. Une preuve de seize créations simultanées couvre ce cas. Les retries SMTP ne consomment aucun nouveau budget. Un budget destinataire épuisé laisse un lien copiable (`limited`) ; le budget workspace journalier renvoie 429. Les durées de job sont bornées aussi par l'horloge transactionnelle PostgreSQL, pas seulement l'horloge applicative.
+
+Le worker expire les pending et purge les invitations closes chaque minute. La date terminale ne change pas après une mise à jour du statut SMTP. Les intentions conservent une FK vers leurs pages : l'archivage reste possible ; la future purge définitive de pages devra retirer/annuler ces intentions dans son ordre de nettoyage. Pas de conversion ni de reset des données locales.
+
+L'interface `/workspaces/:id/acces` conserve le formulaire dans le stockage de l'onglet, par utilisateur/workspace, pendant la configuration du facteur. Retour autorisé seulement vers des chemins internes explicitement admis ; aucune soumission automatique. Les marqueurs de déconnexion effacent aussi ces formulaires dans les onglets actifs. Le lien d'invitation peut être retrouvé via « Mes invitations » si le stockage de l'onglet est indisponible. Renvoi/annulation/retrait demandent une nouvelle action explicite au retour ; leurs boutons ne rejouent pas une requête ancienne. L'arrivée `/workspaces/:id/arrivee` vérifie à nouveau la politique ; un guest termine son adhésion/MFA mais son éditeur navigateur reste fermé jusqu'à 5c.
+
+La [fiche 5b](../reviews/session-5-5b-invitations.md) contient l'inventaire réel des quatorze routes nouvelles/élargies, leurs quotas, les attaques, les journaux complets et les limites. Les campagnes de fuite/concurrence/cache consolidées et les mesures à mille pages restent en 5d ; cette preuve fonctionnelle NAT ne qualifie pas cinquante rédacteurs simultanés.

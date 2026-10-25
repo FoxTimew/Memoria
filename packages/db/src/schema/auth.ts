@@ -134,6 +134,8 @@ export const invitation = pgTable(
     email: text('email').notNull(),
     role: text('role'),
     status: text('status').default('pending').notNull(),
+    closedAt: time('closed_at'),
+    deliveryStatus: text('delivery_status').default('not-sent').notNull(),
     inviterId: uuid('inviter_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
@@ -144,6 +146,10 @@ export const invitation = pgTable(
     index('invitations_workspace_idx').on(t.organizationId),
     index('invitations_email_idx').on(t.email),
     index('invitations_expiry_idx').on(t.expiresAt),
+    unique('invitations_workspace_id_uq').on(t.organizationId, t.id),
+    uniqueIndex('invitations_pending_email_uq')
+      .on(t.organizationId, sql`lower(${t.email})`)
+      .where(sql`${t.status}='pending'`),
     check(
       'invitation_role_ck',
       sql`${t.role} is null or ${t.role} in ('owner','admin','member','guest')`,
@@ -296,6 +302,7 @@ export const authMailJobs = pgTable(
     id: uuid('id').defaultRandom().primaryKey(),
     userId: uuid('user_id').references(() => user.id, { onDelete: 'cascade' }),
     kind: text('kind').notNull(),
+    invitationId: uuid('invitation_id').references(() => invitation.id, { onDelete: 'cascade' }),
     payload: text('payload').notNull(),
     attempts: integer('attempts').default(0).notNull(),
     availableAt: time('available_at').defaultNow().notNull(),
@@ -306,7 +313,7 @@ export const authMailJobs = pgTable(
     index('auth_mail_available_idx').on(t.availableAt),
     check(
       'auth_mail_kind_ck',
-      sql`${t.kind} in ('password-request','verification-request','delivery')`,
+      sql`${t.kind} in ('password-request','verification-request','delivery','invitation')`,
     ),
   ],
 );

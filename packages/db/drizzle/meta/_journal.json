@@ -127,6 +127,13 @@
       "when": 1792941435458,
       "tag": "0017_inherited_page_access",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1792944124717,
+      "tag": "0018_workspace_invitations",
+      "breakpoints": true
     }
   ]
 }
