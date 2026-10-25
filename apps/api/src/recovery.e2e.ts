@@ -81,6 +81,27 @@ await test(
           method = body === undefined ? 'GET' : 'POST',
           extra: Record<string, string> = {},
         ) {
+          if (path === '/security/recover' || path === '/security/operator-recover') {
+            const challenge = await fetch(origin + '/api/auth/security/recovery-challenge', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Origin: config.APP_ORIGIN,
+                'x-forwarded-for': `2001:db8:${(ip++).toString(16)}::1`,
+              },
+              body: JSON.stringify({
+                email: (body as { email: string }).email,
+                purpose: path === '/security/recover' ? 'code' : 'operator',
+              }),
+            });
+            assert.equal(challenge.status, 200);
+            extra = {
+              'x-memoria-recovery-challenge': String(
+                ((await challenge.json()) as { id: string }).id,
+              ),
+              ...extra,
+            };
+          }
           const response = await fetch(
             origin + (path.startsWith('/api/') ? path : '/api/auth' + path),
             {
@@ -676,7 +697,12 @@ await test(
         'mail transport failure retries durably, then purges ciphertext; unknown requests do not send',
         async () => {
           await drain();
-          await ok(client().request('/security/request-password-reset', { email: alice.email }));
+          // Independent recipient: the previous recovery scenarios deliberately exhausted
+          // Alice's real destination budget. Do not disable/reset production quotas here.
+          const recipient = await user();
+          await ok(
+            client().request('/security/request-password-reset', { email: recipient.email }),
+          );
           assert(await processAuthMail(connection.db, mailOptions));
           const reports: unknown[] = [];
           for (let n = 0; n < 6; n++) {

@@ -65,6 +65,14 @@ export async function securityRequest(
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   });
   const data = (await response.json()) as Record<string, unknown>;
+  if (response.status === 429) {
+    const wait = Number(response.headers.get('Retry-After'));
+    throw new Error(
+      Number.isFinite(wait) && wait > 0
+        ? `Patientez ${Math.ceil(wait)} secondes avant de réessayer.`
+        : securityError('TOO_MANY_REQUESTS'),
+    );
+  }
   if (!response.ok)
     throw new Error(
       securityError(response.status === 429 ? 'TOO_MANY_REQUESTS' : String(data.code)),

@@ -8,6 +8,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { createDatabase } from '@memoria/db';
 import { AppModule, configureApplication } from './app.ts';
 import { readConfig } from './config.ts';
+import { ipKey } from '../../../packages/auth/src/throttle.ts';
 
 // Deliberately has neither @Public nor @CurrentUser: only the real global guard
 // can prevent this newly added handler from returning 200 to an anonymous caller.
@@ -42,7 +43,7 @@ await test(
     const hex = randomBytes(4).toString('hex');
     const ip = `2001:0db8:${hex.slice(0, 4)}:${hex.slice(4)}:0000:0000:0000:0000`;
     const paths = ['/sign-in/email', '/sign-up/email', '/send-verification-email', '/get-session'];
-    const keys = paths.map((path) => `${ip}|${path}`);
+    const keys = paths.map((path) => ipKey(config.BETTER_AUTH_SECRET, path, ip));
     const { pool } = createDatabase(config.DATABASE_URL);
     try {
       await app.listen(0, '127.0.0.1');
@@ -69,11 +70,11 @@ await test(
         assert.equal((await request('/api/auth/organization/create', {})).status, 404);
       });
       await t.test(
-        'login admits five attempts, returns 429 on the sixth and recovers after cooldown',
+        'login admits 150 attempts, returns 429 on the next and recovers after the fixed window',
         async () => {
-          const body = { email: `rate-${hex}@example.test`, password: 'invalid-test-password' };
-          for (let attempt = 0; attempt < 5; attempt++) {
-            assert.equal((await request('/api/auth/sign-in/email', body)).status, 401);
+          const body = { email: 'invalid' };
+          for (let attempt = 0; attempt < 150; attempt++) {
+            assert.equal((await request('/api/auth/sign-in/email', body)).status, 400);
           }
           const limited = await request('/api/auth/sign-in/email', body);
           assert.equal(limited.status, 429);
@@ -81,21 +82,21 @@ await test(
           assert.ok(retry > 30 && retry <= 60);
           assert.equal((await request('/api/auth/get-session')).status, 200);
           // Advance only this fixture's persisted timestamp instead of sleeping a minute.
-          const expired = await pool.query(
-            'update auth_rate_limits set last_request=$2 where key=$1',
-            [keys[0], Date.now() - 61000],
-          );
+          const expired = await pool.query('update auth_buckets set started_at=$2 where key=$1', [
+            keys[0],
+            new Date(Date.now() - 61000),
+          ]);
           assert.equal(expired.rowCount, 1);
-          assert.equal((await request('/api/auth/sign-in/email', body)).status, 401);
+          assert.equal((await request('/api/auth/sign-in/email', body)).status, 400);
         },
       );
-      for (const [path, window] of [
-        ['/sign-up/email', 600],
-        ['/send-verification-email', 300],
+      for (const [path, window, max] of [
+        ['/sign-up/email', 600, 100],
+        ['/send-verification-email', 300, 150],
       ] as const) {
-        await t.test(`${path} blocks its fourth request independently`, async () => {
+        await t.test(`${path} blocks after ${max} requests independently`, async () => {
           // Invalid input exercises the real limiter without creating an account or sending mail.
-          for (let attempt = 0; attempt < 3; attempt++)
+          for (let attempt = 0; attempt < max; attempt++)
             assert.equal((await request(`/api/auth${path}`, { email: 'invalid' })).status, 400);
           const limited = await request(`/api/auth${path}`, { email: 'invalid' });
           assert.equal(limited.status, 429);
@@ -105,7 +106,7 @@ await test(
       }
     } finally {
       try {
-        await pool.query('delete from auth_rate_limits where key = any($1::text[])', [keys]);
+        await pool.query('delete from auth_buckets where key = any($1::text[])', [keys]);
       } finally {
         await pool.end();
         await app.close();

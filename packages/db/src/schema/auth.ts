@@ -304,6 +304,9 @@ export const authMailJobs = pgTable(
   },
   (t) => [
     index('auth_mail_available_idx').on(t.availableAt),
-    check('auth_mail_kind_ck', sql`${t.kind} in ('password-request','delivery')`),
+    check(
+      'auth_mail_kind_ck',
+      sql`${t.kind} in ('password-request','verification-request','delivery')`,
+    ),
   ],
 );

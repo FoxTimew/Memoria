@@ -6,3 +6,4 @@ export { lockSession, requireSensitiveAction, SecurityPolicyError } from './work
 export type { SessionIdentity, SensitiveAction } from './workspace-security.ts';
 export { operatorReset } from './recovery-core.ts';
 export { processAuthMail } from './mail-jobs.ts';
+export { purgeAuthCounters } from './throttle.ts';

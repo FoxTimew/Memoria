@@ -1,0 +1,5 @@
+COMMAND=pnpm db:migrate
+$ pnpm --filter @memoria/db migrate
+$ node --env-file=../../.env --experimental-strip-types src/migrate.ts
+
+EXIT_CODE=0

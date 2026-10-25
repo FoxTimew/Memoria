@@ -18,6 +18,7 @@ import type { Database, WriteTransaction } from '@memoria/db';
 import { readAssurance } from './assurance.ts';
 import { lockAccount, securityNotice, revokeForRecovery } from './recovery-core.ts';
 import { recoveryEndpoints } from './recovery-plugin.ts';
+import { resetAccountAttempts } from './throttle.ts';
 
 type Context = Parameters<typeof getSessionFromCtx>[0];
 export type Identity = NonNullable<Awaited<ReturnType<typeof getSessionFromCtx>>>;
@@ -224,6 +225,7 @@ export function securityIntegration(
       if (settings) await db.insert(tables.sessionSecurity).values({ ...settings, sessionId });
       await db.delete(tables.session).where(eq(tables.session.id, previous));
     }
+    await resetAccountAttempts(db, secret, proof.userId);
     await audit(proof.userId, 'strong_session_verified');
   }
 
@@ -438,17 +440,17 @@ export function securityIntegration(
         await db
           .insert(tables.sessionSecurity)
           .values({ sessionId: value.session.id, passwordVerifiedAt: new Date() });
-        return ctx.json({
-          ...(ctx.context.returned as object),
-          requiresStrongAuth:
-            (await factors(value.user.id)).active ||
-            (
-              await db
-                .select()
-                .from(tables.accountSecurity)
-                .where(eq(tables.accountSecurity.userId, value.user.id))
-            )[0]?.recoveryRequired === true,
-        });
+        const requiresStrongAuth =
+          (await factors(value.user.id)).active ||
+          (
+            await db
+              .select()
+              .from(tables.accountSecurity)
+              .where(eq(tables.accountSecurity.userId, value.user.id))
+          )[0]?.recoveryRequired === true;
+        if (!requiresStrongAuth && value.user.emailVerified)
+          await resetAccountAttempts(db, secret, value.user.id);
+        return ctx.json({ ...(ctx.context.returned as object), requiresStrongAuth });
       }
       if (!flow) return;
       if (path === '/verify-password' && flow.initial) {

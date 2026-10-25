@@ -116,6 +116,11 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
               lien puis connectez-vous.
             </p>
           )}
+          {busy && (
+            <p role="status" className="notice mb-5">
+              Vérification en cours. Cela peut prendre jusqu’à trente secondes.
+            </p>
+          )}
           <form onSubmit={submit} className="space-y-5">
             {mode === 'signup' && !sent && (
               <label className="block text-sm font-medium">

@@ -11,7 +11,9 @@ import { queueAuthMail } from './recovery-core.ts';
 export interface AuthOptions {
   origin: string;
   secret: string;
-  sendVerificationEmail(email: string, url: string): Promise<void>;
+  sendVerificationEmail?(email: string, url: string): Promise<void>;
+  /** Only the mail worker sets this after consuming the request's destination budget. */
+  mailBudgetGranted?: boolean;
   /** Server-only request scope, constructed by handleAuthRequest inside a transaction. */
   securityFlow?: SecurityFlow;
 }
@@ -54,6 +56,8 @@ export function createAuth(database: Database | WriteTransaction, options: AuthO
               text: `Pour choisir un nouveau mot de passe, ouvrez ce lien sous trente minutes :\n${options.origin}/recuperation#reset=${token}\nSi vous n’avez rien demandé, ignorez cet email.`,
             },
             user.id,
+            undefined,
+            options.mailBudgetGranted ? false : 'password',
           );
       },
       onPasswordReset: async ({ user }) => security.passwordReset(user.id),
@@ -67,29 +71,30 @@ export function createAuth(database: Database | WriteTransaction, options: AuthO
       autoSignInAfterVerification: false,
       expiresIn: 3600,
       sendVerificationEmail: async ({ user, url }) =>
-        options.sendVerificationEmail(user.email, url),
+        options.sendVerificationEmail
+          ? options.sendVerificationEmail(user.email, url)
+          : queueAuthMail(
+              database,
+              options.secret,
+              'delivery',
+              {
+                email: user.email,
+                subject: 'Vérifiez votre adresse email — Memoria',
+                text: `Confirmez votre adresse email avec ce lien valable une heure :\n${url}`,
+              },
+              user.id,
+              undefined,
+              options.mailBudgetGranted ? false : 'verification',
+            ),
     },
     session: {
       expiresIn: 60 * 60 * 24 * 7,
       updateAge: 60 * 60 * 24,
       cookieCache: { enabled: false },
     },
-    rateLimit: {
-      enabled: true,
-      storage: 'database',
-      window: 60,
-      max: 100,
-      // Paths are relative to basePath, not prefixed with /api/auth.
-      customRules: {
-        '/sign-in/email': { window: 60, max: 5 },
-        '/sign-up/email': { window: 600, max: 3 },
-        '/send-verification-email': { window: 300, max: 3 },
-        '/security/request-password-reset': { window: 300, max: 3 },
-        '/security/recover': { window: 300, max: 5 },
-        '/security/operator-recover': { window: 300, max: 5 },
-        '/reset-password': { window: 300, max: 5 },
-      },
-    },
+    // Fixed-window admission belongs to the HTTP facade, before the auth transaction.
+    // This also removes hidden plugin ceilings incompatible with an office NAT.
+    rateLimit: { enabled: false },
     advanced: {
       database: { generateId: 'uuid' },
       useSecureCookies: true,

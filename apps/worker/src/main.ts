@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { PgBoss } from 'pg-boss';
 import { z } from 'zod';
 import { createDatabase } from '@memoria/db';
-import { processAuthMail } from '@memoria/auth';
+import { processAuthMail, purgeAuthCounters } from '@memoria/auth';
 import nodemailer from 'nodemailer';
 
 const parsed = z
@@ -46,10 +46,15 @@ boss.on('error', () => console.error('Worker database operation failed'));
 await boss.start();
 
 let stopping = false;
+let lastCounterPurge = 0;
 let delivering: Promise<void> | undefined;
 const poll = setInterval(() => {
   if (stopping || delivering) return;
   delivering = (async () => {
+    if (Date.now() - lastCounterPurge >= 60000) {
+      await purgeAuthCounters(connection.db);
+      lastCounterPurge = Date.now();
+    }
     for (let i = 0; i < 20 && !stopping; i++) {
       const done = await processAuthMail(connection.db, {
         origin: config.APP_ORIGIN,

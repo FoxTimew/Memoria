@@ -1,0 +1,26 @@
+COMMAND=pnpm test:auth:limits
+$ node scripts/build-server.mjs api --rate-limits-e2e && node --env-file=.env apps/api/dist/rate-limits.e2e.mjs
+Observed admission: max active 8/8; max leases 50/128 for 50 concurrent logins.
+▶ 4d: real Nest/Better Auth/PostgreSQL admission on two API nodes
+  ✔ 50 distinct accounts can each sign in behind one office NAT, across two nodes (7873.9953ms)
+  ✔ multi-IP failures share progressive delays; another account and unknown addresses behave correctly (3938.4513ms)
+Real admitted victim wait: 30328 ms; fixed delay 30000 ms; victim arrives after two attackers; six failed passwords, one cancelled request, 15 rejected arrivals.
+  ✔ victim admitted at 30 seconds keeps its deadline during a parallel attack; cancellation releases SQL leases (30611.0814ms)
+  ✔ IP quotas are fixed, shared across nodes, immune to forged internal headers and IPv6 host changes (1064.4154ms)
+  ✔ email budgets suppress delivery generically; windows, per-type separation and 24h purge are real SQL (332.607ms)
+  ✔ password-only pending MFA never resets failures; a verified UV passkey does (1835.2451ms)
+  ✔ recovery challenges bind account/purpose, allow five guesses, expire, and renewal observes account delays (4136.1761ms)
+  ✔ native plugin ceilings cannot override the 300-per-route NAT limit (10578.4184ms)
+  ✔ expired failure windows and process-crash leases recover; retention is configurable (393.3691ms)
+  ✔ global admission is bounded, releases slots, and SQL enforces the deadline independently of API clocks (2768.5774ms)
+  ✔ the general 600-per-route rule and reset 100-per-route rules remain active (12071.133ms)
+✔ 4d: real Nest/Better Auth/PostgreSQL admission on two API nodes (77174.6874ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 77180.696
+EXIT_CODE=0

@@ -3,6 +3,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import type { Database, WriteTransaction } from '@memoria/db';
 import * as tables from '@memoria/db/schema';
 import { symmetricEncrypt, symmetricDecrypt } from 'better-auth/crypto';
+import { emailBudget } from './throttle.ts';
 
 export type AuthDb = Database | WriteTransaction;
 export const recoveryHash = (user: string, code: string) =>
@@ -19,11 +20,17 @@ export async function lockAccount(db: AuthDb, user: string) {
 export async function queueAuthMail(
   db: AuthDb,
   secret: string,
-  kind: 'password-request' | 'delivery',
-  payload: object,
+  kind: 'password-request' | 'verification-request' | 'delivery',
+  payload: { email: string; subject?: string; text?: string },
   userId?: string,
   expiresAt = new Date(Date.now() + 1800000),
+  budgetType: string | false = kind === 'password-request'
+    ? 'password'
+    : kind === 'verification-request'
+      ? 'verification'
+      : 'security',
 ) {
+  if (budgetType && !(await emailBudget(db, secret, budgetType, payload.email))) return;
   await db.insert(tables.authMailJobs).values({
     kind,
     userId,
@@ -185,6 +192,8 @@ export async function operatorReset(
         text: `Une récupération a été demandée par l’exploitant. Avec votre mot de passe, ouvrez ce lien sous trente minutes :\n${options.origin}/recuperation#operator=${token}\nSi vous n’êtes pas à l’origine de cette demande, contactez votre exploitant.`,
       },
       user.id,
+      undefined,
+      'operator',
     );
     return result;
   });

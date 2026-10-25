@@ -28,9 +28,14 @@ export async function processAuthMail(
     try {
       await tx.transaction(async (nested) => {
         const payload = await readMailPayload(options.secret, job.payload);
-        if (job.kind === 'password-request') {
-          const auth = createAuth(nested, { ...options, sendVerificationEmail: async () => {} });
-          await auth.api.requestPasswordReset({ body: { email: payload.email } });
+        if (job.kind === 'password-request' || job.kind === 'verification-request') {
+          const auth = createAuth(nested, { ...options, mailBudgetGranted: true });
+          if (job.kind === 'password-request')
+            await auth.api.requestPasswordReset({ body: { email: payload.email } });
+          else
+            await auth.api.sendVerificationEmail({
+              body: { email: payload.email, callbackURL: '/connexion?verified=1' },
+            });
         } else {
           if (!payload.subject || !payload.text) throw new Error('INVALID_MAIL');
           await options.send(payload.email, payload.subject, payload.text);

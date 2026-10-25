@@ -8,6 +8,8 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "test:auth:limits": "node scripts/build-server.mjs api --rate-limits-e2e && node --env-file=.env apps/api/dist/rate-limits.e2e.mjs",
+    "test:auth:limits:browser": "node --env-file=.env --use-system-ca scripts/test-auth-limits-browser.mjs",
     "admin:reset-factor": "node scripts/admin-reset-factor.mjs",
     "dev": "turbo run dev --env-mode=loose",
     "build": "pnpm typecheck && pnpm test:bootstrap && turbo run build",

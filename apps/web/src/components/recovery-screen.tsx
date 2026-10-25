@@ -1,10 +1,17 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { securityRequest } from '../lib/security-client.ts';
 
 export function RecoveryScreen() {
+  const challenge = useRef<{
+    id: string;
+    email: string;
+    purpose: string;
+    expires: number;
+    attempts: number;
+  } | null>(null);
   const [mode, setMode] = useState<'email' | 'reset' | 'code' | 'operator'>('email');
   const [ready, setReady] = useState(false);
   const [token, setToken] = useState(''),
@@ -52,9 +59,31 @@ export function RecoveryScreen() {
           'Votre mot de passe est changé et vos anciennes connexions sont fermées. Connectez-vous à nouveau : votre code habituel ou votre passkey reste nécessaire si vous en avez configuré un.',
         );
       } else {
+        const canonical = email.trim().toLowerCase();
+        if (
+          !challenge.current ||
+          challenge.current.email !== canonical ||
+          challenge.current.purpose !== mode ||
+          challenge.current.expires <= Date.now() ||
+          challenge.current.attempts >= 5
+        ) {
+          const result = await securityRequest('/security/recovery-challenge', {
+            email,
+            purpose: mode,
+          });
+          challenge.current = {
+            id: String(result.id),
+            email: canonical,
+            purpose: mode,
+            expires: new Date(String(result.expiresAt)).getTime(),
+            attempts: 0,
+          };
+        }
+        challenge.current.attempts++;
         await securityRequest(
           mode === 'operator' ? '/security/operator-recover' : '/security/recover',
           { email, password, code: mode === 'operator' ? token : code },
+          { 'x-memoria-recovery-challenge': challenge.current.id },
         );
         setPassword('');
         setToken('');
@@ -87,6 +116,7 @@ export function RecoveryScreen() {
           {notice}
         </p>
       )}
+      {busy && <p role="status">Vérification en cours. Cela peut prendre une minute.</p>}
       <form onSubmit={submit} className="space-y-4">
         <fieldset disabled={!ready || busy} className="space-y-4">
           {mode !== 'reset' && (
