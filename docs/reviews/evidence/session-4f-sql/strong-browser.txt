@@ -1,0 +1,17 @@
+COMMAND: pnpm test:auth:strong:browser
+$ node --env-file=.env --use-system-ca scripts/test-auth-strong-browser.mjs
+PASS QR canvas decoded independently, exact otpauth URI, no external requests/secret URLs, canvas removed after enrollment
+PASS Mailpit, HTTPS login, TOTP enrollment, ten codes and separate strong authentication
+PASS virtual WebAuthn UV registration, explicit proof, rename persisted and secret-free screen
+PASS workspace security navigation, policy saved/reloaded, last-owner demotion refused through UI
+PASS sign-out, password challenge denies content, UV reauthentication restores access; no page errors
+✔ 4a/4b HTTPS UI: local TOTP QR, strong factors, workspace policy and role protection (6553.6809ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6560.6118
+EXIT_CODE=0

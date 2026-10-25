@@ -1,0 +1,15 @@
+COMMAND: pnpm test:auth:adversarial:browser
+$ node --env-file=.env --use-system-ca scripts/test-auth-adversarial-browser.mjs
+PASS B01 real HTTP cache ban, delayed pre-ban response and queued write cannot recreate local content
+PASS B02 real membership revocation, same policy version, stale allowed response cannot resurrect the cache
+PASS B03 eight forged forwarding identities through actual HTTPS Caddy consumed one IP bucket
+✔ 4f HTTPS attacks: delayed policy, removed member, queued cache writes and forged proxy headers (2209.7598ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2217.328
+EXIT_CODE=0

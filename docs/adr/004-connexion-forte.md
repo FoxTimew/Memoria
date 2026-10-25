@@ -126,3 +126,7 @@ Une réponse de politique commencée avant une révocation d'appartenance pouvai
 Exceptions fonctionnelles confirmées par le développeur pendant 4f : lien à usage unique dans l'email de récupération, secret/QR TOTP dans l'enrôlement authentifié et codes de secours affichés une fois. Ces valeurs restent interdites dans journaux, audit, métriques et réponses d'erreur. L'email en clair est interdit dans les métriques ; le destinataire SMTP et la table des utilisateurs doivent connaître l'adresse. Les tests de canaris et l'inspection du code ne constituent pas une preuve exhaustive d'absence de fuite dans une installation modifiée.
 
 Les risques résiduels sont tous soumis à décision dans le tableau final 4f ; aucune acceptation n'est inscrite automatiquement. La comparaison collaborative doit respecter aussi la marge relative de 10 %, indépendamment des plafonds absolus.
+
+## Décisions après revue 4f — 25 octobre 2026
+
+Le développeur accepte R01, R02, R03, R04, R05, R06, R07, R08 et R10 pour le MVP auto-hébergé, avec les atténuations de la [matrice](../reviews/session-4-4f-matrice.md). R01/R03/R06 restent des prérequis SaaS. R09/R11/R13/R14 doivent être traités avant utilisateurs réels ; R12 impose en permanence les attaques de bout en bout des nouvelles routes. R15 reste suspendu jusqu'au diagnostic, à l'optimisation et à la nouvelle comparaison sous la marge max(10 %, 2 ms). Ces décisions remplacent les mentions « en attente » de la livraison initiale sans effacer ses mesures.

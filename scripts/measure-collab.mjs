@@ -6,6 +6,7 @@ import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { finished } from 'node:stream/promises';
 import { resolve, relative } from 'node:path';
 import { readMeasurementPower, POWER_REQUIRED_MESSAGE } from './measurement-power.mjs';
+import { assessRegression } from './measurement-regression.mjs';
 
 const args = process.argv.slice(2);
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
@@ -187,9 +188,11 @@ if (option('--baseline')) {
     const previous = baseline.metrics[key]?.median;
     if (!Number.isFinite(previous)) throw new Error(`Missing baseline ${key}`);
     metric.baseline = previous;
-    metric.changePercent = (metric.median / previous - 1) * 100;
-    if (metric.changePercent > 10)
-      failures.push(`${key}: regression ${metric.changePercent.toFixed(2)}% > 10%`);
+    Object.assign(metric, assessRegression(previous, metric.median));
+    if (metric.exceedsRegression)
+      failures.push(
+        `${key}: regression ${metric.changeMs.toFixed(3)} ms > allowance ${metric.allowedRegressionMs.toFixed(3)} ms (max of 10% or 2 ms)`,
+      );
   }
 }
 const summary = {

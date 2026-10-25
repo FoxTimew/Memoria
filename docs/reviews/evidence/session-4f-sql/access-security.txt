@@ -1,0 +1,33 @@
+COMMAND: pnpm test:collab:e2e --suite access-security
+$ node scripts/test-collab.mjs "--suite" "access-security"
+▶ Cached authorization plans preserve the SQL oracle and independently expected decisions
+  ✔ live passkey (26.078ms)
+  ✔ expired session (23.2184ms)
+  ✔ unverified email (22.6349ms)
+  ✔ future assurance (24.9364ms)
+  ✔ security generation changed (25.9075ms)
+  ✔ recovery session (26.8295ms)
+  ✔ account recovery required despite live proof (26.2927ms)
+  ✔ factor belongs to another user (22.9476ms)
+  ✔ verified TOTP (31.0235ms)
+  ✔ unverified TOTP (27.3462ms)
+  ✔ configured factor without proof cannot use grace (26.4014ms)
+  ✔ weak member with active grace (30.8252ms)
+  ✔ weak member after grace (31.1777ms)
+  ✔ weak member without obligation (29.6821ms)
+  ✔ membership removed (31.7091ms)
+  ✔ workspace archived (29.202ms)
+  ✔ page archived (29.9007ms)
+  ✔ session removed (20.946ms)
+✔ Cached authorization plans preserve the SQL oracle and independently expected decisions (1492.0823ms)
+✔ Warmed journal plans see security revocation committed while the writer waits for its page lock (996.1727ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2491.6757
+Collaboration access-security.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

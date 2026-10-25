@@ -1,0 +1,15 @@
+COMMAND: pnpm test:auth:cache:browser
+$ node --env-file=.env --use-system-ca scripts/test-auth-cache-browser.mjs
+Remote policy purge observed in 939 ms (functional deadline, not a performance benchmark).
+PASS remote workspace ban, three tabs including frozen offline writer, purge, memory retained, reconnect convergence, other account preserved
+PASS shared checkbox warning, server choice, TOTP rotation, memory-only offline editing, logout and other-account preservation; no page errors
+✔ 4e HTTPS: three tabs, offline frozen tab, policy purge, shared login and logout (17996.1539ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18003.1128
+EXIT_CODE=0

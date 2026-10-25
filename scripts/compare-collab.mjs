@@ -7,6 +7,7 @@ import { availableParallelism, cpus, freemem, platform, release, totalmem } from
 import { resolve, relative } from 'node:path';
 import { finished } from 'node:stream/promises';
 import { readMeasurementPower, POWER_REQUIRED_MESSAGE } from './measurement-power.mjs';
+import { assessRegression } from './measurement-regression.mjs';
 
 // Immutable application snapshots, one common harness, no compiler during measurements.
 const repo = resolve('.');
@@ -49,6 +50,7 @@ const protocolHash = hash(
   Buffer.concat([
     await readFile(import.meta.filename),
     await readFile(new URL('./measurement-power.mjs', import.meta.url)),
+    await readFile(new URL('./measurement-regression.mjs', import.meta.url)),
   ]),
 );
 let manifest;
@@ -368,12 +370,14 @@ for (const suite of ['warm', 'cold'])
       )
         failures.push(`${configuration} ${key}: median ${median(values)} outside ${ceiling} ms`);
     }
-    metric.changePercent = (metric.candidate.median / metric.reference.median - 1) * 100;
+    Object.assign(metric, assessRegression(metric.reference.median, metric.candidate.median));
     metric.pairedChangePercent = metric.candidate.values.map(
       (value, i) => (value / metric.reference.values[i] - 1) * 100,
     );
-    if (metric.changePercent > 10)
-      failures.push(`${key}: regression ${metric.changePercent.toFixed(2)}% > 10%`);
+    if (metric.exceedsRegression)
+      failures.push(
+        `${key}: regression ${metric.changeMs.toFixed(3)} ms > allowance ${metric.allowedRegressionMs.toFixed(3)} ms (max of 10% or 2 ms)`,
+      );
     metrics[key] = metric;
   }
 const summary = {
