@@ -4,23 +4,30 @@ import { organization } from 'better-auth/plugins';
 import { memberAc, ownerAc } from 'better-auth/plugins/organization/access';
 import * as schema from '@memoria/db/schema';
 import type { Database, WriteTransaction } from '@memoria/db';
+import { securityIntegration } from './security-plugin.ts';
+import type { SecurityFlow } from './security-plugin.ts';
 
 export interface AuthOptions {
   origin: string;
   secret: string;
   sendVerificationEmail(email: string, url: string): Promise<void>;
+  /** Server-only request scope, constructed by handleAuthRequest inside a transaction. */
+  securityFlow?: SecurityFlow;
 }
 
-/** Session 1: no strong-auth plugins or session_assurance writes. */
 export function createAuth(database: Database | WriteTransaction, options: AuthOptions) {
+  const security = securityIntegration(database, options.origin, options.securityFlow);
   return betterAuth({
     appName: 'Memoria',
     baseURL: options.origin,
     basePath: '/api/auth',
     secret: options.secret,
     trustedOrigins: [options.origin],
+    hooks: security.hooks,
     database: drizzleAdapter(database, { provider: 'pg', schema }),
     logger: { disabled: true },
+    // Let our transaction boundary handle unknown errors without logging SQL parameters.
+    onAPIError: { throw: true },
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
@@ -62,6 +69,9 @@ export function createAuth(database: Database | WriteTransaction, options: AuthO
       ipAddress: { ipAddressHeaders: ['x-memoria-client-ip'] },
     },
     plugins: [
+      security.totpPlugin,
+      security.passkeyPlugin,
+      security.plugin,
       organization({
         creatorRole: 'owner',
         roles: { owner: ownerAc, member: memberAc },

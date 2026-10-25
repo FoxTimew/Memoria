@@ -13,6 +13,8 @@
     "start": "turbo run start --env-mode=loose",
     "test:e2e": "pnpm test:auth:e2e && pnpm test:pages:e2e && node --env-file=.env scripts/test-session1.mjs",
     "test:auth:e2e": "node scripts/build-server.mjs api --auth-e2e && node --env-file=.env apps/api/dist/auth.e2e.mjs",
+    "test:auth:strong": "node scripts/build-server.mjs api --strong-auth-e2e && node --env-file=.env apps/api/dist/strong-auth.e2e.mjs",
+    "test:auth:strong:browser": "node --env-file=.env --use-system-ca scripts/test-auth-strong-browser.mjs",
     "test:pages:e2e": "node scripts/build-server.mjs api --pages-e2e && node --env-file=.env apps/api/dist/pages.e2e.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test",
     "lint": "eslint . --max-warnings=0 && prettier --check .",

@@ -50,6 +50,20 @@
       "when": 1792786434384,
       "tag": "0006_collaboration_receipt_cascade",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792911431049,
+      "tag": "0007_glossy_nitro",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792911431050,
+      "tag": "0008_session_assurance_boundary",
+      "breakpoints": true
     }
   ]
 }

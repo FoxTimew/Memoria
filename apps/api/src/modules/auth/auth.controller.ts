@@ -11,6 +11,19 @@ const authRoutes = new Set([
   'POST /send-verification-email',
   'GET /verify-email',
   'GET /get-session',
+  'POST /verify-password',
+  'GET /security/status',
+  'POST /security/challenge',
+  'POST /security/recovery-codes',
+  'POST /two-factor/enable',
+  'POST /two-factor/verify-totp',
+  'POST /two-factor/disable',
+  'GET /passkey/generate-register-options',
+  'POST /passkey/verify-registration',
+  'GET /passkey/generate-authenticate-options',
+  'POST /passkey/verify-authentication',
+  'POST /passkey/delete-passkey',
+  'POST /passkey/update-passkey',
 ]);
 
 @Public()
@@ -19,7 +32,7 @@ export class AuthController {
   private readonly handler;
 
   constructor(auth: auth.AuthService) {
-    this.handler = toNodeHandler(auth.auth);
+    this.handler = toNodeHandler(auth.handler);
   }
 
   @All('*path')

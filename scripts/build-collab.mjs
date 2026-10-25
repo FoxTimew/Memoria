@@ -25,7 +25,15 @@ const options = {
   target: 'node24',
   format: 'esm',
   sourcemap: true,
-  external: ['yjs', 'pg', 'ws', '@hocuspocus/server', 'better-auth', 'better-auth/*'],
+  external: [
+    'yjs',
+    'pg',
+    'ws',
+    '@hocuspocus/server',
+    'better-auth',
+    'better-auth/*',
+    '@better-auth/passkey',
+  ],
   plugins: [
     {
       name: 'no-ui',

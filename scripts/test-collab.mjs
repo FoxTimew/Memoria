@@ -49,6 +49,7 @@ for (const file of files) {
       '@hocuspocus/server',
       '@hocuspocus/provider',
       'better-auth',
+      '@better-auth/passkey',
       '@nestjs/*',
       'reflect-metadata',
       'rxjs',

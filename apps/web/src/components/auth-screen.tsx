@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { authClient, authError } from '../lib/auth-client.ts';
+import { securityStatus, securityError } from '../lib/security-client.ts';
 
 export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
   const params = useSearchParams();
@@ -48,7 +49,10 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
         });
         if (result.error) setError(authError(result.error.code, result.error.status));
         // A fresh document drops the previous account's client session and editor state.
-        else globalThis.location.replace('/');
+        else
+          globalThis.location.replace(
+            (await securityStatus()).requiresStrongAuth ? '/securite' : '/',
+          );
       }
     } catch {
       setError('Le service est momentanément indisponible. Réessayez.');
@@ -165,6 +169,31 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
                       : 'Envoyer le lien'}
             </button>
           </form>
+          {mode === 'signin' && (
+            <button
+              className="quiet-link mt-5 w-full"
+              disabled={busy}
+              onClick={() => {
+                setBusy(true);
+                setError('');
+                void authClient.signIn
+                  .passkey()
+                  .then((result) => {
+                    if (result.error)
+                      setError(
+                        securityError(
+                          'code' in result.error ? String(result.error.code) : undefined,
+                        ),
+                      );
+                    else globalThis.location.replace('/');
+                  })
+                  .catch(() => setError('La connexion a échoué. Réessayez.'))
+                  .finally(() => setBusy(false));
+              }}
+            >
+              Se connecter avec une passkey
+            </button>
+          )}
           <nav
             className="mt-7 space-y-3 text-center text-sm text-[#57685b]"
             aria-label="Autres options de connexion"

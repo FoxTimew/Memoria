@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { workspaceListSchema, workspaceSummarySchema } from '@memoria/contracts';
@@ -37,6 +38,10 @@ export default function Home() {
     globalThis
       .fetch('/api/internal/workspaces', { credentials: 'include', signal: controller.signal })
       .then(async (response) => {
+        if (response.status === 403) {
+          router.replace('/securite');
+          return [];
+        }
         if (!response.ok) throw new Error('Workspaces unavailable');
         const data: unknown = await response.json();
         setWorkspaces(workspaceListSchema.parse(data));
@@ -156,6 +161,9 @@ export default function Home() {
         </span>
         <div className="flex items-center gap-5 text-sm">
           <span>{session.user.name}</span>
+          <Link className="quiet-link" href="/securite">
+            Sécurité du compte
+          </Link>
           <button className="quiet-link" disabled={busy} onClick={() => setConfirmLogout(true)}>
             Se déconnecter
           </button>

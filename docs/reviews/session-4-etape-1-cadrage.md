@@ -7,7 +7,7 @@
 1. [ADR 004](../adr/004-connexion-forte.md) : ce que permet chaque session, codes de secours, perte de facteur et cache partagé. Trois choix validés : codes communs TOTP/passkeys limités à la récupération ; reset opérateur ciblé, total explicite ; case « Poste partagé » décochée, cache workspace autorisé sauf interdiction administrateur.
 2. [ADR 003](../adr/003-better-auth.md) : comment la preuve forte sera liée à la vraie session. Les options UV ne suffisent pas dans la version installée ; preuve serveur prévue en 4a.
 3. [ADR 015](../adr/015-authentification-simple-et-workspaces.md) : reset email, propositions de quotas NAT et délais par compte. Les chiffres proposés ne sont pas encore appliqués.
-4. [ARCHITECTURE.md](../../ARCHITECTURE.md#session-4--découpage-proposé-après-ce-cadrage) : 4a facteurs/assurance, 4b politique/actions, 4c récupération, 4d quotas, 4e cache ; chaque livraison sera poussée et relue séparément, avec son guide manuel. L'étape actuelle s'arrête avant 4a.
+4. [ARCHITECTURE.md](../../ARCHITECTURE.md#session-4--découpage-retenu) : 4a facteurs/assurance, 4b politique/actions, 4c récupération, 4d quotas, 4e cache ; chaque livraison sera poussée et relue séparément, avec son guide manuel. L'étape actuelle s'arrête avant 4a.
 5. [Sonde d'alimentation](../../scripts/measurement-power.mjs), [tests de sonde](../../scripts/measurement-power.test.mjs) et [tests du lanceur](../../scripts/measurement-runner.test.mjs), puis lanceurs [courant](../../scripts/measure-collab.mjs), [alterné](../../scripts/compare-collab.mjs) et [direct](../../scripts/test-collab.mjs).
 
 ## Ce qui pourrait casser

@@ -2,7 +2,7 @@
 
 Statut : accepté — 2026-10-22.
 
-État après session 1 : email/mot de passe, vérification et plugin organization actifs ; seuls owner/member sont configurés à ce stade. Les autres plugins ci-dessous décrivent la cible, pas des routes déjà ouvertes. Le montage HTTP et la création transactionnelle de workspace sont précisés dans l'ADR 015.
+État en 4a, le 25 octobre 2026 : email/mot de passe, vérification, organization, TOTP et passkeys actifs ; seuls owner/member sont configurés. API key reste une cible. Le montage HTTP et la création transactionnelle de workspace sont précisés dans l'ADR 015 ; l'intégration forte livrée est décrite en fin de cet ADR.
 
 **Décision.** Better Auth 1.7.12 dans NestJS ; plugins `organization`, `twoFactor`, `@better-auth/passkey` et `@better-auth/api-key` à versions exactes. Adaptateur Drizzle, identifiants UUID générés par Better Auth. Le schéma conserve les noms de propriétés attendus par les plugins, avec noms SQL explicites. Le test `schema-contract.test.ts` vérifie les champs des versions installées.
 
@@ -18,9 +18,9 @@ La révocation met `enabled=false` et `revoked_at` ; une expiration peut faire s
 
 ## Session 4, étape 1 — cadrage du 25 octobre 2026
 
-Statut de cet ajout : **cadrage à relire ; trois arbitrages validés par le développeur le 25 octobre**. Les décisions déjà acceptées restent applicables ; aucune route ou migration applicative n'est ajoutée à cette étape.
+Statut de cet ajout : **cadrage entièrement validé par le développeur le 25 octobre**. Les décisions déjà acceptées restent applicables ; aucune route ou migration applicative n'est ajoutée à cette étape.
 
-### Intégration proposée
+### Intégration retenue
 
 Conserver Better Auth et les versions exactes installées. Activer `twoFactor` et `@better-auth/passkey` progressivement après une preuve ciblée, sans activer le plugin API key ni les webhooks avant leurs sessions. Les façades Nest gardent le contrôle des changements sensibles ; la liste HTTP publique n'expose que les cérémonies nécessaires, avec méthodes exactes, schémas stricts, origine et CSRF. « Public » signifie délégué au protocole d'authentification, pas dispensé des contrôles.
 
@@ -41,3 +41,17 @@ La récupération de mot de passe s'appuie sur `sendResetPassword`, l'expiration
 ### Évolution du modèle à concevoir, sans migration à cette étape
 
 Conserver les tables de facteurs et d'assurance existantes ; ajouter seulement les données nécessaires : version de sécurité du compte, provenance/expiration des preuves limitées, choix serveur de cache par session, interdiction/version de politique du workspace, compteurs d'essais et éventuel coffre de récupération. Le contrat Drizzle des plugins reste testé ; les données métier supplémentaires sont séparées des champs possédés par Better Auth. Aucun reset des données, upgrade de dépendance ou nouvelle route de test en production n'est décidé ici.
+
+## 4a — intégration exécutée et vérifiée
+
+Les versions restent 1.7.12. `security-plugin.ts` laisse aux bibliothèques la vérification TOTP, le chiffrement et la cryptographie WebAuthn ; il contrôle l'intention, l'identité, les tentatives, UV et l'assurance. Les hooks serveur passkey refusent `userVerified !== true` avant l'effet natif. Le résultat du hook est conservé dans un contexte **propre à la requête**, puis lié à la session réellement créée, au facteur et à la génération de sécurité du compte. Les options d'authentification renvoyées imposent aussi UV.
+
+**Adaptation du défi natif.** Le hook natif qui intercepte le login pour TOTP seulement est remplacé par une frontière commune TOTP/passkeys. Après un mot de passe valide, Better Auth émet une session restreinte si le compte possède un facteur actif. Elle permet les cérémonies et la lecture d'identité, mais le guard Nest et le résolveur collaboratif refusent tout contenu via `auth_session_can_access_content`. Ce cookie conserve la durée Better Auth de sept jours ; le défi TOTP est distinct, expire en cinq minutes et admet cinq essais. Posséder ce cookie ne prouve jamais le second facteur. L'enrôlement conserve uniquement cette session restreinte et révoque les autres ; il faut une nouvelle vérification explicite pour obtenir l'assurance. Les endpoints natifs de backup codes, OTP email et consultation du secret TOTP sont fermés. `trustDevice` est refusé.
+
+**Atomicité.** `handleAuthRequest` construit l'instance Better Auth avec un adaptateur lié à une transaction PostgreSQL par requête. Une ligne `account_security` verrouille les mutations de facteurs/preuves d'un même compte. Les refus 4xx conservent les compteurs d'essais ; les erreurs internes provoquent un rollback. Aucune réponse ni cookie ne sort avant le commit. Un échec SQL injecté pendant l'INSERT d'assurance laisse les sessions et cookies précédents inchangés. Le handler d'erreurs ne diffuse ni exception SQL ni paramètres ; le journal de test de panne ne contient pas de secrets. Une instrumentation agrégée des échecs, sans détails sensibles, reste à compléter avec 4d/4f.
+
+**Modèle.** Migrations 0007/0008 : génération du compte, dernier pas TOTP consommé, paramètres serveur de session, défis TOTP, empreintes de codes communs et audit de sécurité. L'assurance référence le facteur et la génération ; un facteur absent, une génération ancienne ou une session expirée ne vaut plus preuve. L'authentification et la réauthentification font tourner le cookie, suppriment l'ancienne session et transfèrent les paramètres serveur. La suppression d'un facteur ferme toutes les sessions. Les événements d'audit ne portent que compte/action/date (compte mis à NULL à sa suppression) ; rétention cible 90 jours selon ADR 012, job général encore à livrer.
+
+**Frontière de build.** `@better-auth/passkey` est une dépendance d'exécution externe des apps API/collab, comme Better Auth. Le bundler ne doit pas embarquer une seconde copie du runtime Better Auth via le plugin : cela casse notamment l'identité des erreurs API et leurs handlers. L'ADR 014 précise cette contrainte, révélée par le test UV négatif.
+
+Preuves : [fiche 4a](../reviews/session-4-4a-facteurs-assurance.md), vraie application Nest/SQL, signatures P-256 et tests de concurrence, puis navigateur HTTPS. Pas d'API key, politique de grâce, reset de mot de passe, consommation de code de récupération ou politique de cache dans cette livraison.
