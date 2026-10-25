@@ -1,0 +1,32 @@
+{
+  "source": {
+    "commit": "936629012e64642e779ed32ac4c248a8c7bd98dd",
+    "diff": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "untracked": {
+      "scripts/compare-collab.mjs": "259de76a85cbd54b9d57ee3daa7dba160a86a5338f0c7d1684242606d04c8e89"
+    }
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "metrics": {
+    "capacity:content-200K": {
+      "values": [587673600, 589312000, 585867264],
+      "median": 587673600
+    },
+    "capacity:history-200K": {
+      "values": [786006016, 774209536, 775159808],
+      "median": 775159808
+    }
+  },
+  "failures": [],
+  "failedSeries": [],
+  "scope": "Three independent capacity series. Values are sampled peak RSS in bytes, not latency p95. Full per-profile metrics, assertions and complete logs retained."
+}

@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { createBlockRegistry } from '@memoria/block-catalog/server';
 import { IncrementalValidator } from './incremental-validator.ts';
+import type { ValidationPool } from './validation-pool.ts';
 import type { Store } from './store.ts';
 import { CollaborationError } from './internal-server.ts';
 
@@ -9,9 +10,11 @@ export class Projections {
   private stopped = false;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private running: Promise<void> | undefined;
+  private tail: Promise<unknown> = Promise.resolve();
   constructor(
     readonly store: Store,
     readonly report: (event: object) => void = (event) => console.warn(JSON.stringify(event)),
+    private readonly validators?: ValidationPool,
   ) {}
   start() {
     this.schedule();
@@ -47,11 +50,16 @@ export class Projections {
       }
     }
   }
-  async project(page: string, generation: string) {
+  project(page: string, generation: string) {
+    const result = this.tail.then(() => this.projectOne(page, generation));
+    this.tail = result.catch(() => {});
+    return result;
+  }
+  private async projectOne(page: string, generation: string) {
     const loaded = await this.store.load(page, generation),
       state = loaded.state;
     const target = Number(state.content_revision);
-    const replica = new IncrementalValidator();
+    const replica = new IncrementalValidator(this.validators, () => {}, 128 * 1024 ** 2);
     let snapshot: Uint8Array, blocks: Awaited<ReturnType<IncrementalValidator['inspect']>>;
     try {
       await replica.init(loaded.snapshot, loaded.updates);
@@ -207,5 +215,6 @@ export class Projections {
     this.stopped = true;
     clearTimeout(this.timer);
     await this.running;
+    await this.tail;
   }
 }

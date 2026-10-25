@@ -1,74 +1,48 @@
-import { Worker } from 'node:worker_threads';
-import { once } from 'node:events';
 import type { IncrementalReplica } from './incremental-replica.ts';
-import { CandidateRejected } from '../validator.ts';
+import { ValidationPool } from './validation-pool.ts';
 export class IncrementalValidator {
-  private worker: Worker;
-  private failed = false;
+  private readonly pool: ValidationPool;
+  private readonly handle: ReturnType<ValidationPool['allocate']>;
   private busy = false;
-  private online: Promise<unknown[]>;
-  constructor(
-    private readonly budgetMs = 250,
-    memoryMiB = 128,
-  ) {
-    this.worker = new Worker(new URL('./incremental-worker.mjs', import.meta.url), {
-      resourceLimits: { maxOldGenerationSizeMb: memoryMiB, maxYoungGenerationSizeMb: 16 },
-    });
-    this.online = once(this.worker, 'online');
-    this.worker.on('error', () => {
-      this.failed = true;
-    });
-    this.worker.on('exit', () => {
-      this.failed = true;
-    });
+  private readonly owned: boolean;
+  constructor(pool?: ValidationPool, onFault: () => void = () => {}, weight = 1) {
+    this.owned = !pool;
+    this.pool = pool ?? new ValidationPool(1, 128);
+    this.handle = this.pool.allocate(onFault, weight);
+  }
+  get workerId() {
+    return this.handle.workerId;
+  }
+  resize(weight: number) {
+    this.handle.resize(weight);
   }
   async init(snapshot: Uint8Array, updates: Uint8Array[] = []) {
-    await this.online;
-    await this.request('init', { snapshot, updates }, 30000);
+    if (updates.reduce((sum, update) => sum + update.length, snapshot.length) <= 8 * 1024 ** 2)
+      return (await this.request('init', { snapshot, updates }, 30000)).result as {
+        encodedBytes: number;
+      };
+    // A delayed projection can leave a long journal for a small document. Stream bounded
+    // chunks through the same worker instead of permanently rejecting its reload.
+    await this.request('init-start', { snapshot }, 30000);
+    let chunk: Uint8Array[] = [],
+      bytes = 0;
+    for (const update of updates) {
+      if (bytes + update.length > 8 * 1024 ** 2) {
+        await this.request('init-chunk', { updates: chunk }, 30000);
+        chunk = [];
+        bytes = 0;
+      }
+      chunk.push(update);
+      bytes += update.length;
+    }
+    if (chunk.length) await this.request('init-chunk', { updates: chunk }, 30000);
+    return (await this.request('init-finish', {}, 30000)).result as { encodedBytes: number };
   }
-  private async request(
-    operation: string,
-    data: object = {},
-    deadline = this.budgetMs,
-  ): Promise<{ result: unknown; elapsed: number }> {
-    if (this.busy || this.failed) throw new Error('Replica worker unavailable');
+  private async request(operation: string, data: object = {}, deadline = 250) {
+    if (this.busy) throw new Error('Replica worker busy');
     this.busy = true;
     try {
-      return await new Promise((resolve, reject) => {
-        const finish = () => {
-          clearTimeout(timer);
-          this.worker.off('message', receive);
-          this.worker.off('error', fail);
-          this.worker.off('exit', exit);
-        };
-        const fail = (error: Error) => {
-          finish();
-          reject(error);
-        };
-        const exit = () => fail(new Error('Replica worker exited'));
-        const receive = (message: {
-          result: unknown;
-          elapsed: number;
-          error?: string;
-          validation?: boolean;
-        }) => {
-          finish();
-          if (message.error)
-            reject(
-              message.validation ? new CandidateRejected(message.error) : new Error(message.error),
-            );
-          else resolve(message);
-        };
-        const timer = setTimeout(() => {
-          this.failed = true;
-          void this.worker.terminate();
-          fail(new Error(`Replica budget exceeded (${deadline} ms)`));
-        }, deadline);
-        this.worker.once('message', receive);
-        this.worker.once('error', fail);
-        this.worker.once('exit', exit);
-        this.worker.postMessage({ operation, ...data });
-      });
+      return await this.handle.request(operation, data, deadline);
     } finally {
       this.busy = false;
     }
@@ -100,6 +74,10 @@ export class IncrementalValidator {
     return (await this.request('snapshot', {}, 30000)).result as Uint8Array;
   }
   async close() {
-    await this.worker.terminate();
+    try {
+      await this.handle.close();
+    } finally {
+      if (this.owned) await this.pool.close();
+    }
   }
 }

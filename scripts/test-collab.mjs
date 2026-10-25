@@ -1,4 +1,4 @@
-import { build } from 'esbuild';
+import { build, stop } from 'esbuild';
 import { readdir } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -41,16 +41,24 @@ for (const file of files) {
       'rxjs',
     ],
   });
+  // Release this runner's compiler process before the test/measurement starts.
+  stop();
   const code = await new Promise((resolve) => {
-    const child = spawn(process.execPath, ['--env-file=.env', out], {
-      env: {
-        ...process.env,
-        COLLAB_TEST_MIGRATIONS: fileURLToPath(new URL('../packages/db/drizzle/', import.meta.url)),
+    const child = spawn(
+      process.execPath,
+      [...(file === 'capacity.e2e.ts' ? ['--expose-gc'] : []), '--env-file=.env', out],
+      {
+        env: {
+          ...process.env,
+          COLLAB_TEST_MIGRATIONS: fileURLToPath(
+            new URL('../packages/db/drizzle/', import.meta.url),
+          ),
+        },
+        stdio: 'inherit',
+        windowsHide: true,
+        timeout: 180000,
       },
-      stdio: 'inherit',
-      windowsHide: true,
-      timeout: 180000,
-    });
+    );
     child.on('error', (e) => {
       console.error(e.message);
       resolve(1);

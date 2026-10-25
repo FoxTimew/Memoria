@@ -1,0 +1,31 @@
+$ node scripts/test-collab.mjs "--suite" "capacity"
+{"event":"capacity.memory.before","freeBytes":3038789632}
+✖ Default 1 GiB budget holds thirty authenticated pages per typical profile (3.2925ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11.7031
+
+✖ failing tests:
+
+test at apps\collab\dist\test-capacity.e2e.mjs:119488:1
+✖ Default 1 GiB budget holds thirty authenticated pages per typical profile (3.2925ms)
+  AssertionError [ERR_ASSERTION]: STOP: free RAM below 3 GiB; ask developer before measuring
+      at TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-capacity.e2e.mjs:119494:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+Collaboration capacity.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.

@@ -3,9 +3,11 @@ import type { CollaborationCommand } from '@memoria/contracts';
 import type { AccessRequest } from './access.ts';
 import { CandidateRejected } from '../validator.ts';
 import { IncrementalValidator } from './incremental-validator.ts';
+import type { ValidationPool } from './validation-pool.ts';
 import { RoomBatchQueue } from './room-batch-queue.ts';
 import { Store, receiptFor, digest } from './store.ts';
 import { CollaborationError } from './internal-server.ts';
+import { replicaReservation } from './memory.ts';
 type WriteCommand = Extract<CollaborationCommand, { action: 'write' }>;
 type Entry =
   | { identity: AccessRequest; update: Uint8Array }
@@ -17,7 +19,10 @@ export interface Receipt {
   receipt: string;
 }
 export class Room {
-  readonly replica = new IncrementalValidator();
+  replica: IncrementalValidator;
+  private recovery: Promise<void> | undefined;
+  private closed = false;
+  private encodedUpperBound = 0;
   readonly queue: RoomBatchQueue<Entry, Receipt>;
   revision = 0;
   pending = 0;
@@ -28,16 +33,61 @@ export class Room {
     readonly generation: string,
     readonly doc: Y.Doc,
     private readonly onFatal: () => void,
+    private readonly pool?: ValidationPool,
+    private readonly reserve: (bytes: number) => Promise<void> = async () => {},
+    private readonly weight = 1,
   ) {
+    this.replica = this.createReplica();
     this.queue = new RoomBatchQueue((entries) => this.process(entries));
+  }
+  private createReplica() {
+    return new IncrementalValidator(
+      this.pool,
+      () => {
+        if (this.closed) return;
+        this.fatal = true;
+        this.onFatal();
+      },
+      this.encodedUpperBound ? replicaReservation(this.encodedUpperBound) : this.weight,
+    );
+  }
+  get recovering() {
+    return !!this.recovery;
+  }
+  recover() {
+    if (this.recovery) return this.recovery;
+    this.fatal = true;
+    this.recovery = (async () => {
+      // Includes in-flight SQL commits: an update may be durable despite a lost worker reply.
+      while (this.pending) await new Promise((resolve) => setTimeout(resolve, 10));
+      if (this.closed) throw new Error('ROOM_CLOSED');
+      await this.replica.close();
+      this.replica = this.createReplica();
+      await this.load();
+      this.fatal = false;
+    })().finally(() => {
+      this.recovery = undefined;
+    });
+    return this.recovery;
   }
   async load() {
     const loaded = await this.store.load(this.page, this.generation);
+    this.encodedUpperBound = loaded.updates.reduce(
+      (sum, update) => sum + update.length,
+      loaded.snapshot.length,
+    );
+    await this.reserve(this.encodedUpperBound);
     const init = this.replica.init(loaded.snapshot, loaded.updates);
     this.doc.getXmlFragment('prosemirror');
-    Y.applyUpdate(this.doc, loaded.snapshot);
-    for (const update of loaded.updates) Y.applyUpdate(this.doc, update);
-    await init;
+    Y.applyUpdate(
+      this.doc,
+      loaded.updates.length
+        ? Y.mergeUpdates([loaded.snapshot, ...loaded.updates])
+        : loaded.snapshot,
+    );
+    this.encodedUpperBound = (await init).encodedBytes;
+    await this.reserve(this.encodedUpperBound);
+    this.replica.resize(replicaReservation(this.encodedUpperBound));
     this.revision = Number(loaded.state.content_revision);
   }
   private async enqueue(entry: Entry) {
@@ -90,10 +140,13 @@ export class Room {
           throw new CollaborationError('CONTENT_REVISION_CONFLICT', 409, {
             contentRevision: this.revision,
           });
+        // Commands can replace the complete content; reserve their maximum candidate first.
+        await this.reserve(1024 ** 2);
         validation = await this.replica.command(command.operations);
         update = validation.update;
       } else {
         update = Y.mergeUpdates(entries.map((e) => ('update' in e ? e.update : new Uint8Array())));
+        await this.reserve(Math.min(1024 ** 2, this.encodedUpperBound + update.length));
         validation = await this.replica.prepare(update);
       }
       const contributions = entries.map((e) => ({
@@ -111,18 +164,20 @@ export class Room {
             }
           : {}),
       }));
+      await this.reserve(validation.encodedUpperBound);
       const next = await this.store.append(
         this.generation,
         this.revision,
         contributions,
         update,
         validation.blocks,
-        validation.blockIds,
+        validation.blockIdsToReserve,
       );
       committed = true;
       await this.replica.commit();
       Y.applyUpdate(this.doc, update);
       this.revision = next.revision;
+      this.encodedUpperBound = validation.encodedUpperBound;
       return contributions.map((e, i) => ({
         status: 'durable',
         generation: this.generation,
@@ -136,6 +191,7 @@ export class Room {
       } else {
         try {
           await this.replica.abort();
+          await this.reserve(this.encodedUpperBound);
         } catch {
           this.fatal = true;
           this.onFatal();
@@ -175,6 +231,8 @@ export class Room {
     return results;
   }
   async close() {
+    this.closed = true;
+    await this.recovery?.catch(() => {});
     await this.replica.close();
   }
 }

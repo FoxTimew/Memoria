@@ -1,0 +1,186 @@
+{
+  "durationMs": 38837.685,
+  "totalSamples": 25314,
+  "top": [
+    {
+      "function": "(idle)",
+      "url": "",
+      "line": 0,
+      "selfSamples": 9776
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2813,
+      "selfSamples": 1412
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2813,
+      "selfSamples": 1339
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2813,
+      "selfSamples": 1330
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2813,
+      "selfSamples": 1329
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2813,
+      "selfSamples": 1286
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 1353,
+      "selfSamples": 992
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2813,
+      "selfSamples": 788
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2813,
+      "selfSamples": 776
+    },
+    {
+      "function": "(garbage collector)",
+      "url": "",
+      "line": 0,
+      "selfSamples": 446
+    },
+    {
+      "function": "getState",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2828,
+      "selfSamples": 416
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 3318,
+      "selfSamples": 400
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 3318,
+      "selfSamples": 370
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 1359,
+      "selfSamples": 336
+    },
+    {
+      "function": "writeClientsStructs",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 1350,
+      "selfSamples": 234
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 3318,
+      "selfSamples": 230
+    },
+    {
+      "function": "cleanupYTextAfterTransaction",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 6687,
+      "selfSamples": 228
+    },
+    {
+      "function": "(program)",
+      "url": "",
+      "line": 0,
+      "selfSamples": 177
+    },
+    {
+      "function": "writev",
+      "url": "",
+      "line": 0,
+      "selfSamples": 139
+    },
+    {
+      "function": "cleanupTransactions",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 3245,
+      "selfSamples": 118
+    },
+    {
+      "function": "",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 3127,
+      "selfSamples": 115
+    },
+    {
+      "function": "walk",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-diagnostic.e2e.mjs",
+      "line": 108316,
+      "selfSamples": 112
+    },
+    {
+      "function": "cleanupTransactions",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 3245,
+      "selfSamples": 105
+    },
+    {
+      "function": "walk",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-diagnostic.e2e.mjs",
+      "line": 108316,
+      "selfSamples": 99
+    },
+    {
+      "function": "compileSourceTextModule",
+      "url": "node:internal/modules/esm/utils",
+      "line": 317,
+      "selfSamples": 79
+    },
+    {
+      "function": "cleanupTransactions",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 3245,
+      "selfSamples": 69
+    },
+    {
+      "function": "any",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.114/node_modules/lib0/map.js",
+      "line": 86,
+      "selfSamples": 67
+    },
+    {
+      "function": "escapeElement",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/pg@8.23.1/node_modules/pg/lib/utils.js",
+      "line": 14,
+      "selfSamples": 65
+    },
+    {
+      "function": "walk",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-diagnostic.e2e.mjs",
+      "line": 108316,
+      "selfSamples": 64
+    },
+    {
+      "function": "getStateVector",
+      "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+      "line": 2811,
+      "selfSamples": 55
+    }
+  ]
+}

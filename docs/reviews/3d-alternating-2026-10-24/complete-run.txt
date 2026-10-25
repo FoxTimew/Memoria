@@ -1,0 +1,143 @@
+Results: C:\Users\Foxti\Documents\Projets\Memoria\.local\3d-alternating\2026-10-24T17-03-29-701Z
+reference-warm-1: 3.761 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":26}
+{"configuration":"reference","suite":"warm","iteration":1,"startedAt":"2026-10-24T17:03:30.854Z","freeBytes":4038762496,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":26},"endedFreeBytes":4068626432,"code":0,"p95":{"content-1M":7.983400000000074,"history-1M":33.25290000000132}}
+candidate-warm-1: 3.785 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":27}
+{"configuration":"candidate","suite":"warm","iteration":1,"startedAt":"2026-10-24T17:03:46.396Z","freeBytes":4064571392,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":27},"endedFreeBytes":4099289088,"code":0,"p95":{"content-1M":7.7650000000001,"history-1M":33.85199999999895}}
+reference-cold-1: 3.813 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":27}
+{"configuration":"reference","suite":"cold","iteration":1,"startedAt":"2026-10-24T17:04:02.171Z","freeBytes":4094210048,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":27},"endedFreeBytes":4106186752,"code":0,"p95":{"content-1M":145.9611,"history-1M":310.4283000000014}}
+candidate-cold-1: 3.816 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":27}
+{"configuration":"candidate","suite":"cold","iteration":1,"startedAt":"2026-10-24T17:04:20.577Z","freeBytes":4097097728,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":27},"endedFreeBytes":4090224640,"code":0,"p95":{"content-1M":153.82359999999994,"history-1M":260.669100000001}}
+candidate-warm-2: 3.802 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":28}
+{"configuration":"candidate","suite":"warm","iteration":2,"startedAt":"2026-10-24T17:04:33.901Z","freeBytes":4082249728,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":28},"endedFreeBytes":4096032768,"code":0,"p95":{"content-1M":7.752800000000093,"history-1M":33.06840000000011}}
+reference-warm-2: 3.814 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":28}
+{"configuration":"reference","suite":"warm","iteration":2,"startedAt":"2026-10-24T17:04:49.542Z","freeBytes":4095729664,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":28},"endedFreeBytes":4083982336,"code":0,"p95":{"content-1M":7.7730999999999995,"history-1M":33.54160000000047}}
+candidate-cold-2: 3.788 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":28}
+{"configuration":"candidate","suite":"cold","iteration":2,"startedAt":"2026-10-24T17:05:05.098Z","freeBytes":4067483648,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":28},"endedFreeBytes":4155928576,"code":0,"p95":{"content-1M":147.95299999999997,"history-1M":266.4300999999996}}
+reference-cold-2: 3.858 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":29}
+{"configuration":"reference","suite":"cold","iteration":2,"startedAt":"2026-10-24T17:05:18.151Z","freeBytes":4142837760,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":29},"endedFreeBytes":4182908928,"code":0,"p95":{"content-1M":147.5317,"history-1M":322.5162999999993}}
+reference-warm-3: 3.904 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":29}
+{"configuration":"reference","suite":"warm","iteration":3,"startedAt":"2026-10-24T17:05:36.656Z","freeBytes":4191469568,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":29},"endedFreeBytes":4214591488,"code":0,"p95":{"content-1M":8.397199999999884,"history-1M":34.716699999999946}}
+candidate-warm-3: 3.915 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":29}
+{"configuration":"candidate","suite":"warm","iteration":3,"startedAt":"2026-10-24T17:05:52.311Z","freeBytes":4203253760,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":29},"endedFreeBytes":4213510144,"code":0,"p95":{"content-1M":7.963400000000092,"history-1M":32.58220000000074}}
+reference-cold-3: 3.916 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":30}
+{"configuration":"reference","suite":"cold","iteration":3,"startedAt":"2026-10-24T17:06:07.986Z","freeBytes":4205006848,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":30},"endedFreeBytes":4311289856,"code":0,"p95":{"content-1M":155.47260000000006,"history-1M":311.96229999999923}}
+candidate-cold-3: 4.007 GiB free; battery {"BatteryStatus":2,"EstimatedChargeRemaining":30}
+{"configuration":"candidate","suite":"cold","iteration":3,"startedAt":"2026-10-24T17:06:26.571Z","freeBytes":4302741504,"battery":{"BatteryStatus":2,"EstimatedChargeRemaining":30},"endedFreeBytes":4323344384,"code":0,"p95":{"content-1M":150.49199999999996,"history-1M":246.73030000000017}}
+{
+  "commits": {
+    "reference": "665a82986e0dbb7bbcae5e487627089c0f529de7",
+    "candidate": "875c63f76783e5d28c875bd954d646d8fac31fae"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "protocolHash": "259de76a85cbd54b9d57ee3daa7dba160a86a5338f0c7d1684242606d04c8e89",
+  "metrics": {
+    "warm:content-1M": {
+      "reference": {
+        "values": [
+          7.983400000000074,
+          7.7730999999999995,
+          8.397199999999884
+        ],
+        "median": 7.983400000000074
+      },
+      "candidate": {
+        "values": [
+          7.7650000000001,
+          7.752800000000093,
+          7.963400000000092
+        ],
+        "median": 7.7650000000001
+      },
+      "changePercent": -2.7356765287969043,
+      "pairedChangePercent": [
+        -2.7356765287969043,
+        -0.2611570673207164,
+        -5.166007716855592
+      ]
+    },
+    "warm:history-1M": {
+      "reference": {
+        "values": [
+          33.25290000000132,
+          33.54160000000047,
+          34.716699999999946
+        ],
+        "median": 33.54160000000047
+      },
+      "candidate": {
+        "values": [
+          33.85199999999895,
+          33.06840000000011,
+          32.58220000000074
+        ],
+        "median": 33.06840000000011
+      },
+      "changePercent": -1.4107854127422437,
+      "pairedChangePercent": [
+        1.8016473751089723,
+        -1.4107854127422437,
+        -6.148337831646467
+      ]
+    },
+    "cold:content-1M": {
+      "reference": {
+        "values": [
+          145.9611,
+          147.5317,
+          155.47260000000006
+        ],
+        "median": 147.5317
+      },
+      "candidate": {
+        "values": [
+          153.82359999999994,
+          147.95299999999997,
+          150.49199999999996
+        ],
+        "median": 150.49199999999996
+      },
+      "changePercent": 2.0065518122545534,
+      "pairedChangePercent": [
+        5.386709198546713,
+        0.28556574620910435,
+        -3.2035226785942283
+      ]
+    },
+    "cold:history-1M": {
+      "reference": {
+        "values": [
+          310.4283000000014,
+          322.5162999999993,
+          311.96229999999923
+        ],
+        "median": 311.96229999999923
+      },
+      "candidate": {
+        "values": [
+          260.669100000001,
+          266.4300999999996,
+          246.73030000000017
+        ],
+        "median": 260.669100000001
+      },
+      "changePercent": -16.442114960685437,
+      "pairedChangePercent": [
+        -16.029208677172857,
+        -17.390190821363095,
+        -20.910218959149617
+      ]
+    }
+  },
+  "failures": [],
+  "failedSeries": []
+}
+EXIT_CODE=0

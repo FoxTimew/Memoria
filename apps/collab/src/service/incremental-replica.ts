@@ -11,26 +11,36 @@ export class IncrementalReplica {
   private index!: ContentIndex;
   private checkpoint: Uint8Array;
   private accepted: Uint8Array[] = [];
-  private pending: { update: Uint8Array; upper: number } | undefined;
+  private pending: { update: Uint8Array; upper: number; blockIds: Set<string> } | undefined;
+  private committedBlockIds = new Set<string>();
   private tainted = false;
   private upper = 0;
   private blocks: BlockEnvelope[] = [];
-  constructor(snapshot: Uint8Array) {
+  constructor(snapshot: Uint8Array, updates: Uint8Array[] = []) {
     if (snapshot.length > bounds.document) throw new Error('Maximum base size');
     this.checkpoint = new Uint8Array(snapshot);
+    this.accepted = updates.map((update) => new Uint8Array(update));
     this.reset();
+    // The SQL tail can be long after projection failures. Retain only its compact state.
+    if (this.accepted.length) this.checkpointNow();
   }
   private reset() {
     this.doc?.destroy();
     this.doc = new Y.Doc();
     this.doc.getXmlFragment('prosemirror');
-    Y.applyUpdate(this.doc, this.checkpoint);
-    for (const update of this.accepted) Y.applyUpdate(this.doc, update);
+    // Replay in one Yjs transaction: each apply otherwise copies the full historical state vector.
+    Y.applyUpdate(
+      this.doc,
+      this.accepted.length ? Y.mergeUpdates([this.checkpoint, ...this.accepted]) : this.checkpoint,
+    );
     this.index = { content: new WeakMap(), checked: 0, jsonBytes: 0, structures: 0 };
     for (const entries of this.doc.store.clients.values())
       for (const item of entries) this.index.structures += item.length;
     this.blocks = decodeDocument(this.doc, this.index);
-    this.upper = Y.encodeStateAsUpdate(this.doc).length;
+    // Same conservative sum bound as prepare(); re-encode only when needed to prove the ceiling.
+    this.upper = this.accepted.reduce((sum, update) => sum + update.length, this.checkpoint.length);
+    if (this.upper > bounds.document) this.upper = Y.encodeStateAsUpdate(this.doc).length;
+    if (this.upper > bounds.document) throw new Error('Maximum document size');
     this.pending = undefined;
     this.tainted = false;
     this.doc.on('afterTransaction', (transaction: Y.Transaction) => {
@@ -66,10 +76,13 @@ export class IncrementalReplica {
       let upper = this.upper + update.length;
       if (upper > bounds.document) upper = Y.encodeStateAsUpdate(this.doc).length;
       if (upper > bounds.document) throw new Error('Maximum document size');
-      this.pending = { update: new Uint8Array(update), upper };
+      const blockIds = new Set(this.blocks.map((b) => b.id));
+      this.pending = { update: new Uint8Array(update), upper, blockIds };
       return {
         blocks: this.blocks.filter((b) => b.type === 'core.image'),
-        blockIds: this.blocks.map((b) => b.id),
+        // Ownership is immutable. Reuse it only after the caller confirms a durable SQL commit.
+        // A fresh replica checks all IDs; deleted and later reintroduced IDs are checked again.
+        blockIdsToReserve: [...blockIds].filter((id) => !this.committedBlockIds.has(id)),
         checkedBlocks: this.index.checked,
         jsonBytes: this.index.jsonBytes,
         encodedUpperBound: upper,
@@ -83,6 +96,7 @@ export class IncrementalReplica {
     if (!this.pending || this.tainted) throw new Error('Nothing valid to commit');
     this.accepted.push(this.pending.update);
     this.upper = this.pending.upper;
+    this.committedBlockIds = this.pending.blockIds;
     this.pending = undefined;
     if (
       this.accepted.reduce((sum, u) => sum + u.length, 0) >= 1024 ** 2 ||
@@ -95,6 +109,9 @@ export class IncrementalReplica {
   }
   inspect() {
     return this.blocks;
+  }
+  get encodedUpperBound() {
+    return this.upper;
   }
   snapshot() {
     if (this.pending || this.tainted) throw new Error('Uncommitted replica');
@@ -115,6 +132,7 @@ export class IncrementalReplica {
   }
   checkpointNow() {
     this.checkpoint = this.snapshot();
+    this.upper = this.checkpoint.length;
     this.accepted = [];
   }
   close() {

@@ -1,9 +1,23 @@
 import type { Room } from './room.ts';
 import { CollaborationError } from './internal-server.ts';
-// 128 MiB old + 16 MiB young validator heap, 32 MiB live Yjs tree, 16 MiB buffers.
-// A conservative admission reservation, not a measurement or an OS RSS hard limit.
-export const replicaReservation = 192 * 1024 ** 2;
+// Includes isolated + live trees, content index, replay and candidate buffers.
+// Admission estimates, not V8 limits or an OS RSS cap. See docs/self-hosting.md.
+export const reservationClasses = [
+  [64, 8],
+  [128, 12],
+  [256, 24],
+  [512, 64],
+  [768, 128],
+  [1024, 192],
+] as const;
+export function replicaReservation(encodedBytes: number) {
+  if (!Number.isFinite(encodedBytes) || encodedBytes < 0) throw new Error('Invalid document size');
+  return (reservationClasses.find(([kib]) => encodedBytes <= kib * 1024)?.[1] ?? 192) * 1024 ** 2;
+}
+// One serialized projector, plus startup/runtime and bounded queues per worker.
+export const poolReservation = (workers: number) => (128 + workers * 32) * 1024 ** 2;
 interface Entry {
+  bytes: number;
   pins: number;
   idleSince: number;
   room?: Room;
@@ -18,6 +32,8 @@ export class ReplicaMemory {
     readonly budget: number,
     readonly idleMs: number,
     private readonly evict: (name: string, room: Room) => Promise<void>,
+    private readonly encodedSize: (name: string) => Promise<number>,
+    readonly fixedBytes: number,
   ) {
     this.timer = setInterval(
       () => {
@@ -27,7 +43,37 @@ export class ReplicaMemory {
     );
   }
   get reservedBytes() {
-    return this.entries.size * replicaReservation;
+    return [...this.entries.values()].reduce((sum, entry) => sum + entry.bytes, 0);
+  }
+  get chargedBytes() {
+    return this.fixedBytes + this.reservedBytes;
+  }
+  reservation(name: string) {
+    return this.entries.get(name)?.bytes ?? 0;
+  }
+  private async makeSpace(bytes: number, except?: string) {
+    while (this.chargedBytes + bytes > this.budget) {
+      const oldest = [...this.entries]
+        .filter(([name, e]) => name !== except && this.inactive(e))
+        .sort((a, b) => a[1].idleSince - b[1].idleSince)[0];
+      if (!oldest)
+        throw new CollaborationError('COLLAB_MEMORY_CAPACITY', 503, {
+          message:
+            'Le budget mémoire des documents actifs est atteint. Fermez un document ou réessayez plus tard.',
+        });
+      await this.remove(...oldest);
+    }
+  }
+  async resize(name: string, encodedBytes: number) {
+    const bytes = replicaReservation(encodedBytes);
+    if (this.entries.get(name)?.bytes === bytes) return;
+    await this.serial(async () => {
+      const entry = this.entries.get(name);
+      if (!entry || this.stopped) throw new Error('Missing replica reservation');
+      await this.makeSpace(bytes - entry.bytes, name);
+      entry.bytes = bytes;
+      entry.room?.replica.resize(bytes);
+    });
   }
   private serial<T>(work: () => Promise<T>) {
     const result = this.tail.then(work);
@@ -35,7 +81,13 @@ export class ReplicaMemory {
     return result;
   }
   private inactive(entry: Entry) {
-    return !entry.loading && entry.pins === 0 && !!entry.room && entry.room.pending === 0;
+    return (
+      !entry.loading &&
+      entry.pins === 0 &&
+      !!entry.room &&
+      entry.room.pending === 0 &&
+      !entry.room.recovering
+    );
   }
   private async remove(name: string, entry: Entry) {
     await this.evict(name, entry.room!);
@@ -45,24 +97,16 @@ export class ReplicaMemory {
     return this.serial(async () => {
       if (this.stopped) throw new CollaborationError('SERVICE_UNAVAILABLE', 503);
       let entry = this.entries.get(name);
+      if (entry?.room?.recovering) throw new CollaborationError('ROOM_RELOAD_REQUIRED', 503);
       if (entry?.room?.fatal) {
         if (!this.inactive(entry)) throw new CollaborationError('ROOM_RELOAD_REQUIRED', 503);
         await this.remove(name, entry);
         entry = undefined;
       }
       if (!entry) {
-        while (this.reservedBytes + replicaReservation > this.budget) {
-          const oldest = [...this.entries]
-            .filter(([, e]) => this.inactive(e))
-            .sort((a, b) => a[1].idleSince - b[1].idleSince)[0];
-          if (!oldest)
-            throw new CollaborationError('COLLAB_MEMORY_CAPACITY', 503, {
-              message:
-                'Le budget mémoire des documents actifs est atteint. Fermez un document ou réessayez plus tard.',
-            });
-          await this.remove(...oldest);
-        }
-        entry = { pins: 0, idleSince: Date.now(), loading: false };
+        const bytes = replicaReservation(await this.encodedSize(name));
+        await this.makeSpace(bytes);
+        entry = { bytes, pins: 0, idleSince: Date.now(), loading: false };
         this.entries.set(name, entry);
       }
       entry.pins++;

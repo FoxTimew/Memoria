@@ -1,0 +1,370 @@
+Functional suites; warm/cold/capacity measured separately.
+$ node scripts/test-collab.mjs "--suite" "admission"
+PASS admission: third queued frame never reaches consumer; foreign origin denied; counters released on close
+✔ Real WebSocket ingress charges native-queue frames before delivery (88.5057ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 103.2683
+Collaboration admission.e2e.ts: EXIT_CODE=0
+SUITE admission EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "development"
+PASS scoped reset preserves Yjs and other workspace; preview, confirmation, leader guard, idempotence, verified member and production refusal
+✔ Development commands: scoped reset, dry run, leader exclusion and verified membership (4721.0615ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4732.0577
+Collaboration development.e2e.ts: EXIT_CODE=0
+SUITE development EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "frontend"
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Front provider: durable receipts, offline merge, delete-only resync and blocked revocation (4389.8642ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13404.2505
+Collaboration frontend.e2e.ts: EXIT_CODE=0
+SUITE frontend EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "hmac"
+PASS HMAC: tampered body, wrong path, expired timestamp and replay rejected; one authenticated execution
+✔ Real internal HTTP: HMAC body/path/time and durable anti-replay (2013.449ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2024.1158
+Collaboration hmac.e2e.ts: EXIT_CODE=0
+SUITE hmac EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "journal"
+✔ Journal rollback, replay receipt and file projection against real SQL (3757.9395ms)
+✔ Prepared journal keeps concurrent block ownership, page revisions and fresh permissions (2179.665ms)
+✔ Pipelined failures drain the connection and roll back all queued writes (2248.4355ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8196.8259
+Collaboration journal.e2e.ts: EXIT_CODE=0
+SUITE journal EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "leadership"
+PASS leadership: second instance denied; backend terminated; loss callback and stale fence denial; new owner succeeds
+✔ Real leadership: single owner, control loss, fencing and takeover (2112.5369ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2122.6861
+Collaboration leadership.e2e.ts: EXIT_CODE=0
+SUITE leadership EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "lifecycle"
+✔ Failed startup releases listeners and leadership; health follows control loss (2120.6729ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2129.5619
+Collaboration lifecycle.e2e.ts: EXIT_CODE=0
+SUITE lifecycle EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "memory"
+✔ Real replicas: budget, inactive-first eviction, idle release and pending projection (2736.1211ms)
+✔ Growth is reserved before validation/journal, and a capacity rejection leaves SQL and live content unchanged (2855.0506ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6743.9981
+Collaboration memory.e2e.ts: EXIT_CODE=0
+SUITE memory EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "migrations"
+PASS migrations: foreign workspace/generation, >1 MiB and impossible revisions rejected; receipts survive personal account deletion
+✔ Real collaboration migrations: scope, bounds, revisions, receipts and account deletion (2272.7419ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2281.6908
+Collaboration migrations.e2e.ts: EXIT_CODE=0
+SUITE migrations EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "pool"
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] Replica worker unavailable
+closing connection d85fdfeb-e22a-41e8-a33d-ea5848351b08 (while handling 44ba85e4-ef59-499d-9093-9c2d12c2ec73:b220c873-fd26-44f4-8d84-ad31116e32c5:4273a914-3794-43fe-9009-ee98668e573c) because of exception Error: Replica worker unavailable
+    at ValidationPool.enqueue (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:117134:60)
+    at Object.request (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:117162:123)
+    at IncrementalValidator.request (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:118069:32)
+    at IncrementalValidator.commit (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:118088:16)
+    at Room.attempt (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:118301:26)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processTimers (node:internal/timers:615:9)
+    at async Room.process (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:118334:25)
+    at async RoomBatchQueue.drain (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:118130:25)
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"event":"collaboration.replica.reloaded","page":"ac24de02-cbb1-4875-958d-8506d1e51ed6"}
+{"event":"collaboration.replica.reloaded","page":"b220c873-fd26-44f4-8d84-ad31116e32c5"}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Shared worker failure reloads every affected replica, including an in-flight durable commit (4484.2676ms)
+✔ A long replay crosses bounded worker messages and keeps independent replicas intact (1169.2181ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5687.2892
+Collaboration pool.e2e.ts: EXIT_CODE=0
+SUITE pool EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "presence"
+[onAuthenticate] SESSION_CHANGED
+[beforeHandleAwareness] PRESENCE_FOREIGN_CLIENT
+closing connection 47afb0b1-300d-4e7f-b6dc-4cebf5e44dfb (while handling ed6e8f7f-c89d-4b54-b69a-73cf5bd2025f:d7cb19f2-f55b-417a-b00c-9b755c860c7b:b89fa395-56f1-457a-9e82-8493ee703ee2) because of exception Error: PRESENCE_FOREIGN_CLIENT
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:31892:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeHandleAwareness] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "cursor",
+      "anchor",
+      "item",
+      "client"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 6dc4700d-74da-411c-a075-f33f7a25f904 (while handling ed6e8f7f-c89d-4b54-b69a-73cf5bd2025f:d7cb19f2-f55b-417a-b00c-9b755c860c7b:b89fa395-56f1-457a-9e82-8493ee703ee2) because of exception ZodError: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "cursor",
+      "anchor",
+      "item",
+      "client"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:31897:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+PASS real awareness identity, HTTP/WS session binding, stable color, reconnect, foreign removal, remote timeout, cursor validation, byte/client/rate bounds, no journal revision and revoked presence
+[beforeHandleAwareness] SERVICE_UNAVAILABLE
+closing connection 7b46f66e-cacd-43a9-8762-34ee4a08fe4c (while handling ed6e8f7f-c89d-4b54-b69a-73cf5bd2025f:d7cb19f2-f55b-417a-b00c-9b755c860c7b:b89fa395-56f1-457a-9e82-8493ee703ee2) because of exception CollaborationError: SERVICE_UNAVAILABLE
+    at assertAvailable (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:31747:27)
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:31885:9)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:1579:46
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:1070:4 {
+  code: 'SERVICE_UNAVAILABLE',
+  status: 503,
+  details: {}
+}
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Real presence: verified names/colors, cursor bounds, no impersonation, no persistence and revoke cleanup (5022.3309ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5031.4105
+Collaboration presence.e2e.ts: EXIT_CODE=0
+SUITE presence EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "revocations"
+PASS revocation: membership deletion waits for page writer; commit notification rechecks access; missing session notification handled within 5.5 s test tolerance
+✔ Real revocation locks precede commit; notify and missing-notify fallback recheck SQL (6934.783ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6943.8805
+Collaboration revocations.e2e.ts: EXIT_CODE=0
+SUITE revocations EXIT_CODE=0
+$ node scripts/test-collab.mjs "--suite" "transport"
+▶ Production service: twelve transport and durability scenarios
+  ✔ 01 Better Auth and nested BlockNote document (402.3239ms)
+  ✔ 02 SQL commit precedes broadcast and confirms every merged contributor (323.588ms)
+  ✔ 03 simultaneous text and independent character fields converge (243.0835ms)
+  ✔ 04 offline edits merge after session recheck and durable replay (250.5075ms)
+  ✔ 05 projection failure rolls back effects while typing remains durable, then retries (4553.3337ms)
+  ✔ 06 signed API command waits own projection; retry survives automatic compaction (1413.5407ms)
+[onAuthenticate] GENERATION_CHANGED
+  ✔ 07 no cookie, foreign origin and generation refused before document load (50.7633ms)
+[beforeSync] READ_ONLY
+closing connection 00eee19e-3086-438b-afeb-691983307953 (while handling 1fb30156-68b6-428a-9f46-1b8b77e92f21:b5074e6b-0303-425e-8170-515a6bbd614e:1a1e6e4b-c2ac-43d4-8e65-6b7ba8efbf34) because of exception CollaborationError: READ_ONLY
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:119047:40)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6) {
+  code: 'READ_ONLY',
+  status: 403,
+  details: {}
+}
+[beforeSync] READ_ONLY
+closing connection 96b6b582-5772-4f48-91f8-f0f30004ed50 (while handling 1fb30156-68b6-428a-9f46-1b8b77e92f21:b5074e6b-0303-425e-8170-515a6bbd614e:1a1e6e4b-c2ac-43d4-8e65-6b7ba8efbf34) because of exception CollaborationError: READ_ONLY
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:119047:40)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6) {
+  code: 'READ_ONLY',
+  status: 403,
+  details: {}
+}
+  ✔ 08 read-only access rejects live updates and offline SyncStep2 (469.1911ms)
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 0aec7b6d-591e-4fc2-aef9-d19ddcbb361d (while handling 1fb30156-68b6-428a-9f46-1b8b77e92f21:b5074e6b-0303-425e-8170-515a6bbd614e:1a1e6e4b-c2ac-43d4-8e65-6b7ba8efbf34) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:117090:34)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 9de22b90-94d4-41c1-a32c-2e9ebc0cc03f (while handling 1fb30156-68b6-428a-9f46-1b8b77e92f21:b5074e6b-0303-425e-8170-515a6bbd614e:1a1e6e4b-c2ac-43d4-8e65-6b7ba8efbf34) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:117090:34)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[beforeSync] [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+closing connection 40e3aea9-1b64-4d32-a631-cdaa0b95b7cd (while handling 1fb30156-68b6-428a-9f46-1b8b77e92f21:b5074e6b-0303-425e-8170-515a6bbd614e:1a1e6e4b-c2ac-43d4-8e65-6b7ba8efbf34) because of exception CandidateRejected [Error]: [
+  {
+    "origin": "number",
+    "code": "too_small",
+    "minimum": 0,
+    "inclusive": true,
+    "path": [
+      "health"
+    ],
+    "message": "Too small: expected number to be >=0"
+  }
+]
+    at Worker.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:117090:34)
+    at Worker.emit (node:events:514:28)
+    at MessagePort.<anonymous> (node:internal/worker:350:14)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+[onAuthenticate] REJECTION_LIMIT
+  ✔ 09 rejected batch isolates invalid loop while two healthy writers continue (1497.9261ms)
+  ✔ 10 session deletion closes every tab via fallback within five seconds (4498.0669ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ 11 membership deletion closes only affected user (41.5369ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ 12 ancestor archive revokes descendants and leader loss closes remaining sockets (556.2897ms)
+✔ Production service: twelve transport and durability scenarios (17854.0158ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17861.6971
+Collaboration transport.e2e.ts: EXIT_CODE=0
+SUITE transport EXIT_CODE=0

@@ -3,7 +3,7 @@ import { createAuth } from '@memoria/auth';
 import { readCollabConfig } from './service/config.ts';
 import { collaborationServer, sessionVerifier } from './service/server.ts';
 const config = readCollabConfig();
-const { db, pool } = createDatabase(config.DATABASE_URL);
+const { db, pool } = createDatabase(config.DATABASE_URL, { pipeline: true });
 const auth = createAuth(db, {
   origin: config.APP_ORIGIN,
   secret: config.BETTER_AUTH_SECRET,

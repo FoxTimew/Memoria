@@ -1,0 +1,101 @@
+{
+  "label": "reference-665a829",
+  "source": {
+    "commit": "665a82986e0dbb7bbcae5e487627089c0f529de7",
+    "diff": "48fc8cd30c669aa1593e574d1587a534697e1a18c30cee7c4fed635dbd2c7293",
+    "untracked": "scripts/measure-collab.mjs"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "startedAt": "2026-10-24T13:33:18.514Z",
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "node": "v24.21.0",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "availableCpus": 16,
+    "totalBytes": 14877257728
+  },
+  "series": [
+    {
+      "iteration": 1,
+      "suite": "warm",
+      "startedAt": "2026-10-24T13:33:18.792Z",
+      "freeBytes": 3384094720,
+      "endedFreeBytes": 3197104128,
+      "code": 0,
+      "p95": {
+        "content-1M": 12.90339999999992,
+        "history-1M": 49.63670000000093
+      }
+    },
+    {
+      "iteration": 1,
+      "suite": "cold",
+      "startedAt": "2026-10-24T13:33:39.723Z",
+      "freeBytes": 3392086016,
+      "endedFreeBytes": 3159805952,
+      "code": 0,
+      "p95": {
+        "content-1M": 221.47319999999945,
+        "history-1M": 427.9412999999986
+      }
+    },
+    {
+      "iteration": 2,
+      "suite": "warm",
+      "startedAt": "2026-10-24T13:34:04.973Z",
+      "freeBytes": 3342974976,
+      "endedFreeBytes": 3115999232,
+      "code": 0,
+      "p95": {
+        "content-1M": 14.259199999999964,
+        "history-1M": 55.159200000000055
+      }
+    },
+    {
+      "iteration": 2,
+      "suite": "cold",
+      "startedAt": "2026-10-24T13:34:26.985Z",
+      "freeBytes": 3359436800,
+      "endedFreeBytes": 3075850240,
+      "code": 1,
+      "p95": {
+        "content-1M": 264.88890000000083,
+        "history-1M": 503.52469999999994
+      }
+    },
+    {
+      "iteration": 3,
+      "suite": "warm",
+      "startedAt": "2026-10-24T13:34:52.708Z",
+      "freeBytes": 3316252672,
+      "endedFreeBytes": 3145121792,
+      "code": 0,
+      "p95": {
+        "content-1M": 13.688199999999597,
+        "history-1M": 55.17989999999918
+      }
+    },
+    {
+      "iteration": 3,
+      "suite": "cold",
+      "startedAt": "2026-10-24T13:35:15.196Z",
+      "freeBytes": 3336011776,
+      "endedFreeBytes": 3143098368,
+      "code": 0,
+      "p95": {
+        "content-1M": 230.56440000000111,
+        "history-1M": 433.23149999999805
+      }
+    }
+  ]
+}

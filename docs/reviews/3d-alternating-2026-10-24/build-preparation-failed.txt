@@ -1,0 +1,40 @@
+▲ [WARNING] Cannot find base config file "../../tsconfig.base.json" [tsconfig.json]
+
+    .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/tsconfig.json:2:13:
+      2 │   "extends": "../../tsconfig.base.json",
+        ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+▲ [WARNING] Cannot find base config file "../../tsconfig.base.json" [tsconfig.json]
+
+    .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/tsconfig.json:2:13:
+      2 │   "extends": "../../tsconfig.base.json",
+        ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+X [ERROR] Could not resolve "../../../../packages/blocks/standard/src/ui.ts"
+
+    .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/testing/fixture.ts:10:34:
+      10 │ ...dardSpecs } from '../../../../packages/blocks/standard/src/ui.ts';
+         ╵                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:1752
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+.local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/testing/fixture.ts:10:34: ERROR: Could not resolve "../../../../packages/blocks/standard/src/ui.ts"
+    at failureErrorWithLog (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:1752:15)
+    at C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:1211:25
+    at C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:1163:52
+    at buildResponseToResult (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:1209:7)
+    at C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:1236:16
+    at responseCallbacks.<computed> (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:886:9)
+    at handleIncomingPacket (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:941:12)
+    at Socket.readFromStdout (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\esbuild@0.28.2\node_modules\esbuild\lib\main.js:864:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+EXIT_CODE=1

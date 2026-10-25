@@ -21,6 +21,90 @@ function change(doc: Y.Doc, edit: () => void) {
   return update;
 }
 describe('persistent incremental candidate versus full validator', () => {
+  it('reuses ownership only after commit, retries after abort, and rechecks newly introduced IDs', async () => {
+    const { doc } = await representativeDocument(9),
+      replica = new IncrementalReplica(Y.encodeStateAsUpdate(doc));
+    try {
+      const first = change(doc, () => text(doc).insert(0, 'first'));
+      const allIds = replica.inspect().map((block) => block.id);
+      expect(replica.prepare(first).blockIdsToReserve).toEqual(allIds);
+      replica.abort();
+      expect(replica.prepare(first).blockIdsToReserve).toEqual(allIds);
+      replica.commit();
+      expect(
+        replica.prepare(change(doc, () => text(doc).insert(0, 'second'))).blockIdsToReserve,
+      ).toEqual([]);
+      replica.commit();
+      const group = doc.getXmlFragment('prosemirror').get(0) as Y.XmlElement,
+        copy = (group.get(0) as Y.XmlElement).clone(),
+        id = fixtureId(900);
+      // Copy a leaf to avoid duplicating descendants' IDs.
+      while (copy.length > 1) copy.delete(1, 1);
+      copy.setAttribute('id', id);
+      const inserted = change(doc, () => group.insert(group.length, [copy]));
+      expect(replica.prepare(inserted).blockIdsToReserve).toEqual([id]);
+      replica.abort();
+      expect(replica.prepare(inserted).blockIdsToReserve).toEqual([id]);
+      replica.commit();
+      const again = copy.clone();
+      replica.prepare(change(doc, () => group.delete(group.length - 1, 1)));
+      replica.commit();
+      expect(
+        replica.prepare(change(doc, () => group.insert(group.length, [again]))).blockIdsToReserve,
+      ).toEqual([id]);
+      replica.commit();
+      const reloaded = new IncrementalReplica(replica.snapshot());
+      try {
+        expect(
+          reloaded.prepare(change(doc, () => text(doc).insert(0, 'reload'))).blockIdsToReserve,
+        ).toEqual(replica.inspect().map((block) => block.id));
+      } finally {
+        reloaded.close();
+      }
+    } finally {
+      replica.close();
+      doc.destroy();
+    }
+  });
+  it('loads a journal in one replay and rolls back to its durable content without losing deletions', async () => {
+    const { doc } = await representativeDocument(30);
+    const snapshot = Y.encodeStateAsUpdate(doc),
+      updates: Uint8Array[] = [];
+    let replica: IncrementalReplica | undefined;
+    try {
+      for (let i = 0; i < 80; i++)
+        updates.push(
+          change(doc, () => {
+            if (i % 3 === 0) card(doc).setAttribute('health', (100 + i) as unknown as string);
+            else if (i % 3 === 1) text(doc).insert(0, 'é👾');
+            else text(doc).delete(0, 1);
+          }),
+        );
+      replica = new IncrementalReplica(snapshot, updates);
+      expect(replica.inspect()).toEqual(decodeDocument(doc));
+      expect(replica.snapshot()).toEqual(Y.encodeStateAsUpdate(doc));
+      const durable = replica.snapshot();
+      expect(() =>
+        replica!.prepare(change(doc, () => card(doc).setAttribute('health', 'invalid'))),
+      ).toThrow();
+      replica.abort();
+      expect(replica.snapshot()).toEqual(durable);
+      const client = new Y.Doc();
+      client.getXmlFragment('prosemirror');
+      Y.applyUpdate(client, durable);
+      try {
+        const result = replica.prepare(change(client, () => text(client).insert(0, 'safe')));
+        replica.commit();
+        expect(replica.snapshot().length).toBeLessThanOrEqual(result.encodedUpperBound);
+        expect(replica.inspect()).toEqual(decodeDocument(client));
+      } finally {
+        client.destroy();
+      }
+    } finally {
+      replica?.close();
+      doc.destroy();
+    }
+  });
   it('revalidates only touched content and preserves exact JSON accounting through text, marks and fields', async () => {
     const { doc } = await representativeDocument();
     const replica = new IncrementalReplica(Y.encodeStateAsUpdate(doc));

@@ -1,0 +1,67 @@
+{
+  "label": "capacity-final",
+  "source": {
+    "commit": "936629012e64642e779ed32ac4c248a8c7bd98dd",
+    "diff": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "untracked": {
+      "scripts/compare-collab.mjs": "259de76a85cbd54b9d57ee3daa7dba160a86a5338f0c7d1684242606d04c8e89"
+    }
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "startedAt": "2026-10-24T17:07:06.223Z",
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "node": "v24.21.0",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "availableCpus": 16,
+    "totalBytes": 14877257728
+  },
+  "series": [
+    {
+      "iteration": 1,
+      "suite": "capacity",
+      "startedAt": "2026-10-24T17:07:06.340Z",
+      "freeBytes": 4308541440,
+      "endedFreeBytes": 4217995264,
+      "code": 0,
+      "p95": {
+        "content-200K": 587673600,
+        "history-200K": 786006016
+      }
+    },
+    {
+      "iteration": 2,
+      "suite": "capacity",
+      "startedAt": "2026-10-24T17:07:46.594Z",
+      "freeBytes": 4224724992,
+      "endedFreeBytes": 4143722496,
+      "code": 0,
+      "p95": {
+        "content-200K": 589312000,
+        "history-200K": 774209536
+      }
+    },
+    {
+      "iteration": 3,
+      "suite": "capacity",
+      "startedAt": "2026-10-24T17:08:26.669Z",
+      "freeBytes": 4149915648,
+      "endedFreeBytes": 3666173952,
+      "code": 0,
+      "p95": {
+        "content-200K": 585867264,
+        "history-200K": 775159808
+      }
+    }
+  ]
+}

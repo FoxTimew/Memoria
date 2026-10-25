@@ -1,0 +1,136 @@
+$ pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test
+$ eslint . --max-warnings=0 && prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+$ turbo run typecheck
+
+   • turbo 2.11.10
+   • Packages in scope: @memoria/api, @memoria/auth, @memoria/block-catalog, @memoria/block-character-card, @memoria/block-standard, @memoria/blocks-core, @memoria/blocks-ui, @memoria/collab, @memoria/contracts, @memoria/db, @memoria/web, @memoria/worker
+   • Running typecheck in 12 packages
+   • Remote caching disabled
+
+@memoria/contracts:typecheck: cache hit, replaying logs 96136c3514e26f31
+@memoria/blocks-core:typecheck: cache hit, replaying logs 2a518b0148f58c1d
+@memoria/db:typecheck: cache hit, replaying logs b16c897a3629ccfa
+@memoria/worker:typecheck: cache hit, replaying logs e72ee0512890928f
+@memoria/contracts:typecheck: $ tsc --noEmit
+@memoria/worker:typecheck: $ tsc --noEmit
+@memoria/blocks-core:typecheck: $ tsc --noEmit
+@memoria/db:typecheck: $ tsc --noEmit
+@memoria/auth:typecheck: cache hit, replaying logs d9378c5ecebe84ff
+@memoria/blocks-ui:typecheck: cache hit, replaying logs 2af9fce2796dbe82
+@memoria/blocks-ui:typecheck: $ tsc --noEmit
+@memoria/auth:typecheck: $ tsc --noEmit
+@memoria/block-standard:typecheck: cache hit, replaying logs dcce59227ee8008b
+@memoria/block-standard:typecheck: $ tsc --noEmit
+@memoria/block-character-card:typecheck: cache hit, replaying logs d97ce39e594bf93c
+@memoria/block-character-card:typecheck: $ tsc --noEmit
+@memoria/block-catalog:typecheck: cache hit, replaying logs fa9083dd642429e1
+@memoria/block-catalog:typecheck: $ tsc --noEmit
+@memoria/api:typecheck: cache hit, replaying logs 32238b7cbebd0ed0
+@memoria/collab:typecheck: cache hit, replaying logs f2584ccad323e9ea
+@memoria/api:typecheck: $ tsc --noEmit
+@memoria/collab:typecheck: $ tsc --noEmit
+@memoria/web:typecheck: cache hit, replaying logs 3c518bb38ff30c9a
+@memoria/web:typecheck: $ tsc --noEmit
+
+ Tasks:    12 successful, 12 total
+Cached:    12 cached, 12 total
+  Time:    33ms >>> FULL TURBO
+
+$ node scripts/build-server.mjs api --probe && node apps/api/dist/bootstrap-probe.mjs
+Nest decorators, dependency injection and workspace TypeScript exports: OK
+$ vitest run
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+ ❯ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/incremental-replica.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/incremental-replica.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/incremental-replica.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/codec.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/codec.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/room-batch-queue.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/codec.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/admission.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/room-batch-queue.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/room-batch-queue.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/admission.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/admission.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/rejection-budget.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/rejection-budget.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/rejection-budget.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/individual-results.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/individual-results.test.ts (0 test)
+ ❯ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/individual-results.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 18 ⎯⎯⎯⎯⎯⎯
+
+ FAIL  .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/codec.test.ts [ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/codec.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/admission.test.ts [ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/admission.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/incremental-replica.test.ts [ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/incremental-replica.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/individual-results.test.ts [ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/individual-results.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/rejection-budget.test.ts [ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/rejection-budget.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/room-batch-queue.test.ts [ .local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/service/room-batch-queue.test.ts ]
+Error: Transform failed with 1 error:
+
+[TSCONFIG_ERROR] Failed to load tsconfig '.local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/tsconfig.base.json': Tsconfig not found
+
+  Plugin: vite:oxc
+  File: C:/Users/Foxti/Documents/Projets/Memoria/.local/3d-alternating/2026-10-24T17-02-56-183Z/sources/reference/apps/collab/src/codec.test.ts
+ ❯ transformWithOxc node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:7618:19
+ ❯ TransformPluginContext.transform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:7690:26
+ ❯ EnvironmentPluginContainer.transform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:8582:51
+ ❯ loadAndTransform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:20155:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/codec.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/codec.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/admission.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/admission.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/incremental-replica.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/incremental-replica.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/individual-results.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/individual-results.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/rejection-budget.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/rejection-budget.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/room-batch-queue.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/service/room-batch-queue.test.ts ]
+Error: Transform failed with 1 error:
+
+[TSCONFIG_ERROR] Failed to load tsconfig '.local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/tsconfig.base.json': Tsconfig not found
+
+  Plugin: vite:oxc
+  File: C:/Users/Foxti/Documents/Projets/Memoria/.local/3d-alternating/2026-10-24T17-03-29-701Z/sources/candidate/apps/collab/src/codec.test.ts
+ ❯ transformWithOxc node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:7618:19
+ ❯ TransformPluginContext.transform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:7690:26
+ ❯ EnvironmentPluginContainer.transform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:8582:51
+ ❯ loadAndTransform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:20155:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/codec.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/codec.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/admission.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/admission.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/incremental-replica.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/incremental-replica.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/individual-results.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/individual-results.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/rejection-budget.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/rejection-budget.test.ts ]
+ FAIL  .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/room-batch-queue.test.ts [ .local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/service/room-batch-queue.test.ts ]
+Error: Transform failed with 1 error:
+
+[TSCONFIG_ERROR] Failed to load tsconfig '.local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/tsconfig.base.json': Tsconfig not found
+
+  Plugin: vite:oxc
+  File: C:/Users/Foxti/Documents/Projets/Memoria/.local/3d-alternating/2026-10-24T17-03-29-701Z/sources/reference/apps/collab/src/codec.test.ts
+ ❯ transformWithOxc node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:7618:19
+ ❯ TransformPluginContext.transform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:7690:26
+ ❯ EnvironmentPluginContainer.transform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:8582:51
+ ❯ loadAndTransform node_modules/.pnpm/vite@8.3.5_@types+node@24.1_9d53c444daaf8e15fe5976580c934368/node_modules/vite/dist/node/chunks/node.js:20155:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯
+
+
+ Test Files  18 failed | 19 passed | 1 skipped (38)
+      Tests  92 passed | 6 skipped (98)
+   Start at  19:12:59
+   Duration  4.33s (import 43%, tests 37%, transform 18%, worker 2%)
+
+    Isolate  38 workers spawned · ~293ms startup each (spawn + environment, per file)
+             at least ~449ms faster with isolate: false — reuses workers across files instead of one per file
+
+[ELIFECYCLE] Test failed. See above for more details.
+[ELIFECYCLE] Command failed with exit code 1.
+EXIT_CODE=1

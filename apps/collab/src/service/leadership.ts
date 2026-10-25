@@ -93,10 +93,11 @@ export class Leadership {
 }
 /** Caller must BEGIN first and retain this shared row lock through COMMIT. No workspace lock. */
 export async function assertFence(client: PoolClient, fence: Fence) {
-  const result = await client.query(
-    `SELECT l.id FROM collaboration_leadership l WHERE id=1 AND owner=$1 AND epoch=$2 AND lease_until>clock_timestamp()
+  const result = await client.query({
+    name: 'collaboration-assert-fence-v1',
+    text: `SELECT l.id FROM collaboration_leadership l WHERE id=1 AND owner=$1 AND epoch=$2 AND lease_until>clock_timestamp()
  AND EXISTS(SELECT 1 FROM pg_locks WHERE locktype='advisory' AND granted AND pid=l.backend_pid AND classid=$3::oid AND objid=(hashtext(current_schema())::bigint & 4294967295)::oid AND objsubid=2) FOR SHARE OF l`,
-    [fence.owner, fence.epoch, namespace],
-  );
+    values: [fence.owner, fence.epoch, namespace],
+  });
   if (result.rowCount !== 1) throw new Error('COLLAB_LEADERSHIP_LOST');
 }

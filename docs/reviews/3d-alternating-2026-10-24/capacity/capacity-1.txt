@@ -1,0 +1,75 @@
+{"event":"capacity.memory.before","freeBytes":4071550976}
+{"profile":"content-200K","pages":30,"authenticatedSockets":30,"encodedBytes":[177262,177262,177262,177262,177262,177261,177262,177262,177262,177261,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262,177262],"businessBytes":[172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591,172591],"workerCount":4,"workerDistribution":[{"id":1,"replicas":8,"waiting":0,"bytes":0},{"id":3,"replicas":8,"waiting":0,"bytes":0},{"id":5,"replicas":7,"waiting":0,"bytes":0},{"id":7,"replicas":7,"waiting":0,"bytes":0}],"reservedBytes":754974720,"fixedBytes":268435456,"chargedBytes":1023410176,"baseline":{"rss":319713280,"heapTotal":174530560,"heapUsed":36122648,"external":16479144,"arrayBuffers":435474},"loaded":{"rss":547172352,"heapTotal":288563200,"heapUsed":147815968,"external":29015545,"arrayBuffers":4952413},"after":{"rss":538591232,"heapTotal":297349120,"heapUsed":149289224,"external":36396101,"arrayBuffers":655839},"peakRss":587673600,"processLifetimePeakRss":588828672,"baselineWorkers":[{"workerId":1,"heapUsed":11322336,"external":3788050,"arrayBuffers":173519,"replicas":0},{"workerId":3,"heapUsed":11322440,"external":3788050,"arrayBuffers":174103,"replicas":0},{"workerId":5,"heapUsed":11324048,"external":3788050,"arrayBuffers":174103,"replicas":0},{"workerId":7,"heapUsed":11322864,"external":3788050,"arrayBuffers":174103,"replicas":0}],"loadedWorkers":[{"workerId":1,"heapUsed":27789088,"external":5382864,"arrayBuffers":1768877,"replicas":8},{"workerId":3,"heapUsed":27784816,"external":5382862,"arrayBuffers":1768875,"replicas":8},{"workerId":5,"heapUsed":25832840,"external":5028340,"arrayBuffers":1414353,"replicas":7},{"workerId":7,"heapUsed":25807960,"external":5028340,"arrayBuffers":1414353,"replicas":7}],"afterWorkers":[{"workerId":1,"heapUsed":27668320,"external":5205602,"arrayBuffers":1591615,"replicas":8},{"workerId":3,"heapUsed":27666560,"external":5205600,"arrayBuffers":1591613,"replicas":8},{"workerId":5,"heapUsed":25021088,"external":7118990,"arrayBuffers":3512285,"replicas":7},{"workerId":7,"heapUsed":25736528,"external":5028340,"arrayBuffers":1414353,"replicas":7}],"replicaHeapPerPage":2253107.4,"replicaExpansion":12.710610550338124,"allPagesWrittenAndProjected":true}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"profile":"history-200K","pages":30,"authenticatedSockets":30,"encodedBytes":[175986,175986,175986,175986,175986,175986,175986,175986,175986,175986,175986,175986,175986,175985,175986,175986,175986,175986,175986,175986,175986,175986,175986,175985,175986,175985,175986,175986,175986,175986],"businessBytes":[100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802,100802],"workerCount":4,"workerDistribution":[{"id":1,"replicas":8,"waiting":0,"bytes":0},{"id":3,"replicas":8,"waiting":0,"bytes":0},{"id":5,"replicas":7,"waiting":0,"bytes":0},{"id":7,"replicas":7,"waiting":0,"bytes":0}],"reservedBytes":754974720,"fixedBytes":268435456,"chargedBytes":1023410176,"baseline":{"rss":520548352,"heapTotal":211755008,"heapUsed":45537752,"external":16429070,"arrayBuffers":617499},"loaded":{"rss":710799360,"heapTotal":378740736,"heapUsed":226099480,"external":27199585,"arrayBuffers":2743067},"after":{"rss":604827648,"heapTotal":299835392,"heapUsed":223257912,"external":21027658,"arrayBuffers":1325945},"peakRss":786006016,"processLifetimePeakRss":786841600,"baselineWorkers":[{"workerId":1,"heapUsed":11323920,"external":3788050,"arrayBuffers":174103,"replicas":0},{"workerId":3,"heapUsed":11323352,"external":3788050,"arrayBuffers":173519,"replicas":0},{"workerId":5,"heapUsed":11322584,"external":3788050,"arrayBuffers":173519,"replicas":0},{"workerId":7,"heapUsed":11322848,"external":3788050,"arrayBuffers":174103,"replicas":0}],"loadedWorkers":[{"workerId":1,"heapUsed":37986112,"external":5195394,"arrayBuffers":1581407,"replicas":8},{"workerId":3,"heapUsed":38026392,"external":5195392,"arrayBuffers":1581405,"replicas":8},{"workerId":5,"heapUsed":34735784,"external":5371380,"arrayBuffers":1757393,"replicas":7},{"workerId":7,"heapUsed":34784256,"external":5195393,"arrayBuffers":1581406,"replicas":7}],"afterWorkers":[{"workerId":1,"heapUsed":36454272,"external":5189401,"arrayBuffers":1581407,"replicas":8},{"workerId":3,"heapUsed":36481992,"external":5189399,"arrayBuffers":1581405,"replicas":8},{"workerId":5,"heapUsed":34069360,"external":6310522,"arrayBuffers":2703817,"replicas":7},{"workerId":7,"heapUsed":33282872,"external":5013414,"arrayBuffers":1405420,"replicas":7}],"replicaHeapPerPage":3534839.966666667,"replicaExpansion":20.08592714908789,"allPagesWrittenAndProjected":true}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Default 1 GiB budget holds thirty authenticated pages per typical profile (38246.2028ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38250.7012
+Collaboration capacity.e2e.ts: EXIT_CODE=0
+
+EXIT_CODE=0

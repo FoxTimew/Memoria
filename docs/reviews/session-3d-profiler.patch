@@ -1,0 +1,114 @@
+diff --git a/apps/collab/src/service/incremental-replica.ts b/apps/collab/src/service/incremental-replica.ts
+index a98898d..163c68d 100644
+--- a/apps/collab/src/service/incremental-replica.ts
++++ b/apps/collab/src/service/incremental-replica.ts
+@@ -15,7 +15,7 @@ export class IncrementalReplica {
+   private tainted = false;
+   private upper = 0;
+   private blocks: BlockEnvelope[] = [];
+-  constructor(snapshot: Uint8Array) {
++  constructor(snapshot: Uint8Array, private readonly measure?: (stage: string, ms: number) => void) {
+     if (snapshot.length > bounds.document) throw new Error('Maximum base size');
+     this.checkpoint = new Uint8Array(snapshot);
+     this.reset();
+@@ -52,6 +52,8 @@ export class IncrementalReplica {
+     if (this.pending || this.tainted) throw new Error('Replica needs commit or abort');
+     if (update.length > bounds.update) throw new Error('Maximum update size');
+     try {
++      let measuredAt = performance.now();
++      const measured = (stage: string) => { const now = performance.now(); this.measure?.(stage, now-measuredAt); measuredAt=now; };
+       // Only clock changes from clients in this update. No history-wide structure scan.
+       const meta = Y.parseUpdateMeta(update);
+       const clock = (client: number) => {
+@@ -59,12 +61,16 @@ export class IncrementalReplica {
+         return last ? last.id.clock + last.length : 0;
+       };
+       const before = new Map([...meta.to.keys()].map((client) => [client, clock(client)]));
++      measured('metadata');
+       Y.applyUpdate(this.doc, update);
+       for (const [client, previous] of before) this.index.structures += clock(client) - previous;
++      measured('apply');
+       this.blocks = decodeDocument(this.doc, this.index);
++      measured('codec');
+       // mergeUpdates' sum bound also bounds a GC'ed snapshot. Re-encode only near the ceiling.
+       let upper = this.upper + update.length;
+       if (upper > bounds.document) upper = Y.encodeStateAsUpdate(this.doc).length;
++      measured('encodeSize');
+       if (upper > bounds.document) throw new Error('Maximum document size');
+       this.pending = { update: new Uint8Array(update), upper };
+       return {
+diff --git a/apps/collab/src/testing/access-plan.e2e.ts b/apps/collab/src/testing/access-plan.e2e.ts
+new file mode 100644
+index 0000000..8837889
+--- /dev/null
++++ b/apps/collab/src/testing/access-plan.e2e.ts
+@@ -0,0 +1,15 @@
++import { test } from 'node:test';
++import { writeFile } from 'node:fs/promises';
++import { testDatabase } from './database.ts';
++import { resolveAccess } from '../service/access.ts';
++test('Explain the real authorization query without changing rights',async()=>{
++ const db=await testDatabase();
++ try {
++  await resolveAccess({query:async(sql:string,values:unknown[])=>{
++   const plan=await db.client.query('EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) '+sql,values);
++   await writeFile('.local/3d-access-plan.json',JSON.stringify(plan.rows,null,2));
++   console.log(JSON.stringify(plan.rows));
++   return db.client.query(sql,values);
++  }} as unknown as typeof db.pool,[{...db,key:db.user}]);
++ } finally {await db.close();}
++});
+diff --git a/apps/collab/src/testing/diagnostic.e2e.ts b/apps/collab/src/testing/diagnostic.e2e.ts
+new file mode 100644
+index 0000000..1d7fac3
+--- /dev/null
++++ b/apps/collab/src/testing/diagnostic.e2e.ts
+@@ -0,0 +1,48 @@
++import { test } from 'node:test';
++import { randomUUID } from 'node:crypto';
++import { writeFile } from 'node:fs/promises';
++import * as Y from 'yjs';
++import { loadProfile } from './profiles.ts';
++import { testDatabase } from './database.ts';
++import { decodeDocument } from '../codec.ts';
++import { Leadership } from '../service/leadership.ts';
++import { Store } from '../service/store.ts';
++import { IncrementalReplica } from '../service/incremental-replica.ts';
++
++test('Diagnostic of real journal queries and incremental stages (not a performance acceptance test)', {timeout:120000}, async () => {
++  const db = await testDatabase(), leader = new Leadership(db.url, () => {});
++  await leader.start();
++  const reports: object[]=[];
++  try {
++    for (const profile of ['content-1M', 'history-1M']) {
++      const snapshot=await loadProfile(profile), generation=randomUUID(), doc=new Y.Doc();
++      doc.getXmlFragment('prosemirror'); Y.applyUpdate(doc,snapshot);
++      await db.pool.query('DELETE FROM collaboration_documents WHERE page_id=$1',[db.page]);
++      await db.pool.query('INSERT INTO collaboration_documents(page_id,workspace_id,generation,snapshot,encoded_bytes,business_bytes) VALUES($1,$2,$3,$4,$5,$6)',[db.page,db.workspace,generation,snapshot,snapshot.length,Buffer.byteLength(JSON.stringify(decodeDocument(doc)))]);
++      const timings=new Map<string,number[]>();
++      let sample=false;
++      const measure=(key:string,ms:number)=>{ if(!sample) return; const list=timings.get(key)??[]; list.push(ms); timings.set(key,list); };
++      const client=await db.pool.connect(), query=client.query.bind(client);
++      // Benchmark-only instrumentation: all production Store queries use the real connection.
++      const instrumented={ query: async (sql:string,values?:unknown[]) => {const start=performance.now(); try { return await query(sql,values); } finally { measure(sql,performance.now()-start); } }, release:()=>{} };
++      const store=new Store({connect:async()=>instrumented} as unknown as typeof db.pool, leader);
++      const replica=new IncrementalReplica(snapshot,measure);
++      const nodes=[...doc.getXmlFragment('prosemirror').createTreeWalker(()=>true)], texts=nodes.filter((n):n is Y.XmlText=>n instanceof Y.XmlText),cards=nodes.filter((n):n is Y.XmlElement=>n instanceof Y.XmlElement&&n.nodeName==='gamedevCharacterCard');
++      try {
++        for(let i=0;i<220;i++) {
++          sample=i>=20;
++          let update!:Uint8Array;
++          const capture=(u:Uint8Array)=>{update=u;}; doc.on('update',capture);
++          doc.transact(()=>{if(i%4===0) cards[i%cards.length]!.setAttribute('health',(200+i) as unknown as string); else if(i%4===1) texts[i%texts.length]!.delete(0,1); else texts[i%texts.length]!.insert(0,'x');}); doc.off('update',capture);
++          const validation=replica.prepare(update);
++          await store.append(generation,i,[{identity:{...db,key:db.user},receipt:randomUUID(),update}],update,validation.blocks,validation.blockIds);
++          replica.commit();
++        }
++        const summary=[...timings].map(([stage,samples])=>{const sorted=[...samples].sort((a,b)=>a-b);return{stage,count:samples.length,p50:sorted[Math.ceil(sorted.length*.5)-1],p95:sorted[Math.ceil(sorted.length*.95)-1],total:samples.reduce((a,b)=>a+b,0),samples};});
++        reports.push({profile,summary});
++        console.log(JSON.stringify({profile,summary:summary.map(({samples,...summary})=>({...summary, samples:samples.length}))}));
++      } finally {replica.close(); doc.destroy(); client.release();}
++    }
++    await writeFile('.local/3d-query-stages.json',JSON.stringify({date:new Date().toISOString(),scope:'Instrumented direct replica (no worker), real PostgreSQL journal; diagnostic only, all post-warmup samples',reports},null,2));
++  } finally {await leader.close(); await db.close();}
++});
