@@ -2,6 +2,8 @@
 
 Statut : accepté — 2026-10-22.
 
+**Complément de cadrage session 5, 25 octobre 2026.** Le moteur d'accès proposé dans l'[ADR 019](019-partages-et-acces-collaboratif.md) est commun à l'API de session, la recherche et la collaboration ; l'API publique réutilisera ces prédicats, avec droits actuels de l'émetteur ∩ scopes et restrictions de clé. Aucun credential guest, aucun rôle déclaré par le client, filtrage avant pagination/extraits. `/v1` reste à implémenter en session 8 : R12 exige alors ses propres attaques de bout en bout et quotas, pas une déclaration de sécurité héritée des tests de session 5.
+
 **Décision.** REST `/v1/workspaces/{workspaceId}`, clés liées au workspace, scopes minimaux et mêmes services/autorisations que le front. OpenAPI 3.1 généré depuis Zod ; le futur module Nest le servira à `/openapi.json` avec UI à `/docs`. Le fichier actuel est un contrat de conception, pas une annonce de routes disponibles.
 
 **Alternatives.** GraphQL ; API web distincte en logique métier ; offsets ; nouvelles clés renvoyées en clair à chaque consultation.

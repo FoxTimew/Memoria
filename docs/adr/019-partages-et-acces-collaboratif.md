@@ -1,0 +1,72 @@
+# ADR 019 — Partages de pages et accès collaboratif
+
+Statut : **proposé**, 25 octobre 2026. Cadrage uniquement. Les droits guest edit (contenu, titre, création de sous-pages) et la frontière admin/owner sont validés dans l'[ADR 018](018-invitations-et-arrivee-workspace.md). La suppression des grants à la promotion et le compromis de cache/purge ci-dessous sont également **retenus le 25 octobre**. Les modalités techniques restent proposées ; les invariants déjà acceptés de l'ADR 002 restent applicables.
+
+## Un moteur d'accès, plusieurs transports
+
+Owner/admin/member lisent et modifient tout le contenu vivant du workspace. Guest reçoit `none`, `read` ou `edit` selon ses grants explicites sur la page ou un ancêtre ; le **maximum** s'applique (`edit` > `read`). Pas de refus explicite, pas de page privée de membre, pas de privilège implicite du créateur. Un partage read sur un enfant n'annule pas edit hérité d'un parent. L'interface explique le droit effectif et les sources héritées ; retirer un grant n'est pas promettre la disparition d'un autre accès.
+
+Réutiliser `access_subjects` et `access_grants`, sujet lié à la membership courante, ressources pages, niveaux read/edit et héritage obligatoire pour ce MVP. Garder les FK composites de workspace et l'unicité des grants vivants. Ne pas réduire ce modèle à des colonnes guest sur `pages` ; les futurs types de ressources/visibilité restent extensibles.
+
+Un moteur serveur partagé par Nest et collab compose : session vivante, email vérifié, assurance/récupération, appartenance/rôle, politique MFA/grâce, workspace vivant, existence de la page, chaîne d'ancêtres non archivée et grants courants. Séparer le résultat **droit sur une page** des capacités **gérer les accès/gérer l'arbre** ; un niveau edit n'autorise pas automatiquement ces opérations. Les listes owner/member actuelles ne doivent pas simplement être élargies à guest.
+
+Les prédicats SQL communs et leur adaptateur de service devront fonctionner dans les transactions existantes et dans le résolveur collaboratif groupé, sans importer Nest dans collab. Réutiliser les fonctions de session/assurance optimisées de la session 4 ; aucune décision de droits n'est mise en cache. Une petite couche sans UI fournit le même contrat aux façades et au futur module d'API publique. Une preuve initiale compare les résultats des transports sur les mêmes fixtures, au lieu de maintenir deux interprétations de l'héritage.
+
+## Matrice de capacités retenue
+
+| Opération                                      | Owner/admin/member                        | Guest read        | Guest edit                                       |
+| ---------------------------------------------- | ----------------------------------------- | ----------------- | ------------------------------------------------ |
+| Lire page/blocs, rechercher, recevoir Yjs      | Tout contenu vivant                       | Périmètre partagé | Périmètre partagé                                |
+| Modifier texte, blocs, fiche personnage, titre | Oui                                       | Non               | Sur page éditable                                |
+| Créer une sous-page                            | Oui                                       | Non               | Sous un parent éditable ; elle hérite des grants |
+| Créer une page à la racine                     | Oui                                       | Non               | Non                                              |
+| Déplacer, archiver, restaurer                  | Oui, avec règles de version/arbre         | Non               | Non                                              |
+| Inviter, partager, retirer une personne        | Owner/admin selon ADR 018, preuve récente | Non               | Non                                              |
+| Nommer/retirer admin ou owner ; obligation MFA | Owner seulement, preuve récente           | Non               | Non                                              |
+| Créer une clé API (session ultérieure)         | Sous droits propres et preuve récente     | Non               | Non                                              |
+
+Admin gère la politique de cache, mais une requête contenant aussi un changement de politique MFA est refusée atomiquement ; pas de modification partielle de l'actuelle route `PUT security`. Le dernier owner ne peut se retirer/rétrograder. Le statut MFA ou les emails des autres comptes ne sont pas exposés à guest. La présence n'indique que l'identité d'affichage vérifiée des personnes dans la même salle, sans email ni appartenance globale.
+
+## Arbre, recherche et API
+
+Les exclusions se font **avant LIMIT, pagination, extraits, compteurs et sérialisation**, avec vérification du workspace. La recherche actuelle limite les résultats puis filtre la visibilité : cela doit changer avant l'admission d'un guest. Ne jamais renvoyer l'arbre complet pour filtrage côté navigateur.
+
+Un sous-arbre partagé dont le parent est illisible apparaît comme racine dans « Pages partagées ». Ne pas retourner le titre, l'identifiant parent, les voisins, les positions relatives globales ou les compteurs d'un ancêtre masqué. Fournir au guest une parenté visible et un ordre propre à sa vue. Un lien dans un contenu partagé peut contenir du texte saisi par son auteur ; cette information fait partie du document partagé. En revanche, aucun aperçu, titre automatique, relation ou métadonnée d'une cible illisible n'est résolu par le serveur.
+
+Le GET de version, l'ouverture collaborative, la lecture de projection, les commandes `BlockWriteService`, la recherche et les opérations de titre/sous-page réemploient le même moteur. Page inexistante et page illisible rendent la même réponse 404 ; sur une page lisible mais non éditable, 403. Un workspace inaccessible ne révèle pas ses exigences ni sa liste de membres. Pour une membership réelle en attente de MFA, seule l'information d'enrôlement nécessaire est exposée, aucun contenu.
+
+L'API publique `/v1` reste en session 8 : elle utilisera droits courants de l'émetteur ∩ scopes de clé, sans clé guest et sans session simulée. Les contrats peuvent être documentés ici ; ils ne prouvent pas une route absente (R12). Les futures relations/fichiers et bases suivent ce moteur à leur livraison ; les lignes restent paginées, hors limite de pages et hors arbre.
+
+Le déplacement d'un sous-arbre par un membre peut partager ou retirer l'accès à ses documents. Prévoir un aperçu autorisé des bénéficiaires/niveaux avant mutation, lié aux versions de page et de droits. Recalculer sous verrou ; si l'effet a changé, 409 et nouvelle confirmation, sans dévoiler ces détails aux guests. Un grant explicite suit l'identité de sa page lorsqu'elle est déplacée ; les grants hérités suivent le nouvel arbre. Un ancêtre archivé masque toute la descendance, même si elle possède un grant direct. La restauration peut rétablir ces accès et doit l'annoncer. Les contrôles relationnels 409 sont conservés.
+
+## Révocation et concurrence
+
+Les changements de grants, rôle, membership, déplacement et archivage se sérialisent avec les écritures de toutes les pages affectées. Les façades prennent les verrous compte/session quand requis, le mutex de workspace pour la mutation structurelle/de droits, puis les verrous de pages en ordre stable. Les triggers doivent couvrir aussi les mutations SQL internes pertinentes. La portée inclut les descendants avant/après un déplacement ; fermer seulement la salle racine serait insuffisant.
+
+Le journal Yjs conserve **uniquement son verrou de page**, puis relit les droits dans une nouvelle instruction. Il ne prend jamais le mutex de workspace. Une update en attente d'une révocation doit être refusée après son commit. Une update déjà durable avant la révocation reste acquise. Les rôles et grants ne dépendent ni du retard de projection ni d'un événement outbox asynchrone pour devenir effectifs.
+
+Après commit : notification PostgreSQL, recontrôle des salles et fermeture si accès retiré ou niveau changé. Maintenir le contrôle de secours toutes les quatre secondes et la cible de fermeture sous cinq secondes dans les conditions de test, sans promettre ce délai sous saturation (R03). Une perte du canal de contrôle échoue en mode fermé. Tester la perte de notification, la connexion directe WSS et la course avec une transaction d'update réellement bloquée.
+
+Le retrait d'une membership nettoie ses sujets/grants actifs : une réinvitation ne ressuscite pas ses anciens droits. **Retenu le 25 octobre :** à la promotion guest→member/admin, retirer ses anciens grants explicites avec audit ; une future rétrogradation en guest demande un nouvel ensemble de partages. Ne pas conserver des grants dormants qui réapparaîtraient sans présentation à l'opérateur. Le passage member/admin→guest explicite les pages restantes, purge les accès perdus et ferme les connexions avant réouverture autorisée. L'absence de partage est un état possible, sans accès au contenu.
+
+## Lecture seule collaborative et cache
+
+Le résolveur de production retourne le niveau réel ; aujourd'hui il renvoie edit pour owner/member seulement. Hocuspocus reçoit `readOnly` depuis ce résultat serveur. Le service impose le niveau sur **tous les messages pouvant introduire des octets Yjs** : update, sync step 2, reconnexion/replay et chemin interne du writer. Un client modifiant son UI, son nom de salle, son niveau ou son HMAC ne doit pas écrire. L'admission avant décodage et les plafonds de sockets/salles/octet de l'ADR 017 restent en place.
+
+Le drapeau de transport ne suffit pas : l'append transactionnel doit encore exiger edit pour chaque contribution du lot. Une rétrogradation pendant la file ou la validation ne doit pas laisser un lot ancien passer. En revanche, un lecteur doit pouvoir synchroniser et recevoir les mises à jour : un échange vide ou déjà durable n'est pas une écriture de contenu. Tester une vraie connexion read, sa réception, les faux messages sync et l'absence de modification de révision, journal, projection, audit et outbox après refus. La [documentation Hocuspocus](https://tiptap.dev/docs/hocuspocus/server/hooks) expose les hooks d'authentification et d'interception ; seule la preuve sur notre service/version installée validera leur usage.
+
+Les politiques Poste partagé et cache workspace s'appliquent à **tous les rôles**, guest compris. **Retenu le 25 octobre :** lecture persistante autorisée sous ces mêmes politiques, sans nouvelle exception implicite pour les guests ; perte de droit : purge conservatrice de tous les caches de l'utilisateur dans ce workspace, travail ouvert exportable en mémoire et aucun replay automatique. Un read ne conserve aucune nouvelle édition locale. L'ouverture/reprise exige le réseau pour relire identité, politique et droit sur la page **avant de lire ou afficher son cache**.
+
+Solution technique proposée : étendre les tickets de cache avec une époque d'accès par utilisateur/workspace distincte de l'époque MFA. Une perte de droit ou rétrogradation invalide les tickets et déclenche la purge des caches de cet utilisateur dans ce workspace, y compris les autres onglets. Ne pas purger les autres comptes/workspaces. Les réponses tardives, transactions IndexedDB en vol et onglets figés ne doivent pas recréer les données. Une variation de grants affectant plusieurs personnes invalide toutes les personnes concernées ; un seul compteur de politique MFA ne suffit pas.
+
+En edit→read ou perte d'accès avec travail non synchronisé, bloquer l'envoi, retirer le document éditable et offrir le parcours d'export existant depuis la copie en mémoire, avec message compréhensible. Détacher cette copie du provider et purger le cache actif ; elle ne doit pas être fusionnée automatiquement si edit revient. À la fermeture, ce travail non exporté est perdu et le message le précise. Un navigateur entièrement hors ligne ne peut recevoir immédiatement une interdiction : reprise en ligne obligatoire avant affichage/envoi ; limites R02/R07/R08 conservées, aucune promesse d'effacement des exports.
+
+Un document est partagé comme unité entière. La preuve doit inspecter aussi les octets de synchronisation et la présence, pas seulement le rendu : canaris dans une autre page, parent masqué et contenu supprimé avant partage. Si un contenu censé être retiré reste accessible via l'historique Yjs, consigner le résultat et proposer une décision avant livraison ; ne pas déclarer sa confidentialité assurée par le seul rendu de l'éditeur.
+
+## Preuve et performance avant interface
+
+5a valide d'abord moteur commun + SQL/API/WS sur un sous-arbre : lecture/edit, cumul de grants, ancêtre archivé, inter-workspace, recherche avant pagination, sync frauduleux, downgrade/retrait et concurrence. La création d'un guest de test doit passer par une fixture explicite isolée tant que l'invitation n'est pas livrée. Les chemins non encore adaptés restent fermés aux guests. L'arrivée de 5b ne débloque pas l'éditeur existant avant la livraison conjointe de la lecture seule et de l'invalidation du cache dans l'interface en 5c.
+
+Comparer ensuite la candidate finale de session 5 à main figé `1fc393eb8778dad9a6480620597ef239d322ab22`, protocole alterné sur secteur, trois p95/médiane, RAM ≥3 Gio : hausse ≤ **max(10 % de la référence, 2 ms)** ; contenu 1 Mio <50 ms, historique ≤100 ms, froid <500 ms. Ajouter des séries guest aux profondeurs et nombres de grants représentatifs et bornes proposées ; ne pas compter uniquement le chemin owner optimisé. L'absence de guest dans main interdit d'inventer une référence guest historique : comparer owner/member comme avant, publier séparément les coûts et plafonds absolus guest. Tout dépassement est signalé avant de continuer ; pas de retrait de contrôle pour gagner du temps. Qualification studio R11 toujours distincte.
+
+Alternatives écartées : filtrage front, calcul d'accès basé sur la projection, rôle global read-only, permissions d'un socket figées jusqu'à reconnexion, RLS ajouté sans couvrir les différents transports. Les partages restent un module métier commun dont chaque route doit être attaquée réellement, selon R12. La [fiche de cadrage](../reviews/session-5-etape-1-cadrage.md) décrit le découpage et marque les scénarios futurs comme **absence de test de session 5**.
