@@ -24,6 +24,12 @@ const authRoutes = new Set([
   'POST /passkey/verify-authentication',
   'POST /passkey/delete-passkey',
   'POST /passkey/update-passkey',
+  'POST /security/request-password-reset',
+  'POST /security/recover',
+  'POST /security/operator-recover',
+  'POST /security/recovery-remove-factor',
+  'POST /security/recovery-finish',
+  'POST /reset-password',
 ]);
 
 @Public()

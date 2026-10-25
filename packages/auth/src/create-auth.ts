@@ -6,6 +6,7 @@ import * as schema from '@memoria/db/schema';
 import type { Database, WriteTransaction } from '@memoria/db';
 import { securityIntegration } from './security-plugin.ts';
 import type { SecurityFlow } from './security-plugin.ts';
+import { queueAuthMail } from './recovery-core.ts';
 
 export interface AuthOptions {
   origin: string;
@@ -16,7 +17,12 @@ export interface AuthOptions {
 }
 
 export function createAuth(database: Database | WriteTransaction, options: AuthOptions) {
-  const security = securityIntegration(database, options.origin, options.securityFlow);
+  const security = securityIntegration(
+    database,
+    options.origin,
+    options.securityFlow,
+    options.secret,
+  );
   return betterAuth({
     appName: 'Memoria',
     baseURL: options.origin,
@@ -34,6 +40,26 @@ export function createAuth(database: Database | WriteTransaction, options: AuthO
       autoSignIn: false,
       minPasswordLength: 12,
       maxPasswordLength: 128,
+      resetPasswordTokenExpiresIn: 1800,
+      revokeSessionsOnPasswordReset: true,
+      sendResetPassword: async ({ user, token }) => {
+        if (user.emailVerified)
+          await queueAuthMail(
+            database,
+            options.secret,
+            'delivery',
+            {
+              email: user.email,
+              subject: 'Changer votre mot de passe — Memoria',
+              text: `Pour choisir un nouveau mot de passe, ouvrez ce lien sous trente minutes :\n${options.origin}/recuperation#reset=${token}\nSi vous n’avez rien demandé, ignorez cet email.`,
+            },
+            user.id,
+          );
+      },
+      onPasswordReset: async ({ user }) => security.passwordReset(user.id),
+    },
+    verification: {
+      storeIdentifier: { default: 'plain', overrides: { 'reset-password:': 'hashed' } },
     },
     emailVerification: {
       sendOnSignUp: true,
@@ -58,6 +84,10 @@ export function createAuth(database: Database | WriteTransaction, options: AuthO
         '/sign-in/email': { window: 60, max: 5 },
         '/sign-up/email': { window: 600, max: 3 },
         '/send-verification-email': { window: 300, max: 3 },
+        '/security/request-password-reset': { window: 300, max: 3 },
+        '/security/recover': { window: 300, max: 5 },
+        '/security/operator-recover': { window: 300, max: 5 },
+        '/reset-password': { window: 300, max: 5 },
       },
     },
     advanced: {

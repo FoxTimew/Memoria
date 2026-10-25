@@ -101,7 +101,9 @@ export default function SecurityPage() {
       await refresh();
       setNotice(
         result.enrollmentComplete
-          ? 'Facteur ajouté. Conservez vos codes de secours, puis vérifiez votre identité avec le prochain code.'
+          ? status?.recovery
+            ? 'Application de codes ajoutée. Terminez la récupération pour obtenir vos nouveaux codes de secours.'
+            : 'Facteur ajouté. Conservez vos codes de secours, puis vérifiez votre identité avec le prochain code.'
           : 'Identité vérifiée. Vous pouvez accéder à vos espaces.',
       );
     });
@@ -117,6 +119,17 @@ export default function SecurityPage() {
       setNotice('Identité vérifiée avec votre passkey.');
     });
   }
+  async function removeLostFactor(factor: string) {
+    if (
+      !globalThis.confirm(
+        'Retirer ce facteur perdu ? Vos espaces resteront fermés pendant la récupération.',
+      )
+    )
+      return;
+    await securityRequest('/security/recovery-remove-factor', { factor });
+    setUri('');
+    await refresh();
+  }
   const setupSecret = uri ? new URL(uri).searchParams.get('secret') : '';
   return (
     <main className="mx-auto max-w-2xl space-y-8 px-6 py-10">
@@ -128,6 +141,9 @@ export default function SecurityPage() {
           </Link>
         )}
       </header>
+      <Link className="quiet-link" href="/recuperation">
+        Mot de passe ou facteur perdu ?
+      </Link>
       {error && (
         <p role="alert" className="notice error">
           {error}
@@ -146,11 +162,15 @@ export default function SecurityPage() {
         <>
           <section className="notice">
             <p>
-              {status.requiresStrongAuth
-                ? 'Vérifiez votre identité pour ouvrir vos espaces.'
-                : status.strong
-                  ? 'Vous êtes connecté avec un facteur fort.'
-                  : 'Vous êtes connecté avec votre mot de passe.'}
+              {status.recovery
+                ? 'Récupération en cours, limitée à quinze minutes. Retirez le facteur perdu, ajoutez-en un nouveau, puis terminez la récupération.'
+                : status.recoveryRequired && !status.passkeys.length && !status.totpEnabled
+                  ? 'Un rétablissement de vos facteurs est nécessaire. Utilisez votre code de secours ou le lien envoyé par votre exploitant.'
+                  : status.requiresStrongAuth
+                    ? 'Vérifiez votre identité pour ouvrir vos espaces.'
+                    : status.strong
+                      ? 'Vous êtes connecté avec un facteur fort.'
+                      : 'Vous êtes connecté avec votre mot de passe.'}
             </p>
             {status.strong && !status.recent && (
               <p className="mt-2">
@@ -189,7 +209,7 @@ export default function SecurityPage() {
               </button>
             </section>
           )}
-          {(status.totpEnabled || status.totpPending) && (
+          {((status.totpEnabled && !status.recovery) || status.totpPending) && (
             <section className="space-y-4" aria-label="Vérifier un code">
               <h2 className="text-xl font-semibold">
                 {status.totpPending
@@ -233,12 +253,12 @@ export default function SecurityPage() {
               </form>
             </section>
           )}
-          {status.passkeys.length > 0 && (
+          {status.passkeys.length > 0 && !status.recovery && (
             <button className="primary" disabled={busy} onClick={() => void verifyPasskey()}>
               Vérifier avec une passkey
             </button>
           )}
-          {!status.requiresStrongAuth && (
+          {(!status.requiresStrongAuth || status.recovery) && (
             <section className="space-y-4 border-t pt-6">
               <h2 className="text-xl font-semibold">Ajouter un facteur</h2>
               <p>
@@ -317,7 +337,11 @@ export default function SecurityPage() {
                     saveCodes(result.data);
                     setName('');
                     await refresh();
-                    setNotice('Passkey ajoutée. Vérifiez maintenant votre identité avec elle.');
+                    setNotice(
+                      status.recovery
+                        ? 'Passkey ajoutée. Terminez la récupération pour obtenir vos nouveaux codes de secours.'
+                        : 'Passkey ajoutée. Vérifiez maintenant votre identité avec elle.',
+                    );
                   })
                 }
               >
@@ -327,6 +351,45 @@ export default function SecurityPage() {
                 Votre appareil ou votre clé doit demander un code PIN ou la biométrie. Une clé sans
                 cette vérification ne convient pas.
               </p>
+            </section>
+          )}
+          {status.recovery && (
+            <section className="space-y-4 border-t pt-6" aria-label="Terminer la récupération">
+              {status.totpEnabled && (
+                <button
+                  className="quiet-link"
+                  disabled={busy}
+                  onClick={() => void run(() => removeLostFactor('totp'))}
+                >
+                  Retirer l’application de codes perdue
+                </button>
+              )}
+              {status.passkeys.map((key) => (
+                <div key={key.id}>
+                  <button
+                    className="quiet-link"
+                    disabled={busy}
+                    onClick={() => void run(() => removeLostFactor('passkey:' + key.id))}
+                  >
+                    Retirer la passkey perdue : {key.name ?? 'Passkey'}
+                  </button>
+                </div>
+              ))}
+              <button
+                className="primary"
+                disabled={busy || !status.recoveryFactorReady}
+                onClick={() =>
+                  void run(async () => {
+                    saveCodes(await securityRequest('/security/recovery-finish', {}));
+                    await refresh();
+                    setNotice(
+                      'Récupération terminée. Conservez les nouveaux codes : ils remplacent les anciens. Vérifiez maintenant votre identité avec le nouveau facteur.',
+                    );
+                  })
+                }
+              >
+                Terminer la récupération
+              </button>
             </section>
           )}
           <section className="space-y-4 border-t pt-6">

@@ -212,6 +212,11 @@ export const accountSecurity = pgTable('account_security', {
     .references(() => user.id, { onDelete: 'cascade' }),
   version: integer('version').default(0).notNull(),
   lastTotpStep: bigint('last_totp_step', { mode: 'number' }).default(-1).notNull(),
+  recoveryRequired: boolean('recovery_required').default(false).notNull(),
+  recoveryPendingFactors: uuid('recovery_pending_factors')
+    .array()
+    .default(sql`'{}'::uuid[]`)
+    .notNull(),
 });
 
 export const sessionSecurity = pgTable('session_security', {
@@ -220,6 +225,7 @@ export const sessionSecurity = pgTable('session_security', {
     .references(() => session.id, { onDelete: 'cascade' }),
   passwordVerifiedAt: time('password_verified_at'),
   sharedComputer: boolean('shared_computer').default(false).notNull(),
+  recoveryFactorId: uuid('recovery_factor_id'),
 });
 
 export const factorChallenges = pgTable(
@@ -264,7 +270,40 @@ export const authSecurityEvents = pgTable(
     id: uuid('id').defaultRandom().primaryKey(),
     userId: uuid('user_id').references(() => user.id, { onDelete: 'set null' }),
     action: text('action').notNull(),
+    operator: text('operator'),
+    reason: text('reason'),
+    target: text('target'),
     createdAt: time('created_at').defaultNow().notNull(),
   },
   (t) => [index('auth_security_events_created_idx').on(t.createdAt)],
+);
+
+export const operatorRecovery = pgTable('auth_operator_recovery', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  hash: text('hash').notNull().unique(),
+  securityVersion: integer('security_version').notNull(),
+  expiresAt: time('expires_at').notNull(),
+  consumedAt: time('consumed_at'),
+});
+
+// Only encrypted recipients/links are retained while delivery is pending.
+export const authMailJobs = pgTable(
+  'auth_mail_jobs',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id').references(() => user.id, { onDelete: 'cascade' }),
+    kind: text('kind').notNull(),
+    payload: text('payload').notNull(),
+    attempts: integer('attempts').default(0).notNull(),
+    availableAt: time('available_at').defaultNow().notNull(),
+    expiresAt: time('expires_at').notNull(),
+    createdAt: time('created_at').defaultNow().notNull(),
+  },
+  (t) => [
+    index('auth_mail_available_idx').on(t.availableAt),
+    check('auth_mail_kind_ck', sql`${t.kind} in ('password-request','delivery')`),
+  ],
 );

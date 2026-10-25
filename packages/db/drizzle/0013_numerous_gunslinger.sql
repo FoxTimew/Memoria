@@ -1,0 +1,1 @@
+ALTER TABLE "account_security" ADD COLUMN "recovery_pending_factors" uuid[] DEFAULT '{}'::uuid[] NOT NULL;

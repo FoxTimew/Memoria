@@ -10,5 +10,16 @@ const config: NextConfig = {
   ],
   poweredByHeader: false,
   allowedDevOrigins: ['localhost'],
+  async headers() {
+    return [
+      {
+        source: '/recuperation',
+        headers: [
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+          { key: 'Cache-Control', value: 'no-store' },
+        ],
+      },
+    ];
+  },
 };
 export default config;

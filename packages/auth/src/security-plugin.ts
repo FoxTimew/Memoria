@@ -16,9 +16,11 @@ import { z } from 'zod';
 import * as tables from '@memoria/db/schema';
 import type { Database, WriteTransaction } from '@memoria/db';
 import { readAssurance } from './assurance.ts';
+import { lockAccount, securityNotice, revokeForRecovery } from './recovery-core.ts';
+import { recoveryEndpoints } from './recovery-plugin.ts';
 
 type Context = Parameters<typeof getSessionFromCtx>[0];
-type Identity = NonNullable<Awaited<ReturnType<typeof getSessionFromCtx>>>;
+export type Identity = NonNullable<Awaited<ReturnType<typeof getSessionFromCtx>>>;
 export interface SecurityFlow {
   initial?: Identity | null;
   lockedUser?: string;
@@ -26,6 +28,8 @@ export interface SecurityFlow {
   step?: number;
   factorId?: string;
   enrolling?: boolean;
+  recovering?: boolean;
+  recoveryExpiry?: Date;
   challenge?: string;
   expectedUser?: string;
   proof?: { userId: string; factorId: string; method: 'passkey' | 'totp' };
@@ -43,6 +47,7 @@ const protectedPaths = new Set([
   '/passkey/verify-authentication',
   '/passkey/delete-passkey',
   '/passkey/update-passkey',
+  '/reset-password',
 ]);
 
 /** Per-request hooks: the HTTP adapter constructs this inside one SQL transaction.
@@ -53,6 +58,7 @@ export function securityIntegration(
   db: Database | WriteTransaction,
   origin: string,
   flow?: SecurityFlow,
+  secret = '',
 ) {
   async function factors(userId: string) {
     const [totp] = await db
@@ -65,15 +71,7 @@ export function securityIntegration(
   async function lock(userId: string) {
     if (flow?.lockedUser === userId) return;
     if (flow?.lockedUser) throw denied('IDENTITY_CHANGED');
-    await db.insert(tables.accountSecurity).values({ userId }).onConflictDoNothing();
-    await db.execute(
-      sql`SELECT user_id FROM account_security WHERE user_id=${userId}::uuid FOR UPDATE`,
-    );
-    // Account mutations can revoke every session. Acquire them before the page locks
-    // taken by revocation triggers, matching relational requests' session -> page order.
-    await db.execute(
-      sql`SELECT id FROM auth_sessions WHERE user_id=${userId}::uuid ORDER BY id FOR UPDATE`,
-    );
+    await lockAccount(db, userId);
     if (flow) flow.lockedUser = userId;
   }
   async function identity(ctx: Context) {
@@ -90,13 +88,38 @@ export function securityIntegration(
         ),
       );
     if (!alive.length) throw denied('SESSION_REVOKED');
+    const [assurance] = await db
+      .select()
+      .from(tables.sessionAssurance)
+      .where(eq(tables.sessionAssurance.sessionId, value.session.id));
+    const [state] = await db
+      .select()
+      .from(tables.accountSecurity)
+      .where(eq(tables.accountSecurity.userId, value.user.id));
+    if (assurance?.method === 'recovery' && assurance.securityVersion !== state?.version)
+      throw denied('SESSION_REVOKED');
+    if (flow) flow.recovering = assurance?.method === 'recovery';
+    if (flow?.recovering) flow.recoveryExpiry = new Date(value.session.expiresAt);
     return value;
   }
   async function fresh(value: Identity) {
     if (!(await readAssurance(db, value.session.id)).recent)
       throw denied('RECENT_STRONG_AUTH_REQUIRED');
   }
+  async function factorReady(userId: string, factorId: string) {
+    const [state] = await db
+      .select()
+      .from(tables.accountSecurity)
+      .where(eq(tables.accountSecurity.userId, userId));
+    if (state?.recoveryPendingFactors.includes(factorId)) throw denied('RECOVERY_FINISH_REQUIRED');
+  }
   async function enrollment(value: Identity) {
+    if (flow?.recovering) return;
+    const [state] = await db
+      .select()
+      .from(tables.accountSecurity)
+      .where(eq(tables.accountSecurity.userId, value.user.id));
+    if (state?.recoveryRequired) throw denied('RECOVERY_REQUIRED');
     const existing = await factors(value.user.id);
     if (flow) flow.firstFactor = !existing.active;
     if (existing.active) return fresh(value);
@@ -141,9 +164,45 @@ export function securityIntegration(
       await db
         .delete(tables.sessionAssurance)
         .where(eq(tables.sessionAssurance.sessionId, keepSession));
+    if (keepSession && flow?.recovering) {
+      const [state] = await db
+        .select()
+        .from(tables.accountSecurity)
+        .where(eq(tables.accountSecurity.userId, userId));
+      await db.insert(tables.sessionAssurance).values({
+        sessionId: keepSession,
+        method: 'recovery',
+        verifiedAt: new Date(),
+        securityVersion: state!.version,
+      });
+    }
     await audit(userId, 'factors_changed');
   }
   async function recordProof(sessionId: string, proof: NonNullable<SecurityFlow['proof']>) {
+    if (flow?.recovering) throw denied('RECOVERY_FINISH_REQUIRED');
+    const previous = flow?.initial?.session.id;
+    const [settings] = previous
+      ? await db
+          .select()
+          .from(tables.sessionSecurity)
+          .where(eq(tables.sessionSecurity.sessionId, previous))
+      : [];
+    const [before] = await db
+      .select()
+      .from(tables.accountSecurity)
+      .where(eq(tables.accountSecurity.userId, proof.userId));
+    if (before?.recoveryRequired) {
+      await db
+        .update(tables.accountSecurity)
+        .set({ recoveryRequired: false, version: sql`${tables.accountSecurity.version}+1` })
+        .where(eq(tables.accountSecurity.userId, proof.userId));
+      await db
+        .delete(tables.session)
+        .where(and(eq(tables.session.userId, proof.userId), ne(tables.session.id, sessionId)));
+      await db
+        .delete(tables.operatorRecovery)
+        .where(eq(tables.operatorRecovery.userId, proof.userId));
+    }
     const [security] = await db
       .select()
       .from(tables.accountSecurity)
@@ -161,12 +220,7 @@ export function securityIntegration(
       factorId: proof.factorId,
       securityVersion: security.version,
     });
-    const previous = flow?.initial?.session.id;
     if (previous && previous !== sessionId) {
-      const [settings] = await db
-        .select()
-        .from(tables.sessionSecurity)
-        .where(eq(tables.sessionSecurity.sessionId, previous));
       if (settings) await db.insert(tables.sessionSecurity).values({ ...settings, sessionId });
       await db.delete(tables.session).where(eq(tables.session.id, previous));
     }
@@ -221,6 +275,24 @@ export function securityIntegration(
       const path = ctx.path ?? '';
       if (!protectedPaths.has(path) && !path.startsWith('/security/')) return;
       if (!flow) throw denied('SECURITY_TRANSACTION_REQUIRED');
+      if (
+        [
+          '/security/request-password-reset',
+          '/security/recover',
+          '/security/operator-recover',
+        ].includes(path)
+      )
+        return;
+      if (path === '/reset-password') {
+        if (ctx.query?.token || typeof ctx.body?.token !== 'string' || ctx.body.token.length > 256)
+          throw denied('INVALID_TOKEN');
+        const token = await ctx.context.internalAdapter.findVerificationValue(
+          `reset-password:${ctx.body.token}`,
+        );
+        if (!token || token.expiresAt <= new Date()) throw denied('INVALID_TOKEN');
+        await lock(token.value);
+        return;
+      }
       flow.initial = await getSessionFromCtx(ctx);
       if (ctx.body?.trustDevice === true || ctx.body?.createSession === true)
         throw denied('UNSUPPORTED_AUTH_MODE');
@@ -247,12 +319,29 @@ export function securityIntegration(
           .where(eq(tables.passkey.credentialID, credential));
         if (!key) throw denied('INVALID_CREDENTIAL');
         await lock(key.userId);
+        await factorReady(key.userId, key.id);
         if (flow.initial) await identity(ctx);
+        if (flow.recovering) throw denied('RECOVERY_FINISH_REQUIRED');
         if (flow.expectedUser && flow.expectedUser !== key.userId) throw denied('IDENTITY_CHANGED');
         return;
       }
       const value = await identity(ctx);
       flow.initial = value;
+      if (
+        flow.recovering &&
+        ![
+          '/security/status',
+          '/security/challenge',
+          '/security/recovery-remove-factor',
+          '/security/recovery-finish',
+          '/verify-password',
+          '/two-factor/enable',
+          '/two-factor/verify-totp',
+          '/passkey/generate-register-options',
+          '/passkey/verify-registration',
+        ].includes(path)
+      )
+        throw denied('RECOVERY_SESSION_RESTRICTED');
       if (
         [
           '/two-factor/enable',
@@ -303,6 +392,8 @@ export function securityIntegration(
         const all = await factors(value.user.id);
         if (!all.totp) throw denied('TOTP_NOT_ENABLED');
         flow.enrolling = !all.totp.verified;
+        if (!flow.enrolling) await factorReady(value.user.id, all.totp.id);
+        if (flow.recovering && !flow.enrolling) throw denied('RECOVERY_FINISH_REQUIRED');
         if (flow.enrolling) await enrollment(value);
         flow.firstFactor = !all.active;
         flow.factorId = all.totp.id;
@@ -349,7 +440,14 @@ export function securityIntegration(
           .values({ sessionId: value.session.id, passwordVerifiedAt: new Date() });
         return ctx.json({
           ...(ctx.context.returned as object),
-          requiresStrongAuth: (await factors(value.user.id)).active,
+          requiresStrongAuth:
+            (await factors(value.user.id)).active ||
+            (
+              await db
+                .select()
+                .from(tables.accountSecurity)
+                .where(eq(tables.accountSecurity.userId, value.user.id))
+            )[0]?.recoveryRequired === true,
         });
       }
       if (!flow) return;
@@ -374,17 +472,50 @@ export function securityIntegration(
       ) {
         const value = ctx.context.newSession ?? flow.initial;
         if (!value) throw denied('SESSION_REQUIRED');
+        if (flow.recovering) {
+          if (!flow.recoveryExpiry) throw new Error('RECOVERY_EXPIRY_MISSING');
+          await db
+            .update(tables.session)
+            .set({ expiresAt: flow.recoveryExpiry })
+            .where(eq(tables.session.id, value.session.id));
+          await db
+            .insert(tables.sessionSecurity)
+            .values({ sessionId: value.session.id, sharedComputer: true })
+            .onConflictDoNothing();
+        }
         if (flow.step !== undefined)
           await db
             .update(tables.accountSecurity)
             .set({ lastTotpStep: flow.step })
             .where(eq(tables.accountSecurity.userId, value.user.id));
         await changed(value.user.id, value.session.id);
+        if (flow.recovering) {
+          const all = await factors(value.user.id);
+          // TOTP uses its exact verified ID; a passkey response identifies the new credential.
+          const credential = ctx.body?.response?.id;
+          const added =
+            path === '/passkey/verify-registration'
+              ? all.keys.find((key) => key.credentialID === credential)?.id
+              : flow.factorId;
+          if (!added) throw new Error('RECOVERY_FACTOR_MISSING');
+          await db
+            .update(tables.accountSecurity)
+            .set({
+              recoveryPendingFactors: sql`array_append(${tables.accountSecurity.recoveryPendingFactors},${added}::uuid)`,
+            })
+            .where(eq(tables.accountSecurity.userId, value.user.id));
+          await db
+            .update(tables.sessionSecurity)
+            .set({ recoveryFactorId: added })
+            .where(eq(tables.sessionSecurity.sessionId, value.session.id));
+        }
         return ctx.json({
           status: true,
           enrollmentComplete: true,
           requiresStrongAuth: true,
-          ...(flow.firstFactor ? { recoveryCodes: await codes(value.user.id) } : {}),
+          ...(flow.firstFactor && !flow.recovering
+            ? { recoveryCodes: await codes(value.user.id) }
+            : {}),
         });
       }
       if (path === '/two-factor/verify-totp') {
@@ -415,6 +546,7 @@ export function securityIntegration(
   const plugin = {
     id: 'memoria-security',
     endpoints: {
+      ...recoveryEndpoints(db, secret, flow, identity, codes),
       securityStatus: createAuthEndpoint(
         '/security/status',
         { method: 'GET', use: [sessionMiddleware] },
@@ -422,6 +554,14 @@ export function securityIntegration(
           const value = await identity(ctx),
             all = await factors(value.user.id);
           const assurance = await readAssurance(db, value.session.id);
+          const [state] = await db
+            .select()
+            .from(tables.accountSecurity)
+            .where(eq(tables.accountSecurity.userId, value.user.id));
+          const [settings] = await db
+            .select()
+            .from(tables.sessionSecurity)
+            .where(eq(tables.sessionSecurity.sessionId, value.session.id));
           return ctx.json({
             ...assurance,
             userId: value.user.id,
@@ -429,7 +569,11 @@ export function securityIntegration(
             totpEnabled: all.totp?.verified === true,
             totpPending: all.totp?.verified === false,
             passkeys: all.keys.map(({ id, name, createdAt }) => ({ id, name, createdAt })),
-            requiresStrongAuth: all.active && !assurance.strong,
+            requiresStrongAuth:
+              (all.active || state?.recoveryRequired === true) && !assurance.strong,
+            recovery: flow?.recovering === true,
+            recoveryRequired: state?.recoveryRequired === true,
+            recoveryFactorReady: !!settings?.recoveryFactorId,
             recoveryCodesRemaining: (
               await db
                 .select()
@@ -500,5 +644,25 @@ export function securityIntegration(
       ),
     },
   };
-  return { hooks, totpPlugin, passkeyPlugin, plugin };
+  return {
+    hooks,
+    totpPlugin,
+    passkeyPlugin,
+    plugin,
+    async passwordReset(userId: string) {
+      await lock(userId);
+      const [state] = await db
+        .select()
+        .from(tables.accountSecurity)
+        .where(eq(tables.accountSecurity.userId, userId));
+      await revokeForRecovery(db, userId, state?.recoveryRequired === true);
+      await audit(userId, 'password_reset');
+      await securityNotice(
+        db,
+        secret,
+        userId,
+        'Votre mot de passe a été réinitialisé. Toutes vos sessions ont été fermées ; vos facteurs restent inchangés. Si vous n’avez pas demandé ce changement, contactez votre exploitant.',
+      );
+    },
+  };
 }

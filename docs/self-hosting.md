@@ -4,9 +4,9 @@
 
 **`BETTER_AUTH_SECRET` chiffre les secrets TOTP dans PostgreSQL. Sauvegardez-le hors du serveur**, dans un coffre protégé avec accès restreint, en complément de la sauvegarde de la base. Ne le commitez pas et ne l'inscrivez pas dans les journaux. Une sauvegarde SQL seule ne suffit pas : **la perte de ce secret rend les TOTP enregistrés inutilisables**. Générer une nouvelle valeur ne permet pas de déchiffrer les anciennes données.
 
-Conservez la valeur correspondant à chaque sauvegarde et testez une restauration isolée avec cette même valeur. La remplacer invalide aussi des éléments d'authentification signés ; ne faites pas de rotation improvisée. Les parcours de récupération par code et commande d'administration sont prévus en 4c, pas livrés en 4b. Une passkey de secours préalablement enregistrée reste un autre facteur ; elle ne remplace pas la sauvegarde des secrets d'exploitation.
+Conservez la valeur correspondant à chaque sauvegarde et testez une restauration isolée avec cette même valeur. La remplacer invalide aussi des éléments d'authentification signés ; ne faites pas de rotation improvisée. Les parcours de récupération par code et commande d’administration sont livrés en 4c, décrits ci-dessous. Une passkey de secours préalablement enregistrée reste un autre facteur ; elle ne remplace pas la sauvegarde des secrets d'exploitation.
 
-Après déploiement 4b : appliquer `pnpm db:migrate` (0009/0010), puis redémarrer API et collab ensemble. Aucun reset des données n'est nécessaire. Les réglages de connexion forte sont accessibles dans **Sécurité de l’espace** ; voir le [guide de test 4b](reviews/session-4-4b-politique-actions.md).
+Après déploiement 4c : appliquer `pnpm db:migrate` (0011–0013 après 0009/0010), reconstruire puis redémarrer API, collab, worker et web ensemble. Le worker doit recevoir la même origine HTTPS, le même BETTER_AUTH_SECRET et la configuration SMTP que l’API. Aucun reset des données n'est nécessaire. Les réglages de connexion forte sont accessibles dans **Sécurité de l’espace** ; voir le [guide de test 4b](reviews/session-4-4b-politique-actions.md).
 
 ## État actuel, 25 octobre 2026
 
@@ -71,3 +71,31 @@ pnpm test:collab:e2e --suite memory
 ```
 
 Ne pas exécuter les benchmarks simultanément avec un build ou une autre mesure. Ils gardent tous les échantillons après deux chauffes (froid) ou vingt (updates). Un échec du seuil est un résultat à analyser, pas un motif pour filtrer les observations.
+
+## Récupération 4c — procédure opérateur
+
+Le propriétaire d'un workspace ne possède pas ce pouvoir. La commande s'exécute sur l'installation par un exploitant ayant accès à PostgreSQL et au secret. Vérifiez d'abord l'identité de la personne par votre procédure interne, le compte exact et le facteur perdu, et vérifiez vos sauvegardes. Ne demandez ni son mot de passe ni un code de secours ; ne mettez aucun secret dans le motif ou l'identifiant d'opérateur. Cette procédure n'offre pas de protection contre un administrateur système malveillant.
+
+1. Confirmer SMTP et le worker : la sonde `/api/health/worker` confirme PostgreSQL/processus, **pas la livraison SMTP**. Vérifier un email de test et surveiller auth_mail_retry/auth_mail_abandoned dans les journaux du worker ; ils ne contiennent que l'UUID du job et le compteur. La file est chiffrée avec BETTER_AUTH_SECRET. Ne pas l'imprimer pour récupérer un lien.
+2. Relever l'UUID exact dans la base : `SELECT id,email FROM auth_users WHERE lower(email)=lower('personne@example.org');`. Confirmer l'identité et l'adresse de résultat. Il n'existe pas de recherche approximative par nom dans la commande.
+3. Depuis la racine du dépôt avec .env correct, simuler pour voir les identifiants des facteurs (aucune mutation) :
+
+```sh
+pnpm admin:reset-factor --user-id UUID --factor all --reason "Perte signalée et identité contrôlée" --operator "identifiant-exploitant"
+```
+
+4. Choisir le **facteur précis** : `totp` ou `passkey:UUID-DU-FACTEUR`. Refaire la simulation avec cette cible. Puis appliquer :
+
+```sh
+pnpm admin:reset-factor --user-id UUID --factor totp --reason "Application de codes perdue, identité contrôlée" --operator "identifiant-exploitant" --apply --confirm UUID
+```
+
+Le script reconstruit l'exécutable avant de le lancer ; Node 24, pnpm et les dépendances de build sont requis dans ce mode. Pour un artefact déjà construit, exécuter `node --env-file=.env apps/worker/dist/reset-factor.mjs` avec les mêmes arguments. Aucun mot de passe/jeton dans la ligne de commande. Le résultat comporte compte/cible/facteurs et mode simulation/applied ; aucune autorisation de connexion n'est affichée. L'UUID après --confirm doit être exactement celui après --user-id. Aucun facteur par défaut : oubli ou mauvaise cible refusé.
+
+5. Le compte reçoit un lien de rétablissement valable trente minutes ; il doit saisir son **propre mot de passe**, puis configurer un nouveau facteur dans la session limitée à quinze minutes. Terminer remplace les codes de secours ; une nouvelle vérification avec ce facteur est encore nécessaire. Toutes les anciennes sessions sont fermées, y compris les sockets en ligne ; les autres facteurs, rôles, pages et politiques sont conservés. Un ancien facteur encore disponible peut aussi servir à se reconnecter fortement.
+6. Si tous les facteurs sont perdus, remplacer **explicitement** la cible par `all`, simuler puis appliquer avec confirmation. Un mot de passe simple ne permet pas d'ouvrir les pages ou d'enrôler librement après ce reset. Si l'email a expiré après reset total, répéter all avec un nouveau motif réémet une autorisation (audit operator_recovery_reissued). Avec un facteur survivant, le propriétaire du compte peut se reconnecter avec lui ; pour réémettre en retirant ce facteur, une nouvelle décision de reset ciblé/all est nécessaire. Ne pas effacer le drapeau recoveryRequired manuellement.
+7. Si le mot de passe est également perdu, commencer par « Mot de passe ou facteur perdu ? » → reset email, puis lancer la commande : le reset invalide les autorisations opérateur antérieures. Si SMTP est indisponible, réparer SMTP/worker puis réémettre ; aucune connexion forte de secours n'est produite.
+
+Auditer sans secrets : `SELECT created_at,user_id,action,operator,reason,target FROM auth_security_events WHERE user_id='UUID' ORDER BY created_at DESC;`. Rétention cible 90 jours selon ADR 012, job de purge général encore à livrer. L'UUID utilisateur devient NULL à suppression ; motifs/opérateurs sont des champs libres d'exploitation et ne doivent pas contenir de données du titulaire. La revue RGPD de leur conservation/anonymisation accompagne le job général. Les jobs de mail personnels liés au compte sont supprimés par cascade ; les demandes publiques non résolues expirent sous trente minutes au prochain passage du worker.
+
+Le worker délivre au moins une fois : une panne entre SMTP et commit peut produire un doublon. Aucun doublon ne permet de réutiliser un jeton. Six essais, backoff et expiration ; incidents à surveiller. Pas de promesse d'effacement du cache d'un navigateur hors ligne lors d'un reset distant ; reconnexion refusée et nettoyage au retour selon la frontière de cache, renforcée en 4e.

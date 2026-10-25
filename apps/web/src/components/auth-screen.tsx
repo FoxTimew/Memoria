@@ -93,6 +93,13 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
                 : 'Vérification'}
           </p>
           <h2 className="mb-7 text-3xl font-semibold tracking-tight">{title}</h2>
+          {mode === 'signin' && (
+            <p className="mb-5">
+              <Link className="quiet-link" href="/recuperation">
+                Mot de passe ou facteur perdu ?
+              </Link>
+            </p>
+          )}
           {params.has('error') && (
             <p role="alert" className="notice error mb-5">
               Ce lien est invalide ou a expiré. Demandez un nouveau lien de vérification.

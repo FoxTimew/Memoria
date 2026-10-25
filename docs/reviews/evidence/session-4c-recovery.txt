@@ -1,0 +1,28 @@
+$ node scripts/build-server.mjs worker --reset-factor && node scripts/build-server.mjs api --recovery-e2e && node --env-file=.env apps/api/dist/recovery.e2e.mjs
+▶ 4c: recovery, atomicity and operator reset over real HTTP/SQL/WebSocket
+  ✔ generic queued email for known, unknown and unverified accounts; hashed 30-minute token (163.7712ms)
+  ✔ invalid/expired tokens and weak password refuse without changing sessions or factors (119.6093ms)
+  ✔ injected SQL failure rolls back password, token, assurance and session; no success cookie (209.8828ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ concurrent reset has one winner, closes real socket, retains factors/policy and requires new strong proof (432.8427ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ password plus single-use code; concurrent one winner, actual socket revoked, recovery cannot read even optional workspace (510.367ms)
+  ✔ replace lost passkey, finish regenerates codes, no content until separate UV proof; shared-computer flag preserved (354.1312ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ operator dry-run, exact confirmation and target checks; targeted reset preserves spare factor and closes socket (2562.9582ms)
+  ✔ operator full reset preserves policy; expired grant can be reissued but password alone cannot enroll or read (563.5871ms)
+  ✔ mail transport failure retries durably, then purges ciphertext; unknown requests do not send (75.4203ms)
+  ✔ TOTP-only recovery, quarantined factor survives logout; explicit finish and fresh OTP required (1039.0798ms)
+  ✔ recovery mutation rollback and CSRF; operator rollback leaves factor and sessions untouched (476.8464ms)
+  ✔ password reset during recovery revokes its limited session without reopening password-only access (637.2054ms)
+✔ 4c: recovery, atomicity and operator reset over real HTTP/SQL/WebSocket (8654.9293ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8658.2938
+EXIT_CODE=0

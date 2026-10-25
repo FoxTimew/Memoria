@@ -5,6 +5,9 @@ export interface SecurityStatus {
   strong: boolean;
   recent: boolean;
   requiresStrongAuth: boolean;
+  recovery: boolean;
+  recoveryRequired: boolean;
+  recoveryFactorReady: boolean;
   verifiedAt: string | null;
   method: string | null;
   totpEnabled: boolean;
@@ -14,6 +17,16 @@ export interface SecurityStatus {
 }
 export function securityError(code?: string) {
   switch (code) {
+    case 'RECOVERY_DENIED':
+      return 'L’adresse, le mot de passe ou l’autorisation de récupération est incorrect, expiré ou déjà utilisé.';
+    case 'INVALID_TOKEN':
+    case 'INVALID_RESET_TOKEN':
+      return 'Ce lien est invalide, expiré ou déjà utilisé. Demandez un nouveau lien.';
+    case 'RECOVERY_REQUIRED':
+      return 'Utilisez un code de secours ou le lien de récupération envoyé par votre exploitant.';
+    case 'NEW_FACTOR_REQUIRED':
+    case 'RECOVERY_FINISH_REQUIRED':
+      return 'Configurez un nouveau facteur, puis terminez la récupération avant de vérifier votre identité.';
     case 'RECENT_PASSWORD_REQUIRED':
       return 'Confirmez votre mot de passe avant d’ajouter un facteur.';
     case 'RECENT_STRONG_AUTH_REQUIRED':
