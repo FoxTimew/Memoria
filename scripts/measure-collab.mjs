@@ -5,6 +5,8 @@ import { createWriteStream, readFileSync } from 'node:fs';
 import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { finished } from 'node:stream/promises';
 import { resolve, relative } from 'node:path';
+import { readMeasurementPower, POWER_REQUIRED_MESSAGE } from './measurement-power.mjs';
+import { assessRegression } from './measurement-regression.mjs';
 
 const args = process.argv.slice(2);
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
@@ -82,6 +84,14 @@ for (let iteration = 1; iteration <= 3; iteration++) {
     if (manifest.series.some((s) => s.iteration === iteration && s.suite === suite)) continue;
     if (JSON.stringify(source()) !== JSON.stringify(fingerprint))
       throw new Error('Source changed during measurement');
+    const battery = readMeasurementPower();
+    console.log(`Power: ${JSON.stringify(battery)}`);
+    if (!battery.allowed) {
+      manifest.stopped = { reason: battery.reason, suite, iteration, battery };
+      await save();
+      console.error(POWER_REQUIRED_MESSAGE);
+      process.exit(3);
+    }
     const freeBytes = freemem();
     if (freeBytes < 3 * 1024 ** 3) {
       manifest.stopped = {
@@ -90,6 +100,7 @@ for (let iteration = 1; iteration <= 3; iteration++) {
         suite,
         iteration,
         freeBytes,
+        battery,
       };
       await save();
       console.error(
@@ -115,6 +126,20 @@ for (let iteration = 1; iteration <= 3; iteration++) {
     });
     log.end(`\nEXIT_CODE=${code}\n`);
     await finished(log);
+    if (code === 3) {
+      manifest.stopped = {
+        reason: 'CHILD_POWER_PREFLIGHT_REFUSED',
+        suite,
+        iteration,
+        battery,
+        log: `${suite}-${iteration}.txt`,
+      };
+      await save();
+      console.error(
+        'Alimentation refusée après compilation. Journal conservé ; démarrer une nouvelle campagne après contrôle du secteur.',
+      );
+      process.exit(3);
+    }
     const path = `.local/${capacity ? '3d' : '3a'}-${suite}-production.json`;
     if ((await stat(path)).mtimeMs < start)
       throw new Error(`No fresh ${suite} report; complete log retained`);
@@ -128,6 +153,7 @@ for (let iteration = 1; iteration <= 3; iteration++) {
       suite,
       startedAt: new Date(start).toISOString(),
       freeBytes,
+      battery,
       endedFreeBytes: freemem(),
       code,
       p95: Object.fromEntries(report.reports.map((r) => [r.profile, capacity ? r.peakRss : r.p95])),
@@ -162,9 +188,11 @@ if (option('--baseline')) {
     const previous = baseline.metrics[key]?.median;
     if (!Number.isFinite(previous)) throw new Error(`Missing baseline ${key}`);
     metric.baseline = previous;
-    metric.changePercent = (metric.median / previous - 1) * 100;
-    if (metric.changePercent > 10)
-      failures.push(`${key}: regression ${metric.changePercent.toFixed(2)}% > 10%`);
+    Object.assign(metric, assessRegression(previous, metric.median));
+    if (metric.exceedsRegression)
+      failures.push(
+        `${key}: regression ${metric.changeMs.toFixed(3)} ms > allowance ${metric.allowedRegressionMs.toFixed(3)} ms (max of 10% or 2 ms)`,
+      );
   }
 }
 const summary = {

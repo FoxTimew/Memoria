@@ -28,6 +28,7 @@ import { createInternalServer, CollaborationError } from './internal-server.ts';
 import { RejectionBudget } from './rejection-budget.ts';
 import { CandidateRejected } from '../validator.ts';
 import type { CollabConfig } from './config.ts';
+import { publicError } from './public-error.ts';
 type Context = VerifiedSession & {
   socket: WebSocket;
   budget: SocketBudget;
@@ -77,37 +78,41 @@ export async function collaborationServer(
     maxUnauthenticatedQueueMessages: config.COLLAB_ROOM_QUEUE_MESSAGES,
     maxPendingDocuments: 1,
     async onAuthenticate({ context, documentName, connectionConfig, token }) {
-      assertAvailable();
-      // Cached editors bind their HTTP identity to this cookie, including on reconnect.
-      // Empty tokens remain supported for clients without local persistence (3a/3b).
-      if (token) {
-        const expected = collaborationSessionSchema.parse(JSON.parse(token));
-        if (expected.user !== context.user || expected.session !== context.session)
-          throw new Error('SESSION_CHANGED');
+      try {
+        assertAvailable();
+        // Cached editors bind their HTTP identity to this cookie, including on reconnect.
+        // Empty tokens remain supported for clients without local persistence (3a/3b).
+        if (token) {
+          const expected = collaborationSessionSchema.parse(JSON.parse(token));
+          if (expected.user !== context.user || expected.session !== context.session)
+            throw new Error('SESSION_CHANGED');
+        }
+        if (refusals.blocked(context.user)) throw new Error('REJECTION_LIMIT');
+        const identity = {
+          ...roomIdentity(documentName),
+          user: context.user,
+          session: context.session,
+          key: randomUUID(),
+        };
+        const access = await store.authorize(identity);
+        connectionConfig.readOnly = access.level === 'read';
+        const row = (
+          await pool.query('SELECT generation FROM collaboration_documents WHERE page_id=$1', [
+            identity.page,
+          ])
+        ).rows[0];
+        if (row?.generation !== identity.generation) throw new Error('GENERATION_CHANGED');
+        const release = await memory.acquire(documentName);
+        context.socket.once('close', release);
+        if (context.socket.readyState !== 1) {
+          release();
+          throw new Error('CONNECTION_CLOSED');
+        }
+        context.budget.ready = true;
+        return { identity };
+      } catch (error) {
+        throw publicError(error, 'AUTH_REJECTED');
       }
-      if (refusals.blocked(context.user)) throw new Error('REJECTION_LIMIT');
-      const identity = {
-        ...roomIdentity(documentName),
-        user: context.user,
-        session: context.session,
-        key: randomUUID(),
-      };
-      const access = await store.authorize(identity);
-      connectionConfig.readOnly = access.level === 'read';
-      const row = (
-        await pool.query('SELECT generation FROM collaboration_documents WHERE page_id=$1', [
-          identity.page,
-        ])
-      ).rows[0];
-      if (row?.generation !== identity.generation) throw new Error('GENERATION_CHANGED');
-      const release = await memory.acquire(documentName);
-      context.socket.once('close', release);
-      if (context.socket.readyState !== 1) {
-        release();
-        throw new Error('CONNECTION_CLOSED');
-      }
-      context.budget.ready = true;
-      return { identity };
     },
     async onLoadDocument({ document, documentName, context }) {
       assertAvailable();
@@ -144,7 +149,7 @@ export async function collaborationServer(
       } catch (error) {
         await room.close();
         memory.failed(documentName);
-        throw error;
+        throw publicError(error, 'DOCUMENT_LOAD_FAILED');
       }
     },
     async connected({ connection }) {
@@ -199,11 +204,9 @@ export async function collaborationServer(
           charged.add(context.socket);
           refusals.reject(context.user);
         }
-        context.socket.close(
-          1008,
-          error instanceof Error ? error.message.slice(0, 100) : 'UPDATE_REJECTED',
-        );
-        throw error;
+        const safe = publicError(error, 'UPDATE_REJECTED');
+        context.socket.close(1008, safe.message);
+        throw safe;
       }
     },
     async afterHandleMessage({ connection, update }) {
@@ -243,7 +246,7 @@ export async function collaborationServer(
         presenceOwners.set(key, context.socket);
       } catch (error) {
         context?.socket.close(1008, 'PRESENCE_REJECTED');
-        throw error;
+        throw publicError(error, 'PRESENCE_REJECTED');
       }
     },
   });

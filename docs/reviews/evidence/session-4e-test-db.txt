@@ -1,0 +1,12 @@
+COMMAND=pnpm test:db
+$ node --env-file=.env scripts/test-db.mjs
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  13:31:54
+   Duration  2.06s (tests 94%, import 5%, transform 1%)
+
+EXIT_CODE=0

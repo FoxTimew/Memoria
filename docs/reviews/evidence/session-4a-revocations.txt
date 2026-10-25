@@ -1,0 +1,13 @@
+$ node scripts/test-collab.mjs "--suite" "revocations"
+PASS revocation: membership deletion waits for page writer; commit notification rechecks access; missing session notification handled within 5.5 s test tolerance
+✔ Real revocation locks precede commit; notify and missing-notify fallback recheck SQL (5801.8289ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5805.9551
+Collaboration revocations.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

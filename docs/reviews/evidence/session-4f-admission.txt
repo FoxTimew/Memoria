@@ -1,0 +1,14 @@
+COMMAND: pnpm test:collab:e2e --suite admission
+$ node scripts/test-collab.mjs "--suite" "admission"
+PASS admission: third queued frame never reaches consumer; foreign origin denied; counters released on close
+✔ Real WebSocket ingress charges native-queue frames before delivery (34.2168ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.7228
+Collaboration admission.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

@@ -243,4 +243,9 @@ export class CollaborationClient {
       },
     );
   }
+  disableCache() {
+    this.cache?.close();
+    delete this.cache;
+    this.emit();
+  }
 }

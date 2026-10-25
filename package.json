@@ -8,11 +8,21 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "test:auth:adversarial": "node scripts/build-server.mjs api --adversarial-e2e && node --env-file=.env apps/api/dist/adversarial.e2e.mjs",
+    "test:auth:adversarial:browser": "node --env-file=.env --use-system-ca scripts/test-auth-adversarial-browser.mjs",
+    "test:auth:cache": "node scripts/build-server.mjs api --cache-policy-e2e && node --env-file=.env apps/api/dist/cache-policy.e2e.mjs",
+    "test:auth:cache:browser": "node --env-file=.env --use-system-ca scripts/test-auth-cache-browser.mjs",
+    "test:auth:limits": "node scripts/build-server.mjs api --rate-limits-e2e && node --env-file=.env apps/api/dist/rate-limits.e2e.mjs",
+    "test:auth:limits:browser": "node --env-file=.env --use-system-ca scripts/test-auth-limits-browser.mjs",
+    "admin:reset-factor": "node scripts/admin-reset-factor.mjs",
     "dev": "turbo run dev --env-mode=loose",
     "build": "pnpm typecheck && pnpm test:bootstrap && turbo run build",
     "start": "turbo run start --env-mode=loose",
     "test:e2e": "pnpm test:auth:e2e && pnpm test:pages:e2e && node --env-file=.env scripts/test-session1.mjs",
     "test:auth:e2e": "node scripts/build-server.mjs api --auth-e2e && node --env-file=.env apps/api/dist/auth.e2e.mjs",
+    "test:auth:strong": "node scripts/build-server.mjs api --strong-auth-e2e && node --env-file=.env apps/api/dist/strong-auth.e2e.mjs",
+    "test:auth:workspace": "node scripts/build-server.mjs api --workspace-security-e2e && node --env-file=.env apps/api/dist/workspace-security.e2e.mjs",
+    "test:auth:strong:browser": "node --env-file=.env --use-system-ca scripts/test-auth-strong-browser.mjs",
     "test:pages:e2e": "node scripts/build-server.mjs api --pages-e2e && node --env-file=.env apps/api/dist/pages.e2e.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test",
     "lint": "eslint . --max-warnings=0 && prettier --check .",
@@ -31,7 +41,9 @@
     "infra:down": "docker compose down",
     "test:collab:e2e": "node scripts/test-collab.mjs",
     "dev:collab": "node --env-file=.env scripts/dev-collaboration.mjs",
-    "test:collab:browser": "node --env-file=.env --use-system-ca scripts/test-collab-browser.mjs"
+    "test:collab:browser": "node --env-file=.env --use-system-ca scripts/test-collab-browser.mjs",
+    "test:auth:recovery": "node scripts/build-server.mjs worker --reset-factor && node scripts/build-server.mjs api --recovery-e2e && node --env-file=.env apps/api/dist/recovery.e2e.mjs",
+    "test:auth:recovery:browser": "node --env-file=.env --use-system-ca scripts/test-auth-recovery-browser.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -39,6 +51,7 @@
     "@types/node": "24.19.2",
     "esbuild": "0.28.2",
     "eslint": "10.13.0",
+    "jsqr": "1.4.0",
     "lefthook": "2.2.2",
     "prettier": "3.9.10",
     "turbo": "2.11.10",

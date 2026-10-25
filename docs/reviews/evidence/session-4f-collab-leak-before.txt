@@ -1,0 +1,42 @@
+COMMAND: pnpm test:auth:adversarial
+$ node scripts/build-server.mjs api --adversarial-e2e && node --env-file=.env apps/api/dist/adversarial.e2e.mjs
+▶ 4f attacker paths against actual Nest, Better Auth, PostgreSQL and WebSockets
+  ✔ A01 default guard and all 27 exact public-facade routes enforce their IP quota before execution (250.8495ms)
+  ✔ A02 unlisted native factor/recovery/organization routes, path and method aliases remain closed (14.0155ms)
+  ✔ A03 workspace policy cannot be bypassed with native routes or a direct collaborative connection (375.1453ms)
+  ✔ A04 mailbox-only password reset cannot retain assurance or bypass the second factor (628.6497ms)
+  ✔ A05 recovery session stays restricted through enrollment, native verification and finish; fresh proof is required (574.5802ms)
+  ✔ A06 forged identity/forwarding headers do not evade the real untrusted-peer quota (34.7861ms)
+  ✔ A07 HTTP TOTP enrollment and removal revoke actual WebSockets; pending enrollment never promotes (515.5633ms)
+  ✖ A08 canary secrets absent from captured logs, audits, errors, metrics and non-dedicated mail channels (455.293ms)
+✖ 4f attacker paths against actual Nest, Better Auth, PostgreSQL and WebSockets (4448.6204ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4452.1833
+
+✖ failing tests:
+
+test at apps\api\dist\adversarial.e2e.mjs:49274:13
+✖ A08 canary secrets absent from captured logs, audits, errors, metrics and non-dedicated mail channels (455.293ms)
+  AssertionError [ERR_ASSERTION]: Secret leak detected in logs; value deliberately suppressed
+      at TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/adversarial.e2e.mjs:49352:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/adversarial.e2e.mjs:49274:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/adversarial.e2e.mjs:48994:1 {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+[ELIFECYCLE] Command failed with exit code 1.
+EXIT_CODE=1

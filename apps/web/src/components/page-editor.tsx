@@ -14,7 +14,8 @@ import { CollaborationClient } from '../lib/collaboration-client.ts';
 import type { CollaborationStatus } from '../lib/collaboration-client.ts';
 import { PageTitle } from './page-title.tsx';
 import { LocalRecovery } from './local-recovery.tsx';
-import { LocalSessionRevoked, yjsCache } from '../lib/yjs-cache.ts';
+import { CacheForbidden, LocalSessionRevoked, yjsCache } from '../lib/yjs-cache.ts';
+import { refreshCachePolicy } from '../lib/cache-policy.ts';
 import type { CachePage, CacheTicket } from '../lib/yjs-cache.ts';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
@@ -56,7 +57,12 @@ export default function PageEditor({
     let unsubscribe: (() => void) | undefined;
     void (async () => {
       try {
-        const ticket = await yjsCache.ticket(userId, sessionId);
+        let ticket: CacheTicket | undefined;
+        try {
+          ticket = await refreshCachePolicy(userId, sessionId);
+        } catch (e) {
+          if (!(e instanceof CacheForbidden)) throw e;
+        }
         const [kit, opened] = await Promise.all([
           createEditorKit(),
           contentRequest(`${endpoint}/collaboration`, 'POST'),
@@ -64,14 +70,20 @@ export default function PageEditor({
         const meta = collaborationAccessSchema.parse(opened);
         if (meta.identity.user !== userId || meta.identity.session !== sessionId)
           throw new LocalSessionRevoked();
-        const cached = await yjsCache.open(
-          ticket,
-          document.page.workspaceId,
-          document.page.id,
-          meta.generation,
-        );
+        let cached: Awaited<ReturnType<typeof yjsCache.open>> | undefined;
+        if (ticket && ticket.policies[document.page.workspaceId] !== undefined)
+          try {
+            cached = await yjsCache.open(
+              ticket,
+              document.page.workspaceId,
+              document.page.id,
+              meta.generation,
+            );
+          } catch (e) {
+            if (!(e instanceof CacheForbidden)) throw e;
+          }
         if (cancelled) return;
-        setRecovery({ ticket, pages: cached.older });
+        if (ticket && cached) setRecovery({ ticket, pages: cached.older });
         const url = new URL('/collab', location.origin);
         url.protocol = 'wss:';
         client = new CollaborationClient(
@@ -79,16 +91,22 @@ export default function PageEditor({
           meta.generation,
           { url: url.href },
           async () => {
+            try {
+              await refreshCachePolicy(userId, sessionId);
+            } catch (e) {
+              if (!(e instanceof CacheForbidden)) throw e;
+            }
             await contentRequest(`${endpoint}/version`);
           },
           presenceUser(userId, userName),
           sessionId,
         );
-        client.attachCache(ticket, cached.page, cached.updates, (message) => {
-          editor?._tiptapEditor.destroy();
-          setLoaded(undefined);
-          onLocalRevoked(message);
-        });
+        if (ticket && cached)
+          client.attachCache(ticket, cached.page, cached.updates, (message) => {
+            editor?._tiptapEditor.destroy();
+            setLoaded(undefined);
+            onLocalRevoked(message);
+          });
         const activeClient = client;
         unsubscribe = client.subscribe((state) => {
           if (cancelled) return;
@@ -271,9 +289,11 @@ function ActiveEditor({
     saved: 'Enregistré sur le serveur',
     saving: 'Enregistrement sur le serveur…',
     offline:
-      state.local.phase === 'saved'
-        ? 'Hors ligne — modifications conservées sur cet appareil'
-        : 'Hors ligne — copie locale en attente',
+      state.local.phase === 'none'
+        ? 'Hors ligne — gardez cet onglet ouvert'
+        : state.local.phase === 'saved'
+          ? 'Hors ligne — modifications conservées sur cet appareil'
+          : 'Hors ligne — copie locale en attente',
     blocked: 'Édition arrêtée',
   };
   return (
@@ -288,11 +308,13 @@ function ActiveEditor({
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-2 text-sm">
         <span role="status" data-testid="local-save-status">
-          {state.local.phase === 'saved'
-            ? 'Copie locale à jour'
-            : state.local.phase === 'error'
-              ? 'Copie locale indisponible'
-              : 'Copie locale en cours…'}
+          {state.local.phase === 'none'
+            ? 'Copie locale désactivée sur cet appareil ou dans cet espace'
+            : state.local.phase === 'saved'
+              ? 'Copie locale à jour'
+              : state.local.phase === 'error'
+                ? 'Copie locale indisponible'
+                : 'Copie locale en cours…'}
         </span>
         <ul aria-label="Personnes connectées" className="flex flex-wrap gap-3">
           {state.people.map((person) => (
@@ -315,9 +337,10 @@ function ActiveEditor({
       )}
       {state.phase === 'offline' && (
         <p className="notice mx-6 mt-4">
-          Vous pouvez continuer à écrire. Attendez « Copie locale à jour » avant de fermer cet
-          onglet. Pour le rouvrir, rétablissez la connexion : vos droits seront vérifiés avant de
-          récupérer les modifications. Le titre non enregistré reste uniquement dans cet onglet.
+          {state.local.phase === 'none'
+            ? 'Vous pouvez continuer à écrire, mais fermer ou recharger cet onglet perdra les changements non envoyés. Rétablissez la connexion ou exportez le contenu avant de partir.'
+            : 'Vous pouvez continuer à écrire. Attendez « Copie locale à jour » avant de fermer cet onglet. Pour le rouvrir, rétablissez la connexion : vos droits seront vérifiés avant de récupérer les modifications.'}{' '}
+          Le titre non enregistré reste uniquement dans cet onglet.
         </p>
       )}
       {blocked && (

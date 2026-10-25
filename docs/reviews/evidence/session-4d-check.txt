@@ -1,0 +1,54 @@
+COMMAND=pnpm check
+$ pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test
+$ eslint . --max-warnings=0 && prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+$ turbo run typecheck
+
+   • turbo 2.11.10
+   • Packages in scope: @memoria/api, @memoria/auth, @memoria/block-catalog, @memoria/block-character-card, @memoria/block-standard, @memoria/blocks-core, @memoria/blocks-ui, @memoria/collab, @memoria/contracts, @memoria/db, @memoria/web, @memoria/worker
+   • Running typecheck in 12 packages
+   • Remote caching disabled
+
+@memoria/blocks-core:typecheck: cache hit, replaying logs 8fb45f8df5043744
+@memoria/contracts:typecheck: cache hit, replaying logs a93b91b7ea5ba1f9
+@memoria/blocks-core:typecheck: $ tsc --noEmit
+@memoria/contracts:typecheck: $ tsc --noEmit
+@memoria/db:typecheck: cache hit, replaying logs e05d293b2eef5468
+@memoria/db:typecheck: $ tsc --noEmit
+@memoria/blocks-ui:typecheck: cache hit, replaying logs 25988fb305e9fbbd
+@memoria/auth:typecheck: cache miss, executing 40aa6262fc1ef021
+@memoria/blocks-ui:typecheck: $ tsc --noEmit
+@memoria/block-standard:typecheck: cache hit, replaying logs d81e2cb178657357
+@memoria/block-character-card:typecheck: cache hit, replaying logs 9fd3bcf8e33f9966
+@memoria/block-standard:typecheck: $ tsc --noEmit
+@memoria/block-character-card:typecheck: $ tsc --noEmit
+@memoria/block-catalog:typecheck: cache hit, replaying logs 14fe9fb6bb6be84b
+@memoria/block-catalog:typecheck: $ tsc --noEmit
+@memoria/web:typecheck: cache hit, replaying logs 3ec255e92ba9cdb4
+@memoria/web:typecheck: $ tsc --noEmit
+@memoria/auth:typecheck: $ tsc --noEmit
+@memoria/collab:typecheck: cache miss, executing 62ed0efc965ee162
+@memoria/api:typecheck: cache miss, executing de5c62ce1cb5e85a
+@memoria/worker:typecheck: cache miss, executing 0008faa2d34b2c81
+@memoria/collab:typecheck: $ tsc --noEmit
+@memoria/api:typecheck: $ tsc --noEmit
+@memoria/worker:typecheck: $ tsc --noEmit
+
+ Tasks:    12 successful, 12 total
+Cached:    8 cached, 12 total
+  Time:    14.691s 
+
+$ node scripts/build-server.mjs api --probe && node apps/api/dist/bootstrap-probe.mjs
+Nest decorators, dependency injection and workspace TypeScript exports: OK
+$ vitest run
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+
+ Test Files  21 passed | 1 skipped (22)
+      Tests  108 passed | 6 skipped (114)
+   Start at  12:55:12
+   Duration  4.94s (import 51%, tests 42%, transform 6%, worker 1%)
+
+EXIT_CODE=0

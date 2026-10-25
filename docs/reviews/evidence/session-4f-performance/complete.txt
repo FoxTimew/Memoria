@@ -1,0 +1,160 @@
+COMMAND: node scripts/compare-collab.mjs --session4 --reference 0b8c0f03ca44c9e0b3e233b91ba27fcf4db10e41 --candidate a725b91adb57ad9ad352aa0f2e2f8d2d9d1f79a5
+Results: C:\Users\Foxti\Documents\Projets\Memoria\.local\3d-alternating\2026-10-25T13-12-48-796Z
+Power: {"observedAt":"2026-10-25T13:12:49.693Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":68}],"allowed":true,"reason":null}
+reference-warm-1: 4.961 GiB free; battery {"observedAt":"2026-10-25T13:12:49.693Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":68}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"warm","iteration":1,"startedAt":"2026-10-25T13:12:50.277Z","freeBytes":5326323712,"battery":{"observedAt":"2026-10-25T13:12:49.693Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":68}],"allowed":true,"reason":null},"endedFreeBytes":5360312320,"code":0,"p95":{"content-1M":8.30580000000009,"history-1M":32.847500000000764}}
+Power: {"observedAt":"2026-10-25T13:13:05.493Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":68}],"allowed":true,"reason":null}
+candidate-warm-1: 4.983 GiB free; battery {"observedAt":"2026-10-25T13:13:05.493Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":68}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"warm","iteration":1,"startedAt":"2026-10-25T13:13:05.970Z","freeBytes":5350277120,"battery":{"observedAt":"2026-10-25T13:13:05.493Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":68}],"allowed":true,"reason":null},"endedFreeBytes":5323354112,"code":0,"p95":{"content-1M":11.723500000000058,"history-1M":37.1885999999995}}
+Power: {"observedAt":"2026-10-25T13:13:22.237Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null}
+reference-cold-1: 4.953 GiB free; battery {"observedAt":"2026-10-25T13:13:22.237Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"cold","iteration":1,"startedAt":"2026-10-25T13:13:22.711Z","freeBytes":5317775360,"battery":{"observedAt":"2026-10-25T13:13:22.237Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null},"endedFreeBytes":5290979328,"code":0,"p95":{"content-1M":146.87959999999998,"history-1M":242.89049999999952}}
+Power: {"observedAt":"2026-10-25T13:13:35.452Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null}
+candidate-cold-1: 4.925 GiB free; battery {"observedAt":"2026-10-25T13:13:35.452Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"cold","iteration":1,"startedAt":"2026-10-25T13:13:35.930Z","freeBytes":5287833600,"battery":{"observedAt":"2026-10-25T13:13:35.452Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null},"endedFreeBytes":5230952448,"code":0,"p95":{"content-1M":146.34979999999996,"history-1M":263.8275000000003}}
+Power: {"observedAt":"2026-10-25T13:13:48.633Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null}
+candidate-warm-2: 4.856 GiB free; battery {"observedAt":"2026-10-25T13:13:48.633Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"warm","iteration":2,"startedAt":"2026-10-25T13:13:49.106Z","freeBytes":5213892608,"battery":{"observedAt":"2026-10-25T13:13:48.633Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":69}],"allowed":true,"reason":null},"endedFreeBytes":5247037440,"code":0,"p95":{"content-1M":11.504899999999907,"history-1M":35.829099999999016}}
+Power: {"observedAt":"2026-10-25T13:14:06.281Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null}
+reference-warm-2: 4.880 GiB free; battery {"observedAt":"2026-10-25T13:14:06.281Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"warm","iteration":2,"startedAt":"2026-10-25T13:14:06.760Z","freeBytes":5239951360,"battery":{"observedAt":"2026-10-25T13:14:06.281Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null},"endedFreeBytes":5240905728,"code":0,"p95":{"content-1M":7.8564000000001215,"history-1M":32.69030000000021}}
+Power: {"observedAt":"2026-10-25T13:14:21.928Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null}
+candidate-cold-2: 4.877 GiB free; battery {"observedAt":"2026-10-25T13:14:21.928Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"cold","iteration":2,"startedAt":"2026-10-25T13:14:22.401Z","freeBytes":5236981760,"battery":{"observedAt":"2026-10-25T13:14:21.928Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null},"endedFreeBytes":5221158912,"code":0,"p95":{"content-1M":149.87869999999998,"history-1M":235.73400000000038}}
+Power: {"observedAt":"2026-10-25T13:14:35.029Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null}
+reference-cold-2: 4.848 GiB free; battery {"observedAt":"2026-10-25T13:14:35.029Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"cold","iteration":2,"startedAt":"2026-10-25T13:14:35.505Z","freeBytes":5205168128,"battery":{"observedAt":"2026-10-25T13:14:35.029Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null},"endedFreeBytes":5225349120,"code":0,"p95":{"content-1M":146.7591,"history-1M":239.60140000000047}}
+Power: {"observedAt":"2026-10-25T13:14:48.191Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null}
+reference-warm-3: 4.854 GiB free; battery {"observedAt":"2026-10-25T13:14:48.191Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"warm","iteration":3,"startedAt":"2026-10-25T13:14:48.662Z","freeBytes":5211885568,"battery":{"observedAt":"2026-10-25T13:14:48.191Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":70}],"allowed":true,"reason":null},"endedFreeBytes":5225648128,"code":0,"p95":{"content-1M":7.724699999999984,"history-1M":32.23440000000028}}
+Power: {"observedAt":"2026-10-25T13:15:03.669Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null}
+candidate-warm-3: 4.849 GiB free; battery {"observedAt":"2026-10-25T13:15:03.669Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"warm","iteration":3,"startedAt":"2026-10-25T13:15:04.146Z","freeBytes":5206835200,"battery":{"observedAt":"2026-10-25T13:15:03.669Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null},"endedFreeBytes":5217234944,"code":0,"p95":{"content-1M":11.645999999999958,"history-1M":36.65090000000055}}
+Power: {"observedAt":"2026-10-25T13:15:20.100Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null}
+reference-cold-3: 4.857 GiB free; battery {"observedAt":"2026-10-25T13:15:20.100Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"cold","iteration":3,"startedAt":"2026-10-25T13:15:20.592Z","freeBytes":5215248384,"battery":{"observedAt":"2026-10-25T13:15:20.100Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null},"endedFreeBytes":5212991488,"code":0,"p95":{"content-1M":145.97450000000003,"history-1M":242.10480000000007}}
+Power: {"observedAt":"2026-10-25T13:15:33.376Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null}
+candidate-cold-3: 4.844 GiB free; battery {"observedAt":"2026-10-25T13:15:33.376Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"cold","iteration":3,"startedAt":"2026-10-25T13:15:33.864Z","freeBytes":5200728064,"battery":{"observedAt":"2026-10-25T13:15:33.376Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":71}],"allowed":true,"reason":null},"endedFreeBytes":5185949696,"code":0,"p95":{"content-1M":145.942,"history-1M":227.73979999999938}}
+{
+  "commits": {
+    "reference": "0b8c0f03ca44c9e0b3e233b91ba27fcf4db10e41",
+    "candidate": "a725b91adb57ad9ad352aa0f2e2f8d2d9d1f79a5"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "protocolHash": "4290c2586e69d4db0c09f214ad2c0de6a24005eb6b25c564dd272500c70c46fd",
+  "metrics": {
+    "warm:content-1M": {
+      "reference": {
+        "values": [
+          8.30580000000009,
+          7.8564000000001215,
+          7.724699999999984
+        ],
+        "median": 7.8564000000001215
+      },
+      "candidate": {
+        "values": [
+          11.723500000000058,
+          11.504899999999907,
+          11.645999999999958
+        ],
+        "median": 11.645999999999958
+      },
+      "changePercent": 48.23583320604574,
+      "pairedChangePercent": [
+        41.14835416215092,
+        46.43984522172659,
+        50.76313643248258
+      ]
+    },
+    "warm:history-1M": {
+      "reference": {
+        "values": [
+          32.847500000000764,
+          32.69030000000021,
+          32.23440000000028
+        ],
+        "median": 32.69030000000021
+      },
+      "candidate": {
+        "values": [
+          37.1885999999995,
+          35.829099999999016,
+          36.65090000000055
+        ],
+        "median": 36.65090000000055
+      },
+      "changePercent": 12.115520506083799,
+      "pairedChangePercent": [
+        13.215922064079866,
+        9.601624946845977,
+        13.701201201201929
+      ]
+    },
+    "cold:content-1M": {
+      "reference": {
+        "values": [
+          146.87959999999998,
+          146.7591,
+          145.97450000000003
+        ],
+        "median": 146.7591
+      },
+      "candidate": {
+        "values": [
+          146.34979999999996,
+          149.87869999999998,
+          145.942
+        ],
+        "median": 146.34979999999996
+      },
+      "changePercent": -0.2788924162113515,
+      "pairedChangePercent": [
+        -0.36070359668737284,
+        2.1256603508743144,
+        -0.02226416257635755
+      ]
+    },
+    "cold:history-1M": {
+      "reference": {
+        "values": [
+          242.89049999999952,
+          239.60140000000047,
+          242.10480000000007
+        ],
+        "median": 242.10480000000007
+      },
+      "candidate": {
+        "values": [
+          263.8275000000003,
+          235.73400000000038,
+          227.73979999999938
+        ],
+        "median": 235.73400000000038
+      },
+      "changePercent": -2.6314224253297325,
+      "pairedChangePercent": [
+        8.619933673816327,
+        -1.6140974134542074,
+        -5.933380916033338
+      ]
+    }
+  },
+  "failures": [
+    "warm:content-1M: regression 48.24% > 10%",
+    "warm:history-1M: regression 12.12% > 10%"
+  ],
+  "failedSeries": []
+}
+
+EXIT_CODE=1

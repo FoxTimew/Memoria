@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { retireLegacyDrafts } from '../lib/yjs-cache.ts';
+import { CachePolicyMonitor } from './cache-policy-monitor.tsx';
 
 export function LocalDataBoundary({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false),
@@ -21,7 +22,13 @@ export function LocalDataBoundary({ children }: { children: ReactNode }) {
       active = false;
     };
   }, [attempt]);
-  if (ready) return children;
+  if (ready)
+    return (
+      <>
+        <CachePolicyMonitor />
+        {children}
+      </>
+    );
   return (
     <main className="p-8" aria-busy={!error}>
       <p role={error ? 'alert' : 'status'}>{error || 'Préparation du stockage local…'}</p>

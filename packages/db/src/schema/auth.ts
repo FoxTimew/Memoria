@@ -200,6 +200,113 @@ export const sessionAssurance = pgTable(
       .references(() => session.id, { onDelete: 'cascade' }),
     method: text('method').notNull(),
     verifiedAt: time('verified_at').notNull(),
+    securityVersion: integer('security_version').default(0).notNull(),
+    factorId: uuid('factor_id'),
   },
   (t) => [check('assurance_method_ck', sql`${t.method} in ('totp','passkey','recovery')`)],
+);
+
+export const accountSecurity = pgTable('account_security', {
+  userId: uuid('user_id')
+    .primaryKey()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  version: integer('version').default(0).notNull(),
+  lastTotpStep: bigint('last_totp_step', { mode: 'number' }).default(-1).notNull(),
+  recoveryRequired: boolean('recovery_required').default(false).notNull(),
+  recoveryPendingFactors: uuid('recovery_pending_factors')
+    .array()
+    .default(sql`'{}'::uuid[]`)
+    .notNull(),
+});
+
+export const sessionSecurity = pgTable('session_security', {
+  sessionId: uuid('session_id')
+    .primaryKey()
+    .references(() => session.id, { onDelete: 'cascade' }),
+  passwordVerifiedAt: time('password_verified_at'),
+  sharedComputer: boolean('shared_computer').default(false).notNull(),
+  recoveryFactorId: uuid('recovery_factor_id'),
+});
+
+export const factorChallenges = pgTable(
+  'auth_factor_challenges',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    sessionId: uuid('session_id')
+      .notNull()
+      .references(() => session.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    purpose: text('purpose').notNull(),
+    attempts: integer('attempts').default(0).notNull(),
+    expiresAt: time('expires_at').notNull(),
+    consumedAt: time('consumed_at'),
+  },
+  (t) => [
+    index('factor_challenges_session_idx').on(t.sessionId),
+    check('factor_challenge_attempts_ck', sql`${t.attempts} between 0 and 5`),
+    check('factor_challenge_purpose_ck', sql`${t.purpose} in ('totp-enroll','totp-auth')`),
+  ],
+);
+
+export const recoveryCodes = pgTable(
+  'auth_recovery_codes',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    hash: text('hash').notNull().unique(),
+    createdAt: time('created_at').defaultNow().notNull(),
+    consumedAt: time('consumed_at'),
+  },
+  (t) => [index('recovery_codes_user_idx').on(t.userId)],
+);
+
+export const authSecurityEvents = pgTable(
+  'auth_security_events',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id').references(() => user.id, { onDelete: 'set null' }),
+    action: text('action').notNull(),
+    operator: text('operator'),
+    reason: text('reason'),
+    target: text('target'),
+    createdAt: time('created_at').defaultNow().notNull(),
+  },
+  (t) => [index('auth_security_events_created_idx').on(t.createdAt)],
+);
+
+export const operatorRecovery = pgTable('auth_operator_recovery', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  hash: text('hash').notNull().unique(),
+  securityVersion: integer('security_version').notNull(),
+  expiresAt: time('expires_at').notNull(),
+  consumedAt: time('consumed_at'),
+});
+
+// Only encrypted recipients/links are retained while delivery is pending.
+export const authMailJobs = pgTable(
+  'auth_mail_jobs',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id').references(() => user.id, { onDelete: 'cascade' }),
+    kind: text('kind').notNull(),
+    payload: text('payload').notNull(),
+    attempts: integer('attempts').default(0).notNull(),
+    availableAt: time('available_at').defaultNow().notNull(),
+    expiresAt: time('expires_at').notNull(),
+    createdAt: time('created_at').defaultNow().notNull(),
+  },
+  (t) => [
+    index('auth_mail_available_idx').on(t.availableAt),
+    check(
+      'auth_mail_kind_ck',
+      sql`${t.kind} in ('password-request','verification-request','delivery')`,
+    ),
+  ],
 );

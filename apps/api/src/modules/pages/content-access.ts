@@ -1,10 +1,12 @@
 import { randomUUID } from 'node:crypto';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import { actors, member, organization, pages } from '@memoria/db';
 import type { WriteTransaction } from '@memoria/db';
 import type { RequestContext } from '@memoria/contracts';
 import { z } from 'zod';
+import { lockSession } from '@memoria/auth';
+import type { SessionIdentity } from '@memoria/auth';
 export type StoredPage = typeof pages.$inferSelect;
 export function uuid(value: string) {
   if (!z.uuid().safeParse(value).success) throw new BadRequestException('Identifiant invalide.');
@@ -12,11 +14,12 @@ export function uuid(value: string) {
 }
 export async function contentContext(
   tx: WriteTransaction,
-  userId: string,
+  session: SessionIdentity,
   workspaceId: string,
   write: boolean,
 ): Promise<RequestContext> {
   uuid(workspaceId);
+  await lockSession(tx, session);
   if (write)
     await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${workspaceId}::text, 0))`);
   else
@@ -38,7 +41,7 @@ export async function contentContext(
     .where(
       and(
         eq(member.organizationId, workspaceId),
-        eq(member.userId, userId),
+        eq(member.userId, session.userId),
         isNull(organization.deletedAt),
       ),
     )
@@ -46,6 +49,14 @@ export async function contentContext(
     .limit(1);
   if (!membership || !['owner', 'member'].includes(membership.role))
     throw new NotFoundException('Espace inaccessible.');
+  const access = await tx.execute<{ allowed: boolean }>(
+    sql`SELECT auth_session_can_access_workspace(${session.id}::uuid,${workspaceId}::uuid) AS allowed`,
+  );
+  if (!access.rows[0]?.allowed)
+    throw new ForbiddenException({
+      code: 'WORKSPACE_STRONG_AUTH_REQUIRED',
+      message: 'Cet espace exige une connexion forte.',
+    });
   return {
     workspaceId,
     actorId: membership.actorId,

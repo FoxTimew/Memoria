@@ -1,0 +1,13 @@
+COMMAND=pnpm test:auth:limits:browser
+$ node --env-file=.env --use-system-ca scripts/test-auth-limits-browser.mjs
+PASS HTTPS signup through worker/Mailpit, generic verification response, five failed passwords, visible pending state, correct password accepted after delay.
+✔ 4d browser: generic verification resend, visible wait, successful password after five failures (4751.3014ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4766.1117
+EXIT_CODE=0

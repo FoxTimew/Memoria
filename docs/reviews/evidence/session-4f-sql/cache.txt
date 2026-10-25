@@ -1,0 +1,19 @@
+COMMAND: pnpm test:auth:cache
+$ node scripts/build-server.mjs api --cache-policy-e2e && node --env-file=.env apps/api/dist/cache-policy.e2e.mjs
+▶ 4e real HTTP, PostgreSQL and cryptographic passkey cache policy
+  ✔ shared choice survives first TOTP enrollment and separate strong proof (710.1728ms)
+  ✔ policy heartbeat has its own bounded NAT quota, not a credential allowance (59.2616ms)
+  ✔ anonymous denied; defaults allowed; shared choice stored on server; outsider sees no policies (112.5134ms)
+  ✔ owner requires recent assurance, member denied, policy version fenced and other workspace preserved (107.8557ms)
+  ✔ anonymous passkey login persists shared choice and authenticated rotation cannot remove it (199.4793ms)
+  ✔ policy can re-enable only at a new version; old payload and expired assurance rejected (97.1847ms)
+✔ 4e real HTTP, PostgreSQL and cryptographic passkey cache policy (2935.4148ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2938.5434
+EXIT_CODE=0

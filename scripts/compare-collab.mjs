@@ -6,13 +6,17 @@ import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { availableParallelism, cpus, freemem, platform, release, totalmem } from 'node:os';
 import { resolve, relative } from 'node:path';
 import { finished } from 'node:stream/promises';
+import { readMeasurementPower, POWER_REQUIRED_MESSAGE } from './measurement-power.mjs';
+import { assessRegression } from './measurement-regression.mjs';
 
 // Immutable application snapshots, one common harness, no compiler during measurements.
 const repo = resolve('.');
 const args = process.argv.slice(2);
+const session4 = args.includes('--session4');
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
-const git = (...argv) => execFileSync('git', argv, { windowsHide: true });
+const git = (...argv) =>
+  execFileSync('git', argv, { windowsHide: true, maxBuffer: 128 * 1024 ** 2 });
 const commits = {
   reference: git('rev-parse', option('--reference') ?? '665a829')
     .toString()
@@ -23,9 +27,10 @@ const commits = {
 };
 // Workspace dependencies are resolved from this checkout. Reject any source/version drift.
 if (
-  git('diff', commits.reference, commits.candidate, '--', 'packages', 'pnpm-lock.yaml').length ||
-  git('diff', commits.candidate, '--', 'packages', 'pnpm-lock.yaml').length ||
-  git('ls-files', '--others', '--exclude-standard', '--', 'packages').length
+  !session4 &&
+  (git('diff', commits.reference, commits.candidate, '--', 'packages', 'pnpm-lock.yaml').length ||
+    git('diff', commits.candidate, '--', 'packages', 'pnpm-lock.yaml').length ||
+    git('ls-files', '--others', '--exclude-standard', '--', 'packages').length)
 )
   throw new Error('Comparison requires identical, unchanged workspace packages and lockfile');
 const root = resolve('.local/3d-alternating');
@@ -41,25 +46,13 @@ for (const name of ['content-1M', 'history-1M']) {
   const bytes = await readFile(`.local/incremental/${name}.bin`);
   profiles[name] = { bytes: bytes.length, sha256: hash(bytes) };
 }
-const protocolHash = hash(await readFile(import.meta.filename));
-const power = () => {
-  if (platform() !== 'win32') return { unavailable: 'Windows battery observation only' };
-  try {
-    return JSON.parse(
-      execFileSync(
-        'powershell.exe',
-        [
-          '-NoProfile',
-          '-Command',
-          'Get-CimInstance Win32_Battery | Select-Object BatteryStatus,EstimatedChargeRemaining | ConvertTo-Json -Compress',
-        ],
-        { encoding: 'utf8', windowsHide: true, timeout: 10000 },
-      ),
-    );
-  } catch {
-    return { unavailable: true };
-  }
-};
+const protocolHash = hash(
+  Buffer.concat([
+    await readFile(import.meta.filename),
+    await readFile(new URL('./measurement-power.mjs', import.meta.url)),
+    await readFile(new URL('./measurement-regression.mjs', import.meta.url)),
+  ]),
+);
 let manifest;
 const manifestPath = `${directory}/manifest.json`;
 const save = () => writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
@@ -88,14 +81,32 @@ if (option('--resume')) {
       availableCpus: availableParallelism(),
       totalBytes: totalmem(),
     },
-    protocol:
-      'Three paired series, order AB / BA / AB for each suite; fresh Node process per suite. Both builds completed before any measurements. Same fixtures, migrations, dependencies and common harness; only validator construction/cleanup differ outside timed regions. No samples discarded.',
+    protocol: session4
+      ? 'Session 4: AB / BA / AB, three paired series, immutable sources AND workspace packages AND migrations from each commit. Common warm/cold harness, shared workers in both configurations. Candidate fixture has a live passkey assurance and mandatory workspace policy (SQL fixture, crypto outside timed scope). Same encoded profiles and unchanged common dependency versions. No samples discarded.'
+      : 'Three paired series, order AB / BA / AB for each suite; fresh Node process per suite. Both builds completed before any measurements. Same fixtures, migrations, dependencies and common harness; only validator construction/cleanup differ outside timed regions. No samples discarded.',
     artifacts: {},
     series: [],
   };
   const common = {};
   for (const name of ['warm.e2e.ts', 'cold.e2e.ts', 'database.ts', 'profiles.ts'])
     common[name] = git('show', `${commits.candidate}:apps/collab/src/testing/${name}`).toString();
+  if (session4) {
+    const target = '    return {\n      pool,';
+    if (!common['database.ts'].includes(target)) throw new Error('Review changed database fixture');
+    common['database.ts'] = common['database.ts'].replace(
+      target,
+      `
+    if (process.env.COLLAB_MEASURE_STRONG === 'true') {
+      const factor = randomUUID();
+      await client.query("INSERT INTO auth_passkeys(id,user_id,public_key,credential_id,counter,device_type,backed_up) VALUES($1,$2,'measurement-only-not-a-real-key',$3,0,'singleDevice',false)", [factor,user,randomUUID()]);
+      await client.query("INSERT INTO session_assurance(session_id,method,verified_at,security_version,factor_id) VALUES($1,'passkey',now(),0,$2)", [session,factor]);
+      await client.query("INSERT INTO workspace_policies(workspace_id,require_strong_auth,grace_days,strong_auth_enabled_at) VALUES($1,true,0,now())", [workspace]);
+      const access = await client.query('SELECT auth_session_can_access_workspace($1,$2) AS allowed', [session,workspace]);
+      if (access.rows[0]?.allowed !== true) throw new Error('Strong benchmark fixture not authorized');
+    }
+${target}`,
+    );
+  }
   common['warm.e2e.ts'] = common['warm.e2e.ts']
     .replace(
       "import { IncrementalValidator } from '../service/incremental-validator.ts';",
@@ -132,6 +143,7 @@ export async function loadProfile(profile: string) {
     '@hocuspocus/server',
     '@hocuspocus/provider',
     'better-auth',
+    '@better-auth/passkey',
     '@nestjs/*',
     'reflect-metadata',
     'rxjs',
@@ -140,13 +152,13 @@ export async function loadProfile(profile: string) {
     for (const [configuration, commit] of Object.entries(commits)) {
       const folder = `${directory}/sources/${configuration}`;
       await mkdir(folder, { recursive: true });
-      const archive = git('archive', commit, 'apps/collab');
+      const archive = git('archive', commit, 'apps/collab', ...(session4 ? ['packages'] : []));
       execFileSync('tar', ['-xf', '-', '-C', folder], { input: archive, windowsHide: true });
       const testing = `${folder}/apps/collab/src/testing`;
       for (const [name, source] of Object.entries(common))
         await writeFile(`${testing}/${name}`, source);
       const adapter =
-        configuration === 'reference'
+        configuration === 'reference' && !session4
           ? `import { IncrementalValidator } from '../service/incremental-validator.ts';
 export function createValidationContext() { return { create: () => new IncrementalValidator(), close: async () => {} }; }`
           : `import { IncrementalValidator } from '../service/incremental-validator.ts';
@@ -158,6 +170,35 @@ export function createValidationContext() {
 }`;
       await writeFile(`${testing}/comparison-validator.ts`, adapter);
       manifest.artifacts[configuration] = { archiveHash: hash(archive), adapter, bundles: {} };
+      const exports = new Map(),
+        packageFolders = [];
+      if (session4) {
+        for (const path of git('ls-tree', '-r', '--name-only', commit, 'packages')
+          .toString()
+          .split(/\r?\n/)
+          .filter((p) => p.endsWith('/package.json'))) {
+          const metadata = JSON.parse(await readFile(`${folder}/${path}`, 'utf8'));
+          const current = JSON.parse(await readFile(path, 'utf8'));
+          for (const [name, version] of Object.entries(metadata.dependencies ?? {})) {
+            if (current.dependencies?.[name] !== version)
+              throw new Error(`Dependency drift: ${path} ${name}`);
+          }
+          packageFolders.push(resolve(path, '../node_modules'));
+          const targets =
+            typeof metadata.exports === 'string' ? { '.': metadata.exports } : metadata.exports;
+          for (const [subpath, target] of Object.entries(targets ?? {})) {
+            if (typeof target !== 'string') throw new Error('Unsupported snapshot export');
+            exports.set(
+              metadata.name + (subpath === '.' ? '' : subpath.slice(1)),
+              resolve(folder, path, '..', target),
+            );
+          }
+        }
+        manifest.artifacts[configuration].migrations = relative(
+          repo,
+          resolve(folder, 'packages/db/drizzle'),
+        );
+      }
       for (const entry of ['incremental-worker', 'warm', 'cold']) {
         const source =
           entry === 'incremental-worker'
@@ -173,7 +214,24 @@ export function createValidationContext() {
           format: 'esm',
           tsconfig: resolve('apps/collab/tsconfig.json'),
           external: entry === 'incremental-worker' ? ['yjs'] : external,
-          nodePaths: [resolve('apps/collab/node_modules'), resolve('node_modules')],
+          nodePaths: [
+            resolve('apps/collab/node_modules'),
+            resolve('node_modules'),
+            ...packageFolders,
+          ],
+          plugins: session4
+            ? [
+                {
+                  name: 'immutable-workspace-packages',
+                  setup(builder) {
+                    builder.onResolve({ filter: /^@memoria\// }, ({ path }) => {
+                      if (!exports.has(path)) throw new Error(`Missing snapshot export: ${path}`);
+                      return { path: exports.get(path) };
+                    });
+                  },
+                },
+              ]
+            : [],
         });
         manifest.artifacts[configuration].bundles[entry] = {
           path: relative(repo, output),
@@ -205,8 +263,22 @@ for (let iteration = 1; iteration <= 3; iteration++) {
       for (const [name, profile] of Object.entries(profiles))
         if (hash(await readFile(`.local/incremental/${name}.bin`)) !== profile.sha256)
           throw new Error('Fixture changed');
-      const battery = power(),
+      const battery = readMeasurementPower(),
         freeBytes = freemem();
+      console.log(`Power: ${JSON.stringify(battery)}`);
+      if (!battery.allowed) {
+        manifest.stopped = {
+          reason: battery.reason,
+          configuration,
+          suite,
+          iteration,
+          battery,
+          freeBytes,
+        };
+        await save();
+        console.error(POWER_REQUIRED_MESSAGE);
+        process.exit(3);
+      }
       if (freeBytes < 3 * 1024 ** 3) {
         manifest.stopped = {
           reason: 'FREE_RAM_BELOW_3_GIB',
@@ -215,6 +287,7 @@ for (let iteration = 1; iteration <= 3; iteration++) {
           suite,
           iteration,
           freeBytes,
+          battery,
         };
         await save();
         console.error(
@@ -234,7 +307,13 @@ for (let iteration = 1; iteration <= 3; iteration++) {
           process.execPath,
           ['--env-file=.env', manifest.artifacts[configuration].bundles[suite].path],
           {
-            env: { ...process.env, COLLAB_TEST_MIGRATIONS: resolve('packages/db/drizzle') },
+            env: {
+              ...process.env,
+              COLLAB_TEST_MIGRATIONS: resolve(
+                manifest.artifacts[configuration].migrations ?? 'packages/db/drizzle',
+              ),
+              COLLAB_MEASURE_STRONG: String(session4 && configuration === 'candidate'),
+            },
             windowsHide: true,
             stdio: ['ignore', 'pipe', 'pipe'],
             timeout: 180000,
@@ -291,12 +370,14 @@ for (const suite of ['warm', 'cold'])
       )
         failures.push(`${configuration} ${key}: median ${median(values)} outside ${ceiling} ms`);
     }
-    metric.changePercent = (metric.candidate.median / metric.reference.median - 1) * 100;
+    Object.assign(metric, assessRegression(metric.reference.median, metric.candidate.median));
     metric.pairedChangePercent = metric.candidate.values.map(
       (value, i) => (value / metric.reference.values[i] - 1) * 100,
     );
-    if (metric.changePercent > 10)
-      failures.push(`${key}: regression ${metric.changePercent.toFixed(2)}% > 10%`);
+    if (metric.exceedsRegression)
+      failures.push(
+        `${key}: regression ${metric.changeMs.toFixed(3)} ms > allowance ${metric.allowedRegressionMs.toFixed(3)} ms (max of 10% or 2 ms)`,
+      );
     metrics[key] = metric;
   }
 const summary = {

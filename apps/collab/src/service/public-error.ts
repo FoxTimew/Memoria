@@ -1,0 +1,42 @@
+// Parser, Zod and SQL errors may contain private document values. Only these
+// fixed protocol codes may cross the transport/logging boundary; never a cause.
+const codes = new Set([
+  'ACCESS_DENIED',
+  'SESSION_CHANGED',
+  'REJECTION_LIMIT',
+  'GENERATION_CHANGED',
+  'COLLAB_MEMORY_CAPACITY',
+  'SERVICE_UNAVAILABLE',
+  'ROOM_RELOAD_REQUIRED',
+  'CONNECTION_CLOSED',
+  'INVALID_ROOM',
+  'DOCUMENT_RESET_REQUIRED',
+  'READ_ONLY',
+  'FILE_ACCESS_DENIED',
+  'BLOCK_ID_CONFLICT',
+  'RECEIPT_REUSED',
+  'REVISION_CHANGED',
+  'BINARY_REQUIRED',
+  'SOCKET_CLOSED',
+  'MESSAGE_RATE_LIMIT',
+  'AUTH_REQUIRED',
+  'PRESENCE_RATE_LIMIT',
+  'MULTIPLEXING_DISABLED',
+  'HANDSHAKE_QUEUE_FULL',
+  'AUTH_REPLAY_DISABLED',
+  'ROOM_QUEUE_FULL',
+  'MESSAGE_TOO_LARGE',
+  'INVALID_SYNC',
+  'TRAILING_FRAME_DATA',
+  'UPDATE_TOO_LARGE',
+  'PRESENCE_TOO_LARGE',
+  'PRESENCE_ONE_CLIENT',
+  'PRESENCE_INVALID_CLOCK',
+  'PRESENCE_INVALID_JSON',
+  'PRESENCE_TRAILING_DATA',
+  'MESSAGE_UNSUPPORTED',
+  'HANDSHAKE_TOO_LARGE',
+]);
+export function publicError(error: unknown, fallback: string): Error {
+  return new Error(error instanceof Error && codes.has(error.message) ? error.message : fallback);
+}

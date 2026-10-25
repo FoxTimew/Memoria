@@ -1,0 +1,376 @@
+{
+  "commits": {
+    "reference": "0b8c0f03ca44c9e0b3e233b91ba27fcf4db10e41",
+    "candidate": "a725b91adb57ad9ad352aa0f2e2f8d2d9d1f79a5"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "protocolHash": "4290c2586e69d4db0c09f214ad2c0de6a24005eb6b25c564dd272500c70c46fd",
+  "lockfileHash": "fa48a4326eefa13b2c97b493ade4886ff30d8a4eee787fed2db5204152349c94",
+  "startedAt": "2026-10-25T13:12:48.801Z",
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "node": "v24.21.0",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "availableCpus": 16,
+    "totalBytes": 14877257728
+  },
+  "protocol": "Session 4: AB / BA / AB, three paired series, immutable sources AND workspace packages AND migrations from each commit. Common warm/cold harness, shared workers in both configurations. Candidate fixture has a live passkey assurance and mandatory workspace policy (SQL fixture, crypto outside timed scope). Same encoded profiles and unchanged common dependency versions. No samples discarded.",
+  "artifacts": {
+    "reference": {
+      "archiveHash": "bd7d5c1b0199bf9ba1034ac12fcb58551d0991b15e80af7a9ad6d2ef6bbb6180",
+      "adapter": "import { IncrementalValidator } from '../service/incremental-validator.ts';\nimport { ValidationPool } from '../service/validation-pool.ts';\nimport { readCollabConfig } from '../service/config.ts';\nexport function createValidationContext() {\n  const pool = new ValidationPool(readCollabConfig().COLLAB_VALIDATION_WORKERS);\n  return { create: () => new IncrementalValidator(pool), close: () => pool.close() };\n}",
+      "bundles": {
+        "incremental-worker": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-25T13-12-48-796Z\\reference\\incremental-worker.mjs",
+          "sha256": "013efdfe54a62888ed3ee5b891ec034d1f8fa01c6c88d7ad449fe3d3905f749d"
+        },
+        "warm": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-25T13-12-48-796Z\\reference\\warm.mjs",
+          "sha256": "f2684a8dad2e8c1549f2ca39c708005de671e62b8d16b1cddc2fb2ab38b2b184"
+        },
+        "cold": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-25T13-12-48-796Z\\reference\\cold.mjs",
+          "sha256": "3b59f317fb2112a194b53c97f5eae8bf43fc82fd561b8d81455a96c66130d5cf"
+        }
+      },
+      "migrations": ".local\\3d-alternating\\2026-10-25T13-12-48-796Z\\sources\\reference\\packages\\db\\drizzle"
+    },
+    "candidate": {
+      "archiveHash": "80474a418cbaa1cc81c4e359cb9085af20b940abcb390f2196d7d8cdcff8ba50",
+      "adapter": "import { IncrementalValidator } from '../service/incremental-validator.ts';\nimport { ValidationPool } from '../service/validation-pool.ts';\nimport { readCollabConfig } from '../service/config.ts';\nexport function createValidationContext() {\n  const pool = new ValidationPool(readCollabConfig().COLLAB_VALIDATION_WORKERS);\n  return { create: () => new IncrementalValidator(pool), close: () => pool.close() };\n}",
+      "bundles": {
+        "incremental-worker": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-25T13-12-48-796Z\\candidate\\incremental-worker.mjs",
+          "sha256": "b5289eb3fcbbaa447feac8e0662271efa0197766a819bcf506ff2ad21fd82e33"
+        },
+        "warm": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-25T13-12-48-796Z\\candidate\\warm.mjs",
+          "sha256": "b821b42e2d80160e9958e80ff474916226652cdf6908d0e3ff8eea9a267619fa"
+        },
+        "cold": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-25T13-12-48-796Z\\candidate\\cold.mjs",
+          "sha256": "434e87aedc81ecd2f30bf0c4d8a100a980622f88ea8ecf02f32f6a695010a06f"
+        }
+      },
+      "migrations": ".local\\3d-alternating\\2026-10-25T13-12-48-796Z\\sources\\candidate\\packages\\db\\drizzle"
+    }
+  },
+  "series": [
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 1,
+      "startedAt": "2026-10-25T13:12:50.277Z",
+      "freeBytes": 5326323712,
+      "battery": {
+        "observedAt": "2026-10-25T13:12:49.693Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 68
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5360312320,
+      "code": 0,
+      "p95": {
+        "content-1M": 8.30580000000009,
+        "history-1M": 32.847500000000764
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 1,
+      "startedAt": "2026-10-25T13:13:05.970Z",
+      "freeBytes": 5350277120,
+      "battery": {
+        "observedAt": "2026-10-25T13:13:05.493Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 68
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5323354112,
+      "code": 0,
+      "p95": {
+        "content-1M": 11.723500000000058,
+        "history-1M": 37.1885999999995
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 1,
+      "startedAt": "2026-10-25T13:13:22.711Z",
+      "freeBytes": 5317775360,
+      "battery": {
+        "observedAt": "2026-10-25T13:13:22.237Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 69
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5290979328,
+      "code": 0,
+      "p95": {
+        "content-1M": 146.87959999999998,
+        "history-1M": 242.89049999999952
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 1,
+      "startedAt": "2026-10-25T13:13:35.930Z",
+      "freeBytes": 5287833600,
+      "battery": {
+        "observedAt": "2026-10-25T13:13:35.452Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 69
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5230952448,
+      "code": 0,
+      "p95": {
+        "content-1M": 146.34979999999996,
+        "history-1M": 263.8275000000003
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 2,
+      "startedAt": "2026-10-25T13:13:49.106Z",
+      "freeBytes": 5213892608,
+      "battery": {
+        "observedAt": "2026-10-25T13:13:48.633Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 69
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5247037440,
+      "code": 0,
+      "p95": {
+        "content-1M": 11.504899999999907,
+        "history-1M": 35.829099999999016
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 2,
+      "startedAt": "2026-10-25T13:14:06.760Z",
+      "freeBytes": 5239951360,
+      "battery": {
+        "observedAt": "2026-10-25T13:14:06.281Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 70
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5240905728,
+      "code": 0,
+      "p95": {
+        "content-1M": 7.8564000000001215,
+        "history-1M": 32.69030000000021
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 2,
+      "startedAt": "2026-10-25T13:14:22.401Z",
+      "freeBytes": 5236981760,
+      "battery": {
+        "observedAt": "2026-10-25T13:14:21.928Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 70
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5221158912,
+      "code": 0,
+      "p95": {
+        "content-1M": 149.87869999999998,
+        "history-1M": 235.73400000000038
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 2,
+      "startedAt": "2026-10-25T13:14:35.505Z",
+      "freeBytes": 5205168128,
+      "battery": {
+        "observedAt": "2026-10-25T13:14:35.029Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 70
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5225349120,
+      "code": 0,
+      "p95": {
+        "content-1M": 146.7591,
+        "history-1M": 239.60140000000047
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 3,
+      "startedAt": "2026-10-25T13:14:48.662Z",
+      "freeBytes": 5211885568,
+      "battery": {
+        "observedAt": "2026-10-25T13:14:48.191Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 70
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5225648128,
+      "code": 0,
+      "p95": {
+        "content-1M": 7.724699999999984,
+        "history-1M": 32.23440000000028
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 3,
+      "startedAt": "2026-10-25T13:15:04.146Z",
+      "freeBytes": 5206835200,
+      "battery": {
+        "observedAt": "2026-10-25T13:15:03.669Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 71
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5217234944,
+      "code": 0,
+      "p95": {
+        "content-1M": 11.645999999999958,
+        "history-1M": 36.65090000000055
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 3,
+      "startedAt": "2026-10-25T13:15:20.592Z",
+      "freeBytes": 5215248384,
+      "battery": {
+        "observedAt": "2026-10-25T13:15:20.100Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 71
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5212991488,
+      "code": 0,
+      "p95": {
+        "content-1M": 145.97450000000003,
+        "history-1M": 242.10480000000007
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 3,
+      "startedAt": "2026-10-25T13:15:33.864Z",
+      "freeBytes": 5200728064,
+      "battery": {
+        "observedAt": "2026-10-25T13:15:33.376Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 71
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5185949696,
+      "code": 0,
+      "p95": {
+        "content-1M": 145.942,
+        "history-1M": 227.73979999999938
+      }
+    }
+  ],
+  "harness": {
+    "warm.e2e.ts": "263e7029e1ead93797c238c599e70f2796de6cf7eb27263c5c252f4f3c3d711c",
+    "cold.e2e.ts": "883c1a52b4583969bb38d8950c9b9f63020c6f7ff9634b94ce1c6e4b68cded2f",
+    "database.ts": "b1890a70e5fc8ffd6d73a1b514cc46ce681fe87cabcc24a9ad3e2319a82ef0a1",
+    "profiles.ts": "fde9ad38dbdb48099b896165851a2c3bf59f42782837718863bdb37bfb218e87"
+  }
+}

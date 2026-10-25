@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-10-25T06:39:26.456Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+EXIT_CODE=0

@@ -1,0 +1,12 @@
+$ node --env-file=.env --use-system-ca scripts/test-auth-recovery-browser.mjs
+PASS reset through Mailpit worker; fragment removed, no token in request URLs; password does not bypass factor; recovery UI replaces TOTP with passkey, renews codes and requires separate UV proof
+✔ 4c HTTPS browser, real worker/Mailpit, reset then restricted recovery and new UV proof (5507.2235ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5522.6704
+EXIT_CODE=0

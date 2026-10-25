@@ -2,6 +2,18 @@ import { build, stop } from 'esbuild';
 import { readdir } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { readMeasurementPower, assertMeasurementPower } from './measurement-power.mjs';
+const measurementSuites = new Set(['warm.e2e.ts', 'cold.e2e.ts', 'capacity.e2e.ts']);
+const powerPreflight = () => {
+  const battery = readMeasurementPower();
+  console.log(`Power: ${JSON.stringify(battery)}`);
+  try {
+    assertMeasurementPower(battery);
+  } catch (error) {
+    console.error(error.message);
+    process.exit(error.exitCode);
+  }
+};
 const requested = process.argv[process.argv.indexOf('--suite') + 1];
 const files = (await readdir('apps/collab/src/testing'))
   .filter(
@@ -10,6 +22,7 @@ const files = (await readdir('apps/collab/src/testing'))
   )
   .sort();
 if (!files.length) throw new Error('No matching integration suite');
+if (files.some((file) => measurementSuites.has(file))) powerPreflight();
 await build({
   entryPoints: ['apps/collab/src/service/incremental-worker.ts'],
   outfile: 'apps/collab/dist/incremental-worker.mjs',
@@ -36,6 +49,7 @@ for (const file of files) {
       '@hocuspocus/server',
       '@hocuspocus/provider',
       'better-auth',
+      '@better-auth/passkey',
       '@nestjs/*',
       'reflect-metadata',
       'rxjs',
@@ -43,6 +57,7 @@ for (const file of files) {
   });
   // Release this runner's compiler process before the test/measurement starts.
   stop();
+  if (measurementSuites.has(file)) powerPreflight();
   const code = await new Promise((resolve) => {
     const child = spawn(
       process.execPath,

@@ -1,0 +1,26 @@
+COMMAND: pnpm test:auth:strong
+$ node scripts/build-server.mjs api --strong-auth-e2e && node --env-file=.env apps/api/dist/strong-auth.e2e.mjs
+▶ 4a: real Nest, Better Auth, PostgreSQL and cryptographic factors
+  ✔ the first factor requires a password confirmed in the last five minutes (218.6533ms)
+  ✔ TOTP enrollment returns common codes without promoting the session; content and SQL collaboration deny the challenge (382.4642ms)
+  ✔ TOTP explicit authentication rotates the session and concurrent replay succeeds once (246.2924ms)
+  ✔ five failed attempts persist, re-request does not reset them, expired and trusted-device requests fail (9569.1619ms)
+  ✔ passkey registration rejects signed UV=false and accepts UV=true without creating assurance (129.4411ms)
+  ✔ passkey authentication enforces UV, origin, RP ID, challenge and binds identity (233.1124ms)
+  ✔ passkey challenges reject wrong values, expiration and concurrent replay (152.4154ms)
+  ✔ expired assurance cannot manage factors or regenerate common codes (82.7404ms)
+  ✔ failed assurance INSERT rolls back the new session, no success cookie escapes (60.0863ms)
+  ✔ a passkey-only account has common codes, password alone is restricted and anonymous UV sign-in works (218.6318ms)
+  ✔ reauthentication preserves server session settings and account generation invalidates an old proof (84.304ms)
+  ✔ password confirmation cannot promote or replace a factor, and cross-origin mutations fail (122.6328ms)
+  ✔ regeneration invalidates the old common set and removing a factor revokes every session and assurance (209.6226ms)
+✔ 4a: real Nest, Better Auth, PostgreSQL and cryptographic factors (13124.3014ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13127.7716
+EXIT_CODE=0

@@ -9,6 +9,7 @@
     "dev": "node --env-file-if-exists=../../.env ../../scripts/build-collab.mjs --watch"
   },
   "dependencies": {
+    "@better-auth/passkey": "1.7.12",
     "@hocuspocus/server": "4.7.1",
     "@memoria/auth": "workspace:*",
     "@memoria/block-catalog": "workspace:*",

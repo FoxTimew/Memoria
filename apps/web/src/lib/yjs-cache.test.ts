@@ -14,6 +14,19 @@ function fixture() {
     ),
   };
 }
+async function allowedTicket(store: YjsCache, user: string, session: string) {
+  const ticket = await store.ticket(user, session);
+  return store.applyPolicy(ticket, {
+    user,
+    session,
+    sharedComputer: false,
+    workspaces: ['workspace', 'other'].map((workspace) => ({
+      workspace,
+      allowed: true,
+      version: 1,
+    })),
+  });
+}
 function update(text: string) {
   const doc = new Y.Doc();
   doc.getText('text').insert(0, text);
@@ -30,9 +43,187 @@ function text(updates: Uint8Array[]) {
 }
 
 describe('Yjs cache transaction and identity boundaries', () => {
+  it('does not resurrect a removed membership from an older in-flight policy response at the same server version', async () => {
+    const { store } = fixture();
+    const old = await allowedTicket(store, 'alice', 'a');
+    const page = (await store.open(old, 'workspace', 'page', 'g')).page;
+    await store.append(old, page, update('private'));
+    const inFlight = await store.ticket('alice', 'a');
+    await store.applyPolicy(await store.ticket('alice', 'a'), {
+      user: 'alice',
+      session: 'a',
+      sharedComputer: false,
+      workspaces: [],
+    });
+    const stale = await store.applyPolicy(inFlight, {
+      user: 'alice',
+      session: 'a',
+      sharedComputer: false,
+      workspaces: [{ workspace: 'workspace', version: 1, allowed: true }],
+    });
+    await expect(store.open(stale, 'workspace', 'page', 'g')).rejects.toThrow('désactivée');
+    await expect(store.append(old, page, update('late'))).rejects.toThrow('désactivée');
+    const fresh = await allowedTicket(store, 'alice', 'a');
+    expect((await store.open(fresh, 'workspace', 'page', 'g')).updates).toEqual([]);
+  });
+  it('a signed-out or mismatched response cannot reauthorize cache', async () => {
+    const { store } = fixture();
+    const ticket = await store.ticket('alice', 'a');
+    await expect(
+      store.applyPolicy(ticket, {
+        user: 'bob',
+        session: 'b',
+        sharedComputer: false,
+        workspaces: [],
+      }),
+    ).rejects.toThrow('déconnectée');
+    await store.clearUser('alice', 'a');
+    await expect(
+      store.applyPolicy(ticket, {
+        user: 'alice',
+        session: 'a',
+        sharedComputer: false,
+        workspaces: [{ workspace: 'workspace', version: 10, allowed: true }],
+      }),
+    ).rejects.toThrow('déconnectée');
+    await expect(
+      store.applyPolicy(ticket, {
+        user: 'alice',
+        session: 'a',
+        sharedComputer: true,
+        workspaces: [],
+      }),
+    ).rejects.toThrow('déconnectée');
+  });
+  it('upgrades a v1 cache without deleting allowed content and prevents v1 writers reopening', async () => {
+    const { factory, store } = fixture();
+    await new Promise<void>((resolve, reject) => {
+      const request = factory.open('memoria-yjs-cache-v1', 1);
+      request.onerror = () => reject(request.error);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        db.createObjectStore('users', { keyPath: 'user' });
+        db.createObjectStore('sessions', { keyPath: ['user', 'session'] }).createIndex(
+          'user',
+          'user',
+        );
+        db.createObjectStore('documents', { keyPath: 'key' }).createIndex('user', 'user');
+        const updates = db.createObjectStore('updates', { keyPath: 'id', autoIncrement: true });
+        updates.createIndex('key', 'key');
+        updates.createIndex('user', 'user');
+      };
+      request.onsuccess = () => {
+        const db = request.result,
+          tx = db.transaction(['documents', 'updates'], 'readwrite');
+        const key = JSON.stringify(['alice', 'workspace', 'page', 'g']);
+        tx.objectStore('documents').put({
+          key,
+          user: 'alice',
+          workspace: 'workspace',
+          page: 'page',
+          generation: 'g',
+          epoch: 0,
+          count: 1,
+          bytes: 100,
+          pending: ['old'],
+        });
+        tx.objectStore('updates').add({ key, user: 'alice', data: update('v1 content') });
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+      };
+    });
+    const ticket = await allowedTicket(store, 'alice', 'a');
+    expect(text((await store.open(ticket, 'workspace', 'page', 'g')).updates)).toBe('v1 content');
+    await new Promise<void>((resolve, reject) => {
+      const request = factory.open('memoria-yjs-cache-v1', 1);
+      request.onerror = () => {
+        expect(request.error?.name).toBe('VersionError');
+        resolve();
+      };
+      request.onsuccess = () => {
+        request.result.close();
+        reject(new Error('Old writer reopened'));
+      };
+    });
+  });
+  it('never reads content without a fresh policy and rejects a response arriving after a ban', async () => {
+    const { store } = fixture();
+    const bare = await store.ticket('alice', 'a');
+    await expect(store.open(bare, 'workspace', 'page', 'g')).rejects.toThrow('désactivée');
+    const old = await allowedTicket(store, 'alice', 'a');
+    const page = (await store.open(old, 'workspace', 'page', 'g')).page;
+    await store.append(old, page, update('private'), 'pending');
+    const ban = {
+      user: 'alice',
+      session: 'a',
+      sharedComputer: false,
+      workspaces: [{ workspace: 'workspace', version: 2, allowed: false }],
+    };
+    await store.applyPolicy(bare, ban);
+    const late = await allowedTicket(store, 'alice', 'a');
+    await expect(store.open(late, 'workspace', 'page', 'g')).rejects.toThrow('désactivée');
+    await expect(store.append(old, page, update('late'))).rejects.toThrow('désactivée');
+    await expect(store.acknowledge(old, page, ['pending'])).rejects.toThrow('désactivée');
+    expect(await store.pending('alice')).toBe(0);
+    const enabled = await store.applyPolicy(bare, {
+      ...ban,
+      workspaces: [{ workspace: 'workspace', version: 3, allowed: true }],
+    });
+    expect((await store.open(enabled, 'workspace', 'page', 'g')).updates).toEqual([]);
+    await expect(store.open(old, 'workspace', 'page', 'g')).rejects.toThrow('désactivée');
+  });
+  it('workspace purge preserves other accounts and workspaces; pending writes cannot resurrect it', async () => {
+    const { store } = fixture();
+    const a = await allowedTicket(store, 'alice', 'a'),
+      b = await allowedTicket(store, 'bob', 'b');
+    const first = (await store.open(a, 'workspace', 'p', 'g')).page;
+    const other = (await store.open(a, 'other', 'p', 'g')).page;
+    const bob = (await store.open(b, 'workspace', 'p', 'g')).page;
+    await store.append(a, other, update('other'), 'o');
+    await store.append(b, bob, update('bob'), 'b');
+    const queued = store.append(a, first, update('queued'), 'q').catch(() => {});
+    await store.applyPolicy(a, {
+      user: 'alice',
+      session: 'a',
+      sharedComputer: false,
+      workspaces: [
+        { workspace: 'workspace', version: 2, allowed: false },
+        { workspace: 'other', version: 1, allowed: true },
+      ],
+    });
+    await queued;
+    expect(await store.pending('alice', 'workspace')).toBe(0);
+    expect(text((await store.open(a, 'other', 'p', 'g')).updates)).toBe('other');
+    expect(text((await store.open(b, 'workspace', 'p', 'g')).updates)).toBe('bob');
+  });
+  it('shared computer purges all user documents and permanently disables known sleeping sessions', async () => {
+    const { store } = fixture();
+    const a = await allowedTicket(store, 'alice', 'a'),
+      late = await allowedTicket(store, 'alice', 'late'),
+      b = await allowedTicket(store, 'bob', 'b');
+    const page = (await store.open(a, 'workspace', 'p', 'g')).page;
+    await store.append(a, page, update('private'), 'p');
+    const bob = (await store.open(b, 'workspace', 'p', 'g')).page;
+    await store.append(b, bob, update('bob'));
+    const shared = await store.ticket('alice', 'shared');
+    await store.applyPolicy(shared, {
+      user: 'alice',
+      session: 'shared',
+      sharedComputer: true,
+      workspaces: [],
+    });
+    await expect(store.append(late, page, update('resurrection'))).rejects.toThrow('désactivée');
+    await expect(allowedTicket(store, 'alice', 'late')).rejects.toThrow('désactivée');
+    expect(await store.pending('alice')).toBe(0);
+    expect(text((await store.open(b, 'workspace', 'p', 'g')).updates)).toBe('bob');
+    const fresh = await allowedTicket(store, 'alice', 'fresh-login');
+    expect((await store.open(fresh, 'workspace', 'p', 'g')).updates).toEqual([]);
+  });
   it('survives reopening, scopes user/workspace/page/generation and never mixes old generations', async () => {
     const { factory, store } = fixture(),
-      ticket = await store.ticket('alice', 'session');
+      ticket = await allowedTicket(store, 'alice', 'session');
     const opened = await store.open(ticket, 'workspace', 'page', 'generation');
     await store.append(ticket, opened.page, update('Hors ligne'), 'receipt-a');
     const reopened = await new YjsCache(
@@ -46,12 +237,12 @@ describe('Yjs cache transaction and identity boundaries', () => {
     expect(next.older.map((p) => p.generation)).toEqual(['generation']);
     expect((await store.open(ticket, 'other', 'page', 'generation')).updates).toEqual([]);
     expect((await store.open(ticket, 'workspace', 'other', 'generation')).updates).toEqual([]);
-    const bob = await store.ticket('bob', 'session');
+    const bob = await allowedTicket(store, 'bob', 'session');
     expect((await store.open(bob, 'workspace', 'page', 'generation')).updates).toEqual([]);
   });
   it('merges two tabs without overwriting their work; a receipt only removes known pending tokens', async () => {
     const { store } = fixture(),
-      ticket = await store.ticket('alice', 'session');
+      ticket = await allowedTicket(store, 'alice', 'session');
     const a = await store.open(ticket, 'workspace', 'page', 'generation'),
       b = await store.open(ticket, 'workspace', 'page', 'generation');
     await Promise.all([
@@ -65,7 +256,7 @@ describe('Yjs cache transaction and identity boundaries', () => {
   });
   it('compacts updates without losing delete-only updates or Yjs identities', async () => {
     const { store } = fixture(),
-      ticket = await store.ticket('alice', 'session');
+      ticket = await allowedTicket(store, 'alice', 'session');
     const page = (await store.open(ticket, 'workspace', 'page', 'generation')).page;
     const doc = new Y.Doc();
     let latest!: Uint8Array;
@@ -90,11 +281,11 @@ describe('Yjs cache transaction and identity boundaries', () => {
   });
   it('erases all content for one user and fences sleeping tabs, queued writes and delayed HTTP tickets', async () => {
     const { store } = fixture(),
-      ticket = await store.ticket('alice', 'session'),
-      old = await store.ticket('alice', 'old');
+      ticket = await allowedTicket(store, 'alice', 'session'),
+      old = await allowedTicket(store, 'alice', 'old');
     const a = await store.open(ticket, 'workspace', 'a', 'generation'),
       b = await store.open(old, 'workspace', 'b', 'generation');
-    const bob = await store.ticket('bob', 'bob'),
+    const bob = await allowedTicket(store, 'bob', 'bob'),
       bobPage = await store.open(bob, 'workspace', 'a', 'generation');
     await store.append(bob, bobPage.page, update('Bob'), 'b');
     const pending = store.append(ticket, a.page, update('Alice'), 'a').catch(() => {});
@@ -105,16 +296,16 @@ describe('Yjs cache transaction and identity boundaries', () => {
     );
     await expect(store.acknowledge(ticket, a.page, ['a'])).rejects.toThrow('déconnectée');
     await expect(store.open(old, 'workspace', 'page', 'generation')).rejects.toThrow('déconnectée');
-    await expect(store.ticket('alice', 'session')).rejects.toThrow('déconnectée');
+    await expect(allowedTicket(store, 'alice', 'session')).rejects.toThrow('déconnectée');
     await expect(store.assertActive(ticket)).rejects.toThrow('déconnectée');
-    const fresh = await store.ticket('alice', 'new-login');
+    const fresh = await allowedTicket(store, 'alice', 'new-login');
     for (const page of ['a', 'b'])
       expect((await store.open(fresh, 'workspace', page, 'generation')).updates).toEqual([]);
     expect(text((await store.open(bob, 'workspace', 'a', 'generation')).updates)).toBe('Bob');
   });
   it('fences an obsolete writer after explicit discard; a new handle starts empty', async () => {
     const { store } = fixture(),
-      ticket = await store.ticket('alice', 'session');
+      ticket = await allowedTicket(store, 'alice', 'session');
     const a = await store.open(ticket, 'workspace', 'page', 'generation');
     await store.append(ticket, a.page, update('Abandon'), 'a');
     await store.discard(ticket, a.page);
@@ -128,7 +319,7 @@ describe('Yjs cache transaction and identity boundaries', () => {
         () => factory,
         () => marker,
       ),
-      ticket = await store.ticket('alice', 'session');
+      ticket = await allowedTicket(store, 'alice', 'session');
     const page = (await store.open(ticket, 'workspace', 'page', 'generation')).page;
     await expect(store.append(ticket, page, new Uint8Array(8 * 1024 ** 2 + 1))).rejects.toThrow(
       '8 Mio',
@@ -141,7 +332,7 @@ describe('Yjs cache transaction and identity boundaries', () => {
       },
       () => '',
     );
-    await expect(unavailable.ticket('alice', 'session')).rejects.toThrow('Storage denied');
+    await expect(allowedTicket(unavailable, 'alice', 'session')).rejects.toThrow('Storage denied');
     await expect(unavailable.clearUser('alice', 'session')).rejects.toThrow('Storage denied');
   });
   it('retires v1 drafts at first load and prevents an old version from recreating them', async () => {

@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@better-auth/passkey": "1.7.12",
     "@memoria/auth": "workspace:*",
     "@memoria/block-catalog": "workspace:*",
     "@memoria/contracts": "workspace:*",

@@ -1,0 +1,104 @@
+$ pnpm typecheck && pnpm test:bootstrap && turbo run build
+$ turbo run typecheck
+
+   • turbo 2.11.10
+   • Packages in scope: @memoria/api, @memoria/auth, @memoria/block-catalog, @memoria/block-character-card, @memoria/block-standard, @memoria/blocks-core, @memoria/blocks-ui, @memoria/collab, @memoria/contracts, @memoria/db, @memoria/web, @memoria/worker
+   • Running typecheck in 12 packages
+   • Remote caching disabled
+
+@memoria/contracts:typecheck: cache hit, replaying logs 3f60d75c500ecaa3
+@memoria/blocks-core:typecheck: cache hit, replaying logs 713a47c698b5caea
+@memoria/worker:typecheck: cache hit, replaying logs 8d53edad2dda17a5
+@memoria/contracts:typecheck: $ tsc --noEmit
+@memoria/blocks-core:typecheck: $ tsc --noEmit
+@memoria/worker:typecheck: $ tsc --noEmit
+@memoria/db:typecheck: cache hit, replaying logs d84c732159f53292
+@memoria/db:typecheck: $ tsc --noEmit
+@memoria/blocks-ui:typecheck: cache hit, replaying logs 5b40bc8d8e5f0362
+@memoria/blocks-ui:typecheck: $ tsc --noEmit
+@memoria/auth:typecheck: cache hit, replaying logs 66502e6fd4632040
+@memoria/auth:typecheck: $ tsc --noEmit
+@memoria/block-character-card:typecheck: cache hit, replaying logs ab1f4ec3602748d2
+@memoria/block-character-card:typecheck: $ tsc --noEmit
+@memoria/block-standard:typecheck: cache hit, replaying logs 3349b247b2e8025f
+@memoria/block-standard:typecheck: $ tsc --noEmit
+@memoria/block-catalog:typecheck: cache hit, replaying logs 64d685b60452adc5
+@memoria/block-catalog:typecheck: $ tsc --noEmit
+@memoria/api:typecheck: cache hit, replaying logs 78c7b3f3686488f0
+@memoria/web:typecheck: cache hit, replaying logs 0a579e79eaa3c6e8
+@memoria/api:typecheck: $ tsc --noEmit
+@memoria/web:typecheck: $ tsc --noEmit
+@memoria/collab:typecheck: cache hit, replaying logs 4c517c85126a747c
+@memoria/collab:typecheck: $ tsc --noEmit
+
+ Tasks:    12 successful, 12 total
+Cached:    12 cached, 12 total
+  Time:    31ms >>> FULL TURBO
+
+$ node scripts/build-server.mjs api --probe && node apps/api/dist/bootstrap-probe.mjs
+Nest decorators, dependency injection and workspace TypeScript exports: OK
+
+   • turbo 2.11.10
+   • Packages in scope: @memoria/api, @memoria/auth, @memoria/block-catalog, @memoria/block-character-card, @memoria/block-standard, @memoria/blocks-core, @memoria/blocks-ui, @memoria/collab, @memoria/contracts, @memoria/db, @memoria/web, @memoria/worker
+   • Running build in 12 packages
+   • Remote caching disabled
+
+@memoria/blocks-core:typecheck: cache hit, replaying logs 713a47c698b5caea
+@memoria/blocks-core:typecheck: $ tsc --noEmit
+@memoria/db:typecheck: cache hit, replaying logs d84c732159f53292
+@memoria/db:typecheck: $ tsc --noEmit
+@memoria/contracts:typecheck: cache hit, replaying logs 3f60d75c500ecaa3
+@memoria/contracts:typecheck: $ tsc --noEmit
+@memoria/worker:build: cache hit, replaying logs 3a78661522f32801
+@memoria/worker:build: $ node ../../scripts/build-server.mjs worker
+@memoria/auth:typecheck: cache hit, replaying logs 66502e6fd4632040
+@memoria/blocks-ui:typecheck: cache hit, replaying logs 5b40bc8d8e5f0362
+@memoria/auth:typecheck: $ tsc --noEmit
+@memoria/blocks-ui:typecheck: $ tsc --noEmit
+@memoria/block-character-card:typecheck: cache hit, replaying logs ab1f4ec3602748d2
+@memoria/block-standard:typecheck: cache hit, replaying logs 3349b247b2e8025f
+@memoria/block-character-card:typecheck: $ tsc --noEmit
+@memoria/block-standard:typecheck: $ tsc --noEmit
+@memoria/block-catalog:typecheck: cache hit, replaying logs 64d685b60452adc5
+@memoria/block-catalog:typecheck: $ tsc --noEmit
+@memoria/api:build: cache miss, executing c044228eef44a50a
+@memoria/collab:build: cache miss, executing 01f11986767f9c3b
+@memoria/web:build: cache hit, replaying logs ff7d051b91a3c20f
+@memoria/web:build: $ node ../../scripts/run-web.mjs build
+@memoria/web:build: ▲ Next.js 16.4.2 (Turbopack)
+@memoria/web:build: ✓ Running next.config.ts took 153ms
+@memoria/web:build:
+@memoria/web:build:   Creating an optimized production build ...
+@memoria/web:build: ✓ Compiled successfully in 3.1s
+@memoria/web:build:   Running TypeScript ...
+@memoria/web:build:   Finished TypeScript in 4.7s ...
+@memoria/web:build:   Collecting page data using 10 workers ...
+@memoria/web:build:   Generating static pages using 10 workers (0/7) ...
+@memoria/web:build:   Generating static pages using 10 workers (1/7)
+@memoria/web:build:   Generating static pages using 10 workers (3/7)
+@memoria/web:build:   Generating static pages using 10 workers (5/7)
+@memoria/web:build: ✓ Generating static pages using 10 workers (7/7) in 642ms
+@memoria/web:build:   Finalizing page optimization ...
+@memoria/web:build:
+@memoria/web:build: Route (app)
+@memoria/web:build: ┌ ○ /
+@memoria/web:build: ├ ○ /_not-found
+@memoria/web:build: ├ ○ /connexion
+@memoria/web:build: ├ ○ /inscription
+@memoria/web:build: ├ ○ /securite
+@memoria/web:build: ├ ○ /verification
+@memoria/web:build: ├ ƒ /workspaces/[workspaceId]
+@memoria/web:build: └ ƒ /workspaces/[workspaceId]/securite
+@memoria/web:build:
+@memoria/web:build:
+@memoria/web:build: ○  (Static)   prerendered as static content
+@memoria/web:build: ƒ  (Dynamic)  server-rendered on demand
+@memoria/web:build:
+@memoria/api:build: $ node ../../scripts/build-server.mjs api
+@memoria/collab:build: $ node ../../scripts/build-collab.mjs
+
+ Tasks:    12 successful, 12 total
+Cached:    10 cached, 12 total
+  Time:    1.492s
+
+EXIT_CODE=0
