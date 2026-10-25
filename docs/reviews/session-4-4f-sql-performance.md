@@ -1,6 +1,6 @@
 # Suite de 4f — diagnostic SQL, optimisation et décisions
 
-Décisions du développeur du **25 octobre 2026**, sur `codex/session-4-strong-auth`. Les acceptations limitées au MVP auto-hébergé et les prérequis sont consignés dans la [matrice](session-4-4f-matrice.md). R15 reste suspendu jusqu'à la comparaison finale ; le diagnostic a été présenté au développeur avant toute modification des fonctions de production.
+Décisions du développeur du **25 octobre 2026**, sur `codex/session-4-strong-auth`. Les acceptations limitées au MVP auto-hébergé et les prérequis sont consignés dans la [matrice](session-4-4f-matrice.md). La comparaison finale satisfait la nouvelle règle et les plafonds absolus : aucune dérogation R15 n'est nécessaire. Le diagnostic a été présenté au développeur avant toute modification des fonctions de production.
 
 ## Diagnostic avant optimisation
 
@@ -31,13 +31,48 @@ Sources méthodologiques : [auto_explain](https://www.postgresql.org/docs/17/aut
 
 [Suite SQL dédiée](../../apps/collab/src/testing/access-security.e2e.ts) : **20 tests réussis**, parent compris. Dix-huit situations confrontent les fonctions livrées à leurs versions originales tirées des migrations et à des attentes explicites : session expirée/supprimée, email non vérifié, preuve future, génération révoquée, récupération, facteur étranger, TOTP vérifié/non vérifié, grâce valide/expirée, obligation désactivée, appartenance retirée, workspace/page archivés. Les plans sont chauffés et les autorisations relues après chaque changement et restauration.
 
-Une course réelle fait attendre l'écriture derrière le verrou de page pris par une révocation de génération. Après COMMIT de la révocation, l'update échoue `ACCESS_DENIED`, sans nouvelle révision. La présence de l'attente est vérifiée avec `pg_blocking_pids`, pas déduite d'un simple délai. Les suites HTTP/WS existantes et adverses doivent aussi passer avant la comparaison finale.
+Une course réelle fait attendre l'écriture derrière le verrou de page pris par une révocation de génération. Après COMMIT de la révocation, l'update échoue `ACCESS_DENIED`, sans nouvelle révision. La présence de l'attente est vérifiée avec `pg_blocking_pids`, pas déduite d'un simple délai. Les suites HTTP/WS existantes et adverses ont aussi été relancées avec la migration avant la comparaison finale.
+
+| Contrôle sur la version optimisée                               | Résultat et journal complet                                                                                                                                                                                                                                                                                                                       |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm check`                                                    | **117 tests Vitest réussis**, 6 SQL ignorés ici ; lint, types et bootstrap réussis — [journal](evidence/session-4f-sql/check.txt)                                                                                                                                                                                                                 |
+| `pnpm test:db` et `pnpm build`                                  | 6 tests SQL réussis et quatre applications compilées — [SQL](evidence/session-4f-sql/db.txt), [build](evidence/session-4f-sql/build.txt)                                                                                                                                                                                                          |
+| Équivalence des fonctions et révocation pendant l'attente       | **20 tests réussis** — [access-security](evidence/session-4f-sql/access-security.txt)                                                                                                                                                                                                                                                             |
+| Facteurs / politique / récupération / quotas / cache / attaques | 14 / 13 / 13 / 12 / 7 / 9 tests réussis — [facteurs](evidence/session-4f-sql/strong.txt), [politique](evidence/session-4f-sql/workspace.txt), [récupération](evidence/session-4f-sql/recovery.txt), [quotas](evidence/session-4f-sql/limits.txt), [cache](evidence/session-4f-sql/cache.txt), [attaques](evidence/session-4f-sql/adversarial.txt) |
+| Pages / transport / révocations HTTP→WebSocket                  | 8 / 13 / 1 tests réussis — [pages](evidence/session-4f-sql/pages.txt), [transport](evidence/session-4f-sql/transport.txt), [révocations](evidence/session-4f-sql/revocations.txt)                                                                                                                                                                 |
+| Quatre parcours HTTPS Caddy/Edge                                | Un test chacun : [facteurs/QR/UV/politique](evidence/session-4f-sql/strong-browser.txt), [récupération](evidence/session-4f-sql/recovery-browser.txt), [cache à trois onglets](evidence/session-4f-sql/cache-browser.txt), [attaques](evidence/session-4f-sql/adversarial-browser.txt)                                                            |
+| Migration locale puis second lancement                          | Deux sorties 0 — [migration](evidence/session-4f-sql/migration.txt), [répétition](evidence/session-4f-sql/migration-repeat.txt)                                                                                                                                                                                                                   |
+
+Les scénarios HTTPS emploient un authentificateur virtuel UV. Les essais Android, Windows Hello et YubiKey du développeur restent les validations matérielles de 4a–4e ; aucun nouvel essai matériel n'est revendiqué ici. Les nombres Node incluent leurs tests parents. Le parcours navigateur des délais, l'authentification initiale, la présence et l'admission ont leurs preuves dans la livraison 4f initiale ; ils ne sont pas présentés comme relancés dans cette optimisation.
+
+Après archivage des résultats, le [contrôle final `pnpm check`](evidence/session-4f-sql/final-check.txt) passe également : 117 tests réussis, sortie 0. Les [sondes HTTPS après redémarrage](evidence/session-4f-sql/health.txt) renvoient 200 pour API, collab, worker et écran de connexion.
 
 ## Règle de mesure et résultat final
 
 La règle retenue est `candidate − référence ≤ max(0,10 × référence, 2 ms)`, appliquée à chaque médiane des trois p95. Les plafonds absolus restent indépendants : contenu <50 ms, historique ≤100 ms, froid des deux profils <500 ms. Les deux lanceurs utilisent le même calcul et des tests couvrent ses limites. La nouvelle règle ne réétiquette pas l'échec archivé de la campagne initiale.
 
-La comparaison alternée finale reste à exécuter après gel du commit applicatif et tests complets. Elle inclura tous les correctifs 4f et la migration 0016, avec main figé, trois paires AB/BA/AB, `BatteryStatus=2` et au moins 3 Gio libres avant chaque série. Un dépassement après cette optimisation arrête la suite et est soumis au développeur sans nouvelle optimisation implicite.
+Comparaison du **25 octobre 2026** entre main `0b8c0f03ca44c9e0b3e233b91ba27fcf4db10e41` et le commit applicatif final `f45113b2c7774f4ce2361b934f161427d2801f00`, incluant les correctifs 4f et la migration 0016. Trois paires AB/BA/AB, sources/packages/migrations propres à chaque commit, mêmes fixtures encodées, aucun échantillon écarté. Candidate préparée avec assurance forte vivante et obligation workspace, cérémonie cryptographique hors mesure. Le commit suivant n'ajoute que documentation et preuves, sans modifier le code mesuré.
+
+Portable Windows, Ryzen 7 5800H, Node 24.21.0 ; **BatteryStatus=2** avant chacune des douze séries, RAM libre **3,965 à 4,058 Gio**. Aucun build ou autre test simultané. Les services locaux API/web/collab/worker ont été arrêtés pendant la campagne puis redémarrés.
+
+| Mesure, profil 1 Mio | Trois p95 main, ms          | Trois p95 candidate, ms     | Médianes main → candidate | Écart                | Hausse maximale autorisée |
+| -------------------- | --------------------------- | --------------------------- | ------------------------- | -------------------- | ------------------------- |
+| Update contenu       | 7,799 / 7,584 / 7,875       | 8,801 / 8,761 / 8,638       | **7,799 → 8,761 ms**      | +0,962 ms (+12,33 %) | 2,000 ms                  |
+| Update historique    | 34,581 / 32,597 / 32,518    | 32,967 / 33,399 / 32,896    | **32,597 → 32,967 ms**    | +0,370 ms (+1,14 %)  | 3,260 ms                  |
+| Froid contenu        | 148,710 / 144,403 / 149,091 | 144,232 / 145,978 / 147,880 | **148,710 → 145,978 ms**  | −2,732 ms (−1,84 %)  | 14,871 ms                 |
+| Froid historique     | 243,107 / 243,876 / 238,774 | 247,252 / 267,056 / 245,271 | **243,107 → 247,252 ms**  | +4,146 ms (+1,71 %)  | 24,311 ms                 |
+
+**Les quatre mesures passent, sortie 0.** Le contenu dépasse 10 % mais augmente de moins de 2 ms : c'est l'application de la règle explicitement décidée, pas une dérogation. Les plafonds absolus passent aussi. Ce résultat local n'établit ni la capacité d'un studio de cinquante personnes ni la qualification sur 4 vCPU / 8 Gio.
+
+Preuves : [résumé](evidence/session-4f-sql-performance/summary.json), [manifest des douze séries et empreintes](evidence/session-4f-sql-performance/manifest.json), [journal intégral](evidence/session-4f-sql-performance/complete.txt). Les douze rapports JSON contiennent les résultats et échantillons ; le protocole exact est archivé en `protocol-source.txt`, `power-source.txt`, `regression-source.txt`. Leur concaténation dans cet ordre a l'empreinte SHA-256 `6b4b1a047e48f08514979844c16039c41412a570be3369a212ffcec9e9fe1d55`.
+
+Pour reproduire cette campagne (secteur et RAM requis) :
+
+```powershell
+node scripts/compare-collab.mjs --session4 --reference 0b8c0f03ca44c9e0b3e233b91ba27fcf4db10e41 --candidate f45113b2c7774f4ce2361b934f161427d2801f00
+```
+
+Le profilage ciblé et ses plans sont archivés séparément : [baseline](evidence/session-4f-sql/profile-baseline.txt), [optimisé](evidence/session-4f-sql/profile-optimized.txt) et fichiers `baseline-{1,2,3}.json` / `optimized-{1,2,3}.json`. `node scripts/profile-collab-access.mjs <label>` mesure les migrations du checkout courant ; son label ne sélectionne pas une ancienne version. La baseline a été produite avant ajout de la migration 0016.
 
 ## Relecture et essai manuel
 

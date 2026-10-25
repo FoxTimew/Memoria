@@ -1,0 +1,168 @@
+COMMAND: node scripts/compare-collab.mjs --session4 --reference 0b8c0f03ca44c9e0b3e233b91ba27fcf4db10e41 --candidate f45113b2c7774f4ce2361b934f161427d2801f00
+Results: C:\Users\Foxti\Documents\Projets\Memoria\.local\3d-alternating\2026-10-25T14-14-49-912Z
+Power: {"observedAt":"2026-10-25T14:14:50.803Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+reference-warm-1: 4.030 GiB free; battery {"observedAt":"2026-10-25T14:14:50.803Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"warm","iteration":1,"startedAt":"2026-10-25T14:14:51.359Z","freeBytes":4327301120,"battery":{"observedAt":"2026-10-25T14:14:50.803Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4354842624,"code":0,"p95":{"content-1M":7.799399999999878,"history-1M":34.581200000000536}}
+Power: {"observedAt":"2026-10-25T14:15:06.928Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+candidate-warm-1: 4.036 GiB free; battery {"observedAt":"2026-10-25T14:15:06.928Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"warm","iteration":1,"startedAt":"2026-10-25T14:15:07.406Z","freeBytes":4333989888,"battery":{"observedAt":"2026-10-25T14:15:06.928Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4352622592,"code":0,"p95":{"content-1M":8.800500000000056,"history-1M":32.967099999999846}}
+Power: {"observedAt":"2026-10-25T14:15:23.314Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+reference-cold-1: 4.058 GiB free; battery {"observedAt":"2026-10-25T14:15:23.314Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"cold","iteration":1,"startedAt":"2026-10-25T14:15:23.783Z","freeBytes":4356771840,"battery":{"observedAt":"2026-10-25T14:15:23.314Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4342657024,"code":0,"p95":{"content-1M":148.7097000000001,"history-1M":243.10659999999916}}
+Power: {"observedAt":"2026-10-25T14:15:36.277Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+candidate-cold-1: 4.044 GiB free; battery {"observedAt":"2026-10-25T14:15:36.277Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"cold","iteration":1,"startedAt":"2026-10-25T14:15:36.756Z","freeBytes":4341772288,"battery":{"observedAt":"2026-10-25T14:15:36.277Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4319154176,"code":0,"p95":{"content-1M":144.2322999999999,"history-1M":247.2521999999999}}
+Power: {"observedAt":"2026-10-25T14:15:49.395Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+candidate-warm-2: 4.019 GiB free; battery {"observedAt":"2026-10-25T14:15:49.395Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"warm","iteration":2,"startedAt":"2026-10-25T14:15:49.866Z","freeBytes":4315377664,"battery":{"observedAt":"2026-10-25T14:15:49.395Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4344606720,"code":0,"p95":{"content-1M":8.76130000000012,"history-1M":33.399099999998725}}
+Power: {"observedAt":"2026-10-25T14:16:05.512Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+reference-warm-2: 4.041 GiB free; battery {"observedAt":"2026-10-25T14:16:05.512Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"warm","iteration":2,"startedAt":"2026-10-25T14:16:05.982Z","freeBytes":4339478528,"battery":{"observedAt":"2026-10-25T14:16:05.512Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4347416576,"code":0,"p95":{"content-1M":7.583900000000085,"history-1M":32.596700000000055}}
+Power: {"observedAt":"2026-10-25T14:16:20.896Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+candidate-cold-2: 4.045 GiB free; battery {"observedAt":"2026-10-25T14:16:20.896Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"cold","iteration":2,"startedAt":"2026-10-25T14:16:21.374Z","freeBytes":4343169024,"battery":{"observedAt":"2026-10-25T14:16:20.896Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4311248896,"code":0,"p95":{"content-1M":145.9777999999999,"history-1M":267.0563000000002}}
+Power: {"observedAt":"2026-10-25T14:16:34.516Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+reference-cold-2: 4.012 GiB free; battery {"observedAt":"2026-10-25T14:16:34.516Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"cold","iteration":2,"startedAt":"2026-10-25T14:16:34.983Z","freeBytes":4307509248,"battery":{"observedAt":"2026-10-25T14:16:34.516Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4300070912,"code":0,"p95":{"content-1M":144.40280000000007,"history-1M":243.8757999999998}}
+Power: {"observedAt":"2026-10-25T14:16:47.548Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+reference-warm-3: 4.002 GiB free; battery {"observedAt":"2026-10-25T14:16:47.548Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"warm","iteration":3,"startedAt":"2026-10-25T14:16:48.027Z","freeBytes":4297367552,"battery":{"observedAt":"2026-10-25T14:16:47.548Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4321300480,"code":0,"p95":{"content-1M":7.874799999999823,"history-1M":32.51789999999892}}
+Power: {"observedAt":"2026-10-25T14:17:03.369Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+candidate-warm-3: 4.021 GiB free; battery {"observedAt":"2026-10-25T14:17:03.369Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"warm","iteration":3,"startedAt":"2026-10-25T14:17:03.846Z","freeBytes":4317331456,"battery":{"observedAt":"2026-10-25T14:17:03.369Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4286169088,"code":0,"p95":{"content-1M":8.63819999999987,"history-1M":32.89649999999892}}
+Power: {"observedAt":"2026-10-25T14:17:19.548Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+reference-cold-3: 3.990 GiB free; battery {"observedAt":"2026-10-25T14:17:19.548Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"reference","suite":"cold","iteration":3,"startedAt":"2026-10-25T14:17:20.017Z","freeBytes":4284723200,"battery":{"observedAt":"2026-10-25T14:17:19.548Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4269592576,"code":0,"p95":{"content-1M":149.09080000000017,"history-1M":238.77439999999842}}
+Power: {"observedAt":"2026-10-25T14:17:32.537Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+candidate-cold-3: 3.965 GiB free; battery {"observedAt":"2026-10-25T14:17:32.537Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{"configuration":"candidate","suite":"cold","iteration":3,"startedAt":"2026-10-25T14:17:33.006Z","freeBytes":4257632256,"battery":{"observedAt":"2026-10-25T14:17:32.537Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null},"endedFreeBytes":4232269824,"code":0,"p95":{"content-1M":147.87990000000013,"history-1M":245.27100000000064}}
+{
+  "commits": {
+    "reference": "0b8c0f03ca44c9e0b3e233b91ba27fcf4db10e41",
+    "candidate": "f45113b2c7774f4ce2361b934f161427d2801f00"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "protocolHash": "6b4b1a047e48f08514979844c16039c41412a570be3369a212ffcec9e9fe1d55",
+  "metrics": {
+    "warm:content-1M": {
+      "reference": {
+        "values": [
+          7.799399999999878,
+          7.583900000000085,
+          7.874799999999823
+        ],
+        "median": 7.799399999999878
+      },
+      "candidate": {
+        "values": [
+          8.800500000000056,
+          8.76130000000012,
+          8.63819999999987
+        ],
+        "median": 8.76130000000012
+      },
+      "changeMs": 0.9619000000002416,
+      "changePercent": 12.332999974360293,
+      "allowedRegressionMs": 2,
+      "exceedsRegression": false,
+      "pairedChangePercent": [
+        12.835602738674702,
+        15.52499373673204,
+        9.694214456240967
+      ]
+    },
+    "warm:history-1M": {
+      "reference": {
+        "values": [
+          34.581200000000536,
+          32.596700000000055,
+          32.51789999999892
+        ],
+        "median": 32.596700000000055
+      },
+      "candidate": {
+        "values": [
+          32.967099999999846,
+          33.399099999998725,
+          32.89649999999892
+        ],
+        "median": 32.967099999999846
+      },
+      "changeMs": 0.37039999999979045,
+      "changePercent": 1.1363113443992485,
+      "allowedRegressionMs": 3.2596700000000056,
+      "exceedsRegression": false,
+      "pairedChangePercent": [
+        -4.667565035339038,
+        2.461598873501525,
+        1.1642818263172483
+      ]
+    },
+    "cold:content-1M": {
+      "reference": {
+        "values": [
+          148.7097000000001,
+          144.40280000000007,
+          149.09080000000017
+        ],
+        "median": 148.7097000000001
+      },
+      "candidate": {
+        "values": [
+          144.2322999999999,
+          145.9777999999999,
+          147.87990000000013
+        ],
+        "median": 145.9777999999999
+      },
+      "changeMs": -2.7319000000002234,
+      "changePercent": -1.8370691353692605,
+      "allowedRegressionMs": 14.870970000000012,
+      "exceedsRegression": false,
+      "pairedChangePercent": [
+        -3.010832514624273,
+        1.0906990723170251,
+        -0.8121896186753519
+      ]
+    },
+    "cold:history-1M": {
+      "reference": {
+        "values": [
+          243.10659999999916,
+          243.8757999999998,
+          238.77439999999842
+        ],
+        "median": 243.10659999999916
+      },
+      "candidate": {
+        "values": [
+          247.2521999999999,
+          267.0563000000002,
+          245.27100000000064
+        ],
+        "median": 247.2521999999999
+      },
+      "changeMs": 4.145600000000741,
+      "changePercent": 1.7052601615919747,
+      "allowedRegressionMs": 24.310659999999917,
+      "exceedsRegression": false,
+      "pairedChangePercent": [
+        1.7052601615919816,
+        9.505043140811997,
+        2.7208109412073744
+      ]
+    }
+  },
+  "failures": [],
+  "failedSeries": []
+}
+EXIT_CODE=0

@@ -1,0 +1,6 @@
+COMMAND: HTTPS health checks after restarting Memoria services
+/api/health HTTP 200
+/api/health/collab HTTP 200
+/api/health/worker HTTP 200
+/connexion HTTP 200
+EXIT_CODE=0
