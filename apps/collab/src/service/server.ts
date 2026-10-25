@@ -178,7 +178,7 @@ export async function collaborationServer(
       if (type === 0) return;
       try {
         if (rooms.get(documentName)?.fatal) throw new Error('ROOM_RELOAD_REQUIRED');
-        await store.authorize(context.identity);
+        const currentAccess = await store.authorize(context.identity);
         if (type === 1 && Y.snapshotContainsUpdate(Y.snapshot(document), payload)) {
           // Reconnection may resend an already durable state (including deletions).
           // Explicitly confirm it without creating a revision or an audit/outbox event.
@@ -193,7 +193,8 @@ export async function collaborationServer(
           );
           return;
         }
-        if (connection.readOnly) throw new CollaborationError('READ_ONLY', 403);
+        if (connection.readOnly || currentAccess.level !== 'edit')
+          throw new CollaborationError('READ_ONLY', 403);
         const receipt = await rooms.get(documentName)!.update(context.identity, payload);
         receipts.set(connection, receipt);
       } catch (error) {
@@ -317,6 +318,8 @@ export async function collaborationServer(
     assertAvailable();
     const identity = { key: randomUUID(), ...command };
     const state = await store.open(identity);
+    if (command.action === 'write' && (await store.authorize(identity)).level !== 'edit')
+      throw new CollaborationError('READ_ONLY', 403);
     if (command.action === 'open')
       return {
         generation: state.generation,

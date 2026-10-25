@@ -130,10 +130,13 @@ try {
         spans: [{ type: 'text', text, styles: { bold: true } }],
       });
       await t.test(
-        'owner/member share content; guests, outsiders and anonymous requests are denied',
+        'owner/member share content; unshared guests see empty lists and cannot open pages',
         async () => {
           assert.equal((await request(`${base}/pages`, 1)).status, 200);
-          for (const index of [2, 3, 10])
+          assert.deepEqual(await json(await request(`${base}/pages`, 2)), { pages: [], trash: [] });
+          assert.deepEqual(await json(await request(`${base}/search?q=Atelier`, 2)), []);
+          assert.equal((await request(`${base}/pages/${root.id}`, 2)).status, 404);
+          for (const index of [3, 10])
             for (const path of ['pages', `pages/${root.id}`, 'search?q=Atelier'])
               assert.equal(
                 (await request(`${base}/${path}`, index)).status,
@@ -141,7 +144,7 @@ try {
               );
           assert.equal(
             (await request(`${base}/pages`, 2, 'POST', { title: 'Denied', parentId: null })).status,
-            404,
+            403,
           );
         },
       );
@@ -352,7 +355,7 @@ try {
           users[1]!.id,
         ]);
         assert.equal((await request(`${base}/search?q=Dragon`, 1)).status, 404);
-        assert.equal((await write([{ op: 'archive', id: p }], 1)).status, 403);
+        assert.equal((await write([{ op: 'archive', id: p }], 1)).status, 404);
       });
     },
   );

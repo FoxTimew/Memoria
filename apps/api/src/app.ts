@@ -30,6 +30,9 @@ class SafeExceptionFilter implements ExceptionFilter {
     if (error instanceof SecurityPolicyError) {
       response.status(error.status).json({ code: error.code, message: error.code });
     } else if (error instanceof HttpException) {
+      const body = error.getResponse();
+      if (error.getStatus() === 429 && typeof body === 'object' && 'retryAfter' in body)
+        response.setHeader('Retry-After', String(body.retryAfter));
       response.status(error.getStatus()).json(error.getResponse());
     } else if (
       error &&

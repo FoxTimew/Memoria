@@ -43,7 +43,8 @@
     "dev:collab": "node --env-file=.env scripts/dev-collaboration.mjs",
     "test:collab:browser": "node --env-file=.env --use-system-ca scripts/test-collab-browser.mjs",
     "test:auth:recovery": "node scripts/build-server.mjs worker --reset-factor && node scripts/build-server.mjs api --recovery-e2e && node --env-file=.env apps/api/dist/recovery.e2e.mjs",
-    "test:auth:recovery:browser": "node --env-file=.env --use-system-ca scripts/test-auth-recovery-browser.mjs"
+    "test:auth:recovery:browser": "node --env-file=.env --use-system-ca scripts/test-auth-recovery-browser.mjs",
+    "test:sharing:e2e": "node scripts/build-server.mjs api --sharing-e2e && node --env-file=.env apps/api/dist/sharing.e2e.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

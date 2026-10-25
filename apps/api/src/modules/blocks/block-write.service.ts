@@ -14,10 +14,34 @@ import {
 import type { CollaborationCommand } from '@memoria/contracts';
 import type { AuthenticatedSession } from '../auth/current-user.decorator.ts';
 import { readConfig } from '../../config.ts';
+import * as database from '../../database.module.ts';
+import { pages } from '@memoria/db';
+import { and, eq } from 'drizzle-orm';
+import { contentContext, pageRights, requirePageRight, uuid } from '../pages/content-access.ts';
 /** Sole non-editor write facade. No SQL block mutation and no fallback during collaboration outage. */
 @Injectable()
 export class BlockWriteService {
+  constructor(private readonly database: database.DatabaseService) {}
+  private async check(
+    session: AuthenticatedSession,
+    workspace: string,
+    page: string,
+    write: boolean,
+  ) {
+    uuid(page);
+    await this.database.db.transaction(async (tx) => {
+      await contentContext(tx, session, workspace, false);
+      const selected = await tx
+        .select()
+        .from(pages)
+        .where(and(eq(pages.workspaceId, workspace), eq(pages.id, page)));
+      requirePageRight(await pageRights(tx, session, workspace, selected), page, write);
+    });
+    // This is only the HTTP response boundary. Collab rechecks after its page lock;
+    // this transaction is over before forwarding, so it cannot grant a reusable permit.
+  }
   async open(session: AuthenticatedSession, workspace: string, page: string) {
+    await this.check(session, workspace, page, false);
     const opened = await this.forward({
       action: 'open',
       user: session.userId,
@@ -33,6 +57,7 @@ export class BlockWriteService {
   async write(session: AuthenticatedSession, workspace: string, page: string, input: unknown) {
     const parsed = collaborationWriteSchema.safeParse(input);
     if (!parsed.success) throw new BadRequestException('Commande collaborative invalide.');
+    await this.check(session, workspace, page, true);
     return this.forward({
       action: 'write',
       user: session.userId,

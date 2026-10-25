@@ -120,6 +120,13 @@
       "when": 1792936886164,
       "tag": "0016_cached_auth_access_plans",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792941435458,
+      "tag": "0017_inherited_page_access",
+      "breakpoints": true
     }
   ]
 }

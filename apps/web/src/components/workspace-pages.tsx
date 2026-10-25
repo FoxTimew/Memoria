@@ -46,6 +46,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
   const editorActions = useRef<EditorActions | null>(null);
   const locallyClosed = useRef(false);
   const [signedOut, setSignedOut] = useState('');
+  const [guestBlocked, setGuestBlocked] = useState<boolean>();
   const closeLocalSession = useCallback((message = 'Session fermée sur ce poste.') => {
     locallyClosed.current = true;
     setSignedOut(message);
@@ -75,17 +76,29 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
   useEffect(() => {
     if (!session) return;
     let cancelled = false;
-    Promise.all([contentRequest(`${base}/pages`), contentRequest('/api/internal/workspaces')])
-      .then(([pages, workspaces]) => {
+    setGuestBlocked(undefined);
+    contentRequest('/api/internal/workspaces')
+      .then(async (workspaces) => {
         if (cancelled || locallyClosed.current) return;
-        setTree(pageTreeSchema.parse(pages));
-        setName(
-          workspaceListSchema.parse(workspaces).find((w) => w.id === workspaceId)?.name ??
-            'Espace de travail',
-        );
+        const workspace = workspaceListSchema.parse(workspaces).find((w) => w.id === workspaceId);
+        setName(workspace?.name ?? 'Espace de travail');
+        // Guest browser support ships with read-only UI and cache invalidation in 5c.
+        if (workspace?.role === 'guest') {
+          setGuestBlocked(true);
+          setTree({ pages: [], trash: [] });
+          setDocument(undefined);
+          return;
+        }
+        const pages = pageTreeSchema.parse(await contentRequest(`${base}/pages`));
+        if (cancelled || locallyClosed.current) return;
+        setTree(pages);
+        setGuestBlocked(false);
       })
       .catch((e: unknown) => {
-        if (!cancelled) setError(e instanceof Error ? e.message : 'Chargement impossible.');
+        if (!cancelled) {
+          setError(e instanceof Error ? e.message : 'Chargement impossible.');
+          setGuestBlocked(false);
+        }
       });
     return () => {
       cancelled = true;
@@ -205,7 +218,16 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
         </a>
       </main>
     );
-  if (isPending || !session)
+  if (guestBlocked)
+    return (
+      <main className="p-8">
+        <p role="status">L’accès invité dans l’interface n’est pas encore disponible.</p>
+        <a className="quiet-link" href="/">
+          Retour aux espaces
+        </a>
+      </main>
+    );
+  if (isPending || !session || guestBlocked === undefined)
     return (
       <p role="status" className="p-8">
         Chargement de votre espace…

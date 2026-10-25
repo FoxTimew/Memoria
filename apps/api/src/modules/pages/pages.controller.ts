@@ -2,8 +2,10 @@ import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { CurrentSession } from '../auth/current-user.decorator.ts';
 import type { AuthenticatedSession } from '../auth/current-user.decorator.ts';
 import * as pages from './pages.service.ts';
+import { ContentQuota } from './content-quota.ts';
 
 @Controller('api/internal/workspaces/:workspaceId')
+@ContentQuota()
 export class PagesController {
   constructor(private readonly pages: pages.PagesService) {}
   @Get('pages') list(

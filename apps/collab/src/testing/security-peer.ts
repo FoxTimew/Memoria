@@ -45,6 +45,14 @@ export function securityPeer(
   return {
     provider,
     doc,
+    sendYjs(payload: Uint8Array, type: 1 | 2 = 2) {
+      const wire = encoding.createEncoder();
+      encoding.writeVarString(wire, provider.effectiveName);
+      encoding.writeVarUint(wire, 0);
+      encoding.writeVarUint(wire, type);
+      encoding.writeVarUint8Array(wire, payload);
+      socket.send(encoding.toUint8Array(wire));
+    },
     sendPresenceJson(json: string) {
       const payload = encoding.createEncoder();
       encoding.writeVarUint(payload, 1);

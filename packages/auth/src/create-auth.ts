@@ -1,7 +1,7 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { organization } from 'better-auth/plugins';
-import { memberAc, ownerAc } from 'better-auth/plugins/organization/access';
+import { defaultAc, adminAc, memberAc, ownerAc } from 'better-auth/plugins/organization/access';
 import * as schema from '@memoria/db/schema';
 import type { Database, WriteTransaction } from '@memoria/db';
 import { securityIntegration } from './security-plugin.ts';
@@ -109,7 +109,8 @@ export function createAuth(database: Database | WriteTransaction, options: AuthO
       security.plugin,
       organization({
         creatorRole: 'owner',
-        roles: { owner: ownerAc, member: memberAc },
+        roles: { owner: ownerAc, admin: adminAc, member: memberAc, guest: defaultAc.newRole({}) },
+        requireEmailVerificationOnInvitation: true,
         allowUserToCreateOrganization: async (user) => user.emailVerified,
       }),
     ],

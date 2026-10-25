@@ -1,5 +1,7 @@
 # Session 5 — étape 1 : invités et partages
 
+Note de suivi : le développeur a ensuite accepté intégralement le cadrage et les valeurs des ADR 018/019. Cette fiche conserve l’état historique de l’étape 1 ; les preuves exécutées depuis sont consignées dans la [fiche 5a](session-5-5a-droits.md) et sa [matrice](session-5-5a-frontieres.md).
+
 25 octobre 2026. Branche `codex/session-5-guests-sharing`, créée depuis main synchronisé `1fc393eb8778dad9a6480620597ef239d322ab22`, après fusion de la [PR de session 4 #5](https://github.com/FoxTimew/Memoria/pull/5). La création/fusion de cette PR a été explicitement demandée par le développeur ; ce n'est pas une autorisation générale pour les suivantes.
 
 **Livraison de cadrage uniquement : documents et journal de contrôle.** Aucun changement applicatif, migration, dépendance, nouvelle route ou écran. Les sept réponses reçues pendant cette étape sont consignées, sans commencer l'implémentation. Les ADR restent proposés jusqu'à validation du cadrage complet, notamment des modalités techniques, quotas détaillés et découpage.
@@ -8,7 +10,7 @@
 
 1. [ADR 018 — invitations et arrivée](../adr/018-invitations-et-arrivee-workspace.md) : rôles, vérification d'identité, transaction, email, MFA et quotas proposés.
 2. [ADR 019 — partages et collaboration](../adr/019-partages-et-acces-collaboratif.md) : héritage, lecture seule, révocation, recherche et cache.
-3. [Architecture](../../ARCHITECTURE.md#session-5--découpage-proposé) : sous-étapes et engagements de qualification préservés.
+3. [Architecture](../../ARCHITECTURE.md#session-5--découpage-retenu) : sous-étapes et engagements de qualification préservés.
 4. Les compléments de session 5 dans les ADR 002, 003, 004, 009, 015 et 017 renvoient à ces deux décisions ; ils ne déclarent pas leur implémentation terminée.
 
 ## Arbitrages reçus et propositions à relire
