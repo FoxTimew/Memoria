@@ -8,6 +8,8 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "test:auth:adversarial": "node scripts/build-server.mjs api --adversarial-e2e && node --env-file=.env apps/api/dist/adversarial.e2e.mjs",
+    "test:auth:adversarial:browser": "node --env-file=.env --use-system-ca scripts/test-auth-adversarial-browser.mjs",
     "test:auth:cache": "node scripts/build-server.mjs api --cache-policy-e2e && node --env-file=.env apps/api/dist/cache-policy.e2e.mjs",
     "test:auth:cache:browser": "node --env-file=.env --use-system-ca scripts/test-auth-cache-browser.mjs",
     "test:auth:limits": "node scripts/build-server.mjs api --rate-limits-e2e && node --env-file=.env apps/api/dist/rate-limits.e2e.mjs",

@@ -74,10 +74,13 @@ parentPort!.on(
       else if (operation === 'snapshot') result = replica!.snapshot();
       else throw new Error('Unknown worker operation');
       parentPort!.postMessage({ id, result, elapsed: performance.now() - started });
-    } catch (error) {
+    } catch {
       parentPort!.postMessage({
         id,
-        error: error instanceof Error ? error.message : 'Rejected',
+        error:
+          operation === 'prepare' || operation === 'command'
+            ? 'INVALID_CONTENT'
+            : 'REPLICA_OPERATION_FAILED',
         validation: operation === 'prepare' || operation === 'command',
         elapsed: performance.now() - started,
       });

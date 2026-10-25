@@ -43,6 +43,29 @@ function text(updates: Uint8Array[]) {
 }
 
 describe('Yjs cache transaction and identity boundaries', () => {
+  it('does not resurrect a removed membership from an older in-flight policy response at the same server version', async () => {
+    const { store } = fixture();
+    const old = await allowedTicket(store, 'alice', 'a');
+    const page = (await store.open(old, 'workspace', 'page', 'g')).page;
+    await store.append(old, page, update('private'));
+    const inFlight = await store.ticket('alice', 'a');
+    await store.applyPolicy(await store.ticket('alice', 'a'), {
+      user: 'alice',
+      session: 'a',
+      sharedComputer: false,
+      workspaces: [],
+    });
+    const stale = await store.applyPolicy(inFlight, {
+      user: 'alice',
+      session: 'a',
+      sharedComputer: false,
+      workspaces: [{ workspace: 'workspace', version: 1, allowed: true }],
+    });
+    await expect(store.open(stale, 'workspace', 'page', 'g')).rejects.toThrow('désactivée');
+    await expect(store.append(old, page, update('late'))).rejects.toThrow('désactivée');
+    const fresh = await allowedTicket(store, 'alice', 'a');
+    expect((await store.open(fresh, 'workspace', 'page', 'g')).updates).toEqual([]);
+  });
   it('a signed-out or mismatched response cannot reauthorize cache', async () => {
     const { store } = fixture();
     const ticket = await store.ticket('alice', 'a');

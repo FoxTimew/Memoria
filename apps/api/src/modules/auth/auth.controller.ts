@@ -4,7 +4,7 @@ import { toNodeHandler } from 'better-auth/node';
 import * as auth from './auth.service.ts';
 import { Public } from './public.decorator.ts';
 
-const authRoutes = new Set([
+export const authRoutes = new Set([
   'POST /sign-up/email',
   'POST /sign-in/email',
   'POST /sign-out',

@@ -1,0 +1,18 @@
+COMMAND: pnpm test:auth:e2e
+$ node scripts/build-server.mjs api --auth-e2e && node --env-file=.env apps/api/dist/auth.e2e.mjs
+▶ Real Nest authentication boundary and PostgreSQL rate limits
+  ✔ a newly added undecorated route is closed by default (57.3032ms)
+  ✔ explicit public health and Better Auth handlers remain reachable (52.6473ms)
+  ✔ login admits 150 attempts, returns 429 on the next and recovers after the fixed window (528.529ms)
+  ✔ /sign-up/email blocks after 100 requests independently (2040.2251ms)
+  ✔ /send-verification-email blocks after 150 requests independently (420.4206ms)
+✔ Real Nest authentication boundary and PostgreSQL rate limits (3213.5068ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3220.9456
+EXIT_CODE=0

@@ -6,6 +6,7 @@ import type { CollabConfig } from './config.ts';
 import { Admission } from './admission.ts';
 import type { SocketBudget } from './admission.ts';
 import { documentBytes } from './config.ts';
+import { publicError } from './public-error.ts';
 export interface VerifiedSession {
   user: string;
   session: string;
@@ -96,10 +97,7 @@ export async function createIngress(
               admission.receive(budget, bytes);
               handle(bytes);
             } catch (error) {
-              connection.close(
-                1008,
-                error instanceof Error ? error.message.slice(0, 100) : 'REJECTED',
-              );
+              connection.close(1008, publicError(error, 'FRAME_REJECTED').message);
             }
           });
         });

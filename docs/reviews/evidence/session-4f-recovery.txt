@@ -1,0 +1,29 @@
+COMMAND: pnpm test:auth:recovery
+$ node scripts/build-server.mjs worker --reset-factor && node scripts/build-server.mjs api --recovery-e2e && node --env-file=.env apps/api/dist/recovery.e2e.mjs
+▶ 4c: recovery, atomicity and operator reset over real HTTP/SQL/WebSocket
+  ✔ generic queued email for known, unknown and unverified accounts; hashed 30-minute token (200.8872ms)
+  ✔ invalid/expired tokens and weak password refuse without changing sessions or factors (223.7451ms)
+  ✔ injected SQL failure rolls back password, token, assurance and session; no success cookie (258.1574ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ concurrent reset has one winner, closes real socket, retains factors/policy and requires new strong proof (450.5923ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ password plus single-use code; concurrent one winner, actual socket revoked, recovery cannot read even optional workspace (628.6808ms)
+  ✔ replace lost passkey, finish regenerates codes, no content until separate UV proof; shared-computer flag preserved (389.4403ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ operator dry-run, exact confirmation and target checks; targeted reset preserves spare factor and closes socket (2564.5379ms)
+  ✔ operator full reset preserves policy; expired grant can be reissued but password alone cannot enroll or read (666.305ms)
+  ✔ mail transport failure retries durably, then purges ciphertext; unknown requests do not send (225.1237ms)
+  ✔ TOTP-only recovery, quarantined factor survives logout; explicit finish and fresh OTP required (1382.4934ms)
+  ✔ recovery mutation rollback and CSRF; operator rollback leaves factor and sessions untouched (592.5977ms)
+  ✔ password reset during recovery revokes its limited session without reopening password-only access (774.3931ms)
+✔ 4c: recovery, atomicity and operator reset over real HTTP/SQL/WebSocket (9929.3386ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9933.0845
+EXIT_CODE=0

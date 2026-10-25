@@ -1,0 +1,51 @@
+COMMAND: pnpm exec vitest run apps/web/src/lib/yjs-cache.test.ts
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+ ❯ apps/web/src/lib/yjs-cache.test.ts (14 tests | 1 failed) 81ms
+   ❯ Yjs cache transaction and identity boundaries (14)
+     × does not resurrect a removed membership from an older in-flight policy response at the same server version 24ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/lib/yjs-cache.test.ts > Yjs cache transaction and identity boundaries > does not resurrect a removed membership from an older in-flight policy response at the same server version
+AssertionError: promise resolved "{ page: { …(9) }, updates: [], …(1) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "older": [],
++   "page": {
++     "bytes": 0,
++     "count": 0,
++     "epoch": 0,
++     "generation": "g",
++     "key": "[\"alice\",\"workspace\",\"page\",\"g\"]",
++     "page": "page",
++     "pending": [],
++     "user": "alice",
++     "workspace": "workspace",
++   },
++   "updates": [],
+  }
+
+ ❯ apps/web/src/lib/yjs-cache.test.ts:59:62
+     57|       workspaces: [{ workspace: 'workspace', version: 1, allowed: true…
+     58|     });
+     59|     await expect(store.open(stale, 'workspace', 'page', 'g')).rejects.…
+       |                                                              ^
+     60|     await expect(store.append(old, page, update('late'))).rejects.toTh…
+     61|     const fresh = await allowedTicket(store, 'alice', 'a');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)
+   Start at  14:07:34
+   Duration  346ms (tests 38%, import 37%, transform 23%, worker 2%)
+
+EXIT_CODE=1

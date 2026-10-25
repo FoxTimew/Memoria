@@ -1,0 +1,21 @@
+COMMAND: pnpm test:auth:adversarial
+$ node scripts/build-server.mjs api --adversarial-e2e && node --env-file=.env apps/api/dist/adversarial.e2e.mjs
+▶ 4f attacker paths against actual Nest, Better Auth, PostgreSQL and WebSockets
+  ✔ A01 default guard and all 27 exact public-facade routes enforce their IP quota before execution (253.1361ms)
+  ✔ A02 unlisted native factor/recovery/organization routes, path and method aliases remain closed (14.5574ms)
+  ✔ A03 workspace policy cannot be bypassed with native routes or a direct collaborative connection (340.9385ms)
+  ✔ A04 mailbox-only password reset cannot retain assurance or bypass the second factor (659.1508ms)
+  ✔ A05 recovery session stays restricted through enrollment, native verification and finish; fresh proof is required (569.7756ms)
+  ✔ A06 forged identity/forwarding headers do not evade the real untrusted-peer quota (31.0399ms)
+  ✔ A07 HTTP TOTP enrollment and removal revoke actual WebSockets; pending enrollment never promotes (498.6825ms)
+  ✔ A08 canary secrets absent from captured logs, audits, errors, metrics and non-dedicated mail channels (544.3539ms)
+✔ 4f attacker paths against actual Nest, Better Auth, PostgreSQL and WebSockets (4528.0072ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4531.5961
+EXIT_CODE=0

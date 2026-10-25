@@ -9,25 +9,27 @@ import ts from 'typescript';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const app = process.argv[2];
 if (app !== 'api' && app !== 'worker') throw new Error('Expected api or worker');
-const entry = process.argv.includes('--cache-policy-e2e')
-  ? 'cache-policy.e2e'
-  : process.argv.includes('--rate-limits-e2e')
-    ? 'rate-limits.e2e'
-    : process.argv.includes('--recovery-e2e')
-      ? 'recovery.e2e'
-      : process.argv.includes('--reset-factor')
-        ? 'reset-factor'
-        : process.argv.includes('--probe')
-          ? 'bootstrap-probe'
-          : process.argv.includes('--auth-e2e')
-            ? 'auth.e2e'
-            : process.argv.includes('--strong-auth-e2e')
-              ? 'strong-auth.e2e'
-              : process.argv.includes('--workspace-security-e2e')
-                ? 'workspace-security.e2e'
-                : process.argv.includes('--pages-e2e')
-                  ? 'pages.e2e'
-                  : 'main';
+const entry = process.argv.includes('--adversarial-e2e')
+  ? 'adversarial.e2e'
+  : process.argv.includes('--cache-policy-e2e')
+    ? 'cache-policy.e2e'
+    : process.argv.includes('--rate-limits-e2e')
+      ? 'rate-limits.e2e'
+      : process.argv.includes('--recovery-e2e')
+        ? 'recovery.e2e'
+        : process.argv.includes('--reset-factor')
+          ? 'reset-factor'
+          : process.argv.includes('--probe')
+            ? 'bootstrap-probe'
+            : process.argv.includes('--auth-e2e')
+              ? 'auth.e2e'
+              : process.argv.includes('--strong-auth-e2e')
+                ? 'strong-auth.e2e'
+                : process.argv.includes('--workspace-security-e2e')
+                  ? 'workspace-security.e2e'
+                  : process.argv.includes('--pages-e2e')
+                    ? 'pages.e2e'
+                    : 'main';
 const watching = process.argv.includes('--watch');
 const outfile = resolve(root, `apps/${app}/dist/${entry}.mjs`);
 let child;
@@ -117,7 +119,7 @@ if (watching) {
   }
   await watcher.watch();
 } else {
-  if (entry === 'recovery.e2e' || entry === 'pages.e2e' || entry === 'workspace-security.e2e')
+  if (['adversarial.e2e', 'recovery.e2e', 'pages.e2e', 'workspace-security.e2e'].includes(entry))
     await build({
       entryPoints: [resolve(root, 'apps/collab/src/service/incremental-worker.ts')],
       outfile: resolve(root, 'apps/api/dist/incremental-worker.mjs'),

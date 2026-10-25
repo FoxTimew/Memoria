@@ -1,0 +1,32 @@
+COMMAND: pnpm test:auth:workspace
+$ node scripts/build-server.mjs api --workspace-security-e2e && node --env-file=.env apps/api/dist/workspace-security.e2e.mjs
+▶ 4b: workspace policy, transactional gates and HTTP-to-WebSocket revocation
+  ✔ only an owner with a recent strong proof can manage policy; outsiders cannot inspect it (84.6189ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ HTTP first-factor enrollment closes both live WebSockets, including the retained session, within five seconds (427.7072ms)
+  ✔ activation grants existing members seven days; edits and reactivation never postpone their deadline (298.3378ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ grace expiry closes only the protected workspace socket without a new SQL notification; HTTP/HMAC/reconnect fail closed (2388.1181ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ new members cannot inherit grace or supply a future deadline; missing deadline also denies access (176.8777ms)
+  ✔ recent assurance gates policy, roles and future API/webhook contracts; old assurance still allows content (250.6998ms)
+  ✔ assurance is rechecked after waiting for the workspace lock, before any sensitive effect (113.7678ms)
+  ✔ role mutations require owner + recent proof, compare the old role and preserve a last owner (118.9769ms)
+API request failed: Error
+  ✔ an audit failure rolls back policy, grace dates and version together (79.6337ms)
+  ✔ a concurrent policy activation wins before last-factor removal and rolls back no valid factor (93.719ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ HTTP activation without grace closes an existing weak socket and immediately blocks content (177.2573ms)
+  ✔ last-factor removal is refused by policy; HTTP removal with a spare factor closes actual sockets and revokes assurance (239.3519ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ 4b: workspace policy, transactional gates and HTTP-to-WebSocket revocation (6423.8441ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6427.111
+EXIT_CODE=0

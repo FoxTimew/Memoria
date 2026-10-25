@@ -22,6 +22,7 @@ export type CacheTicket = {
   epoch: number;
   marker: string;
   policies: Record<string, number>;
+  observedPolicyEpochs: Record<string, number>;
 };
 export type CachePolicy = {
   user: string;
@@ -176,8 +177,20 @@ export class YjsCache {
         }
         if (!request.result) sessions.put({ user, session, revoked: false } satisfies Session);
         const epoch = tx.objectStore('users').get(user);
-        epoch.onsuccess = () =>
-          done({ user, session, marker, epoch: epoch.result?.epoch ?? 0, policies: {} });
+        epoch.onsuccess = () => {
+          const observed = tx.objectStore('policies').index('user').getAll(user);
+          observed.onsuccess = () =>
+            done({
+              user,
+              session,
+              marker,
+              epoch: epoch.result?.epoch ?? 0,
+              policies: {},
+              observedPolicyEpochs: Object.fromEntries(
+                (observed.result as Policy[]).map((p) => [p.workspace, p.epoch]),
+              ),
+            });
+        };
       };
     });
   }
@@ -228,6 +241,16 @@ export class YjsCache {
               const old = known.get(proposed.workspace);
               known.delete(proposed.workspace);
               if (old && old.version > proposed.version) continue;
+              // Membership removal does not change the workspace's policy version.
+              // A response begun before that local revocation cannot undo its tombstone.
+              if (
+                old &&
+                !old.allowed &&
+                proposed.allowed &&
+                old.version === proposed.version &&
+                ticket.observedPolicyEpochs[proposed.workspace] !== old.epoch
+              )
+                continue;
               const current: Policy = {
                 ...proposed,
                 user: ticket.user,

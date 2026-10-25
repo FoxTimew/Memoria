@@ -33,7 +33,13 @@ export function envelope(bytes: Uint8Array) {
     if (state.readVarUint() !== 1) throw new Error('PRESENCE_ONE_CLIENT');
     if (!Number.isSafeInteger(state.readVarUint()) || !Number.isSafeInteger(state.readVarUint()))
       throw new Error('PRESENCE_INVALID_CLOCK');
-    state.readVarString();
+    // Hocuspocus parses awareness JSON before our hook and logs parser errors.
+    // Bound it above, then reject malformed input without forwarding its value.
+    try {
+      JSON.parse(state.readVarString());
+    } catch {
+      throw new Error('PRESENCE_INVALID_JSON');
+    }
     if (state.decoder.pos !== payload.length) throw new Error('PRESENCE_TRAILING_DATA');
     return { address, name, type, update: false };
   }
