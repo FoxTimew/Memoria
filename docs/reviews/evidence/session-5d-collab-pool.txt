@@ -1,0 +1,29 @@
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] UPDATE_REJECTED
+closing connection c698d1d0-cbfd-43dc-af61-000e4b1da5b3 (while handling e20638ba-b73c-4adb-9b22-8c1acad3ed0c:faca36a0-85af-47f1-9c0a-d14a6dd25ec5:1cb435bd-1003-4498-9577-377be83cb4cd) because of exception Error: UPDATE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:120328:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-pool.e2e.mjs:120609:22)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processTimers (node:internal/timers:615:9)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:1070:4
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"event":"collaboration.replica.reloaded","page":"b10e6760-901f-4537-af01-bed59e29cbf5"}
+{"event":"collaboration.replica.reloaded","page":"faca36a0-85af-47f1-9c0a-d14a6dd25ec5"}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Shared worker failure reloads every affected replica, including an in-flight durable commit (2085.3933ms)
+✔ A long replay crosses bounded worker messages and keeps independent replicas intact (461.5593ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2551.6591
+Collaboration pool.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

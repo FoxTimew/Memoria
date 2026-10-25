@@ -246,11 +246,11 @@ await test(
       reader.on('websocket', (socket) => socket.on('close', () => closes.guest++));
       for (const p of [reader, frozen, writer, memberPage])
         p.on('pageerror', (e) => errors.push(e.message));
-      async function open(p) {
+      async function open(p, title = 'Shared child 5c') {
         await p.goto(`${origin}/workspaces/${workspace}`);
         await p
           .getByRole('navigation', { name: 'Arbre des pages' })
-          .getByRole('button', { name: 'Shared child 5c', exact: true })
+          .getByRole('button', { name: title, exact: true })
           .click();
         await expect(p.locator('.bn-editor')).toBeVisible({ timeout: 20000 });
         await expect(p.getByTestId('local-save-status')).toHaveText('Copie locale à jour', {
@@ -278,6 +278,31 @@ await test(
       console.log(
         'PASS retained no-factor share action; partial tree/search/breadcrumbs; read-only title, text and character card; live updates received',
       );
+      const separate = await create('Independent guest 5d');
+      const separateShares = await call(
+        owner,
+        `${base}/pages/${separate.id}/shares`,
+        undefined,
+        'GET',
+      );
+      await call(
+        owner,
+        `${base}/pages/${separate.id}/shares/${member}`,
+        { expectedAccessVersion: separateShares.accessVersion, level: 'edit' },
+        'PUT',
+      );
+      const independent = await lifecycle.page();
+      independent.on('pageerror', (e) => errors.push(e.message));
+      let independentCloses = 0;
+      independent.on('websocket', (socket) => socket.on('close', () => independentCloses++));
+      await open(independent, 'Independent guest 5d');
+      const independentIds = async (p) => {
+        const snapshot = await records(p);
+        const keys = new Set(snapshot.docs.filter((d) => d.page === separate.id).map((d) => d.key));
+        return snapshot.updates.filter((u) => keys.has(u.key)).map((u) => u.id);
+      };
+      const retained = await independentIds(independent);
+      assert(retained.length > 0);
       await open(memberPage);
       const ids = async (page) => (await records(page)).updates.map((u) => u.id);
       const memberCache = await ids(memberPage),
@@ -332,6 +357,13 @@ await test(
       await management.getByLabel('Page à partager').selectOption(root.id);
       await change('edit');
       await expect(reader.locator('.bn-editor')).toHaveCount(0, { timeout: 10000 });
+      await expect(independent.locator('.bn-editor')).toBeVisible();
+      assert.equal(independentCloses, 0, 'other page of same guest remains connected');
+      assert.deepEqual(
+        await independentIds(independent),
+        retained,
+        'other page cache retained after changed share',
+      );
       await open(reader);
       await open(frozen);
       await expect(
@@ -357,7 +389,7 @@ await test(
         .poll(
           async () =>
             (await records(reader)).docs.filter(
-              (d) => d.user === guestUser && d.workspace === workspace,
+              (d) => d.user === guestUser && d.workspace === workspace && d.page === child.id,
             ).length,
         )
         .toBe(0);
@@ -387,11 +419,14 @@ await test(
         .poll(
           async () =>
             (await records(reader)).docs.filter(
-              (d) => d.user === guestUser && d.workspace === workspace,
+              (d) => d.user === guestUser && d.workspace === workspace && d.page === child.id,
             ).length,
         )
         .toBe(0);
       // No awake guest tab receives the revocation in this second scenario.
+      assert.equal(independentCloses, 0);
+      assert.deepEqual(await independentIds(independent), retained);
+      await independent.close();
       await change('edit');
       await open(frozen);
       await reader.close();
@@ -411,7 +446,7 @@ await test(
         .poll(
           async () =>
             (await records(frozen)).docs.filter(
-              (d) => d.user === guestUser && d.workspace === workspace,
+              (d) => d.user === guestUser && d.workspace === workspace && d.page === child.id,
             ).length,
         )
         .toBe(0);
@@ -426,6 +461,9 @@ await test(
       );
       await change('read');
       await open(frozen);
+      // The earlier ancestor move changed the child's relational version without
+      // closing this unaffected editor. Read a fresh version before this new move.
+      await open(writer);
       await writer.getByRole('button', { name: 'Déplacer', exact: true }).click();
       await writer.getByLabel('Page parente').selectOption(elsewhere.id);
       await writer.getByRole('button', { name: 'Vérifier les accès', exact: true }).click();
@@ -437,6 +475,11 @@ await test(
       await expect(preview).toHaveCount(0);
       await expect(frozen.locator('.bn-editor')).toHaveCount(0, { timeout: 10000 });
       assert.equal((await guest.request.get(origin + `${base}/pages/${child.id}`)).status(), 404);
+      assert.deepEqual(
+        await independentIds(frozen),
+        retained,
+        'unopened independent page cache survives every removal/regrant/move',
+      );
       assert.deepEqual(errors, []);
       console.log(
         'PASS share removal, restore of fresh read, preview then actual move changes inherited access; no browser errors',

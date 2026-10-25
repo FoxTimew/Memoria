@@ -1,0 +1,12 @@
+$ node --env-file=.env --use-system-ca scripts/test-invitations-browser.mjs
+PASS owner without factor guided and form retained; explicit submission; real worker/Mailpit; anonymous metadata hidden; verified recipient; no grace/content before independent UV proof; no browser errors
+✔ 5b HTTPS UI: retained invitation form, real SMTP, verified recipient and guided MFA arrival (5348.9656ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5355.9808
+EXIT_CODE=0

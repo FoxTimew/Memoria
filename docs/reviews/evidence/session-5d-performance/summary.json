@@ -1,0 +1,81 @@
+{
+  "commits": {
+    "reference": "1fc393eb8778dad9a6480620597ef239d322ab22",
+    "candidate": "bcd3c2fdde7ee23ed5924e01aa1908540a9a3c69"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "protocolHash": "390c8a6408d37fdfe0c18bb76e14e63f4b2d7e71d96a100d1285e14291f8920a",
+  "metrics": {
+    "warm:content-1M": {
+      "reference": {
+        "values": [10.531400000000303, 8.685600000000022, 8.689799999999877],
+        "median": 8.689799999999877
+      },
+      "candidate": {
+        "values": [9.025499999999965, 8.685999999999922, 10.103600000000142],
+        "median": 9.025499999999965
+      },
+      "changeMs": 0.33570000000008804,
+      "changePercent": 3.863149899883689,
+      "allowedRegressionMs": 2,
+      "exceedsRegression": false,
+      "pairedChangePercent": [-14.299143513685685, 0.004605323753104074, 16.269649474099346]
+    },
+    "warm:history-1M": {
+      "reference": {
+        "values": [33.44160000000011, 33.3158999999996, 32.950300000000425],
+        "median": 33.3158999999996
+      },
+      "candidate": {
+        "values": [33.3773999999994, 33.714899999999034, 34.76469999999972],
+        "median": 33.714899999999034
+      },
+      "changeMs": 0.3989999999994325,
+      "changePercent": 1.1976263585838511,
+      "allowedRegressionMs": 3.3315899999999603,
+      "exceedsRegression": false,
+      "pairedChangePercent": [-0.19197646045856498, 1.1976263585838476, 5.506474903109448]
+    },
+    "cold:content-1M": {
+      "reference": {
+        "values": [146.08810000000017, 150.94129999999996, 147.40300000000002],
+        "median": 147.40300000000002
+      },
+      "candidate": {
+        "values": [147.60429999999997, 145.8071, 146.6789000000001],
+        "median": 146.6789000000001
+      },
+      "changeMs": -0.7240999999999076,
+      "changePercent": -0.4912383058688815,
+      "allowedRegressionMs": 14.740300000000003,
+      "exceedsRegression": false,
+      "pairedChangePercent": [1.0378668762204502, -3.401454737702647, -0.4912383058688796]
+    },
+    "cold:history-1M": {
+      "reference": {
+        "values": [242.64590000000044, 242.65339999999924, 240.54989999999998],
+        "median": 242.64590000000044
+      },
+      "candidate": {
+        "values": [238.4257000000016, 230.6931999999997, 266.47310000000016],
+        "median": 238.4257000000016
+      },
+      "changeMs": -4.22019999999884,
+      "changePercent": -1.7392422455927887,
+      "allowedRegressionMs": 24.264590000000045,
+      "exceedsRegression": false,
+      "pairedChangePercent": [-1.739242245592787, -4.928923312016053, 10.776641353831451]
+    }
+  },
+  "failures": [],
+  "failedSeries": []
+}

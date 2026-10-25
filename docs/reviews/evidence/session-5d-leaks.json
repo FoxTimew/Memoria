@@ -1,0 +1,7 @@
+{
+  "errorsInspected": 180,
+  "logEntriesInspected": 69,
+  "emailsInspected": 8,
+  "canaries": 29,
+  "result": "No canary leak in inspected channels; not an exhaustive information-flow proof"
+}

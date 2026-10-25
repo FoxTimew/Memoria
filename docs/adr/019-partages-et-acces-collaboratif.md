@@ -1,8 +1,12 @@
 # ADR 019 — Partages de pages et accès collaboratif
 
-Statut : **accepté**, 25 octobre 2026. 5a et 5b validées par le développeur ; 5c livrée pour relecture. Les preuves et absences figurent dans les fiches de chaque étape.
+Statut : **accepté**, 25 octobre 2026. 5a, 5b et 5c validées par le développeur ; revue 5d et invalidation ciblée décrites dans la [fiche consolidée](../reviews/session-5-5d-revue-adverse.md).
 
-## Réalisation 5c
+## Réalisation 5d
+
+La migration **0020** remplace les invalidations globales de 5c par des versions de droits effectifs **par membership et par page**, calculées au commit avec le même calcul que l'aperçu. IndexedDB v4 purge seulement les pages modifiées. Un archivage sans rapport et un déplacement sans effet préservent les sockets et le cache : preuves HTTP/WSS/navigateur détaillées dans la fiche 5d. Le contrôle de session/MFA/politique/grants reste intégral. Les détails transactionnels et de migration sont précisés plus bas.
+
+## Historique de la réalisation 5c, supersédé pour l'invalidation
 
 La gestion des partages est disponible dans « Membres, invitations et partages ». Elle distingue partage direct, sources héritées et droit effectif. Le PUT exige une preuve forte récente et la version d'accès du workspace ; owner/admin sans preuve sont guidés vers la configuration/vérification puis reviennent à leur choix, sans enregistrement automatique. Liste paginée 50/max 100, plafonds de l'ADR 018, audit sans email. Le navigateur invité ouvre l'arbre déjà filtré côté serveur ; le titre et les champs personnalisés, ainsi que BlockNote lui-même, sont désactivés en lecture seule.
 

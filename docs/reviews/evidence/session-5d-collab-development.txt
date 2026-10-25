@@ -1,0 +1,12 @@
+PASS scoped reset preserves Yjs and other workspace; preview, confirmation, leader guard, idempotence, verified member and production refusal
+✔ Development commands: scoped reset, dry run, leader exclusion and verified membership (2426.3638ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2431.9385
+Collaboration development.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

@@ -1,0 +1,12 @@
+PASS HMAC: tampered body, wrong path, expired timestamp and replay rejected; one authenticated execution
+✔ Real internal HTTP: HMAC body/path/time and durable anti-replay (1243.4071ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1248.2122
+Collaboration hmac.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

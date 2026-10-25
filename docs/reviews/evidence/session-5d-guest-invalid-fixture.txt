@@ -1,0 +1,30 @@
+Power: {"observedAt":"2026-10-25T19:06:15.948Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":89}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-25T19:06:16.899Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":89}],"allowed":true,"reason":null}
+✖ Production incremental validation and journal, 1 MiB profiles (1243.3908ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1247.1318
+
+✖ failing tests:
+
+test at apps\collab\dist\test-warm.e2e.mjs:113710:1
+✖ Production incremental validation and journal, 1 MiB profiles (1243.3908ms)
+  CollaborationError: ACCESS_DENIED
+      at transaction.page.page (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-warm.e2e.mjs:113335:19)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Store.transaction (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-warm.e2e.mjs:113238:22)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-warm.e2e.mjs:113819:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'ACCESS_DENIED',
+    status: 403,
+    details: {}
+  }
+Collaboration warm.e2e.ts: EXIT_CODE=1
+
+EXIT_CODE=1

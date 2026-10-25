@@ -68,6 +68,10 @@ test(
                 [db.workspace, user],
               );
             }
+          await db.client.query(
+            "INSERT INTO access_subjects(workspace_id,kind,member_id) SELECT workspace_id,'member',id FROM workspace_members WHERE workspace_id=$1",
+            [db.workspace],
+          );
           const subjects = (
             await db.client.query(
               'SELECT id FROM access_subjects WHERE workspace_id=$1 AND deleted_at IS NULL',
@@ -79,6 +83,15 @@ test(
               "INSERT INTO access_grants(workspace_id,subject_id,resource_type,resource_id,level,inherit) SELECT $1,$2,'page',id,'edit',true FROM unnest($3::uuid[]) id",
               [db.workspace, subject.id, roots.slice(0, guestDepth === 50 ? 100 : 10)],
             );
+          assert.equal(
+            (
+              await db.client.query(
+                'SELECT count(*)::int n FROM access_grants WHERE workspace_id=$1',
+                [db.workspace],
+              )
+            ).rows[0].n,
+            guestDepth === 50 ? 5000 : 10,
+          );
           await db.client.query('COMMIT');
         } catch (e) {
           await db.client.query('ROLLBACK');
