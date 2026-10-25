@@ -12,7 +12,8 @@ import { assessRegression } from './measurement-regression.mjs';
 // Immutable application snapshots, one common harness, no compiler during measurements.
 const repo = resolve('.');
 const args = process.argv.slice(2);
-const session4 = args.includes('--session4');
+const session5 = args.includes('--session5');
+const session4 = args.includes('--session4') || session5;
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const git = (...argv) =>
@@ -81,9 +82,11 @@ if (option('--resume')) {
       availableCpus: availableParallelism(),
       totalBytes: totalmem(),
     },
-    protocol: session4
-      ? 'Session 4: AB / BA / AB, three paired series, immutable sources AND workspace packages AND migrations from each commit. Common warm/cold harness, shared workers in both configurations. Candidate fixture has a live passkey assurance and mandatory workspace policy (SQL fixture, crypto outside timed scope). Same encoded profiles and unchanged common dependency versions. No samples discarded.'
-      : 'Three paired series, order AB / BA / AB for each suite; fresh Node process per suite. Both builds completed before any measurements. Same fixtures, migrations, dependencies and common harness; only validator construction/cleanup differ outside timed regions. No samples discarded.',
+    protocol: session5
+      ? 'Session 5: AB / BA / AB, three paired series; immutable application/packages/migrations from each commit. Live passkey assurance and required workspace policy in BOTH versions; candidate additionally checks the real per-page browser epoch on every append. Same warm/cold harness and dependency versions, no discarded samples.'
+      : session4
+        ? 'Session 4: AB / BA / AB, three paired series, immutable sources AND workspace packages AND migrations from each commit. Common warm/cold harness, shared workers in both configurations. Candidate fixture has a live passkey assurance and mandatory workspace policy (SQL fixture, crypto outside timed scope). Same encoded profiles and unchanged common dependency versions. No samples discarded.'
+        : 'Three paired series, order AB / BA / AB for each suite; fresh Node process per suite. Both builds completed before any measurements. Same fixtures, migrations, dependencies and common harness; only validator construction/cleanup differ outside timed regions. No samples discarded.',
     artifacts: {},
     series: [],
   };
@@ -312,7 +315,10 @@ for (let iteration = 1; iteration <= 3; iteration++) {
               COLLAB_TEST_MIGRATIONS: resolve(
                 manifest.artifacts[configuration].migrations ?? 'packages/db/drizzle',
               ),
-              COLLAB_MEASURE_STRONG: String(session4 && configuration === 'candidate'),
+              COLLAB_MEASURE_STRONG: String(
+                session5 || (session4 && configuration === 'candidate'),
+              ),
+              COLLAB_MEASURE_PAGE_EPOCH: String(session5 && configuration === 'candidate'),
             },
             windowsHide: true,
             stdio: ['ignore', 'pipe', 'pipe'],

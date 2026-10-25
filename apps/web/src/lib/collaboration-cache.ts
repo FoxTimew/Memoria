@@ -38,7 +38,7 @@ export class CollaborationCache {
       /* The transactional check also catches revoked epochs. */
     }
     void this.store
-      .assertActive(this.ticket, this.page.workspace)
+      .assertActive(this.ticket, this.page.workspace, this.page.page)
       .catch((error: unknown) => this.error(error));
   };
   constructor(
@@ -148,7 +148,7 @@ export class CollaborationCache {
     this.onRevoked('Votre accès a changé. Le document a été fermé.');
     // Hide the document immediately, then erase after any previously queued transactions.
     void this.chain
-      .then(() => this.store.revokeWorkspace(this.ticket, this.page.workspace))
+      .then(() => this.store.revokePage(this.ticket, this.page.workspace, this.page.page))
       .catch((error: unknown) => {
         if (!(error instanceof LocalSessionRevoked))
           this.onRevoked(

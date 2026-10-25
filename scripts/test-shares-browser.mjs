@@ -80,7 +80,7 @@ async function records(page) {
             db.close();
             resolve({
               docs: docs.result,
-              updates: updates.result.map((u) => ({ key: u.key, user: u.user })),
+              updates: updates.result.map((u) => ({ id: u.id, key: u.key, user: u.user })),
             });
           };
         };
@@ -88,7 +88,7 @@ async function records(page) {
   );
 }
 await test(
-  '5c HTTPS: guided shares, partial tree, genuine read-only, offline frozen cache and move preview',
+  '5d HTTPS: targeted invalidation, guided shares, partial tree, read-only, frozen cache and move preview',
   { timeout: 240000 },
   async () => {
     const browser = await chromium.launch({
@@ -103,6 +103,7 @@ await test(
     try {
       const owner = await browser.newContext({ viewport: { width: 1440, height: 1100 } }),
         guest = lifecycle.context;
+      const regular = await browser.newContext({ viewport: { width: 1440, height: 1100 } });
       const password = randomBytes(24).toString('base64url');
       async function account(context, name) {
         const email = `share5c-${randomUUID()}@example.test`;
@@ -125,6 +126,7 @@ await test(
       }
       await account(owner, 'Owner 5c');
       const guestUser = await account(guest, 'Guest 5c');
+      const regularUser = await account(regular, 'Member 5d');
       workspace = (
         await call(
           owner,
@@ -151,6 +153,14 @@ await test(
       await pool.query("INSERT INTO actors(workspace_id,user_id,kind) VALUES($1,$2,'user')", [
         workspace,
         guestUser,
+      ]);
+      await pool.query(
+        "INSERT INTO workspace_members(id,user_id,workspace_id,role) VALUES($1,$2,$3,'member')",
+        [randomUUID(), regularUser, workspace],
+      );
+      await pool.query("INSERT INTO actors(workspace_id,user_id,kind) VALUES($1,$2,'user')", [
+        workspace,
+        regularUser,
       ]);
       const meta = await call(owner, `${base}/pages/${child.id}/collaboration`, {}, 'POST', 201);
       const paragraph = randomUUID();
@@ -230,7 +240,12 @@ await test(
       const reader = await lifecycle.page(),
         frozen = await lifecycle.page(),
         writer = await owner.newPage();
-      for (const p of [reader, frozen, writer]) p.on('pageerror', (e) => errors.push(e.message));
+      const memberPage = await regular.newPage();
+      const closes = { member: 0, guest: 0 };
+      memberPage.on('websocket', (socket) => socket.on('close', () => closes.member++));
+      reader.on('websocket', (socket) => socket.on('close', () => closes.guest++));
+      for (const p of [reader, frozen, writer, memberPage])
+        p.on('pageerror', (e) => errors.push(e.message));
       async function open(p) {
         await p.goto(`${origin}/workspaces/${workspace}`);
         await p
@@ -263,6 +278,58 @@ await test(
       console.log(
         'PASS retained no-factor share action; partial tree/search/breadcrumbs; read-only title, text and character card; live updates received',
       );
+      await open(memberPage);
+      const ids = async (page) => (await records(page)).updates.map((u) => u.id);
+      const memberCache = await ids(memberPage),
+        guestCache = await ids(reader);
+      const unrelated = await create('Unrelated archive 5d');
+      await call(
+        owner,
+        `${base}/pages/${unrelated.id}/archive`,
+        { expectedVersion: unrelated.version },
+        'POST',
+        201,
+      );
+      const body = { expectedVersion: root.version, parentId: elsewhere.id, afterId: null };
+      const unchanged = await call(
+        owner,
+        `${base}/pages/${root.id}/move/preview`,
+        body,
+        'POST',
+        201,
+      );
+      assert.deepEqual(unchanged.effects, [], 'the direct root share follows the subtree');
+      await call(
+        owner,
+        `${base}/pages/${root.id}/move`,
+        { ...body, previewToken: unchanged.token },
+        'POST',
+        201,
+      );
+      await new Promise((resolve) => globalThis.setTimeout(resolve, 5200));
+      assert.deepEqual(
+        closes,
+        { member: 0, guest: 0 },
+        'unrelated archive/ineffective move must not close live sockets',
+      );
+      assert.deepEqual(
+        await ids(memberPage),
+        memberCache,
+        'unaffected member cache bytes retained, not rebuilt',
+      );
+      assert.deepEqual(
+        await ids(reader),
+        guestCache,
+        'unaffected guest cache bytes retained, not rebuilt',
+      );
+      await expect(memberPage.locator('.bn-editor')).toBeVisible();
+      await expect(reader.locator('.bn-editor')).toBeVisible();
+      console.log(
+        'PASS 5d targeted invalidation: unrelated archive and ineffective move preserve member/guest sockets and original IndexedDB update IDs',
+      );
+      // Refresh management's CAS snapshot after the unrelated tree change.
+      await management.reload();
+      await management.getByLabel('Page à partager').selectOption(root.id);
       await change('edit');
       await expect(reader.locator('.bn-editor')).toHaveCount(0, { timeout: 10000 });
       await open(reader);
@@ -312,7 +379,7 @@ await test(
       await open(reader);
       assert(!(await reader.locator('.bn-editor').innerText()).includes('OFFLINE_REVOKED_5C'));
       console.log(
-        'PASS online downgrade purges workspace; offline frozen editor cannot resurrect its cache or replay after regrant; memory export retained',
+        'PASS online downgrade purges affected pages; offline frozen editor cannot resurrect its cache or replay after regrant; memory export retained',
       );
       await change('none');
       await expect(reader.locator('.bn-editor')).toHaveCount(0, { timeout: 10000 });

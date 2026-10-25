@@ -8,6 +8,7 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "measure:rights": "node scripts/measure-rights.mjs",
     "test:shares:browser": "node --env-file=.env --use-system-ca scripts/test-shares-browser.mjs",
     "test:shares:e2e": "node scripts/build-server.mjs api --shares-e2e && node --env-file=.env apps/api/dist/shares.e2e.mjs",
     "test:auth:adversarial": "node scripts/build-server.mjs api --adversarial-e2e && node --env-file=.env apps/api/dist/adversarial.e2e.mjs",

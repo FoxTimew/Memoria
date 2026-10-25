@@ -22,6 +22,80 @@ test(
       store = new Store(db.pool, leader),
       reports: object[] = [];
     try {
+      const guestDepth = Number(process.env.COLLAB_MEASURE_GUEST_DEPTH ?? 0);
+      if (guestDepth) {
+        assert([5, 50].includes(guestDepth), 'Only documented guest profiles');
+        const roots = Array.from({ length: 100 }, () => randomUUID());
+        await db.client.query('BEGIN');
+        try {
+          const factor = randomUUID();
+          await db.client.query(
+            "INSERT INTO auth_passkeys(id,user_id,public_key,credential_id,counter,device_type,backed_up) VALUES($1,$2,'measurement-only',$3,0,'singleDevice',false)",
+            [factor, db.user, randomUUID()],
+          );
+          await db.client.query(
+            "INSERT INTO session_assurance(session_id,method,verified_at,security_version,factor_id) VALUES($1,'passkey',now(),0,$2)",
+            [db.session, factor],
+          );
+          await db.client.query(
+            'INSERT INTO workspace_policies(workspace_id,require_strong_auth,grace_days,strong_auth_enabled_at) VALUES($1,true,0,now())',
+            [db.workspace],
+          );
+          await db.client.query(
+            "UPDATE workspace_members SET role='guest' WHERE workspace_id=$1 AND user_id=$2",
+            [db.workspace, db.user],
+          );
+          for (let i = 0; i < 100; i++)
+            await db.client.query(
+              'INSERT INTO pages(id,workspace_id,parent_id,position) VALUES($1,$2,$3,$4)',
+              [roots[i], db.workspace, i > 0 && i < guestDepth - 1 ? roots[i - 1] : null, 'p' + i],
+            );
+          await db.client.query('UPDATE pages SET parent_id=$1 WHERE id=$2', [
+            roots[guestDepth - 2],
+            db.page,
+          ]);
+          // Bound profile: 50 guests x 100 roots = 5000 active grants. Only the
+          // measured author has a live session; this is resolver load, not 50 writers.
+          if (guestDepth === 50)
+            for (let i = 0; i < 49; i++) {
+              const user = randomUUID();
+              await db.client.query(
+                "INSERT INTO auth_users(id,name,email,email_verified) VALUES($1,'Load guest',$2,true)",
+                [user, user + '@example.test'],
+              );
+              await db.client.query(
+                "INSERT INTO workspace_members(workspace_id,user_id,role) VALUES($1,$2,'guest')",
+                [db.workspace, user],
+              );
+            }
+          const subjects = (
+            await db.client.query(
+              'SELECT id FROM access_subjects WHERE workspace_id=$1 AND deleted_at IS NULL',
+              [db.workspace],
+            )
+          ).rows;
+          for (const subject of subjects)
+            await db.client.query(
+              "INSERT INTO access_grants(workspace_id,subject_id,resource_type,resource_id,level,inherit) SELECT $1,$2,'page',id,'edit',true FROM unnest($3::uuid[]) id",
+              [db.workspace, subject.id, roots.slice(0, guestDepth === 50 ? 100 : 10)],
+            );
+          await db.client.query('COMMIT');
+        } catch (e) {
+          await db.client.query('ROLLBACK');
+          throw e;
+        }
+      }
+      // Outside the timed region: browser identity carries a page epoch since 5d.
+      // The main reference has no epoch feature; its authentic session/MFA checks remain enabled.
+      const accessVersion =
+        process.env.COLLAB_MEASURE_PAGE_EPOCH === 'true' || guestDepth
+          ? ((
+              await db.pool.query(
+                'SELECT e.version FROM page_access_state e JOIN workspace_members m ON m.id=e.member_id WHERE e.workspace_id=$1 AND e.page_id=$2 AND m.user_id=$3',
+                [db.workspace, db.page, db.user],
+              )
+            ).rows[0].version as number)
+          : undefined;
       for (const profile of ['content-1M', 'history-1M']) {
         const snapshot = await loadProfile(profile),
           generation = randomUUID();
@@ -69,7 +143,17 @@ test(
             await store.append(
               generation,
               i,
-              [{ identity: { ...db, key: db.user }, receipt: randomUUID(), update }],
+              [
+                {
+                  identity: {
+                    ...db,
+                    key: db.user,
+                    ...(accessVersion === undefined ? {} : { accessVersion }),
+                  },
+                  receipt: randomUUID(),
+                  update,
+                },
+              ],
               update,
               validated.blocks,
               validated.blockIdsToReserve,
@@ -92,6 +176,7 @@ test(
           ).rows;
           const report = {
             profile,
+            guestDepth,
             p95,
             max: totals.at(-1),
             iterations: 200,

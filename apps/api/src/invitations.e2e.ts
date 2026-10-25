@@ -504,6 +504,38 @@ await test(
               .rows[0].status,
             'pending',
           );
+          // Physical issuer removal, distinct from a role downgrade: the held link
+          // must not survive deletion of its authority or recreate permissions.
+          const issuer = await account(),
+            recipient = await account();
+          const issuerInvite = summary(await ok(invite(owner, issuer.email, 'admin'), 201));
+          await ok(accept(issuer, issuerInvite.id), 201);
+          await strong(issuer);
+          const held = summary(
+            await ok(
+              invite(issuer, recipient.email, 'guest', [{ pageId: page, level: 'edit' }]),
+              201,
+            ),
+          );
+          const issuerId = (
+            await db.pool.query(
+              'SELECT id FROM workspace_members WHERE workspace_id=$1 AND user_id=$2',
+              [workspace, issuer.id],
+            )
+          ).rows[0].id;
+          await ok(
+            owner.b.call(`${base}/members/${issuerId}`, { expectedRole: 'admin' }, 'DELETE'),
+          );
+          assert.equal((await accept(recipient, held.id)).status, 404);
+          assert.equal(
+            (
+              await db.pool.query(
+                'SELECT count(*) n FROM workspace_members WHERE workspace_id=$1 AND user_id=$2',
+                [workspace, recipient.id],
+              )
+            ).rows[0].n,
+            '0',
+          );
         },
       );
       await t.test(

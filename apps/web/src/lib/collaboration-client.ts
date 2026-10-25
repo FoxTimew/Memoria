@@ -128,7 +128,12 @@ export class CollaborationClient {
       ...(user ? {} : { awareness: null }),
       token:
         expectedSession && user
-          ? JSON.stringify({ user: user.id, session: expectedSession, accessVersion })
+          ? JSON.stringify({
+              scope: 'page',
+              user: user.id,
+              session: expectedSession,
+              accessVersion,
+            })
           : '',
       flushDelay: 100,
       forceSyncInterval: 15000,

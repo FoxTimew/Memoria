@@ -113,4 +113,10 @@ export class PagesController {
   ) {
     return this.pages.search(session, workspace, query);
   }
+  @Get('page-access') accessSnapshot(
+    @CurrentSession() session: AuthenticatedSession,
+    @Param('workspaceId') workspace: string,
+  ) {
+    return this.pages.accessSnapshot(session, workspace);
+  }
 }

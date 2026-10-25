@@ -79,26 +79,41 @@ export async function shareState(tx: WriteTransaction, workspace: string) {
 export async function accessPreview(
   tx: WriteTransaction,
   workspace: string,
-  before: StoredPage[],
   after: StoredPage[],
   affected: Set<string>,
   binding: object,
 ): Promise<AccessPreview> {
   const state = await shareState(tx, workspace);
   const effects: AccessPreview['effects'] = [];
-  const fromLevel = predictor(before, state.grants),
-    toLevel = predictor(after, state.grants);
+  // Same effective-permission calculation as the deferred per-page invalidation.
+  const candidate = after.map((p) => ({
+    id: p.id,
+    parent_id: p.parentId,
+    archived: p.deletedAt !== null,
+  }));
+  const changes = (
+    await tx.execute<{
+      member_id: string;
+      page_id: string;
+      before_level: 'none' | 'read' | 'edit';
+      after_level: 'none' | 'read' | 'edit';
+    }>(
+      sql`SELECT * FROM content_access_effects(${workspace}::uuid,${JSON.stringify(candidate)}::jsonb,false)`,
+    )
+  ).rows;
   for (const guest of state.guests) {
-    const changes: AccessPreview['effects'][number]['changes'] = [];
-    for (const old of before.filter((p) => affected.has(p.id))) {
-      const from = fromLevel(old.id, guest.member);
-      const to = toLevel(old.id, guest.member);
-      if (from === to) continue;
-      const existing = changes.find((c) => c.from === from && c.to === to);
+    const grouped: AccessPreview['effects'][number]['changes'] = [];
+    for (const change of changes.filter(
+      (c) => c.member_id === guest.member && affected.has(c.page_id),
+    )) {
+      const from = change.before_level,
+        to = change.after_level;
+      const existing = grouped.find((c) => c.from === from && c.to === to);
       if (existing) existing.count++;
-      else changes.push({ from, to, count: 1 });
+      else grouped.push({ from, to, count: 1 });
     }
-    if (changes.length) effects.push({ memberId: guest.member, name: guest.name, changes });
+    if (grouped.length)
+      effects.push({ memberId: guest.member, name: guest.name, changes: grouped });
   }
   const token = createHmac('sha256', readConfig().BETTER_AUTH_SECRET)
     .update(canonicalJson({ workspace, version: state.version, binding, effects }))

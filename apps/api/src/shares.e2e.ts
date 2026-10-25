@@ -15,6 +15,7 @@ import {
   pageSchema,
   collaborationAccessSchema,
   cachePolicySchema,
+  pageAccessSnapshotSchema,
 } from '@memoria/contracts';
 import { AppModule, configureApplication } from './app.ts';
 import { readConfig } from './config.ts';
@@ -24,6 +25,7 @@ import { testDatabase } from '../../collab/src/testing/database.ts';
 import { collaborationServer, sessionVerifier } from '../../collab/src/service/server.ts';
 import { readCollabConfig } from '../../collab/src/service/config.ts';
 import { securityPeer } from '../../collab/src/testing/security-peer.ts';
+import { measureRights } from './testing/rights-load.ts';
 async function until(test: () => boolean | Promise<boolean>) {
   const end = Date.now() + 10000;
   while (!(await test())) {
@@ -141,6 +143,7 @@ await test(
       const owner = await account(),
         guest = await account(),
         admin = await account(),
+        regular = await account(),
         outsider = await account();
       const workspace = String(
         (
@@ -165,6 +168,7 @@ await test(
       for (const [a, role] of [
         [guest, 'guest'],
         [admin, 'admin'],
+        [regular, 'member'],
       ] as const) {
         const invitation = invitationSummarySchema.parse(
           await ok(
@@ -288,7 +292,11 @@ await test(
         'C03: epoch-bound WebSocket closed after HTTP downgrade; old token cannot reconnect after regrant',
         async () => {
           const meta = await open();
-          const token = JSON.stringify({ ...meta.identity, accessVersion: meta.accessVersion });
+          const token = JSON.stringify({
+            ...meta.identity,
+            scope: 'page',
+            accessVersion: meta.accessVersion,
+          });
           const legacy = securityPeer(
             host.ingress.url,
             meta.room,
@@ -330,6 +338,104 @@ await test(
             policy.workspaces.find((w) => w.workspace === workspace)?.accessVersion,
             newer.accessVersion,
           );
+        },
+      );
+      await t.test(
+        'C04: unrelated archive and ineffective move preserve live sockets; actual loss closes only the affected guest/page',
+        async () => {
+          const unaffected = await create('Unrelated live document'),
+            archived = await create('Archive without disturbing writers'),
+            destination = await create('Move destination');
+          const grant = async (level: 'read' | 'edit' | null) =>
+            ok(
+              owner.b.call(
+                `${base}/pages/${unaffected.id}/shares/${guestId}`,
+                {
+                  expectedAccessVersion: (await list(owner, unaffected.id)).accessVersion,
+                  level,
+                },
+                'PUT',
+              ),
+            );
+          await grant('edit');
+          const getMeta = async (a: Account) =>
+            collaborationAccessSchema.parse(
+              await ok(a.b.call(`${base}/pages/${unaffected.id}/collaboration`, {}), 201),
+            );
+          const guestBefore = await getMeta(guest),
+            memberBefore = await getMeta(regular);
+          const connect = async (a: Account, meta: typeof guestBefore) => {
+            const peer = securityPeer(
+              host.ingress.url,
+              meta.room,
+              a.b.cookie(),
+              config.APP_ORIGIN,
+              JSON.stringify({
+                ...meta.identity,
+                scope: 'page',
+                accessVersion: meta.accessVersion,
+              }),
+            );
+            peers.push(peer);
+            await until(() => peer.provider.isSynced || peer.failed);
+            assert(!peer.failed);
+            return peer;
+          };
+          const guestPeer = await connect(guest, guestBefore),
+            memberPeer = await connect(regular, memberBefore);
+          await ok(
+            owner.b.call(`${base}/pages/${archived.id}/archive`, {
+              expectedVersion: archived.version,
+            }),
+            201,
+          );
+          const body = {
+            expectedVersion: unaffected.version,
+            parentId: destination.id,
+            afterId: null,
+          };
+          const preview = accessPreviewSchema.parse(
+            await ok(owner.b.call(`${base}/pages/${unaffected.id}/move/preview`, body), 201),
+          );
+          assert.deepEqual(preview.effects, []);
+          await ok(
+            owner.b.call(`${base}/pages/${unaffected.id}/move`, {
+              ...body,
+              previewToken: preview.token,
+            }),
+            201,
+          );
+          await delay(5200); // Observe the fallback check as well as NOTIFY.
+          assert(
+            !memberPeer.closed && !guestPeer.closed,
+            'unchanged effective access must keep both sockets',
+          );
+          assert.equal((await getMeta(regular)).accessVersion, memberBefore.accessVersion);
+          assert.equal((await getMeta(guest)).accessVersion, guestBefore.accessVersion);
+          const beforeLoss = Date.now();
+          await grant(null);
+          await until(() => guestPeer.closed);
+          assert(
+            Date.now() - beforeLoss < 5000,
+            'actual loss must close within the existing bound',
+          );
+          assert(!memberPeer.closed, 'another user on the same page is not revoked');
+          assert.equal((await getMeta(regular)).accessVersion, memberBefore.accessVersion);
+          const snapshot = pageAccessSnapshotSchema.parse(
+            await ok(guest.b.call(`${base}/page-access`)),
+          );
+          assert(
+            !snapshot.pages.some((p) => [unaffected.id, hidden.id, other.id].includes(p.page)),
+          );
+          assert.equal((await browser().call(`${base}/page-access`)).status, 401);
+          assert.equal((await outsider.b.call(`${base}/page-access`)).status, 404);
+          const restricted = browser();
+          await ok(
+            restricted.call('/sign-in/email', { email: owner.email, password: owner.password }),
+          );
+          assert.equal((await restricted.call(`${base}/page-access`)).status, 403);
+          memberPeer.destroy();
+          guestPeer.destroy();
         },
       );
       await t.test(
@@ -453,12 +559,25 @@ await test(
           assert.equal((await guest.b.call(`${base}/pages/${grandchild.id}`)).status, 200);
         },
       );
+      if (process.env.MEMORIA_MEASURE_RIGHTS === 'true') {
+        await db.pool.query('TRUNCATE auth_buckets');
+        await t.test('5d measurement: 1000 pages and four writers during share/role/removal', () =>
+          measureRights(
+            db.pool,
+            owner.b.call,
+            owner.b.cookie(),
+            host.ingress.url,
+            config.APP_ORIGIN,
+          ),
+        );
+      }
       await t.test(
-        'Q02: canonical quotas cover all four new routes; forged IP cannot reset the bucket',
+        'Q02: canonical quotas cover all five new routes; forged IP cannot reset the bucket',
         async () => {
           app.set('trust proxy', false);
           const routes: [string, string, string, unknown?][] = [
             ['GET', 'access:read', '/pages/:pageId/shares'],
+            ['GET', 'content:read', '/page-access'],
             [
               'PUT',
               'access:mutate',

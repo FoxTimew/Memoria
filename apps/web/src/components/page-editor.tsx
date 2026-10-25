@@ -14,7 +14,13 @@ import { CollaborationClient } from '../lib/collaboration-client.ts';
 import type { CollaborationStatus } from '../lib/collaboration-client.ts';
 import { PageTitle } from './page-title.tsx';
 import { LocalRecovery } from './local-recovery.tsx';
-import { AccessChanged, CacheForbidden, LocalSessionRevoked, yjsCache } from '../lib/yjs-cache.ts';
+import {
+  AccessChanged,
+  CacheForbidden,
+  LocalSessionRevoked,
+  yjsCache,
+  pageAccessKey,
+} from '../lib/yjs-cache.ts';
 import { refreshCachePolicy } from '../lib/cache-policy.ts';
 import type { CachePage, CacheTicket } from '../lib/yjs-cache.ts';
 import '@blocknote/core/fonts/inter.css';
@@ -61,7 +67,7 @@ export default function PageEditor({
       try {
         let ticket: CacheTicket | undefined;
         try {
-          ticket = await refreshCachePolicy(userId, sessionId);
+          ticket = await refreshCachePolicy(userId, sessionId, document.page.workspaceId);
         } catch (e) {
           if (!(e instanceof CacheForbidden)) throw e;
         }
@@ -72,7 +78,11 @@ export default function PageEditor({
         const meta = collaborationAccessSchema.parse(opened);
         if (meta.identity.user !== userId || meta.identity.session !== sessionId)
           throw new LocalSessionRevoked();
-        if (ticket && ticket.accessVersions[document.page.workspaceId] !== meta.accessVersion)
+        if (
+          ticket &&
+          ticket.pageAccess[pageAccessKey(document.page.workspaceId, document.page.id)]?.version !==
+            meta.accessVersion
+        )
           throw new AccessChanged();
         let cached: Awaited<ReturnType<typeof yjsCache.open>> | undefined;
         if (ticket && ticket.policies[document.page.workspaceId] !== undefined)
@@ -124,7 +134,7 @@ export default function PageEditor({
             });
           if (ticket)
             void yjsCache
-              .revokeWorkspace(ticket, document.page.workspaceId)
+              .revokePage(ticket, document.page.workspaceId, document.page.id)
               .catch(() =>
                 onAccessChanged(
                   '',

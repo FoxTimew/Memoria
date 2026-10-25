@@ -1,4 +1,4 @@
-import { cachePolicySchema } from '@memoria/contracts';
+import { cachePolicySchema, pageAccessSnapshotSchema } from '@memoria/contracts';
 import { CacheForbidden, LocalSessionRevoked, yjsCache } from './yjs-cache.ts';
 import type { CacheTicket } from './yjs-cache.ts';
 
@@ -11,7 +11,11 @@ export function notifyCachePolicy(user: string) {
     channel.close();
   }
 }
-export async function refreshCachePolicy(user: string, session: string): Promise<CacheTicket> {
+export async function refreshCachePolicy(
+  user: string,
+  session: string,
+  forceWorkspace?: string,
+): Promise<CacheTicket> {
   const ticket = await yjsCache.ticket(user, session);
   const response = await fetch('/api/auth/security/cache-policy', {
     credentials: 'include',
@@ -23,7 +27,34 @@ export async function refreshCachePolicy(user: string, session: string): Promise
     throw new Error('Vérification du stockage local indisponible. Réessayez en ligne.');
   const snapshot = cachePolicySchema.parse(await response.json());
   try {
-    return await yjsCache.applyPolicy(ticket, snapshot);
+    let current = await yjsCache.applyPolicy(ticket, snapshot);
+    for (const workspace of snapshot.workspaces) {
+      if (
+        workspace.workspace !== forceWorkspace &&
+        current.checkedAccessVersions[workspace.workspace] ===
+          current.accessVersions[workspace.workspace]
+      )
+        continue;
+      const response = await fetch(
+        `/api/internal/workspaces/${encodeURIComponent(workspace.workspace)}/page-access`,
+        {
+          credentials: 'include',
+          cache: 'no-store',
+          signal: AbortSignal.timeout(4000),
+        },
+      );
+      if ([401, 403, 404].includes(response.status)) {
+        await yjsCache.revokeWorkspace(current, workspace.workspace);
+        continue;
+      }
+      if (!response.ok) throw new Error('Vérification des pages indisponible. Réessayez en ligne.');
+      current = await yjsCache.applyPageAccess(
+        current,
+        workspace.workspace,
+        pageAccessSnapshotSchema.parse(await response.json()),
+      );
+    }
+    return current;
   } finally {
     notifyCachePolicy(user);
   }

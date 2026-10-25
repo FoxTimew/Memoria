@@ -102,6 +102,24 @@ export class PagesService {
       trash: ctx.principal.role === 'guest' ? [] : all.filter((p) => p.deletedAt).map(pageResponse),
     }));
   }
+  accessSnapshot(session: SessionIdentity, workspaceId: string) {
+    return this.run(session, workspaceId, false, async (tx, ctx, _all, rights) => {
+      if (ctx.principal.kind !== 'member')
+        throw new BadRequestException('Session de membre attendue.');
+      const [revision, state] = await Promise.all([
+        tx.execute<{ version: number }>(
+          sql`SELECT access_version AS version FROM workspace_members WHERE id=${ctx.principal.memberId}::uuid`,
+        ),
+        tx.execute<{ page: string; version: number; level: 'read' | 'edit' }>(
+          sql`SELECT page_id AS page,version,level FROM page_access_state WHERE workspace_id=${workspaceId}::uuid AND member_id=${ctx.principal.memberId}::uuid AND level<>'none' ORDER BY page_id`,
+        ),
+      ]);
+      return {
+        accessVersion: revision.rows[0]!.version,
+        pages: state.rows.filter((p) => rights.has(p.page)),
+      };
+    });
+  }
   get(session: SessionIdentity, workspaceId: string, pageId: string, versionOnly = false) {
     return this.run(session, workspaceId, false, async (tx, ctx, all, rights) => {
       requirePageRight(rights, pageId);
@@ -251,7 +269,6 @@ export class PagesService {
     const move = action === 'move' ? parse(pageMoveSchema, input) : undefined;
     return this.run(session, workspaceId, !previewOnly, async (tx, ctx, all) => {
       requireTreeManager(ctx);
-      const before = all.map((p) => ({ ...p }));
       const page = requirePage(pageId, all, action === 'restore');
       if (page.version !== data.expectedVersion)
         throw new ConflictException({ code: 'VERSION_CONFLICT', message: 'La page a changé.' });
@@ -280,7 +297,7 @@ export class PagesService {
         );
       }
       if (action !== 'archive') {
-        const preview = await accessPreview(tx, workspaceId, before, all, affected, {
+        const preview = await accessPreview(tx, workspaceId, all, affected, {
           user: session.userId,
           session: session.id,
           page: pageId,

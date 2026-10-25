@@ -59,6 +59,18 @@ export const cachePolicySchema = z.strictObject({
     }),
   ),
 });
+export const pageAccessSnapshotSchema = z.strictObject({
+  accessVersion: z.int().positive(),
+  pages: z
+    .array(
+      z.strictObject({
+        page: z.uuid(),
+        version: z.int().positive(),
+        level: z.enum(['read', 'edit']),
+      }),
+    )
+    .max(1000),
+});
 export const workspaceMembersSchema = z.array(
   z.strictObject({
     id: z.uuid(),

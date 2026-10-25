@@ -39,7 +39,8 @@ export class BlockWriteService {
       requirePageRight(rights, page, write);
       const row = (
         await tx.execute<{ version: number }>(
-          sql`SELECT access_version AS version FROM workspace_members WHERE workspace_id=${workspace}::uuid AND user_id=${session.userId}::uuid`,
+          sql`SELECT e.version FROM page_access_state e JOIN workspace_members m ON m.id=e.member_id AND m.workspace_id=e.workspace_id
+          WHERE e.workspace_id=${workspace}::uuid AND m.user_id=${session.userId}::uuid AND e.page_id=${page}::uuid AND e.level<>'none'`,
         )
       ).rows[0]!;
       return { level: rights.get(page)!, accessVersion: row.version };

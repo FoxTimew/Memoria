@@ -63,6 +63,12 @@ test(
       assert('room' in opened && opened.room);
       const room = opened.room;
       const create = async (account: typeof alice, expected = account) => {
+        const accessVersion = (
+          await db.pool.query(
+            'SELECT e.version FROM page_access_state e JOIN workspace_members m ON m.id=e.member_id WHERE e.workspace_id=$1 AND e.page_id=$2 AND m.user_id=$3',
+            [db.workspace, db.page, expected.user],
+          )
+        ).rows[0].version as number;
         const peer = new CollaborationClient(
           room,
           opened.generation,
@@ -77,6 +83,7 @@ test(
           undefined,
           presenceUser(expected.user, expected.name),
           expected.session,
+          accessVersion,
         );
         peers.push(peer);
         peer.connect();

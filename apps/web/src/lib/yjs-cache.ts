@@ -2,7 +2,20 @@ import * as Y from 'yjs';
 
 export const cacheDatabase = 'memoria-yjs-cache-v1';
 export const legacyDatabase = 'memoria-local-drafts-v1';
-const stores = ['users', 'sessions', 'documents', 'updates', 'policies'];
+const stores = ['users', 'sessions', 'documents', 'updates', 'policies', 'pagePolicies'];
+export const pageAccessKey = (workspace: string, page: string) => JSON.stringify([workspace, page]);
+type PagePolicy = {
+  user: string;
+  workspace: string;
+  page: string;
+  version: number;
+  epoch: number;
+  allowed: boolean;
+};
+type PageSnapshot = {
+  accessVersion: number;
+  pages: { page: string; version: number; level: 'read' | 'edit' }[];
+};
 const maxBytes = 8 * 1024 ** 2;
 export class LocalSessionRevoked extends Error {
   readonly status = 401;
@@ -31,6 +44,9 @@ export type CacheTicket = {
   policies: Record<string, number>;
   observedPolicyEpochs: Record<string, number>;
   accessVersions: Record<string, number>;
+  checkedAccessVersions: Record<string, number>;
+  pageAccess: Record<string, { version: number; epoch: number }>;
+  observedPageEpochs: Record<string, number>;
 };
 export type CachePolicy = {
   user: string;
@@ -46,6 +62,8 @@ type Policy = {
   revoked?: boolean;
   allowed: boolean;
   epoch: number;
+  checkedAccessVersion?: number;
+  legacyAccessVersion?: number;
 };
 export type CachePage = {
   key: string;
@@ -71,12 +89,13 @@ function openDatabase(
   factory: IDBFactory,
   name: string,
   version: number,
-  upgrade: (db: IDBDatabase) => void,
+  upgrade: (db: IDBDatabase, tx: IDBTransaction, oldVersion: number) => void,
 ) {
   return new Promise<IDBDatabase>((resolve, reject) => {
     const request = factory.open(name, version);
     let failed = false;
-    request.onupgradeneeded = () => upgrade(request.result);
+    request.onupgradeneeded = (event) =>
+      upgrade(request.result, request.transaction!, event.oldVersion);
     request.onerror = () => reject(request.error);
     request.onblocked = () => {
       failed = true;
@@ -107,22 +126,45 @@ export class YjsCache {
   private async run<T>(
     work: (tx: IDBTransaction, done: (value: T) => void, fail: (error: Error) => void) => void,
   ): Promise<T> {
-    const db = await openDatabase(this.factory(), this.name, 3, (db) => {
+    const db = await openDatabase(this.factory(), this.name, 4, (db, upgrade, oldVersion) => {
       // Old copies have no access epoch. Retain logout tombstones, retire only content/policies.
-      for (const store of ['documents', 'updates', 'policies'])
-        if (db.objectStoreNames.contains(store)) db.deleteObjectStore(store);
-      const policies = db.createObjectStore('policies', { keyPath: ['user', 'workspace'] });
-      policies.createIndex('user', 'user');
+      if (oldVersion < 3)
+        for (const store of ['documents', 'updates', 'policies'])
+          if (db.objectStoreNames.contains(store)) db.deleteObjectStore(store);
+      if (!db.objectStoreNames.contains('policies')) {
+        const policies = db.createObjectStore('policies', { keyPath: ['user', 'workspace'] });
+        policies.createIndex('user', 'user');
+      } else {
+        const cursor = upgrade.objectStore('policies').openCursor();
+        cursor.onsuccess = () => {
+          const c = cursor.result;
+          if (c) {
+            c.update({
+              ...c.value,
+              legacyAccessVersion: c.value.accessVersion,
+              checkedAccessVersion: 0,
+            });
+            c.continue();
+          }
+        };
+      }
+      const pagePolicies = db.createObjectStore('pagePolicies', {
+        keyPath: ['user', 'workspace', 'page'],
+      });
+      pagePolicies.createIndex('user', 'user');
+      pagePolicies.createIndex('workspace', ['user', 'workspace']);
       if (!db.objectStoreNames.contains('users')) {
         db.createObjectStore('users', { keyPath: 'user' });
         const sessions = db.createObjectStore('sessions', { keyPath: ['user', 'session'] });
         sessions.createIndex('user', 'user');
       }
-      const documents = db.createObjectStore('documents', { keyPath: 'key' });
-      documents.createIndex('user', 'user');
-      const updates = db.createObjectStore('updates', { keyPath: 'id', autoIncrement: true });
-      updates.createIndex('key', 'key');
-      updates.createIndex('user', 'user');
+      if (!db.objectStoreNames.contains('documents')) {
+        const documents = db.createObjectStore('documents', { keyPath: 'key' });
+        documents.createIndex('user', 'user');
+        const updates = db.createObjectStore('updates', { keyPath: 'id', autoIncrement: true });
+        updates.createIndex('key', 'key');
+        updates.createIndex('user', 'user');
+      }
     });
     return new Promise<T>((resolve, reject) => {
       const tx = db.transaction(stores, 'readwrite', { durability: 'strict' });
@@ -200,28 +242,52 @@ export class YjsCache {
         const epoch = tx.objectStore('users').get(user);
         epoch.onsuccess = () => {
           const observed = tx.objectStore('policies').index('user').getAll(user);
-          observed.onsuccess = () =>
-            done({
-              user,
-              session,
-              marker,
-              epoch: epoch.result?.epoch ?? 0,
-              policies: {},
-              accessVersions: {},
-              observedPolicyEpochs: Object.fromEntries(
-                (observed.result as Policy[]).map((p) => [p.workspace, p.epoch]),
-              ),
-            });
+          observed.onsuccess = () => {
+            const pagePolicies = tx.objectStore('pagePolicies').index('user').getAll(user);
+            pagePolicies.onsuccess = () =>
+              done({
+                user,
+                session,
+                marker,
+                epoch: epoch.result?.epoch ?? 0,
+                policies: {},
+                accessVersions: {},
+                checkedAccessVersions: Object.fromEntries(
+                  (observed.result as Policy[]).map((p) => [
+                    p.workspace,
+                    p.checkedAccessVersion ?? 0,
+                  ]),
+                ),
+                pageAccess: Object.fromEntries(
+                  (pagePolicies.result as PagePolicy[])
+                    .filter((p) => p.allowed)
+                    .map((p) => [
+                      pageAccessKey(p.workspace, p.page),
+                      { version: p.version, epoch: p.epoch },
+                    ]),
+                ),
+                observedPageEpochs: Object.fromEntries(
+                  (pagePolicies.result as PagePolicy[]).map((p) => [
+                    pageAccessKey(p.workspace, p.page),
+                    p.epoch,
+                  ]),
+                ),
+                observedPolicyEpochs: Object.fromEntries(
+                  (observed.result as Policy[]).map((p) => [p.workspace, p.epoch]),
+                ),
+              });
+          };
         };
       };
     });
   }
-  assertActive(ticket: CacheTicket, workspace?: string) {
+  assertActive(ticket: CacheTicket, workspace?: string, page?: string) {
     return this.run<void>((tx, done, fail) =>
       this.allowed(
         tx,
         ticket,
-        () => (workspace ? this.policyAllowed(tx, ticket, workspace, () => done(), fail) : done()),
+        () =>
+          workspace ? this.policyAllowed(tx, ticket, workspace, () => done(), fail, page) : done(),
         fail,
       ),
     );
@@ -232,16 +298,12 @@ export class YjsCache {
     workspace: string,
     next: () => void,
     fail: (error: Error) => void,
+    page?: string,
   ) {
     const read = tx.objectStore('policies').get([ticket.user, workspace]);
     read.onsuccess = () => {
       const policy = read.result as Policy | undefined;
-      if (
-        policy &&
-        (policy.revoked ||
-          (ticket.accessVersions[workspace] !== undefined &&
-            ticket.accessVersions[workspace] !== policy.accessVersion))
-      ) {
+      if (policy && policy.revoked) {
         fail(new AccessChanged());
         return;
       }
@@ -249,7 +311,25 @@ export class YjsCache {
         fail(new CacheForbidden());
         return;
       }
-      next();
+      if (!page) {
+        next();
+        return;
+      }
+      const pageRead = tx.objectStore('pagePolicies').get([ticket.user, workspace, page]);
+      pageRead.onsuccess = () => {
+        const current = pageRead.result as PagePolicy | undefined;
+        const expected = ticket.pageAccess[pageAccessKey(workspace, page)];
+        if (
+          !current?.allowed ||
+          !expected ||
+          current.version !== expected.version ||
+          current.epoch !== expected.epoch
+        ) {
+          fail(new AccessChanged());
+          return;
+        }
+        next();
+      };
     };
   }
   /** Consume a fresh server decision. The pre-request ticket fences delayed HTTP responses. */
@@ -285,19 +365,15 @@ export class YjsCache {
               )
                 continue;
               const current: Policy = {
+                ...old,
                 ...proposed,
+                revoked: false,
                 accessVersion,
                 user: ticket.user,
-                epoch:
-                  (old?.epoch ?? 0) +
-                  (old && (old.allowed !== proposed.allowed || old.accessVersion !== accessVersion)
-                    ? 1
-                    : 0),
+                epoch: (old?.epoch ?? 0) + (old && old.allowed !== proposed.allowed ? 1 : 0),
               };
               store.put(current);
               accessVersions[current.workspace] = accessVersion;
-              if (old && old.accessVersion !== accessVersion)
-                this.purgeWorkspace(tx, ticket.user, current.workspace);
               if (current.allowed) policies[current.workspace] = current.epoch;
               else this.purgeWorkspace(tx, ticket.user, current.workspace);
             }
@@ -318,6 +394,135 @@ export class YjsCache {
         true,
       ),
     );
+  }
+  applyPageAccess(ticket: CacheTicket, workspace: string, snapshot: PageSnapshot) {
+    return this.run<CacheTicket>((tx, done, fail) =>
+      this.allowed(
+        tx,
+        ticket,
+        () => {
+          const policies = tx.objectStore('policies'),
+            read = policies.get([ticket.user, workspace]);
+          read.onsuccess = () => {
+            const policy = read.result as Policy | undefined;
+            if (!policy || policy.revoked) {
+              fail(new AccessChanged());
+              return;
+            }
+            if (
+              snapshot.accessVersion < policy.accessVersion ||
+              snapshot.accessVersion < (policy.checkedAccessVersion ?? 0)
+            ) {
+              done(ticket);
+              return;
+            }
+            const pagePolicies = tx.objectStore('pagePolicies');
+            const previous = pagePolicies.index('workspace').getAll([ticket.user, workspace]);
+            previous.onsuccess = () => {
+              const documents = tx.objectStore('documents').index('user').getAll(ticket.user);
+              documents.onsuccess = () => {
+                const cached = (documents.result as CachePage[]).filter(
+                  (p) => p.workspace === workspace,
+                );
+                const cachedIds = new Set(cached.map((p) => p.page));
+                const known = new Map((previous.result as PagePolicy[]).map((p) => [p.page, p]));
+                const fresh = new Map(snapshot.pages.map((p) => [p.page, p]));
+                const pageAccess = { ...ticket.pageAccess },
+                  observedPageEpochs = { ...ticket.observedPageEpochs };
+                const ids = new Set([
+                  ...known.keys(),
+                  ...fresh.keys(),
+                  ...cached.map((p) => p.page),
+                ]);
+                for (const page of ids) {
+                  const old = known.get(page),
+                    proposed = fresh.get(page),
+                    key = pageAccessKey(workspace, page);
+                  delete pageAccess[key];
+                  if (
+                    old &&
+                    (old.version > (proposed?.version ?? snapshot.accessVersion) ||
+                      (!old.allowed &&
+                        proposed?.version === old.version &&
+                        ticket.observedPageEpochs[key] !== old.epoch))
+                  )
+                    continue;
+                  const allowed = proposed !== undefined;
+                  const version =
+                    proposed?.version ??
+                    (!old?.allowed && old ? old.version : snapshot.accessVersion);
+                  const changed = old ? old.allowed !== allowed || old.version !== version : false;
+                  const current: PagePolicy = {
+                    user: ticket.user,
+                    workspace,
+                    page,
+                    allowed,
+                    version,
+                    epoch: (old?.epoch ?? 0) + (changed ? 1 : 0),
+                  };
+                  pagePolicies.put(current);
+                  observedPageEpochs[key] = current.epoch;
+                  if (allowed) pageAccess[key] = { version, epoch: current.epoch };
+                  if (
+                    cachedIds.has(page) &&
+                    (!allowed || changed || (!old && policy.legacyAccessVersion !== version))
+                  )
+                    this.purgePage(tx, ticket.user, workspace, page);
+                }
+                policies.put({
+                  ...policy,
+                  accessVersion: snapshot.accessVersion,
+                  checkedAccessVersion: snapshot.accessVersion,
+                  legacyAccessVersion: undefined,
+                });
+                done({
+                  ...ticket,
+                  pageAccess,
+                  observedPageEpochs,
+                  accessVersions: { ...ticket.accessVersions, [workspace]: snapshot.accessVersion },
+                  checkedAccessVersions: {
+                    ...ticket.checkedAccessVersions,
+                    [workspace]: snapshot.accessVersion,
+                  },
+                });
+              };
+            };
+          };
+        },
+        fail,
+        true,
+      ),
+    );
+  }
+  private purgePage(tx: IDBTransaction, user: string, workspace: string, pageId: string) {
+    const read = tx.objectStore('documents').index('user').openCursor(user);
+    read.onsuccess = () => {
+      const cursor = read.result;
+      if (!cursor) return;
+      const page = cursor.value as CachePage;
+      if (page.workspace === workspace && page.page === pageId) {
+        this.remove(tx.objectStore('updates').index('key').openCursor(page.key));
+        cursor.delete();
+      }
+      cursor.continue();
+    };
+  }
+  revokePage(ticket: CacheTicket, workspace: string, page: string) {
+    return this.run<void>((tx, done) => {
+      const store = tx.objectStore('pagePolicies'),
+        read = store.get([ticket.user, workspace, page]);
+      read.onsuccess = () => {
+        const old = read.result as PagePolicy | undefined,
+          expected = ticket.pageAccess[pageAccessKey(workspace, page)];
+        if (old && expected && (old.version !== expected.version || old.epoch !== expected.epoch)) {
+          done();
+          return;
+        }
+        if (old) store.put({ ...old, allowed: false, epoch: old.epoch + 1 });
+        this.purgePage(tx, ticket.user, workspace, page);
+        done();
+      };
+    });
   }
   private purgeWorkspace(tx: IDBTransaction, user: string, workspace: string) {
     const read = tx.objectStore('documents').index('user').openCursor(user);
@@ -355,8 +560,16 @@ export class YjsCache {
       };
     });
   }
-  accessStamp(user: string, workspace: string) {
+  accessStamp(user: string, workspace: string, page?: string) {
     return this.run<string>((tx, done) => {
+      if (page) {
+        const read = tx.objectStore('pagePolicies').get([user, workspace, page]);
+        read.onsuccess = () => {
+          const p = read.result as PagePolicy | undefined;
+          done(p ? `${p.version}:${p.epoch}:${p.allowed}` : '');
+        };
+        return;
+      }
       const r = tx.objectStore('policies').get([user, workspace]);
       r.onsuccess = () => {
         const p = r.result as Policy | undefined;
@@ -411,6 +624,10 @@ export class YjsCache {
               ticket,
               workspace,
               () => {
+                if (ticket.accessVersions[workspace] !== ticket.checkedAccessVersions[workspace]) {
+                  fail(new AccessChanged());
+                  return;
+                }
                 const documents = tx.objectStore('documents'),
                   request = documents.get(key);
                 request.onsuccess = () => {
@@ -445,6 +662,7 @@ export class YjsCache {
                 };
               },
               fail,
+              page,
             );
           },
           fail,
@@ -483,6 +701,7 @@ export class YjsCache {
         };
       },
       fail,
+      page.page,
     );
   }
   append(ticket: CacheTicket, page: CachePage, data: Uint8Array, token?: string) {

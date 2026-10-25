@@ -172,10 +172,48 @@ await test(
         }),
       );
     }
-    async function blocked(b: Client, base: string, page: string, generation: string) {
+    async function blocked(
+      b: Client,
+      base: string,
+      page: string,
+      generation: string,
+      restricted = false,
+    ) {
       for (const path of [base + '/pages', base + '/pages/' + page])
         assert.equal((await b.request(path)).status, 403);
       assert.equal((await b.request(`${base}/pages/${page}/collaboration`, {})).status, 403);
+      if (restricted) {
+        // An attacker with a reset mailbox or a recovery-only cookie tries EVERY
+        // session-5 facade, rather than relying on the original content guard test.
+        const id = randomUUID();
+        const routes: [string, string][] = [
+          ['GET', base + '/invitations'],
+          ['POST', base + '/invitations'],
+          ['POST', base + `/invitations/${id}/resend`],
+          ['POST', base + `/invitations/${id}/cancel`],
+          ['GET', '/api/internal/invitations'],
+          ['POST', '/api/internal/invitations/resolve'],
+          ['POST', '/api/internal/invitations/accept'],
+          ['POST', '/api/internal/invitations/reject'],
+          ['GET', base + '/arrival'],
+          ['GET', base + '/security'],
+          ['PUT', base + '/security'],
+          ['GET', base + '/members'],
+          ['PUT', base + `/members/${id}/role`],
+          ['DELETE', base + `/members/${id}`],
+          ['GET', base + `/pages/${page}/shares`],
+          ['PUT', base + `/pages/${page}/shares/${id}`],
+          ['POST', base + `/pages/${page}/move/preview`],
+          ['POST', base + `/pages/${page}/restore/preview`],
+          ['GET', base + '/page-access'],
+        ];
+        for (const [method, path] of routes)
+          assert.equal(
+            (await b.request(path, method === 'GET' ? undefined : {}, method)).status,
+            403,
+            `${method} ${path}`,
+          );
+      }
       const workspace = base.split('/').at(-1)!;
       const p = securityPeer(
         host.ingress.url,
@@ -382,10 +420,10 @@ await test(
             }),
           );
           assert.equal((await ok(reset.request('/security/status'))).strong, false);
-          await blocked(reset, base, page, generation);
+          await blocked(reset, base, page, generation, true);
           await ok(reset.request('/verify-password', { password }));
           assert.equal((await ok(reset.request('/security/status'))).strong, false);
-          await blocked(reset, base, page, generation);
+          await blocked(reset, base, page, generation, true);
           assert.equal((await reset.request('/two-factor/disable', { password })).status, 403);
         },
       );
@@ -407,7 +445,7 @@ await test(
               { 'x-memoria-recovery-challenge': String(challenge.id) },
             ),
           );
-          await blocked(limited, base, page, generation);
+          await blocked(limited, base, page, generation, true);
           assert.equal((await limited.request('/security/recovery-finish', {})).status, 403);
           const replacement = testAuthenticator();
           await enroll(limited, replacement);
@@ -420,12 +458,12 @@ await test(
             ).status,
             403,
           );
-          await blocked(limited, base, page, generation);
+          await blocked(limited, base, page, generation, true);
           const restrictedCookie = limited.cookie();
           const finished = await ok(limited.request('/security/recovery-finish', {}));
           for (const code of finished.recoveryCodes as string[]) secrets.add(code);
           assert.equal((await client(restrictedCookie).request('/security/status')).status, 403);
-          await blocked(limited, base, page, generation);
+          await blocked(limited, base, page, generation, true);
           assert.equal((await ok(limited.request('/security/status'))).strong, false);
           await prove(limited, replacement);
           await ok(limited.request(base + '/pages'));
@@ -509,6 +547,33 @@ await test(
           secrets.add(marker.slice(0, 10)); // JSON.parse errors can truncate a quoted input value.
           const writer = client();
           await prove(writer, victim.key);
+          const invitationEmail = randomUUID() + '@example.test';
+          const invitation = await ok(
+            writer.request(base + '/invitations', {
+              email: invitationEmail,
+              role: 'guest',
+              roots: [{ pageId: page, level: 'read' }],
+            }),
+            201,
+          );
+          // Error bodies must not echo arbitrary credentials smuggled into access mutations.
+          await writer.request(
+            `${base}/pages/${page}/shares/${randomUUID()}`,
+            { expectedAccessVersion: 1, level: marker, password: marker },
+            'PUT',
+          );
+          await writer.request(`${base}/pages/${page}/move/preview`, {
+            expectedVersion: 1,
+            parentId: marker,
+            afterId: null,
+          });
+          await drain();
+          assert(
+            mails.some(
+              (m) => m.email === invitationEmail && m.text.includes(String(invitation.id)),
+            ),
+            'Invitation delivered through real job processor',
+          );
           const malicious = securityPeer(
             host.ingress.url,
             `${workspace}:${page}:${generation}`,
@@ -639,7 +704,7 @@ await test(
                 `Secret leak detected in ${channel}; value deliberately suppressed`,
               );
           }
-          for (const email of [victim.email, member.email])
+          for (const email of [victim.email, member.email, invitationEmail])
             assert(!counters.includes(email), 'Plaintext email in quota metrics');
           for (const mail of mails) {
             // Only the one-time reset/operator link is an accepted secret-bearing email channel.
@@ -651,10 +716,10 @@ await test(
               );
           }
           const jobs = JSON.stringify((await db.pool.query('SELECT * FROM auth_mail_jobs')).rows);
-          for (const value of [...secrets, victim.email, member.email])
+          for (const value of [...secrets, victim.email, member.email, invitationEmail])
             assert(!jobs.includes(value), 'Unencrypted secret/email in durable mail queue');
           await writeFile(
-            '.local/session-4f-leaks.json',
+            '.local/session-5d-leaks.json',
             JSON.stringify(
               {
                 errorsInspected: errors.length,

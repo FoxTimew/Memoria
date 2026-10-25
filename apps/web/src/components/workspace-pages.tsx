@@ -56,6 +56,8 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
   const [checking, setChecking] = useState(false);
   const viewEpoch = useRef(0);
   const editorActions = useRef<EditorActions | null>(null);
+  const currentPage = useRef<string | undefined>(undefined);
+  currentPage.current = document?.page.id;
   const locallyClosed = useRef(false);
   const [signedOut, setSignedOut] = useState('');
   const [role, setRole] = useState<string>();
@@ -139,16 +141,28 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     if (!session) return;
     let active = true,
       previous: string | undefined;
+    let previousPage: string | undefined, previousPageStamp: string | undefined;
     const changed = () => {
       void yjsCache
         .accessStamp(session.user.id, workspaceId)
-        .then((stamp) => {
+        .then(async (stamp) => {
           if (!active || locallyClosed.current) return;
           if (previous !== undefined && previous !== stamp && previous !== '') {
-            accessChanged(editorActions.current?.export() ?? '');
             void refresh().catch(() => {});
           }
           previous = stamp;
+          const selected = currentPage.current;
+          if (selected) {
+            const pageStamp = await yjsCache.accessStamp(session.user.id, workspaceId, selected);
+            if (!active || locallyClosed.current || currentPage.current !== selected) return;
+            if (previousPage === selected && previousPageStamp && previousPageStamp !== pageStamp)
+              accessChanged(editorActions.current?.export() ?? '');
+            previousPage = selected;
+            previousPageStamp = pageStamp;
+          } else {
+            previousPage = undefined;
+            previousPageStamp = undefined;
+          }
         })
         .catch(() => {});
     };

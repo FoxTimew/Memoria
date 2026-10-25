@@ -8,3 +8,4 @@ export * from './operations.ts';
 export * from './collaboration.ts';
 export * from './throttling.ts';
 export * from './invitations.ts';
+export * from './page-access.ts';
