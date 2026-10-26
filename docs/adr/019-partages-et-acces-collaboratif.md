@@ -1,5 +1,7 @@
 # ADR 019 — Partages de pages et accès collaboratif
 
+Note de cadrage du 26 octobre 2026 : session 5 fusionnée par PR #6. L'[ADR 020](020-droits-et-concurrence-des-bases.md) propose l'extension aux lignes de bases, héritant du conteneur, et le remplacement du verrouillage/relevé global des lignes par des barrières et époques de base. La garantie d'invalidation ciblée de 5d reste exigée. Aucune de ces modifications techniques de session 6 n'est encore implémentée ou acceptée par cette note.
+
 Statut : **accepté**, 25 octobre 2026. 5a, 5b et 5c validées par le développeur ; revue 5d et invalidation ciblée décrites dans la [fiche consolidée](../reviews/session-5-5d-revue-adverse.md).
 
 ## Réalisation 5d
