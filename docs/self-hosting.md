@@ -149,3 +149,7 @@ Le script reconstruit l'exécutable avant de le lancer ; Node 24, pnpm et les d�
 Auditer sans secrets : `SELECT created_at,user_id,action,operator,reason,target FROM auth_security_events WHERE user_id='UUID' ORDER BY created_at DESC;`. Rétention cible 90 jours selon ADR 012, job de purge général encore à livrer. L'UUID utilisateur devient NULL à suppression ; motifs/opérateurs sont des champs libres d'exploitation et ne doivent pas contenir de données du titulaire. La revue RGPD de leur conservation/anonymisation accompagne le job général. Les jobs de mail personnels liés au compte sont supprimés par cascade ; les demandes publiques non résolues expirent sous trente minutes au prochain passage du worker.
 
 Le worker délivre au moins une fois : une panne entre SMTP et commit peut produire un doublon. Aucun doublon ne permet de réutiliser un jeton. Six essais, backoff et expiration ; incidents à surveiller. Pas de promesse d'effacement du cache d'un navigateur hors ligne lors d'un reset distant ; reconnexion refusée et nettoyage au retour selon la frontière de cache, renforcée en 4e.
+
+## Bases de données — réglages de déploiement
+
+Les [bornes des bases](database-deployment.md) sont configurables par environnement, avec les défauts validés de 10 000 lignes/base et 50 000/workspace. Toute hausse exige une mesure préalable au nouveau volume. La candidate 6a reste un diagnostic de barrières non qualifié, à ne pas déployer sur les données de travail.
