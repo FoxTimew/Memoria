@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { and, eq, isNull, sql } from 'drizzle-orm';
-import { actors, member, organization, pages } from '@memoria/db';
+import { actors, member, organization, pages, accessRequests } from '@memoria/db';
 import type { WriteTransaction } from '@memoria/db';
 import type { RequestContext } from '@memoria/contracts';
 import { z } from 'zod';
@@ -26,6 +26,12 @@ export async function contentContext(
     await tx.execute(
       sql`select pg_advisory_xact_lock_shared(hashtextextended(${workspaceId}::text, 0))`,
     );
+  // Rights/security triggers use these same rows. Check the decision only after waiting,
+  // so a role, factor or policy revoked during lock acquisition cannot authorize a write.
+  if (write)
+    await tx.execute(
+      sql`SELECT id FROM pages WHERE workspace_id=${workspaceId}::uuid ORDER BY id FOR NO KEY UPDATE`,
+    );
   const [membership] = await tx
     .select({ id: member.id, role: member.role, actorId: actors.id })
     .from(member)
@@ -45,9 +51,9 @@ export async function contentContext(
         isNull(organization.deletedAt),
       ),
     )
-    .orderBy(actors.createdAt)
+    .orderBy(actors.createdAt, actors.id)
     .limit(1);
-  if (!membership || !['owner', 'member'].includes(membership.role))
+  if (!membership || !['owner', 'admin', 'member', 'guest'].includes(membership.role))
     throw new NotFoundException('Espace inaccessible.');
   const access = await tx.execute<{ allowed: boolean }>(
     sql`SELECT auth_session_can_access_workspace(${session.id}::uuid,${workspaceId}::uuid) AS allowed`,
@@ -64,9 +70,41 @@ export async function contentContext(
     principal: {
       kind: 'member',
       memberId: membership.id,
-      role: membership.role as 'owner' | 'member',
+      role: membership.role as 'owner' | 'admin' | 'member' | 'guest',
     },
   };
+}
+export type PageRights = Map<string, 'read' | 'edit'>;
+export async function pageRights(
+  tx: WriteTransaction,
+  session: SessionIdentity,
+  workspace: string,
+  all: readonly StoredPage[],
+): Promise<PageRights> {
+  if (!all.length) return new Map();
+  const requests = accessRequests(
+    all.map((p) => ({
+      key: p.id,
+      page: p.id,
+      workspace,
+      user: session.userId,
+      session: session.id,
+    })),
+  );
+  const rows = await tx.execute<{ key: string; level: 'read' | 'edit' }>(
+    sql`SELECT key,level FROM content_resolve_access(${requests}::jsonb)`,
+  );
+  return new Map(rows.rows.map((r) => [r.key, r.level]));
+}
+export function requirePageRight(rights: PageRights, id: string, write = false) {
+  uuid(id);
+  const level = rights.get(id);
+  if (!level) throw new NotFoundException('Page inaccessible.');
+  if (write && level !== 'edit') throw new ForbiddenException('Cette page est en lecture seule.');
+}
+export function requireTreeManager(ctx: RequestContext) {
+  if (!['owner', 'admin', 'member'].includes(ctx.principal.role))
+    throw new ForbiddenException('Cette action est réservée aux membres du studio.');
 }
 export function visible(page: StoredPage, all: readonly StoredPage[]): boolean {
   const seen = new Set<string>();

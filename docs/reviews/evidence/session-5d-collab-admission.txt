@@ -1,0 +1,12 @@
+PASS admission: third queued frame never reaches consumer; foreign origin denied; counters released on close
+✔ Real WebSocket ingress charges native-queue frames before delivery (48.8242ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53.3684
+Collaboration admission.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

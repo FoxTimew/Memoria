@@ -1,0 +1,15 @@
+COMMAND: pnpm test:db
+Recorded: 2026-10-25; functional verification (not benchmark)
+
+$ node --env-file=.env scripts/test-db.mjs
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  17:34:29
+   Duration  1.05s (tests 93%, import 5%, transform 1%, worker 1%)
+
+
+EXIT_CODE: 0

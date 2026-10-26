@@ -86,7 +86,29 @@ pnpm test:collab:e2e --suite memory
 
 Ne pas exécuter les benchmarks simultanément avec un build ou une autre mesure. Ils gardent tous les échantillons après deux chauffes (froid) ou vingt (updates). Un échec du seuil est un résultat à analyser, pas un motif pour filtrer les observations.
 
-## Quotas d'authentification 4d
+## Invitations et membres 5b
+
+Appliquer `pnpm db:migrate` (migration 0018), puis reconstruire et redémarrer API, worker et front. Aucun reset de données. SMTP reste requis en production ; Mailpit sert au développement. Le worker partage `BETTER_AUTH_SECRET` avec l'API pour lire la file chiffrée. La [fiche 5b](reviews/session-5-5b-invitations.md) décrit les tests à deux comptes et les chemins d'interface.
+
+| Variable                            | Défaut | Règle                                                                 |
+| ----------------------------------- | ------ | --------------------------------------------------------------------- |
+| `INVITATION_VALIDITY_DAYS`          | 7      | entier 1–30 ; appliqué aux nouvelles invitations/renvois              |
+| `INVITATION_RETENTION_DAYS`         | 30     | entier positif ; délai après clôture, non prolongé par SMTP           |
+| `INVITATION_MAIL_TTL_HOURS`         | 24     | entier 1–24 ; jamais au-delà de l'expiration de l'invitation          |
+| `WORKSPACE_MAX_MEMBERS`             | 100    | tous les rôles, guests compris                                        |
+| `WORKSPACE_MAX_PENDING_INVITATIONS` | 500    | compte sous verrou, invitations expirées exclues                      |
+| `GUEST_MAX_SHARED_ROOTS`            | 100    | plafond de grants pour un guest ; une invitation en décrit au plus 20 |
+| `WORKSPACE_MAX_SHARES`              | 5000   | grants actifs par workspace                                           |
+
+Configurer les mêmes valeurs dans API et worker. Les quotas HTTP de l'ADR 018 sont fixes ; les budgets email reprennent `AUTH_EMAIL_MAX_15M=3` et `AUTH_EMAIL_MAX_DAY=10` avec le type séparé `invitation`. Une page de liste contient 50 éléments, au plus 100 via API. Ces bornes ne sont pas une preuve de capacité sous charge.
+
+Dans « Membres et invitations », lire l'état d'envoi. Après « Envoi en attente », actualiser la page pour voir le dernier état ; une invitation déjà affichée n'est pas surveillée par polling. Six essais SMTP au maximum, backoff, puis « Envoi échoué » ; le lien reste copiable jusqu'à son expiration. « Renvoyer » produit un **nouveau** lien et invalide l'ancien, sous les mêmes budgets. La copie seule ne consomme pas d'email. Le lien exige toujours le compte destinataire vérifié ; aucun secret de connexion n'est communiqué à l'admin. Un email reçu après annulation n'accorde pas de droits. Des doublons SMTP restent possibles entre livraison et commit.
+
+Le worker expire et purge les invitations chaque minute ; l'API contrôle l'expiration même si le worker est arrêté. Une purge en retard conserve les données plus longtemps sans réactiver les liens. La FK des intentions de partage garde leur page jusqu'à la purge de l'invitation : la purge définitive des pages de session 9 doit respecter cet ordre (annuler/retirer les intentions concernées). Les invitations terminales antérieures à 0018 reçoivent leur ancienne `updated_at` comme date de clôture. La rétention/anonymisation globale reste au programme RGPD R13.
+
+Pour reproduire les preuves : `pnpm test:invitations:atomicity`, `pnpm test:invitations:e2e` (schémas temporaires), puis `pnpm test:invitations:browser` (Caddy HTTPS, certificat approuvé, worker/Mailpit et deux comptes temporaires nettoyés). Le navigateur utilise une passkey virtuelle, pas le matériel du studio. Ne pas utiliser les scripts de fixtures de développement pour gérer des membres en production.
+
+## Quotas d'authentification 4d — configuration
 
 Les limites NAT, compte et email actives en 4d sont décrites dans l'[ADR 015](adr/015-authentification-simple-et-workspaces.md#4d--quotas-et-admission-exécutés). Appliquer `pnpm db:migrate` puis reconstruire/redémarrer API et worker ensemble ; le schéma de quotas est nécessaire au handler d'authentification. Le renvoi de vérification passe désormais lui aussi par le worker : une API disponible ne garantit pas qu'un email a été livré.
 

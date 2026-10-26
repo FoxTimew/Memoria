@@ -1,0 +1,204 @@
+START: 2026-10-25T16:36:35.5028839+01:00
+COMMAND: pnpm test:collab:e2e --suite access-security
+$ node scripts/test-collab.mjs "--suite" "access-security"
+▶ Cached authorization plans preserve the SQL oracle and independently expected decisions
+  ✔ live passkey (26.5464ms)
+  ✔ expired session (22.8019ms)
+  ✔ unverified email (24.4694ms)
+  ✔ future assurance (25.9536ms)
+  ✔ security generation changed (28.5721ms)
+  ✔ recovery session (25.3072ms)
+  ✔ account recovery required despite live proof (28.0325ms)
+  ✔ factor belongs to another user (25.8899ms)
+  ✔ verified TOTP (31.2475ms)
+  ✔ unverified TOTP (30.3524ms)
+  ✔ configured factor without proof cannot use grace (27.4713ms)
+  ✔ weak member with active grace (31.2696ms)
+  ✔ weak member after grace (32.559ms)
+  ✔ weak member without obligation (31.925ms)
+  ✔ membership removed (34.5552ms)
+  ✔ workspace archived (28.7592ms)
+  ✔ page archived (29.3725ms)
+  ✔ session removed (21.1077ms)
+✔ Cached authorization plans preserve the SQL oracle and independently expected decisions (1722.0712ms)
+✔ Warmed journal plans see security revocation committed while the writer waits for its page lock (1045.6875ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2771.8243
+Collaboration access-security.e2e.ts: EXIT_CODE=0
+EXIT_CODE: 0
+COMMAND: pnpm test:collab:e2e --suite journal
+$ node scripts/test-collab.mjs "--suite" "journal"
+✔ Journal rollback, replay receipt and file projection against real SQL (1556.0311ms)
+✔ Prepared journal keeps concurrent block ownership, page revisions and fresh permissions (1019.6822ms)
+✔ Pipelined failures drain the connection and roll back all queued writes (921.2486ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3501.5867
+Collaboration journal.e2e.ts: EXIT_CODE=0
+EXIT_CODE: 0
+COMMAND: pnpm test:collab:e2e --suite transport
+$ node scripts/test-collab.mjs "--suite" "transport"
+▶ Production service: twelve transport and durability scenarios
+  ✔ 01 Better Auth and nested BlockNote document (201.3013ms)
+  ✔ 02 SQL commit precedes broadcast and confirms every merged contributor (262.6147ms)
+  ✔ 03 simultaneous text and independent character fields converge (131.4438ms)
+  ✔ 04 offline edits merge after session recheck and durable replay (180.6198ms)
+  ✔ 05 projection failure rolls back effects while typing remains durable, then retries (3885.817ms)
+  ✔ 06 signed API command waits own projection; retry survives automatic compaction (1264.8513ms)
+[onAuthenticate] GENERATION_CHANGED
+  ✔ 07 no cookie, foreign origin and generation refused before document load (30.9366ms)
+[beforeSync] READ_ONLY
+closing connection cf5bfcdb-d5f1-422f-b634-153f01c69e7f (while handling ec69a119-faa4-4873-8d16-a47740396913:b3514249-f881-482c-826e-9c860168dd0d:f8f96aba-fdee-4780-968b-793fe35ba484) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120131:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120411:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] READ_ONLY
+closing connection fd241dce-d33f-4a4d-9daa-3da9769e51a7 (while handling ec69a119-faa4-4873-8d16-a47740396913:b3514249-f881-482c-826e-9c860168dd0d:f8f96aba-fdee-4780-968b-793fe35ba484) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120131:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120411:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+  ✔ 08 read-only access rejects live updates and offline SyncStep2 (255.9124ms)
+[beforeSync] UPDATE_REJECTED
+closing connection 0007cd38-d56a-4c61-b575-fa23e88fdc4c (while handling ec69a119-faa4-4873-8d16-a47740396913:b3514249-f881-482c-826e-9c860168dd0d:f8f96aba-fdee-4780-968b-793fe35ba484) because of exception Error: UPDATE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120131:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120411:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] UPDATE_REJECTED
+closing connection bbbcc3d9-142a-4b75-aec5-c4921f4839b0 (while handling ec69a119-faa4-4873-8d16-a47740396913:b3514249-f881-482c-826e-9c860168dd0d:f8f96aba-fdee-4780-968b-793fe35ba484) because of exception Error: UPDATE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120131:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120411:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] UPDATE_REJECTED
+closing connection 96bc4ac3-cf27-454c-9546-3c05af43a397 (while handling ec69a119-faa4-4873-8d16-a47740396913:b3514249-f881-482c-826e-9c860168dd0d:f8f96aba-fdee-4780-968b-793fe35ba484) because of exception Error: UPDATE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120131:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:120411:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[onAuthenticate] REJECTION_LIMIT
+  ✔ 09 rejected batch isolates invalid loop while two healthy writers continue (1380.7793ms)
+  ✔ 10 session deletion closes every tab via fallback within five seconds (3910.8578ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ 11 membership deletion closes only affected user (29.9736ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ 12 ancestor archive revokes descendants and leader loss closes remaining sockets (256.6285ms)
+✔ Production service: twelve transport and durability scenarios (13370.5124ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13373.827
+Collaboration transport.e2e.ts: EXIT_CODE=0
+EXIT_CODE: 0
+COMMAND: pnpm test:collab:e2e --suite revocations
+$ node scripts/test-collab.mjs "--suite" "revocations"
+PASS revocation: membership deletion waits for page writer; commit notification rechecks access; missing session notification handled within 5.5 s test tolerance
+✔ Real revocation locks precede commit; notify and missing-notify fallback recheck SQL (4916.7639ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4920.7127
+Collaboration revocations.e2e.ts: EXIT_CODE=0
+EXIT_CODE: 0
+COMMAND: pnpm test:collab:e2e --suite hmac
+$ node scripts/test-collab.mjs "--suite" "hmac"
+PASS HMAC: tampered body, wrong path, expired timestamp and replay rejected; one authenticated execution
+✔ Real internal HTTP: HMAC body/path/time and durable anti-replay (890.8566ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 894.5442
+Collaboration hmac.e2e.ts: EXIT_CODE=0
+EXIT_CODE: 0
+COMMAND: pnpm test:collab:e2e --suite frontend
+$ node scripts/test-collab.mjs "--suite" "frontend"
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Front provider: durable receipts, offline merge, delete-only resync and blocked revocation (2028.1355ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11644.6108
+Collaboration frontend.e2e.ts: EXIT_CODE=0
+EXIT_CODE: 0
+COMMAND: pnpm test:collab:e2e --suite admission
+$ node scripts/test-collab.mjs "--suite" "admission"
+PASS admission: third queued frame never reaches consumer; foreign origin denied; counters released on close
+✔ Real WebSocket ingress charges native-queue frames before delivery (33.0344ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.228
+Collaboration admission.e2e.ts: EXIT_CODE=0
+EXIT_CODE: 0
+COMMAND: pnpm test:collab:e2e --suite presence
+$ node scripts/test-collab.mjs "--suite" "presence"
+[onAuthenticate] SESSION_CHANGED
+[beforeHandleAwareness] PRESENCE_REJECTED
+closing connection fd1cf92d-8d61-42bf-8c6f-9caa5e2d7af6 (while handling 2e3a7f89-a03e-4ab0-b3ed-a3443e25c59d:b9436850-11aa-434c-8819-bf4b8c723fd5:af13fe06-0a44-4a4d-ad1a-5159f1dc19a3) because of exception Error: PRESENCE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:33109:10)
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:33426:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeHandleAwareness] PRESENCE_REJECTED
+closing connection 30b8829a-f9a6-4687-bb08-1059566c07ce (while handling 2e3a7f89-a03e-4ab0-b3ed-a3443e25c59d:b9436850-11aa-434c-8819-bf4b8c723fd5:af13fe06-0a44-4a4d-ad1a-5159f1dc19a3) because of exception Error: PRESENCE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:33109:10)
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:33426:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+PASS real awareness identity, HTTP/WS session binding, stable color, reconnect, foreign removal, remote timeout, cursor validation, byte/client/rate bounds, no journal revision and revoked presence
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Real presence: verified names/colors, cursor bounds, no impersonation, no persistence and revoke cleanup (2641.6592ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2645.3863
+Collaboration presence.e2e.ts: EXIT_CODE=0
+EXIT_CODE: 0
+END: 2026-10-25T16:37:26.2703184+01:00

@@ -1,0 +1,32 @@
+COMMAND: pnpm test:invitations:e2e
+Recorded: 2026-10-25; functional verification (not benchmark)
+
+$ node scripts/build-server.mjs api --invitations-e2e && node --env-file=.env apps/api/dist/invitations.e2e.mjs
+▶ 5b real HTTP: invitations, current authority, transactional acceptance and MFA arrival
+  ✔ I04: no factor/recent proof blocks even optional workspace; enrollment alone is not assurance (413.4125ms)
+  ✔ I01/I04: exact verified recipient, strict roles/roots and native route denial (210.6126ms)
+API request failed: Error
+  ✔ I03: real HTTP audit failure rolls back native accepted status, membership, actor, grants and mail (167.3234ms)
+  ✔ I02/I03: resend rotates link, duplicate creation and terminal/expired links do not create access (573.4063ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ I04/A03: admin cannot target privileged roles; owner promotion clears grants; removal closes actual sockets (681.0599ms)
+  ✔ I03: inviter loses authority and pending invitations are canceled; archived roots roll back acceptance (403.2457ms)
+  ✔ I05: newly accepted guest has no grace; enrollment alone exposes no content and verified factor restores access (663.4651ms)
+PASS NAT: 50 real password logins, creations and acceptances; same trusted source IP
+  ✔ Q01: fifty real accounts behind one office IP can receive and accept fifty invitations (12024.552ms)
+  ✔ Q01/R12: all new routes require authentication; proxy forgery and UUID rotation cannot reset quotas (299.9601ms)
+  ✔ Q02: pending/member/share capacities remain atomic under concurrent requests (817.7806ms)
+  ✔ Q02: sixteen concurrent creations finish without borrowing a second pooled connection (601.1738ms)
+  ✔ I06/Q02: encrypted mail, destination budgets, bounded retries, cancellation and at-least-once delivery (335.8297ms)
+  ✔ I02: worker expiration/retention, immutable terminal time and independent runtime expiry (65.2515ms)
+✔ 5b real HTTP: invitations, current authority, transactional acceptance and MFA arrival (19238.6522ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19241.8885
+
+EXIT_CODE: 0

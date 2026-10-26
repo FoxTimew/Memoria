@@ -1,0 +1,13 @@
+{"profile":"content-1M","guestDepth":0,"p95":9.025499999999965,"max":20.38090000000011,"iterations":200,"warmup":20,"preparedPlans":[{"name":"collaboration-append-update-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-assert-fence-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-receipt-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-reserve-block-ids-v1","generic_plans":"0","custom_plans":"1"},{"name":"content-resolve-access-v1","generic_plans":"215","custom_plans":"5"}],"samples":200}
+{"profile":"history-1M","guestDepth":0,"p95":33.3773999999994,"max":43.22010000000046,"iterations":200,"warmup":20,"preparedPlans":[{"name":"collaboration-append-update-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-assert-fence-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-receipt-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-reserve-block-ids-v1","generic_plans":"0","custom_plans":"2"},{"name":"content-resolve-access-v1","generic_plans":"435","custom_plans":"5"}],"samples":200}
+✔ Production incremental validation and journal, 1 MiB profiles (15617.9554ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15622.1134
+
+EXIT_CODE=0

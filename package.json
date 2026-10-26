@@ -8,6 +8,9 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "measure:rights": "node scripts/measure-rights.mjs",
+    "test:shares:browser": "node --env-file=.env --use-system-ca scripts/test-shares-browser.mjs",
+    "test:shares:e2e": "node scripts/build-server.mjs api --shares-e2e && node --env-file=.env apps/api/dist/shares.e2e.mjs",
     "test:auth:adversarial": "node scripts/build-server.mjs api --adversarial-e2e && node --env-file=.env apps/api/dist/adversarial.e2e.mjs",
     "test:auth:adversarial:browser": "node --env-file=.env --use-system-ca scripts/test-auth-adversarial-browser.mjs",
     "test:auth:cache": "node scripts/build-server.mjs api --cache-policy-e2e && node --env-file=.env apps/api/dist/cache-policy.e2e.mjs",
@@ -43,7 +46,11 @@
     "dev:collab": "node --env-file=.env scripts/dev-collaboration.mjs",
     "test:collab:browser": "node --env-file=.env --use-system-ca scripts/test-collab-browser.mjs",
     "test:auth:recovery": "node scripts/build-server.mjs worker --reset-factor && node scripts/build-server.mjs api --recovery-e2e && node --env-file=.env apps/api/dist/recovery.e2e.mjs",
-    "test:auth:recovery:browser": "node --env-file=.env --use-system-ca scripts/test-auth-recovery-browser.mjs"
+    "test:auth:recovery:browser": "node --env-file=.env --use-system-ca scripts/test-auth-recovery-browser.mjs",
+    "test:sharing:e2e": "node scripts/build-server.mjs api --sharing-e2e && node --env-file=.env apps/api/dist/sharing.e2e.mjs",
+    "test:invitations:browser": "node --env-file=.env --use-system-ca scripts/test-invitations-browser.mjs",
+    "test:invitations:atomicity": "node scripts/build-server.mjs api --invitations-atomicity-e2e && node --env-file=.env apps/api/dist/invitations-atomicity.e2e.mjs",
+    "test:invitations:e2e": "node scripts/build-server.mjs api --invitations-e2e && node --env-file=.env apps/api/dist/invitations.e2e.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

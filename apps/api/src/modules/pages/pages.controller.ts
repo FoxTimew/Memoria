@@ -2,8 +2,10 @@ import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { CurrentSession } from '../auth/current-user.decorator.ts';
 import type { AuthenticatedSession } from '../auth/current-user.decorator.ts';
 import * as pages from './pages.service.ts';
+import { ContentQuota } from './content-quota.ts';
 
 @Controller('api/internal/workspaces/:workspaceId')
+@ContentQuota()
 export class PagesController {
   constructor(private readonly pages: pages.PagesService) {}
   @Get('pages') list(
@@ -72,6 +74,22 @@ export class PagesController {
   ) {
     return this.pages.mutate(session, workspace, id, 'move', body);
   }
+  @Post('pages/:pageId/move/preview') previewMove(
+    @CurrentSession() session: AuthenticatedSession,
+    @Param('workspaceId') workspace: string,
+    @Param('pageId') id: string,
+    @Body() body: unknown,
+  ) {
+    return this.pages.mutate(session, workspace, id, 'move', body, true);
+  }
+  @Post('pages/:pageId/restore/preview') previewRestore(
+    @CurrentSession() session: AuthenticatedSession,
+    @Param('workspaceId') workspace: string,
+    @Param('pageId') id: string,
+    @Body() body: unknown,
+  ) {
+    return this.pages.mutate(session, workspace, id, 'restore', body, true);
+  }
   @Post('pages/:pageId/archive') archive(
     @CurrentSession() session: AuthenticatedSession,
     @Param('workspaceId') workspace: string,
@@ -94,5 +112,11 @@ export class PagesController {
     @Query('q') query: string,
   ) {
     return this.pages.search(session, workspace, query);
+  }
+  @Get('page-access') accessSnapshot(
+    @CurrentSession() session: AuthenticatedSession,
+    @Param('workspaceId') workspace: string,
+  ) {
+    return this.pages.accessSnapshot(session, workspace);
   }
 }

@@ -1,0 +1,13 @@
+✔ Real replicas: budget, inactive-first eviction, idle release and pending projection (1364.6554ms)
+✔ Growth is reserved before validation/journal, and a capacity rejection leaves SQL and live content unchanged (1258.1031ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4263.5496
+Collaboration memory.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

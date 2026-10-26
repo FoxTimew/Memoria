@@ -26,3 +26,12 @@ export const CurrentSession = createParamDecorator(
     return session;
   },
 );
+/** Native Better Auth server calls require the original cookie. Authorization still uses
+ * CurrentSession from the global guard, then rechecks its SQL identity under transaction. */
+export const CurrentAuthHeaders = createParamDecorator(
+  (_data: unknown, context: ExecutionContext): Headers => {
+    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
+    if (!request.authSession) throw new UnauthorizedException();
+    return new Headers({ cookie: request.headers.cookie ?? '' });
+  },
+);

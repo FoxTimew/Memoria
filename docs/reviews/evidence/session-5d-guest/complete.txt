@@ -1,0 +1,13 @@
+{"series":1,"depth":5,"power":{"observedAt":"2026-10-25T19:06:59.994Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":89}],"allowed":true,"reason":null},"freeBytes":5344731136}
+{"series":1,"depth":5,"p95":[["content-1M",10.174999999999955],["history-1M",33.04400000000169]]}
+{"series":1,"depth":50,"power":{"observedAt":"2026-10-25T19:07:16.859Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":89}],"allowed":true,"reason":null},"freeBytes":5356466176}
+{"series":1,"depth":50,"p95":[["content-1M",13.136700000000019],["history-1M",36.31930000000102]]}
+{"series":2,"depth":5,"power":{"observedAt":"2026-10-25T19:07:37.190Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":89}],"allowed":true,"reason":null},"freeBytes":5356187648}
+{"series":2,"depth":5,"p95":[["content-1M",9.093700000000126],["history-1M",42.014000000000124]]}
+{"series":2,"depth":50,"power":{"observedAt":"2026-10-25T19:07:55.250Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":90}],"allowed":true,"reason":null},"freeBytes":5324697600}
+{"series":2,"depth":50,"p95":[["content-1M",12.080600000000231],["history-1M",39.821100000001024]]}
+{"series":3,"depth":5,"power":{"observedAt":"2026-10-25T19:08:16.127Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":90}],"allowed":true,"reason":null},"freeBytes":5345062912}
+{"series":3,"depth":5,"p95":[["content-1M",9.14670000000001],["history-1M",33.70019999999931]]}
+{"series":3,"depth":50,"power":{"observedAt":"2026-10-25T19:08:33.141Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":90}],"allowed":true,"reason":null},"freeBytes":5331746816}
+{"series":3,"depth":50,"p95":[["content-1M",12.256799999999203],["history-1M",37.52680000000146]]}
+EXIT_CODE=0

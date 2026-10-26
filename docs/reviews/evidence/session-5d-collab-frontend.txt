@@ -1,0 +1,12 @@
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Front provider: durable receipts, offline merge, delete-only resync and blocked revocation (2345.3146ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11813.5418
+Collaboration frontend.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

@@ -7,9 +7,14 @@ import { securityError, securityRequest, securityStatus } from '../../lib/securi
 import type { SecurityStatus } from '../../lib/security-client.ts';
 import { onLocalSignOut, signOutAndClear } from '../../lib/local-sign-out.ts';
 import { TotpQr } from '../../components/totp-qr.tsx';
+import { accessReturnPath } from '../../lib/access-flow.ts';
 
 export default function SecurityPage() {
   const [status, setStatus] = useState<SecurityStatus>();
+  const [returnTo, setReturnTo] = useState<string | null>(null);
+  useEffect(() => {
+    setReturnTo(accessReturnPath(new URL(globalThis.location.href).searchParams.get('returnTo')));
+  }, []);
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
     [notice, setNotice] = useState('');
@@ -178,6 +183,24 @@ export default function SecurityPage() {
               </p>
             )}
           </section>
+          {returnTo && (
+            <section className="notice space-y-3" aria-label="Reprendre votre action">
+              <p>
+                {returnTo.endsWith('/acces')
+                  ? 'Pour gérer les accès au studio, ajoutez une seconde vérification à votre compte, puis vérifiez votre identité.'
+                  : 'Ce studio protège ses documents avec une seconde vérification. Ajoutez une clé d’accès ou une application de codes, puis vérifiez votre identité pour continuer.'}
+              </p>
+              <p>
+                La configuration seule ne suffit pas : vérifiez ensuite un code ou utilisez votre
+                clé d’accès.
+              </p>
+              {status.recent && codes.length === 0 && (
+                <a className="primary inline-block" href={returnTo}>
+                  Reprendre mon action
+                </a>
+              )}
+            </section>
+          )}
           {codes.length > 0 && (
             <section
               className="rounded-xl border border-[#b58641] p-5"

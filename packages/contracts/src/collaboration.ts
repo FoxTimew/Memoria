@@ -7,9 +7,15 @@ export const collaborationOpenSchema = z.strictObject({
   room: z.string().max(160),
 });
 export const collaborationSessionSchema = z.strictObject({ user: z.uuid(), session: z.uuid() });
+export const collaborationClientTokenSchema = collaborationSessionSchema.extend({
+  scope: z.literal('page'),
+  accessVersion: z.int().positive(),
+});
 /** Fresh HTTP identity, bound again to the cookie on WebSocket authentication. */
 export const collaborationAccessSchema = collaborationOpenSchema.extend({
   identity: collaborationSessionSchema,
+  level: z.enum(['read', 'edit']),
+  accessVersion: z.int().positive(),
 });
 export const collaborationWriteSchema = z.strictObject({
   generation: z.uuid(),

@@ -6,6 +6,7 @@ import type { WorkspaceSecurity } from '@memoria/contracts';
 import { contentRequest } from '../lib/content-api.ts';
 import { authClient } from '../lib/auth-client.ts';
 import { refreshCachePolicy } from '../lib/cache-policy.ts';
+import { securityDestination } from '../lib/access-flow.ts';
 export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: string }) {
   const base = `/api/internal/workspaces/${encodeURIComponent(workspaceId)}`;
   const [policy, setPolicy] = useState<WorkspaceSecurity>();
@@ -52,11 +53,17 @@ export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: st
         <Link className="quiet-link" href={`/workspaces/${workspaceId}`}>
           Retour aux pages
         </Link>
-        <Link className="quiet-link" href="/securite">
+        <Link
+          className="quiet-link"
+          href={securityDestination(`/workspaces/${workspaceId}/securite`)}
+        >
           Sécurité du compte
         </Link>
         <Link className="quiet-link" href="/">
           Mes espaces
+        </Link>
+        <Link className="quiet-link" href={`/workspaces/${workspaceId}/acces`}>
+          Membres et invitations
         </Link>
       </nav>
       {error && (
@@ -89,7 +96,7 @@ export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: st
               </>
             )}
           </p>
-          {policy.role === 'owner' ? (
+          {['owner', 'admin'].includes(policy.role) ? (
             <form
               className="space-y-5 border-t pt-5"
               onSubmit={(e) => {
@@ -105,8 +112,9 @@ export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: st
                     return;
                   await contentRequest(base + '/security', 'PUT', {
                     expectedVersion: policy.version,
-                    requireStrongAuth: required,
-                    graceDays: days,
+                    ...(policy.role === 'owner'
+                      ? { requireStrongAuth: required, graceDays: days }
+                      : {}),
                     allowPersistentCache: allowCache,
                   });
                   if (session) await refreshCachePolicy(session.user.id, session.session.id);
@@ -137,6 +145,7 @@ export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: st
                 <input
                   type="checkbox"
                   checked={required}
+                  disabled={policy.role !== 'owner'}
                   onChange={(e) => setRequired(e.target.checked)}
                 />{' '}
                 Exiger un facteur fort
@@ -146,6 +155,7 @@ export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: st
                 <input
                   className="field mt-2"
                   type="number"
+                  disabled={policy.role !== 'owner'}
                   min={0}
                   max={30}
                   required
@@ -168,6 +178,12 @@ export default function WorkspaceSecurityPage({ workspaceId }: { workspaceId: st
           {policy.role === 'owner' && (
             <section className="space-y-4 border-t pt-5">
               <h2 className="text-xl font-semibold">Rôles des membres</h2>
+              <p>
+                Premiers 50 membres.{' '}
+                <Link className="quiet-link" href={`/workspaces/${workspaceId}/acces`}>
+                  Ouvrir la gestion complète des membres et invitations
+                </Link>
+              </p>
               <p>
                 Changer un rôle demande une vérification de moins de dix minutes. L’espace doit
                 garder au moins un propriétaire.

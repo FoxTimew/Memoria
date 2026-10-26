@@ -14,7 +14,13 @@ import { CollaborationClient } from '../lib/collaboration-client.ts';
 import type { CollaborationStatus } from '../lib/collaboration-client.ts';
 import { PageTitle } from './page-title.tsx';
 import { LocalRecovery } from './local-recovery.tsx';
-import { CacheForbidden, LocalSessionRevoked, yjsCache } from '../lib/yjs-cache.ts';
+import {
+  AccessChanged,
+  CacheForbidden,
+  LocalSessionRevoked,
+  yjsCache,
+  pageAccessKey,
+} from '../lib/yjs-cache.ts';
 import { refreshCachePolicy } from '../lib/cache-policy.ts';
 import type { CachePage, CacheTicket } from '../lib/yjs-cache.ts';
 import '@blocknote/core/fonts/inter.css';
@@ -22,7 +28,7 @@ import '@blocknote/mantine/style.css';
 
 type Kit = Awaited<ReturnType<typeof createEditorKit>>;
 type Editor = Kit['schema']['BlockNoteEditor'];
-export type EditorActions = { discard: () => Promise<unknown> };
+export type EditorActions = { discard: () => Promise<unknown>; export: () => string };
 export default function PageEditor({
   actions,
   document,
@@ -30,6 +36,7 @@ export default function PageEditor({
   onSaved,
   onDirty,
   onLocalRevoked,
+  onAccessChanged,
   reload,
   userId,
   userName,
@@ -41,6 +48,7 @@ export default function PageEditor({
   onSaved: () => void;
   onDirty: (dirty: boolean) => void;
   onLocalRevoked: (message?: string) => void;
+  onAccessChanged: (exported: string, cleanupError?: string) => void;
   reload: () => void;
   userId: string;
   userName: string;
@@ -59,7 +67,7 @@ export default function PageEditor({
       try {
         let ticket: CacheTicket | undefined;
         try {
-          ticket = await refreshCachePolicy(userId, sessionId);
+          ticket = await refreshCachePolicy(userId, sessionId, document.page.workspaceId);
         } catch (e) {
           if (!(e instanceof CacheForbidden)) throw e;
         }
@@ -70,6 +78,12 @@ export default function PageEditor({
         const meta = collaborationAccessSchema.parse(opened);
         if (meta.identity.user !== userId || meta.identity.session !== sessionId)
           throw new LocalSessionRevoked();
+        if (
+          ticket &&
+          ticket.pageAccess[pageAccessKey(document.page.workspaceId, document.page.id)]?.version !==
+            meta.accessVersion
+        )
+          throw new AccessChanged();
         let cached: Awaited<ReturnType<typeof yjsCache.open>> | undefined;
         if (ticket && ticket.policies[document.page.workspaceId] !== undefined)
           try {
@@ -96,13 +110,47 @@ export default function PageEditor({
             } catch (e) {
               if (!(e instanceof CacheForbidden)) throw e;
             }
-            await contentRequest(`${endpoint}/version`);
+            const fresh = collaborationAccessSchema.parse(
+              await contentRequest(`${endpoint}/collaboration`, 'POST'),
+            );
+            if (fresh.identity.user !== userId || fresh.identity.session !== sessionId)
+              throw new LocalSessionRevoked();
+            if (fresh.accessVersion !== meta.accessVersion || fresh.level !== meta.level)
+              throw new AccessChanged();
           },
           presenceUser(userId, userName),
           sessionId,
+          meta.accessVersion,
+          meta.level === 'read',
         );
+        const accessChanged = () => {
+          if (cancelled) return;
+          const exported =
+            actions.current?.export() ??
+            JSON.stringify({
+              pageId: document.page.id,
+              title: document.page.title,
+              blocks: editor?.document ?? [],
+            });
+          if (ticket)
+            void yjsCache
+              .revokePage(ticket, document.page.workspaceId, document.page.id)
+              .catch(() =>
+                onAccessChanged(
+                  '',
+                  'Impossible d’effacer la copie locale. Déconnectez-vous pour réessayer le nettoyage.',
+                ),
+              );
+          client?.destroy();
+          onAccessChanged(exported);
+        };
+        client.onAccessRevoked = accessChanged;
         if (ticket && cached)
           client.attachCache(ticket, cached.page, cached.updates, (message) => {
+            if (message) {
+              accessChanged();
+              return;
+            }
             editor?._tiptapEditor.destroy();
             setLoaded(undefined);
             onLocalRevoked(message);
@@ -126,6 +174,7 @@ export default function PageEditor({
                   },
                 }),
               );
+              editor.isEditable = !activeClient.readOnly;
               setLoaded({ kit, editor, client: activeClient });
             } catch {
               activeClient.stop('EDITOR_SCHEMA');
@@ -146,7 +195,7 @@ export default function PageEditor({
       editor?._tiptapEditor.destroy();
       client?.destroy();
     };
-  }, [endpoint, userId, sessionId, userName, onLocalRevoked]);
+  }, [endpoint, userId, sessionId, userName, onLocalRevoked, onAccessChanged]);
   if (error || (!loaded && connection?.phase === 'blocked'))
     return (
       <div role="alert" className="notice error m-6">
@@ -209,14 +258,26 @@ function ActiveEditor({
   const [link, setLink] = useState(''),
     [linkError, setLinkError] = useState('');
   const dirty = (state.dirty && state.local.phase !== 'saved') || titleDirty,
-    blocked = state.phase === 'blocked';
-  const latest = useRef({ dirty });
-  latest.current = { dirty };
+    blocked = state.phase === 'blocked' || state.phase === 'checking' || client.readOnly;
+  const latest = useRef({ dirty, titleValue });
+  latest.current = { dirty, titleValue };
   useEffect(() => {
     onDirty(dirty);
   }, [dirty, onDirty]);
   useEffect(() => {
     actions.current = {
+      export: () =>
+        JSON.stringify(
+          {
+            pageId: document.page.id,
+            generation: client.generation,
+            exportedAt: new Date().toISOString(),
+            title: latest.current.titleValue,
+            blocks: editor.document,
+          },
+          null,
+          2,
+        ),
       discard: async () => {
         await client.cache?.discard();
         client.destroy();
@@ -285,6 +346,7 @@ function ActiveEditor({
     },
   }));
   const statuses = {
+    checking: 'Vérification de vos accès…',
     connecting: 'Connexion…',
     saved: 'Enregistré sur le serveur',
     saving: 'Enregistrement sur le serveur…',
@@ -298,6 +360,12 @@ function ActiveEditor({
   };
   return (
     <div className="page-editor">
+      {client.readOnly && (
+        <p role="status" className="notice mx-6 mt-4">
+          Lecture seule : cette page vous a été partagée pour consultation. Demandez un accès en
+          édition à un administrateur pour la modifier.
+        </p>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e3e6dd] px-6 py-3 text-sm">
         <span role="status" aria-live="polite" data-testid="save-status">
           {statuses[state.phase]}
@@ -335,7 +403,7 @@ function ActiveEditor({
           </button>
         </div>
       )}
-      {state.phase === 'offline' && (
+      {state.phase === 'offline' && !client.readOnly && (
         <p className="notice mx-6 mt-4">
           {state.local.phase === 'none'
             ? 'Vous pouvez continuer à écrire, mais fermer ou recharger cet onglet perdra les changements non envoyés. Rétablissez la connexion ou exportez le contenu avant de partir.'
@@ -343,7 +411,7 @@ function ActiveEditor({
           Le titre non enregistré reste uniquement dans cet onglet.
         </p>
       )}
-      {blocked && (
+      {state.phase === 'blocked' && (
         <div role="alert" className="notice error mx-6 mt-4">
           <p>{state.message}</p>
           <button className="quiet-link" onClick={() => setDiscard(true)}>
@@ -365,122 +433,124 @@ function ActiveEditor({
           </button>
         </div>
       )}
-      <PageTitle
-        title={document.page.title}
-        version={document.page.version}
-        endpoint={endpoint}
-        disabled={blocked}
-        onDirty={setTitleDirty}
-        onSaved={onSaved}
-        onValue={setTitleValue}
-      />
-      <fieldset disabled={blocked} className="contents">
-        <div className="editor-toolbar" role="toolbar" aria-label="Mise en forme">
-          {(['bold', 'italic', 'underline', 'strike', 'code'] as const).map((style, i) => (
+      <div hidden={state.phase === 'checking'}>
+        <PageTitle
+          title={document.page.title}
+          version={document.page.version}
+          endpoint={endpoint}
+          disabled={blocked}
+          onDirty={setTitleDirty}
+          onSaved={onSaved}
+          onValue={setTitleValue}
+        />
+        <fieldset disabled={blocked} className="contents">
+          <div className="editor-toolbar" role="toolbar" aria-label="Mise en forme">
+            {(['bold', 'italic', 'underline', 'strike', 'code'] as const).map((style, i) => (
+              <button
+                key={style}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  editor.toggleStyles({ [style]: true });
+                  editor.focus();
+                }}
+              >
+                {['Gras', 'Italique', 'Souligné', 'Barré', 'Code inline'][i]}
+              </button>
+            ))}
+            {([1, 2, 3] as const).map((level) => (
+              <button
+                key={level}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() =>
+                  editor.updateBlock(editor.getTextCursorPosition().block, {
+                    type: 'heading',
+                    props: { level },
+                  })
+                }
+              >
+                H{level}
+              </button>
+            ))}
+            <button onMouseDown={(e) => e.preventDefault()} onClick={() => editor.moveBlocksUp()}>
+              Monter
+            </button>
+            <button onMouseDown={(e) => e.preventDefault()} onClick={() => editor.moveBlocksDown()}>
+              Descendre
+            </button>
             <button
-              key={style}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                editor.toggleStyles({ [style]: true });
-                editor.focus();
+                if (editor.canNestBlock()) editor.nestBlock();
               }}
             >
-              {['Gras', 'Italique', 'Souligné', 'Barré', 'Code inline'][i]}
+              Indenter
             </button>
-          ))}
-          {([1, 2, 3] as const).map((level) => (
             <button
-              key={level}
               onMouseDown={(e) => e.preventDefault()}
-              onClick={() =>
-                editor.updateBlock(editor.getTextCursorPosition().block, {
-                  type: 'heading',
-                  props: { level },
-                })
-              }
+              onClick={() => {
+                if (editor.canUnnestBlock()) editor.unnestBlock();
+              }}
             >
-              H{level}
+              Désindenter
             </button>
-          ))}
-          <button onMouseDown={(e) => e.preventDefault()} onClick={() => editor.moveBlocksUp()}>
-            Monter
-          </button>
-          <button onMouseDown={(e) => e.preventDefault()} onClick={() => editor.moveBlocksDown()}>
-            Descendre
-          </button>
-          <button
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => {
-              if (editor.canNestBlock()) editor.nestBlock();
+          </div>
+          <form
+            className="mx-6 mb-3 flex gap-2 text-sm"
+            onSubmit={(event) => {
+              event.preventDefault();
+              try {
+                const url = new URL(link);
+                if (!['http:', 'https:'].includes(url.protocol)) throw new Error();
+                editor.createLink(url.href);
+                editor.focus();
+                setLink('');
+                setLinkError('');
+              } catch {
+                setLinkError('Le lien doit commencer par https:// ou http://.');
+              }
             }}
           >
-            Indenter
-          </button>
-          <button
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => {
-              if (editor.canUnnestBlock()) editor.unnestBlock();
-            }}
+            <input
+              className="field"
+              aria-label="Adresse du lien"
+              placeholder="https://… (sur le texte sélectionné)"
+              value={link}
+              maxLength={2048}
+              onChange={(e) => setLink(e.target.value)}
+            />
+            <button type="submit" className="quiet-link">
+              Ajouter le lien
+            </button>
+          </form>
+          {linkError && (
+            <p role="alert" className="notice error mx-6 mb-3">
+              {linkError}
+            </p>
+          )}
+          <BlockNoteView
+            editor={editor}
+            editable={!blocked}
+            theme="light"
+            formattingToolbar={false}
+            linkToolbar={false}
+            sideMenu={false}
+            slashMenu={false}
+            filePanel={false}
+            tableHandles={false}
           >
-            Désindenter
-          </button>
-        </div>
-        <form
-          className="mx-6 mb-3 flex gap-2 text-sm"
-          onSubmit={(event) => {
-            event.preventDefault();
-            try {
-              const url = new URL(link);
-              if (!['http:', 'https:'].includes(url.protocol)) throw new Error();
-              editor.createLink(url.href);
-              editor.focus();
-              setLink('');
-              setLinkError('');
-            } catch {
-              setLinkError('Le lien doit commencer par https:// ou http://.');
-            }
-          }}
-        >
-          <input
-            className="field"
-            aria-label="Adresse du lien"
-            placeholder="https://… (sur le texte sélectionné)"
-            value={link}
-            maxLength={2048}
-            onChange={(e) => setLink(e.target.value)}
-          />
-          <button type="submit" className="quiet-link">
-            Ajouter le lien
-          </button>
-        </form>
-        {linkError && (
-          <p role="alert" className="notice error mx-6 mb-3">
-            {linkError}
-          </p>
-        )}
-        <BlockNoteView
-          editor={editor}
-          editable={!blocked}
-          theme="light"
-          formattingToolbar={false}
-          linkToolbar={false}
-          sideMenu={false}
-          slashMenu={false}
-          filePanel={false}
-          tableHandles={false}
-        >
-          <SuggestionMenuController
-            triggerCharacter="/"
-            getItems={async (query) =>
-              items.filter((item) =>
-                `${item.title} ${item.aliases.join(' ')}`
-                  .toLowerCase()
-                  .includes(query.toLowerCase()),
-              )
-            }
-          />
-        </BlockNoteView>
-      </fieldset>
+            <SuggestionMenuController
+              triggerCharacter="/"
+              getItems={async (query) =>
+                items.filter((item) =>
+                  `${item.title} ${item.aliases.join(' ')}`
+                    .toLowerCase()
+                    .includes(query.toLowerCase()),
+                )
+              }
+            />
+          </BlockNoteView>
+        </fieldset>
+      </div>
       <p className="px-6 py-5 text-xs text-[#73806f]">
         Tapez / pour ajouter un bloc. Tab et Maj+Tab règlent l’imbrication. Ctrl+Z annule une
         modification.

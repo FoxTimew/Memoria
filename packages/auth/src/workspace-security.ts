@@ -21,7 +21,12 @@ export async function lockSession(tx: WriteTransaction, session: SessionIdentity
   if (!result.rows.length) throw new SecurityPolicyError('SESSION_REVOKED', 401);
 }
 export type SensitiveAction =
-  'workspace.policy' | 'member.role' | 'api_key.create' | 'webhook.create';
+  | 'workspace.policy'
+  | 'workspace.cache'
+  | 'workspace.access'
+  | 'member.role'
+  | 'api_key.create'
+  | 'webhook.create';
 /** Caller runs the effect in this transaction, immediately after this check. No reusable permit. */
 export async function requireSensitiveAction(
   tx: WriteTransaction,
@@ -29,7 +34,16 @@ export async function requireSensitiveAction(
   workspace: string,
   action: SensitiveAction,
 ) {
-  if (!['workspace.policy', 'member.role', 'api_key.create', 'webhook.create'].includes(action))
+  if (
+    ![
+      'workspace.policy',
+      'workspace.cache',
+      'workspace.access',
+      'member.role',
+      'api_key.create',
+      'webhook.create',
+    ].includes(action)
+  )
     throw new SecurityPolicyError('UNKNOWN_SENSITIVE_ACTION');
   await tx.execute(
     sql`INSERT INTO account_security(user_id) VALUES(${session.userId}::uuid) ON CONFLICT DO NOTHING`,
@@ -41,7 +55,7 @@ export async function requireSensitiveAction(
   await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${workspace}::text,0))`);
   // Wait for in-flight collaborative commits before changing policy/roles. The journal itself
   // still takes only its page lock, never the workspace lock.
-  if (action === 'workspace.policy' || action === 'member.role')
+  if (['workspace.policy', 'workspace.cache', 'workspace.access', 'member.role'].includes(action))
     await tx.execute(
       sql`SELECT id FROM pages WHERE workspace_id=${workspace}::uuid ORDER BY id FOR NO KEY UPDATE`,
     );
@@ -54,9 +68,16 @@ export async function requireSensitiveAction(
     JOIN LATERAL(SELECT id FROM actors WHERE workspace_id=m.workspace_id AND user_id=m.user_id AND kind='user' ORDER BY created_at,id LIMIT 1) a ON true
     WHERE m.user_id=${session.userId}::uuid AND m.workspace_id=${workspace}::uuid`);
   const member = result.rows[0];
-  if (!member || !['owner', 'member'].includes(member.role))
+  if (!member || !['owner', 'admin', 'member'].includes(member.role))
     throw new SecurityPolicyError('WORKSPACE_INACCESSIBLE', 404);
-  if (action !== 'api_key.create' && member.role !== 'owner')
+  if (
+    action !== 'api_key.create' &&
+    member.role !== 'owner' &&
+    !(
+      member.role === 'admin' &&
+      ['workspace.access', 'workspace.cache', 'member.role'].includes(action)
+    )
+  )
     throw new SecurityPolicyError('OWNER_REQUIRED');
   const assurance = await readAssurance(tx, session.id);
   if (!assurance.recent) throw new SecurityPolicyError('RECENT_STRONG_AUTH_REQUIRED');

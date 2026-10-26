@@ -1,6 +1,8 @@
 import { logoutMarkerKey, retireLegacyDrafts, yjsCache } from './yjs-cache.ts';
+import { clearAccessFlows } from './access-flow.ts';
 const eventName = 'memoria-local-sign-out';
 export function notifyLocalSignOut(user: string) {
+  clearAccessFlows();
   // Opaque revocation marker only. No page content, names or authentication token.
   try {
     globalThis.localStorage?.setItem(logoutMarkerKey(user), crypto.randomUUID());
@@ -18,10 +20,16 @@ export function notifyLocalSignOut(user: string) {
 }
 export function onLocalSignOut(user: string, callback: () => void) {
   const local = (event: Event) => {
-    if ((event as CustomEvent).detail === user) callback();
+    if ((event as CustomEvent).detail === user) {
+      clearAccessFlows();
+      callback();
+    }
   };
   const storage = (event: StorageEvent) => {
-    if (event.key === logoutMarkerKey(user)) callback();
+    if (event.key === logoutMarkerKey(user)) {
+      clearAccessFlows();
+      callback();
+    }
   };
   globalThis.addEventListener(eventName, local);
   globalThis.addEventListener('storage', storage);
@@ -29,7 +37,10 @@ export function onLocalSignOut(user: string, callback: () => void) {
     typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel(eventName) : undefined;
   if (channel)
     channel.onmessage = (e: MessageEvent<unknown>) => {
-      if (e.data === user) callback();
+      if (e.data === user) {
+        clearAccessFlows();
+        callback();
+      }
     };
   return () => {
     globalThis.removeEventListener(eventName, local);

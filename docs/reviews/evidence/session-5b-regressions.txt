@@ -1,0 +1,208 @@
+COMMAND: pnpm test:sharing:e2e
+$ node scripts/build-server.mjs api --sharing-e2e && node --env-file=.env apps/api/dist/sharing.e2e.mjs
+▶ 5a: real Nest, Better Auth sessions, PostgreSQL grants, HMAC and hostile WebSockets
+  ✔ A01/A02: inherited maximum, hidden ancestors and SQL/API decisions agree (642.2365ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ R12: every page route rejects anonymous calls; alternate read/write routes keep guest boundaries (311.1785ms)
+  ✔ A02: inaccessible matches cannot fill the first hundred search results (1342.0207ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ A01/A04: read cannot mutate; edit can rename/create children but cannot manage the tree (935.8122ms)
+[beforeSync] READ_ONLY
+closing connection 6a972aee-fdb0-4765-a2f3-418265403059 (while handling e0ee0a9e-471d-45d9-8a25-7433477e8be9:1700c907-ef89-4b78-8d01-86e7676a85ee:436993bf-b994-48b6-aae0-fbe5d7d2e9d7) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49189:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49474:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46485:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46420:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46693:11)
+[beforeSync] READ_ONLY
+closing connection af7d601b-58e3-4cd3-8705-664e0322ccf3 (while handling e0ee0a9e-471d-45d9-8a25-7433477e8be9:1700c907-ef89-4b78-8d01-86e7676a85ee:436993bf-b994-48b6-aae0-fbe5d7d2e9d7) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49189:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49474:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46485:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46420:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46693:11)
+[beforeSync] READ_ONLY
+closing connection 19d5b8ec-2aae-4361-88ad-554b49f1a715 (while handling e0ee0a9e-471d-45d9-8a25-7433477e8be9:1700c907-ef89-4b78-8d01-86e7676a85ee:436993bf-b994-48b6-aae0-fbe5d7d2e9d7) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49189:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49474:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46485:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46420:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46693:11)
+  ✔ C01/L01: read receives live Yjs but cannot send update, sync2, delete-set or writer commands (2674.781ms)
+  ✔ A03: relational rename also rechecks rights after waiting for a committed downgrade (124.7499ms)
+  ✔ A03/C02: committed downgrade beats a real HTTP writer waiting on access locks (60.0667ms)
+[beforeSync] ACCESS_DENIED
+closing connection 92ff627c-3431-4c67-9af7-f9b12858ee95 (while handling e0ee0a9e-471d-45d9-8a25-7433477e8be9:1700c907-ef89-4b78-8d01-86e7676a85ee:436993bf-b994-48b6-aae0-fbe5d7d2e9d7) because of exception Error: ACCESS_DENIED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49189:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49474:22)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46485:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46420:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46693:11)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47282:7
+  ✔ A03/C02: a real WebSocket update waits for the page lock then sees the committed downgrade (95.3751ms)
+[onAuthenticate] ACCESS_DENIED
+  ✔ C02: missed notification still disconnects descendants within five seconds (2230.2509ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ A01/A02: strongest ancestor wins; archive hides direct grants; move recalculates inheritance (257.0146ms)
+[onAuthenticate] ACCESS_DENIED
+  ✔ I05: policy, recovery and expired sessions cannot bypass page or socket rights (76.7777ms)
+  ✔ A03: promotion/removal cannot resurrect dormant grants; anonymous audit records cleanup (106.5425ms)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+  ✔ Q01: matched route/IP and shared account budgets resist header and UUID rotation (10777.3421ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ 5a: real Nest, Better Auth sessions, PostgreSQL grants, HMAC and hostile WebSockets (24348.1451ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24351.6169
+
+EXIT_CODE: 0
+
+COMMAND: pnpm test:auth:workspace
+$ node scripts/build-server.mjs api --workspace-security-e2e && node --env-file=.env apps/api/dist/workspace-security.e2e.mjs
+▶ 4b: workspace policy, transactional gates and HTTP-to-WebSocket revocation
+  ✔ only an owner with a recent strong proof can manage policy; outsiders cannot inspect it (73.2131ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ HTTP first-factor enrollment closes both live WebSockets, including the retained session, within five seconds (487.7566ms)
+  ✔ activation grants existing members seven days; edits and reactivation never postpone their deadline (246.8292ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ grace expiry closes only the protected workspace socket without a new SQL notification; HTTP/HMAC/reconnect fail closed (2118.8707ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ new members cannot inherit grace or supply a future deadline; missing deadline also denies access (195.9334ms)
+  ✔ recent assurance gates policy, roles and future API/webhook contracts; old assurance still allows content (217.5335ms)
+  ✔ assurance is rechecked after waiting for the workspace lock, before any sensitive effect (102.2994ms)
+  ✔ role mutations require owner + recent proof, compare the old role and preserve a last owner (134.7289ms)
+API request failed: Error
+  ✔ an audit failure rolls back policy, grace dates and version together (63.8785ms)
+  ✔ a concurrent policy activation wins before last-factor removal and rolls back no valid factor (91.1919ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ HTTP activation without grace closes an existing weak socket and immediately blocks content (172.5537ms)
+  ✔ last-factor removal is refused by policy; HTTP removal with a spare factor closes actual sockets and revokes assurance (226.1453ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ 4b: workspace policy, transactional gates and HTTP-to-WebSocket revocation (6571.3785ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6575.0154
+
+EXIT_CODE: 0
+
+COMMAND: pnpm test:auth:recovery
+$ node scripts/build-server.mjs worker --reset-factor && node scripts/build-server.mjs api --recovery-e2e && node --env-file=.env apps/api/dist/recovery.e2e.mjs
+▶ 4c: recovery, atomicity and operator reset over real HTTP/SQL/WebSocket
+  ✔ generic queued email for known, unknown and unverified accounts; hashed 30-minute token (192.3071ms)
+  ✔ invalid/expired tokens and weak password refuse without changing sessions or factors (178.1049ms)
+  ✔ injected SQL failure rolls back password, token, assurance and session; no success cookie (237.9565ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ concurrent reset has one winner, closes real socket, retains factors/policy and requires new strong proof (489.2935ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ password plus single-use code; concurrent one winner, actual socket revoked, recovery cannot read even optional workspace (785.6559ms)
+  ✔ replace lost passkey, finish regenerates codes, no content until separate UV proof; shared-computer flag preserved (384.5321ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ operator dry-run, exact confirmation and target checks; targeted reset preserves spare factor and closes socket (2552.5282ms)
+  ✔ operator full reset preserves policy; expired grant can be reissued but password alone cannot enroll or read (654.466ms)
+  ✔ mail transport failure retries durably, then purges ciphertext; unknown requests do not send (226.8202ms)
+  ✔ TOTP-only recovery, quarantined factor survives logout; explicit finish and fresh OTP required (1411.7133ms)
+  ✔ recovery mutation rollback and CSRF; operator rollback leaves factor and sessions untouched (613.0671ms)
+  ✔ password reset during recovery revokes its limited session without reopening password-only access (770.0635ms)
+✔ 4c: recovery, atomicity and operator reset over real HTTP/SQL/WebSocket (10042.2319ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10045.514
+
+EXIT_CODE: 0
+
+COMMAND: pnpm test:auth:limits
+$ node scripts/build-server.mjs api --rate-limits-e2e && node --env-file=.env apps/api/dist/rate-limits.e2e.mjs
+Observed admission: max active 8/8; max leases 50/128 for 50 concurrent logins.
+▶ 4d: real Nest/Better Auth/PostgreSQL admission on two API nodes
+  ✔ 50 distinct accounts can each sign in behind one office NAT, across two nodes (5589.7653ms)
+  ✔ multi-IP failures share progressive delays; another account and unknown addresses behave correctly (3199.887ms)
+Real admitted victim wait: 30146 ms; fixed delay 30000 ms; victim arrives after two attackers; six failed passwords, one cancelled request, 15 rejected arrivals.
+  ✔ victim admitted at 30 seconds keeps its deadline during a parallel attack; cancellation releases SQL leases (30345.757ms)
+  ✔ IP quotas are fixed, shared across nodes, immune to forged internal headers and IPv6 host changes (490.8228ms)
+  ✔ email budgets suppress delivery generically; windows, per-type separation and 24h purge are real SQL (127.5772ms)
+  ✔ password-only pending MFA never resets failures; a verified UV passkey does (1406.9794ms)
+  ✔ recovery challenges bind account/purpose, allow five guesses, expire, and renewal observes account delays (3596.8804ms)
+  ✔ native plugin ceilings cannot override the 300-per-route NAT limit (5994.2684ms)
+  ✔ expired failure windows and process-crash leases recover; retention is configurable (186.5477ms)
+  ✔ global admission is bounded, releases slots, and SQL enforces the deadline independently of API clocks (1806.386ms)
+  ✔ the general 600-per-route rule and reset 100-per-route rules remain active (7258.3127ms)
+✔ 4d: real Nest/Better Auth/PostgreSQL admission on two API nodes (60947.8759ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60951.5384
+
+EXIT_CODE: 0
+
+COMMAND: pnpm test:auth:cache
+$ node scripts/build-server.mjs api --cache-policy-e2e && node --env-file=.env apps/api/dist/cache-policy.e2e.mjs
+▶ 4e real HTTP, PostgreSQL and cryptographic passkey cache policy
+  ✔ shared choice survives first TOTP enrollment and separate strong proof (888.2115ms)
+  ✔ policy heartbeat has its own bounded NAT quota, not a credential allowance (51.7997ms)
+  ✔ anonymous denied; defaults allowed; shared choice stored on server; outsider sees no policies (93.8941ms)
+  ✔ owner requires recent assurance, member denied, policy version fenced and other workspace preserved (108.4876ms)
+  ✔ anonymous passkey login persists shared choice and authenticated rotation cannot remove it (205.2817ms)
+  ✔ policy can re-enable only at a new version; old payload and expired assurance rejected (115.1098ms)
+✔ 4e real HTTP, PostgreSQL and cryptographic passkey cache policy (3139.7053ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3142.9214
+
+EXIT_CODE: 0
+
+COMMAND: pnpm test:auth:adversarial
+$ node scripts/build-server.mjs api --adversarial-e2e && node --env-file=.env apps/api/dist/adversarial.e2e.mjs
+▶ 4f attacker paths against actual Nest, Better Auth, PostgreSQL and WebSockets
+  ✔ A01 default guard and all 27 exact public-facade routes enforce their IP quota before execution (246.0905ms)
+  ✔ A02 unlisted native factor/recovery/organization routes, path and method aliases remain closed (13.8923ms)
+  ✔ A03 workspace policy cannot be bypassed with native routes or a direct collaborative connection (313.9227ms)
+  ✔ A04 mailbox-only password reset cannot retain assurance or bypass the second factor (641.4427ms)
+  ✔ A05 recovery session stays restricted through enrollment, native verification and finish; fresh proof is required (546.1469ms)
+  ✔ A06 forged identity/forwarding headers do not evade the real untrusted-peer quota (31.2908ms)
+  ✔ A07 HTTP TOTP enrollment and removal revoke actual WebSockets; pending enrollment never promotes (452.7941ms)
+  ✔ A08 canary secrets absent from captured logs, audits, errors, metrics and non-dedicated mail channels (550.2571ms)
+✔ 4f attacker paths against actual Nest, Better Auth, PostgreSQL and WebSockets (4447.1404ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4450.6045
+
+EXIT_CODE: 0

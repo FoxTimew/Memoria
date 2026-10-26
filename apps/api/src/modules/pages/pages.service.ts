@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
-import { and, eq, isNull, sql } from 'drizzle-orm';
+import { and, eq, isNull, sql, inArray } from 'drizzle-orm';
 import { blocks, pages, searchDocuments, collaborationDocuments } from '@memoria/db';
 import type { WriteTransaction } from '@memoria/db';
 import {
@@ -13,10 +13,18 @@ import { z } from 'zod';
 import type { SessionIdentity } from '@memoria/auth';
 import * as database from '../../database.module.ts';
 import * as writer from '../blocks/block-write.service.ts';
-import { contentContext, descendants, requirePage, visible } from './content-access.ts';
-import type { StoredPage } from './content-access.ts';
+import {
+  contentContext,
+  descendants,
+  requirePage,
+  pageRights,
+  requirePageRight,
+  requireTreeManager,
+} from './content-access.ts';
+import type { StoredPage, PageRights } from './content-access.ts';
 import { compareRank, positionAfter } from '../blocks/block-plan.ts';
 import { pageEffects } from './page-effects.ts';
+import { accessPreview } from './share-preview.ts';
 
 function parse<T>(schema: z.ZodType<T>, input: unknown): T {
   const result = schema.safeParse(input);
@@ -36,6 +44,28 @@ export function pageResponse(page: StoredPage) {
     deletedAt: page.deletedAt?.toISOString() ?? null,
   };
 }
+function visibleResponse(
+  page: StoredPage,
+  ctx: RequestContext,
+  rights: PageRights,
+  all: StoredPage[],
+) {
+  const result = { ...pageResponse(page), level: rights.get(page.id) };
+  if (ctx.principal.role !== 'guest') return result;
+  // No hidden parent ID or global sibling rank escapes through list, get or create.
+  const parent = page.parentId && rights.has(page.parentId) ? page.parentId : null;
+  const siblings = all
+    .filter(
+      (p) =>
+        rights.has(p.id) && (p.parentId && rights.has(p.parentId) ? p.parentId : null) === parent,
+    )
+    .sort(compareRank);
+  return {
+    ...result,
+    parentId: parent,
+    position: `a${String(siblings.findIndex((p) => p.id === page.id)).padStart(6, '0')}`,
+  };
+}
 @Injectable()
 export class PagesService {
   constructor(
@@ -46,7 +76,12 @@ export class PagesService {
     session: SessionIdentity,
     workspaceId: string,
     write: boolean,
-    work: (tx: WriteTransaction, ctx: RequestContext, all: StoredPage[]) => Promise<T>,
+    work: (
+      tx: WriteTransaction,
+      ctx: RequestContext,
+      all: StoredPage[],
+      rights: PageRights,
+    ) => Promise<T>,
   ) {
     return this.database.db.transaction(async (tx) => {
       const ctx = await contentContext(tx, session, workspaceId, write);
@@ -55,20 +90,39 @@ export class PagesService {
         .from(pages)
         .where(eq(pages.workspaceId, workspaceId))
         .orderBy(pages.id);
-      return work(tx, ctx, all);
+      return work(tx, ctx, all, await pageRights(tx, session, workspaceId, all));
     });
   }
   list(session: SessionIdentity, workspaceId: string) {
-    return this.run(session, workspaceId, false, async (_tx, _ctx, all) => ({
+    return this.run(session, workspaceId, false, async (_tx, ctx, all, rights) => ({
       pages: all
-        .filter((p) => visible(p, all))
+        .filter((p) => rights.has(p.id))
         .sort(compareRank)
-        .map(pageResponse),
-      trash: all.filter((p) => p.deletedAt).map(pageResponse),
+        .map((p) => visibleResponse(p, ctx, rights, all)),
+      trash: ctx.principal.role === 'guest' ? [] : all.filter((p) => p.deletedAt).map(pageResponse),
     }));
   }
+  accessSnapshot(session: SessionIdentity, workspaceId: string) {
+    return this.run(session, workspaceId, false, async (tx, ctx, _all, rights) => {
+      if (ctx.principal.kind !== 'member')
+        throw new BadRequestException('Session de membre attendue.');
+      const [revision, state] = await Promise.all([
+        tx.execute<{ version: number }>(
+          sql`SELECT access_version AS version FROM workspace_members WHERE id=${ctx.principal.memberId}::uuid`,
+        ),
+        tx.execute<{ page: string; version: number; level: 'read' | 'edit' }>(
+          sql`SELECT page_id AS page,version,level FROM page_access_state WHERE workspace_id=${workspaceId}::uuid AND member_id=${ctx.principal.memberId}::uuid AND level<>'none' ORDER BY page_id`,
+        ),
+      ]);
+      return {
+        accessVersion: revision.rows[0]!.version,
+        pages: state.rows.filter((p) => rights.has(p.page)),
+      };
+    });
+  }
   get(session: SessionIdentity, workspaceId: string, pageId: string, versionOnly = false) {
-    return this.run(session, workspaceId, false, async (tx, _ctx, all) => {
+    return this.run(session, workspaceId, false, async (tx, ctx, all, rights) => {
+      requirePageRight(rights, pageId);
       const page = requirePage(pageId, all);
       if (versionOnly) return { version: page.version };
       await tx.execute(
@@ -100,12 +154,18 @@ export class PagesService {
         })
         .from(collaborationDocuments)
         .where(eq(collaborationDocuments.pageId, pageId));
-      return { page: pageResponse(page), blocks: content, collaboration: state ?? null };
+      return {
+        page: visibleResponse(page, ctx, rights, all),
+        blocks: content,
+        collaboration: state ?? null,
+      };
     });
   }
   create(session: SessionIdentity, workspaceId: string, input: unknown) {
     const data = parse(internalPageCreateSchema, input);
-    return this.run(session, workspaceId, true, async (tx, ctx, all) => {
+    return this.run(session, workspaceId, true, async (tx, ctx, all, rights) => {
+      if (data.parentId) requirePageRight(rights, data.parentId, true);
+      else requireTreeManager(ctx);
       if (all.length >= 1000)
         throw new BadRequestException('Maximum 1000 pages par espace pour cette tranche.');
       if (data.parentId) requirePage(data.parentId, all);
@@ -130,7 +190,8 @@ export class PagesService {
         .returning();
       if (!page) throw new Error('Page insert failed');
       await pageEffects(ctx, tx, page, [...all, page], 'page.created', 'page.created');
-      return pageResponse(page);
+      rights.set(page.id, 'edit');
+      return visibleResponse(page, ctx, rights, [...all, page]);
     });
   }
   save(session: SessionIdentity, workspaceId: string, pageId: string, input: unknown) {
@@ -151,7 +212,8 @@ export class PagesService {
       z.strictObject({ expectedVersion: z.int().positive(), title: z.string().max(500) }),
       input,
     );
-    return this.run(session, workspaceId, true, async (tx, ctx, all) => {
+    return this.run(session, workspaceId, true, async (tx, ctx, all, rights) => {
+      requirePageRight(rights, pageId, true);
       const page = requirePage(pageId, all);
       if (page.version !== data.expectedVersion)
         throw new ConflictException({ code: 'VERSION_CONFLICT' });
@@ -198,13 +260,15 @@ export class PagesService {
     pageId: string,
     action: 'move' | 'archive' | 'restore',
     input: unknown,
+    previewOnly = false,
   ) {
     const data = parse(
       pageVersionInputSchema,
       action === 'move' ? { expectedVersion: parse(pageMoveSchema, input).expectedVersion } : input,
     );
     const move = action === 'move' ? parse(pageMoveSchema, input) : undefined;
-    return this.run(session, workspaceId, true, async (tx, ctx, all) => {
+    return this.run(session, workspaceId, !previewOnly, async (tx, ctx, all) => {
+      requireTreeManager(ctx);
       const page = requirePage(pageId, all, action === 'restore');
       if (page.version !== data.expectedVersion)
         throw new ConflictException({ code: 'VERSION_CONFLICT', message: 'La page a changé.' });
@@ -231,6 +295,33 @@ export class PagesService {
           all.filter((p) => p.id !== page.id && p.parentId === page.parentId && !p.deletedAt),
           move.afterId,
         );
+      }
+      if (action !== 'archive') {
+        const preview = await accessPreview(tx, workspaceId, all, affected, {
+          user: session.userId,
+          session: session.id,
+          page: pageId,
+          action,
+          version: data.expectedVersion,
+          parentId: move?.parentId ?? page.parentId,
+          afterId: move?.afterId ?? null,
+        });
+        if (previewOnly) return preview;
+        // Non-shared legacy clients can still move. Any supplied preview must match,
+        // and a workspace with shares always requires one, even for zero net effects.
+        const supplied = move?.previewToken ?? data.previewToken;
+        const shared =
+          (
+            await tx.execute(
+              sql`SELECT 1 FROM access_grants WHERE workspace_id=${workspaceId}::uuid AND deleted_at IS NULL LIMIT 1`,
+            )
+          ).rows.length > 0;
+        if ((shared || supplied) && supplied !== preview.token)
+          throw new ConflictException({
+            code: 'ACCESS_PREVIEW_STALE',
+            message:
+              'Les accès ou la page ont changé. Vérifiez le nouvel aperçu avant de confirmer.',
+          });
       }
       // Ranks rebalanced on unaffected siblings are observable too.
       // Vacate the target rank first when moving within the same sibling list.
@@ -272,7 +363,8 @@ export class PagesService {
   search(session: SessionIdentity, workspaceId: string, query: string) {
     if (typeof query !== 'string' || query.trim().length < 1 || query.length > 200)
       throw new BadRequestException('Recherche attendue : 1 à 200 caractères.');
-    return this.run(session, workspaceId, false, async (tx, _ctx, all) => {
+    return this.run(session, workspaceId, false, async (tx, _ctx, _all, rights) => {
+      if (!rights.size) return [];
       const matches = await tx
         .select({
           id: pages.id,
@@ -293,13 +385,13 @@ export class PagesService {
         .where(
           and(
             eq(searchDocuments.workspaceId, workspaceId),
+            inArray(pages.id, [...rights.keys()]),
             sql`${searchDocuments.vector} @@ plainto_tsquery('simple', ${query})`,
           ),
         )
         .orderBy(pages.updatedAt)
         .limit(100);
-      const allowed = new Set(all.filter((p) => visible(p, all)).map((p) => p.id));
-      return matches.filter((m) => allowed.has(m.id));
+      return matches;
     });
   }
   private checkDepth(parentId: string | null, all: StoredPage[], depth: number) {

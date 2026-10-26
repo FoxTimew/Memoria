@@ -7,3 +7,8 @@ export type { SessionIdentity, SensitiveAction } from './workspace-security.ts';
 export { operatorReset } from './recovery-core.ts';
 export { processAuthMail } from './mail-jobs.ts';
 export { purgeAuthCounters } from './throttle.ts';
+export { consumeBucket, ipKey, throttleKey } from './throttle.ts';
+export { invitationPolicy } from './invitation-policy.ts';
+export { emailBudget } from './throttle.ts';
+export { queueAuthMail } from './recovery-core.ts';
+export { purgeInvitations } from './invitation-maintenance.ts';

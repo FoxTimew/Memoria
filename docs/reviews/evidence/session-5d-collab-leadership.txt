@@ -1,0 +1,12 @@
+PASS leadership: second instance denied; backend terminated; loss callback and stale fence denial; new owner succeeds
+✔ Real leadership: single owner, control loss, fencing and takeover (1017.6172ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1021.2161
+Collaboration leadership.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

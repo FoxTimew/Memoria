@@ -1,0 +1,28 @@
+[onAuthenticate] SESSION_CHANGED
+[beforeHandleAwareness] PRESENCE_REJECTED
+closing connection 42484fdd-278b-4ae7-9e3a-6d3e4deb2621 (while handling 8683e56b-aa03-43fc-84e3-5b5cff48c846:9d9dc5aa-9c44-4d62-ac8b-50b4b79be7d3:91ef61d9-7618-45b4-8a6e-5d0707a0d103) because of exception Error: PRESENCE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:33606:10)
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:33924:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeHandleAwareness] PRESENCE_REJECTED
+closing connection 3df60700-65b3-41b7-af22-42108e5b7bda (while handling 8683e56b-aa03-43fc-84e3-5b5cff48c846:9d9dc5aa-9c44-4d62-ac8b-50b4b79be7d3:91ef61d9-7618-45b4-8a6e-5d0707a0d103) because of exception Error: PRESENCE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:33606:10)
+    at Object.beforeHandleAwareness (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-presence.e2e.mjs:33924:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:209:6)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+PASS real awareness identity, HTTP/WS session binding, stable color, reconnect, foreign removal, remote timeout, cursor validation, byte/client/rate bounds, no journal revision and revoked presence
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ Real presence: verified names/colors, cursor bounds, no impersonation, no persistence and revoke cleanup (2646.0842ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2649.9266
+Collaboration presence.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

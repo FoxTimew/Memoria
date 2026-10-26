@@ -1,5 +1,11 @@
 import * as Y from 'yjs';
-import { CacheForbidden, LocalSessionRevoked, logoutMarker, yjsCache } from './yjs-cache.ts';
+import {
+  AccessChanged,
+  CacheForbidden,
+  LocalSessionRevoked,
+  logoutMarker,
+  yjsCache,
+} from './yjs-cache.ts';
 import { cachePolicyEvent } from './cache-policy.ts';
 import type { CachePage, CacheTicket, YjsCache } from './yjs-cache.ts';
 import { onLocalSignOut } from './local-sign-out.ts';
@@ -32,7 +38,7 @@ export class CollaborationCache {
       /* The transactional check also catches revoked epochs. */
     }
     void this.store
-      .assertActive(this.ticket, this.page.workspace)
+      .assertActive(this.ticket, this.page.workspace, this.page.page)
       .catch((error: unknown) => this.error(error));
   };
   constructor(
@@ -72,7 +78,8 @@ export class CollaborationCache {
     };
   }
   private error(error: unknown) {
-    if (error instanceof CacheForbidden) {
+    if (error instanceof AccessChanged) this.client.stop('ACCESS_CHANGED');
+    else if (error instanceof CacheForbidden) {
       this.close();
       this.client.disableCache();
     } else if (error instanceof LocalSessionRevoked) this.revoked();
@@ -141,7 +148,7 @@ export class CollaborationCache {
     this.onRevoked('Votre accès a changé. Le document a été fermé.');
     // Hide the document immediately, then erase after any previously queued transactions.
     void this.chain
-      .then(() => this.store.discard(this.ticket, this.page))
+      .then(() => this.store.revokePage(this.ticket, this.page.workspace, this.page.page))
       .catch((error: unknown) => {
         if (!(error instanceof LocalSessionRevoked))
           this.onRevoked(

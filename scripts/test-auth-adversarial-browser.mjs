@@ -112,11 +112,16 @@ await test(
       await page.route('**/api/auth/security/cache-policy', (route) => route.abort());
       await page.addScriptTag({ content: compiled.outputFiles[0].text });
       const snapshot = await ok(request(member, '/security/cache-policy'));
-      const init = { snapshot, workspace, pageId, generation };
-      await page.evaluate(async ({ snapshot, workspace, pageId, generation }) => {
+      const pageAccess = await ok(request(member, base + '/page-access'));
+      const init = { snapshot, pageAccess, workspace, pageId, generation };
+      await page.evaluate(async ({ snapshot, pageAccess, workspace, pageId, generation }) => {
         const store = globalThis.MemoriaCacheAttack.yjsCache;
         const ticket = await store.ticket(snapshot.user, snapshot.session);
-        const allowed = await store.applyPolicy(ticket, snapshot);
+        const allowed = await store.applyPageAccess(
+          await store.applyPolicy(ticket, snapshot),
+          workspace,
+          pageAccess,
+        );
         const opened = await store.open(allowed, workspace, pageId, generation);
         // Empty valid Yjs update plus an outstanding receipt is sufficient to observe resurrection.
         await store.append(allowed, opened.page, new Uint8Array([0, 0]), 'offline-receipt');
@@ -190,11 +195,12 @@ await test(
       );
       const restored = await ok(request(member, '/security/cache-policy'));
       await page.evaluate(
-        async ({ snapshot, workspace, pageId, generation }) => {
+        async ({ snapshot, pageAccess, workspace, pageId, generation }) => {
           const { store } = globalThis.cacheAttack;
-          const allowed = await store.applyPolicy(
-            await store.ticket(snapshot.user, snapshot.session),
-            snapshot,
+          const allowed = await store.applyPageAccess(
+            await store.applyPolicy(await store.ticket(snapshot.user, snapshot.session), snapshot),
+            workspace,
+            pageAccess,
           );
           const opened = await store.open(allowed, workspace, pageId, generation);
           await store.append(
@@ -210,13 +216,21 @@ await test(
             late: await store.ticket(snapshot.user, snapshot.session),
           };
         },
-        { ...init, snapshot: restored },
+        {
+          ...init,
+          snapshot: restored,
+          pageAccess: await ok(request(member, base + '/page-access')),
+        },
       );
-      // Membership management UI is session 5. This SQL fixture performs the same real revocation.
-      await pool.query('DELETE FROM workspace_members WHERE workspace_id=$1 AND user_id=$2', [
-        workspace,
-        memberId,
-      ]);
+      const membership = (
+        await pool.query('SELECT id FROM workspace_members WHERE workspace_id=$1 AND user_id=$2', [
+          workspace,
+          memberId,
+        ])
+      ).rows[0].id;
+      await ok(
+        request(owner, `${base}/members/${membership}`, { expectedRole: 'member' }, 'DELETE'),
+      );
       const removed = await ok(request(member, '/security/cache-policy'));
       assert(!removed.workspaces.some((w) => w.workspace === workspace));
       assert.deepEqual(await attempt(removed, restored), {
@@ -226,7 +240,7 @@ await test(
       });
       assert.equal(
         (await request(member, `${base}/pages/${pageId}/collaboration`, {})).status,
-        403,
+        404,
       );
       console.log(
         'PASS B02 real membership revocation, same policy version, stale allowed response cannot resurrect the cache',

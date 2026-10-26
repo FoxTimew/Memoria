@@ -7,6 +7,7 @@ import type { FormEvent } from 'react';
 import { authClient, authError } from '../lib/auth-client.ts';
 import { securityStatus, securityError } from '../lib/security-client.ts';
 import { refreshCachePolicy } from '../lib/cache-policy.ts';
+import { pendingInvitation, securityDestination } from '../lib/access-flow.ts';
 
 export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
   const params = useSearchParams();
@@ -27,7 +28,14 @@ export function AuthScreen({ mode }: { mode: 'signin' | 'signup' | 'verify' }) {
   async function finishLogin() {
     const status = await securityStatus();
     await refreshCachePolicy(status.userId, status.sessionId);
-    globalThis.location.replace(status.requiresStrongAuth ? '/securite' : '/');
+    const destination = pendingInvitation() ? '/invitation' : '/';
+    globalThis.location.replace(
+      status.requiresStrongAuth
+        ? destination === '/invitation'
+          ? securityDestination(destination)
+          : '/securite'
+        : destination,
+    );
   }
   const title =
     mode === 'signin'

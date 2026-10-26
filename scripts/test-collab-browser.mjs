@@ -4,6 +4,7 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { chromium, expect } from '@playwright/test';
+import { lifecycleBrowser } from './browser-lifecycle.mjs';
 const origin = process.env.APP_ORIGIN;
 if (
   origin !== 'https://localhost' ||
@@ -54,9 +55,13 @@ await test(
       pages = [],
       errors = [],
       sockets = [];
+    const lifecycle = await lifecycleBrowser();
     try {
       for (let i = 0; i < 2; i++) {
-        const context = await browser.newContext({ viewport: { width: 1440, height: 1080 } });
+        const context =
+          i === 0
+            ? lifecycle.context
+            : await browser.newContext({ viewport: { width: 1440, height: 1080 } });
         contexts.push(context);
         let account = fixture.accounts[i];
         if (!account) {
@@ -82,7 +87,7 @@ await test(
           account.verified = true;
           await persist();
         }
-        const page = await context.newPage();
+        const page = i === 0 ? await lifecycle.page() : await context.newPage();
         pages.push(page);
         page.on('pageerror', (error) => errors.push(error.message));
         page.on('websocket', (socket) => sockets.push(socket.url()));
@@ -286,7 +291,7 @@ await test(
       await expect(b.locator('.bn-editor')).not.toContainText('Fermeture3c');
       await a.close();
       await contexts[0].setOffline(false);
-      const reopened = await contexts[0].newPage();
+      const reopened = await lifecycle.page();
       await openPage(reopened);
       for (const page of [reopened, b])
         await expect(page.locator('.bn-editor')).toContainText('Fermeture3c');
@@ -309,7 +314,7 @@ await test(
       console.log(
         'PASS offline update retained in real IndexedDB after tab close, restored after online authorization, merged and acknowledged',
       );
-      const sleeper = await contexts[0].newPage();
+      const sleeper = await lifecycle.page();
       await openPage(sleeper);
       const cdp = await contexts[0].newCDPSession(sleeper);
       await cdp.send('Network.enable');
@@ -325,7 +330,7 @@ await test(
       await expect(sleeper.getByTestId('local-save-status')).toHaveText('Copie locale à jour');
       await expect(b.locator('.bn-editor')).not.toContainText('LatePrivate3c');
       await reopened.bringToFront();
-      await cdp.send('Page.setWebLifecycleState', { state: 'frozen' });
+      const resume = await lifecycle.freeze(sleeper);
       await reopened.goto(origin);
       await reopened.getByRole('button', { name: 'Se déconnecter', exact: true }).click();
       await reopened
@@ -339,7 +344,7 @@ await test(
         downloadThroughput: -1,
         uploadThroughput: -1,
       });
-      await cdp.send('Page.setWebLifecycleState', { state: 'active' });
+      await resume();
       await expect(sleeper.getByText('Session fermée sur ce poste.', { exact: true })).toBeVisible({
         timeout: 10000,
       });
@@ -372,9 +377,9 @@ await test(
         data: {},
       });
       assert(revoked.ok());
-      await expect(
-        b.getByText('Votre accès a changé. Le document a été fermé.', { exact: true }),
-      ).toBeVisible({ timeout: 10000 });
+      await expect(b.getByText('Vos accès ont changé.', { exact: false })).toBeVisible({
+        timeout: 10000,
+      });
       await expect(b.locator('.bn-editor')).toHaveCount(0);
       await expect.poll(async () => (await cache(b)).updates).toBe(0);
       assert((await cache(b)).documents.every((p) => p.pending.length === 0 && p.count === 0));
@@ -383,7 +388,8 @@ await test(
         'PASS server session revocation closes the cached editor and erases its page updates',
       );
     } finally {
-      for (const context of contexts) await context.close();
+      for (const context of contexts) if (context !== lifecycle.context) await context.close();
+      await lifecycle.close();
       await browser.close();
     }
   },

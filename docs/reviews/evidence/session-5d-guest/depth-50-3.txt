@@ -1,0 +1,16 @@
+Power: {"observedAt":"2026-10-25T19:08:33.680Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":90}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-25T19:08:34.609Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":90}],"allowed":true,"reason":null}
+{"profile":"content-1M","guestDepth":50,"p95":12.256799999999203,"max":22.118100000000595,"iterations":200,"warmup":20,"preparedPlans":[{"name":"collaboration-append-update-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-assert-fence-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-receipt-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-reserve-block-ids-v1","generic_plans":"0","custom_plans":"1"},{"name":"content-resolve-access-v1","generic_plans":"215","custom_plans":"5"}],"samples":200}
+{"profile":"history-1M","guestDepth":50,"p95":37.52680000000146,"max":46.88659999999982,"iterations":200,"warmup":20,"preparedPlans":[{"name":"collaboration-append-update-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-assert-fence-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-receipt-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-reserve-block-ids-v1","generic_plans":"0","custom_plans":"2"},{"name":"content-resolve-access-v1","generic_plans":"435","custom_plans":"5"}],"samples":200}
+✔ Production incremental validation and journal, 1 MiB profiles (18373.3072ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18377.0424
+Collaboration warm.e2e.ts: EXIT_CODE=0
+
+EXIT_CODE=0

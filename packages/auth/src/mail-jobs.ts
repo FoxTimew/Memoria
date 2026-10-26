@@ -1,5 +1,5 @@
 import { eq, sql } from 'drizzle-orm';
-import { authMailJobs } from '@memoria/db';
+import { authMailJobs, invitation } from '@memoria/db';
 import type { Database } from '@memoria/db';
 import { createAuth } from './create-auth.ts';
 import { readMailPayload } from './recovery-core.ts';
@@ -25,6 +25,15 @@ export async function processAuthMail(
       .for('update', { skipLocked: true });
     const job = jobs[0];
     if (!job) return false;
+    if (job.kind === 'invitation') {
+      const current = await tx.execute(
+        sql`SELECT id FROM workspace_invitations WHERE id=${job.invitationId}::uuid AND status='pending' AND expires_at>clock_timestamp()`,
+      );
+      if (!current.rows.length) {
+        await tx.delete(authMailJobs).where(eq(authMailJobs.id, job.id));
+        return true;
+      }
+    }
     try {
       await tx.transaction(async (nested) => {
         const payload = await readMailPayload(options.secret, job.payload);
@@ -42,6 +51,11 @@ export async function processAuthMail(
         }
       });
       await tx.delete(authMailJobs).where(eq(authMailJobs.id, job.id));
+      if (job.invitationId)
+        await tx
+          .update(invitation)
+          .set({ deliveryStatus: 'sent' })
+          .where(eq(invitation.id, job.invitationId));
     } catch {
       const attempt = job.attempts + 1;
       if (attempt >= 6) await tx.delete(authMailJobs).where(eq(authMailJobs.id, job.id));
@@ -53,6 +67,11 @@ export async function processAuthMail(
             availableAt: new Date(Date.now() + Math.min(300000, 1000 * 2 ** attempt)),
           })
           .where(eq(authMailJobs.id, job.id));
+      if (job.invitationId)
+        await tx
+          .update(invitation)
+          .set({ deliveryStatus: attempt >= 6 ? 'failed' : 'retrying' })
+          .where(eq(invitation.id, job.invitationId));
       options.report?.({
         action: attempt >= 6 ? 'auth_mail_abandoned' : 'auth_mail_retry',
         jobId: job.id,

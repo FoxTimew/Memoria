@@ -1,0 +1,73 @@
+START: 2026-10-25T16:41:45.6233088+01:00
+COMMAND: pnpm test:pages:e2e
+$ node scripts/build-server.mjs api --pages-e2e && node --env-file=.env apps/api/dist/pages.e2e.mjs
+▶ Production Nest + BlockWriteService + collaboration + PostgreSQL
+  ✔ owner/member share content; unshared guests see empty lists and cannot open pages (180.0214ms)
+  ✔ Nest session injection and BlockWriteService wait for projected nested content (1534.518ms)
+  ✔ command idempotency and stale content revision do not change relational version (1264.6904ms)
+  ✔ invalid candidates, foreign files and cross-page IDs cannot reach the journal (273.7593ms)
+  ✔ rename retains relational 409 and legacy content PUT cannot bypass Yjs (99.9929ms)
+  ✔ archive/restore hides descendants from search and retains document generation (184.2605ms)
+  ✔ tree cycles and revoked membership remain denied (77.1826ms)
+✔ Production Nest + BlockWriteService + collaboration + PostgreSQL (4685.878ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5072.5308
+EXIT_CODE: 0
+COMMAND: pnpm test:auth:workspace
+$ node scripts/build-server.mjs api --workspace-security-e2e && node --env-file=.env apps/api/dist/workspace-security.e2e.mjs
+▶ 4b: workspace policy, transactional gates and HTTP-to-WebSocket revocation
+  ✔ only an owner with a recent strong proof can manage policy; outsiders cannot inspect it (58.4364ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ HTTP first-factor enrollment closes both live WebSockets, including the retained session, within five seconds (481.7792ms)
+  ✔ activation grants existing members seven days; edits and reactivation never postpone their deadline (213.0146ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ grace expiry closes only the protected workspace socket without a new SQL notification; HTTP/HMAC/reconnect fail closed (2385.8941ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ new members cannot inherit grace or supply a future deadline; missing deadline also denies access (190.6095ms)
+  ✔ recent assurance gates policy, roles and future API/webhook contracts; old assurance still allows content (206.5318ms)
+  ✔ assurance is rechecked after waiting for the workspace lock, before any sensitive effect (102.7095ms)
+  ✔ role mutations require owner + recent proof, compare the old role and preserve a last owner (96.1092ms)
+API request failed: Error
+  ✔ an audit failure rolls back policy, grace dates and version together (54.6435ms)
+  ✔ a concurrent policy activation wins before last-factor removal and rolls back no valid factor (72.8466ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ HTTP activation without grace closes an existing weak socket and immediately blocks content (181.9376ms)
+  ✔ last-factor removal is refused by policy; HTTP removal with a spare factor closes actual sockets and revokes assurance (254.5322ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ 4b: workspace policy, transactional gates and HTTP-to-WebSocket revocation (6338.6605ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6342.0743
+EXIT_CODE: 0
+COMMAND: pnpm test:auth:e2e
+$ node scripts/build-server.mjs api --auth-e2e && node --env-file=.env apps/api/dist/auth.e2e.mjs
+▶ Real Nest authentication boundary and PostgreSQL rate limits
+  ✔ a newly added undecorated route is closed by default (59.2534ms)
+  ✔ explicit public health and Better Auth handlers remain reachable (48.6384ms)
+  ✔ login admits 150 attempts, returns 429 on the next and recovers after the fixed window (534.8953ms)
+  ✔ /sign-up/email blocks after 100 requests independently (2141.3508ms)
+  ✔ /send-verification-email blocks after 150 requests independently (432.4261ms)
+✔ Real Nest authentication boundary and PostgreSQL rate limits (3328.1271ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3336.6966
+EXIT_CODE: 0
+END: 2026-10-25T16:42:10.5966826+01:00

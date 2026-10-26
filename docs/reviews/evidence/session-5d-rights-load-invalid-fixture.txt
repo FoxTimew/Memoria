@@ -1,0 +1,60 @@
+$ node scripts/measure-rights.mjs
+{"power":{"observedAt":"2026-10-25T18:56:27.713Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":79}],"allowed":true,"reason":null},"freeBytes":5132185600}
+▶ 5c real HTTP/WS: shares, previews, epochs and hostile callers
+  ✔ S01/R12: each new route denies anonymous, outsider, guest; weak administrator guided by explicit proof error (331.9313ms)
+  ✔ S02: admin strong proof, maximum inherited level, stale CAS and member isolation (350.2378ms)
+[onAuthenticate] AUTH_REJECTED
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ C03: epoch-bound WebSocket closed after HTTP downgrade; old token cannot reconnect after regrant (438.7369ms)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] AUTH_REJECTED
+[onAuthenticate] ACCESS_DENIED
+  ✔ C04: unrelated archive and ineffective move preserve live sockets; actual loss closes only the affected guest/page (5987.3861ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ M01: preview matches actual inherited losses/gains; stale/forged/misbound preview fails (795.3072ms)
+{"series":1,"power":{"observedAt":"2026-10-25T18:56:41.343Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":79}],"allowed":true,"reason":null},"freeBytes":4822601728}
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] AUTH_REJECTED
+  ✖ 5d measurement: 1000 pages and four writers during share/role/removal (4984.8732ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ Q02: canonical quotas cover all five new routes; forged IP cannot reset the bucket (29.0779ms)
+✖ 5c real HTTP/WS: shares, previews, epochs and hostile callers (15547.1511ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 6
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15550.448
+
+✖ failing tests:
+
+test at apps\api\dist\shares.e2e.mjs:50723:15
+✖ 5d measurement: 1000 pages and four writers during share/role/removal (4984.8732ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  400 !== 200
+
+      at ok (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/shares.e2e.mjs:50275:13)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async measure (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/shares.e2e.mjs:50365:9)
+      at async measureRights (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/shares.e2e.mjs:50373:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/shares.e2e.mjs:50723:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/shares.e2e.mjs:50425:1 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+[ELIFECYCLE] Command failed with exit code 1.
+EXIT_CODE=1
