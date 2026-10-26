@@ -672,12 +672,12 @@ await test(
                 Boolean(
                   (
                     await db.pool.query(
-                      "SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE $1=ANY(pg_blocking_pids(pid)) AND query LIKE '%FROM pages%') AS waiting",
+                      "SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE $1=ANY(pg_blocking_pids(pid)) AND query LIKE '%content_lock_document%') AS waiting",
                       [pid],
                     )
                   ).rows[0].waiting,
                 ),
-              'journal page row lock',
+              'journal document barrier',
             );
             await blocker.query('COMMIT');
             await until(() => editor.closed, 'queued socket revoked');

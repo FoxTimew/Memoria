@@ -31,4 +31,6 @@ export const pageAccessPending = pgTable('page_access_pending', {
   workspaceId: uuid('workspace_id')
     .primaryKey()
     .references(() => organization.id, { onDelete: 'cascade' }),
+  // NULL means the whole workspace. Targeted scopes are unioned; a full scope never shrinks.
+  memberIds: uuid('member_ids').array(),
 });
