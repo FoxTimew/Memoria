@@ -1,5 +1,7 @@
 # Session 6a — diagnostic des barrières, arrêt avant interface
 
+**Suivi du 26 octobre 2026 :** le développeur a retenu le profilage puis la réduction du travail sous barrière. Le [compte rendu suivant](session-6-6a-optimisation-barrieres.md) confirme la cause et le passage des plafonds SQL/WSS, sans livrer l’ensemble de 6a. Les résultats et l’arrêt initial ci-dessous restent conservés comme historique.
+
 26 octobre 2026. **6a commencée, non livrée et non qualifiée.** La première preuve aux bornes échoue sur l'attente SQL des rédacteurs. Arrêt conformément à la demande : aucun service de cellules, aucune nouvelle route HTTP/WSS de bases, aucune interface. Les tables de versions ne constituent pas une livraison du CAS. Ne pas merger/déployer cette candidate de preuve sur les données de travail.
 
 ## Lire en priorité

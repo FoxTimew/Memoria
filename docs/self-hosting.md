@@ -152,4 +152,4 @@ Le worker délivre au moins une fois : une panne entre SMTP et commit peut produ
 
 ## Bases de données — réglages de déploiement
 
-Les [bornes des bases](database-deployment.md) sont configurables par environnement, avec les défauts validés de 10 000 lignes/base et 50 000/workspace. Toute hausse exige une mesure préalable au nouveau volume. La candidate 6a reste un diagnostic de barrières non qualifié, à ne pas déployer sur les données de travail.
+Les [bornes des bases](database-deployment.md) sont configurables par environnement, avec les défauts validés de 10 000 lignes/base et 50 000/workspace. Toute hausse exige une mesure préalable au nouveau volume. Le [suivi 6a](reviews/session-6-6a-optimisation-barrieres.md) lève le premier arrêt de performance des barrières ; la session reste incomplète, à ne pas déployer sur les données de travail avant qualification et procédure coordonnée définitives.

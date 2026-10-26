@@ -1,6 +1,6 @@
 # Réglages de déploiement des bases
 
-Statut 6a : contrat de configuration testé ; aucune route de bases n'est encore ouverte. Le banc de barrières a dépassé son plafond d'attente SQL : **ne pas déployer la migration de preuve sur les données de travail**. Les services 6a/6b restent à terminer après décision.
+Statut 6a : contrat de configuration testé ; aucune route de bases n'est encore ouverte. Le premier dépassement du banc de barrières a été résolu par une réconciliation ciblée (attente SQL observée 34,4 ms ; confirmation WSS 56,7 ms au p95 médian). La [fiche de suivi](reviews/session-6-6a-optimisation-barrieres.md) précise les limites : 6a reste incomplète. **Ne pas déployer les migrations de preuve sur les données de travail** avant la qualification et la procédure coordonnée définitives.
 
 Les valeurs suivantes sont des **défauts de déploiement**, pas des constantes métier immuables. Elles sont lues une fois via `readDatabaseLimits`, hors des entrées HTTP. Les API/worker/collab du même déploiement doivent recevoir la même configuration. Une valeur non entière, nulle, négative, hors entier sûr ou des bornes incohérentes provoquent un échec explicite. Aucune hausse ne sera autorisée par une préférence utilisateur : toute hausse exige une mesure publiée au nouveau volume, puis une requalification des plafonds retenus. Baisser une borne ne supprime pas les données : les futurs services devront refuser la croissance, sans bloquer la lecture ou la purge.
 

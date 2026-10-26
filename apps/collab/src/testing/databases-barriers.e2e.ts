@@ -123,7 +123,10 @@ try {
   console.log(
     'PASS database barriers: inherited access, closed legacy scope, bounded materialization, writer/revocation in both orders.',
   );
-  if (process.env.MEMORIA_MEASURE_DATABASES === 'true') {
+  if (
+    process.env.MEMORIA_MEASURE_DATABASES === 'true' ||
+    process.env.MEMORIA_PROFILE_DATABASES === 'true'
+  ) {
     const { measureDatabaseBarriers } = await import('./databases-load.ts');
     await measureDatabaseBarriers(fixture, readDatabaseLimits());
   }
