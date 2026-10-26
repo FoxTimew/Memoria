@@ -169,6 +169,27 @@
       "when": 1793013660522,
       "tag": "0023_targeted_member_reconciliation",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1793017208501,
+      "tag": "0024_subtree_reconciliation",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1793017907380,
+      "tag": "0025_database_cell_state",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1793020341777,
+      "tag": "0026_database_definition_boundaries",
+      "breakpoints": true
     }
   ]
 }

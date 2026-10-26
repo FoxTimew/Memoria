@@ -1,5 +1,14 @@
 import { sql } from 'drizzle-orm';
-import { check, foreignKey, integer, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
+import {
+  check,
+  foreignKey,
+  index,
+  integer,
+  pgTable,
+  primaryKey,
+  text,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { member, organization } from './auth.ts';
 
 /** Transactionally derived effective permissions. Versions change only for changed pairs.
@@ -17,6 +26,7 @@ export const pageAccessState = pgTable(
   },
   (t) => [
     primaryKey({ columns: [t.workspaceId, t.memberId, t.pageId] }),
+    index('page_access_state_resource_idx').on(t.workspaceId, t.pageId, t.memberId),
     foreignKey({
       columns: [t.workspaceId, t.memberId],
       foreignColumns: [member.organizationId, member.id],
@@ -33,4 +43,6 @@ export const pageAccessPending = pgTable('page_access_pending', {
     .references(() => organization.id, { onDelete: 'cascade' }),
   // NULL means the whole workspace. Targeted scopes are unioned; a full scope never shrinks.
   memberIds: uuid('member_ids').array(),
+  // NULL means all pages; coalescing uses a safe Cartesian superset of both scopes.
+  pageIds: uuid('page_ids').array(),
 });

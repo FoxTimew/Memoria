@@ -12,11 +12,12 @@ export async function profileDatabaseMutation(db: TestDatabase, member: string) 
   try {
     const definitions = (
       await c.query<{ proname: string; source: string }>(
-        `SELECT p.proname,pg_get_functiondef(p.oid) source FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname=current_schema() AND p.proname IN ('content_reconcile_access','content_effective_access','content_access_effects','content_effective_access_scoped','content_access_effects_scoped')`,
+        `SELECT p.proname,pg_get_functiondef(p.oid) source FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname=current_schema() AND p.proname IN ('content_reconcile_access','content_effective_access','content_access_effects','content_effective_access_scoped','content_access_effects_scoped','content_effective_access_bounded','content_access_effects_bounded')`,
       )
     ).rows;
     const reconcile = definitions.find((r) => r.proname === 'content_reconcile_access')!.source;
     const scoped = reconcile.includes('true,targets');
+    const bounded = reconcile.includes('content_access_effects_bounded');
     const body = reconcile
       .slice(
         reconcile.indexOf('WITH changed AS MATERIALIZED'),
@@ -26,6 +27,7 @@ export async function profileDatabaseMutation(db: TestDatabase, member: string) 
       .replaceAll('NEW.workspace_id', '$1::uuid')
       .replaceAll('after_level,v', 'after_level,$2::integer')
       .replaceAll('access_version=v', 'access_version=$2::integer')
+      .replaceAll('true,targets,resources', 'true,$3::uuid[],$4::uuid[]')
       .replaceAll('true,targets', 'true,$3::uuid[]');
     assert(body.startsWith('WITH changed') && body.includes('content_access_effects'));
     for (let series = 1; series <= 3; series++) {
@@ -106,7 +108,11 @@ export async function profileDatabaseMutation(db: TestDatabase, member: string) 
       const plan = (
         await c.query(
           'EXPLAIN (ANALYZE, BUFFERS, VERBOSE, FORMAT JSON) ' + body,
-          scoped ? [db.workspace, version, [member]] : [db.workspace, version],
+          bounded
+            ? [db.workspace, version, [member], null]
+            : scoped
+              ? [db.workspace, version, [member]]
+              : [db.workspace, version],
         )
       ).rows[0]['QUERY PLAN'][0];
       await c.query('ROLLBACK');

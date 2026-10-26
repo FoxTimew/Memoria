@@ -12,11 +12,11 @@ export async function databaseLoadFixture(fixture: TestDatabase, limits: Databas
     .rows[0].id;
   const bases: string[] = [existing];
   const targetUsers: string[] = [];
+  const ordinary: string[] = [page];
+  for (let i = 1; i < 1000; i++) ordinary.push(randomUUID());
   const c = await pool.connect();
   try {
     await c.query('BEGIN');
-    const ordinary: string[] = [page];
-    for (let i = 1; i < 1000; i++) ordinary.push(randomUUID());
     // 20 branches, depth 50; the 50 containers are among the ordinary pages.
     await c.query(
       `INSERT INTO pages(id,workspace_id,parent_id,title,position)
@@ -109,5 +109,14 @@ export async function databaseLoadFixture(fixture: TestDatabase, limits: Databas
     '0',
   );
 
-  return { bases, targetUsers };
+  return {
+    bases,
+    targetUsers,
+    tree: {
+      root: ordinary[510]!,
+      parent: ordinary[509]!,
+      destination: ordinary[750]!,
+      descendants: 40,
+    },
+  };
 }

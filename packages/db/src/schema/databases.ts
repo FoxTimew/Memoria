@@ -87,6 +87,7 @@ export const databaseProperties = pgTable(
   },
   (t) => [
     unique('properties_workspace_id_uq').on(t.workspaceId, t.id),
+    unique('properties_database_id_uq').on(t.workspaceId, t.databaseId, t.id),
     unique('properties_typed_uq').on(t.workspaceId, t.databaseId, t.id, t.kind),
     unique('properties_relation_target_uq').on(
       t.workspaceId,
@@ -284,10 +285,57 @@ export const databaseCellVersions = pgTable(
       foreignColumns: [databaseRows.workspaceId, databaseRows.databaseId, databaseRows.pageId],
     }).onDelete('cascade'),
     foreignKey({
-      columns: [t.workspaceId, t.propertyId],
-      foreignColumns: [databaseProperties.workspaceId, databaseProperties.id],
+      columns: [t.workspaceId, t.databaseId, t.propertyId],
+      foreignColumns: [
+        databaseProperties.workspaceId,
+        databaseProperties.databaseId,
+        databaseProperties.id,
+      ],
     }).onDelete('cascade'),
     check('cell_version_ck', sql`${t.version} >= 0`),
+  ],
+);
+
+export const databaseAssignablePeople = pgTable(
+  'database_assignable_people',
+  {
+    workspaceId: uuid('workspace_id').notNull(),
+    databaseId: uuid('database_id').notNull(),
+    personId: uuid('person_id').notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.workspaceId, t.databaseId, t.personId] }),
+    foreignKey({
+      columns: [t.workspaceId, t.databaseId],
+      foreignColumns: [databases.workspaceId, databases.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [t.workspaceId, t.personId],
+      foreignColumns: [databasePeople.workspaceId, databasePeople.id],
+    }),
+  ],
+);
+
+// Separate from lifecycle and Yjs latches: concurrent cells never upgrade a row SHARE lock.
+export const databaseRowChanges = pgTable(
+  'database_row_changes',
+  {
+    workspaceId: uuid('workspace_id').notNull(),
+    databaseId: uuid('database_id').notNull(),
+    rowPageId: uuid('row_page_id').notNull(),
+    propertyRevision: bigint('property_revision', { mode: 'bigint' })
+      .default(sql`0`)
+      .notNull(),
+    firstDirtyAt: time('first_dirty_at'),
+    lastDirtyAt: time('last_dirty_at'),
+  },
+  (t) => [
+    primaryKey({ columns: [t.workspaceId, t.rowPageId] }),
+    foreignKey({
+      columns: [t.workspaceId, t.databaseId, t.rowPageId],
+      foreignColumns: [databaseRows.workspaceId, databaseRows.databaseId, databaseRows.pageId],
+    }).onDelete('cascade'),
+    check('row_property_revision_ck', sql`${t.propertyRevision}>=0`),
   ],
 );
 

@@ -125,6 +125,7 @@ try {
   );
   if (
     process.env.MEMORIA_MEASURE_DATABASES === 'true' ||
+    process.env.MEMORIA_MEASURE_DATABASE_TREE === 'true' ||
     process.env.MEMORIA_PROFILE_DATABASES === 'true'
   ) {
     const { measureDatabaseBarriers } = await import('./databases-load.ts');

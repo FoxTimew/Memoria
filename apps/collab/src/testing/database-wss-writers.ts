@@ -17,18 +17,27 @@ import { firstText, until } from './pool-helpers.ts';
 
 /** Real auth, TLS/Caddy, Hocuspocus and durable receipts. The row-scope adapter exists only
  * in this isolated fixture: production still rejects legacy page tokens for database rows. */
-export async function databaseWssWriters(db: TestDatabase, bases: string[]) {
+export async function databaseWssWriters(
+  db: TestDatabase,
+  bases: string[],
+  sameRow?: { page: string; database: string },
+) {
   const authentication = await testAuth(db),
     account = await authentication.account('WSS measure');
   // Replace, rather than add to, the fixture's owner: exactly 100 memberships throughout measurement.
-  await db.pool.query('DELETE FROM workspace_members WHERE workspace_id=$1 AND user_id=$2', [
-    db.workspace,
-    db.user,
-  ]);
+  if (!sameRow)
+    await db.pool.query('DELETE FROM workspace_members WHERE workspace_id=$1 AND user_id=$2', [
+      db.workspace,
+      db.user,
+    ]);
   await db.pool.query(
     "UPDATE workspace_members SET role='owner' WHERE workspace_id=$1 AND user_id=$2",
     [db.workspace, account.user],
   );
+  const accounts = sameRow
+    ? [account, await authentication.account('Second WSS writer')]
+    : [account];
+  const timedRooms = new Set<string>();
   const url = new URL(db.url);
   url.searchParams.set(
     'options',
@@ -52,7 +61,11 @@ export async function databaseWssWriters(db: TestDatabase, bases: string[]) {
       access: (connection, requests) =>
         resolvePageAccess(
           connection,
-          requests.map((r) => (scopes.has(r.page) ? { ...r, rowScope: scopes.get(r.page)! } : r)),
+          requests.map((r) =>
+            scopes.has(r.user + ':' + r.page)
+              ? { ...r, rowScope: scopes.get(r.user + ':' + r.page)! }
+              : r,
+          ),
         ),
     },
   );
@@ -86,33 +99,34 @@ export async function databaseWssWriters(db: TestDatabase, bases: string[]) {
   };
   try {
     proxy = await caddyFixture(Number(new URL(host.ingress.url).port));
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < (sameRow ? 2 : 4); i++) {
+      const writerAccount = accounts[i] ?? account;
       const row =
-        i === 3
+        !sameRow && i === 3
           ? null
           : (
               await db.pool.query(
                 `SELECT r.page_id,r.lifecycle_version,d.id AS database,a.version FROM database_rows r JOIN databases d ON d.id=r.database_id
       JOIN workspace_members m ON m.workspace_id=r.workspace_id AND m.user_id=$2
       JOIN page_access_state a ON a.workspace_id=r.workspace_id AND a.member_id=m.id AND a.page_id=d.page_id
-      WHERE r.database_id=$1 ORDER BY r.page_id LIMIT 1`,
-                [bases[i], account.user],
+      WHERE r.database_id=$1 AND ($3::uuid IS NULL OR r.page_id=$3) ORDER BY r.page_id LIMIT 1`,
+                [sameRow?.database ?? bases[i], writerAccount.user, sameRow?.page ?? null],
               )
             ).rows[0];
       const page = row?.page_id ?? db.page;
       if (row)
-        scopes.set(page, {
+        scopes.set(writerAccount.user + ':' + page, {
           database: row.database,
           baseVersion: row.version,
           lifecycle: row.lifecycle_version,
         });
       const identity = {
         key: 'wss-' + i,
-        user: account.user,
-        session: account.session,
+        user: writerAccount.user,
+        session: writerAccount.session,
         workspace: db.workspace,
         page,
-        ...(row ? { rowScope: scopes.get(page)! } : {}),
+        ...(row ? { rowScope: scopes.get(writerAccount.user + ':' + page)! } : {}),
       };
       const state = await host.store.open(identity),
         doc = new Y.Doc();
@@ -129,7 +143,7 @@ export async function databaseWssWriters(db: TestDatabase, bases: string[]) {
           constructor(address: string) {
             super(address, {
               ca: proxy!.ca,
-              headers: { cookie: account.cookie, origin: authentication.origin },
+              headers: { cookie: writerAccount.cookie, origin: authentication.origin },
             });
           }
         },
@@ -165,9 +179,13 @@ export async function databaseWssWriters(db: TestDatabase, bases: string[]) {
       });
       peers.push({ doc, provider, socket, pending, failed: () => failed });
       provider.attach();
-      void socket.connect();
+      void socket.connect().catch(() => {
+        failed = true;
+      });
       await until(() => provider.synced || failed, 'TLS editor sync');
       assert(!failed, 'TLS editor authenticated');
+      if (timedRooms.has(name)) continue;
+      timedRooms.add(name);
       const room = host.rooms.get(name)!;
       const update = room.update.bind(room);
       // Timing wrapper delegates the complete production method without replacing its behavior.
@@ -178,22 +196,36 @@ export async function databaseWssWriters(db: TestDatabase, bases: string[]) {
         return receipt;
       };
     }
-    assert.equal(
-      (
-        await db.pool.query('SELECT count(*) n FROM workspace_members WHERE workspace_id=$1', [
-          db.workspace,
-        ])
-      ).rows[0].n,
-      '100',
-    );
+    if (!sameRow)
+      assert.equal(
+        (
+          await db.pool.query('SELECT count(*) n FROM workspace_members WHERE workspace_id=$1', [
+            db.workspace,
+          ])
+        ).rows[0].n,
+        '100',
+      );
     return {
+      subjects: accounts.map((a) => ({
+        user: a.user,
+        session: a.session,
+        workspace: db.workspace,
+      })),
+      async assertConverged() {
+        assert(sameRow, 'Convergence check needs the same document');
+        await until(
+          () =>
+            peers.every((p) => firstText(p.doc).toString() === firstText(peers[0]!.doc).toString()),
+          'two Yjs clients converge',
+        );
+      },
       metadata: {
         transport: 'WSS via isolated Caddy, certificate and hostname verified',
         caddyImage: proxy.image,
         rowScope:
           'fixture-owned, frozen base/lifecycle epochs; production row ticket route not exposed',
       },
-      async run(work: () => Promise<void>) {
+      async run(work: () => Promise<void>, minimumReceipts = 30) {
         let stopped = false;
         collecting = true;
         confirmations = [];
@@ -261,7 +293,7 @@ export async function databaseWssWriters(db: TestDatabase, bases: string[]) {
           ...waits,
           ...Array.from({ length: Math.max(0, confirmations.length - waits.length) }, () => 0),
         ];
-        assert(roundTrips.length >= 30, 'At least 30 complete WSS receipts per series');
+        assert(roundTrips.length >= minimumReceipts, 'Enough complete WSS receipts per window');
         return { confirmations, waits, allWaits, roundTrips };
       },
       close,

@@ -11,7 +11,12 @@ import { databaseWssWriters } from './database-wss-writers.ts';
 /** First blocking gate: real SQL mutation cost. HTTP and editor waiting can only add to it. */
 export async function measureDatabaseBarriers(fixture: TestDatabase, limits: DatabaseLimits) {
   const { pool } = fixture;
-  const { bases, targetUsers } = await databaseLoadFixture(fixture, limits);
+  const { bases, targetUsers, tree } = await databaseLoadFixture(fixture, limits);
+  if (process.env.MEMORIA_MEASURE_DATABASE_TREE === 'true') {
+    const { measureDatabaseTree } = await import('./databases-tree-load.ts');
+    await measureDatabaseTree(fixture, bases, tree);
+    return;
+  }
   if (process.env.MEMORIA_PROFILE_DATABASES === 'true') {
     const { profileDatabaseMutation } = await import('./databases-profile.ts');
     await profileDatabaseMutation(fixture, targetUsers[0]!);
