@@ -94,3 +94,9 @@ Archivage/restauration de ligne produit un changement d'état dans cet agrégat 
 ## Preuves à apporter
 
 Le [cadrage de session 6](../reviews/session-6-etape-1-cadrage.md) décrit routes, quotas, étapes et mesures. Ces contrats ne sont pas des résultats de tests. 6a prouve d'abord cellule 0 concurrente, vide/recréation, cellules indépendantes, Yjs simultané, recontrôle au commit, rollback et bornes concurrentes avant l'interface.
+
+## État de la preuve 6a, 26 octobre
+
+Le noyau `DatabaseCells` applique désormais CAS de cellule et schéma, validation des neuf types, droits/recontrôle, archivage/restauration, références masquées et marque de révision durable dans PostgreSQL. Dix-neuf tests d’intégration couvrent notamment version zéro, tombstones, valeurs/version cohérentes, ensembles, cibles révoquées pendant l’attente, options archivées, définitions peuplées et rollback. Deux comptes éditent aussi réellement le même corps via WSS dans le banc de cellules. La [fiche](../reviews/session-6-6a-cellules-et-arborescence.md) distingue mesures exploratoires et version finale à remesurer.
+
+Ce noyau n’est pas une livraison des routes CRUD, du compilateur AST, des curseurs signés, de la recherche ou du worker outbox : ils restent en 6b. Le banc SQL minimal du tableau est prêt pour trois séries mais a été arrêté avant mesure à 2,762 Gio libres. Décision explicite : maintenir ≥3 Gio et différer, sans modifier <200 ms. La preuve reste bloquante avant interface.

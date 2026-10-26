@@ -1,0 +1,29 @@
+▶ 6a cell kernel: real PostgreSQL concurrency, rights, hidden links and rollback
+  ✔ version zero races; clear retains tombstone; response replay cannot overwrite (141.4204ms)
+  ✔ nine types validate; false/zero remain different from empty; title and Yjs versions untouched (299.5579ms)
+  ✔ different cells proceed while the other cell is locked; same set uses one CAS (119.6242ms)
+  ✔ hidden relations survive clearVisible; unavailable and invented IDs have identical errors (211.8443ms)
+  ✔ person visibility is explicit; withdrawal detaches without deleting assignments (92.8713ms)
+  ✔ guest read and schema/lifecycle spoofing fail; source access checked before validation (26.8087ms)
+  ✔ schema race waits, rechecks the version and preserves values (49.3946ms)
+  ✔ revocation first: queued write is refused with no value in the error (36.1479ms)
+  ✔ write first: rights commit waits until the authorized cell commit (79.8413ms)
+  ✔ lifecycle CAS, archive while waiting, and old lifecycle ticket rejection (42.2209ms)
+  ✔ write failure rolls back value, CAS version and row aggregate together (48.1524ms)
+  ✔ archived property rejects stale schema and new writes without deleting historical values (29.926ms)
+  ✔ 10,000 person references survive withdrawal without identity resurrection (2798.2126ms)
+  ✔ value and version stay coherent while a previously empty cell is repeatedly written (2732.658ms)
+  ✔ target revocation while adding a relation is rechecked after the wait (115.0897ms)
+  ✔ typed/base foreign keys reject populated type changes and foreign cell identities (10.1579ms)
+  ✔ archived options may be retained or removed, never newly assigned (229.838ms)
+  ✔ option and assignable-list changes wait for the same base barrier (37.866ms)
+✔ 6a cell kernel: real PostgreSQL concurrency, rights, hidden links and rollback (8197.7842ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8201.3722
+Collaboration database-cells.e2e.ts: EXIT_CODE=0

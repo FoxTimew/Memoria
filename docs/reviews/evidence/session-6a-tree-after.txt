@@ -1,0 +1,35 @@
+$ node scripts/test-collab.mjs "--suite" "databases-barriers"
+Power: {"observedAt":"2026-10-26T12:23:34.398Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-26T12:23:35.133Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+PASS database barriers: inherited access, closed legacy scope, bounded materialization, writer/revocation in both orders.
+Fixture: containers ready.
+Fixture: memberships and grants committed.
+Fixture ready: 1,000 ordinary pages, 50 bases, 50,000 rows, 100 memberships, 5,000 grants, depth 50.
+{"kind":"move","series":1,"power":{"observedAt":"2026-10-26T12:24:16.586Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3562319872}
+{"kind":"move","series":1,"p95":[31.2387000000017,17.345099999998638,31.248899999998685,35.24380000000383],"mutations":30,"receipts":150}
+{"kind":"move","series":2,"power":{"observedAt":"2026-10-26T12:24:31.379Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3549048832}
+{"kind":"move","series":2,"p95":[36.13520000000426,14.777299999994284,32.0393999999942,35.95190000000002],"mutations":30,"receipts":151}
+{"kind":"move","series":3,"power":{"observedAt":"2026-10-26T12:24:46.142Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3559038976}
+{"kind":"move","series":3,"p95":[30.624599999995553,16.09209999999439,30.494699999995646,34.455099999991944],"mutations":30,"receipts":150}
+{"kind":"archive","series":1,"power":{"observedAt":"2026-10-26T12:25:00.850Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3579965440}
+{"kind":"archive","series":1,"p95":[100.56730000000971,80.91319999999541,97.48760000000766,101.38999999999942],"mutations":30,"receipts":209}
+{"kind":"archive","series":2,"power":{"observedAt":"2026-10-26T12:25:20.401Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3556696064}
+{"kind":"archive","series":2,"p95":[103.36100000000442,76.31339999999909,93.7216999999946,97.92669999999634],"mutations":30,"receipts":206}
+{"kind":"archive","series":3,"power":{"observedAt":"2026-10-26T12:25:39.725Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3513495552}
+{"kind":"archive","series":3,"p95":[84.06100000000151,65.95810000001802,82.77249999999185,86.61149999999907],"mutations":30,"receipts":189}
+{"kind":"restore","series":1,"power":{"observedAt":"2026-10-26T12:25:57.829Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3512516608}
+{"kind":"restore","series":1,"p95":[83.66749999998137,66.22469999999157,81.65989999999874,85.75769999998738],"mutations":30,"receipts":189}
+{"kind":"restore","series":2,"power":{"observedAt":"2026-10-26T12:26:15.880Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3486437376}
+{"kind":"restore","series":2,"p95":[83.79120000000694,65.31280000001425,82.65840000001481,86.63709999999264],"mutations":30,"receipts":185}
+{"kind":"restore","series":3,"power":{"observedAt":"2026-10-26T12:26:33.714Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3474599936}
+{"kind":"restore","series":3,"p95":[93.24900000001071,67.76550000000861,84.88409999999567,88.92660000000615],"mutations":30,"receipts":198}
+{"kind":"move","medianP95":[31.2387000000017,16.09209999999439,31.248899999998685,35.24380000000383],"limits":[500,100,200,200],"passed":true}
+{"kind":"archive","medianP95":[100.56730000000971,76.31339999999909,93.7216999999946,97.92669999999634],"limits":[500,100,200,200],"passed":true}
+{"kind":"restore","medianP95":[83.79120000000694,66.22469999999157,82.65840000001481,86.63709999999264],"limits":[500,100,200,200],"passed":true}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+Collaboration databases-barriers.e2e.ts: EXIT_CODE=0
+
+EXIT_CODE=0

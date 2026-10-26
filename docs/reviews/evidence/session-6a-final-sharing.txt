@@ -1,0 +1,73 @@
+$ node scripts/build-server.mjs api --sharing-e2e && node --env-file=.env apps/api/dist/sharing.e2e.mjs
+[beforeUnloadDocument] RESIDENT_REPLICA
+▶ 5a: real Nest, Better Auth sessions, PostgreSQL grants, HMAC and hostile WebSockets
+  ✔ A01/A02: inherited maximum, hidden ancestors and SQL/API decisions agree (857.7173ms)
+  ✔ R12: every page route rejects anonymous calls; alternate read/write routes keep guest boundaries (451.9338ms)
+  ✔ A02: inaccessible matches cannot fill the first hundred search results (1365.9791ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ A01/A04: read cannot mutate; edit can rename/create children but cannot manage the tree (1453.2783ms)
+[beforeSync] READ_ONLY
+closing connection 218669e3-7653-4fbb-8337-ac875865d948 (while handling 79b753c8-b82b-4a17-935b-d8fa45535a71:c91004d0-8052-49e1-8786-fd51a918c650:5d9e4b14-db0c-43ac-bfb1-e3c1805acd60) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49698:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49984:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46994:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46929:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47202:11)
+[beforeSync] READ_ONLY
+closing connection a832433e-822d-46ae-ad59-0658d9f76146 (while handling 79b753c8-b82b-4a17-935b-d8fa45535a71:c91004d0-8052-49e1-8786-fd51a918c650:5d9e4b14-db0c-43ac-bfb1-e3c1805acd60) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49698:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49984:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46994:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46929:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47202:11)
+[beforeSync] READ_ONLY
+closing connection 4628d2a3-c4c4-4e4a-b176-5bf43256bd91 (while handling 79b753c8-b82b-4a17-935b-d8fa45535a71:c91004d0-8052-49e1-8786-fd51a918c650:5d9e4b14-db0c-43ac-bfb1-e3c1805acd60) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49698:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49984:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46994:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46929:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47202:11)
+  ✔ C01/L01: read receives live Yjs but cannot send update, sync2, delete-set or writer commands (2976.9787ms)
+  ✔ A03: relational rename also rechecks rights after waiting for a committed downgrade (238.1111ms)
+  ✔ A03/C02: committed downgrade beats a real HTTP writer waiting on access locks (85.5393ms)
+[beforeSync] ACCESS_DENIED
+closing connection f15f028c-88df-4028-98d1-14f0dbba9daa (while handling 79b753c8-b82b-4a17-935b-d8fa45535a71:c91004d0-8052-49e1-8786-fd51a918c650:5d9e4b14-db0c-43ac-bfb1-e3c1805acd60) because of exception Error: ACCESS_DENIED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49698:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49984:22)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46994:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46929:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47202:11)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47791:7
+  ✔ A03/C02: a real WebSocket update waits for the page lock then sees the committed downgrade (137.9943ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ C02: missed notification still disconnects descendants within five seconds (250.7032ms)
+  ✔ A01/A02: strongest ancestor wins; archive hides direct grants; move recalculates inheritance (532.9504ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ I05: policy, recovery and expired sessions cannot bypass page or socket rights (131.3447ms)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+  ✔ A03: promotion/removal cannot resurrect dormant grants; anonymous audit records cleanup (228.746ms)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+  ✔ Q01: matched route/IP and shared account budgets resist header and UUID rotation (14118.3515ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ 5a: real Nest, Better Auth sessions, PostgreSQL grants, HMAC and hostile WebSockets (28826.0247ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28830.503

@@ -1,0 +1,10 @@
+{"fixture":{"rows":10000,"properties":50,"relationTargets":50,"people":20,"optionsPerProperty":100,"holes":"n % 17","fullSets":"n % 1000"},"limits":{"server":200,"pageSize":50}}
+{"role":"owner","scenario":"broad","count":50,"status":"FUNCTIONAL_ONLY_NO_MEASUREMENT"}
+{"role":"owner","scenario":"deep","count":50,"status":"FUNCTIONAL_ONLY_NO_MEASUREMENT"}
+{"role":"owner","scenario":"ten-filters","count":50,"status":"FUNCTIONAL_ONLY_NO_MEASUREMENT"}
+{"role":"owner","scenario":"nulls-desc","count":50,"status":"FUNCTIONAL_ONLY_NO_MEASUREMENT"}
+{"role":"guest","scenario":"broad","count":50,"status":"FUNCTIONAL_ONLY_NO_MEASUREMENT"}
+{"role":"guest","scenario":"deep","count":50,"status":"FUNCTIONAL_ONLY_NO_MEASUREMENT"}
+{"role":"guest","scenario":"ten-filters","count":47,"status":"FUNCTIONAL_ONLY_NO_MEASUREMENT"}
+{"role":"guest","scenario":"nulls-desc","count":50,"status":"FUNCTIONAL_ONLY_NO_MEASUREMENT"}
+Collaboration database-table-load.e2e.ts: EXIT_CODE=0

@@ -1,0 +1,25 @@
+$ node scripts/test-collab.mjs "--suite" "database-table-load"
+Power: {"observedAt":"2026-10-26T12:57:07.078Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-26T12:57:07.717Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+{"fixture":{"rows":10000,"properties":50,"relationTargets":50,"people":20,"optionsPerProperty":100,"holes":"n % 17","fullSets":"n % 1000"},"limits":{"server":200,"pageSize":50}}
+{"role":"owner","scenario":"broad","series":1,"power":{"observedAt":"2026-10-26T12:58:18.746Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":2965778432}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: FREE_RAM_BELOW_3_GIB
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-database-table-load.e2e.mjs:5097:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration database-table-load.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.
+
+EXIT_CODE=1

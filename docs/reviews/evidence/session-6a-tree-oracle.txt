@@ -1,0 +1,13 @@
+Fixture: containers ready.
+Fixture: memberships and grants committed.
+Fixture ready: 1,000 ordinary pages, 50 bases, 50,000 rows, 100 memberships, 5,000 grants, depth 50.
+✔ full 1,000-page / 50,000-row fixture: subtree reconciliation equals complete oracle (40844.6006ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40848.4558
+Collaboration reconciliation-tree.e2e.ts: EXIT_CODE=0

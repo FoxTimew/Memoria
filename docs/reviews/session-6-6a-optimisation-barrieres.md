@@ -1,5 +1,7 @@
 # Session 6a — profilage et réduction du travail sous barrière
 
+Suivi ultérieur : [sous-arbres, cellules et équivalence aléatoire](session-6-6a-cellules-et-arborescence.md). Cette fiche conserve le diagnostic et les mesures de rôle de sa livraison initiale.
+
 26 octobre 2026. Suite au premier arrêt, le développeur a choisi de profiler puis de limiter le travail sous verrou, sans affaiblir les contrôles. **Le scénario de changement de rôle aux bornes passe maintenant les plafonds SQL et WSS.** Cette livraison débloque la preuve ; elle ne termine pas 6a et n’ouvre aucune interface ni nouvelle route applicative de bases.
 
 ## Fichiers à lire en priorité
