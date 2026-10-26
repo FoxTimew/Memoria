@@ -4,6 +4,8 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { readMeasurementPower, assertMeasurementPower } from './measurement-power.mjs';
 const measurementSuites = new Set(['warm.e2e.ts', 'cold.e2e.ts', 'capacity.e2e.ts']);
+if (process.env.MEMORIA_MEASURE_DATABASES === 'true')
+  measurementSuites.add('databases-barriers.e2e.ts');
 const powerPreflight = () => {
   const battery = readMeasurementPower();
   console.log(`Power: ${JSON.stringify(battery)}`);

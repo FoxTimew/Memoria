@@ -148,6 +148,20 @@
       "when": 1792952805917,
       "tag": "0020_targeted_page_access",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1793010641098,
+      "tag": "0021_database_barriers",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1793011777378,
+      "tag": "0022_database_people_workspace",
+      "breakpoints": true
     }
   ]
 }

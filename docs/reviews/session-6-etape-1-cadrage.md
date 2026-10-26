@@ -1,6 +1,6 @@
 # Session 6 — étape 1 : cadrage des bases de données
 
-Date : 26 octobre 2026. **Cadrage des bases sans code applicatif. 6a n'est pas commencée.** Exception de socle expressément autorisée après le blocage Windows : remplacement de Lefthook par les [hooks Git natifs](session-6-hooks-natifs.md), conservant tous les contrôles.
+Date : 26 octobre 2026. **État lors de la livraison du cadrage : sans code applicatif, avant 6a.** Le cadrage est désormais accepté ; la [preuve 6a](session-6-6a-barrieres.md) est arrêtée sur son seuil d'attente SQL. Exception de socle expressément autorisée après le blocage Windows : remplacement de Lefthook par les [hooks Git natifs](session-6-hooks-natifs.md), conservant tous les contrôles.
 
 La session 5 a été créée puis fusionnée, sur autorisation explicite reçue pendant cette étape, par la [PR #6](https://github.com/FoxTimew/Memoria/pull/6). Main synchronisé : `4d611edfe7ae7e00bad1be3d9327e9e2acf2e55c` ; branche `codex/session-6-databases` créée depuis ce commit. Cette autorisation ponctuelle ne modifie pas la règle : le développeur crée et fusionne les PR suivantes. Les risques de 5d ne sont pas renommés « acceptés » du seul fait de cette fusion.
 
@@ -8,11 +8,11 @@ La session 5 a été créée puis fusionnée, sur autorisation explicite reçue 
 
 1. [ADR 008](../adr/008-proprietes-typees.md) : types, bornes, cellule/version, tableau, recherche et événements.
 2. [ADR 020](../adr/020-droits-et-concurrence-des-bases.md) : droits hérités, références masquées, personnes, verrous et invalidation ciblée.
-3. [ARCHITECTURE.md](../../ARCHITECTURE.md#session-6--découpage-proposé) : ordre des preuves, étapes et règles d'arrêt.
+3. [ARCHITECTURE.md](../../ARCHITECTURE.md#session-6--découpage-retenu) : ordre des preuves, étapes et règles d'arrêt.
 
 Les tables de `packages/db/src/schema/databases.ts` sont un socle de conception, pas un service livré. Elles n'ont pas encore la version durable d'une cellule vide/multi-valeurs, les barrières de base ni la référence de personne évitant une cascade massive. Les anciennes routes de pages/recherche/collaboration devront reconnaître les lignes ; ajouter seulement des contrôleurs de bases ne suffira pas.
 
-## Choix retenus et propositions encore ouvertes
+## Choix retenus et décisions acceptées
 
 Réponses du développeur du 26 octobre :
 
@@ -26,9 +26,9 @@ Réponses du développeur du 26 octobre :
 | Tableau               | Une vue commune, deux tris, dix filtres ET ; tris scalaires/titre/select/URL ; ensembles filtrables non triables ; pagination 50/max 100                       |
 | Nouveaux plafonds p95 | Tableau <200 ms, cellule avec Yjs <100 ms, mutation de droits <500 ms ; attente SQL éditeur <100 ms, confirmation avec mutation <200 ms                        |
 
-**Restent proposés à la relecture du cadrage complet :** opérateurs exacts et sémantique des dates/vides, bornes secondaires de texte/URL/nom et réponses, protocole de verrous, versions/erreurs, agrégation des événements, quotas ci-dessous, séquencement 6a–6d. Ces six réponses ne sont pas une validation anticipée de chaque détail technique. Aucun de ces tests nouveaux n'est annoncé comme exécuté. Attendre la validation du cadrage avant 6a.
+**Acceptés le 26 octobre 2026 après relecture du cadrage complet :** opérateurs exacts et sémantique des dates/vides, bornes secondaires de texte/URL/nom et réponses, protocole de verrous, versions/erreurs, agrégation des événements, quotas ci-dessous, séquencement 6a–6d. La validation ultérieure couvre ces détails. Cette fiche reste le compte rendu du cadrage : aucun test de 6a n'y est présenté comme exécuté.
 
-## Découpage proposé
+## Découpage retenu
 
 | Étape                                                        | Livraison et preuves avant relecture                                                                                                                                                                                                                                                                                                                                                                                                                           | Guide manuel à fournir                                                                                                                                                                                                                                                                                                        |
 | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -39,7 +39,7 @@ Réponses du développeur du 26 octobre :
 
 Chaque sous-étape a ses commits par sujet, une fiche avec fichiers prioritaires/ce qui pourrait casser/guide manuel, journaux complets, hash poussé et vérifié directement sur le distant. Arrêt pour relecture entre étapes. Descriptions `.local/session-6a-pr.md` et suivantes conservées pour la description finale ; pas de PR automatique. Les preuves de 6a deviennent des tests permanents ciblant le service réel, pas un second moteur de droits maintenu à côté.
 
-## Inventaire proposé de routes et quotas — R12 / S5-R11
+## Inventaire retenu de routes et quotas — R12 / S5-R11
 
 Préfixe `W = /api/internal/workspaces/:w`, `D = W/databases/:d`. Chemins **prévisionnels**, aucun ajouté ici. Guard global, session injectée, assurance/politique, Origin/CSRF et droit courant ; aucune nouvelle exception `@Public()`. Même service métier pour la future API publique, mais aucune route `/v1` livrée par anticipation. Toute route réellement ajoutée/élargie devra figurer dans l'inventaire final avec attaque exécutée ; une seule ligne de matrice regroupée ne dispense pas de tester chaque méthode/gabarit.
 
@@ -61,9 +61,9 @@ Préfixe `W = /api/internal/workspaces/:w`, `D = W/databases/:d`. Chemins **pré
 
 Les propriétés retirées ne sont pas restaurées par une route de mise à jour ordinaire. Pour la page conteneur, archivage/restauration/déplacement passent par les routes de pages existantes avec prévisualisation et barrière de base ; les lignes refusent ces routes génériques et utilisent leur cycle de vie dédié. Aucun endpoint de suppression définitive, bulk import ou export massif dans ce périmètre.
 
-Les POST de lecture (`query`, `choices`, `row-access`) sont classés explicitement dans L ; ne pas reprendre une heuristique GET/POST qui les classerait comme mutations. Les méthodes inattendues et les routes non déclarées n'ouvrent aucune famille sans limite. Tableau visible : rafraîchissement proposé à cinq secondes/focus, avec backoff ; compter aussi ce trafic dans le test NAT et les budgets de lecture existants.
+Les POST de lecture (`query`, `choices`, `row-access`) sont classés explicitement dans L ; ne pas reprendre une heuristique GET/POST qui les classerait comme mutations. Les méthodes inattendues et les routes non déclarées n'ouvrent aucune famille sans limite. Tableau visible : rafraîchissement retenu à cinq secondes/focus, avec backoff ; compter aussi ce trafic dans le test NAT et les budgets de lecture existants.
 
-Budgets **proposés**, fenêtres fixes atomiques PostgreSQL de 60 s ; les quotas auth et contenu existants restent actifs. Les nouvelles familles sont partagées entre leurs gabarits, pour que changer d'UUID, méthode ou type ne multiplie pas le budget. Le coût HTTP est borné avant SQL coûteux. IP fournie exclusivement par la chaîne de proxy de confiance, IPv6 /64, clés HMAC sans email, `429`/`Retry-After`, aucun délai extensible par les refus.
+Budgets **retenus**, fenêtres fixes atomiques PostgreSQL de 60 s ; les quotas auth et contenu existants restent actifs. Les nouvelles familles sont partagées entre leurs gabarits, pour que changer d'UUID, méthode ou type ne multiplie pas le budget. Le coût HTTP est borné avant SQL coûteux. IP fournie exclusivement par la chaîne de proxy de confiance, IPv6 /64, clés HMAC sans email, `429`/`Retry-After`, aucun délai extensible par les refus.
 
 | Famille                                           | IP commune                              | Compte                                         | Workspace complémentaire                                                     |
 | ------------------------------------------------- | --------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------- |
@@ -75,7 +75,7 @@ Budgets **proposés**, fenêtres fixes atomiques PostgreSQL de 60 s ; les quotas
 
 Justification : 50 personnes × 120 opérations = 6 000 pour lecture/cellules ; ce n'est pas 50 modifications par frappe. Création/schéma sont moins fréquents et partagent des plafonds de stockage. Les budgets compte ne sont pas multipliés par ligne/propriété. Tester le NAT réel et les requêtes refusées, pas seulement le calcul des valeurs. Proposition de garde complémentaire : 16 requêtes SQL de bases simultanées par instance, file bornée de 32, refus 429 avec délai en surcharge ; à mesurer avec le pool SQL existant pour éviter les attentes circulaires, aucun second pool caché.
 
-Autres limites proposées : corps de mutation ≤64 Kio, AST/query ≤16 Kio, `row-access` ≤100 IDs, nom/texte/URL selon ADR 008 ; réponse tableau ≤4 Mio, au besoin moins de lignes que demandé et curseur sur la dernière réellement retournée. Pas de corps Yjs dans le tableau. Sélecteurs paginés 50/max 100. Timeout SQL tableau proposé 2 s, mesure d'attente séparée ; échec atomique et message réessayable. Aucun de ces chiffres nouveaux ne qualifie la pile à 50 rédacteurs.
+Autres limites retenues : corps de mutation ≤64 Kio, AST/query ≤16 Kio, `row-access` ≤100 IDs, nom/texte/URL selon ADR 008 ; réponse tableau ≤4 Mio, au besoin moins de lignes que demandé et curseur sur la dernière réellement retournée. Pas de corps Yjs dans le tableau. Sélecteurs paginés 50/max 100. Timeout SQL tableau retenu 2 s, mesure d'attente séparée ; échec atomique et message réessayable. Aucun de ces chiffres nouveaux ne qualifie la pile à 50 rédacteurs.
 
 ## Matrice initiale des attaques
 
@@ -104,7 +104,7 @@ Pas de benchmark dans ce cadrage. **Secteur obligatoire (`BatteryStatus=2`) et �
 
 Nouveaux plafonds **validés le 26 octobre** :
 
-| Mesure                           | Fixture et protocole proposés                                                                                                                                                                                                                               | Plafond retenu                                                          |
+| Mesure                           | Fixture et protocole retenus                                                                                                                                                                                                                                | Plafond retenu                                                          |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | Tableau trié/filtré              | 10 000 lignes, 50 propriétés, valeurs nulles et neuf types, choix/relations aux bornes ; pages initiales/profondes, deux tris, dix filtres, sélectivité haute/basse, « contient » ; 200 requêtes par cas et série, buffers chauffés séparément du démarrage | p95 serveur <200 ms par cas                                             |
 | Cellule avec document ouvert     | Deux rédacteurs Yjs et deux auteurs de cellules sur la même ligne ; 200 commits/série, types scalaires et ensembles ; cas de vrais 409 mesuré séparément                                                                                                    | p95 serveur cellule <100 ms                                             |
@@ -121,7 +121,7 @@ La comparaison alternée main/candidate porte sur les chemins collaboratifs **ex
 
 Ce qui pourrait casser à l'implémentation : une route générique traite encore une ligne comme page ordinaire ; un trigger oublie la barrière de base ; un verrou inverse bloque retrait et journal ; la version d'une cellule vidée disparaît ; le projecteur écrase le texte relationnel ; un curseur ou un sélecteur révèle une cible masquée ; un relevé paginé purge les caches hors de sa page. Ces risques motivent 6a et les attaques, ils ne sont pas des défauts corrigés dans ce commit documentaire.
 
-Guide manuel de cadrage (10–15 minutes) : lire les réponses retenues, simuler sur papier une base Tâches partagée à un guest edit, deux cellules modifiées simultanément et une relation vers une base non partagée. Vérifier que le guest modifie le statut mais pas ses choix, ne voit pas les personnes hors liste, garde les liens masqués et ne retrouve pas les lignes dans l'arbre. Relire les seuils/découpage et les modalités encore proposées. L'application continue à offrir les fonctions de session 5 ; il n'y a pas de nouveau tableau à tester ici.
+Guide manuel de cadrage (10–15 minutes) : lire les réponses retenues, simuler sur papier une base Tâches partagée à un guest edit, deux cellules modifiées simultanément et une relation vers une base non partagée. Vérifier que le guest modifie le statut mais pas ses choix, ne voit pas les personnes hors liste, garde les liens masqués et ne retrouve pas les lignes dans l'arbre. Relire les seuils/découpage et les modalités encore retenues. L'application continue à offrir les fonctions de session 5 ; il n'y a pas de nouveau tableau à tester ici.
 
 Contrôle du cadrage avant la correction des hooks : `pnpm check` réussi, code 0 ; lint/format, typage des douze packages, preuve Nest/décorateurs/exports TypeScript, Vitest **122 réussis / 6 ignorés**, 23 fichiers réussis / 1 ignoré. [Journal complet initial](evidence/session-6-cadrage-check.txt), résumé final inclus. La [fiche des hooks](session-6-hooks-natifs.md) consigne la validation finale incluant leurs douze tests supplémentaires. Aucun nouveau test fonctionnel de bases ni mesure de performance ; les six scénarios SQL ignorés ne sont pas exécutés par `pnpm check`. Liens relatifs vérifiés et `git diff --check` sans erreur. Le compte rendu final fournit le résultat du push avec hooks actifs et le hash distant.
 

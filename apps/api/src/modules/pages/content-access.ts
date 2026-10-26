@@ -28,10 +28,7 @@ export async function contentContext(
     );
   // Rights/security triggers use these same rows. Check the decision only after waiting,
   // so a role, factor or policy revoked during lock acquisition cannot authorize a write.
-  if (write)
-    await tx.execute(
-      sql`SELECT id FROM pages WHERE workspace_id=${workspaceId}::uuid ORDER BY id FOR NO KEY UPDATE`,
-    );
+  if (write) await tx.execute(sql`SELECT database_lock_workspace(${workspaceId}::uuid)`);
   const [membership] = await tx
     .select({ id: member.id, role: member.role, actorId: actors.id })
     .from(member)

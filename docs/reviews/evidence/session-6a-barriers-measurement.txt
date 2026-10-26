@@ -1,0 +1,30 @@
+$ node scripts/test-collab.mjs "--suite" "databases-barriers"
+PASS database barriers: inherited access, closed legacy scope, bounded materialization, writer/revocation in both orders.
+Fixture: containers ready.
+Fixture: memberships and grants committed.
+Fixture ready: 1,000 ordinary pages, 50 bases, 50,000 rows, 100 memberships, 5,000 grants, depth 50.
+{"series":1,"power":{"observedAt":"2026-10-26T10:43:21.657Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3820658688}
+{"series":1,"p95":191.5226999999977,"waitP95":145.70929999999862,"confirmationP95":173.7812000000049,"samples":30,"writes":117}
+{"series":2,"power":{"observedAt":"2026-10-26T10:43:28.336Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3739856896}
+{"series":2,"p95":188.18729999999778,"waitP95":133.1333999999988,"confirmationP95":165.11899999999878,"samples":30,"writes":113}
+{"series":3,"power":{"observedAt":"2026-10-26T10:43:34.814Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3706306560}
+{"series":3,"p95":186.33130000000529,"waitP95":139.31040000000212,"confirmationP95":168.70560000000114,"samples":30,"writes":112}
+{"gate":"rights_sql_commit_ms","medianP95":188.18729999999778,"limit":500,"waitMedian":139.31040000000212,"confirmationMedian":168.70560000000114,"passed":false}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: STOP_6A_EDITOR_WAIT_BUDGET: observed SQL lock waits exceed 100 ms
+    at measureDatabaseBarriers (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-databases-barriers.e2e.mjs:32031:5)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-databases-barriers.e2e.mjs:32185:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration databases-barriers.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.

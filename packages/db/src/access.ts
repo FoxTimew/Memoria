@@ -6,6 +6,7 @@ export interface PageAccessRequest {
   workspace: string;
   page: string;
   accessVersion?: number | undefined;
+  rowScope?: { database: string; baseVersion?: number; lifecycle?: string };
 }
 export interface PageAccess extends PageAccessRequest {
   actor: string;
@@ -21,7 +22,8 @@ export function accessRequests(requests: readonly PageAccessRequest[]) {
         previous.session !== r.session ||
         previous.workspace !== r.workspace ||
         previous.page !== r.page ||
-        previous.accessVersion !== r.accessVersion)
+        previous.accessVersion !== r.accessVersion ||
+        JSON.stringify(previous.rowScope) !== JSON.stringify(r.rowScope))
     )
       throw new Error('Conflicting access request key');
     unique.set(r.key, r);
@@ -35,6 +37,9 @@ export function accessRequests(requests: readonly PageAccessRequest[]) {
       workspace: r.workspace,
       page: r.page,
       accessversion: r.accessVersion,
+      database: r.rowScope?.database,
+      baseversion: r.rowScope?.baseVersion,
+      lifecycle: r.rowScope?.lifecycle,
     })),
   );
 }
@@ -44,6 +49,20 @@ export async function resolvePageAccess(
   requests: readonly PageAccessRequest[],
 ): Promise<Map<string, PageAccess>> {
   if (!requests.length) return new Map();
+  if (requests.some((r) => r.rowScope)) {
+    const ordinary = requests.filter((r) => !r.rowScope);
+    const scoped = requests.filter((r) => r.rowScope);
+    const result = await database.query<{ key: string; actor: string; level: 'read' | 'edit' }>({
+      name: 'database-resolve-access-v1',
+      text: 'SELECT key,actor,level FROM database_resolve_access($1::jsonb)',
+      values: [accessRequests(scoped)],
+    });
+    const byKey = new Map(scoped.map((r) => [r.key, r]));
+    const resolved = await resolvePageAccess(database, ordinary);
+    for (const row of result.rows)
+      resolved.set(row.key, { ...byKey.get(row.key)!, actor: row.actor, level: row.level });
+    return resolved;
+  }
   const result = await database.query<{ key: string; actor: string; level: 'read' | 'edit' }>({
     name: 'content-resolve-access-v1',
     text: 'SELECT key,actor,level FROM content_resolve_access($1::jsonb)',

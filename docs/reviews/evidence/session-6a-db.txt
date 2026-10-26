@@ -1,0 +1,10 @@
+$ node --env-file=.env scripts/test-db.mjs
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  11:55:03
+   Duration  1.78s (tests 91%, import 6%, transform 3%, worker 1%)
+

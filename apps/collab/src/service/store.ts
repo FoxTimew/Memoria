@@ -59,7 +59,7 @@ export class Store {
         client.query('BEGIN'),
         assertFence(client, fence),
         pageLock
-          ? client.query('SELECT id FROM pages WHERE id=$1 AND workspace_id=$2 FOR NO KEY UPDATE', [
+          ? client.query('SELECT content_lock_document($2::uuid,$1::uuid)', [
               pageLock.page,
               pageLock.workspace,
             ])
@@ -82,7 +82,7 @@ export class Store {
   }
   async open(identity: AccessRequest) {
     return this.transaction(async (client) => {
-      await client.query('SELECT id FROM pages WHERE id=$1 AND workspace_id=$2 FOR NO KEY UPDATE', [
+      await client.query('SELECT content_lock_document($2::uuid,$1::uuid)', [
         identity.page,
         identity.workspace,
       ]);

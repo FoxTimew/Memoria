@@ -1,0 +1,24 @@
+$ node scripts/build-server.mjs api --shares-e2e && node --env-file=.env apps/api/dist/shares.e2e.mjs
+▶ 5c real HTTP/WS: shares, previews, epochs and hostile callers
+  ✔ S01/R12: each new route denies anonymous, outsider, guest; weak administrator guided by explicit proof error (308.4218ms)
+  ✔ S02: admin strong proof, maximum inherited level, stale CAS and member isolation (368.0062ms)
+[onAuthenticate] AUTH_REJECTED
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ C03: epoch-bound WebSocket closed after HTTP downgrade; old token cannot reconnect after regrant (426.5461ms)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] AUTH_REJECTED
+[onAuthenticate] ACCESS_DENIED
+  ✔ C04: unrelated archive and ineffective move preserve live sockets; actual loss closes only the affected guest/page (5981.454ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ M01: preview matches actual inherited losses/gains; stale/forged/misbound preview fails (724.2353ms)
+  ✔ Q02: canonical quotas cover all five new routes; forged IP cannot reset the bucket (25.1781ms)
+✔ 5c real HTTP/WS: shares, previews, epochs and hostile callers (10669.537ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10672.8735

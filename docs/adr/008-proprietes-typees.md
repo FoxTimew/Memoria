@@ -1,6 +1,6 @@
 # ADR 008 — Valeurs typées et vue tableau
 
-Statut : socle accepté — 2026-10-22 ; compléments de session 6 en cadrage — 2026-10-26. Les réponses explicitement retenues sont identifiées ci-dessous ; les autres modalités restent proposées, sans implémentation à cette étape.
+Statut : accepté — 2026-10-26. Tous les choix du cadrage, y compris les bornes secondaires, quotas, versions, erreurs et le protocole de verrous, sont retenus. La preuve 6a reste bloquante avant toute interface.
 
 **Décision.** Définitions/choix de propriétés normalisés ; une table scalaire typée et trois tables de liens pour multi-select, personne et relation. Une ligne est une page dans une seule base. JSONB reste réservé aux blocs et aux configurations validées de vues/propriétés.
 
@@ -16,7 +16,7 @@ La suppression de propriété masque ses valeurs et les purge après rétention.
 
 **Engagements conservés :** texte, nombre, select, multi-select, date, checkbox, personne, relation et URL. Une ligne appartient à une seule base, possède un titre et son propre document Yjs. Une relation cible plusieurs lignes d'une base fixée du même workspace. La page conteneur d'une base compte parmi les 1 000 pages ordinaires ; ses lignes sont exclues de cette borne et de l'arbre latéral. Le tableau est paginé et ne charge aucun document Yjs de ligne : celui-ci est chargé seulement à son ouverture, avec les limites et le budget collaboratifs existants.
 
-**Réponse du 26 octobre :** toutes les lignes héritent des droits de la base ; ni partage individuel de ligne ni sous-pages sous une ligne. Guest edit peut créer une ligne et modifier titre, cellules et corps, sans modifier le schéma ni archiver/restaurer. Les règles de confidentialité et de verrouillage sont détaillées dans l'[ADR 020](020-droits-et-concurrence-des-bases.md). Proposition : pas de déplacement de ligne entre bases, conversion page/ligne ou import en session 6. Le conteneur reste déplaçable avec aperçu des effets d'accès.
+**Réponse du 26 octobre :** toutes les lignes héritent des droits de la base ; ni partage individuel de ligne ni sous-pages sous une ligne. Guest edit peut créer une ligne et modifier titre, cellules et corps, sans modifier le schéma ni archiver/restaurer. Les règles de confidentialité et de verrouillage sont détaillées dans l'[ADR 020](020-droits-et-concurrence-des-bases.md). Décision : pas de déplacement de ligne entre bases, conversion page/ligne ou import en session 6. Le conteneur reste déplaçable avec aperçu des effets d'accès.
 
 Bornes **retenues le 26 octobre**, configurables ; augmenter une borne ne vaut pas qualification du nouveau volume :
 
@@ -30,9 +30,9 @@ Bornes **retenues le 26 octobre**, configurables ; augmenter une borne ne vaut p
 | Pagination                                             | 50 par défaut, maximum 100     |
 | Vue enregistrée / tris / prédicats de filtre           | 1 / 2 / 10                     |
 
-Les éléments en corbeille comptent jusqu'à purge ; l'archivage ne contourne pas les bornes. Propositions complémentaires : texte de cellule limité à 2 000 caractères Unicode, URL à 2 048, nom de propriété/option à 80 ; liste assignable au plus égale aux 100 memberships du workspace. Compteurs contrôlés atomiquement sous transaction, sans COUNT puis INSERT non protégé. Pas de purge définitive nouvelle dans cette session ; l'archivage de propriété masque les valeurs en attendant la rétention générale.
+Les éléments en corbeille comptent jusqu'à purge ; l'archivage ne contourne pas les bornes. Bornes complémentaires retenues : texte de cellule limité à 2 000 caractères Unicode, URL à 2 048, nom de propriété/option à 80 ; liste assignable au plus égale aux 100 memberships du workspace. Compteurs contrôlés atomiquement sous transaction, sans COUNT puis INSERT non protégé. Pas de purge définitive nouvelle dans cette session ; l'archivage de propriété masque les valeurs en attendant la rétention générale.
 
-| Type                  | Contrat de valeur proposé                                                                                                                                              |
+| Type                  | Contrat de valeur retenu                                                                                                                                               |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Texte                 | Texte brut sans HTML, chaîne vide normalisée en absence ; espaces significatifs conservés                                                                              |
 | Nombre                | Chaîne décimale exacte `numeric(28,8)`, zéro distinct du vide ; excès de décimales rejeté sans arrondi ; ni NaN ni infini                                              |
@@ -45,7 +45,7 @@ Les éléments en corbeille comptent jusqu'à purge ; l'archivage ne contourne p
 
 Une option archivée disparaît du sélecteur et reste indiquée comme archivée dans une cellule existante, retirable mais non assignable. Renommer conserve l'ID. Une propriété peuplée, y compris par des valeurs archivées, ne change ni type, ni mode de date, ni base cible. Les tables Drizzle présentes ne prouvent pas ces règles métier ; contraintes complémentaires, services et tests restent à construire.
 
-## Concurrence par cellule — proposition
+## Concurrence par cellule — décision
 
 Ajouter une version durable par `(workspace, base, ligne, propriété)`, commune aux valeurs scalaires et ensembles de liens. Une cellule jamais écrite vaut version 0. La première mutation crée sa version sous contrainte d'unicité ; un concurrent attend puis relit. Vider la cellule conserve cette version (tombstone) : une ancienne version 0 ne peut pas la ressusciter. Numéros transportés en chaînes décimales, sans arrondi JavaScript.
 
@@ -53,15 +53,15 @@ Chaque mutation porte `expectedCellVersion`, `expectedSchemaVersion` et une opé
 
 Le schéma a sa version (définitions, options et vue commune), avec CAS et droit owner/admin/member. Version périmée : `409 SCHEMA_VERSION_CONFLICT` avant conversion/effacement. Titre et cycle de vie conservent la version de page et leurs 409 ; le corps garde `contentRevision` Yjs. Modifier une cellule n'incrémente pas la version du titre, n'écrit ni dans Yjs ni dans les blocs. Toute écriture de corps hors éditeur reste dans `BlockWriteService`.
 
-Le client valide une cellule par Entrée, choix ou sortie de focus, pas à chaque touche. Saisie en cours conservée en mémoire, jamais écrasée par rafraîchissement. Un conflit présente la valeur distante accessible et propose une relecture/reprise, sans retry écrasant. Hors ligne, cellules/schéma non enregistrables et avertissement avant fermeture ; seul le corps garde le cache Yjs existant. Pas de cache persistant de propriétés. Réponse perdue : relire version/valeur avant toute nouvelle mutation. Création de ligne idempotente par clé acteur/base, rétention proposée de 24 h.
+Le client valide une cellule par Entrée, choix ou sortie de focus, pas à chaque touche. Saisie en cours conservée en mémoire, jamais écrasée par rafraîchissement. Un conflit présente la valeur distante accessible et propose une relecture/reprise, sans retry écrasant. Hors ligne, cellules/schéma non enregistrables et avertissement avant fermeture ; seul le corps garde le cache Yjs existant. Pas de cache persistant de propriétés. Réponse perdue : relire version/valeur avant toute nouvelle mutation. Création de ligne idempotente par clé acteur/base, rétention retenue de 24 h.
 
-Proposition de rafraîchissement du tableau : toutes les cinq secondes lorsque la vue est visible, au retour du focus et après une mutation confirmée, avec suspension/backoff en cas de quota ou erreur. Comparer les versions sans écraser une cellule en cours de saisie. Les propriétés ne bénéficient pas de fusion Yjs ou de curseurs par cellule ; le corps conserve sa collaboration temps réel. La création initialise atomiquement page/ligne, valeurs initiales, génération/document vide et outbox, via les services communs ; seule la réplique de validation est chargée paresseusement.
+Rafraîchissement retenu du tableau : toutes les cinq secondes lorsque la vue est visible, au retour du focus et après une mutation confirmée, avec suspension/backoff en cas de quota ou erreur. Comparer les versions sans écraser une cellule en cours de saisie. Les propriétés ne bénéficient pas de fusion Yjs ou de curseurs par cellule ; le corps conserve sa collaboration temps réel. La création initialise atomiquement page/ligne, valeurs initiales, génération/document vide et outbox, via les services communs ; seule la réplique de validation est chargée paresseusement.
 
 ## Tableau et requêtes
 
 **Retenu le 26 octobre :** une vue enregistrée par base, deux tris et dix filtres réunis par **ET**, sans OU imbriqué. Tri ascendant/descendant sur titre, texte, nombre, date, checkbox, select et URL ; multi-select/personne/relation filtrables mais non triables. Owner/admin/member modifient la vue commune sous version ; guest ajuste son affichage pour la visite sans l'enregistrer dans la vue commune. Pas de vues privées, formule, rollup, agrégat ou jointure transitive. Le titre reste disponible pour ouvrir la ligne.
 
-Opérateurs **proposés** :
+Opérateurs **retenus** :
 
 | Type                             | Filtres                                                                                                                  |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
@@ -73,13 +73,13 @@ Opérateurs **proposés** :
 | Multi-select, personne, relation | contient au moins une des valeurs accessibles indiquées, au plus 20                                                      |
 | Tous                             | vide/non vide ; pour personne/relation : sans/avec valeur **accessible**, jamais test des valeurs masquées               |
 
-Ordre proposé : texte normalisé en casse avec collation PostgreSQL `C` (accents conservés), valeur numérique exacte, début de date, booléen ou libellé d'option ; NULLS LAST dans les deux sens puis UUID de ligne stable. Option archivée : libellé/clé de tri stables, indication d'archivage. Aucun titre de relation inaccessible n'est résolu pour trier.
+Ordre retenu : texte normalisé en casse avec collation PostgreSQL `C` (accents conservés), valeur numérique exacte, début de date, booléen ou libellé d'option ; NULLS LAST dans les deux sens puis UUID de ligne stable. Option archivée : libellé/clé de tri stables, indication d'archivage. Aucun titre de relation inaccessible n'est résolu pour trier.
 
 Pagination par curseur signé contenant clés de tri et UUID, lié à acteur, base/workspace, filtres, tri, version de schéma et époque d'accès. Revérifier les droits à chaque appel ; ce curseur ne les accorde pas. Retourner `hasMore`, pas de total masqué/global. Les modifications concurrentes peuvent déplacer une ligne entre pages de résultats : dédupliquer par ID et proposer Actualiser, sans promettre un snapshot de navigation. Changement de droits/schéma : recommencer à la première page. L'ordre déterministe et le coût des lignes sautées motivent le curseur plutôt qu'un OFFSET croissant ([PostgreSQL 17](https://www.postgresql.org/docs/17/queries-limit.html)).
 
 AST Zod bornée vers SQL paramétré et identifiants/opérateurs de liste fermée. Autorisation avant LIMIT/extrait. Mesurer `EXPLAIN (ANALYZE, BUFFERS)` avec deux tris, cellules absentes, filtre peu sélectif et « contient » : les index actuels ne prouvent pas ces coûts. Une vue enregistrée avec un filtre personne/relation devenu inaccessible utilise une vue neutre et « Certains réglages ne sont pas disponibles » ; aucune transmission du filtre masqué, aucun résultat dépendant de lui.
 
-## Recherche et événements — proposition
+## Recherche et événements — décision
 
 La recherche couvre titre et propriétés texte actives des lignes avec les mêmes droits que tableau/API/writer/WSS ; le corps déjà recherchable conserve sa projection. Ne pas indexer les noms de personnes ou titres de relations dans la ligne source. Résultat : titre/extrait autorisés et base accessible, sans parent caché ni ajout à l'arbre. Nombres, options et URLs restent filtrables dans le tableau, sans extension implicite du texte intégral.
 
@@ -87,7 +87,7 @@ Actualiser titre et texte relationnels dans la transaction de mutation pour lect
 
 La création inscrit `database.row.created` une seule fois dans l'outbox avec ligne/valeurs initiales. Les changements suivants marquent durablement une ligne sale ; regroupement après 1 s d'inactivité, au plus 5 s d'activité continue, en `database.row.updated`. Titre, propriétés et projection du corps alimentent **un même agrégateur par ligne** ; pas de double `page.updated` pour ce corps. Audit de contenu agrégé par auteur/ligne/fenêtre ; schéma et accès gardent leur audit propre immédiat. Ni événement par frappe, ni fenêtre uniquement en mémoire.
 
-Payload proposé : IDs workspace/base/ligne, numéro monotone d'événement, révision des propriétés et `contentRevision` projetée. Aucune valeur, email ou titre lié. Numéro d'événement distinct des versions CAS. Une mutation arrivée pendant le traitement reste sale pour la fenêtre suivante ; insertion outbox et avancement atomiques, reprise idempotente. La révision des propriétés utilise un incrément SQL bref commun à la ligne, sans CAS client : mesurer sa contention. HTTP cellule répond après commit valeur/index/marque durable, sans attendre outbox ; le writer de corps attend sa projection. Livraison externe/webhooks en session 9.
+Payload retenu : IDs workspace/base/ligne, numéro monotone d'événement, révision des propriétés et `contentRevision` projetée. Aucune valeur, email ou titre lié. Numéro d'événement distinct des versions CAS. Une mutation arrivée pendant le traitement reste sale pour la fenêtre suivante ; insertion outbox et avancement atomiques, reprise idempotente. La révision des propriétés utilise un incrément SQL bref commun à la ligne, sans CAS client : mesurer sa contention. HTTP cellule répond après commit valeur/index/marque durable, sans attendre outbox ; le writer de corps attend sa projection. Livraison externe/webhooks en session 9.
 
 Archivage/restauration de ligne produit un changement d'état dans cet agrégat ; schéma/propriété archivée actualise la recherche sans événement par valeur. Les liens vers une ligne archivée restent conservés et masqués jusqu'à la purge selon rétention. Adapter le retrait d'un membership référencé pour éviter une cascade massive dans sa transaction d'accès (ADR 020).
 

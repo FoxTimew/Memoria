@@ -56,9 +56,7 @@ export async function requireSensitiveAction(
   // Wait for in-flight collaborative commits before changing policy/roles. The journal itself
   // still takes only its page lock, never the workspace lock.
   if (['workspace.policy', 'workspace.cache', 'workspace.access', 'member.role'].includes(action))
-    await tx.execute(
-      sql`SELECT id FROM pages WHERE workspace_id=${workspace}::uuid ORDER BY id FOR NO KEY UPDATE`,
-    );
+    await tx.execute(sql`SELECT database_lock_workspace(${workspace}::uuid)`);
   const result = await tx.execute<{
     id: string;
     role: string;

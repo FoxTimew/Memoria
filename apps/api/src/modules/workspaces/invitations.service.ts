@@ -181,9 +181,7 @@ export class InvitationsService {
     await tx.execute(
       sql`SELECT pg_advisory_xact_lock(hashtextextended(${first.organizationId}::text,0))`,
     );
-    await tx.execute(
-      sql`SELECT id FROM pages WHERE workspace_id=${first.organizationId}::uuid ORDER BY id FOR NO KEY UPDATE`,
-    );
+    await tx.execute(sql`SELECT database_lock_workspace(${first.organizationId}::uuid)`);
     const [row] = await tx.select().from(invitation).where(eq(invitation.id, id)).for('update');
     if (
       !row ||

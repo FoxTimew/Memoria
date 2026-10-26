@@ -88,7 +88,7 @@ export class PagesService {
       const all = await tx
         .select()
         .from(pages)
-        .where(eq(pages.workspaceId, workspaceId))
+        .where(and(eq(pages.workspaceId, workspaceId), eq(pages.kind, 'page')))
         .orderBy(pages.id);
       return work(tx, ctx, all, await pageRights(tx, session, workspaceId, all));
     });
