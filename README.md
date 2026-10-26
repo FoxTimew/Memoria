@@ -10,6 +10,9 @@ Aucun utilisateur réel avant la fin de la session 4 et la finition de l'interfa
 
 - Node.js 24, pnpm 11.25.0, Docker Compose v2.
 - `pnpm install --frozen-lockfile`, puis `pnpm hooks:install`.
+
+Les hooks Git natifs utilisent Node, sans Lefthook : secrets, lint et formatage des fichiers ajoutés à l'index avant commit ; typage, preuve Nest compilée et tests avant push. Après cette migration, relancer `pnpm hooks:install` dans chaque clone : seuls les anciens hooks générés de Memoria/Lefthook sont remplacés ; les hooks personnalisés et `core.hooksPath` sont préservés ou signalés. Un fichier partiellement ajouté à l'index est refusé avant les corrections automatiques, pour ne pas inclure des modifications non sélectionnées. [Installation, limites et tests](docs/reviews/session-6-hooks-natifs.md).
+
 - `pnpm check` : lint, format, types, preuve de build/injection Nest et tests unitaires/contrats.
 - `pnpm test:bootstrap` : compile puis exécute Nest avec les exports TypeScript du monorepo. Voir [ADR 014](docs/adr/014-build-serveur-typescript-source.md).
 - `pnpm build` : vérifie les types, exécute la preuve Nest et construit les quatre applications. `pnpm start` les démarre ; `pnpm dev` active les reconstructions automatiques.
