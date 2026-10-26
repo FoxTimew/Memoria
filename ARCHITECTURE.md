@@ -308,6 +308,8 @@ Après le relevé secteur, relever la RAM libre : **au moins 3 Gio avant chaque 
 
 **Décision du 26 octobre, preuve 6a : minimum de 3 Gio maintenu.** Le tableau à 10 000 lignes a été préparé, puis refusé avant son premier échantillon (2,762 Gio libres). Le développeur ne pouvant libérer davantage de mémoire, la mesure est différée ; aucune exception à 2 Gio n’est retenue. Les contrôles fonctionnels peuvent continuer, mais leurs durées ne qualifient aucun p95. Les mesures déjà conformes sont conservées avec leur périmètre exact ; reprendre la candidate finale, sans substituer un relevé au repos à celui effectué après préparation.
 
+Reprise après redémarrage de WSL le même jour : candidate `2dcc4f9`, secteur confirmé, 4,103 Gio avant lancement puis **2,751 Gio après préparation**. Nouveau refus avant mesure ; cellules finales non relancées. [Diagnostic des principaux processus et de la VM](docs/reviews/session-6-6a-reprise-memoire.md). Le rebond de RAM après nettoyage ne qualifie pas une série ; 6a reste ouverte.
+
 Changer le protocole interdit de reprendre une ancienne campagne : empreinte de la sonde incluse dans la comparaison, empreinte des sources dans le lanceur courant. Un arrêt secteur avant lancement peut être repris après branchement ; s'il survient dans le processus enfant après compilation, garder son journal et démarrer une nouvelle campagne. Un hôte dédié sans Win32_Battery nécessitera une sonde adaptée et documentée avant qualification ; l'absence de batterie n'est pas une attestation implicite. Aucun résultat historique sur batterie n'est effacé ou réétiqueté ; la nouvelle règle s'applique aux séries à venir.
 
 ## Sessions suivantes

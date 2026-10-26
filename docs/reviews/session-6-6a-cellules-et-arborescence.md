@@ -4,6 +4,8 @@
 
 Commits de code : `429cab0` (migrations, portées et oracles) puis `8d9372b` (noyau de cellules et clients de preuve). La publication de l’ensemble, fiche comprise, est vérifiée après push dans `.local/session-6a-publication-status.md` et dans le compte rendu ; la fiche n’incorpore pas un hash autoréférentiel.
 
+**Reprise suivante, même jour :** la candidate `2dcc4f9` a de nouveau préparé le tableau, puis refusé le premier échantillon à **2,751 Gio** malgré 4,103 Gio disponibles avant lancement. Aucun p95 obtenu, banc cellules non lancé ; 6a reste ouverte. Le [diagnostic de mémoire](session-6-6a-reprise-memoire.md) donne les consommations WSL/Docker, PostgreSQL et Node, sans modification applicative ni optimisation.
+
 ## Fichiers prioritaires
 
 1. [Migration 0024](../../packages/db/drizzle/0024_subtree_reconciliation.sql) : portée par sous-arbre, union dans la transaction et repli global. [Oracle à pleine taille](../../apps/collab/src/testing/reconciliation-tree.e2e.ts) et [test aléatoire](../../apps/collab/src/testing/reconciliation-random.e2e.ts).

@@ -1,0 +1,23 @@
+CANDIDATE=2dcc4f9a625d62f315282c993ff6422b0676de33
+Power: {"observedAt":"2026-10-26T14:03:56.019Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-26T14:03:56.843Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+{"fixture":{"rows":10000,"properties":50,"relationTargets":50,"people":20,"optionsPerProperty":100,"holes":"n % 17","fullSets":"n % 1000"},"limits":{"server":200,"pageSize":50}}
+{"role":"owner","scenario":"broad","series":1,"power":{"observedAt":"2026-10-26T14:05:07.279Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":2954285056}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: FREE_RAM_BELOW_3_GIB
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-database-table-load.e2e.mjs:5131:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration database-table-load.e2e.ts: EXIT_CODE=1
+EXIT_CODE=1

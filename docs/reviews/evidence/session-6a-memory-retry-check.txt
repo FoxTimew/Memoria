@@ -1,0 +1,54 @@
+$ pnpm hooks:check && pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test
+$ node scripts/check-git-hooks.mjs
+Hooks Memoria installés et à jour dans ce clone.
+$ eslint . --max-warnings=0 && prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+$ turbo run typecheck
+
+   • turbo 2.11.10
+   • Packages in scope: @memoria/api, @memoria/auth, @memoria/block-catalog, @memoria/block-character-card, @memoria/block-standard, @memoria/blocks-core, @memoria/blocks-ui, @memoria/collab, @memoria/contracts, @memoria/db, @memoria/web, @memoria/worker
+   • Running typecheck in 12 packages
+   • Remote caching disabled
+
+@memoria/blocks-core:typecheck: cache hit, replaying logs 1198aa4187c4eaf4
+@memoria/db:typecheck: cache hit, replaying logs 7d8a5c5a41fd353b
+@memoria/blocks-core:typecheck: $ tsc --noEmit
+@memoria/db:typecheck: $ tsc --noEmit
+@memoria/contracts:typecheck: cache hit, replaying logs 104149f950f21570
+@memoria/contracts:typecheck: $ tsc --noEmit
+@memoria/auth:typecheck: cache hit, replaying logs 8a0289550c764c55
+@memoria/auth:typecheck: $ tsc --noEmit
+@memoria/blocks-ui:typecheck: cache hit, replaying logs d7f041b03cff971d
+@memoria/blocks-ui:typecheck: $ tsc --noEmit
+@memoria/worker:typecheck: cache hit, replaying logs e7ff02c5dd3cfdd6
+@memoria/block-standard:typecheck: cache hit, replaying logs 85d2c0df05e2984d
+@memoria/block-character-card:typecheck: cache hit, replaying logs b9e9220fa375eae6
+@memoria/worker:typecheck: $ tsc --noEmit
+@memoria/block-standard:typecheck: $ tsc --noEmit
+@memoria/block-character-card:typecheck: $ tsc --noEmit
+@memoria/block-catalog:typecheck: cache hit, replaying logs 661444998dd5e750
+@memoria/block-catalog:typecheck: $ tsc --noEmit
+@memoria/web:typecheck: cache hit, replaying logs 9743e1b01507975c
+@memoria/web:typecheck: $ tsc --noEmit
+@memoria/api:typecheck: cache hit, replaying logs 57acc23fe722fe5b
+@memoria/collab:typecheck: cache hit, replaying logs 6b2d75c4015923a6
+@memoria/api:typecheck: $ tsc --noEmit
+@memoria/collab:typecheck: $ tsc --noEmit
+
+ Tasks:    12 successful, 12 total
+Cached:    12 cached, 12 total
+  Time:    48ms >>> FULL TURBO
+
+$ node scripts/build-server.mjs api --probe && node apps/api/dist/bootstrap-probe.mjs
+Nest decorators, dependency injection and workspace TypeScript exports: OK
+$ vitest run
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+
+ Test Files  25 passed | 1 skipped (26)
+      Tests  136 passed | 6 skipped (142)
+   Start at  15:11:20
+   Duration  32.51s (tests 74%, import 23%, transform 3%)
+

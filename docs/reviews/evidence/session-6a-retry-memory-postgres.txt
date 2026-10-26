@@ -1,0 +1,8 @@
+PID   COMMAND          RSS
+    1 postgres          25m
+   27 postgres         108m
+   28 postgres         136m
+   30 postgres         9216
+   31 postgres         8184
+   32 postgres         7060
+  390 ps                940

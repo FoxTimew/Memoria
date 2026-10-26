@@ -1,0 +1,179 @@
+{
+  "ObservedAt": "2026-10-26T14:06:03.1423239Z",
+  "Phase": "after table RAM rejection and fixture cleanup",
+  "BatteryStatus": [2],
+  "FreeGiB": 3.108,
+  "TotalGiB": 13.856,
+  "Top": [
+    {
+      "Name": "vmmemWSL",
+      "Id": 7060,
+      "WorkingSetMiB": 3802.0,
+      "PrivateMiB": 3883.0
+    },
+    {
+      "Name": "ChatGPT",
+      "Id": 17680,
+      "WorkingSetMiB": 478.0,
+      "PrivateMiB": 510.0
+    },
+    {
+      "Name": "ChatGPT",
+      "Id": 19292,
+      "WorkingSetMiB": 343.0,
+      "PrivateMiB": 342.0
+    },
+    {
+      "Name": "MsMpEng",
+      "Id": 5284,
+      "WorkingSetMiB": 302.0,
+      "PrivateMiB": 366.0
+    },
+    {
+      "Name": "explorer",
+      "Id": 10372,
+      "WorkingSetMiB": 261.0,
+      "PrivateMiB": 163.0
+    },
+    {
+      "Name": "codex",
+      "Id": 17656,
+      "WorkingSetMiB": 249.0,
+      "PrivateMiB": 204.0
+    },
+    {
+      "Name": "Memory Compression",
+      "Id": 4168,
+      "WorkingSetMiB": 178.0,
+      "PrivateMiB": 2.0
+    },
+    {
+      "Name": "OneDrive",
+      "Id": 21680,
+      "WorkingSetMiB": 172.0,
+      "PrivateMiB": 194.0
+    },
+    {
+      "Name": "ChatGPT",
+      "Id": 21348,
+      "WorkingSetMiB": 168.0,
+      "PrivateMiB": 275.0
+    },
+    {
+      "Name": "com.docker.backend",
+      "Id": 19140,
+      "WorkingSetMiB": 163.0,
+      "PrivateMiB": 161.0
+    },
+    {
+      "Name": "msedge",
+      "Id": 27580,
+      "WorkingSetMiB": 151.0,
+      "PrivateMiB": 66.0
+    },
+    {
+      "Name": "Docker Desktop",
+      "Id": 22408,
+      "WorkingSetMiB": 148.0,
+      "PrivateMiB": 99.0
+    },
+    {
+      "Name": "StartMenuExperienceHost",
+      "Id": 11796,
+      "WorkingSetMiB": 143.0,
+      "PrivateMiB": 76.0
+    },
+    {
+      "Name": "TextInputHost",
+      "Id": 18196,
+      "WorkingSetMiB": 140.0,
+      "PrivateMiB": 85.0
+    },
+    {
+      "Name": "Docker Desktop",
+      "Id": 17364,
+      "WorkingSetMiB": 136.0,
+      "PrivateMiB": 118.0
+    }
+  ],
+  "Groups": [
+    {
+      "Name": "ChatGPT",
+      "Count": 12,
+      "WorkingSetMiB": 1435.0,
+      "PrivateMiB": 1508.0
+    },
+    {
+      "Name": "codex",
+      "Count": 2,
+      "WorkingSetMiB": 327.0,
+      "PrivateMiB": 211.0
+    },
+    {
+      "Name": "codex-code-mode-host",
+      "Count": 1,
+      "WorkingSetMiB": 23.0,
+      "PrivateMiB": 15.0
+    },
+    {
+      "Name": "codex-computer-use-swift",
+      "Count": 1,
+      "WorkingSetMiB": 35.0,
+      "PrivateMiB": 15.0
+    },
+    {
+      "Name": "codex-windows-sandbox-service",
+      "Count": 1,
+      "WorkingSetMiB": 28.0,
+      "PrivateMiB": 2.0
+    },
+    {
+      "Name": "com.docker.backend",
+      "Count": 2,
+      "WorkingSetMiB": 228.0,
+      "PrivateMiB": 250.0
+    },
+    {
+      "Name": "com.docker.build",
+      "Count": 1,
+      "WorkingSetMiB": 47.0,
+      "PrivateMiB": 63.0
+    },
+    {
+      "Name": "docker",
+      "Count": 1,
+      "WorkingSetMiB": 24.0,
+      "PrivateMiB": 55.0
+    },
+    {
+      "Name": "Docker Desktop",
+      "Count": 5,
+      "WorkingSetMiB": 473.0,
+      "PrivateMiB": 424.0
+    },
+    {
+      "Name": "docker-agent",
+      "Count": 1,
+      "WorkingSetMiB": 57.0,
+      "PrivateMiB": 68.0
+    },
+    {
+      "Name": "node",
+      "Count": 9,
+      "WorkingSetMiB": 415.0,
+      "PrivateMiB": 324.0
+    },
+    {
+      "Name": "node_repl",
+      "Count": 9,
+      "WorkingSetMiB": 91.0,
+      "PrivateMiB": 26.0
+    },
+    {
+      "Name": "vmmemWSL",
+      "Count": 1,
+      "WorkingSetMiB": 3802.0,
+      "PrivateMiB": 3883.0
+    }
+  ]
+}

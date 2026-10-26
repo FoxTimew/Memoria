@@ -1,0 +1,165 @@
+{
+  "BatteryStatus": [2],
+  "FreeGiB": 4.103,
+  "TotalGiB": 13.856,
+  "Top": [
+    {
+      "Name": "vmmemWSL",
+      "Id": 7060,
+      "WorkingSetMiB": 2744.0,
+      "PrivateMiB": 2817.0
+    },
+    {
+      "Name": "ChatGPT",
+      "Id": 17680,
+      "WorkingSetMiB": 527.0,
+      "PrivateMiB": 559.0
+    },
+    {
+      "Name": "ChatGPT",
+      "Id": 19292,
+      "WorkingSetMiB": 367.0,
+      "PrivateMiB": 366.0
+    },
+    {
+      "Name": "MsMpEng",
+      "Id": 5284,
+      "WorkingSetMiB": 303.0,
+      "PrivateMiB": 369.0
+    },
+    {
+      "Name": "explorer",
+      "Id": 10372,
+      "WorkingSetMiB": 263.0,
+      "PrivateMiB": 166.0
+    },
+    {
+      "Name": "codex",
+      "Id": 17656,
+      "WorkingSetMiB": 246.0,
+      "PrivateMiB": 202.0
+    },
+    {
+      "Name": "OneDrive",
+      "Id": 21680,
+      "WorkingSetMiB": 172.0,
+      "PrivateMiB": 194.0
+    },
+    {
+      "Name": "Memory Compression",
+      "Id": 4168,
+      "WorkingSetMiB": 171.0,
+      "PrivateMiB": 2.0
+    },
+    {
+      "Name": "ChatGPT",
+      "Id": 21348,
+      "WorkingSetMiB": 168.0,
+      "PrivateMiB": 275.0
+    },
+    {
+      "Name": "com.docker.backend",
+      "Id": 19140,
+      "WorkingSetMiB": 164.0,
+      "PrivateMiB": 162.0
+    },
+    {
+      "Name": "msedge",
+      "Id": 27580,
+      "WorkingSetMiB": 151.0,
+      "PrivateMiB": 66.0
+    },
+    {
+      "Name": "Docker Desktop",
+      "Id": 22408,
+      "WorkingSetMiB": 151.0,
+      "PrivateMiB": 102.0
+    },
+    {
+      "Name": "StartMenuExperienceHost",
+      "Id": 11796,
+      "WorkingSetMiB": 143.0,
+      "PrivateMiB": 76.0
+    },
+    {
+      "Name": "TextInputHost",
+      "Id": 18196,
+      "WorkingSetMiB": 140.0,
+      "PrivateMiB": 85.0
+    }
+  ],
+  "Groups": [
+    {
+      "Name": "ChatGPT",
+      "Count": 12,
+      "WorkingSetMiB": 1509.0,
+      "PrivateMiB": 1568.0
+    },
+    {
+      "Name": "codex",
+      "Count": 2,
+      "WorkingSetMiB": 324.0,
+      "PrivateMiB": 208.0
+    },
+    {
+      "Name": "codex-code-mode-host",
+      "Count": 1,
+      "WorkingSetMiB": 23.0,
+      "PrivateMiB": 14.0
+    },
+    {
+      "Name": "codex-computer-use-swift",
+      "Count": 1,
+      "WorkingSetMiB": 35.0,
+      "PrivateMiB": 15.0
+    },
+    {
+      "Name": "codex-windows-sandbox-service",
+      "Count": 1,
+      "WorkingSetMiB": 28.0,
+      "PrivateMiB": 2.0
+    },
+    {
+      "Name": "com.docker.backend",
+      "Count": 2,
+      "WorkingSetMiB": 229.0,
+      "PrivateMiB": 251.0
+    },
+    {
+      "Name": "com.docker.build",
+      "Count": 1,
+      "WorkingSetMiB": 50.0,
+      "PrivateMiB": 67.0
+    },
+    {
+      "Name": "Docker Desktop",
+      "Count": 5,
+      "WorkingSetMiB": 475.0,
+      "PrivateMiB": 427.0
+    },
+    {
+      "Name": "docker-agent",
+      "Count": 1,
+      "WorkingSetMiB": 57.0,
+      "PrivateMiB": 68.0
+    },
+    {
+      "Name": "node",
+      "Count": 9,
+      "WorkingSetMiB": 415.0,
+      "PrivateMiB": 324.0
+    },
+    {
+      "Name": "node_repl",
+      "Count": 9,
+      "WorkingSetMiB": 91.0,
+      "PrivateMiB": 25.0
+    },
+    {
+      "Name": "vmmemWSL",
+      "Count": 1,
+      "WorkingSetMiB": 2744.0,
+      "PrivateMiB": 2817.0
+    }
+  ]
+}
