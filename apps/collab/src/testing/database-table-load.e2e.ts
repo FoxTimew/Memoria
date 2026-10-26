@@ -1,12 +1,14 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
-import { freemem } from 'node:os';
+import { prepareMeasurement, runMeasuredSeries } from '../../../../scripts/measurement-memory.mjs';
+import type { Hygiene } from '../../../../scripts/measurement-memory.mjs';
 import { writeFile } from 'node:fs/promises';
 import { accessRequests, readDatabaseLimits } from '@memoria/db';
 import { cellFixture } from './database-cell-fixture.ts';
 
 // Closed SQL proof of the ADR008 physical design, not a public filter/compiler endpoint.
+const functionalOnly = process.env.MEMORIA_DATABASE_TABLE_SMOKE === 'true';
+const preparation = functionalOnly ? undefined : await prepareMeasurement('database-table');
 const f = await cellFixture(),
   { db } = f,
   limits = readDatabaseLimits();
@@ -26,9 +28,9 @@ const reports: {
   power: unknown;
   samples: number[];
   p95: number;
+  hygiene: Hygiene;
 }[] = [];
 const plans: unknown[] = [];
-const functionalOnly = process.env.MEMORIA_DATABASE_TABLE_SMOKE === 'true';
 try {
   assert.equal(limits.rowsPerBase, 10000);
   assert.equal(limits.propertiesPerBase, 50);
@@ -358,26 +360,26 @@ try {
           continue;
         }
         for (let series = 1; series <= 3; series++) {
-          const power = JSON.parse(
-            execFileSync(process.execPath, ['scripts/measurement-power.mjs'], {
-              encoding: 'utf8',
-              windowsHide: true,
-            }),
+          const { result, hygiene } = await runMeasuredSeries(
+            `database-table-${role}-${scenario}-${series}`,
+            async () => {
+              // Warm separately; EXPLAIN is diagnostic and not part of a timed sample.
+              for (let n = 0; n < 3; n++)
+                await query(role, scenario, cursor, 0, series === 1 && n === 0);
+              const samples: number[] = [];
+              for (let n = 0; n < 200; n++) {
+                const start = performance.now();
+                await query(role, scenario, cursor);
+                samples.push(performance.now() - start);
+              }
+              return { samples, p95: p95(samples) };
+            },
+            preparation ? { preparation } : {},
           );
-          const freeBytes = freemem();
-          console.log(JSON.stringify({ role, scenario, series, power, freeBytes }));
-          assert(power.allowed, 'AC_POWER_REQUIRED');
-          assert(freeBytes >= 3 * 1024 ** 3, 'FREE_RAM_BELOW_3_GIB');
-          // Warm separately; EXPLAIN is diagnostic and not part of a timed sample.
-          for (let n = 0; n < 3; n++)
-            await query(role, scenario, cursor, 0, series === 1 && n === 0);
-          const samples: number[] = [];
-          for (let n = 0; n < 200; n++) {
-            const start = performance.now();
-            await query(role, scenario, cursor);
-            samples.push(performance.now() - start);
-          }
-          reports.push({ role, scenario, series, power, freeBytes, samples, p95: p95(samples) });
+          const { samples, p95: value } = result;
+          const power = hygiene.before.power,
+            freeBytes = hygiene.before.windowsFreeBytes;
+          reports.push({ role, scenario, series, power, freeBytes, samples, p95: value, hygiene });
           await writeFile(
             '.local/session-6a-table-measurement.json',
             JSON.stringify(
@@ -393,6 +395,7 @@ try {
                 },
                 protocol:
                   'Closed SQL query proof, kernel entry to JSON serialization and commit; no HTTP or signed-cursor codec (6b)',
+                preparation,
                 reports,
                 plans,
               },
@@ -400,7 +403,9 @@ try {
               2,
             ) + '\n',
           );
-          console.log(JSON.stringify({ role, scenario, series, p95: p95(samples) }));
+          console.log(
+            JSON.stringify({ role, scenario, series, p95: value, hygiene: hygiene.path }),
+          );
         }
         const median = reports
           .filter((r) => r.role === role && r.scenario === scenario)
