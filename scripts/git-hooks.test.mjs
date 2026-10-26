@@ -66,7 +66,12 @@ function fixture() {
   ok(git(root, 'config', 'commit.gpgsign', 'false'));
   ok(git(root, 'config', 'core.autocrlf', 'false'));
   write(root, '.test-global-config', '');
-  for (const file of ['git-hooks.mjs', 'install-git-hooks.mjs', 'check-staged.mjs']) {
+  for (const file of [
+    'git-hooks.mjs',
+    'install-git-hooks.mjs',
+    'check-git-hooks.mjs',
+    'check-staged.mjs',
+  ]) {
     mkdirSync(join(root, 'scripts'), { recursive: true });
     copyFileSync(join(sourceRoot, 'scripts', file), join(root, 'scripts', file));
   }
@@ -119,6 +124,29 @@ afterEach(() => {
 });
 
 describe('native hooks invoked by real Git', () => {
+  it('starts pnpm check with clone verification and rejects missing or altered hooks', () => {
+    const manifest = JSON.parse(readFileSync(join(sourceRoot, 'package.json'), 'utf8'));
+    expect(manifest.scripts.check.split(' && ')[0]).toBe('pnpm hooks:check');
+    expect(manifest.scripts['hooks:check']).toBe('node scripts/check-git-hooks.mjs');
+    const root = fixture();
+    const check = () => command(root, process.execPath, ['scripts/check-git-hooks.mjs']);
+    ok(check());
+    for (const name of ['pre-commit', 'pre-push']) {
+      rmSync(join(root, '.git/hooks', name));
+      let result = check();
+      expect(result.status).not.toBe(0);
+      expect(result.stderr).toContain('pnpm hooks:install');
+      write(root, `.git/hooks/${name}`, '#!/bin/sh\n# Memoria Git hook:\nexit 0\n');
+      result = check();
+      expect(result.status).not.toBe(0);
+      expect(result.stderr).toContain('pnpm hooks:install');
+      ok(command(root, process.execPath, ['scripts/install-git-hooks.mjs']));
+      ok(check());
+    }
+    ok(git(root, 'config', 'core.hooksPath', 'empty-hooks'));
+    expect(check().status).not.toBe(0);
+  }, 30_000);
+
   it('blocks a recognizable credential without printing its content', () => {
     const root = fixture();
     const credential = ['ghp_', 'a'.repeat(40)].join('');

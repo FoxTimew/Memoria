@@ -49,3 +49,7 @@ Résultat des tests ciblés : **12 réussis**, journal `.local/session-6-hooks-t
 4. Pour le travail courant, préparer les fichiers complets souhaités, lancer commit puis push normalement. Les lignes `[git hook]` montrent les étapes ; tout échec doit laisser l'opération bloquée. Ne pas utiliser `--no-verify` pour passer un échec.
 
 Ce qui pourrait casser : Node absent du PATH de l'interface Git, dépendances non installées, installation non relancée après clone/migration, hook personnalisé nécessitant une intégration manuelle, fichier partiellement indexé ou retour à une ancienne branche. Tous doivent produire un échec visible ; aucune relance automatique sans contrôle.
+
+## Complément 6a — présence des hooks dans le clone
+
+`pnpm check` commence par `pnpm hooks:check`. Le contrôle compare chaque wrapper installé avec sa source suivie par Git, refuse les fichiers irréguliers, une redirection `core.hooksPath` et, sur POSIX, un hook non exécutable. Le message prescrit `pnpm hooks:install`. Le test supplémentaire vérifie installation valide, suppression de chacun des deux hooks, faux wrapper, réinstallation et redirection ; la suite ciblée compte désormais 13 tests. Les chiffres précédents restent le journal historique du cadrage.
