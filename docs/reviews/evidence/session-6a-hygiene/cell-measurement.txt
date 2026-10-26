@@ -1,0 +1,26 @@
+CANDIDATE=850162f29715f911c9448b624f45494066a8dd1f
+Power: {"observedAt":"2026-10-26T15:48:02.356Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-26T15:48:03.046Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-26T15:48:04.772Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-cells-preparation-ff71153b-6c76-4c11-82e9-4fac3fe71858.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-cells","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-26T15:48:05.419Z","windowsFreeBytes":3489796096,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5784879104,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-26T15:48:05.419Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}}}
+{"hygiene":".local/measurement-hygiene/database-cells-1-attempt-1-959012c7-fd73-4904-aa3a-b33c6e69e4a6.json","status":"valid","label":"database-cells-1","attempt":1,"before":{"observedAt":"2026-10-26T15:48:10.901Z","windowsFreeBytes":3682082816,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5713063936,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-26T15:48:10.901Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-26T15:48:18.940Z","windowsFreeBytes":3744559104,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5705138176,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-26T15:48:18.940Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":9,"deltaInPages":0,"deltaOutPages":0}}
+{"series":1,"p95":[25.078199999999924,26.974700000000666],"conflictPairP95":39.70940000000155,"wireP95":19.08339999999953,"receipts":70,"hygiene":".local/measurement-hygiene/database-cells-1-attempt-1-959012c7-fd73-4904-aa3a-b33c6e69e4a6.json"}
+{"hygiene":".local/measurement-hygiene/database-cells-2-attempt-1-eda5f7fd-2fa9-4a9c-865c-bb29ddba4147.json","status":"valid","label":"database-cells-2","attempt":1,"before":{"observedAt":"2026-10-26T15:48:21.697Z","windowsFreeBytes":3729227776,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5686767616,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-26T15:48:21.697Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-26T15:48:29.721Z","windowsFreeBytes":3835920384,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5686136832,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-26T15:48:29.721Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":9,"deltaInPages":0,"deltaOutPages":0}}
+{"series":2,"p95":[28.63130000000092,30.08009999999922],"conflictPairP95":24.233100000001286,"wireP95":17.081200000000536,"receipts":70,"hygiene":".local/measurement-hygiene/database-cells-2-attempt-1-eda5f7fd-2fa9-4a9c-865c-bb29ddba4147.json"}
+{"hygiene":".local/measurement-hygiene/database-cells-3-attempt-1-f61844b9-6f7a-4946-9e6e-b2a661d4eb3c.json","status":"valid","label":"database-cells-3","attempt":1,"before":{"observedAt":"2026-10-26T15:48:32.439Z","windowsFreeBytes":3831816192,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5678694400,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-26T15:48:32.439Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-26T15:48:40.433Z","windowsFreeBytes":3811418112,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5661761536,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-26T15:48:40.433Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":9,"deltaInPages":0,"deltaOutPages":0}}
+{"series":3,"p95":[23.385699999998906,27.654999999998836],"conflictPairP95":31.336199999997916,"wireP95":22.028099999995902,"receipts":70,"hygiene":".local/measurement-hygiene/database-cells-3-attempt-1-f61844b9-6f7a-4946-9e6e-b2a661d4eb3c.json"}
+{"medians":[25.078199999999924,27.654999999998836],"limit":100,"passed":true}
+[beforeUnloadDocument] RESIDENT_REPLICA
+Collaboration database-cells-load.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

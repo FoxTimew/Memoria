@@ -1,5 +1,7 @@
 # Session 6a — sous-arbres, cellules et preuve d’équivalence
 
+**Suite publiée le 26 octobre :** les deux mesures différées ont réussi sous le protocole Windows/WSL révisé par le développeur. Voir la [fiche finale de clôture 6a](session-6-6a-finale.md), ses traces et ses limites. Le texte ci-dessous conserve l'état intermédiaire, les mesures et le guide d'origine ; les indications « reste ouverte » et le seuil mémoire de 3 Gio après préparation y sont historiques.
+
 26 octobre 2026. **Livraison intermédiaire : 6a reste ouverte.** Les mutations d’arborescence passent leurs plafonds après réconciliation ciblée. Le noyau de cellules et les courses PostgreSQL sont testés. Le banc du tableau est différé : après préparation, seulement 2,762 Gio étaient disponibles. Le développeur a expressément maintenu le minimum de **3 Gio** ; aucun résultat de performance du tableau n’est revendiqué. Ni interface ni nouvelle route de bases livrée.
 
 Commits de code : `429cab0` (migrations, portées et oracles) puis `8d9372b` (noyau de cellules et clients de preuve). La publication de l’ensemble, fiche comprise, est vérifiée après push dans `.local/session-6a-publication-status.md` et dans le compte rendu ; la fiche n’incorpore pas un hash autoréférentiel.

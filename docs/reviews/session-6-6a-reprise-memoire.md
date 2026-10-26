@@ -1,5 +1,7 @@
 # Session 6a — reprise des mesures, refus après préparation
 
+**Suite le même jour :** ce diagnostic a motivé la révision du protocole mémoire Windows/WSL décidée par le développeur. Les mesures ont ensuite réussi ; voir la [fiche finale 6a](session-6-6a-finale.md). Le refus ci-dessous reste conservé, sans qualification rétroactive.
+
 26 octobre 2026. Candidate de code inchangée : **`2dcc4f9a625d62f315282c993ff6422b0676de33`**. Le développeur a redémarré WSL, relancé l’infrastructure et demandé les deux mesures différées, dans l’ordre tableau puis cellules/Yjs. **Aucune mesure de latence n’a été effectuée : 6a reste ouverte.** Le banc cellules n’a pas été lancé après l’arrêt du tableau.
 
 ## Protocole et point d’arrêt

@@ -1,0 +1,1 @@
+Archive verified: 29 preparation/series JSON files and both aggregate reports match the original measurements; formatting only.
