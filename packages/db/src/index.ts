@@ -9,3 +9,5 @@ export type { Database, WriteTransaction } from './transaction.ts';
 export { createDatabase } from './client.ts';
 export { accessRequests, resolvePageAccess } from './access.ts';
 export type { PageAccess, PageAccessRequest } from './access.ts';
+export { DatabaseCells, DatabaseFault } from './database-cells.ts';
+export type { DatabaseSubject, CellAddress, CellWrite } from './database-cells.ts';
