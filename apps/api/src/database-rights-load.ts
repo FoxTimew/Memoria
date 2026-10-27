@@ -13,6 +13,21 @@ import { databaseEventWorker } from './testing/database-event-worker.ts';
 import { profileDatabaseShare } from './testing/database-share-profile.ts';
 
 const p95 = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.ceil(xs.length * 0.95) - 1] ?? 0;
+const cases = [
+  'share',
+  'role',
+  'remove',
+  'move',
+  'archive',
+  'restore',
+  'row-archive',
+  'row-restore',
+];
+const fromCase = process.argv.includes('--from-case')
+  ? process.argv[process.argv.indexOf('--from-case') + 1]
+  : 'share';
+assert(fromCase && cases.includes(fromCase), 'Unknown starting case');
+const selectedCases = cases.slice(cases.indexOf(fromCase));
 const preparation = await prepareMeasurement('database-http-rights');
 const h = await databaseHttpHarness(async () => {
   // Bulk setup uses the same timeout as the 6a bound fixture; it is outside measured samples.
@@ -115,6 +130,7 @@ const save = () =>
         protocol:
           'Three series/case; 32 HTTP mutations with two explicit warmups, one genuine owner with recent WebAuthn. Five native WSS documents (four rows in different bases and one ordinary page), paced 5 updates/s. Setup/reset and fresh previews outside measured writer windows. 2150ms between mutations respects unchanged per-account access quotas. Lock waits sampled every 5ms (approximate), wire time ends at durable receipt. Retain blocked-wait p95 and overlapping editor confirmations separately from all confirmations.',
         preparation,
+        selectedCases,
         reports,
       },
       null,
@@ -125,6 +141,15 @@ const restoreMember = async () => {
   const c = await db.pool.connect();
   try {
     await c.query('BEGIN');
+    // Isolated fixture reset, outside measured writer windows. A real rejoin gets
+    // a NEW member/person ID; this benchmark restores its original generated ID.
+    // The rights fixture contains no assignments, so only its unreferenced,
+    // detached person can be removed. Never change the production detach trigger.
+    await c.query(
+      `DELETE FROM database_people p WHERE p.workspace_id=$1 AND p.id=$2 AND p.member_id IS NULL
+       AND NOT EXISTS(SELECT 1 FROM person_values v WHERE v.workspace_id=p.workspace_id AND v.member_id=p.id)`,
+      [w, selected.id],
+    );
     await c.query(
       "INSERT INTO workspace_members SELECT * FROM json_populate_record(NULL::workspace_members,$1::json) ON CONFLICT(id) DO UPDATE SET role='guest'",
       [JSON.stringify(selected)],
@@ -157,16 +182,7 @@ try {
       process.argv.includes('--profile-role') ? { kind: 'role', reset: restoreMember } : undefined,
     );
   } else
-    for (const kind of [
-      'share',
-      'role',
-      'remove',
-      'move',
-      'archive',
-      'restore',
-      'row-archive',
-      'row-restore',
-    ]) {
+    for (const kind of selectedCases) {
       for (let series = 1; series <= 3; series++) {
         const eventStart = events.count();
         await restoreMember();
