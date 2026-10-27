@@ -32,8 +32,8 @@
     },
     {
       "name": "run.txt",
-      "bytes": 3147,
-      "sha256": "d73513d03440e39899805deefd0906ae4a19c57f87f299495dfda692e4e69d3f"
+      "bytes": 3107,
+      "sha256": "60a44ac4616eca05168241b06284db7a713a23a656444b26d361356c3a49298b"
     },
     {
       "name": "series-1-confirmations-1.ndjson",
@@ -57,18 +57,18 @@
     },
     {
       "name": "session-6d-http-rights-setup-interrupted.txt",
-      "bytes": 2090,
-      "sha256": "efb80ca07ee4f9923a7ea7cd8d75e4313b5a672024a0afd8d7a332bcf0c220c2"
+      "bytes": 2055,
+      "sha256": "58b6926159fa3c7a87ba71cccf9bce21f9780067d0deaffd27b24479e104737d"
     },
     {
       "name": "session-6d-http-rights-ticket-assertion.txt",
-      "bytes": 1815,
-      "sha256": "43eca65e3372179f1bbd87d9293cb243a1e8ec5fa889e6705c94de0e109e0564"
+      "bytes": 1775,
+      "sha256": "dc6435c077d97c240157dca87fdf72c4cd5c7f0b17156c1651813da08223682c"
     },
     {
       "name": "session-6d-http-rights-ticket-scope.txt",
-      "bytes": 1772,
-      "sha256": "bfac2e55dd5fc7901603856792f36a08f4b7aa267ba71ab5dd0d25ff343dde00"
+      "bytes": 1732,
+      "sha256": "6cdbcb9251d4aa39072a960f96024060c180b454ebd0a82d1013f3e108502354"
     }
   ]
 }
