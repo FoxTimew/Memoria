@@ -1,6 +1,6 @@
 # Session 6d — revue adverse, charge et comparaison finale
 
-27 octobre 2026, branche `codex/session-6-databases`. **Étape non clôturée : le partage corrigé passe ; la promotion d'un guest avec 100 partages a dépassé les plafonds, puis a été profilée et corrigée avec autorisation. Sa requalification reste à faire.** Aucun risque n'est accepté ; le développeur crée et fusionne la PR unique.
+27 octobre 2026, branche `codex/session-6-databases`. **Étape non clôturée : partage et promotion à 100 partages passent après les deux optimisations autorisées. Arrêt suivant sur le retrait : attente SQL p95 107,176 ms, plafond 100 ms. Arbre, cycle de vie et comparaison finale restent à qualifier.** Aucun risque n'est accepté ; le développeur crée et fusionne la PR unique.
 
 ## Fichiers prioritaires
 
@@ -52,7 +52,7 @@ L/E/C/S par minute, dans l'ordre IP / compte / workspace : **6 000 / 120 / —**
 
 ## Mesures et contrôles
 
-**La campagne des droits est arrêtée sur le rôle après les trois séries de partage corrigé ; la comparaison finale n'a pas été lancée.** Les résultats déjà terminés sont détaillés ci-dessous. La première série de dix minutes de rafraîchissement est conservée comme essai incomplet : requêtes réussies et hygiène sans swap, mais absence de télémétrie PostgreSQL à cause des séquences ANSI de Docker Windows. Le collecteur a été corrigé avec un test, puis les trois séries ont été rejouées intégralement. Ce premier essai ne compte pas parmi les trois résultats retenus.
+**Les six séries finales de partage et de promotion passent ; le retrait échoue sur l'attente SQL et arrête la campagne. La comparaison finale n'a pas été lancée.** Les résultats déjà terminés sont détaillés ci-dessous. La première série de dix minutes de rafraîchissement est conservée comme essai incomplet : requêtes réussies et hygiène sans swap, mais absence de télémétrie PostgreSQL à cause des séquences ANSI de Docker Windows. Le collecteur a été corrigé avec un test, puis les trois séries ont été rejouées intégralement. Ce premier essai ne compte pas parmi les trois résultats retenus.
 
 Le banc simule le trafic mesuré sur deux vrais onglets visibles de l'interface finale, puis utilise 50 sessions Better Auth et 50 sockets WSS natives avec présence/synchronisation. Il ne lance pas cent moteurs de rendu. Une ligne persistée par compte, une seule base de 10 000 lignes/50 propriétés, politiques de cache par défaut ; les comptes sont owner/member. Les latences API sont mesurées depuis le middleware avant guard jusqu'à la fin de réponse ; le processus générateur est distinct du processus Nest/collab. Les relevés PostgreSQL portent sur le conteneur complet, qui dessert aussi la pile locale inactive. Ces conditions ne constituent pas la qualification dédiée 4 vCPU/8 Gio.
 
@@ -187,8 +187,32 @@ Les [journaux complets](evidence/session-6d-functional/) distinguent les échecs
 | S6-R11 | Risques antérieurs de saturation globale, huit réservations mot de passe et ingénierie sociale opérateur                                                           | Conserver les décisions datées de session 4 et les prérequis SaaS ; cette session ne constitue pas une nouvelle acceptation.                                                                               |
 | S6-R12 | Restauration de colonnes absente de l'interface, finition visuelle et messages encore techniques                                                                   | Ajouter le panneau dans la finition avant utilisateurs ; restauration d'options/lignes et route de propriété restent distinctes.                                                                           |
 | S6-R13 | Onze navigations automatiques en quatorze secondes atteignent L malgré la réussite de la charge nominale ; cadencer le test ne relève pas cette limite utilisateur | Conserver les quotas conformément à la décision ; qualifier les parcours rapides et l'accumulation de caches avant toute modification de cadence ou quota.                                                 |
-| S6-R14 | Promotion HTTP d'un guest à 100 partages : les plafonds échouent malgré le partage corrigé ; autres mutations et comparaison finale encore absentes                | Bloquer la clôture 6d et le merge. Profiler les acquisitions répétées après arbitrage, puis rejouer les trois séries et les attaques.                                                                      |
+| S6-R14 | Partage et promotion requalifiés ; retrait HTTP d'un guest à 100 partages à 107,176 ms d'attente SQL (>100), arbre/cycle de vie et comparaison encore absents      | Bloquer la clôture 6d et le merge. Recommander un profilage du retrait après arbitrage ; aucune nouvelle optimisation ni dérogation sans décision.                                                         |
 
 ## Relecture manuelle
 
 Suivre le [guide consolidé à deux navigateurs](session-6-guide-manuel.md), notamment le prestataire qui met à jour le statut, les liens cachés conservés, le conflit explicite et le retrait/rétablissement avec un onglet hors ligne. Ce qui peut casser : ordre des verrous, époque base/ligne confondue avec la version d'une cellule, contrôle de droits oublié dans une projection ou un sélecteur, et trafic automatique sous-estimé. Les résultats finaux doivent être renseignés avant de présenter cette étape comme terminée.
+
+### Requalification de 0028 : partage et promotion
+
+Version applicative `575f10321d12d8bb0da16a4292e901e8c75e175a`, six séries conformes archivées dans [la campagne partage/rôle](evidence/session-6d-rights-share-role-final/). Le partage vise désormais une base racine : assertion du changement effectif lecture/édition, sans droit hérité qui le masque. Cette sélection plus précise interdit de présenter les campagnes précédentes comme des paires alternées.
+
+| P95 (ms), séries 1 / 2 / 3  | Partage                  | Promotion guest avec 100 partages |
+| --------------------------- | ------------------------ | --------------------------------- |
+| HTTP                        | 76,651 / 71,813 / 72,620 | 108,937 / 91,491 / 96,099         |
+| Attente SQL observée        | 15,403 / 17,894 / 23,612 | 50,547 / 40,793 / 45,950          |
+| WSS chevauchant la mutation | 45,314 / 40,848 / 42,947 | 72,114 / 60,061 / 64,997          |
+
+Médianes respectives : **72,620 / 17,894 / 42,947 ms** et **96,099 / 45,950 / 64,997 ms**, sous 500/100/200. Aucun seuil ni contrôle modifié. La première remise en état après retrait échoue ensuite dans la fixture : elle tente de recréer le même UUID de membership, alors que la référence personne détachée doit rester conservée en production. Erreur et trace sont archivées ; cette série incomplète ne compte pas.
+
+Correction du banc seulement (`786b39bf201468ccf263e123409770a55f090082`) : sa fixture isolée efface sa seule référence personne détachée et sans affectation avant de recréer son UUID de test, hors fenêtre mesurée. Un vrai retour dans le workspace reçoit un nouveau membership et une nouvelle référence personne ; le trigger de production ne change pas. Reprise explicite `--from-case remove`, avec nouvelle préparation, trois séries par cas et mêmes plafonds ; aucune série antérieure supprimée ou amalgamée.
+
+### Nouvel arrêt : retrait à 100 partages
+
+Version applicative identique à `575f103`, banc corrigé `786b39b`. [Série complète et hygiène](evidence/session-6d-rights-remove-stop/) : 30 mutations après deux warmups, 93 attentes observées, 456 reçus WSS dont 140 chevauchant la mutation, 129 événements agrégés. **P95 HTTP 190,166 ms (<500), attente SQL 107,176 ms (>100), WSS total 112,508 ms et chevauchant 129,860 ms (<200)**. Confirmation service 108,207 ms, indicateur. Une seule série, aucune médiane de trois annoncée. Secteur confirmé ; 71 intervalles vmstat sans swap, Windows 3,687 → 3,685 Gio, WSL 5,331 → 5,310 Gio.
+
+Arrêt automatique au premier plafond dépassé. Aucun nouvel essai ni modification de production après ce résultat. Une lecture du code suggère une piste à confirmer : lors de la suppression en cascade du sujet, les triggers des grants peuvent ne plus retrouver le membre et élargir la réconciliation à tout le workspace (`content_queue_access`, migration 0024). Ce n'est pas un coût mesuré ni un diagnostic établi. Recommandation : profiler le retrait (plans, triggers et réconciliation) avant toute correction ciblée, puis conserver les preuves d'équivalence et de rollback. Autre option soumise au développeur : autoriser les deux séries restantes sur cette version inchangée pour évaluer la reproductibilité du dépassement de 7,176 ms ; cela ne constitue pas une dérogation au plafond.
+
+Restent non exécutés sur cette candidate : les séries de déplacement, archivage/restauration ordinaires et de ligne, puis la comparaison alternée avec main. Le navigateur final a été attaqué avant 0028 ; après 0028 les suites réelles cellules, barrières, partages HTTP/WSS, objets et équivalence aléatoire passent, mais le scénario Edge complet n'a pas encore été rejoué. La PR reste un brouillon non prêt au merge.
+
+Contrôle final de cette livraison : `pnpm check` terminé, **166 réussis / six SQL ignorés**, puis `pnpm test:db` terminé, **six réussis** sur les migrations actuelles. Journaux complets `evidence/session-6d-functional/acquisitions-final-check.txt` et `acquisitions-db.txt`. Les tests de verrous, cellules, objets HTTP, partages HTTP/WSS et oracle aléatoire après 0028 sont archivés avec le préfixe `lock-` ; aucun test ignoré n'est présenté comme exécuté par `pnpm check`.

@@ -1,0 +1,54 @@
+{
+  "source": ".local\\session-6d-http-rights.json",
+  "originalSha256": "1799f4af3946335e5465ea3ec4662168bccd00f388621d45b6bd09d6c2ff9b8c",
+  "encoding": "JSON summaries + ordered, compact NDJSON shards, no samples removed. Array hashes use JSON.stringify(array). Hygiene result duplicates are replaced by their SHA256.",
+  "hygiene": [
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-preparation-f61b23ec-1e4e-414a-9caa-36a979fc961c.json",
+      "file": "database-http-rights-preparation-f61b23ec-1e4e-414a-9caa-36a979fc961c.json",
+      "originalSha256": "80074410271b5f8bbd8d2916f70a5859603dc028246d866e8d96cf65a625e092"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-remove-1-attempt-1-2644d3ad-252b-4059-8588-e6644c923054.json",
+      "file": "database-http-rights-remove-1-attempt-1-2644d3ad-252b-4059-8588-e6644c923054.json",
+      "originalSha256": "b0a2d0424c3ce2f32e95db68106b363bec6bb71ece20a3567c1fb795a203d1a7"
+    }
+  ],
+  "files": [
+    {
+      "name": "database-http-rights-preparation-f61b23ec-1e4e-414a-9caa-36a979fc961c.json",
+      "bytes": 676,
+      "sha256": "80074410271b5f8bbd8d2916f70a5859603dc028246d866e8d96cf65a625e092"
+    },
+    {
+      "name": "database-http-rights-remove-1-attempt-1-2644d3ad-252b-4059-8588-e6644c923054.json",
+      "bytes": 26734,
+      "sha256": "316f58378f137b646eca1b5de5da63a933f5609ed979915617bfa4799a49b993"
+    },
+    {
+      "name": "measurement.json",
+      "bytes": 11213,
+      "sha256": "19c39c9a9c807db3aaa9811691006b1228c64ee97ab9a661ba7a8806fdc04793"
+    },
+    {
+      "name": "run.txt",
+      "bytes": 3121,
+      "sha256": "740dc2239688c41b7c0bb8b0f7b7fcbccee61a6662fa68f7357b018644151232"
+    },
+    {
+      "name": "series-1-confirmations-1.ndjson",
+      "bytes": 8261,
+      "sha256": "0e1a6b218fe4fb9d4e99d5992bab5653759dd1d18ecb73921ce02c68628234c1"
+    },
+    {
+      "name": "series-1-overlap-1.ndjson",
+      "bytes": 2577,
+      "sha256": "0f4285055d553de869f2618f48bb022bc2ef8606a1acf0749c49b1e70b97aac8"
+    },
+    {
+      "name": "series-1-wire-1.ndjson",
+      "bytes": 8520,
+      "sha256": "bfd0a78648ff3c03bbbb3c4532e00700a901872015f8893f34b03b3942415410"
+    }
+  ]
+}
