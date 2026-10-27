@@ -172,7 +172,28 @@ const restoreMember = async () => {
   }
 };
 try {
-  if (
+  if (process.argv.includes('--tree-preflight')) {
+    await h.prove(owner);
+    const value = (
+      await db.pool.query('SELECT version FROM pages WHERE id=$1', [fixture.tree.root])
+    ).rows[0].version;
+    const route = `${W}/pages/${fixture.tree.root}/move/preview`;
+    const input = { expectedVersion: value, parentId: fixture.tree.destination, afterId: null };
+    const rejected = await h.call(owner, input, route);
+    assert.equal(typeof value, 'string', 'raw pg bigint differs from Drizzle number mapping');
+    assert.equal(rejected.status, 400);
+    const accepted = await h.call(owner, { ...input, expectedVersion: Number(value) }, route);
+    assert.equal(accepted.status, 201);
+    console.log(
+      JSON.stringify({
+        preflight: 'ordinary page version contract',
+        rawType: typeof value,
+        rejected: rejected.status,
+        accepted: accepted.status,
+        affectedPages: accepted.data.pages,
+      }),
+    );
+  } else if (
     process.argv.includes('--profile') ||
     process.argv.includes('--profile-role') ||
     process.argv.includes('--profile-remove')
@@ -266,14 +287,17 @@ try {
                   ).rows[0];
                   path = `${W}/pages/${fixture.tree.root}/${kind}`;
                   body = {
-                    expectedVersion: page.version,
+                    expectedVersion: Number(page.version),
                     ...(kind === 'move'
                       ? { parentId: fixture.tree.destination, afterId: null }
                       : {}),
                   };
                   if (kind !== 'archive') {
                     const preview = await h.call(owner, body, path + '/preview');
-                    assert(preview.status >= 200 && preview.status < 300);
+                    assert(
+                      preview.status >= 200 && preview.status < 300,
+                      `Preview HTTP_${preview.status}_${String(preview.data.code)}`,
+                    );
                     previews.push(preview.server);
                     body.previewToken = preview.data.token;
                   }
