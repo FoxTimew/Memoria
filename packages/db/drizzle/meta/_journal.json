@@ -190,6 +190,13 @@
       "when": 1793020341777,
       "tag": "0026_database_definition_boundaries",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1793093369161,
+      "tag": "0027_database_services",
+      "breakpoints": true
     }
   ]
 }

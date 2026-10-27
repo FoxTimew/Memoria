@@ -6,7 +6,7 @@ export interface PageAccessRequest {
   workspace: string;
   page: string;
   accessVersion?: number | undefined;
-  rowScope?: { database: string; baseVersion?: number; lifecycle?: string };
+  rowScope?: { database: string; baseVersion?: number; lifecycle?: string } | undefined;
 }
 export interface PageAccess extends PageAccessRequest {
   actor: string;

@@ -328,6 +328,9 @@ export const databaseRowChanges = pgTable(
       .notNull(),
     firstDirtyAt: time('first_dirty_at'),
     lastDirtyAt: time('last_dirty_at'),
+    eventRevision: bigint('event_revision', { mode: 'bigint' })
+      .default(sql`0`)
+      .notNull(),
   },
   (t) => [
     primaryKey({ columns: [t.workspaceId, t.rowPageId] }),

@@ -276,64 +276,69 @@ export class DatabaseCells {
     });
   }
   async write(s: DatabaseSubject, a: CellWrite) {
+    return this.transaction((c) => this.writeInTransaction(c, s, a));
+  }
+  /** Internal composition for atomic row creation; callers pre-plan all base/row latches. */
+  async writeInTransaction(c: PoolClient, s: DatabaseSubject, a: CellWrite) {
     identifiers(s.workspace, a.database, a.row, a.property);
     version(a.expectedCellVersion);
     version(a.expectedSchemaVersion);
     if (Buffer.byteLength(JSON.stringify(a)) > this.limits.mutationBytes) fail('VALUE_LIMIT');
-    return this.transaction(async (c) => {
-      await this.access(c, s, a, true);
-      const plan = await this.plan(c, s, a, a.value);
-      await this.access(c, s, a, true);
-      const schemaVersion = await this.schema(c, s, a);
-      if (schemaVersion !== a.expectedSchemaVersion)
-        throw new DatabaseFault(409, 'SCHEMA_VERSION_CONFLICT', { schemaVersion });
-      const p = await this.property(c, s, a);
-      if (
-        p.kind !== plan.preliminary?.kind ||
-        p.relation_target_database_id !== plan.preliminary?.relation_target_database_id
+
+    await this.access(c, s, a, true);
+    const plan = await this.plan(c, s, a, a.value);
+    await this.access(c, s, a, true);
+    const schemaVersion = await this.schema(c, s, a);
+    if (schemaVersion !== a.expectedSchemaVersion)
+      throw new DatabaseFault(409, 'SCHEMA_VERSION_CONFLICT', { schemaVersion });
+    const p = await this.property(c, s, a);
+    if (
+      p.kind !== plan.preliminary?.kind ||
+      p.relation_target_database_id !== plan.preliminary?.relation_target_database_id
+    )
+      fail('RETRY_REQUIRED', 409);
+    await c.query(
+      'INSERT INTO database_cell_versions(workspace_id,database_id,row_page_id,property_id) VALUES($1,$2,$3,$4) ON CONFLICT DO NOTHING',
+      [s.workspace, a.database, a.row, a.property],
+    );
+    const current = (
+      await c.query<{ version: string }>(
+        'SELECT version::text FROM database_cell_versions WHERE workspace_id=$1 AND row_page_id=$2 AND property_id=$3 FOR UPDATE',
+        [s.workspace, a.row, a.property],
       )
-        fail('RETRY_REQUIRED', 409);
-      await c.query(
-        'INSERT INTO database_cell_versions(workspace_id,database_id,row_page_id,property_id) VALUES($1,$2,$3,$4) ON CONFLICT DO NOTHING',
-        [s.workspace, a.database, a.row, a.property],
-      );
-      const current = (
-        await c.query<{ version: string }>(
-          'SELECT version::text FROM database_cell_versions WHERE workspace_id=$1 AND row_page_id=$2 AND property_id=$3 FOR UPDATE',
+    ).rows[0]!.version;
+    const access = await this.access(c, s, a, true);
+    if (current !== a.expectedCellVersion)
+      throw new DatabaseFault(409, 'CELL_VERSION_CONFLICT', {
+        version: current,
+        schemaVersion,
+        value: await this.value(c, s, a, p),
+      });
+    if (p.kind === 'relation') {
+      const actual = (
+        await c.query<{ target_page_id: string }>(
+          'SELECT target_page_id FROM relation_values WHERE workspace_id=$1 AND row_page_id=$2 AND property_id=$3 AND deleted_at IS NULL ORDER BY target_page_id',
           [s.workspace, a.row, a.property],
         )
-      ).rows[0]!.version;
-      const access = await this.access(c, s, a, true);
-      if (current !== a.expectedCellVersion)
-        throw new DatabaseFault(409, 'CELL_VERSION_CONFLICT', {
-          version: current,
-          schemaVersion,
-          value: await this.value(c, s, a, p),
-        });
-      if (p.kind === 'relation') {
-        const actual = (
-          await c.query<{ target_page_id: string }>(
-            'SELECT target_page_id FROM relation_values WHERE workspace_id=$1 AND row_page_id=$2 AND property_id=$3 AND deleted_at IS NULL ORDER BY target_page_id',
-            [s.workspace, a.row, a.property],
-          )
-        ).rows.map((r) => r.target_page_id);
-        if (JSON.stringify(actual) !== JSON.stringify(plan.before)) fail('RETRY_REQUIRED', 409);
-      }
-      await this.replace(c, s, a, p, access.actor);
-      const next = (BigInt(current) + 1n).toString();
-      await c.query(
-        'UPDATE database_cell_versions SET version=$1 WHERE workspace_id=$2 AND row_page_id=$3 AND property_id=$4',
-        [next, s.workspace, a.row, a.property],
-      );
-      await c.query(
-        `INSERT INTO database_row_changes(workspace_id,database_id,row_page_id,property_revision,first_dirty_at,last_dirty_at) VALUES($1,$2,$3,1,clock_timestamp(),clock_timestamp())
-        ON CONFLICT(workspace_id,row_page_id) DO UPDATE SET property_revision=database_row_changes.property_revision+1,first_dirty_at=coalesce(database_row_changes.first_dirty_at,excluded.first_dirty_at),last_dirty_at=excluded.last_dirty_at`,
-        [s.workspace, a.database, a.row],
-      );
-      const value = await this.value(c, s, a, p);
-      await this.access(c, s, a, true);
-      return { version: next, schemaVersion, value };
-    });
+      ).rows.map((r) => r.target_page_id);
+      if (JSON.stringify(actual) !== JSON.stringify(plan.before)) fail('RETRY_REQUIRED', 409);
+    }
+    await this.replace(c, s, a, p, access.actor);
+    const next = (BigInt(current) + 1n).toString();
+    await c.query(
+      'UPDATE database_cell_versions SET version=$1 WHERE workspace_id=$2 AND row_page_id=$3 AND property_id=$4',
+      [next, s.workspace, a.row, a.property],
+    );
+    await c.query('SELECT database_mark_row($1,$2,$3,$4)', [
+      s.workspace,
+      a.database,
+      a.row,
+      access.actor,
+    ]);
+    await c.query('SELECT database_refresh_row($1,$2)', [s.workspace, a.row]);
+    const value = await this.value(c, s, a, p);
+    await this.access(c, s, a, true);
+    return { version: next, schemaVersion, value };
   }
   private async replace(
     c: PoolClient,
@@ -576,9 +581,10 @@ export class DatabaseCells {
       ).rows[0];
       if (!b) fail('ACCESS_DENIED', 404);
       const roles = (
-        await c.query<{ role: string }>('SELECT role FROM content_resolve_access($1::jsonb)', [
-          accessRequests([{ ...s, key: 'base', page: b.page_id }]),
-        ])
+        await c.query<{ role: string; actor: string }>(
+          'SELECT role,actor FROM content_resolve_access($1::jsonb)',
+          [accessRequests([{ ...s, key: 'base', page: b.page_id }])],
+        )
       ).rows[0];
       if (!roles || roles.role === 'guest') fail('ACCESS_DENIED', 404);
       const p = (
@@ -593,10 +599,17 @@ export class DatabaseCells {
         'UPDATE pages SET deleted_at=CASE WHEN $1 THEN clock_timestamp() ELSE NULL END,version=version+1 WHERE workspace_id=$2 AND id=$3',
         [archived, s.workspace, row],
       );
+      await c.query('SELECT database_mark_row($1,$2,$3,$4)', [
+        s.workspace,
+        database,
+        row,
+        roles.actor,
+      ]);
       const final = (
-        await c.query<{ role: string }>('SELECT role FROM content_resolve_access($1::jsonb)', [
-          accessRequests([{ ...s, key: 'base', page: b.page_id }]),
-        ])
+        await c.query<{ role: string; actor: string }>(
+          'SELECT role,actor FROM content_resolve_access($1::jsonb)',
+          [accessRequests([{ ...s, key: 'base', page: b.page_id }])],
+        )
       ).rows[0];
       if (!final || final.role === 'guest') fail('ACCESS_DENIED', 404);
       return { version: (BigInt(p.version) + 1n).toString() };
