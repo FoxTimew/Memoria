@@ -44,3 +44,30 @@ Lire `modules/databases/table-compiler.ts` (paramètres, sémantique et curseurs
 Le parcours à deux clients de 6a reste le moyen manuel de créer une fixture isolée ; aucune interface de base n'est livrée. Pour cette tranche, lancer les attaques ci-dessus avec PostgreSQL local puis vérifier zéro échec et l'absence d'identifiant caché dans les assertions. Pour la performance, utiliser uniquement la commande dédiée avec les préconditions mémoire/secteur ; une suite d'attaque ne mesure pas la latence. Un guide CRUD/recherche/outbox complet sera fourni après la livraison de ces chemins.
 
 Ce qui pourrait casser : coût du compilateur général et des contrôles supplémentaires, mauvais ordre des NULL en pagination, omission d'un droit dans la projection des références, reprise d'un curseur périmé, attentes au pool SQL sous charge. L'équivalence des résultats, les plans, les attaques et la mesure HTTP sont les contrôles de cette première tranche ; ils ne remplacent pas la revue finale 6d.
+
+## Résultat du contrôle, 27 octobre 2026
+
+Candidate mesurée : `8e151f77841ec6a6ec0cdcc9b3ddceb88d7b5cdc`. **Les huit scénarios HTTP passent ; le contrôle préalable autorise la suite de 6b.** Trois séries de 200 requêtes, aucun build/test parallèle, 24 traces valides et 615 intervalles vmstat sans swap. Windows : 3,426 Gio avant préparation ; minima des relevés de séries 1,687 Gio Windows et 5,077 Gio WSL. BatteryStatus=2 partout. Aucun rejeu ni série retirée.
+
+| p95 serveur (ms)    | Série 1 | Série 2 | Série 3 |    Médiane |
+| ------------------- | ------: | ------: | ------: | ---------: |
+| owner — broad       |   63.97 |   65.69 |   67.49 |  **65.69** |
+| owner — deep        |   52.26 |   53.27 |   52.39 |  **52.39** |
+| owner — ten-filters |  157.60 |  163.50 |  155.73 | **157.60** |
+| owner — nulls-desc  |   65.90 |   68.94 |   64.45 |  **65.90** |
+| guest — broad       |   53.20 |   51.80 |   50.94 |  **51.80** |
+| guest — deep        |   50.50 |   48.65 |   60.26 |  **50.50** |
+| guest — ten-filters |  139.16 |  136.25 |  135.31 | **136.25** |
+| guest — nulls-desc  |   63.90 |   61.81 |   64.99 |  **63.90** |
+
+Le pire médian HTTP serveur est **157,60 ms**, sous 200 ms ; les trois p95 de ce cas sont 157,60 / 163,50 / 155,73 ms. L'aller-retour HTTP correspondant vaut 170,92 / 172,07 / 171,96 ms. Les huit comparaisons d'IDs ordonnés avec l'oracle fermé réussissent. Cette campagne séquentielle ne qualifie pas cinquante rédacteurs simultanés, toutes les distributions de données ou une pile derrière Caddy.
+
+[Journal complet](evidence/session-6b-table-http/measurement.txt), [échantillons et plans bruts](evidence/session-6b-table-http/measurement.json), [index des traces](evidence/session-6b-table-http/index.json), [synthèse des plans](evidence/session-6b-table-http/plans-summary.json). Les chemins .local des sources désignent leur provenance ; les copies versionnées portent le même nom.
+
+### Comparaison des plans
+
+Les plans sont capturés hors chronométrage, sur la même fixture, dans l'ordre oracle puis compilateur. Leurs temps d'exécution sont des observations individuelles, **pas des p95 ni une comparaison alternée**. Le plan général réutilise les jointures scalaires et transmet les IDs d'options déjà validés par le service ; l'oracle fait une sous-requête d'options. Au cas dix filtres owner, cela donne 22 174 blocs touchés contre 226 736, et une sélection observée à 31,38 ms contre 91,03 ms. Invité : 19 972 contre 224 580 blocs, 19,46 contre 87,16 ms. Les contrôles d'options/droits en amont et l'hydratation restent inclus dans les p95 HTTP, pas dans ces seuls plans de sélection.
+
+Pour les cas peu sélectif/profond, le plan général exploite l'index numérique et un tri incrémental, alors que l'oracle emploie selon le cas des scans plus larges et un tri. Pour le descendant avec vides, les deux ont la même forme : scans des index texte/numérique, scans des lignes/pages et tri (608 blocs touchés chacun). Aucun index ajouté ni optimisation postérieure à la mesure. Les UUID synthétiques/statistiques expliquent pourquoi une forme de plan isolée n'est pas une garantie pour toutes les bases.
+
+Contrôles fonctionnels conservés : [pnpm check complet](evidence/session-6b-table-http/check.txt), 149 tests réussis / 6 SQL ignorés dans la suite standard ; [attaques réelles de cette route](evidence/session-6b-table-http/attacks.txt), 7 tests réussis. Le remplacement autorisé de Turbo conserve les douze typechecks et les refus réels de commit/push en cas d'échec.
