@@ -1,0 +1,172 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "database-http-share-profile-1",
+  "attempt": 1,
+  "preparation": {
+    "path": ".local/measurement-hygiene/database-http-rights-preparation-31d4c5ca-ccc5-41e0-9a08-aee5b1d1649a.json",
+    "observation": {
+      "observedAt": "2026-10-27T14:07:40.837Z",
+      "windowsFreeBytes": 3999006720,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5807923200,
+        "swapInPages": 0,
+        "swapOutPages": 0
+      },
+      "power": {
+        "observedAt": "2026-10-27T14:07:40.837Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "status": "valid",
+  "before": {
+    "observedAt": "2026-10-27T14:08:33.348Z",
+    "windowsFreeBytes": 4054417408,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5764583424,
+      "swapInPages": 0,
+      "swapOutPages": 0
+    },
+    "power": {
+      "observedAt": "2026-10-27T14:08:33.348Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 100
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "workStartedAt": 1793110113824,
+  "workEndedAt": 1793110126761,
+  "swap": {
+    "raw": "BOOT dc1818ce-057f-406e-9e82-a0bb01fa6a48\nvmstat from procps-ng 4.0.4\n--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n   0    0            0      4722728         7656      1265780    0    0     0  2520 1604 2030   0   0 100   0   0   0\n   0    0            0      4722572         7668      1265780    0    0     0  1496 4683 7829   1   1  98   0   0   0\n   0    0            0      4712244         7668      1265988    0    0     0  1280 1823 2724   0   0  99   0   0   0\n   0    0            0      4717824         7668      1266108    0    0    24  1136 6184 10483   1   2  97   0   0   0\n   3    0            0      4712804         7672      1266108    0    0     0  1320 2871 4298   0   1  99   0   0   0\n   1    0            0      4699948         7672      1266168    0    0     0  1360 6183 10068   1   1  97   0   0   0\n   0    0            0      4707068         7680      1266168    0    0     0  1384 12878 22656   3   2  95   0   0   0\n   0    0            0      4698384         7680      1266232    0    0     0  1376 6203 10242   1   1  97   0   0   0\n   0    0            0      4707864         7680      1266232    0    0     0  1296 4350 7357   0   1  99   0   0   0\n   0    0            0      4705732         7680      1266296    0    0     0    96 3630 5945   1   1  98   0   0   0\n   0    0            0      4709428         7680      1266296    0    0     0   272 3299 5627   0   1  99   0   0   0\n   0    0            0      4710224         7688      1266352    0    0     0   388 4053 6864   1   1  98   0   0   0\n   0    0            0      4707304         7688      1266352    0    0     0   272 4588 7489   1   1  98   0   0   0\n   0    0            0      4705848         7688      1266416    0    0     0   352 3324 5473   1   1  98   0   0   0\n   0    0            0      4711328         7688      1266416    0    0     0   264 2506 3832   1   0  99   0   0   0\n",
+    "chunks": [
+      {
+        "observedAt": "2026-10-27T14:08:32.202Z",
+        "text": "BOOT "
+      },
+      {
+        "observedAt": "2026-10-27T14:08:32.202Z",
+        "text": "dc1818ce-057f-406e-9e82-a0bb01fa6a48\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:32.204Z",
+        "text": "vmstat from procps-ng 4.0.4\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:32.207Z",
+        "text": "--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:33.207Z",
+        "text": "   0    0            0      4722728         7656      1265780    0    0     0  2520 1604 2030   0   0 100   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:35.223Z",
+        "text": "   0    0            0      4722572         7668      1265780    0    0     0  1496 4683 7829   1   1  98   0   0   0\n   0    0            0      4712244         7668      1265988    0    0     0  1280 1823 2724   0   0  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:37.167Z",
+        "text": "   0    0            0      4717824         7668      1266108    0    0    24  1136 6184 10483   1   2  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:37.256Z",
+        "text": "   3    0            0      4712804         7672      1266108    0    0     0  1320 2871 4298   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:38.334Z",
+        "text": "   1    0            0      4699948         7672      1266168    0    0     0  1360 6183 10068   1   1  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:39.431Z",
+        "text": "   0    0            0      4707068         7680      1266168    0    0     0  1384 12878 22656   3   2  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:40.209Z",
+        "text": "   0    0            0      4698384         7680      1266232    0    0     0  1376 6203 10242   1   1  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:41.493Z",
+        "text": "   0    0            0      4707864         7680      1266232    0    0     0  1296 4350 7357   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:42.210Z",
+        "text": "   0    0            0      4705732         7680      1266296    0    0     0    96 3630 5945   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:43.700Z",
+        "text": "   0    0            0      4709428         7680      1266296    0    0     0   272 3299 5627   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:44.211Z",
+        "text": "   0    0            0      4710224         7688      1266352    0    0     0   388 4053 6864   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:45.749Z",
+        "text": "   0    0            0      4707304         7688      1266352    0    0     0   272 4588 7489   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:46.212Z",
+        "text": "   0    0            0      4705848         7688      1266416    0    0     0   352 3324 5473   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-27T14:08:47.212Z",
+        "text": "   0    0            0      4711328         7688      1266416    0    0     0   264 2506 3832   1   0  99   0   0   0\n"
+      }
+    ],
+    "startedAt": 1793110111964,
+    "endedAt": 1793110127212,
+    "probeError": null,
+    "stderr": "",
+    "imageId": "sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac",
+    "command": "vmstat -w -n -y 1",
+    "intervalSeconds": 1,
+    "workStartedAt": 1793110113824,
+    "workEndedAt": 1793110126761
+  },
+  "after": {
+    "observedAt": "2026-10-27T14:08:47.325Z",
+    "windowsFreeBytes": 3557343232,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5753593856,
+      "swapInPages": 0,
+      "swapOutPages": 0
+    },
+    "power": {
+      "observedAt": "2026-10-27T14:08:47.325Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 100
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "assessment": {
+    "valid": true,
+    "reason": null,
+    "intervals": 15,
+    "deltaInPages": 0,
+    "deltaOutPages": 0
+  },
+  "resultSha256": "02509064f99783db949cb34d95e5ecc6d12608b4aaa100109162f3e4dfdae8d2",
+  "resultStorage": "The series raw arrays and summary retain the measurement result; original full hygiene file remains in .local."
+}

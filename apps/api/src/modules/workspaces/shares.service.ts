@@ -17,7 +17,10 @@ export class SharesService {
     const { limit, offset } = accessInput(accessPaginationSchema, query);
     return this.database.db.transaction(async (tx) => {
       await readManager(tx, session, workspace);
-      const all = await tx.select().from(pages).where(eq(pages.workspaceId, workspace));
+      const all = await tx
+        .select()
+        .from(pages)
+        .where(and(eq(pages.workspaceId, workspace), eq(pages.kind, 'page')));
       const page = requirePage(pageId, all);
       const state = await shareState(tx, workspace);
       const ancestors = new Set<string>();
@@ -64,7 +67,12 @@ export class SharesService {
     const data = accessInput(shareUpdateSchema, input);
     return this.database.db.transaction(async (tx) => {
       const actor = await requireSensitiveAction(tx, session, workspace, 'workspace.access');
-      const all = await tx.select().from(pages).where(eq(pages.workspaceId, workspace));
+      // Rows inherit their base's rights; only the bounded ordinary tree participates here.
+      // Keep this read after the same identity and exclusive rights barriers.
+      const all = await tx
+        .select()
+        .from(pages)
+        .where(and(eq(pages.workspaceId, workspace), eq(pages.kind, 'page')));
       requirePage(pageId, all);
       const [guest] = await tx
         .select()

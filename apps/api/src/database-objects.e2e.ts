@@ -496,6 +496,57 @@ await test('6b objects: live HTTP boundaries and atomic creation', async (t) => 
       },
     );
     await t.test(
+      'D02: ordinary sharing ignores database rows and refuses individual row shares',
+      async () => {
+        await h.prove(owner);
+        const memberId = (
+          await f.db.pool.query(
+            'SELECT id FROM workspace_members WHERE workspace_id=$1 AND user_id=$2',
+            [f.db.workspace, guest.user],
+          )
+        ).rows[0].id;
+        const pages = `/api/internal/workspaces/${f.db.workspace}/pages`;
+        const current = await h.call(owner, {}, `${pages}/${f.containers[0]}/shares`, {}, 'GET');
+        assert.equal(current.status, 200);
+        assert.equal(
+          (await h.call(owner, {}, `${pages}/${f.rows[0]}/shares`, {}, 'GET')).status,
+          404,
+        );
+        assert.equal(
+          (
+            await h.call(
+              owner,
+              { expectedAccessVersion: current.data.accessVersion, level: 'edit' },
+              `${pages}/${f.rows[0]}/shares/${memberId}`,
+              {},
+              'PUT',
+            )
+          ).status,
+          404,
+        );
+        assert.equal(
+          (
+            await h.call(
+              owner,
+              { expectedAccessVersion: current.data.accessVersion, level: 'read' },
+              `${pages}/${f.containers[0]}/shares/${memberId}`,
+              {},
+              'PUT',
+            )
+          ).status,
+          200,
+        );
+        assert.equal(
+          (
+            await f.db.pool.query('SELECT count(*) n FROM access_grants WHERE resource_id=$1', [
+              f.rows[0],
+            ])
+          ).rows[0].n,
+          '0',
+        );
+      },
+    );
+    await t.test(
       'D12: each mutation family refuses forged IPs and alternate paths at the account and workspace budgets',
       async () => {
         for (const [family, path, method, max] of [

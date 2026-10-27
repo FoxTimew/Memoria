@@ -110,6 +110,24 @@ Décision du développeur, 27 octobre : **profiler puis réduire le travail sous
 
 Les premières mises au point du banc sont conservées séparément : délai de préparation de la grosse fixture passé au même 120 s que 6a (le délai de 10 s coupait la transaction de peuplement), puis contrat de ticket de page ordinaire corrigé (HTTP 201, portée `page`). Elles ont échoué avant toute série et ne sont ni des mesures ni des corrections applicatives.
 
+### Profilage et correction autorisée du partage
+
+Le diagnostic initial a été poussé et vérifié sur le distant à `cf91429f9b0bcf03553b311f5f03753efa08d3e5`. Ensuite, trois séries de six mutations HTTP réelles ont été profilées, sans rédacteurs concurrents, sous le même protocole d'hygiène. Une tentative interrompue avant enregistrement complet est conservée séparément. Les latences instrumentées ne sont pas des échantillons de qualification : le profileur force la contrainte différée juste avant COMMIT pour isoler la réconciliation, relève `pg_stat_xact_user_functions` et exécute EXPLAIN ANALYZE sur les SELECT capturés. Aucun paramètre d'authentification n'est écrit dans les traces.
+
+| Étape, moyenne par série (ms)                               | Série 1 | Série 2 | Série 3 |
+| ----------------------------------------------------------- | ------: | ------: | ------: |
+| Lecture/transfert/décodage des 51 000 pages, côté client PG |  89,212 |  90,874 |  87,646 |
+| Entre fin de cette requête et début de la suivante          |  94,036 |  96,434 |  90,692 |
+| Lecture des 5 000 partages                                  |   7,209 |   7,992 |   7,319 |
+| Acquisition initiale des barrières                          |   5,521 |   5,981 |   5,225 |
+| Réconciliation différée isolée                              |  18,764 |  18,912 |  17,852 |
+
+Les trois plans de pages sont des parcours séquentiels de **51 000 lignes**, environ **9 ms côté PostgreSQL**, 732 blocs en cache ; les plans de grants trient **5 000 lignes** en 3,25–3,56 ms. Le temps entre requêtes comprend notamment la conversion Drizzle et la validation de page, sans attribution exclusive à une fonction JavaScript. Les fonctions montrent une seule réconciliation et cinq appels de barrière par mutation (appel initial et triggers) ; leurs temps inclusifs ne s'additionnent pas aux requêtes qui les contiennent. Les trois p95 diagnostiques par étape et les plans/statistiques complets sont dans [le profilage](evidence/session-6d-share-profile/).
+
+Correction applicative retenue : filtrer `kind='page'` dans les deux lectures de l'arbre par `SharesService` (consultation et mutation), comme le service d'arborescence le faisait déjà. Les lignes héritent de leur base et ne participent pas aux chemins de pages ordinaires. Le transfert passe donc de 51 000 à au plus 1 000 enregistrements sur cette fixture. **Aucun contrôle, verrou, trigger ou précondition n'est déplacé ou retiré ; aucun calcul hors transaction.** Les 5 000 partages restent lus pour l'instant : leur coût mesuré est secondaire et ne justifie pas de remanier simultanément ce parcours avant requalification.
+
+Tests après correction : suite objets HTTP **9 réussis**, dont refus de consultation et mutation d'un partage individuel de ligne, avec partage de la base toujours fonctionnel ; suite partages HTTP/WS **7 réussis**, héritage, previews, révocation ciblée et quotas compris. Le nouveau test intervient après les scénarios qui exigent volontairement un owner sans preuve récente ; son premier placement avant eux avait modifié leur fixture d'assurance, puis a été corrigé sans changer leurs assertions. Requalification des latences à suivre avant clôture.
+
 ### Contrôles fonctionnels rejoués
 
 - `pnpm check` : 30 fichiers de tests réussis, un fichier SQL ignoré ; **166 tests réussis et six SQL ignorés** dans cette commande. Les six SQL passent séparément.

@@ -1,0 +1,41 @@
+▶ 6b objects: live HTTP boundaries and atomic creation
+  ✔ D02: ordinary sharing ignores database rows and refuses individual row shares (440.3093ms)
+  ✔ D01 D02 D12: every mounted object method has a quota and refuses no session, bad Origin and hidden base (208.4674ms)
+  ✔ D03 D05 D06 D07: guest reads, cannot change schema or archive, hidden schema/persons stay hidden (337.4014ms)
+  ✔ D05 D08 D10: base/schema/options/view CAS, immutable populated definitions, quotas count trash (649.9157ms)
+  ✔ D05: real cell CAS and independent title; lifecycle cannot free storage capacity (306.9017ms)
+  ✖ D03 D06 D07: guest editing conserves hidden relations, controls nine types, and strong owner manages assignable people (733.9248ms)
+  ✔ D12: each mutation family refuses forged IPs and alternate paths at the account and workspace budgets (85.8329ms)
+  ✔ D01 D04: restricted assurance, expiry and logout fail on every read family (46.3996ms)
+✖ 6b objects: live HTTP boundaries and atomic creation (4907.8523ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4912.034
+
+✖ failing tests:
+
+test at apps\api\dist\database-objects.e2e.mjs:42869:13
+✖ D03 D06 D07: guest editing conserves hidden relations, controls nine types, and strong owner manages assignable people (733.9248ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 403
+  
+      at TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-objects.e2e.mjs:42909:15)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-objects.e2e.mjs:42869:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-objects.e2e.mjs:42674:1 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

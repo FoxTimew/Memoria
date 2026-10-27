@@ -10,6 +10,7 @@ import { databaseLoadFixture } from '../../collab/src/testing/databases-fixture.
 import { databaseHttpHarness } from './testing/database-http-fixture.ts';
 import { databaseLiveWriters } from './testing/database-live-writers.ts';
 import { databaseEventWorker } from './testing/database-event-worker.ts';
+import { profileDatabaseShare } from './testing/database-share-profile.ts';
 
 const p95 = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.ceil(xs.length * 0.95) - 1] ?? 0;
 const preparation = await prepareMeasurement('database-http-rights');
@@ -142,175 +143,182 @@ const restoreMember = async () => {
   }
 };
 try {
-  for (const kind of [
-    'share',
-    'role',
-    'remove',
-    'move',
-    'archive',
-    'restore',
-    'row-archive',
-    'row-restore',
-  ]) {
-    for (let series = 1; series <= 3; series++) {
-      const eventStart = events.count();
-      await restoreMember();
-      await h.prove(owner);
-      const writers = await databaseLiveWriters(h, owner, writerRoutes);
-      try {
-        const { result, hygiene } = await runMeasuredSeries(
-          `database-http-rights-${kind}-${series}`,
-          async () => {
-            const mutations: { server: number; roundTrip: number; start: number; end: number }[] =
-                [],
-              waits: number[] = [],
-              wire: number[] = [],
-              overlap: number[] = [],
-              confirmations: number[] = [],
-              previews: number[] = [];
-            let failure: string | null = null;
-            for (let n = 0; n < 32 && !failure; n++) {
-              const cycle = performance.now();
-              let path = '',
-                method = 'POST',
-                body: Record<string, unknown> = {};
-              if (['role', 'remove'].includes(kind)) {
-                await restoreMember();
-                path = `${W}/members/${selected.id}` + (kind === 'role' ? '/role' : '');
-                method = kind === 'role' ? 'PUT' : 'DELETE';
-                body = { expectedRole: 'guest', ...(kind === 'role' ? { role: 'member' } : {}) };
-              } else if (kind === 'share') {
-                const state = await h.call(owner, {}, `${W}/pages/${shared}/shares`, {}, 'GET');
-                assert.equal(state.status, 200);
-                path = `${W}/pages/${shared}/shares/${selected.id}`;
-                method = 'PUT';
-                body = {
-                  expectedAccessVersion: state.data.accessVersion,
-                  level: n % 2 ? 'edit' : 'read',
-                };
-              } else if (kind.startsWith('row-')) {
-                // Reset this single synthetic row outside the editor window, preserve unrelated scopes.
-                await db.pool.query(
-                  'UPDATE database_rows SET deleted_at=' +
-                    (kind === 'row-restore' ? 'now()' : 'NULL') +
-                    ' WHERE page_id=$1',
-                  [targetRow],
-                );
-                await db.pool.query(
-                  'UPDATE pages SET deleted_at=' +
-                    (kind === 'row-restore' ? 'now()' : 'NULL') +
-                    ' WHERE id=$1',
-                  [targetRow],
-                );
-                const r = (
-                  await db.pool.query('SELECT version FROM pages WHERE id=$1', [targetRow])
-                ).rows[0];
-                path = rowPath + '/' + kind.slice(4);
-                body = { expectedVersion: String(r.version) };
-              } else {
-                await db.pool.query('UPDATE pages SET deleted_at=NULL WHERE id=ANY($1::uuid[])', [
-                  subtree,
-                ]);
-                await db.pool.query('UPDATE pages SET parent_id=$1 WHERE id=$2', [
-                  fixture.tree.parent,
-                  fixture.tree.root,
-                ]);
-                if (kind === 'restore')
+  if (process.argv.includes('--profile')) {
+    await profileDatabaseShare(h, owner, shared, selected.id as string, preparation);
+  } else
+    for (const kind of [
+      'share',
+      'role',
+      'remove',
+      'move',
+      'archive',
+      'restore',
+      'row-archive',
+      'row-restore',
+    ]) {
+      for (let series = 1; series <= 3; series++) {
+        const eventStart = events.count();
+        await restoreMember();
+        await h.prove(owner);
+        const writers = await databaseLiveWriters(h, owner, writerRoutes);
+        try {
+          const { result, hygiene } = await runMeasuredSeries(
+            `database-http-rights-${kind}-${series}`,
+            async () => {
+              const mutations: { server: number; roundTrip: number; start: number; end: number }[] =
+                  [],
+                waits: number[] = [],
+                wire: number[] = [],
+                overlap: number[] = [],
+                confirmations: number[] = [],
+                previews: number[] = [];
+              let failure: string | null = null;
+              for (let n = 0; n < 32 && !failure; n++) {
+                const cycle = performance.now();
+                let path = '',
+                  method = 'POST',
+                  body: Record<string, unknown> = {};
+                if (['role', 'remove'].includes(kind)) {
+                  await restoreMember();
+                  path = `${W}/members/${selected.id}` + (kind === 'role' ? '/role' : '');
+                  method = kind === 'role' ? 'PUT' : 'DELETE';
+                  body = { expectedRole: 'guest', ...(kind === 'role' ? { role: 'member' } : {}) };
+                } else if (kind === 'share') {
+                  const state = await h.call(owner, {}, `${W}/pages/${shared}/shares`, {}, 'GET');
+                  assert.equal(state.status, 200);
+                  path = `${W}/pages/${shared}/shares/${selected.id}`;
+                  method = 'PUT';
+                  body = {
+                    expectedAccessVersion: state.data.accessVersion,
+                    level: n % 2 ? 'edit' : 'read',
+                  };
+                } else if (kind.startsWith('row-')) {
+                  // Reset this single synthetic row outside the editor window, preserve unrelated scopes.
                   await db.pool.query(
-                    'UPDATE pages SET deleted_at=now() WHERE id=ANY($1::uuid[])',
-                    [subtree],
+                    'UPDATE database_rows SET deleted_at=' +
+                      (kind === 'row-restore' ? 'now()' : 'NULL') +
+                      ' WHERE page_id=$1',
+                    [targetRow],
                   );
-                const page = (
-                  await db.pool.query('SELECT version FROM pages WHERE id=$1', [fixture.tree.root])
-                ).rows[0];
-                path = `${W}/pages/${fixture.tree.root}/${kind}`;
-                body = {
-                  expectedVersion: page.version,
-                  ...(kind === 'move' ? { parentId: fixture.tree.destination, afterId: null } : {}),
-                };
-                if (kind !== 'archive') {
-                  const preview = await h.call(owner, body, path + '/preview');
-                  assert(preview.status >= 200 && preview.status < 300);
-                  previews.push(preview.server);
-                  body.previewToken = preview.data.token;
+                  await db.pool.query(
+                    'UPDATE pages SET deleted_at=' +
+                      (kind === 'row-restore' ? 'now()' : 'NULL') +
+                      ' WHERE id=$1',
+                    [targetRow],
+                  );
+                  const r = (
+                    await db.pool.query('SELECT version FROM pages WHERE id=$1', [targetRow])
+                  ).rows[0];
+                  path = rowPath + '/' + kind.slice(4);
+                  body = { expectedVersion: String(r.version) };
+                } else {
+                  await db.pool.query('UPDATE pages SET deleted_at=NULL WHERE id=ANY($1::uuid[])', [
+                    subtree,
+                  ]);
+                  await db.pool.query('UPDATE pages SET parent_id=$1 WHERE id=$2', [
+                    fixture.tree.parent,
+                    fixture.tree.root,
+                  ]);
+                  if (kind === 'restore')
+                    await db.pool.query(
+                      'UPDATE pages SET deleted_at=now() WHERE id=ANY($1::uuid[])',
+                      [subtree],
+                    );
+                  const page = (
+                    await db.pool.query('SELECT version FROM pages WHERE id=$1', [
+                      fixture.tree.root,
+                    ])
+                  ).rows[0];
+                  path = `${W}/pages/${fixture.tree.root}/${kind}`;
+                  body = {
+                    expectedVersion: page.version,
+                    ...(kind === 'move'
+                      ? { parentId: fixture.tree.destination, afterId: null }
+                      : {}),
+                  };
+                  if (kind !== 'archive') {
+                    const preview = await h.call(owner, body, path + '/preview');
+                    assert(preview.status >= 200 && preview.status < 300);
+                    previews.push(preview.server);
+                    body.previewToken = preview.data.token;
+                  }
                 }
+                let mutation!: { server: number; roundTrip: number; start: number; end: number };
+                const editors = await writers.run(async () => {
+                  const start = performance.now();
+                  const r = await h.call(owner, body, path, {}, method);
+                  mutation = {
+                    start,
+                    end: performance.now(),
+                    server: r.server,
+                    roundTrip: r.roundTrip,
+                  };
+                  if (r.status < 200 || r.status >= 300)
+                    failure = `HTTP_${r.status}_${String(r.data.code)}`;
+                  await delay(450);
+                }, 5);
+                if (n >= 2) {
+                  mutations.push(mutation);
+                  waits.push(...editors.waits);
+                  wire.push(...editors.wire.map((r) => r.ms));
+                  confirmations.push(...editors.confirmations);
+                  overlap.push(
+                    ...editors.wire
+                      .filter((r) => r.start <= mutation.end && r.end >= mutation.start)
+                      .map((r) => r.ms),
+                  );
+                }
+                await delay(Math.max(0, 2150 - (performance.now() - cycle)));
               }
-              let mutation!: { server: number; roundTrip: number; start: number; end: number };
-              const editors = await writers.run(async () => {
-                const start = performance.now();
-                const r = await h.call(owner, body, path, {}, method);
-                mutation = {
-                  start,
-                  end: performance.now(),
-                  server: r.server,
-                  roundTrip: r.roundTrip,
-                };
-                if (r.status < 200 || r.status >= 300)
-                  failure = `HTTP_${r.status}_${String(r.data.code)}`;
-                await delay(450);
-              }, 5);
-              if (n >= 2) {
-                mutations.push(mutation);
-                waits.push(...editors.waits);
-                wire.push(...editors.wire.map((r) => r.ms));
-                confirmations.push(...editors.confirmations);
-                overlap.push(
-                  ...editors.wire
-                    .filter((r) => r.start <= mutation.end && r.end >= mutation.start)
-                    .map((r) => r.ms),
-                );
-              }
-              await delay(Math.max(0, 2150 - (performance.now() - cycle)));
-            }
-            return {
-              failure,
-              mutations,
-              waits,
-              wire,
-              overlap,
-              confirmations,
-              previews,
-              p95: {
-                mutation: p95(mutations.map((r) => r.server)),
-                blockedSqlWait: p95(waits),
-                wire: p95(wire),
-                overlappingWire: p95(overlap),
-                serverConfirmation: p95(confirmations),
-              },
-            };
-          },
-          { preparation },
-        );
-        events.check();
-        reports.push({
-          kind,
-          series,
-          hygiene,
-          ...result,
-          aggregatedEvents: events.count() - eventStart,
-        });
-        await save();
-        console.log(
-          JSON.stringify({
+              return {
+                failure,
+                mutations,
+                waits,
+                wire,
+                overlap,
+                confirmations,
+                previews,
+                p95: {
+                  mutation: p95(mutations.map((r) => r.server)),
+                  blockedSqlWait: p95(waits),
+                  wire: p95(wire),
+                  overlappingWire: p95(overlap),
+                  serverConfirmation: p95(confirmations),
+                },
+              };
+            },
+            { preparation },
+          );
+          events.check();
+          reports.push({
             kind,
             series,
-            p95: result.p95,
-            overlap: result.overlap.length,
-            failure: result.failure,
-          }),
-        );
-        assert(!result.failure, result.failure ?? '');
-        assert(
-          result.p95.mutation < 500 &&
-            result.p95.blockedSqlWait < 100 &&
-            Math.max(result.p95.wire, result.p95.overlappingWire) < 200,
-          'STOP_DATABASE_HTTP_RIGHTS_BUDGET',
-        );
-      } finally {
-        await writers.close();
+            hygiene,
+            ...result,
+            aggregatedEvents: events.count() - eventStart,
+          });
+          await save();
+          console.log(
+            JSON.stringify({
+              kind,
+              series,
+              p95: result.p95,
+              overlap: result.overlap.length,
+              failure: result.failure,
+            }),
+          );
+          assert(!result.failure, result.failure ?? '');
+          assert(
+            result.p95.mutation < 500 &&
+              result.p95.blockedSqlWait < 100 &&
+              Math.max(result.p95.wire, result.p95.overlappingWire) < 200,
+            'STOP_DATABASE_HTTP_RIGHTS_BUDGET',
+          );
+        } finally {
+          await writers.close();
+        }
       }
     }
-  }
 } finally {
   await events.close();
   await h.close();
