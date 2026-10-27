@@ -1,6 +1,6 @@
 # Session 6d — revue adverse, charge et comparaison finale
 
-27 octobre 2026, branche `codex/session-6-databases`. **Étape non clôturée : arrêt au plafond d'attente des éditeurs lors d'un partage.** Le développeur a autorisé le profilage puis la réduction du travail sous barrière, après publication de ce diagnostic. Aucun risque n'est accepté ; le développeur crée et fusionne la PR unique.
+27 octobre 2026, branche `codex/session-6-databases`. **Étape non clôturée : le partage corrigé passe, mais la promotion d'un guest avec 100 partages dépasse les plafonds.** Le premier profilage et sa correction ont été autorisés ; la campagne s'est arrêtée sur ce second cas avant nouvelle optimisation. Aucun risque n'est accepté ; le développeur crée et fusionne la PR unique.
 
 ## Fichiers prioritaires
 
@@ -52,7 +52,7 @@ L/E/C/S par minute, dans l'ordre IP / compte / workspace : **6 000 / 120 / —**
 
 ## Mesures et contrôles
 
-**La campagne des droits est arrêtée après sa première série ; la comparaison finale n'a pas été lancée.** Les résultats déjà terminés sont détaillés ci-dessous. La première série de dix minutes de rafraîchissement est conservée comme essai incomplet : requêtes réussies et hygiène sans swap, mais absence de télémétrie PostgreSQL à cause des séquences ANSI de Docker Windows. Le collecteur a été corrigé avec un test, puis les trois séries ont été rejouées intégralement. Ce premier essai ne compte pas parmi les trois résultats retenus.
+**La campagne des droits est arrêtée sur le rôle après les trois séries de partage corrigé ; la comparaison finale n'a pas été lancée.** Les résultats déjà terminés sont détaillés ci-dessous. La première série de dix minutes de rafraîchissement est conservée comme essai incomplet : requêtes réussies et hygiène sans swap, mais absence de télémétrie PostgreSQL à cause des séquences ANSI de Docker Windows. Le collecteur a été corrigé avec un test, puis les trois séries ont été rejouées intégralement. Ce premier essai ne compte pas parmi les trois résultats retenus.
 
 Le banc simule le trafic mesuré sur deux vrais onglets visibles de l'interface finale, puis utilise 50 sessions Better Auth et 50 sockets WSS natives avec présence/synchronisation. Il ne lance pas cent moteurs de rendu. Une ligne persistée par compte, une seule base de 10 000 lignes/50 propriétés, politiques de cache par défaut ; les comptes sont owner/member. Les latences API sont mesurées depuis le middleware avant guard jusqu'à la fin de réponse ; le processus générateur est distinct du processus Nest/collab. Les relevés PostgreSQL portent sur le conteneur complet, qui dessert aussi la pile locale inactive. Ces conditions ne constituent pas la qualification dédiée 4 vCPU/8 Gio.
 
@@ -126,7 +126,23 @@ Les trois plans de pages sont des parcours séquentiels de **51 000 lignes**, en
 
 Correction applicative retenue : filtrer `kind='page'` dans les deux lectures de l'arbre par `SharesService` (consultation et mutation), comme le service d'arborescence le faisait déjà. Les lignes héritent de leur base et ne participent pas aux chemins de pages ordinaires. Le transfert passe donc de 51 000 à au plus 1 000 enregistrements sur cette fixture. **Aucun contrôle, verrou, trigger ou précondition n'est déplacé ou retiré ; aucun calcul hors transaction.** Les 5 000 partages restent lus pour l'instant : leur coût mesuré est secondaire et ne justifie pas de remanier simultanément ce parcours avant requalification.
 
-Tests après correction : suite objets HTTP **9 réussis**, dont refus de consultation et mutation d'un partage individuel de ligne, avec partage de la base toujours fonctionnel ; suite partages HTTP/WS **7 réussis**, héritage, previews, révocation ciblée et quotas compris. Le nouveau test intervient après les scénarios qui exigent volontairement un owner sans preuve récente ; son premier placement avant eux avait modifié leur fixture d'assurance, puis a été corrigé sans changer leurs assertions. Requalification des latences à suivre avant clôture.
+Tests après correction : suite objets HTTP **9 réussis**, dont refus de consultation et mutation d'un partage individuel de ligne, avec partage de la base toujours fonctionnel ; suite partages HTTP/WS **7 réussis**, héritage, previews, révocation ciblée et quotas compris. Le nouveau test intervient après les scénarios qui exigent volontairement un owner sans preuve récente ; son premier placement avant eux avait modifié leur fixture d'assurance, puis a été corrigé sans changer leurs assertions. `pnpm check` termine encore avec 166 réussis, six SQL ignorés ; journaux complets `objects-after-sharing.txt`, `shares-after.txt` et `check-sharing.txt`.
+
+### Requalification après correction : partage réussi, arrêt sur la promotion
+
+Candidate applicative `8fc39f4717029d5b8a950e2c11f1ca68226bfdaf`. Même protocole HTTP/WSS non instrumenté et fixture aux mêmes cardinalités ; trois séries de partage terminées, puis une seule de rôle. Les identifiants de fixture sont régénérés : ne pas présenter cette campagne comme une comparaison alternée ou apparier artificiellement ses mutations à celles de la campagne précédente. Tous les échantillons, les traces mémoire et l'arrêt sont dans [la campagne après correction](evidence/session-6d-rights-after-sharing/).
+
+| Partage, p95 (ms)                | Série 1 | Série 2 | Série 3 | Médiane / plafond  |
+| -------------------------------- | ------: | ------: | ------: | ------------------ |
+| Mutation HTTP                    |  95,813 |  90,040 |  91,888 | 91,888 / 500       |
+| Attente SQL observée             |  33,415 |  37,697 |  38,249 | 37,697 / 100       |
+| Reçu WSS, tous                   |  48,356 |  48,701 |  48,986 | 48,701 / 200       |
+| Reçu WSS chevauchant la mutation |  61,422 |  57,894 |  62,229 | 61,422 / 200       |
+| Confirmation service             |  43,918 |  44,635 |  44,169 | 44,169, indicateur |
+
+Le scénario suivant promeut un **guest possédant 100 partages** en member par la vraie route HTTP, puis restaure la fixture hors fenêtre mesurée. Les 100 anciens partages sont supprimés conformément à la règle produit. Sa première série de 30 mutations retenues échoue : **HTTP 578,207 ms (>500)**, **attente SQL 466,891 ms (>100)**, **reçu WSS total 463,443 ms et chevauchant 496,648 ms (>200)**, confirmation service 459,174 ms. 621 reçus, 180 chevauchants, 150 attentes observées ; aucune erreur HTTP ni déconnexion. Les quatre séries ont chacune 71 intervalles sans swap, secteur confirmé ; mémoire Windows toujours au-dessus de 3,4 Gio et WSL au-dessus de 5,2 Gio avant/après.
+
+Piste statique, **pas encore profilée** : le trigger de promotion supprime les grants ; chaque suppression appelle `content_lock_rights`, qui réexécute `database_lock_workspace` alors que la même transaction possède déjà ses barrières. Cent grants multiplient ce travail. La preuve de rôle 6a visait un membership initialement member sans ces cent partages : ses chiffres ne couvrent pas ce cas. Proposition soumise au développeur : profiler les fonctions et réduire les acquisitions répétées dans une même transaction, avec preuves de concurrence, rollback et maintien des contrôles. Aucun changement de ces fonctions ni de plafond à ce stade. Retrait, arbre, cycle de vie et comparaison alternée restent non exécutés dans cette campagne.
 
 ### Contrôles fonctionnels rejoués
 
@@ -155,7 +171,7 @@ Les [journaux complets](evidence/session-6d-functional/) distinguent les échecs
 | S6-R11 | Risques antérieurs de saturation globale, huit réservations mot de passe et ingénierie sociale opérateur                                                           | Conserver les décisions datées de session 4 et les prérequis SaaS ; cette session ne constitue pas une nouvelle acceptation.                                                                               |
 | S6-R12 | Restauration de colonnes absente de l'interface, finition visuelle et messages encore techniques                                                                   | Ajouter le panneau dans la finition avant utilisateurs ; restauration d'options/lignes et route de propriété restent distinctes.                                                                           |
 | S6-R13 | Onze navigations automatiques en quatorze secondes atteignent L malgré la réussite de la charge nominale ; cadencer le test ne relève pas cette limite utilisateur | Conserver les quotas conformément à la décision ; qualifier les parcours rapides et l'accumulation de caches avant toute modification de cadence ou quota.                                                 |
-| S6-R14 | Partage HTTP à la borne : attente SQL et reçu WSS dépassent les plafonds ; autres mutations et comparaison finale encore absentes                                  | Bloquer la clôture 6d et le merge. Profiler puis optimiser dans le périmètre autorisé, rejouer les trois séries et les attaques.                                                                           |
+| S6-R14 | Promotion HTTP d'un guest à 100 partages : les plafonds échouent malgré le partage corrigé ; autres mutations et comparaison finale encore absentes                | Bloquer la clôture 6d et le merge. Profiler les acquisitions répétées après arbitrage, puis rejouer les trois séries et les attaques.                                                                      |
 
 ## Relecture manuelle
 
