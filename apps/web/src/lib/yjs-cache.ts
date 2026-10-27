@@ -756,6 +756,12 @@ export class YjsCache {
       };
     });
   }
+  cachedRows(user: string) {
+    return this.run<CachePage[]>((tx, done) => {
+      const read = tx.objectStore('documents').index('user').getAll(user);
+      read.onsuccess = () => done((read.result as CachePage[]).filter((p) => !!p.database));
+    });
+  }
   pending(user: string, workspace?: string) {
     return this.run<number>((tx, done) => {
       const read = tx.objectStore('documents').index('user').getAll(user);

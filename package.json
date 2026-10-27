@@ -8,6 +8,7 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "test:databases:browser": "node --env-file=.env --use-system-ca scripts/test-databases-browser.mjs",
     "proof:databases": "node scripts/proof-databases.mjs",
     "measure:rights": "node scripts/measure-rights.mjs",
     "test:shares:browser": "node --env-file=.env --use-system-ca scripts/test-shares-browser.mjs",

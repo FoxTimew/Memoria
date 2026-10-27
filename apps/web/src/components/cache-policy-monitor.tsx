@@ -13,7 +13,9 @@ export function CachePolicyMonitor() {
     let active = true,
       running = false;
     const check = async () => {
-      if (running || !navigator.onLine) return;
+      // A visible tab checks the shared IDB; hidden tabs recheck before resuming.
+      // Otherwise every background row tab consumes the same per-account read quota.
+      if (running || !navigator.onLine || document.hidden) return;
       running = true;
       try {
         await refreshCachePolicy(data.user.id, data.session.id);
