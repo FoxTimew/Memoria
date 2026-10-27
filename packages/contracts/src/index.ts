@@ -8,3 +8,4 @@ export * from './presence.ts';
 
 export * from './invitations.ts';
 export * from './shares.ts';
+export * from './databases.ts';
