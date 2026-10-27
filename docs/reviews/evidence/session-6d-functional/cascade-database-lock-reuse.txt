@@ -1,0 +1,20 @@
+▶ workspace barrier reuse follows real PostgreSQL transactions and savepoints
+  ✔ repeated acquisition retains row and ordinary-page barriers until commit or rollback (168.2404ms)
+  ✔ same connection reacquires after commit and rollback, behind a cell writer (27.5217ms)
+  ✔ rollback to acquisition savepoint removes marker and locks, requiring reacquisition (12.1847ms)
+  ✔ outer acquisition survives an inner rollback and still blocks writers (13.4562ms)
+  ✔ failed partial acquisition creates no marker after exception rollback (55.0771ms)
+  ✔ markers are per workspace and acquisition of another workspace cannot be skipped (9.4301ms)
+  ✔ first-use temporary DDL rolls back with its savepoint and can be recreated (24.5804ms)
+  ✔ a container and page inserted after acquisition remain protected by their creating transaction (55.0936ms)
+✔ workspace barrier reuse follows real PostgreSQL transactions and savepoints (1394.3717ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1397.639
+Collaboration database-lock-reuse.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

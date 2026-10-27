@@ -1,0 +1,11 @@
+✔ Targeted reconciliation equals full rights and never shrinks a global pending scope (1163.5203ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1167.1682
+Collaboration reconciliation.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

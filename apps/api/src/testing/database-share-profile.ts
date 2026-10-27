@@ -14,6 +14,7 @@ type Trace = {
   reconciliationMs?: number;
   functionsBefore?: unknown[];
   functionsAfter?: unknown[];
+  reconciliationScope?: unknown[];
 };
 /** Diagnostic only: split deferred reconciliation before COMMIT, never a qualification sample. */
 export async function profileDatabaseShare(
@@ -22,7 +23,7 @@ export async function profileDatabaseShare(
   page: string,
   member: string,
   preparation: Preparation,
-  options?: { kind: 'role'; reset: () => Promise<void> },
+  options?: { kind: 'role' | 'remove'; reset: () => Promise<void> },
 ) {
   const kind = options?.kind ?? 'share';
   const pool = h.app.get(DatabaseService).pool;
@@ -50,6 +51,8 @@ export async function profileDatabaseShare(
           });
         if (kind === 'role' && /^update\s+"workspace_members"/i.test(sql))
           explain.set('role-update', { sql, values: Array.isArray(values) ? values : [] });
+        if (kind === 'remove' && /^delete\s+from\s+"workspace_members"/i.test(sql))
+          explain.set('member-delete', { sql, values: Array.isArray(values) ? values : [] });
         const record = (
           start: number,
           result: { rowCount?: number | null; rows?: unknown[] } | undefined,
@@ -78,6 +81,11 @@ export async function profileDatabaseShare(
             const stats =
               'SELECT funcname,calls,total_time,self_time FROM pg_stat_xact_user_functions WHERE schemaname=current_schema() ORDER BY funcname';
             current.functionsBefore = (await raw(stats)).rows;
+            current.reconciliationScope = (
+              await raw(
+                'SELECT member_ids IS NULL AS all_members,cardinality(member_ids) AS members,page_ids IS NULL AS all_pages,cardinality(page_ids) AS pages FROM page_access_pending',
+              )
+            ).rows;
             const start = performance.now();
             await raw('SET CONSTRAINTS content_access_commit IMMEDIATE');
             current.reconciliationMs = performance.now() - start;
@@ -107,8 +115,10 @@ export async function profileDatabaseShare(
             let body: Record<string, unknown>, path: string;
             if (options) {
               await options.reset();
-              body = { expectedRole: 'guest', role: 'member' };
-              path = `/api/internal/workspaces/${owner.workspace}/members/${member}/role`;
+              body = { expectedRole: 'guest', ...(kind === 'role' ? { role: 'member' } : {}) };
+              path =
+                `/api/internal/workspaces/${owner.workspace}/members/${member}` +
+                (kind === 'role' ? '/role' : '');
             } else {
               const state = await h.call(owner, {}, route, {}, 'GET');
               assert.equal(state.status, 200);
@@ -119,7 +129,13 @@ export async function profileDatabaseShare(
               path = `${route}/${member}`;
             }
             trace = { queries: [] };
-            const response = await h.call(owner, body, path, {}, 'PUT');
+            const response = await h.call(
+              owner,
+              body,
+              path,
+              {},
+              kind === 'remove' ? 'DELETE' : 'PUT',
+            );
             const captured = trace;
             trace = undefined;
             assert.equal(response.status, 200, String(response.data.code));
@@ -142,7 +158,11 @@ export async function profileDatabaseShare(
             await delay(Math.max(0, 2150 - (performance.now() - cycle)));
           }
           const plans = [];
-          if (options) assert(explain.has('role-update'), 'Actual native role UPDATE captured');
+          if (options)
+            assert(
+              explain.has(kind === 'role' ? 'role-update' : 'member-delete'),
+              'Actual native membership statement captured',
+            );
           for (const [name, query] of explain) {
             if (options) await options.reset();
             const c = await h.f.db.pool.connect();
@@ -154,6 +174,20 @@ export async function profileDatabaseShare(
                 query.values,
               );
               plans.push({ name, sql: query.sql, plan: result.rows[0]['QUERY PLAN'][0] });
+              if (options) {
+                const reconciliation = await c.query(
+                  `EXPLAIN (ANALYZE,BUFFERS,VERBOSE,FORMAT JSON)
+                   SELECT e.* FROM page_access_pending p
+                   CROSS JOIN LATERAL content_access_effects_bounded(p.workspace_id,NULL,true,p.member_ids,p.page_ids) e
+                   WHERE p.workspace_id=$1`,
+                  [owner.workspace],
+                );
+                plans.push({
+                  name: 'pending-access-effects',
+                  sql: 'actual pending scope after membership statement',
+                  plan: reconciliation.rows[0]['QUERY PLAN'][0],
+                });
+              }
             } finally {
               await c.query('ROLLBACK');
               c.release();

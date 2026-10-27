@@ -153,10 +153,10 @@ test('Targeted reconciliation equals full rights and never shrinks a global pend
         epochs,
       );
       await oracle();
-      // Cascaded grant deletion can no longer resolve the vanished subject: safe global fallback.
+      // The deleted subject queues its OLD owner; its cascaded children must not widen that scope.
       await c.query('BEGIN');
       await c.query('DELETE FROM access_subjects WHERE id=$1', [sb]);
-      assert.equal(await scope(), null);
+      assert.deepEqual(await scope(), [b]);
       await c.query('COMMIT');
       await oracle();
       await pool.query('DELETE FROM workspace_members WHERE id=$1', [b]);

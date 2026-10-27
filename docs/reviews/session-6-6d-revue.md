@@ -216,3 +216,19 @@ Arrêt automatique au premier plafond dépassé. Aucun nouvel essai ni modificat
 Restent non exécutés sur cette candidate : les séries de déplacement, archivage/restauration ordinaires et de ligne, puis la comparaison alternée avec main. Le navigateur final a été attaqué avant 0028 ; après 0028 les suites réelles cellules, barrières, partages HTTP/WSS, objets et équivalence aléatoire passent, mais le scénario Edge complet n'a pas encore été rejoué. La PR reste un brouillon non prêt au merge.
 
 Contrôle final de cette livraison : `pnpm check` terminé, **166 réussis / six SQL ignorés**, puis `pnpm test:db` terminé, **six réussis** sur les migrations actuelles. Journaux complets `evidence/session-6d-functional/acquisitions-final-check.txt` et `acquisitions-db.txt`. Les tests de verrous, cellules, objets HTTP, partages HTTP/WSS et oracle aléatoire après 0028 sont archivés avec le préfixe `lock-` ; aucun test ignoré n'est présenté comme exécuté par `pnpm check`.
+
+### Profilage puis correction du retrait — 27 octobre 2026
+
+Autorisation explicite du développeur après l'arrêt à 107,176 ms. [Trois séries de profilage](evidence/session-6d-remove-profile/), six retraits HTTP chacune, même fixture 1 000 pages / 50 000 lignes / 100 memberships / 5 000 grants. Session propriétaire et contrôle d'assurance réels ; aucun rédacteur pendant le diagnostic. Mesures instrumentées, séparées de la qualification WSS.
+
+| Moyenne par série (ms)                        |       1 |       2 |       3 |
+| --------------------------------------------- | ------: | ------: | ------: |
+| HTTP instrumenté                              | 200,196 | 143,209 | 144,379 |
+| DELETE du membre, triggers compris            |  11,079 |   8,170 |   8,180 |
+| Réconciliation au commit                      | 137,139 |  92,577 |  93,112 |
+| Fonction de barrière, appels inclusifs        |   8,496 |   7,821 |   7,298 |
+| Enregistrement de la portée, appels inclusifs |   4,274 |   2,663 |   2,705 |
+
+Les coûts inclusifs s'emboîtent : ne pas les additionner. Les dix-huit traces ont `all_members=true, all_pages=true`. Le DELETE dans les plans prend 6,620 / 3,959 / 11,478 ms. Le calcul des effets de la portée réellement enregistrée prend 115,678 / 119,808 / 119,127 ms : **55 900 décisions avant et après pour les 99 memberships restants, zéro différence retournée**, 640 blocs temporaires écrits (ce n'est pas du swap Linux). La portée est élargie par les grants dont le sujet vient de disparaître, alors que le trigger du sujet conserve OLD.member_id. Diagnostic présenté avant optimisation.
+
+Migration 0029 : le grant supprimé par la cascade laisse son sujet enregistrer la portée ; le sujet disparu dispose de OLD.kind/OLD.member_id. Pas de suppression des verrous, des notifications ni du recontrôle au commit. La FK non différable et sa cascade sont vérifiées explicitement. Dix sous-scénarios réels (`reconciliation-cascade`, onze résultats node:test parent compris) couvrent suppression directe, sujet à cent partages, retrait de membre, cascades multiples, réaffectation puis cascade, portée globale conservée, savepoint, contraintes déclenchées immédiatement, sujet API key conservant le secours global, attente réelle du rédacteur suivie de refus après commit ou autorisation après rollback. Chaque scénario compare aussi au calcul complet. Requalification de performance requise avant toute clôture.

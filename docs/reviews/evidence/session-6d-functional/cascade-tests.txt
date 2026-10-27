@@ -1,0 +1,22 @@
+▶ cascaded rights reconciliation: exact scope, full oracle, rollback and live SQL writer
+  ✔ direct grant deletion still queues its existing subject (53.8338ms)
+  ✔ deleting a subject with 100 grants queues only its OLD member; unrelated epochs unchanged (58.3044ms)
+  ✔ membership cascade preserves scope and detached person, without broad reconciliation (40.4138ms)
+  ✔ multiple subject cascades union affected people (42.3647ms)
+  ✔ grant reassignment followed by cascade keeps both old and new owners (43.1432ms)
+  ✔ global scope never shrinks, before or after a cascade (81.7465ms)
+  ✔ savepoint rollback discards cascade scope, then another subject can be deleted (44.8613ms)
+  ✔ immediate deferred constraints do not miss the parent event (48.03ms)
+  ✔ unsupported API-key subject retains global fallback during its cascade (88.9937ms)
+  ✔ a writer really waits, then sees revocation after commit or unchanged access after rollback (90.0731ms)
+✔ cascaded rights reconciliation: exact scope, full oracle, rollback and live SQL writer (1754.3886ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1757.7019
+Collaboration reconciliation-cascade.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

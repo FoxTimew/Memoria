@@ -172,14 +172,22 @@ const restoreMember = async () => {
   }
 };
 try {
-  if (process.argv.includes('--profile') || process.argv.includes('--profile-role')) {
+  if (
+    process.argv.includes('--profile') ||
+    process.argv.includes('--profile-role') ||
+    process.argv.includes('--profile-remove')
+  ) {
     await profileDatabaseShare(
       h,
       owner,
       shared,
       selected.id as string,
       preparation,
-      process.argv.includes('--profile-role') ? { kind: 'role', reset: restoreMember } : undefined,
+      process.argv.includes('--profile-remove')
+        ? { kind: 'remove', reset: restoreMember }
+        : process.argv.includes('--profile-role')
+          ? { kind: 'role', reset: restoreMember }
+          : undefined,
     );
   } else
     for (const kind of selectedCases) {
