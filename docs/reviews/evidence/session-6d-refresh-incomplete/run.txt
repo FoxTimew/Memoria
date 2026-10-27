@@ -1,0 +1,42 @@
+{
+  "observedAt": "2026-10-27T12:37:46.104Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-refresh-50-preparation-2db77802-bcce-4462-8068-563de7094379.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-refresh-50","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-27T12:37:46.726Z","windowsFreeBytes":3740762112,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5811019776,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T12:37:46.726Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+{"fixture":{"rows":10000,"properties":50,"relationTargets":50,"people":20,"optionsPerProperty":100,"holes":"n % 17","fullSets":"n % 1000"},"limits":{"server":200,"pageSize":50}}
+{"series":1,"seconds":30,"responses":1925,"statuses":{"200":1925},"queryP95":61.981400000000576,"cpuCores":0.25097254360372945}
+{"series":1,"seconds":60,"responses":3826,"statuses":{"200":3826},"queryP95":60.269899999999325,"cpuCores":0.3119830905164944}
+{"series":1,"seconds":90,"responses":5726,"statuses":{"200":5726},"queryP95":58.83690000000934,"cpuCores":0.3592446815526061}
+{"series":1,"seconds":120,"responses":7624,"statuses":{"200":7624},"queryP95":58.34519999999611,"cpuCores":0.3598003827476523}
+{"series":1,"seconds":150,"responses":9525,"statuses":{"200":9525},"queryP95":57.33960000000661,"cpuCores":0.45434457492561975}
+{"series":1,"seconds":180,"responses":11425,"statuses":{"200":11425},"queryP95":59.295500000000175,"cpuCores":0.5779319774062578}
+{"series":1,"seconds":210,"responses":13325,"statuses":{"200":13325},"queryP95":60.269899999999325,"cpuCores":0.2971187880914744}
+{"series":1,"seconds":240,"responses":15223,"statuses":{"200":15223},"queryP95":62.146999999997206,"cpuCores":0.26504786764489463}
+{"series":1,"seconds":270,"responses":17126,"statuses":{"200":17126},"queryP95":62.146999999997206,"cpuCores":0.5312249206313797}
+{"series":1,"seconds":300,"responses":19026,"statuses":{"200":19026},"queryP95":62.146999999997206,"cpuCores":0.4691473122560545}
+{"series":1,"seconds":330,"responses":20926,"statuses":{"200":20926},"queryP95":61.992399999988265,"cpuCores":0.3093453629475953}
+{"series":1,"seconds":360,"responses":22826,"statuses":{"200":22826},"queryP95":62.34020000000601,"cpuCores":0.37518132513444563}
+{"series":1,"seconds":390,"responses":24726,"statuses":{"200":24726},"queryP95":62.444900000002235,"cpuCores":0.31296285130955215}
+{"series":1,"seconds":420,"responses":26626,"statuses":{"200":26626},"queryP95":62.4600999999675,"cpuCores":0.2811357042044176}
+{"series":1,"seconds":450,"responses":28523,"statuses":{"200":28523},"queryP95":63.0167999999976,"cpuCores":0.5150293242326213}
+{"series":1,"seconds":480,"responses":30426,"statuses":{"200":30426},"queryP95":63.0167999999976,"cpuCores":0.5608751491918016}
+{"series":1,"seconds":510,"responses":32326,"statuses":{"200":32326},"queryP95":62.4600999999675,"cpuCores":0.32806397247463487}
+{"series":1,"seconds":540,"responses":34226,"statuses":{"200":34226},"queryP95":63.0167999999976,"cpuCores":0.3911393629550605}
+{"series":1,"seconds":570,"responses":36127,"statuses":{"200":36127},"queryP95":62.4600999999675,"cpuCores":0.327802597275932}
+{"hygiene":".local/measurement-hygiene/database-refresh-50-1-attempt-1-49d57fd8-c3ff-4a35-8c6f-048f449d00a8.json","status":"valid","label":"database-refresh-50-1","attempt":1,"before":{"observedAt":"2026-10-27T12:39:18.622Z","windowsFreeBytes":3135115264,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5726519296,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T12:39:18.622Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-27T12:49:19.740Z","windowsFreeBytes":2970763264,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5612154880,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T12:49:19.740Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":602,"deltaInPages":0,"deltaOutPages":0}}
+file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-refresh-load.mjs:53543
+        throw new Error(result.failure);
+              ^
+
+Error: POSTGRES_TELEMETRY_MISSING
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-refresh-load.mjs:53543:15
+
+Node.js v24.21.0

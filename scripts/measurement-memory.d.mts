@@ -19,6 +19,11 @@ export type Hygiene = {
   };
 };
 export function prepareMeasurement(label: string): Promise<Preparation>;
+export function readMemorySnapshot(): MemorySnapshot;
+export function assertMemoryStage(
+  observation: MemorySnapshot,
+  stage: 'before-preparation' | 'after-preparation',
+): void;
 export function runMeasuredSeries<T>(
   label: string,
   work: () => Promise<T>,

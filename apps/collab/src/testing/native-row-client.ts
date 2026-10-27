@@ -11,11 +11,13 @@ export async function nativeRowClient(
   origin: string,
   room: string,
   token: unknown,
+  presence?: { id: string; name: string; color: string },
 ) {
   const doc = new Y.Doc();
   doc.getXmlFragment('prosemirror');
   let closed = false;
   const receipts = new Set<string>();
+  const receiptTimes = new Map<string, number>();
   const socket = new HocuspocusProviderWebsocket({
     url,
     autoConnect: false,
@@ -29,7 +31,7 @@ export async function nativeRowClient(
   const provider = new HocuspocusProvider({
     name: room,
     document: doc,
-    awareness: null,
+    ...(presence ? { forceSyncInterval: 15000, flushDelay: 100 } : { awareness: null }),
     websocketProvider: socket,
     token: typeof token === 'string' ? token : JSON.stringify(token),
     onClose: () => {
@@ -40,10 +42,14 @@ export async function nativeRowClient(
     },
     onStateless: ({ payload }) => {
       const r = JSON.parse(payload);
-      if (r.status === 'durable') receipts.add(r.receipt);
+      if (r.status === 'durable') {
+        receipts.add(r.receipt);
+        receiptTimes.set(r.receipt, performance.now());
+      }
     },
   });
   provider.attach();
+  if (presence) provider.awareness?.setLocalStateField('user', presence);
   void socket.connect().catch(() => {
     closed = true;
   });
@@ -53,6 +59,7 @@ export async function nativeRowClient(
     provider,
     closed: () => closed,
     receipts,
+    receiptTimes,
     async edit(text: string) {
       let bytes: Uint8Array | undefined;
       const capture = (u: Uint8Array) => {

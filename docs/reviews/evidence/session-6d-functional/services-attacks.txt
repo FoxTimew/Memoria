@@ -1,0 +1,41 @@
+▶ 6b native row protocol, effects and hostile HTTP/WSS clients
+  ✔ D01 D02 D11 D12: native routes authenticate, check Origin, declare quotas and hide unknown rows (178.6334ms)
+[beforeSync] READ_ONLY
+closing connection 6d2d699b-35ff-4d9b-87f7-1d45a9bc17d8 (while handling 77bef6ba-0985-4241-8d59-efae0eb6be5c:c1320c6a-ce59-4eaa-bf5b-92b54cd9ef4c:dd861b42-a93c-4d7f-9535-d3de9df82efa) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:51256:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:51543:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48587:21)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48522:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48795:11)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] SESSION_CHANGED
+  ✔ D11: native row ticket converges, read-only cannot commit; old page scope, wrong base and identity fail (210.8401ms)
+  ✔ D06 D09: property search and Yjs projection share the index without leaking hidden rows (188.006ms)
+  ✔ D09: failed outbox transaction retains the window, retry groups authors once and emits no cell values (30.3152ms)
+  ✔ D11: killed worker and concurrent flush retain every committed change (4810.6173ms)
+  ✔ D11: non-editor row writes use HMAC/journal/projection and cannot escape their row (1233.9632ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+  ✔ D11: archive closes only the row, stale lifecycle cannot reopen after restore, base reduction closes its rows (410.5833ms)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ D11: Chromium cache with real HTTP decisions, sleeping tab, lifecycle and logout (1738.5419ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+  ✔ D04: recovery assurance and revoked session cannot open native rows or reconnect (302.6999ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ 6b native row protocol, effects and hostile HTTP/WSS clients (13009.9081ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13014.2364

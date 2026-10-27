@@ -1,0 +1,16 @@
+▶ 6b table: executable attacks against the real Nest HTTP route
+  ✔ D01 D02: guard, Origin, inaccessible and cross-workspace IDs (136.7002ms)
+  ✔ D06 D07: hidden values cannot be recovered through payload or filters (185.3549ms)
+  ✔ D08: typed operators, literal wildcards, injection and bounded AST (346.0627ms)
+  ✔ D09: signed cursor cannot cross actor, query, schema or revoked/regranted scope (222.0571ms)
+  ✔ D01 D04: expired policy, restricted session and logout are enforced on table (39.6066ms)
+  ✔ D12: shared account bucket resists forged headers, identifiers and fixed-window extension (62.0146ms)
+✔ 6b table: executable attacks against the real Nest HTTP route (3188.6296ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3191.9536

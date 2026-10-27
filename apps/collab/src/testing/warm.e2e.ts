@@ -11,6 +11,7 @@ import { Store } from '../service/store.ts';
 import { IncrementalValidator } from '../service/incremental-validator.ts';
 import { ValidationPool } from '../service/validation-pool.ts';
 import { readCollabConfig } from '../service/config.ts';
+import { readMemorySnapshot, assertMemoryStage } from '../../../../scripts/measurement-memory.mjs';
 test(
   'Production incremental validation and journal, 1 MiB profiles',
   { timeout: 120000 },
@@ -130,6 +131,9 @@ test(
         const replica = new IncrementalValidator(validators),
           samples: object[] = [];
         await replica.init(snapshot);
+        const memory =
+          process.env.COLLAB_MEASURE_HYGIENE === 'true' ? readMemorySnapshot() : undefined;
+        if (memory) assertMemoryStage(memory, 'after-preparation');
         const nodes = [...doc.getXmlFragment('prosemirror').createTreeWalker(() => true)],
           texts = nodes.filter((n): n is Y.XmlText => n instanceof Y.XmlText),
           cards = nodes.filter(
@@ -189,6 +193,7 @@ test(
           ).rows;
           const report = {
             profile,
+            memoryAfterPreparation: memory,
             guestDepth,
             p95,
             max: totals.at(-1),

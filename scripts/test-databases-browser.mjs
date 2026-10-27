@@ -4,6 +4,12 @@ import { randomUUID, randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { chromium, expect } from '@playwright/test';
 import { lifecycleBrowser } from './browser-lifecycle.mjs';
+import { writeFile } from 'node:fs/promises';
+import { performance } from 'node:perf_hooks';
+import { prepareMeasurement, runMeasuredSeries } from './measurement-memory.mjs';
+
+const refreshTrace = process.argv.includes('--refresh-trace');
+const preparation = refreshTrace ? await prepareMeasurement('database-refresh-oracle') : undefined;
 
 const origin = process.env.APP_ORIGIN;
 if (
@@ -99,10 +105,38 @@ await test(
     const lifecycle = await lifecycleBrowser(),
       accounts = [],
       errors = [];
+    const quotaTrace = [];
+    const quotaDetails = [];
     let workspace;
     try {
       const owner = await browser.newContext({ viewport: { width: 1440, height: 1100 } }),
         guest = lifecycle.context;
+      if (!refreshTrace)
+        for (const [role, context] of [
+          ['owner', owner],
+          ['guest', guest],
+        ]) {
+          context.on('response', (response) => {
+            const url = new URL(response.url());
+            if (!url.pathname.startsWith('/api/')) return;
+            const observation = {
+              role,
+              at: Date.now(),
+              path: url.pathname.replace(/[0-9a-f]{8}-[0-9a-f-]{27}/gi, ':id'),
+              method: response.request().method(),
+              status: response.status(),
+            };
+            quotaTrace.push(observation);
+            if (response.status() === 429)
+              quotaDetails.push(
+                (async () => {
+                  const body = await response.json().catch(() => ({}));
+                  observation.code = body.code;
+                  observation.retryAfter = response.headers()['retry-after'];
+                })(),
+              );
+          });
+        }
       const password = randomBytes(24).toString('base64url');
       async function account(context, name) {
         const email = `table6c-${randomUUID()}@example.test`;
@@ -240,6 +274,73 @@ await test(
       await share(other, 'edit');
       let reader = await lifecycle.page();
       const writer = await owner.newPage();
+      if (refreshTrace) {
+        await management.close();
+        await reader.close();
+        const rowTab = await owner.newPage();
+        await writer.goto(href);
+        await rowTab.goto(`${href}/rows/${row}`);
+        await expect(writer.locator('tbody tr')).toHaveCount(1);
+        await expect(rowTab.getByTestId('local-save-status')).toHaveText('Copie locale à jour', {
+          timeout: 20000,
+        });
+        assert.equal(await writer.evaluate(() => globalThis.document.hidden), false);
+        assert.equal(await rowTab.evaluate(() => globalThis.document.hidden), false);
+        const requests = [];
+        const { result, hygiene } = await runMeasuredSeries(
+          'database-refresh-oracle',
+          async () => {
+            const start = performance.now();
+            const listeners = [writer, rowTab].map((page, tab) => {
+              const record = (response) => {
+                const path = new URL(response.url()).pathname;
+                if (path.startsWith('/api/'))
+                  requests.push({
+                    tab: tab ? 'row' : 'table',
+                    elapsedMs: performance.now() - start,
+                    path: path
+                      .replaceAll(workspace, ':workspace')
+                      .replaceAll(main.id, ':database')
+                      .replaceAll(row, ':row'),
+                    method: response.request().method(),
+                    status: response.status(),
+                  });
+              };
+              page.on('response', record);
+              return () => page.off('response', record);
+            });
+            try {
+              await new Promise((resolve) => globalThis.setTimeout(resolve, 65000));
+            } finally {
+              for (const stop of listeners) stop();
+            }
+            return { durationMs: performance.now() - start, requests };
+          },
+          { preparation },
+        );
+        const report = {
+          purpose:
+            'Wire cadence oracle, two real visible final UI tabs; not a latency qualification',
+          source: '6c final application',
+          preparation,
+          hygiene,
+          ...result,
+        };
+        await writeFile(
+          '.local/session-6d-refresh-oracle.json',
+          JSON.stringify(report, null, 2) + '\n',
+        );
+        assert(
+          requests.every((r) => r.status === 200),
+          'Refresh oracle received non-200 response; stop before changing quotas/cadence',
+        );
+        console.log(
+          'PASS final UI cadence oracle: two visible tabs, 65 seconds, ' +
+            requests.length +
+            ' API responses',
+        );
+        return;
+      }
       for (const page of [reader, writer]) page.on('pageerror', (e) => errors.push(e.message));
       await reader.goto(href);
       await expect(reader.getByText('Lecture seule : cette base')).toBeVisible();
@@ -249,12 +350,93 @@ await test(
         reader.getByText('Certaines valeurs ne sont pas accessibles', { exact: true }),
       ).toHaveCount(2);
       assert(!(await reader.locator('main').innerText()).includes('SECRET'));
+      // Attack from the loaded final UI: hiding controls cannot be the authorization boundary.
+      const attackErrors = [];
+      async function hostile(path, method = 'GET', body) {
+        const response = await reader.evaluate(
+          async ({ path, method, body }) => {
+            const r = await globalThis.fetch(path, {
+              method,
+              headers: { 'content-type': 'application/json' },
+              ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+            });
+            return { status: r.status, data: await r.json() };
+          },
+          { path, method, body },
+        );
+        if (response.status >= 400) attackErrors.push(response.data);
+        return response;
+      }
+      async function hostileCell(kind, value, status) {
+        const path = `${endpoint}/rows/${row}/cells/${properties[kind]}`;
+        const current = await call(owner, path, undefined, 'GET');
+        assert.equal(
+          (
+            await hostile(path, 'PATCH', {
+              expectedSchemaVersion: current.schemaVersion,
+              expectedCellVersion: current.version,
+              value,
+            })
+          ).status,
+          status,
+        );
+      }
+      await hostileCell('text', 'FORGED READ ONLY WRITE', 404);
+      assert.equal(
+        (await call(owner, `${endpoint}/rows/${row}/cells/${properties.text}`, undefined, 'GET'))
+          .value,
+        null,
+      );
+      const secretPath = `${root}/databases/${secret.id}/rows/${secretRow}`;
+      assert.deepEqual(
+        await hostile(secretPath),
+        await hostile(`${root}/databases/${randomUUID()}/rows/${randomUUID()}`),
+      );
+      console.log(
+        'PASS 6d final UI attacks: forged read-only write and hidden native row denied, hidden/missing replies identical',
+      );
       console.log(
         'PASS guest read: immutable table, hidden schema, neutral relation/person without title/id/count',
       );
       await share(main, 'edit');
       await reader.reload();
       await writer.goto(href);
+      assert.equal(
+        (
+          await hostile(endpoint + '/properties', 'POST', {
+            expectedSchemaVersion: (await schema()).schema_version,
+            kind: 'text',
+            name: 'FORGED SCHEMA',
+          })
+        ).status,
+        404,
+      );
+      await hostileCell('relation', { remove: [secretRow] }, 400);
+      await hostileCell('url', 'javascript:globalThis.__databaseAttack=1', 400);
+      assert.equal(
+        (
+          await call(
+            owner,
+            `${endpoint}/rows/${row}/cells/${properties.relation}`,
+            undefined,
+            'GET',
+          )
+        ).value.items[0].id,
+        secretRow,
+      );
+      const injection = '<img src=x onerror="globalThis.__databaseAttack=1">';
+      await write('text', injection);
+      await reader.reload();
+      await expect(
+        reader.getByRole('button', { name: 'Modifier Notes de Livrer le décor' }),
+      ).toHaveText(injection);
+      assert.equal(await reader.locator('tbody img').count(), 0);
+      assert.equal(await reader.evaluate(() => globalThis.__databaseAttack), undefined);
+      await write('text', null);
+      await reader.reload();
+      console.log(
+        'PASS 6d final UI attacks: forged guest schema, hidden relation removal and javascript URL denied; HTML text stays inert',
+      );
       async function edit(page, label) {
         await page
           .getByRole('button', { name: `Modifier ${label} de Livrer le décor`, exact: true })
@@ -403,6 +585,12 @@ await test(
       console.log(
         'PASS native row WSS collaboration between two browsers, relational title and local Yjs cache',
       );
+      // Explicit think time between the interaction and revocation phases, approved for 6d.
+      // Keep the real background timers running; never reset a bucket or retry a 429.
+      console.log(
+        'PACING: 65 seconds before cache attacks, unchanged production quotas and refresh timers',
+      );
+      await new Promise((resolve) => globalThis.setTimeout(resolve, 65000));
       await guest.setOffline(true);
       await reader.evaluate(() => globalThis.dispatchEvent(new globalThis.Event('offline')));
       await editor(reader).press('End');
@@ -476,6 +664,41 @@ await test(
       });
       await reader.reload();
       await ready(reader);
+      const frozenPolicy = await lifecycle.freeze(reader);
+      let policy = await call(owner, root + '/security', undefined, 'GET');
+      await call(
+        owner,
+        root + '/security',
+        { expectedVersion: policy.version, allowPersistentCache: false },
+        'PUT',
+      );
+      await expect
+        .poll(
+          async () => (await records(independent)).docs.filter((x) => x.user === guestUser).length,
+          { timeout: 20000 },
+        )
+        .toBe(0);
+      await frozenPolicy();
+      await expect(reader.getByTestId('local-save-status')).toHaveText(
+        'Copie locale désactivée sur cet appareil ou dans cet espace',
+        { timeout: 15000 },
+      );
+      await reader.reload();
+      await expect(editor(reader)).toBeVisible({ timeout: 15000 });
+      assert.equal((await records(reader)).docs.filter((x) => x.user === guestUser).length, 0);
+      policy = await call(owner, root + '/security', undefined, 'GET');
+      await call(
+        owner,
+        root + '/security',
+        { expectedVersion: policy.version, allowPersistentCache: true },
+        'PUT',
+      );
+      await reader.reload();
+      await ready(reader);
+      assert((await records(reader)).docs.some((x) => x.user === guestUser));
+      console.log(
+        'PASS 6d final UI: workspace cache prohibition purges rows and fences a frozen tab/reload; fresh authorization can create a new cache',
+      );
       const frozenLogout = await lifecycle.freeze(reader);
       await independent.goto(origin);
       await independent.getByRole('button', { name: 'Se déconnecter', exact: true }).click();
@@ -493,8 +716,34 @@ await test(
       console.log(
         'PASS archive/restore lifecycle and logout fence frozen row UI, cache remains empty',
       );
+      const metadata = await pool.query(
+        'SELECT metadata::text AS value FROM audit_logs WHERE workspace_id=$1 UNION ALL SELECT payload::text FROM outbox_events WHERE workspace_id=$1',
+        [workspace],
+      );
+      const sinks = JSON.stringify({ errors, attackErrors, metadata: metadata.rows });
+      for (const canary of [
+        password,
+        injection,
+        'Ma saisie conservée',
+        'FORBIDDEN REPLAY',
+        ...accounts.map((a) => a.email),
+      ])
+        assert(!sinks.includes(canary), 'Canary appeared in error/audit/outbox sink');
+      console.log(
+        'PASS 6d canaries absent from browser errors, denial bodies and workspace audit/outbox metadata; functional document responses excluded',
+      );
       assert.deepEqual(errors, []);
+      assert(
+        !quotaTrace.some((r) => r.status === 429),
+        'Unexpected quota failure in paced UI attacks',
+      );
     } finally {
+      await Promise.allSettled(quotaDetails);
+      if (!refreshTrace)
+        await writeFile(
+          '.local/session-6d-browser-requests.json',
+          JSON.stringify(quotaTrace, null, 2) + '\n',
+        );
       await lifecycle.close();
       await browser.close();
       if (workspace) await pool.query('DELETE FROM workspaces WHERE id=$1', [workspace]);

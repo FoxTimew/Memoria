@@ -6,13 +6,14 @@ import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { availableParallelism, cpus, freemem, platform, release, totalmem } from 'node:os';
 import { resolve, relative } from 'node:path';
 import { finished } from 'node:stream/promises';
-import { readMeasurementPower, POWER_REQUIRED_MESSAGE } from './measurement-power.mjs';
+import { prepareMeasurement, runMeasuredSeries } from './measurement-memory.mjs';
 import { assessRegression } from './measurement-regression.mjs';
 
 // Immutable application snapshots, one common harness, no compiler during measurements.
 const repo = resolve('.');
 const args = process.argv.slice(2);
-const session5 = args.includes('--session5');
+const session6 = args.includes('--session6');
+const session5 = args.includes('--session5') || session6;
 const session4 = args.includes('--session4') || session5;
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
@@ -51,6 +52,7 @@ const protocolHash = hash(
   Buffer.concat([
     await readFile(import.meta.filename),
     await readFile(new URL('./measurement-power.mjs', import.meta.url)),
+    await readFile(new URL('./measurement-memory.mjs', import.meta.url)),
     await readFile(new URL('./measurement-regression.mjs', import.meta.url)),
   ]),
 );
@@ -82,11 +84,13 @@ if (option('--resume')) {
       availableCpus: availableParallelism(),
       totalBytes: totalmem(),
     },
-    protocol: session5
-      ? 'Session 5: AB / BA / AB, three paired series; immutable application/packages/migrations from each commit. Live passkey assurance and required workspace policy in BOTH versions; candidate additionally checks the real per-page browser epoch on every append. Same warm/cold harness and dependency versions, no discarded samples.'
-      : session4
-        ? 'Session 4: AB / BA / AB, three paired series, immutable sources AND workspace packages AND migrations from each commit. Common warm/cold harness, shared workers in both configurations. Candidate fixture has a live passkey assurance and mandatory workspace policy (SQL fixture, crypto outside timed scope). Same encoded profiles and unchanged common dependency versions. No samples discarded.'
-        : 'Three paired series, order AB / BA / AB for each suite; fresh Node process per suite. Both builds completed before any measurements. Same fixtures, migrations, dependencies and common harness; only validator construction/cleanup differ outside timed regions. No samples discarded.',
+    protocol: session6
+      ? 'Session 6: AB / BA / AB, three paired series; immutable application/packages/migrations from each commit; same assurance, mandatory workspace policy AND per-page epoch in BOTH versions. Shared warm/cold harness, memory checks after profile preparation, WSL vmstat over entire child lifetime. Before preparation Windows >=3 GiB; after preparation Windows >=1.5 GiB and WSL MemAvailable >=2 GiB; AC required. Swap-invalidated process is replayed from scratch, no discarded samples hidden.'
+      : session5
+        ? 'Session 5: AB / BA / AB, three paired series; immutable application/packages/migrations from each commit. Live passkey assurance and required workspace policy in BOTH versions; candidate additionally checks the real per-page browser epoch on every append. Same warm/cold harness and dependency versions, no discarded samples.'
+        : session4
+          ? 'Session 4: AB / BA / AB, three paired series, immutable sources AND workspace packages AND migrations from each commit. Common warm/cold harness, shared workers in both configurations. Candidate fixture has a live passkey assurance and mandatory workspace policy (SQL fixture, crypto outside timed scope). Same encoded profiles and unchanged common dependency versions. No samples discarded.'
+          : 'Three paired series, order AB / BA / AB for each suite; fresh Node process per suite. Both builds completed before any measurements. Same fixtures, migrations, dependencies and common harness; only validator construction/cleanup differ outside timed regions. No samples discarded.',
     artifacts: {},
     series: [],
   };
@@ -155,6 +159,9 @@ export async function loadProfile(profile: string) {
     for (const [configuration, commit] of Object.entries(commits)) {
       const folder = `${directory}/sources/${configuration}`;
       await mkdir(folder, { recursive: true });
+      await mkdir(`${folder}/scripts`, { recursive: true });
+      for (const name of ['measurement-memory.mjs', 'measurement-power.mjs'])
+        await writeFile(`${folder}/scripts/${name}`, await readFile(`scripts/${name}`));
       const archive = git('archive', commit, 'apps/collab', ...(session4 ? ['packages'] : []));
       execFileSync('tar', ['-xf', '-', '-C', folder], { input: archive, windowsHide: true });
       const testing = `${folder}/apps/collab/src/testing`;
@@ -266,84 +273,71 @@ for (let iteration = 1; iteration <= 3; iteration++) {
       for (const [name, profile] of Object.entries(profiles))
         if (hash(await readFile(`.local/incremental/${name}.bin`)) !== profile.sha256)
           throw new Error('Fixture changed');
-      const battery = readMeasurementPower(),
-        freeBytes = freemem();
-      console.log(`Power: ${JSON.stringify(battery)}`);
-      if (!battery.allowed) {
-        manifest.stopped = {
-          reason: battery.reason,
-          configuration,
-          suite,
-          iteration,
-          battery,
-          freeBytes,
-        };
-        await save();
-        console.error(POWER_REQUIRED_MESSAGE);
-        process.exit(3);
-      }
-      if (freeBytes < 3 * 1024 ** 3) {
-        manifest.stopped = {
-          reason: 'FREE_RAM_BELOW_3_GIB',
-          at: new Date().toISOString(),
-          configuration,
-          suite,
-          iteration,
-          freeBytes,
-          battery,
-        };
-        await save();
-        console.error(
-          `STOP: ${(freeBytes / 1024 ** 3).toFixed(3)} GiB free; ask the developer to close applications, then resume.`,
-        );
-        process.exit(2);
-      }
-      delete manifest.stopped;
       const name = `${configuration}-${suite}-${iteration}`;
-      const log = createWriteStream(`${directory}/${name}.txt`, { flags: 'wx' });
-      const start = Date.now();
-      console.log(
-        `${name}: ${(freeBytes / 1024 ** 3).toFixed(3)} GiB free; battery ${JSON.stringify(battery)}`,
+      const preparation = await prepareMeasurement(name);
+      let attempt = 0;
+      const {
+        result: { code, report, start },
+        hygiene,
+      } = await runMeasuredSeries(
+        name,
+        async () => {
+          const log = createWriteStream(`${directory}/${name}-attempt-${++attempt}.txt`, {
+            flags: 'wx',
+          });
+          const start = Date.now();
+          const code = await new Promise((resolveCode) => {
+            const child = spawn(
+              process.execPath,
+              ['--env-file=.env', manifest.artifacts[configuration].bundles[suite].path],
+              {
+                env: {
+                  ...process.env,
+                  COLLAB_TEST_MIGRATIONS: resolve(
+                    manifest.artifacts[configuration].migrations ?? 'packages/db/drizzle',
+                  ),
+                  COLLAB_MEASURE_STRONG: String(
+                    session5 || (session4 && configuration === 'candidate'),
+                  ),
+                  COLLAB_MEASURE_PAGE_EPOCH: String(
+                    session6 || (session5 && configuration === 'candidate'),
+                  ),
+                  COLLAB_MEASURE_HYGIENE: 'true',
+                },
+                windowsHide: true,
+                stdio: ['ignore', 'pipe', 'pipe'],
+                timeout: 180000,
+              },
+            );
+            child.stdout.on('data', (chunk) => log.write(chunk));
+            child.stderr.on('data', (chunk) => log.write(chunk));
+            child.on('error', (error) => log.write(error.message + '\n'));
+            child.on('close', (exitCode) => resolveCode(exitCode ?? 1));
+          });
+          log.end(`\nEXIT_CODE=${code}\n`);
+          await finished(log);
+          const path = `.local/3a-${suite}-production.json`;
+          if ((await stat(path)).mtimeMs < start)
+            throw new Error(`No fresh ${name} report; complete log retained`);
+          const report = JSON.parse(await readFile(path, 'utf8'));
+          if (!report.reports.every((r) => r.memoryAfterPreparation))
+            throw new Error(
+              'Missing post-preparation memory evidence; use the updated common harness',
+            );
+          return { code, report, start };
+        },
+        { preparation },
       );
-      const code = await new Promise((resolveCode) => {
-        const child = spawn(
-          process.execPath,
-          ['--env-file=.env', manifest.artifacts[configuration].bundles[suite].path],
-          {
-            env: {
-              ...process.env,
-              COLLAB_TEST_MIGRATIONS: resolve(
-                manifest.artifacts[configuration].migrations ?? 'packages/db/drizzle',
-              ),
-              COLLAB_MEASURE_STRONG: String(
-                session5 || (session4 && configuration === 'candidate'),
-              ),
-              COLLAB_MEASURE_PAGE_EPOCH: String(session5 && configuration === 'candidate'),
-            },
-            windowsHide: true,
-            stdio: ['ignore', 'pipe', 'pipe'],
-            timeout: 180000,
-          },
-        );
-        child.stdout.on('data', (chunk) => log.write(chunk));
-        child.stderr.on('data', (chunk) => log.write(chunk));
-        child.on('error', (error) => log.write(error.message + '\n'));
-        child.on('close', (exitCode) => resolveCode(exitCode ?? 1));
-      });
-      log.end(`\nEXIT_CODE=${code}\n`);
-      await finished(log);
-      const path = `.local/3a-${suite}-production.json`;
-      if ((await stat(path)).mtimeMs < start)
-        throw new Error(`No fresh ${name} report; complete log retained`);
-      const report = JSON.parse(await readFile(path, 'utf8'));
       await writeFile(`${directory}/${name}.json`, JSON.stringify(report, null, 2) + '\n');
       const row = {
         configuration,
         suite,
         iteration,
         startedAt: new Date(start).toISOString(),
-        freeBytes,
-        battery,
+        preparation,
+        hygiene,
+        freeBytes: hygiene.before.windowsFreeBytes,
+        battery: hygiene.before.power,
         endedFreeBytes: freemem(),
         code,
         p95: Object.fromEntries(report.reports.map((r) => [r.profile, r.p95])),

@@ -1,0 +1,317 @@
+import 'reflect-metadata';
+import assert from 'node:assert/strict';
+import { randomUUID } from 'node:crypto';
+import { writeFile } from 'node:fs/promises';
+import { setTimeout as delay } from 'node:timers/promises';
+import { readDatabaseLimits } from '@memoria/db';
+import { prepareMeasurement, runMeasuredSeries } from '../../../scripts/measurement-memory.mjs';
+import { testDatabase } from '../../collab/src/testing/database.ts';
+import { databaseLoadFixture } from '../../collab/src/testing/databases-fixture.ts';
+import { databaseHttpHarness } from './testing/database-http-fixture.ts';
+import { databaseLiveWriters } from './testing/database-live-writers.ts';
+import { databaseEventWorker } from './testing/database-event-worker.ts';
+
+const p95 = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.ceil(xs.length * 0.95) - 1] ?? 0;
+const preparation = await prepareMeasurement('database-http-rights');
+const h = await databaseHttpHarness(async () => {
+  // Bulk setup uses the same timeout as the 6a bound fixture; it is outside measured samples.
+  const db = await testDatabase({ queryTimeoutMs: 120000 }),
+    base = randomUUID(),
+    row = randomUUID();
+  await db.pool.query('INSERT INTO databases(id,workspace_id,page_id) VALUES($1,$2,$3)', [
+    base,
+    db.workspace,
+    db.page,
+  ]);
+  await db.pool.query(
+    "INSERT INTO pages(id,workspace_id,kind,position,title) VALUES($1,$2,'database_row','a0','Row')",
+    [row, db.workspace],
+  );
+  await db.pool.query(
+    'INSERT INTO database_rows(workspace_id,database_id,page_id) VALUES($1,$2,$3)',
+    [db.workspace, base, row],
+  );
+  const fixture = await databaseLoadFixture(db, readDatabaseLimits());
+  // Replace the synthetic owner with a genuine Better Auth account: exactly 100 memberships.
+  await db.pool.query('DELETE FROM workspace_members WHERE workspace_id=$1 AND user_id=$2', [
+    db.workspace,
+    db.user,
+  ]);
+  return { db, bases: fixture.bases, containers: [db.page], fixture };
+});
+const { db, bases, fixture } = h.f,
+  w = db.workspace;
+const owner = await h.account('owner');
+const W = `/api/internal/workspaces/${w}`;
+const selected = (
+  await db.pool.query(
+    "SELECT m.* FROM workspace_members m WHERE workspace_id=$1 AND role='guest' ORDER BY id LIMIT 1",
+    [w],
+  )
+).rows[0];
+const subject = (
+  await db.pool.query('SELECT * FROM access_subjects WHERE workspace_id=$1 AND member_id=$2', [
+    w,
+    selected.id,
+  ])
+).rows[0];
+const grants = (
+  await db.pool.query('SELECT * FROM access_grants WHERE workspace_id=$1 AND subject_id=$2', [
+    w,
+    subject.id,
+  ])
+).rows;
+const shared = (
+  await db.pool.query(
+    'SELECT g.resource_id FROM access_grants g JOIN databases d ON d.workspace_id=g.workspace_id AND d.page_id=g.resource_id WHERE g.subject_id=$1 LIMIT 1',
+    [subject.id],
+  )
+).rows[0].resource_id as string;
+const subtree = (
+  await db.pool.query<{ id: string }>(
+    'WITH RECURSIVE t AS (SELECT id FROM pages WHERE id=$1 UNION ALL SELECT p.id FROM pages p JOIN t ON p.parent_id=t.id) SELECT id FROM t',
+    [fixture.tree.root],
+  )
+).rows.map((r) => r.id);
+const writerRoutes: string[] = [];
+for (const base of bases.slice(0, 4)) {
+  const row = (
+    await db.pool.query(
+      'SELECT page_id FROM database_rows WHERE database_id=$1 ORDER BY page_id LIMIT 1',
+      [base],
+    )
+  ).rows[0].page_id;
+  writerRoutes.push(`${W}/databases/${base}/rows/${row}`);
+}
+writerRoutes.push(`${W}/pages/${db.page}`);
+const targetRow = (
+  await db.pool.query(
+    'SELECT page_id FROM database_rows WHERE database_id=$1 ORDER BY page_id LIMIT 1',
+    [bases[45]],
+  )
+).rows[0].page_id as string;
+const rowPath = `${W}/databases/${bases[45]}/rows/${targetRow}`;
+const reports: unknown[] = [];
+const events = databaseEventWorker(db.pool);
+const save = () =>
+  writeFile(
+    '.local/session-6d-http-rights.json',
+    JSON.stringify(
+      {
+        fixture: {
+          ordinary: 1000,
+          bases: 50,
+          rows: 50000,
+          members: 100,
+          grants: 5000,
+          subtree: subtree.length,
+          properties: 'empty; rights cardinality, not table workload',
+        },
+        protocol:
+          'Three series/case; 32 HTTP mutations with two explicit warmups, one genuine owner with recent WebAuthn. Five native WSS documents (four rows in different bases and one ordinary page), paced 5 updates/s. Setup/reset and fresh previews outside measured writer windows. 2150ms between mutations respects unchanged per-account access quotas. Lock waits sampled every 5ms (approximate), wire time ends at durable receipt. Retain blocked-wait p95 and overlapping editor confirmations separately from all confirmations.',
+        preparation,
+        reports,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+const restoreMember = async () => {
+  const c = await db.pool.connect();
+  try {
+    await c.query('BEGIN');
+    await c.query(
+      "INSERT INTO workspace_members SELECT * FROM json_populate_record(NULL::workspace_members,$1::json) ON CONFLICT(id) DO UPDATE SET role='guest'",
+      [JSON.stringify(selected)],
+    );
+    await c.query(
+      'INSERT INTO access_subjects SELECT * FROM json_populate_record(NULL::access_subjects,$1::json) ON CONFLICT(id) DO UPDATE SET deleted_at=NULL',
+      [JSON.stringify(subject)],
+    );
+    await c.query('DELETE FROM access_grants WHERE subject_id=$1', [subject.id]);
+    await c.query(
+      'INSERT INTO access_grants SELECT * FROM json_populate_recordset(NULL::access_grants,$1::json)',
+      [JSON.stringify(grants)],
+    );
+    await c.query('COMMIT');
+  } catch (e) {
+    await c.query('ROLLBACK');
+    throw e;
+  } finally {
+    c.release();
+  }
+};
+try {
+  for (const kind of [
+    'share',
+    'role',
+    'remove',
+    'move',
+    'archive',
+    'restore',
+    'row-archive',
+    'row-restore',
+  ]) {
+    for (let series = 1; series <= 3; series++) {
+      const eventStart = events.count();
+      await restoreMember();
+      await h.prove(owner);
+      const writers = await databaseLiveWriters(h, owner, writerRoutes);
+      try {
+        const { result, hygiene } = await runMeasuredSeries(
+          `database-http-rights-${kind}-${series}`,
+          async () => {
+            const mutations: { server: number; roundTrip: number; start: number; end: number }[] =
+                [],
+              waits: number[] = [],
+              wire: number[] = [],
+              overlap: number[] = [],
+              confirmations: number[] = [],
+              previews: number[] = [];
+            let failure: string | null = null;
+            for (let n = 0; n < 32 && !failure; n++) {
+              const cycle = performance.now();
+              let path = '',
+                method = 'POST',
+                body: Record<string, unknown> = {};
+              if (['role', 'remove'].includes(kind)) {
+                await restoreMember();
+                path = `${W}/members/${selected.id}` + (kind === 'role' ? '/role' : '');
+                method = kind === 'role' ? 'PUT' : 'DELETE';
+                body = { expectedRole: 'guest', ...(kind === 'role' ? { role: 'member' } : {}) };
+              } else if (kind === 'share') {
+                const state = await h.call(owner, {}, `${W}/pages/${shared}/shares`, {}, 'GET');
+                assert.equal(state.status, 200);
+                path = `${W}/pages/${shared}/shares/${selected.id}`;
+                method = 'PUT';
+                body = {
+                  expectedAccessVersion: state.data.accessVersion,
+                  level: n % 2 ? 'edit' : 'read',
+                };
+              } else if (kind.startsWith('row-')) {
+                // Reset this single synthetic row outside the editor window, preserve unrelated scopes.
+                await db.pool.query(
+                  'UPDATE database_rows SET deleted_at=' +
+                    (kind === 'row-restore' ? 'now()' : 'NULL') +
+                    ' WHERE page_id=$1',
+                  [targetRow],
+                );
+                await db.pool.query(
+                  'UPDATE pages SET deleted_at=' +
+                    (kind === 'row-restore' ? 'now()' : 'NULL') +
+                    ' WHERE id=$1',
+                  [targetRow],
+                );
+                const r = (
+                  await db.pool.query('SELECT version FROM pages WHERE id=$1', [targetRow])
+                ).rows[0];
+                path = rowPath + '/' + kind.slice(4);
+                body = { expectedVersion: String(r.version) };
+              } else {
+                await db.pool.query('UPDATE pages SET deleted_at=NULL WHERE id=ANY($1::uuid[])', [
+                  subtree,
+                ]);
+                await db.pool.query('UPDATE pages SET parent_id=$1 WHERE id=$2', [
+                  fixture.tree.parent,
+                  fixture.tree.root,
+                ]);
+                if (kind === 'restore')
+                  await db.pool.query(
+                    'UPDATE pages SET deleted_at=now() WHERE id=ANY($1::uuid[])',
+                    [subtree],
+                  );
+                const page = (
+                  await db.pool.query('SELECT version FROM pages WHERE id=$1', [fixture.tree.root])
+                ).rows[0];
+                path = `${W}/pages/${fixture.tree.root}/${kind}`;
+                body = {
+                  expectedVersion: page.version,
+                  ...(kind === 'move' ? { parentId: fixture.tree.destination, afterId: null } : {}),
+                };
+                if (kind !== 'archive') {
+                  const preview = await h.call(owner, body, path + '/preview');
+                  assert(preview.status >= 200 && preview.status < 300);
+                  previews.push(preview.server);
+                  body.previewToken = preview.data.token;
+                }
+              }
+              let mutation!: { server: number; roundTrip: number; start: number; end: number };
+              const editors = await writers.run(async () => {
+                const start = performance.now();
+                const r = await h.call(owner, body, path, {}, method);
+                mutation = {
+                  start,
+                  end: performance.now(),
+                  server: r.server,
+                  roundTrip: r.roundTrip,
+                };
+                if (r.status < 200 || r.status >= 300)
+                  failure = `HTTP_${r.status}_${String(r.data.code)}`;
+                await delay(450);
+              }, 5);
+              if (n >= 2) {
+                mutations.push(mutation);
+                waits.push(...editors.waits);
+                wire.push(...editors.wire.map((r) => r.ms));
+                confirmations.push(...editors.confirmations);
+                overlap.push(
+                  ...editors.wire
+                    .filter((r) => r.start <= mutation.end && r.end >= mutation.start)
+                    .map((r) => r.ms),
+                );
+              }
+              await delay(Math.max(0, 2150 - (performance.now() - cycle)));
+            }
+            return {
+              failure,
+              mutations,
+              waits,
+              wire,
+              overlap,
+              confirmations,
+              previews,
+              p95: {
+                mutation: p95(mutations.map((r) => r.server)),
+                blockedSqlWait: p95(waits),
+                wire: p95(wire),
+                overlappingWire: p95(overlap),
+                serverConfirmation: p95(confirmations),
+              },
+            };
+          },
+          { preparation },
+        );
+        events.check();
+        reports.push({
+          kind,
+          series,
+          hygiene,
+          ...result,
+          aggregatedEvents: events.count() - eventStart,
+        });
+        await save();
+        console.log(
+          JSON.stringify({
+            kind,
+            series,
+            p95: result.p95,
+            overlap: result.overlap.length,
+            failure: result.failure,
+          }),
+        );
+        assert(!result.failure, result.failure ?? '');
+        assert(
+          result.p95.mutation < 500 &&
+            result.p95.blockedSqlWait < 100 &&
+            Math.max(result.p95.wire, result.p95.overlappingWire) < 200,
+          'STOP_DATABASE_HTTP_RIGHTS_BUDGET',
+        );
+      } finally {
+        await writers.close();
+      }
+    }
+  }
+} finally {
+  await events.close();
+  await h.close();
+}

@@ -1,0 +1,17 @@
+▶ 6b objects: live HTTP boundaries and atomic creation
+  ✔ D01 D02 D12: every mounted object method has a quota and refuses no session, bad Origin and hidden base (271.2792ms)
+  ✔ D03 D05 D06 D07: guest reads, cannot change schema or archive, hidden schema/persons stay hidden (285.8612ms)
+  ✔ D05 D08 D10: base/schema/options/view CAS, immutable populated definitions, quotas count trash (584.7509ms)
+  ✔ D05: real cell CAS and independent title; lifecycle cannot free storage capacity (278.9228ms)
+  ✔ D03 D06 D07: guest editing conserves hidden relations, controls nine types, and strong owner manages assignable people (1087.2145ms)
+  ✔ D12: each mutation family refuses forged IPs and alternate paths at the account and workspace budgets (75.001ms)
+  ✔ D01 D04: restricted assurance, expiry and logout fail on every read family (40.9034ms)
+✔ 6b objects: live HTTP boundaries and atomic creation (4414.8107ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4418.0808

@@ -1,0 +1,813 @@
+{
+  "source": "ea9f23063c85c1021392153e26813ae8746e6973",
+  "protocol": "3 x 600 seconds; 50 distinct authenticated accounts behind one untrusted HTTP IP, each with a virtual visible table tab and native WSS row tab. Production routes/guards/quotas/admission unchanged; real 65s final-UI oracle. Cadences 4s/cache per tab, 15s/table/base/title, deterministic distributed phases; one persisted row per account. Separate server process; default four workers and 1 GiB budget. Driver simulates network work, not rendering or browser RAM.",
+  "preparation": {
+    "path": ".local/measurement-hygiene/database-refresh-50-preparation-2db77802-bcce-4462-8068-563de7094379.json",
+    "observation": {
+      "observedAt": "2026-10-27T12:37:46.726Z",
+      "windowsFreeBytes": 3740762112,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5811019776,
+        "swapInPages": 0,
+        "swapOutPages": 0
+      },
+      "power": {
+        "observedAt": "2026-10-27T12:37:46.726Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "oracle": {
+    "purpose": "Wire cadence oracle, two real visible final UI tabs; not a latency qualification",
+    "source": "6c final application",
+    "preparation": {
+      "path": ".local/measurement-hygiene/database-refresh-oracle-preparation-fd62aba3-4037-4af9-9f79-293c45aa9881.json",
+      "observation": {
+        "observedAt": "2026-10-27T12:23:43.895Z",
+        "windowsFreeBytes": 4224348160,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5813985280,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T12:23:43.896Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      }
+    },
+    "hygiene": {
+      "path": ".local/measurement-hygiene/database-refresh-oracle-attempt-1-54ffdf55-e463-4860-866b-e5080eb851c3.json",
+      "attempts": [
+        {
+          "path": ".local/measurement-hygiene/database-refresh-oracle-attempt-1-54ffdf55-e463-4860-866b-e5080eb851c3.json",
+          "status": "valid",
+          "reason": null
+        }
+      ],
+      "before": {
+        "observedAt": "2026-10-27T12:23:53.449Z",
+        "windowsFreeBytes": 3632750592,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5770178560,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T12:23:53.449Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-27T12:24:59.449Z",
+        "windowsFreeBytes": 3786317824,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5787770880,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T12:24:59.449Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 67,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    "durationMs": 65007.5819,
+    "requests": [
+      {
+        "tab": "table",
+        "elapsedMs": 295.15380000000005,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 318.0717999999997,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 361.9578999999994,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 383.6090000000004,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 4309.380499999999,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 4330.9774,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 4365.805699999999,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 4388.547699999999,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 8298.193699999998,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 8319.9436,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 8375.3202,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 8396.163999999999,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 11295.1781,
+        "path": "/api/internal/workspaces/:workspace/databases/:database",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 11332.3935,
+        "path": "/api/internal/workspaces/:workspace/databases/:database/query",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 11375.902799999998,
+        "path": "/api/internal/workspaces/:workspace/databases/:database",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 12120.295499999998,
+        "path": "/api/internal/workspaces/:workspace/databases/:database/rows/:row",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 12293.920499999998,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 12317.209799999999,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 12372.9255,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 12393.849499999998,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 16293.753200000001,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 16315.391399999999,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 16365.9458,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 16387.571300000003,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 20302.1241,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 20324.485,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 20367.731,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 20389.660600000003,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 24301.280099999996,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 24322.3111,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 24366.074399999998,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 24387.8917,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 26293.060399999995,
+        "path": "/api/internal/workspaces/:workspace/databases/:database",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 26323.4435,
+        "path": "/api/internal/workspaces/:workspace/databases/:database/query",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 26366.5541,
+        "path": "/api/internal/workspaces/:workspace/databases/:database",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 27125.2846,
+        "path": "/api/internal/workspaces/:workspace/databases/:database/rows/:row",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 28300.9393,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 28322.4467,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 28366.055099999998,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 28387.8548,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 32308.245499999997,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 32329.6316,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 32364.3137,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 32385.6512,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 36310.9482,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 36334.8696,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 36358.632999999994,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 36380.625,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 40305.9392,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 40327.1313,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 40364.1768,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 40385.9467,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 41302.518,
+        "path": "/api/internal/workspaces/:workspace/databases/:database",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 41331.1749,
+        "path": "/api/internal/workspaces/:workspace/databases/:database/query",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 41365.201799999995,
+        "path": "/api/internal/workspaces/:workspace/databases/:database",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 42128.9404,
+        "path": "/api/internal/workspaces/:workspace/databases/:database/rows/:row",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 44300.5779,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 44321.857299999996,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 44365.5885,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 44387.2509,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 48297.7489,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 48318.8598,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 48365.540499999996,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 48387.0706,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 52305.702099999995,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 52327.7353,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 52364.464,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 52386.639899999995,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 56301.6067,
+        "path": "/api/internal/workspaces/:workspace/databases/:database",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 56315.75429999999,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 56331.435600000004,
+        "path": "/api/internal/workspaces/:workspace/databases/:database/query",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 56362.8941,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 56364.998400000004,
+        "path": "/api/internal/workspaces/:workspace/databases/:database",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 56379.127799999995,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 56419.891599999995,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 57131.5449,
+        "path": "/api/internal/workspaces/:workspace/databases/:database/rows/:row",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 60305.6662,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 60330.4668,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 60363.2526,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 60386.4085,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 64302.97269999999,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "table",
+        "elapsedMs": 64325.136900000005,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 64364.2271,
+        "path": "/api/auth/security/cache-policy",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "tab": "row",
+        "elapsedMs": 64385.5991,
+        "path": "/api/internal/workspaces/:workspace/row-access",
+        "method": "POST",
+        "status": 200
+      }
+    ]
+  },
+  "reports": [
+    {
+      "series": 1,
+      "hygiene": {
+        "path": ".local/measurement-hygiene/database-refresh-50-1-attempt-1-49d57fd8-c3ff-4a35-8c6f-048f449d00a8.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/database-refresh-50-1-attempt-1-49d57fd8-c3ff-4a35-8c6f-048f449d00a8.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-27T12:39:18.622Z",
+          "windowsFreeBytes": 3135115264,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5726519296,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T12:39:18.622Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-27T12:49:19.740Z",
+          "windowsFreeBytes": 2970763264,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5612154880,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T12:49:19.740Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 602,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "durationMs": 600056.2193,
+      "postgres": [],
+      "skipped": {},
+      "failure": "POSTGRES_TELEMETRY_MISSING",
+      "queryP95": 62.234900000010384,
+      "rawArrays": {
+        "responses": {
+          "count": 38000,
+          "sha256": "d38772f483e65e05c7a2c6c1ba5daacbcb76929db7f25a4a6d788d328178685f",
+          "files": [
+            "series-1-responses-1.ndjson",
+            "series-1-responses-2.ndjson",
+            "series-1-responses-3.ndjson",
+            "series-1-responses-4.ndjson"
+          ]
+        },
+        "serverSamples": {
+          "count": 38000,
+          "sha256": "b0f6c0efaf98ae7f2156997e9245d0e8cf12dced365039a4113fb0a1c0da7ac7",
+          "files": [
+            "series-1-serverSamples-1.ndjson",
+            "series-1-serverSamples-2.ndjson",
+            "series-1-serverSamples-3.ndjson",
+            "series-1-serverSamples-4.ndjson"
+          ]
+        },
+        "loads": {
+          "count": 600,
+          "sha256": "8d81aa8616e812cf4cab3fa69003c5b7007c590c8a7c0c1fead7246ba5b9789d",
+          "files": ["series-1-loads-1.ndjson"]
+        }
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "stopped": "POSTGRES_TELEMETRY_MISSING"
+    }
+  ]
+}

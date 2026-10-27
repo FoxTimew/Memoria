@@ -1,0 +1,270 @@
+{
+  "protocol": "Three series, two real authenticated HTTP cell writers and two native WSS writers on the same row; 100 scalar + 100 set writes, then 30 conflicting pairs. HTTP guard/quotas/admission/serialization included. Cells paced 650ms per writer, Yjs paced 200ms; no counter resets. WSS latency ends at receipt arrival, not polling wakeup.",
+  "preparation": {
+    "path": ".local/measurement-hygiene/database-http-cells-preparation-94e29621-0446-4a7c-a7a4-4fc342e70b96.json",
+    "observation": {
+      "observedAt": "2026-10-27T13:38:12.328Z",
+      "windowsFreeBytes": 4646256640,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5763624960,
+        "swapInPages": 0,
+        "swapOutPages": 0
+      },
+      "power": {
+        "observedAt": "2026-10-27T13:38:12.328Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "reports": [
+    {
+      "series": 1,
+      "hygiene": {
+        "path": ".local/measurement-hygiene/database-http-cells-1-attempt-1-47caf882-c542-401b-b413-2ef4b6f4d723.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/database-http-cells-1-attempt-1-47caf882-c542-401b-b413-2ef4b6f4d723.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-27T13:38:18.013Z",
+          "windowsFreeBytes": 4504309760,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5734862848,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T13:38:18.013Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-27T13:39:44.011Z",
+          "windowsFreeBytes": 4683448320,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5706559488,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T13:39:44.012Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 87,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "failure": null,
+      "p95": [37.532899999998335, 42.45659999999771],
+      "wireP95": 21.895700000000943,
+      "aggregatedEvents": 8,
+      "rawArrays": {
+        "samples": {
+          "count": 260,
+          "sha256": "91d4b125a3f48fcc5c8bfec083f303b6db05b62a8d04aa04f3084cc7a6d7d11a",
+          "files": ["series-1-samples-1.ndjson"]
+        },
+        "wire": {
+          "count": 836,
+          "sha256": "8ea548a1814c201324bca6f223c37d9f65ccedb27d4e4d7a6002e9b674a9e9ed",
+          "files": ["series-1-wire-1.ndjson"]
+        }
+      }
+    },
+    {
+      "series": 2,
+      "hygiene": {
+        "path": ".local/measurement-hygiene/database-http-cells-2-attempt-1-20be7a3f-6422-4c01-8fee-d2ef52e9ce90.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/database-http-cells-2-attempt-1-20be7a3f-6422-4c01-8fee-d2ef52e9ce90.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-27T13:39:46.777Z",
+          "windowsFreeBytes": 4656402432,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5710282752,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T13:39:46.777Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-27T13:41:12.814Z",
+          "windowsFreeBytes": 4600745984,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5694881792,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T13:41:12.814Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 87,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "failure": null,
+      "p95": [35.09429999999702, 42.65649999999732],
+      "wireP95": 21.104099999996834,
+      "aggregatedEvents": 3,
+      "rawArrays": {
+        "samples": {
+          "count": 260,
+          "sha256": "8c419f00946647100a96246dc26b1e49ae86c1094905249ca01ee173c7c9793b",
+          "files": ["series-2-samples-1.ndjson"]
+        },
+        "wire": {
+          "count": 840,
+          "sha256": "a0faaeeb0d2dc2f2f5c37621da200bb680911965529f8051f40133d5f5f3b793",
+          "files": ["series-2-wire-1.ndjson"]
+        }
+      }
+    },
+    {
+      "series": 3,
+      "hygiene": {
+        "path": ".local/measurement-hygiene/database-http-cells-3-attempt-1-18d6a3dd-c9b4-4ec9-98d9-033c32dec97c.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/database-http-cells-3-attempt-1-18d6a3dd-c9b4-4ec9-98d9-033c32dec97c.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-27T13:41:15.584Z",
+          "windowsFreeBytes": 4552175616,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5710393344,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T13:41:15.584Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-27T13:42:41.613Z",
+          "windowsFreeBytes": 4902621184,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5698568192,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T13:42:41.613Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 87,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "failure": null,
+      "p95": [37.70329999999376, 43.92699999999604],
+      "wireP95": 21.022500000020955,
+      "aggregatedEvents": 5,
+      "rawArrays": {
+        "samples": {
+          "count": 260,
+          "sha256": "c5245a1c084ac38899386720f15a10388faf512e51bd9f53684fd7988f53aa92",
+          "files": ["series-3-samples-1.ndjson"]
+        },
+        "wire": {
+          "count": 838,
+          "sha256": "33fb87436d42229186de29fac1a203d4de6330d4a30d8654f4c6c5b0e5dbde42",
+          "files": ["series-3-wire-1.ndjson"]
+        }
+      }
+    }
+  ]
+}

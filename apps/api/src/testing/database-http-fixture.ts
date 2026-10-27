@@ -12,9 +12,18 @@ import { readConfig } from '../config.ts';
 import { cellFixture } from '../../../collab/src/testing/database-cell-fixture.ts';
 import { testAuthenticator } from './webauthn.ts';
 export type Reader = { cookie: string; user: string; session: string; workspace: string };
-export async function databaseHttpFixture() {
+export function databaseHttpFixture() {
+  return databaseHttpHarness(cellFixture);
+}
+export async function databaseHttpHarness<
+  F extends {
+    db: Awaited<ReturnType<typeof cellFixture>>['db'];
+    containers: string[];
+    bases: string[];
+  },
+>(factory: () => Promise<F>) {
   process.env.COLLAB_TEST_MIGRATIONS = resolve('packages/db/drizzle');
-  const f = await cellFixture();
+  const f = await factory();
   process.env.DATABASE_URL = f.db.url;
   const config = readConfig(),
     app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -45,6 +54,7 @@ export async function databaseHttpFixture() {
     sendVerificationEmail: async () => {},
   });
   const passwords = new Map<string, string>();
+  const factors = new Map<string, ReturnType<typeof testAuthenticator>>();
   async function account(role: 'owner' | 'member' | 'guest', grant = true): Promise<Reader> {
     const email = randomUUID() + '@example.test',
       password = randomBytes(22).toString('hex');
@@ -157,13 +167,17 @@ export async function databaseHttpFixture() {
         assert.equal(r.status, 200, JSON.stringify(result));
         return result;
       };
-      await request('/verify-password', { password: passwords.get(reader.user) });
-      const key = testAuthenticator(),
-        register = await request('/passkey/generate-register-options');
-      await request('/passkey/verify-registration', {
-        response: key.register(String(register.challenge)),
-        name: 'Database access test',
-      });
+      let key = factors.get(reader.user);
+      if (!key) {
+        await request('/verify-password', { password: passwords.get(reader.user) });
+        key = testAuthenticator();
+        const register = await request('/passkey/generate-register-options');
+        await request('/passkey/verify-registration', {
+          response: key.register(String(register.challenge)),
+          name: 'Database access test',
+        });
+        factors.set(reader.user, key);
+      }
       const challenge = await request('/passkey/generate-authenticate-options');
       await request('/passkey/verify-authentication', {
         response: key.authenticate(String(challenge.challenge)),
