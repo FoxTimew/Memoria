@@ -9,39 +9,43 @@ import ts from 'typescript';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const app = process.argv[2];
 if (app !== 'api' && app !== 'worker') throw new Error('Expected api or worker');
-const entry = process.argv.includes('--database-table-e2e')
-  ? 'database-table.e2e'
-  : process.argv.includes('--database-table-load')
-    ? 'database-table-load'
-    : process.argv.includes('--shares-e2e')
-      ? 'shares.e2e'
-      : process.argv.includes('--invitations-e2e')
-        ? 'invitations.e2e'
-        : process.argv.includes('--invitations-atomicity-e2e')
-          ? 'invitations-atomicity.e2e'
-          : process.argv.includes('--sharing-e2e')
-            ? 'sharing.e2e'
-            : process.argv.includes('--adversarial-e2e')
-              ? 'adversarial.e2e'
-              : process.argv.includes('--cache-policy-e2e')
-                ? 'cache-policy.e2e'
-                : process.argv.includes('--rate-limits-e2e')
-                  ? 'rate-limits.e2e'
-                  : process.argv.includes('--recovery-e2e')
-                    ? 'recovery.e2e'
-                    : process.argv.includes('--reset-factor')
-                      ? 'reset-factor'
-                      : process.argv.includes('--probe')
-                        ? 'bootstrap-probe'
-                        : process.argv.includes('--auth-e2e')
-                          ? 'auth.e2e'
-                          : process.argv.includes('--strong-auth-e2e')
-                            ? 'strong-auth.e2e'
-                            : process.argv.includes('--workspace-security-e2e')
-                              ? 'workspace-security.e2e'
-                              : process.argv.includes('--pages-e2e')
-                                ? 'pages.e2e'
-                                : 'main';
+const entry = process.argv.includes('--database-services-e2e')
+  ? 'database-services.e2e'
+  : process.argv.includes('--database-objects-e2e')
+    ? 'database-objects.e2e'
+    : process.argv.includes('--database-table-e2e')
+      ? 'database-table.e2e'
+      : process.argv.includes('--database-table-load')
+        ? 'database-table-load'
+        : process.argv.includes('--shares-e2e')
+          ? 'shares.e2e'
+          : process.argv.includes('--invitations-e2e')
+            ? 'invitations.e2e'
+            : process.argv.includes('--invitations-atomicity-e2e')
+              ? 'invitations-atomicity.e2e'
+              : process.argv.includes('--sharing-e2e')
+                ? 'sharing.e2e'
+                : process.argv.includes('--adversarial-e2e')
+                  ? 'adversarial.e2e'
+                  : process.argv.includes('--cache-policy-e2e')
+                    ? 'cache-policy.e2e'
+                    : process.argv.includes('--rate-limits-e2e')
+                      ? 'rate-limits.e2e'
+                      : process.argv.includes('--recovery-e2e')
+                        ? 'recovery.e2e'
+                        : process.argv.includes('--reset-factor')
+                          ? 'reset-factor'
+                          : process.argv.includes('--probe')
+                            ? 'bootstrap-probe'
+                            : process.argv.includes('--auth-e2e')
+                              ? 'auth.e2e'
+                              : process.argv.includes('--strong-auth-e2e')
+                                ? 'strong-auth.e2e'
+                                : process.argv.includes('--workspace-security-e2e')
+                                  ? 'workspace-security.e2e'
+                                  : process.argv.includes('--pages-e2e')
+                                    ? 'pages.e2e'
+                                    : 'main';
 const watching = process.argv.includes('--watch');
 const outfile = resolve(root, `apps/${app}/dist/${entry}.mjs`);
 let child;
@@ -76,6 +80,8 @@ const options = {
     '@better-auth/passkey',
     'nodemailer',
     'express',
+    '@playwright/test',
+    'esbuild',
   ],
   banner: {
     js: "import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);",
@@ -133,6 +139,7 @@ if (watching) {
 } else {
   if (
     [
+      'database-services.e2e',
       'sharing.e2e',
       'shares.e2e',
       'invitations.e2e',

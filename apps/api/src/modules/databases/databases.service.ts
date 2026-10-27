@@ -26,15 +26,13 @@ type Selected = {
 @Injectable()
 export class DatabasesService {
   readonly limits = readDatabaseLimits();
-  private readonly admission = new DatabaseAdmission(
-    this.limits.concurrentQueries,
-    this.limits.queuedQueries,
-    this.limits.queryTimeoutMs,
-  );
   private readonly secret = readConfig().BETTER_AUTH_SECRET;
   /** Internal observer for EXPLAIN on the same fixture, never enabled by HTTP input. */
   queryObserver?: (c: PoolClient, query: { text: string; values: unknown[] }) => Promise<void>;
-  constructor(private readonly database: database.DatabaseService) {}
+  constructor(
+    private readonly database: database.DatabaseService,
+    private readonly admission: DatabaseAdmission,
+  ) {}
   async query(session: SessionIdentity, workspace: string, id: string, input: unknown) {
     if (!/^[0-9a-f-]{36}$/i.test(workspace) || !/^[0-9a-f-]{36}$/i.test(id)) invalidQuery();
     if (Buffer.byteLength(JSON.stringify(input) ?? '') > this.limits.queryBytes)

@@ -6,6 +6,7 @@ import { representativeDocument, fixtureId } from './testing/fixture.ts';
 import { BlockNoteEditor } from '@blocknote/core';
 import { blocksToYDoc } from '@blocknote/core/yjs';
 import { createEditorKit } from '@memoria/block-catalog/client';
+import { initialDocument } from '@memoria/collaboration-core';
 
 function card(doc: Y.Doc) {
   return [...doc.getXmlFragment('prosemirror').createTreeWalker(() => true)].find(
@@ -14,6 +15,16 @@ function card(doc: Y.Doc) {
   )!;
 }
 describe('collaboration strict codec and isolated candidates', () => {
+  it('transactional row initialization matches the production codec and byte metrics', () => {
+    const { snapshot, businessBytes } = initialDocument(),
+      doc = new Y.Doc();
+    try {
+      Y.applyUpdate(doc, snapshot);
+      expect(Buffer.byteLength(JSON.stringify(decodeDocument(doc)))).toBe(businessBytes);
+    } finally {
+      doc.destroy();
+    }
+  });
   it('accepts the actual front schema through Yjs, including nested standard blocks and character props', async () => {
     const { doc } = await representativeDocument(9);
     const source = decodeDocument(doc);

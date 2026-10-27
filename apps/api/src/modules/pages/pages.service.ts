@@ -25,6 +25,7 @@ import type { StoredPage, PageRights } from './content-access.ts';
 import { compareRank, positionAfter } from '../blocks/block-plan.ts';
 import { pageEffects } from './page-effects.ts';
 import { accessPreview } from './share-preview.ts';
+import * as databaseObjects from '../databases/database-objects.service.ts';
 
 function parse<T>(schema: z.ZodType<T>, input: unknown): T {
   const result = schema.safeParse(input);
@@ -71,6 +72,7 @@ export class PagesService {
   constructor(
     private readonly database: database.DatabaseService,
     private readonly writer: writer.BlockWriteService,
+    private readonly databaseObjects: databaseObjects.DatabaseObjectsService,
   ) {}
   private run<T>(
     session: SessionIdentity,
@@ -360,10 +362,10 @@ export class PagesService {
       return pageResponse(page);
     });
   }
-  search(session: SessionIdentity, workspaceId: string, query: string) {
+  async search(session: SessionIdentity, workspaceId: string, query: string) {
     if (typeof query !== 'string' || query.trim().length < 1 || query.length > 200)
       throw new BadRequestException('Recherche attendue : 1 à 200 caractères.');
-    return this.run(session, workspaceId, false, async (tx, _ctx, _all, rights) => {
+    const ordinary = await this.run(session, workspaceId, false, async (tx, _ctx, _all, rights) => {
       if (!rights.size) return [];
       const matches = await tx
         .select({
@@ -393,6 +395,10 @@ export class PagesService {
         .limit(100);
       return matches;
     });
+    return [...ordinary, ...(await this.databaseObjects.search(session, workspaceId, query))].slice(
+      0,
+      100,
+    );
   }
   private checkDepth(parentId: string | null, all: StoredPage[], depth: number) {
     const seen = new Set<string>();

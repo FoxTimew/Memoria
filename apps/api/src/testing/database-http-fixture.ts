@@ -10,6 +10,7 @@ import { DatabaseService } from '../database.module.ts';
 import { DatabasesService } from '../modules/databases/databases.service.ts';
 import { readConfig } from '../config.ts';
 import { cellFixture } from '../../../collab/src/testing/database-cell-fixture.ts';
+import { testAuthenticator } from './webauthn.ts';
 export type Reader = { cookie: string; user: string; session: string; workspace: string };
 export async function databaseHttpFixture() {
   process.env.COLLAB_TEST_MIGRATIONS = resolve('packages/db/drizzle');
@@ -43,6 +44,7 @@ export async function databaseHttpFixture() {
     secret: config.BETTER_AUTH_SECRET,
     sendVerificationEmail: async () => {},
   });
+  const passwords = new Map<string, string>();
   async function account(role: 'owner' | 'member' | 'guest', grant = true): Promise<Reader> {
     const email = randomUUID() + '@example.test',
       password = randomBytes(22).toString('hex');
@@ -63,6 +65,7 @@ export async function databaseHttpFixture() {
       .join('; ');
     const verified = await authentication.api.getSession({ headers: new Headers({ cookie }) });
     assert(verified);
+    passwords.set(verified.user.id, password);
     const member = randomUUID(),
       subject = randomUUID();
     await f.db.pool.query(
@@ -123,6 +126,55 @@ export async function databaseHttpFixture() {
     app,
     config,
     origin,
+    authentication,
+    async prove(reader: Reader) {
+      const jar = new Map(
+        reader.cookie
+          .split('; ')
+          .filter(Boolean)
+          .map((s) => {
+            const i = s.indexOf('=');
+            return [s.slice(0, i), s.slice(i + 1)];
+          }),
+      );
+      const request = async (path: string, body?: unknown) => {
+        const r = await fetch(origin + '/api/auth' + path, {
+          method: body === undefined ? 'GET' : 'POST',
+          headers: {
+            origin: config.APP_ORIGIN,
+            'content-type': 'application/json',
+            cookie: [...jar].map(([k, v]) => k + '=' + v).join('; '),
+          },
+          ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+        });
+        for (const cookie of r.headers.getSetCookie()) {
+          const pair = cookie.split(';')[0]!,
+            i = pair.indexOf('=');
+          if (/Max-Age=0(?:;|$)/i.test(cookie)) jar.delete(pair.slice(0, i));
+          else jar.set(pair.slice(0, i), pair.slice(i + 1));
+        }
+        const result = (await r.json()) as Record<string, unknown>;
+        assert.equal(r.status, 200, JSON.stringify(result));
+        return result;
+      };
+      await request('/verify-password', { password: passwords.get(reader.user) });
+      const key = testAuthenticator(),
+        register = await request('/passkey/generate-register-options');
+      await request('/passkey/verify-registration', {
+        response: key.register(String(register.challenge)),
+        name: 'Database access test',
+      });
+      const challenge = await request('/passkey/generate-authenticate-options');
+      await request('/passkey/verify-authentication', {
+        response: key.authenticate(String(challenge.challenge)),
+      });
+      reader.cookie = [...jar].map(([k, v]) => k + '=' + v).join('; ');
+      const current = await authentication.api.getSession({
+        headers: new Headers({ cookie: reader.cookie }),
+      });
+      assert(current);
+      reader.session = current.session.id;
+    },
     account,
     call,
     path,

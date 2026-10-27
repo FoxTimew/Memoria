@@ -70,6 +70,16 @@ export class Projections {
     }
     const business = Buffer.byteLength(JSON.stringify(blocks));
     await this.store.transaction(async (client) => {
+      await client.query('SELECT database_lock_rows($1,ARRAY[$2]::uuid[])', [
+        state.workspace_id,
+        page,
+      ]);
+      const databaseRow = (
+        await client.query<{ database_id: string }>(
+          'SELECT database_id FROM database_rows WHERE workspace_id=$1 AND page_id=$2',
+          [state.workspace_id, page],
+        )
+      ).rows[0];
       // Same per-page mutex as relational search effects; never a workspace mutex.
       await client.query("SELECT pg_advisory_xact_lock(hashtextextended('projection:'||$1,0))", [
         page,
@@ -130,7 +140,33 @@ export class Projections {
             [page],
           )
         ).rows[0]!;
-        if (row.visible) {
+        if (databaseRow) {
+          const registry = createBlockRegistry();
+          const text = blocks.map((b) => registry.toPlainText(b)).join('\n');
+          for (const author of authors)
+            await client.query('SELECT database_mark_row($1,$2,$3,$4,false)', [
+              state.workspace_id,
+              databaseRow.database_id,
+              page,
+              author.actor_id,
+            ]);
+          if (!authors.length)
+            await client.query('SELECT database_mark_row($1,$2,$3,NULL,false)', [
+              state.workspace_id,
+              databaseRow.database_id,
+              page,
+            ]);
+          // Same lock order as cell/title writes: revision/window before search row.
+          // The Yjs projection has already waited its 1s/5s window. Do not add a second one.
+          await client.query(
+            "UPDATE database_row_changes SET last_dirty_at=least(last_dirty_at,clock_timestamp()-interval '1 second') WHERE workspace_id=$1 AND row_page_id=$2",
+            [state.workspace_id, page],
+          );
+          await client.query(
+            'INSERT INTO database_row_search(workspace_id,database_id,row_page_id,body_text) VALUES($1,$2,$3,$4) ON CONFLICT(workspace_id,row_page_id) DO UPDATE SET body_text=excluded.body_text',
+            [state.workspace_id, databaseRow.database_id, page, text],
+          );
+        } else if (row.visible) {
           const registry = createBlockRegistry();
           const text = [row.title, ...blocks.map((b) => registry.toPlainText(b))].join('\n');
           await client.query(
@@ -138,33 +174,35 @@ export class Projections {
             [state.workspace_id, page, text, row.version],
           );
         } else await client.query('DELETE FROM search_documents WHERE page_id=$1', [page]);
-        for (const author of authors)
+        if (!databaseRow)
+          for (const author of authors)
+            await client.query(
+              `INSERT INTO audit_logs(workspace_id,actor_id,action,resource_type,resource_id,metadata) VALUES($1,$2,'collaboration.projected','page',$3,$4)`,
+              [
+                state.workspace_id,
+                author.actor_id,
+                page,
+                JSON.stringify({ generation, contentRevision: target }),
+              ],
+            );
+        if (!databaseRow)
           await client.query(
-            `INSERT INTO audit_logs(workspace_id,actor_id,action,resource_type,resource_id,metadata) VALUES($1,$2,'collaboration.projected','page',$3,$4)`,
+            `INSERT INTO outbox_events(id,workspace_id,type,aggregate_id,aggregate_version,payload) VALUES($1,$2,'page.updated',$3,$4,$5)`,
             [
+              event,
               state.workspace_id,
-              author.actor_id,
               page,
-              JSON.stringify({ generation, contentRevision: target }),
+              target,
+              JSON.stringify({
+                id: event,
+                workspaceId: state.workspace_id,
+                type: 'page.updated',
+                schemaVersion: 1,
+                occurredAt: new Date().toISOString(),
+                data: { pageId: page, generation, contentRevision: target },
+              }),
             ],
           );
-        await client.query(
-          `INSERT INTO outbox_events(id,workspace_id,type,aggregate_id,aggregate_version,payload) VALUES($1,$2,'page.updated',$3,$4,$5)`,
-          [
-            event,
-            state.workspace_id,
-            page,
-            target,
-            JSON.stringify({
-              id: event,
-              workspaceId: state.workspace_id,
-              type: 'page.updated',
-              schemaVersion: 1,
-              occurredAt: new Date().toISOString(),
-              data: { pageId: page, generation, contentRevision: target },
-            }),
-          ],
-        );
       }
       const warn = snapshot.length >= 768 * 1024 && snapshot.length / business >= 4;
       const updated = await client.query(
