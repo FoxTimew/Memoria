@@ -72,7 +72,7 @@ function preCommit() {
 }
 
 function prePush() {
-  run('typecheck', ['node_modules/turbo/bin/turbo', 'run', 'typecheck']);
+  run('typecheck', ['scripts/typecheck.mjs']);
   run('Nest build', ['scripts/build-server.mjs', 'api', '--probe']);
   run('Nest probe', ['apps/api/dist/bootstrap-probe.mjs']);
   run('tests', ['node_modules/vitest/vitest.mjs', 'run', '--passWithNoTests']);

@@ -94,8 +94,7 @@ process.exit(result.status ?? 1);
     );
   }
   write(root, 'eslint.config.mjs', "export default [{rules:{'no-debugger':'error'}}];\n");
-  write(root, 'node_modules/turbo/package.json', '{"type":"module"}');
-  write(root, 'node_modules/turbo/bin/turbo', instrument('typecheck'));
+  write(root, 'scripts/typecheck.mjs', instrument('typecheck'));
   write(root, 'scripts/build-server.mjs', instrument('Nest build'));
   write(root, 'apps/api/dist/bootstrap-probe.mjs', instrument('Nest probe'));
   write(root, 'node_modules/vitest/vitest.mjs', instrument('tests'));
@@ -128,6 +127,7 @@ describe('native hooks invoked by real Git', () => {
     const manifest = JSON.parse(readFileSync(join(sourceRoot, 'package.json'), 'utf8'));
     expect(manifest.scripts.check.split(' && ')[0]).toBe('pnpm hooks:check');
     expect(manifest.scripts['hooks:check']).toBe('node scripts/check-git-hooks.mjs');
+    expect(manifest.scripts.typecheck).toBe('pnpm -r --if-present typecheck');
     const root = fixture();
     const check = () => command(root, process.execPath, ['scripts/check-git-hooks.mjs']);
     ok(check());
@@ -235,7 +235,7 @@ describe('native hooks invoked by real Git', () => {
     const root = fixture();
     const remote = join(root, 'remote.git');
     ok(git(root, 'init', '--bare', remote));
-    rmSync(join(root, 'node_modules/turbo/bin/turbo'));
+    rmSync(join(root, 'scripts/typecheck.mjs'));
     const result = git(root, 'push', remote, 'main');
     expect(result.status).not.toBe(0);
     expect(result.stdout + result.stderr).toContain('typecheck failed');
