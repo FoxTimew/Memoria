@@ -22,7 +22,9 @@ export async function profileDatabaseShare(
   page: string,
   member: string,
   preparation: Preparation,
+  options?: { kind: 'role'; reset: () => Promise<void> },
 ) {
+  const kind = options?.kind ?? 'share';
   const pool = h.app.get(DatabaseService).pool;
   const wrapped = new WeakSet<PoolClient>();
   let trace: Trace | undefined;
@@ -46,6 +48,8 @@ export async function profileDatabaseShare(
             sql,
             values: Array.isArray(values) ? values : [],
           });
+        if (kind === 'role' && /^update\s+"workspace_members"/i.test(sql))
+          explain.set('role-update', { sql, values: Array.isArray(values) ? values : [] });
         const record = (
           start: number,
           result: { rowCount?: number | null; rows?: unknown[] } | undefined,
@@ -95,21 +99,27 @@ export async function profileDatabaseShare(
     for (let series = 1; series <= 3; series++) {
       await h.prove(owner);
       const { result, hygiene } = await runMeasuredSeries(
-        `database-http-share-profile-${series}`,
+        `database-http-${kind}-profile-${series}`,
         async () => {
           const samples = [];
           for (let n = 0; n < 6; n++) {
             const cycle = performance.now();
-            const state = await h.call(owner, {}, route, {}, 'GET');
-            assert.equal(state.status, 200);
+            let body: Record<string, unknown>, path: string;
+            if (options) {
+              await options.reset();
+              body = { expectedRole: 'guest', role: 'member' };
+              path = `/api/internal/workspaces/${owner.workspace}/members/${member}/role`;
+            } else {
+              const state = await h.call(owner, {}, route, {}, 'GET');
+              assert.equal(state.status, 200);
+              body = {
+                expectedAccessVersion: state.data.accessVersion,
+                level: n % 2 ? 'edit' : 'read',
+              };
+              path = `${route}/${member}`;
+            }
             trace = { queries: [] };
-            const response = await h.call(
-              owner,
-              { expectedAccessVersion: state.data.accessVersion, level: n % 2 ? 'edit' : 'read' },
-              `${route}/${member}`,
-              {},
-              'PUT',
-            );
+            const response = await h.call(owner, body, path, {}, 'PUT');
             const captured = trace;
             trace = undefined;
             assert.equal(response.status, 200, String(response.data.code));
@@ -132,12 +142,22 @@ export async function profileDatabaseShare(
             await delay(Math.max(0, 2150 - (performance.now() - cycle)));
           }
           const plans = [];
+          if (options) assert(explain.has('role-update'), 'Actual native role UPDATE captured');
           for (const [name, query] of explain) {
-            const result = await h.f.db.pool.query(
-              'EXPLAIN (ANALYZE,BUFFERS,VERBOSE,FORMAT JSON) ' + query.sql,
-              query.values,
-            );
-            plans.push({ name, sql: query.sql, plan: result.rows[0]['QUERY PLAN'][0] });
+            if (options) await options.reset();
+            const c = await h.f.db.pool.connect();
+            try {
+              await c.query('BEGIN');
+              if (options) await c.query('SELECT database_lock_workspace($1)', [owner.workspace]);
+              const result = await c.query(
+                'EXPLAIN (ANALYZE,BUFFERS,VERBOSE,FORMAT JSON) ' + query.sql,
+                query.values,
+              );
+              plans.push({ name, sql: query.sql, plan: result.rows[0]['QUERY PLAN'][0] });
+            } finally {
+              await c.query('ROLLBACK');
+              c.release();
+            }
           }
           return { samples, plans };
         },
@@ -145,11 +165,12 @@ export async function profileDatabaseShare(
       );
       reports.push({ series, hygiene, ...result });
       await writeFile(
-        '.local/session-6d-share-profile.json',
+        `.local/session-6d-${kind}-profile.json`,
         JSON.stringify(
           {
             protocol:
-              'Three diagnostic series, six genuine HTTP mutations each; no concurrent writers. Same full rights fixture. Client-side PG timing includes transfer/decoding but excludes later Drizzle mapping; gaps include framework and instrumentation. track_functions=all; force deferred content_access_commit before COMMIT to expose reconciliation and pg_stat_xact_user_functions. These instrumented latencies are not qualification samples. EXPLAIN ANALYZE uses captured parameterized SELECTs with no mutations. No parameter values or credentials in output.',
+              'Three diagnostic series, six genuine HTTP mutations each; no concurrent writers. Same full rights fixture. Client-side PG timing includes transfer/decoding but excludes later Drizzle mapping; gaps include framework and instrumentation. track_functions=all; force deferred content_access_commit before COMMIT to expose reconciliation and pg_stat_xact_user_functions. These instrumented latencies are not qualification samples. EXPLAIN ANALYZE uses captured statements inside a rolled-back transaction; the role fixture is restored with its 100 grants before each sample and plan. No parameter values or credentials in output.',
+            kind,
             preparation,
             reports,
           },

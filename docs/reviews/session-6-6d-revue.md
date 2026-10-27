@@ -1,10 +1,10 @@
 # Session 6d — revue adverse, charge et comparaison finale
 
-27 octobre 2026, branche `codex/session-6-databases`. **Étape non clôturée : le partage corrigé passe, mais la promotion d'un guest avec 100 partages dépasse les plafonds.** Le premier profilage et sa correction ont été autorisés ; la campagne s'est arrêtée sur ce second cas avant nouvelle optimisation. Aucun risque n'est accepté ; le développeur crée et fusionne la PR unique.
+27 octobre 2026, branche `codex/session-6-databases`. **Étape non clôturée : le partage corrigé passe ; la promotion d'un guest avec 100 partages a dépassé les plafonds, puis a été profilée et corrigée avec autorisation. Sa requalification reste à faire.** Aucun risque n'est accepté ; le développeur crée et fusionne la PR unique.
 
 ## Fichiers prioritaires
 
-- `packages/db/drizzle/0021_database_barriers.sql` à `0027_database_services.sql` et `packages/db/src/database-cells.ts` : barrières, recontrôle au commit, versions indépendantes, compteurs et liens masqués.
+- `packages/db/drizzle/0021_database_barriers.sql` à `0028_transaction_workspace_barriers.sql` et `packages/db/src/database-cells.ts` : barrières, recontrôle au commit, versions indépendantes, compteurs et liens masqués.
 - `apps/api/src/modules/databases/` : autorisations, admission, quotas, schéma, AST paramétrée et curseurs liés au lecteur/requête/schéma/droits.
 - `apps/web/src/components/database-screen.tsx`, `database-cell.tsx`, `apps/web/src/lib/yjs-cache.ts` : affichage, saisie conservée sur conflit et cache natif base/ligne.
 - `apps/api/src/database-*.e2e.ts`, `scripts/test-databases-browser.mjs`, `apps/api/src/adversarial.e2e.ts` : attaques effectivement exécutables contre les vrais services, y compris depuis l'interface finale.
@@ -142,7 +142,23 @@ Candidate applicative `8fc39f4717029d5b8a950e2c11f1ca68226bfdaf`. Même protocol
 
 Le scénario suivant promeut un **guest possédant 100 partages** en member par la vraie route HTTP, puis restaure la fixture hors fenêtre mesurée. Les 100 anciens partages sont supprimés conformément à la règle produit. Sa première série de 30 mutations retenues échoue : **HTTP 578,207 ms (>500)**, **attente SQL 466,891 ms (>100)**, **reçu WSS total 463,443 ms et chevauchant 496,648 ms (>200)**, confirmation service 459,174 ms. 621 reçus, 180 chevauchants, 150 attentes observées ; aucune erreur HTTP ni déconnexion. Les quatre séries ont chacune 71 intervalles sans swap, secteur confirmé ; mémoire Windows toujours au-dessus de 3,4 Gio et WSL au-dessus de 5,2 Gio avant/après.
 
-Piste statique, **pas encore profilée** : le trigger de promotion supprime les grants ; chaque suppression appelle `content_lock_rights`, qui réexécute `database_lock_workspace` alors que la même transaction possède déjà ses barrières. Cent grants multiplient ce travail. La preuve de rôle 6a visait un membership initialement member sans ces cent partages : ses chiffres ne couvrent pas ce cas. Proposition soumise au développeur : profiler les fonctions et réduire les acquisitions répétées dans une même transaction, avec preuves de concurrence, rollback et maintien des contrôles. Aucun changement de ces fonctions ni de plafond à ce stade. Retrait, arbre, cycle de vie et comparaison alternée restent non exécutés dans cette campagne.
+La preuve de rôle 6a visait un membership initialement member sans ces cent partages : ses chiffres ne couvrent pas ce cas. Le développeur a autorisé le profilage des triggers, puis la réduction des acquisitions répétées dans une même transaction. Retrait, arbre, cycle de vie et comparaison alternée restent à qualifier.
+
+### Profilage de la promotion et réutilisation des barrières — 27 octobre 2026
+
+[Trois séries de diagnostic](evidence/session-6d-role-profile/), six promotions HTTP réelles chacune, même fixture pleine et aucun rédacteur concurrent. Instrumentation identique au partage : temps client PostgreSQL, `track_functions=all`, réconciliation différée explicitement déclenchée avant COMMIT, EXPLAIN ANALYZE de la requête native capturée dans une transaction annulée. Ces temps instrumentés ne remplacent pas la qualification HTTP/WSS.
+
+| Moyenne par série (ms)                |       1 |       2 |       3 |
+| ------------------------------------- | ------: | ------: | ------: |
+| HTTP instrumenté                      | 558,609 | 529,869 | 488,565 |
+| UPDATE du membership, triggers inclus | 460,386 | 443,746 | 411,382 |
+| Réconciliation différée               |  48,195 |  44,504 |  36,501 |
+
+Chaque promotion appelle `database_lock_workspace` **103 fois**. Les plans trouvent le membre en 0,013–0,020 ms (100 memberships, trois blocs en cache) ; le trigger `content_clear_promoted_grants` prend 433,383 / 508,077 / 381,299 ms. Les temps inclusifs de fonctions s'emboîtent et ne s'additionnent pas. Ce diagnostic a été présenté avant la correction.
+
+Migration `0028_transaction_workspace_barriers.sql` : marqueur temporaire PostgreSQL, par relation de base et workspace, inséré **après** acquisition de tous les verrous existants, `ON COMMIT DELETE ROWS`. Les appels suivants de la même transaction réutilisent les verrous détenus. Une annulation de transaction ou un retour au savepoint annule aussi le marqueur ; aucune mémoire JavaScript ni GUC persistant. Aucun contrôle de session, politique, droits, version ou réconciliation n'est mémorisé ou supprimé. La suppression des anciens partages lors d'une promotion est conservée. Les créations de pages ordinaires et de bases restent sérialisées par le mutex du workspace. Le rôle SQL serveur doit pouvoir créer une table temporaire ; cette table est interne au backend, pas une API client.
+
+Test permanent `database-lock-reuse.e2e.ts` : huit sous-scénarios réels, neuf résultats node:test parent compris. Attente de vraies écritures après 103 appels, reprise après COMMIT/ROLLBACK, savepoint annulant l'acquisition, savepoint conservant une acquisition extérieure, timeout partiel, deux workspaces, création initiale de la table temporaire annulée puis rejouée, base/page créées après acquisition. La contention est observée dans `pg_stat_activity` et `pg_blocking_pids`, pas supposée après un délai. Le premier essai a corrigé un paramètre UUID/texte de fixture avant toute assertion ; son journal est conservé. L'oracle aléatoire passe encore 500 transactions et 1 015 opérations avec la même graine. La requalification des plafonds reste requise.
 
 ### Contrôles fonctionnels rejoués
 

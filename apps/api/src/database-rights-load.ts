@@ -64,7 +64,10 @@ const grants = (
 ).rows;
 const shared = (
   await db.pool.query(
-    'SELECT g.resource_id FROM access_grants g JOIN databases d ON d.workspace_id=g.workspace_id AND d.page_id=g.resource_id WHERE g.subject_id=$1 LIMIT 1',
+    `SELECT g.resource_id FROM access_grants g
+     JOIN databases d ON d.workspace_id=g.workspace_id AND d.page_id=g.resource_id
+     JOIN pages p ON p.id=d.page_id AND p.parent_id IS NULL
+     WHERE g.subject_id=$1 ORDER BY g.resource_id LIMIT 1`,
     [subject.id],
   )
 ).rows[0].resource_id as string;
@@ -105,6 +108,7 @@ const save = () =>
           rows: 50000,
           members: 100,
           grants: 5000,
+          shareTarget: 'root container; no inherited edit can mask its read/edit transition',
           subtree: subtree.length,
           properties: 'empty; rights cardinality, not table workload',
         },
@@ -143,8 +147,15 @@ const restoreMember = async () => {
   }
 };
 try {
-  if (process.argv.includes('--profile')) {
-    await profileDatabaseShare(h, owner, shared, selected.id as string, preparation);
+  if (process.argv.includes('--profile') || process.argv.includes('--profile-role')) {
+    await profileDatabaseShare(
+      h,
+      owner,
+      shared,
+      selected.id as string,
+      preparation,
+      process.argv.includes('--profile-role') ? { kind: 'role', reset: restoreMember } : undefined,
+    );
   } else
     for (const kind of [
       'share',
@@ -257,6 +268,17 @@ try {
                     failure = `HTTP_${r.status}_${String(r.data.code)}`;
                   await delay(450);
                 }, 5);
+                if (kind === 'share' && !failure) {
+                  const effective = await db.pool.query(
+                    'SELECT level FROM page_access_state WHERE workspace_id=$1 AND member_id=$2 AND page_id=$3',
+                    [w, selected.id, shared],
+                  );
+                  assert.equal(
+                    effective.rows[0]?.level,
+                    body.level,
+                    'share changes effective access',
+                  );
+                }
                 if (n >= 2) {
                   mutations.push(mutation);
                   waits.push(...editors.waits);

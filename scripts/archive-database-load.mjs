@@ -1,7 +1,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { resolve, relative, basename, join } from 'node:path';
 import { createHash } from 'node:crypto';
-import { format } from 'prettier';
+import { format, resolveConfig } from 'prettier';
 
 // Lossless raw arrays in bounded NDJSON files: avoid duplicating them inside hygiene JSON.
 const source = resolve(process.argv[2] ?? ''),
@@ -19,8 +19,9 @@ const raw = await readFile(source),
 const originalReports = document.reports;
 if (!Array.isArray(originalReports)) throw new Error('Expected load reports');
 const files = [];
+const formatting = await resolveConfig('package.json');
 async function save(name, text) {
-  if (name.endsWith('.json')) text = await format(text, { parser: 'json' });
+  if (name.endsWith('.json')) text = await format(text, { ...formatting, parser: 'json' });
   const bytes = Buffer.from(text);
   if (bytes.length > 18 * 1024 ** 2) throw new Error('Evidence shard exceeds 18 MiB');
   await writeFile(join(destination, name), bytes, { flag: 'wx' });
