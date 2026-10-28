@@ -102,7 +102,11 @@ export async function databaseLiveWriters(
             firstText(c.doc).insert(0, 'x');
             assert(receipt);
             await until(() => c.receiptTimes.has(receipt) || c.closed(), 'rights WSS receipt');
-            assert(!c.closed(), 'Unrelated native editor disconnected');
+            assert(
+              !c.closed(),
+              'Unrelated native editor disconnected: ' +
+                JSON.stringify({ route: routes[index], failure: c.failure() }),
+            );
             const end = c.receiptTimes.get(receipt)!;
             wire.push({ start, end, ms: end - start });
             await delay(Math.max(0, 200 - (performance.now() - start)));

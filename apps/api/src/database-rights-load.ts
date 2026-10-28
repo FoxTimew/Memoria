@@ -11,6 +11,7 @@ import { databaseHttpHarness } from './testing/database-http-fixture.ts';
 import { databaseLiveWriters } from './testing/database-live-writers.ts';
 import { databaseEventWorker } from './testing/database-event-worker.ts';
 import { profileDatabaseShare } from './testing/database-share-profile.ts';
+import { databaseControlDiagnostic } from '../../collab/src/testing/database-control-diagnostic.ts';
 
 const p95 = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.ceil(xs.length * 0.95) - 1] ?? 0;
 const cases = [
@@ -27,7 +28,8 @@ const fromCase = process.argv.includes('--from-case')
   ? process.argv[process.argv.indexOf('--from-case') + 1]
   : 'share';
 assert(fromCase && cases.includes(fromCase), 'Unknown starting case');
-const selectedCases = cases.slice(cases.indexOf(fromCase));
+const diagnostic = process.argv.includes('--diagnose-tree');
+const selectedCases = diagnostic ? ['move'] : cases.slice(cases.indexOf(fromCase));
 const preparation = await prepareMeasurement('database-http-rights');
 const h = await databaseHttpHarness(async () => {
   // Bulk setup uses the same timeout as the 6a bound fixture; it is outside measured samples.
@@ -112,6 +114,7 @@ const targetRow = (
 const rowPath = `${W}/databases/${bases[45]}/rows/${targetRow}`;
 const reports: unknown[] = [];
 const events = databaseEventWorker(db.pool);
+const finishDiagnostic = diagnostic ? databaseControlDiagnostic(db.pool) : undefined;
 const save = () =>
   writeFile(
     '.local/session-6d-http-rights.json',
@@ -212,7 +215,7 @@ try {
     );
   } else
     for (const kind of selectedCases) {
-      for (let series = 1; series <= 3; series++) {
+      for (let series = 1; series <= (diagnostic ? 1 : 3); series++) {
         const eventStart = events.count();
         await restoreMember();
         await h.prove(owner);
@@ -229,7 +232,7 @@ try {
                 confirmations: number[] = [],
                 previews: number[] = [];
               let failure: string | null = null;
-              for (let n = 0; n < 32 && !failure; n++) {
+              for (let n = 0; n < (diagnostic ? 1 : 32) && !failure; n++) {
                 const cycle = performance.now();
                 let path = '',
                   method = 'POST',
@@ -312,6 +315,14 @@ try {
                     server: r.server,
                     roundTrip: r.roundTrip,
                   };
+                  if (diagnostic)
+                    console.log(
+                      JSON.stringify({
+                        diagnosticMutation: kind,
+                        status: r.status,
+                        serverMs: r.server,
+                      }),
+                    );
                   if (r.status < 200 || r.status >= 300)
                     failure = `HTTP_${r.status}_${String(r.data.code)}`;
                   await delay(450);
@@ -360,6 +371,7 @@ try {
             { preparation },
           );
           events.check();
+          assert(!diagnostic, 'Diagnostic samples must not be published as qualification p95');
           reports.push({
             kind,
             series,
@@ -390,6 +402,7 @@ try {
       }
     }
 } finally {
+  await finishDiagnostic?.();
   await events.close();
   await h.close();
 }

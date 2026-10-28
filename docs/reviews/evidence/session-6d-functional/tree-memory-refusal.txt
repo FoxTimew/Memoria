@@ -1,0 +1,47 @@
+{
+  "observedAt": "2026-10-28T10:58:01.350Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 85
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-http-rights-preparation-b9912886-42fe-40b0-9ff0-2594471ef2bc.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-http-rights","phase":"before-preparation","status":"refused","observation":{"observedAt":"2026-10-28T10:58:02.041Z","windowsFreeBytes":2522042368,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5798772736,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T10:58:02.041Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":85}],"allowed":true,"reason":null}},"reason":"WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB"}
+file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-rights-load.mjs:12754
+var fail2 = (reason, observation) => Object.assign(new Error(reason), { reason, observation });
+                                                   ^
+
+Error: WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB
+    at fail2 (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-rights-load.mjs:12754:52)
+    at assertMemoryStage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-rights-load.mjs:12800:11)
+    at prepareMeasurement (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-rights-load.mjs:12828:5)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-rights-load.mjs:53523:25
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  reason: 'WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB',
+  observation: {
+    observedAt: '2026-10-28T10:58:02.041Z',
+    windowsFreeBytes: 2522042368,
+    wsl: {
+      bootId: 'dc1818ce-057f-406e-9e82-a0bb01fa6a48',
+      memAvailableBytes: 5798772736,
+      swapInPages: 0,
+      swapOutPages: 0
+    },
+    power: {
+      observedAt: '2026-10-28T10:58:02.041Z',
+      platform: 'win32',
+      batteries: [ { BatteryStatus: 2, EstimatedChargeRemaining: 85 } ],
+      allowed: true,
+      reason: null
+    }
+  }
+}
+
+Node.js v24.21.0
+EXIT_CODE=1

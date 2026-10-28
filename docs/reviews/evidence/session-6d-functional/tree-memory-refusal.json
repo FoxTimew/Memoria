@@ -1,0 +1,29 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "database-http-rights",
+  "phase": "before-preparation",
+  "status": "refused",
+  "observation": {
+    "observedAt": "2026-10-28T10:58:02.041Z",
+    "windowsFreeBytes": 2522042368,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5798772736,
+      "swapInPages": 0,
+      "swapOutPages": 0
+    },
+    "power": {
+      "observedAt": "2026-10-28T10:58:02.041Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 85
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "reason": "WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB"
+}
