@@ -1,0 +1,71 @@
+$ pnpm hooks:check && pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test
+$ node scripts/check-git-hooks.mjs
+Hooks Memoria installés et à jour dans ce clone.
+$ eslint . --max-warnings=0 && prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+$ pnpm -r --if-present typecheck
+Scope: 13 of 14 workspace projects
+packages/blocks/core typecheck$ tsc --noEmit
+packages/collaboration-core typecheck$ tsc --noEmit
+packages/contracts typecheck$ tsc --noEmit
+packages/db typecheck$ tsc --noEmit
+packages/collaboration-core typecheck: Done
+packages/blocks/core typecheck: Done
+packages/blocks/ui typecheck$ tsc --noEmit
+packages/contracts typecheck: Done
+packages/blocks/ui typecheck: Done
+packages/blocks/standard typecheck$ tsc --noEmit
+packages/blocks/character-card typecheck$ tsc --noEmit
+packages/db typecheck: Done
+packages/auth typecheck$ tsc --noEmit
+packages/blocks/standard typecheck: Done
+packages/blocks/character-card typecheck: Done
+packages/blocks/catalog typecheck$ tsc --noEmit
+packages/auth typecheck: src/create-auth.ts(1,28): error TS2307: Cannot find module 'better-auth' or its corresponding type declarations.
+packages/auth typecheck: src/create-auth.ts(2,32): error TS2307: Cannot find module 'better-auth/adapters/drizzle' or its corresponding type declarations.
+packages/auth typecheck: src/create-auth.ts(3,30): error TS2307: Cannot find module 'better-auth/plugins' or its corresponding type declarations.
+packages/auth typecheck: src/create-auth.ts(4,55): error TS2307: Cannot find module 'better-auth/plugins/organization/access' or its corresponding type declarations.
+packages/auth typecheck: src/create-auth.ts(49,35): error TS7031: Binding element 'user' implicitly has an 'any' type.
+packages/auth typecheck: src/create-auth.ts(49,41): error TS7031: Binding element 'token' implicitly has an 'any' type.
+packages/auth typecheck: src/create-auth.ts(65,33): error TS7031: Binding element 'user' implicitly has an 'any' type.
+packages/auth typecheck: src/create-auth.ts(75,39): error TS7031: Binding element 'user' implicitly has an 'any' type.
+packages/auth typecheck: src/create-auth.ts(75,45): error TS7031: Binding element 'url' implicitly has an 'any' type.
+packages/auth typecheck: src/create-auth.ts(119,47): error TS7006: Parameter 'user' implicitly has an 'any' type.
+packages/auth typecheck: src/recovery-core.ts(5,52): error TS2307: Cannot find module 'better-auth/crypto' or its corresponding type declarations.
+packages/auth typecheck: src/recovery-plugin.ts(1,26): error TS2307: Cannot find module 'better-auth' or its corresponding type declarations.
+packages/auth typecheck: src/recovery-plugin.ts(2,55): error TS2307: Cannot find module 'better-auth/api' or its corresponding type declarations.
+packages/auth typecheck: src/recovery-plugin.ts(3,34): error TS2307: Cannot find module 'better-auth/cookies' or its corresponding type declarations.
+packages/auth typecheck: src/recovery-plugin.ts(41,14): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/recovery-plugin.ts(116,14): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/recovery-plugin.ts(137,14): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/recovery-plugin.ts(182,14): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/schema-contract.test.ts(1,31): error TS2307: Cannot find module 'better-auth/db' or its corresponding type declarations.
+packages/auth typecheck: src/schema-contract.test.ts(15,39): error TS18046: 'model' is of type 'unknown'.
+packages/auth typecheck: src/schema-contract.ts(1,40): error TS2307: Cannot find module 'better-auth' or its corresponding type declarations.
+packages/auth typecheck: src/schema-contract.ts(2,41): error TS2307: Cannot find module 'better-auth/plugins' or its corresponding type declarations.
+packages/auth typecheck: src/schema-contract.ts(3,25): error TS2307: Cannot find module '@better-auth/passkey' or its corresponding type declarations.
+packages/auth typecheck: src/schema-contract.ts(4,24): error TS2307: Cannot find module '@better-auth/api-key' or its corresponding type declarations.
+packages/auth typecheck: src/security-plugin.ts(3,26): error TS2307: Cannot find module 'better-auth' or its corresponding type declarations.
+packages/auth typecheck: src/security-plugin.ts(9,8): error TS2307: Cannot find module 'better-auth/api' or its corresponding type declarations.
+packages/auth typecheck: src/security-plugin.ts(10,34): error TS2307: Cannot find module 'better-auth/cookies' or its corresponding type declarations.
+packages/auth typecheck: src/security-plugin.ts(11,34): error TS2307: Cannot find module 'better-auth/crypto' or its corresponding type declarations.
+packages/auth typecheck: src/security-plugin.ts(12,27): error TS2307: Cannot find module 'better-auth/plugins' or its corresponding type declarations.
+packages/auth typecheck: src/security-plugin.ts(13,25): error TS2307: Cannot find module '@better-auth/passkey' or its corresponding type declarations.
+packages/auth typecheck: src/security-plugin.ts(261,35): error TS7031: Binding element 'verification' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(261,49): error TS7031: Binding element 'user' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(268,35): error TS7031: Binding element 'verification' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(268,49): error TS7031: Binding element 'clientData' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(289,41): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(440,40): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(577,16): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(605,16): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(647,16): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: src/security-plugin.ts(692,16): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+packages/auth typecheck: Failed
+C:\Users\Foxti\Documents\Projets\Memoria\packages\auth:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @memoria/auth@ typecheck: `tsc --noEmit`
+Exit status 2
+[ELIFECYCLE] Command failed with exit code 2.
+[ELIFECYCLE] Command failed with exit code 2.
+Exit code: 2
