@@ -1,0 +1,14 @@
+$ node scripts/test-collab.mjs "--suite" "database-cells-load"
+Power: {"observedAt":"2026-10-26T12:48:46.058Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-26T12:48:46.793Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+{"series":1,"power":{"observedAt":"2026-10-26T12:48:51.603Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3738320896}
+{"series":1,"p95":[23.596400000000358,27.072299999999814],"conflictPairP95":23.81720000000132,"wireP95":20.579400000000533,"receipts":70}
+{"series":2,"power":{"observedAt":"2026-10-26T12:48:59.275Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3782918144}
+{"series":2,"p95":[22.542900000000373,26.213200000000143],"conflictPairP95":31.11859999999797,"wireP95":13.751499999998487,"receipts":68}
+{"series":3,"power":{"observedAt":"2026-10-26T12:49:06.714Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3841175552}
+{"series":3,"p95":[22.76800000000003,27.065299999998388],"conflictPairP95":23.59700000000157,"wireP95":14.071500000001834,"receipts":68}
+{"medians":[22.76800000000003,27.065299999998388],"limit":100,"passed":true}
+[beforeUnloadDocument] RESIDENT_REPLICA
+Collaboration database-cells-load.e2e.ts: EXIT_CODE=0
+
+EXIT_CODE=0

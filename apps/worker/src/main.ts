@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { PgBoss } from 'pg-boss';
 import { z } from 'zod';
-import { createDatabase } from '@memoria/db';
+import { createDatabase, processDatabaseRowEvent } from '@memoria/db';
 import { processAuthMail, purgeAuthCounters, purgeInvitations } from '@memoria/auth';
 import nodemailer from 'nodemailer';
 
@@ -54,6 +54,9 @@ const poll = setInterval(() => {
     if (Date.now() - lastCounterPurge >= 60000) {
       await purgeAuthCounters(connection.db);
       await purgeInvitations(connection.db);
+      await connection.pool.query(
+        'DELETE FROM database_create_receipts WHERE expires_at<=clock_timestamp()',
+      );
       lastCounterPurge = Date.now();
     }
     for (let i = 0; i < 20 && !stopping; i++) {
@@ -73,6 +76,19 @@ const poll = setInterval(() => {
       delivering = undefined;
     });
 }, 1000);
+// A slow SMTP server must not hold the durable row aggregation queue.
+let aggregating: Promise<void> | undefined;
+const rowPoll = setInterval(() => {
+  if (stopping || aggregating) return;
+  aggregating = (async () => {
+    for (let i = 0; i < 20 && !stopping; i++)
+      if (!(await processDatabaseRowEvent(connection.pool))) break;
+  })()
+    .catch(() => console.error('Database row event queue unavailable'))
+    .finally(() => {
+      aggregating = undefined;
+    });
+}, 250);
 const server = createServer(async (request, response) => {
   response.setHeader('Content-Type', 'application/json');
   response.setHeader('Cache-Control', 'no-store');
@@ -96,8 +112,10 @@ async function shutdown() {
   if (stopping) return;
   stopping = true;
   clearInterval(poll);
+  clearInterval(rowPoll);
   server.close();
   await delivering;
+  await aggregating;
   smtp.close();
   await connection.pool.end();
   await boss.stop({ graceful: true, timeout: 10000 });

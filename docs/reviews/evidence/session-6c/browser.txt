@@ -1,0 +1,20 @@
+PASS guest read: immutable table, hidden schema, neutral relation/person without title/id/count
+PASS original use case: guest editor updates task status through final UI
+PASS cell conflict shows current value, preserves input, explicit reapply; hidden references retained
+PASS nine cell editors, filters/sort and schema creation visible only to authorized role
+PASS final UI signed cursor pagination: no repeated rows and return to previous page
+PASS native row WSS collaboration between two browsers, relational title and local Yjs cache
+PASS final UI offline edit survives closing/reopening a row tab and merges after access recheck
+PASS real browser freeze/resume events and suspended timer
+PASS final UI frozen/offline old ticket cannot resurrect after removal/regrant; unrelated base survives; read-only body receives fresh document
+PASS real browser freeze/resume events and suspended timer
+PASS archive/restore lifecycle and logout fence frozen row UI, cache remains empty
+✔ 6c final UI: typed table, guest task, CAS, selectors, native rows and cache resurrection attacks (23028.653ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23035.6664

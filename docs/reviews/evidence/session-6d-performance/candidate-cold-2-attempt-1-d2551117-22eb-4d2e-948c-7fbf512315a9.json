@@ -1,0 +1,274 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "candidate-cold-2",
+  "attempt": 1,
+  "preparation": {
+    "path": ".local/measurement-hygiene/candidate-cold-2-preparation-f8dda2ed-744c-49a4-a7d4-63e7f01e9318.json",
+    "observation": {
+      "observedAt": "2026-10-28T12:19:20.308Z",
+      "windowsFreeBytes": 4842110976,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5755027456,
+        "swapInPages": 0,
+        "swapOutPages": 0
+      },
+      "power": {
+        "observedAt": "2026-10-28T12:19:20.308Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "status": "valid",
+  "before": {
+    "observedAt": "2026-10-28T12:19:22.736Z",
+    "windowsFreeBytes": 4800532480,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5748432896,
+      "swapInPages": 0,
+      "swapOutPages": 0
+    },
+    "power": {
+      "observedAt": "2026-10-28T12:19:22.736Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 100
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "workStartedAt": 1793189963206,
+  "workEndedAt": 1793189978192,
+  "swap": {
+    "raw": "BOOT dc1818ce-057f-406e-9e82-a0bb01fa6a48\nvmstat from procps-ng 4.0.4\n--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n   0    0            0      4520384        57888      1403148    0    0     0   164 15925 29117   2   2  95   0   0   0\n   4    0            0      4518856        57900      1403148    0    0     0   108 4160 6908   1   1  99   0   0   0\n   3    0            0      4499924        57968      1405772    0    0     0  2888 18125 31481   5   5  90   0   0   0\n   1    0            0      4502752        57972      1405876    0    0     0    72 2685 4215   0   1  99   0   0   0\n   0    0            0      4496628        57972      1405876    0    0     0   272 6578 11019   0   1  98   0   0   0\n   0    0            0      4499616        57972      1405876    0    0     0    16 7304 12775   1   2  98   0   0   0\n   0    0            0      4499412        57980      1406428    0    0     0   984 6567 10673   1   1  98   0   0   0\n   0    0            0      4507436        57980      1406428    0    0     0   280 2252 3627   0   1  99   0   0   0\n   0    0            0      4513512        57980      1406428    0    0     0    16 4330 7292   0   1  99   0   0   0\n   2    0            0      4512476        57984      1406428    0    0     0    24 2931 4701   0   1  99   0   0   0\n   1    0            0      4507464        57984      1406428    0    0     0    16 2712 4456   0   1  99   0   0   0\n   5    0            0      4504408        57992      1406428    0    0     0    60 4563 7428   1   1  99   0   0   0\n   0    0            0      4504812        57992      1406428    0    0     0    16 17985 32556   3   3  94   0   0   0\n   0    0            0      4507236        57992      1406428    0    0     0    16 3436 5704   0   1  99   0   0   0\n   0    0            0      4503960        57992      1406428    0    0     0    16 3953 6630   0   1  99   0   0   0\n   0    0            0      4507372        57992      1406428    0    0     0    16 3395 5794   0   1  99   0   0   0\n   0    1            0      4526848        58008      1403832    0    0     0   792 3414 4600   1   4  96   0   0   0\n",
+    "chunks": [
+      {
+        "observedAt": "2026-10-28T12:19:21.623Z",
+        "text": "BOOT "
+      },
+      {
+        "observedAt": "2026-10-28T12:19:21.624Z",
+        "text": "dc1818ce-057f-406e-9e82-a0bb01fa6a48\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:21.626Z",
+        "text": "vmstat from procps-ng 4.0.4\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:21.628Z",
+        "text": "--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:22.629Z",
+        "text": "   0    0            0      4520384        57888      1403148    0    0     0   164 15925 29117   2   2  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:23.629Z",
+        "text": "   4    0            0      4518856        57900      1403148    0    0     0   108 4160 6908   1   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:24.629Z",
+        "text": "   3    0            0      4499924        57968      1405772    0    0     0  2888 18125 31481   5   5  90   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:25.630Z",
+        "text": "   1    0            0      4502752        57972      1405876    0    0     0    72 2685 4215   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:26.630Z",
+        "text": "   0    0            0      4496628        57972      1405876    0    0     0   272 6578 11019   0   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:27.630Z",
+        "text": "   0    0            0      4499616        57972      1405876    0    0     0    16 7304 12775   1   2  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:28.631Z",
+        "text": "   0    0            0      4499412        57980      1406428    0    0     0   984 6567 10673   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:29.631Z",
+        "text": "   0    0            0      4507436        57980      1406428    0    0     0   280 2252 3627   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:30.632Z",
+        "text": "   0    0            0      4513512        57980      1406428    0    0     0    16 4330 7292   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:31.632Z",
+        "text": "   2    0            0      4512476        57984      1406428    0    0     0    24 2931 4701   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:32.634Z",
+        "text": "   1    0            0      4507464        57984      1406428    0    0     0    16 2712 4456   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:33.632Z",
+        "text": "   5    0            0      4504408        57992      1406428    0    0     0    60 4563 7428   1   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:34.633Z",
+        "text": "   0    0            0      4504812        57992      1406428    0    0     0    16 17985 32556   3   3  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:35.633Z",
+        "text": "   0    0            0      4507236        57992      1406428    0    0     0    16 3436 5704   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:36.634Z",
+        "text": "   0    0            0      4503960        57992      1406428    0    0     0    16 3953 6630   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:37.634Z",
+        "text": "   0    0            0      4507372        57992      1406428    0    0     0    16 3395 5794   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-28T12:19:38.634Z",
+        "text": "   0    1            0      4526848        58008      1403832    0    0     0   792 3414 4600   1   4  96   0   0   0\n"
+      }
+    ],
+    "startedAt": 1793189961399,
+    "endedAt": 1793189978662,
+    "probeError": null,
+    "stderr": "",
+    "imageId": "sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac",
+    "command": "vmstat -w -n -y 1",
+    "intervalSeconds": 1,
+    "workStartedAt": 1793189963206,
+    "workEndedAt": 1793189978192
+  },
+  "after": {
+    "observedAt": "2026-10-28T12:19:38.774Z",
+    "windowsFreeBytes": 4794839040,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5748383744,
+      "swapInPages": 0,
+      "swapOutPages": 0
+    },
+    "power": {
+      "observedAt": "2026-10-28T12:19:38.774Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 100
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "assessment": {
+    "valid": true,
+    "reason": null,
+    "intervals": 17,
+    "deltaInPages": 0,
+    "deltaOutPages": 0
+  },
+  "result": {
+    "code": 0,
+    "report": {
+      "date": "2026-10-28T12:19:37.719Z",
+      "scope": "Real Hocuspocus cold room: memory admission, consistent PostgreSQL snapshot read, live Yjs document and fresh replica using the selected version worker lifecycle. No journal tail, session check, network or concurrent typing.",
+      "reports": [
+        {
+          "profile": "content-1M",
+          "memoryAfterPreparation": {
+            "observedAt": "2026-10-28T12:19:24.741Z",
+            "windowsFreeBytes": 4669259776,
+            "wsl": {
+              "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+              "memAvailableBytes": 5736726528,
+              "swapInPages": 0,
+              "swapOutPages": 0
+            },
+            "power": {
+              "observedAt": "2026-10-28T12:19:24.741Z",
+              "platform": "win32",
+              "batteries": [
+                {
+                  "BatteryStatus": 2,
+                  "EstimatedChargeRemaining": 100
+                }
+              ],
+              "allowed": true,
+              "reason": null
+            }
+          },
+          "encodedBytes": 1045110,
+          "businessBytes": 1040382,
+          "warmup": 2,
+          "iterations": 30,
+          "p95": 178.3344000000002,
+          "max": 233.91200000000026,
+          "samples": [
+            178.3344000000002, 233.91200000000026, 58.1875, 44.94599999999991, 46.31530000000021,
+            45.40070000000014, 39.773099999999886, 41.43010000000004, 40.95569999999998,
+            43.329099999999926, 42.97960000000012, 38.822400000000016, 41.66469999999981,
+            36.47469999999976, 40.171800000000076, 39.93209999999999, 35.297199999999975,
+            38.58879999999999, 38.95750000000044, 38.25710000000072, 40.46060000000034,
+            37.65340000000015, 35.6186000000007, 42.52520000000004, 35.89850000000024,
+            39.615499999999884, 39.483900000000176, 40.69419999999991, 37.073199999999815,
+            35.534599999999955
+          ]
+        },
+        {
+          "profile": "history-1M",
+          "memoryAfterPreparation": {
+            "observedAt": "2026-10-28T12:19:28.544Z",
+            "windowsFreeBytes": 4369002496,
+            "wsl": {
+              "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+              "memAvailableBytes": 5732978688,
+              "swapInPages": 0,
+              "swapOutPages": 0
+            },
+            "power": {
+              "observedAt": "2026-10-28T12:19:28.544Z",
+              "platform": "win32",
+              "batteries": [
+                {
+                  "BatteryStatus": 2,
+                  "EstimatedChargeRemaining": 100
+                }
+              ],
+              "allowed": true,
+              "reason": null
+            }
+          },
+          "encodedBytes": 1042470,
+          "businessBytes": 100802,
+          "warmup": 2,
+          "iterations": 30,
+          "p95": 294.53529999999955,
+          "max": 297.7469000000001,
+          "samples": [
+            236.2391000000007, 217.70550000000003, 220.0567000000001, 211.71599999999944,
+            213.10750000000007, 225.83410000000003, 206.09689999999955, 216.97289999999975,
+            217.98480000000018, 217.96459999999934, 226.0705999999991, 217.69959999999992,
+            227.47819999999956, 221.85839999999916, 256.9354000000003, 297.7469000000001,
+            294.53529999999955, 254.95800000000054, 253.52999999999884, 248.8251999999993,
+            233.23630000000048, 220.63480000000163, 237.33859999999913, 263.32130000000143,
+            220.70869999999923, 227.08679999999913, 196.54889999999978, 218.52969999999914,
+            216.64780000000064, 205.79529999999977
+          ]
+        }
+      ]
+    },
+    "start": 1793189963206
+  }
+}

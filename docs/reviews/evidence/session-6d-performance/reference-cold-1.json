@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-28T12:18:13.077Z",
+  "scope": "Real Hocuspocus cold room: memory admission, consistent PostgreSQL snapshot read, live Yjs document and fresh replica using the selected version worker lifecycle. No journal tail, session check, network or concurrent typing.",
+  "reports": [
+    {
+      "profile": "content-1M",
+      "memoryAfterPreparation": {
+        "observedAt": "2026-10-28T12:18:00.080Z",
+        "windowsFreeBytes": 4763574272,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5790711808,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-28T12:18:00.080Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "encodedBytes": 1045110,
+      "businessBytes": 1040382,
+      "warmup": 2,
+      "iterations": 30,
+      "p95": 163.89579999999978,
+      "max": 169.2180000000003,
+      "samples": [
+        163.89579999999978, 169.2180000000003, 56.59830000000011, 49.36449999999968,
+        53.68379999999979, 48.50460000000021, 46.34659999999985, 41.19240000000036,
+        46.0938000000001, 42.53969999999981, 54.46190000000024, 38.885499999999865,
+        42.782700000000204, 40.28769999999986, 40.08680000000004, 39.03850000000011,
+        38.85939999999982, 46.160399999999754, 39.81989999999996, 38.99250000000029,
+        38.2476000000006, 37.76549999999952, 39.993900000000394, 38.69760000000042,
+        38.90740000000005, 40.255200000000514, 37.09770000000026, 37.70939999999973,
+        38.163400000000365, 37.17370000000028
+      ]
+    },
+    {
+      "profile": "history-1M",
+      "memoryAfterPreparation": {
+        "observedAt": "2026-10-28T12:18:03.906Z",
+        "windowsFreeBytes": 4375756800,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5778944000,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-28T12:18:03.906Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "encodedBytes": 1042470,
+      "businessBytes": 100802,
+      "warmup": 2,
+      "iterations": 30,
+      "p95": 272.1035000000011,
+      "max": 347.5553,
+      "samples": [
+        220.4453999999996, 228.9373999999998, 212.89829999999984, 250.11250000000018,
+        207.8798000000006, 220.0652, 230.5699999999997, 207.35210000000097, 347.5553, 225.9964,
+        235.3768, 234.5018, 236.53749999999854, 262.9318000000003, 252.42789999999877,
+        272.1035000000011, 235.39069999999992, 237.88680000000022, 263.6214999999993,
+        233.78440000000046, 224.53700000000026, 217.82799999999952, 210.44250000000102,
+        223.47479999999996, 200.79529999999977, 215.0676999999996, 213.22910000000047,
+        225.26010000000133, 234.9475999999995, 214.2603999999992
+      ]
+    }
+  ]
+}

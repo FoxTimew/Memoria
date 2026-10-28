@@ -1,0 +1,59 @@
+{
+  "source": ".local\\session-6d-remove-profile.json",
+  "originalSha256": "3fdc7be75a53b92a733cf288d1c4eda3758aa571c832970b774491bb54625d78",
+  "encoding": "JSON summaries + ordered, compact NDJSON shards, no samples removed. Array hashes use JSON.stringify(array). Hygiene result duplicates are replaced by their SHA256.",
+  "hygiene": [
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-preparation-773790cc-1775-48eb-89d1-8de571943e2b.json",
+      "file": "database-http-rights-preparation-773790cc-1775-48eb-89d1-8de571943e2b.json",
+      "originalSha256": "94c62ed1cc741bbab734e89a8fb803edb041b8490d1c5e7529048ed490096bb3"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-remove-profile-1-attempt-1-a5b5449c-8d1e-4eb8-ba59-d2a9a4974ebf.json",
+      "file": "database-http-remove-profile-1-attempt-1-a5b5449c-8d1e-4eb8-ba59-d2a9a4974ebf.json",
+      "originalSha256": "1b643ec7ce74811725ba841927d4707141a79a0fae7ef098340dcf9ff6c6449c"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-remove-profile-2-attempt-1-d138e6ef-d804-43d5-8321-4697ae254d58.json",
+      "file": "database-http-remove-profile-2-attempt-1-d138e6ef-d804-43d5-8321-4697ae254d58.json",
+      "originalSha256": "65a656a14ac5f980f4c311ca4fa786132cfce964a4191204a44ccf86405c41e9"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-remove-profile-3-attempt-1-19798b89-6d76-47be-9e95-cc8dce8f923a.json",
+      "file": "database-http-remove-profile-3-attempt-1-19798b89-6d76-47be-9e95-cc8dce8f923a.json",
+      "originalSha256": "124409ff0cd38b80b3b476d105f7753ab2b2d8552c2df36c894226a563928a21"
+    }
+  ],
+  "files": [
+    {
+      "name": "database-http-remove-profile-1-attempt-1-a5b5449c-8d1e-4eb8-ba59-d2a9a4974ebf.json",
+      "bytes": 8527,
+      "sha256": "28fb4dfb667b25b1bea538e54a07552aa4959fa4f63b79c5adee247a598af793"
+    },
+    {
+      "name": "database-http-remove-profile-2-attempt-1-d138e6ef-d804-43d5-8321-4697ae254d58.json",
+      "bytes": 8527,
+      "sha256": "a2d0e9555709ab0f9703c5badfa3f05cb9871f983e6c5dfe1a011b058460f8b6"
+    },
+    {
+      "name": "database-http-remove-profile-3-attempt-1-19798b89-6d76-47be-9e95-cc8dce8f923a.json",
+      "bytes": 8523,
+      "sha256": "486391faaec49718d1410742f3f5b441dda5d0e50c86de313db542c8eb9a4855"
+    },
+    {
+      "name": "database-http-rights-preparation-773790cc-1775-48eb-89d1-8de571943e2b.json",
+      "bytes": 676,
+      "sha256": "94c62ed1cc741bbab734e89a8fb803edb041b8490d1c5e7529048ed490096bb3"
+    },
+    {
+      "name": "measurement.json",
+      "bytes": 479526,
+      "sha256": "6580491b9bbb3222c59f58ffc6510cbc57adb4417d178677b8118bf411abb363"
+    },
+    {
+      "name": "run.txt",
+      "bytes": 57011,
+      "sha256": "e8e44a8f4eb0fb7d883eb0b1dd63515b958dd54921b22a9e07aa1e41b9d725b4"
+    }
+  ]
+}

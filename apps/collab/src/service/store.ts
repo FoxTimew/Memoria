@@ -49,21 +49,30 @@ export class Store {
   ) {}
   async transaction<T>(
     work: (client: PoolClient) => Promise<T>,
-    pageLock?: { page: string; workspace: string },
+    pageLock?: { page: string; workspace: string; mode?: 'projection' },
   ) {
     const client = await this.pool.connect();
     try {
       const fence = this.leadership.fence;
-      // PostgreSQL executes this ordered pipeline serially. No data write precedes its checks.
+      // PostgreSQL executes this ordered pipeline serially. Wait for content locks
+      // BEFORE retaining the shared fence row, so a blocked writer cannot starve
+      // lease renewal. The SQL fence is still checked and held through COMMIT.
       await drainQueries([
         client.query('BEGIN'),
-        assertFence(client, fence),
         pageLock
-          ? client.query('SELECT id FROM pages WHERE id=$1 AND workspace_id=$2 FOR NO KEY UPDATE', [
+          ? client.query(
+              pageLock.mode === 'projection'
+                ? 'SELECT database_lock_rows($2::uuid,ARRAY[$1]::uuid[])'
+                : 'SELECT content_lock_document($2::uuid,$1::uuid)',
+              [pageLock.page, pageLock.workspace],
+            )
+          : Promise.resolve(),
+        pageLock?.mode === 'projection'
+          ? client.query("SELECT pg_advisory_xact_lock(hashtextextended('projection:'||$1,0))", [
               pageLock.page,
-              pageLock.workspace,
             ])
           : Promise.resolve(),
+        assertFence(client, fence),
       ]);
       const result = await work(client);
       await client.query('COMMIT');
@@ -81,47 +90,46 @@ export class Store {
     return access;
   }
   async open(identity: AccessRequest) {
-    return this.transaction(async (client) => {
-      await client.query('SELECT id FROM pages WHERE id=$1 AND workspace_id=$2 FOR NO KEY UPDATE', [
-        identity.page,
-        identity.workspace,
-      ]);
-      await this.authorize(identity, client);
-      let row = (
-        await client.query<StoredDocument>(
-          'SELECT * FROM collaboration_documents WHERE page_id=$1',
-          [identity.page],
-        )
-      ).rows[0];
-      if (!row) {
-        if (
-          (await client.query('SELECT 1 FROM blocks WHERE page_id=$1 LIMIT 1', [identity.page]))
-            .rowCount
-        )
-          throw new CollaborationError('DOCUMENT_RESET_REQUIRED');
-        const doc = emptyDocument();
-        try {
-          const snapshot = Y.encodeStateAsUpdate(doc),
-            business = Buffer.byteLength(JSON.stringify(decodeDocument(doc)));
-          row = (
-            await client.query<StoredDocument>(
-              `INSERT INTO collaboration_documents(page_id,workspace_id,generation,snapshot,encoded_bytes,business_bytes,content_revision,snapshot_revision,projection_due_at,projection_first_pending_at) VALUES($1,$2,$3,$4,$5,$6,1,1,clock_timestamp(),clock_timestamp()) RETURNING *`,
-              [
-                identity.page,
-                identity.workspace,
-                randomUUID(),
-                Buffer.from(snapshot),
-                snapshot.length,
-                business,
-              ],
-            )
-          ).rows[0]!;
-        } finally {
-          doc.destroy();
+    return this.transaction(
+      async (client) => {
+        await this.authorize(identity, client);
+        let row = (
+          await client.query<StoredDocument>(
+            'SELECT * FROM collaboration_documents WHERE page_id=$1',
+            [identity.page],
+          )
+        ).rows[0];
+        if (!row) {
+          if (
+            (await client.query('SELECT 1 FROM blocks WHERE page_id=$1 LIMIT 1', [identity.page]))
+              .rowCount
+          )
+            throw new CollaborationError('DOCUMENT_RESET_REQUIRED');
+          const doc = emptyDocument();
+          try {
+            const snapshot = Y.encodeStateAsUpdate(doc),
+              business = Buffer.byteLength(JSON.stringify(decodeDocument(doc)));
+            row = (
+              await client.query<StoredDocument>(
+                `INSERT INTO collaboration_documents(page_id,workspace_id,generation,snapshot,encoded_bytes,business_bytes,content_revision,snapshot_revision,projection_due_at,projection_first_pending_at) VALUES($1,$2,$3,$4,$5,$6,1,1,clock_timestamp(),clock_timestamp()) RETURNING *`,
+                [
+                  identity.page,
+                  identity.workspace,
+                  randomUUID(),
+                  Buffer.from(snapshot),
+                  snapshot.length,
+                  business,
+                ],
+              )
+            ).rows[0]!;
+          } finally {
+            doc.destroy();
+          }
         }
-      }
-      return row;
-    });
+        return row;
+      },
+      { page: identity.page, workspace: identity.workspace },
+    );
   }
   async load(page: string, generation: string) {
     const client = await this.pool.connect();

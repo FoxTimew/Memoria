@@ -1,0 +1,95 @@
+{
+  "candidate": "47e7b09e15e0fa13c390c993910a42186d1a84f7",
+  "cases": [
+    {
+      "name": "owner/broad",
+      "p95": [65.97050000001036, 64.9481999999989, 63.43950000000768],
+      "median": 64.9481999999989,
+      "httpP95": [72.78399999999965, 72.96990000001097, 72.61689999999362],
+      "httpMedian": 72.78399999999965
+    },
+    {
+      "name": "owner/deep",
+      "p95": [53.11160000000382, 52.86600000000908, 53.20709999999963],
+      "median": 53.11160000000382,
+      "httpP95": [61.682399999990594, 61.02150000000256, 60.73029999999562],
+      "httpMedian": 61.02150000000256
+    },
+    {
+      "name": "owner/ten-filters",
+      "p95": [135.18350000001374, 135.63959999999497, 135.61349999997765],
+      "median": 135.61349999997765,
+      "httpP95": [144.86100000000442, 146.52519999997457, 143.050900000002],
+      "httpMedian": 144.86100000000442
+    },
+    {
+      "name": "owner/nulls-desc",
+      "p95": [72.25010000000475, 69.73080000001937, 69.35070000000997],
+      "median": 69.73080000001937,
+      "httpP95": [81.05389999999898, 79.88959999999497, 80.37760000000708],
+      "httpMedian": 80.37760000000708
+    },
+    {
+      "name": "guest/broad",
+      "p95": [52.882199999992736, 61.15989999996964, 50.80560000002151],
+      "median": 52.882199999992736,
+      "httpP95": [59.822699999960605, 68.35069999995176, 59.37509999994654],
+      "httpMedian": 59.822699999960605
+    },
+    {
+      "name": "guest/deep",
+      "p95": [52.39309999998659, 53.10930000001099, 55.62410000001546],
+      "median": 53.10930000001099,
+      "httpP95": [63.8747999999905, 65.27049999998417, 65.99719999998342],
+      "httpMedian": 65.27049999998417
+    },
+    {
+      "name": "guest/ten-filters",
+      "p95": [124.6009999999078, 121.93960000004154, 131.41440000000875],
+      "median": 124.6009999999078,
+      "httpP95": [133.17129999998724, 133.14039999991655, 134.8542000000598],
+      "httpMedian": 133.17129999998724
+    },
+    {
+      "name": "guest/nulls-desc",
+      "p95": [74.89899999997579, 66.0405000000028, 64.52040000003763],
+      "median": 66.0405000000028,
+      "httpP95": [83.22279999998864, 77.42859999998473, 75.91229999996722],
+      "httpMedian": 77.42859999998473
+    }
+  ],
+  "files": [
+    "database-http-table-preparation-dd1929e6-7537-448d-9a96-372992edc70b.json",
+    "database-http-owner-broad-1-attempt-1-42ec6b0b-b030-4543-b092-7e6d57f02b7b.json",
+    "database-http-owner-broad-2-attempt-1-d91a4f0d-e470-4609-9df6-93f05faca933.json",
+    "database-http-owner-broad-3-attempt-1-b677209c-8afa-4107-aa57-8848ab77a19f.json",
+    "database-http-owner-deep-1-attempt-1-d5c6484c-9098-48c8-8ab4-35bffd443427.json",
+    "database-http-owner-deep-2-attempt-1-2e78a3ab-5adc-41fd-a4b6-364d8e99defb.json",
+    "database-http-owner-deep-3-attempt-1-db97bfbd-3bcc-4f29-9097-ed1504806a52.json",
+    "database-http-owner-ten-filters-1-attempt-1-ffb03ec5-f814-42b0-a587-9a8eb121d4df.json",
+    "database-http-owner-ten-filters-2-attempt-1-d050ea7b-aed7-4916-9d67-a8e79b2c372b.json",
+    "database-http-owner-ten-filters-3-attempt-1-3885f678-3786-4d2b-a920-6dddbbf312b1.json",
+    "database-http-owner-nulls-desc-1-attempt-1-671e33be-f6a8-44cd-83db-26375366f7d7.json",
+    "database-http-owner-nulls-desc-2-attempt-1-95afaa87-e0a1-4f4c-9031-313b5ddcc631.json",
+    "database-http-owner-nulls-desc-3-attempt-1-c1e6afda-acec-4e76-8ba2-8629bbe000af.json",
+    "database-http-guest-broad-1-attempt-1-81d0c8a0-d29a-4bdd-8c37-480c5c320b45.json",
+    "database-http-guest-broad-2-attempt-1-039700af-024d-425e-adb4-5825ef5b7c8f.json",
+    "database-http-guest-broad-3-attempt-1-296071e8-6e36-41c5-aa17-457db1049675.json",
+    "database-http-guest-deep-1-attempt-1-04ec6fdf-49d1-4179-8e13-3042a7f2d9be.json",
+    "database-http-guest-deep-2-attempt-1-b6e75b00-3cd5-4a69-8ceb-8072d43b6016.json",
+    "database-http-guest-deep-3-attempt-1-b0e04f91-7663-4248-ac36-9ecaba0897ab.json",
+    "database-http-guest-ten-filters-1-attempt-1-bd8fc4cc-bbc0-4401-8d1c-068af79ec7b2.json",
+    "database-http-guest-ten-filters-2-attempt-1-ae5a947f-2d8b-48d2-9880-0694bbf89b82.json",
+    "database-http-guest-ten-filters-3-attempt-1-d2232bb7-1699-4dba-b9e2-b1fb3d1cc5b9.json",
+    "database-http-guest-nulls-desc-1-attempt-1-6a3c6a89-1df8-4609-89ed-66b199228b2b.json",
+    "database-http-guest-nulls-desc-2-attempt-1-1220b0ae-6564-4d11-b358-5fd326f88f5d.json",
+    "database-http-guest-nulls-desc-3-attempt-1-bba758fd-7c5a-4d49-ae75-b31e1b8579a2.json"
+  ],
+  "hygiene": {
+    "preparationWindowsGiB": 4.488971710205078,
+    "windowsMinGiB": 2.740386962890625,
+    "wslMinGiB": 5.096797943115234,
+    "intervals": 589,
+    "swapPages": 0
+  }
+}

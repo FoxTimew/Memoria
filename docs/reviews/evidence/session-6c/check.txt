@@ -1,0 +1,46 @@
+$ pnpm hooks:check && pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test
+$ node scripts/check-git-hooks.mjs
+Hooks Memoria installés et à jour dans ce clone.
+$ eslint . --max-warnings=0 && prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+$ pnpm -r --if-present typecheck
+Scope: 13 of 14 workspace projects
+packages/blocks/core typecheck$ tsc --noEmit
+packages/contracts typecheck$ tsc --noEmit
+packages/collaboration-core typecheck$ tsc --noEmit
+packages/db typecheck$ tsc --noEmit
+packages/collaboration-core typecheck: Done
+packages/blocks/core typecheck: Done
+packages/blocks/ui typecheck$ tsc --noEmit
+packages/contracts typecheck: Done
+packages/db typecheck: Done
+packages/auth typecheck$ tsc --noEmit
+packages/blocks/ui typecheck: Done
+packages/blocks/character-card typecheck$ tsc --noEmit
+packages/blocks/standard typecheck$ tsc --noEmit
+packages/blocks/standard typecheck: Done
+packages/blocks/character-card typecheck: Done
+packages/blocks/catalog typecheck$ tsc --noEmit
+packages/auth typecheck: Done
+apps/worker typecheck$ tsc --noEmit
+packages/blocks/catalog typecheck: Done
+apps/api typecheck$ tsc --noEmit
+apps/collab typecheck$ tsc --noEmit
+apps/web typecheck$ tsc --noEmit
+apps/worker typecheck: Done
+apps/web typecheck: Done
+apps/collab typecheck: Done
+apps/api typecheck: Done
+$ node scripts/build-server.mjs api --probe && node apps/api/dist/bootstrap-probe.mjs
+Nest decorators, dependency injection and workspace TypeScript exports: OK
+$ vitest run
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+
+ Test Files  29 passed | 1 skipped (30)
+      Tests  165 passed | 6 skipped (171)
+   Start at  12:33:57
+   Duration  30.38s (tests 70%, import 27%, transform 3%)
+

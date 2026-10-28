@@ -9,6 +9,7 @@ import { loadProfile } from './profiles.ts';
 import { decodeDocument } from '../codec.ts';
 import { readCollabConfig } from '../service/config.ts';
 import { collaborationServer } from '../service/server.ts';
+import { readMemorySnapshot, assertMemoryStage } from '../../../../scripts/measurement-memory.mjs';
 test(
   'Cold production load, 1 MiB content/history, 30 unfiltered samples each',
   { timeout: 120000 },
@@ -45,6 +46,9 @@ test(
           [db.workspace, db.page, generation, Buffer.from(snapshot), snapshot.length, business],
         );
         const samples: number[] = [];
+        const memory =
+          process.env.COLLAB_MEASURE_HYGIENE === 'true' ? readMemorySnapshot() : undefined;
+        if (memory) assertMemoryStage(memory, 'after-preparation');
         for (let i = 0; i < 32; i++) {
           const start = performance.now(),
             release = await host.memory.acquire(name);
@@ -65,6 +69,7 @@ test(
           p95 = sorted[Math.ceil(samples.length * 0.95) - 1]!;
         const report = {
           profile,
+          memoryAfterPreparation: memory,
           encodedBytes: snapshot.length,
           businessBytes: business,
           warmup: 2,

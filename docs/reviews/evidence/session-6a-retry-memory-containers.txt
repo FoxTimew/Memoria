@@ -1,0 +1,10 @@
+BEFORE_PREPARATION
+{"BlockIO":"162MB / 36.9kB","CPUPerc":"0.00%","Container":"58fa910e82166bee71f6127baa62fefbc75b33080ab82991a7fdffdd1c7cae43","ID":"58fa910e8216","MemPerc":"1.20%","MemUsage":"82.63MiB / 6.697GiB","Name":"memoria-minio-1","NetIO":"1.65kB / 126B","PIDs":"21"}
+{"BlockIO":"40.7MB / 315kB","CPUPerc":"0.02%","Container":"ab640a242f35cdffcedc19178b61a0c82e25a677e46abe689eb78bec9a8bd026","ID":"ab640a242f35","MemPerc":"0.57%","MemUsage":"39.35MiB / 6.697GiB","Name":"memoria-postgres-1","NetIO":"2.08kB / 126B","PIDs":"6"}
+{"BlockIO":"53.2MB / 8.19kB","CPUPerc":"0.00%","Container":"8bad98a17e49e980a57fa1c12cba9e450312b65821e4094670ad02d57fc3f1df","ID":"8bad98a17e49","MemPerc":"0.24%","MemUsage":"16.49MiB / 6.697GiB","Name":"memoria-caddy-1","NetIO":"1.6kB / 126B","PIDs":"14"}
+{"BlockIO":"26MB / 496kB","CPUPerc":"0.00%","Container":"0bca8ab8a77821d014952304535a355c5926aac0a7fa3b5478a3310b41675f03","ID":"0bca8ab8a778","MemPerc":"0.33%","MemUsage":"22.66MiB / 6.697GiB","Name":"memoria-mailpit-1","NetIO":"1.82kB / 126B","PIDs":"11"}
+AFTER_REJECTION_AND_CLEANUP
+{"BlockIO":"162MB / 131kB","CPUPerc":"0.05%","Container":"58fa910e82166bee71f6127baa62fefbc75b33080ab82991a7fdffdd1c7cae43","ID":"58fa910e8216","MemPerc":"1.24%","MemUsage":"84.71MiB / 6.697GiB","Name":"memoria-minio-1","NetIO":"1.69kB / 126B","PIDs":"21"}
+{"BlockIO":"215MB / 1.07GB","CPUPerc":"0.06%","Container":"ab640a242f35cdffcedc19178b61a0c82e25a677e46abe689eb78bec9a8bd026","ID":"ab640a242f35","MemPerc":"2.92%","MemUsage":"199.9MiB / 6.697GiB","Name":"memoria-postgres-1","NetIO":"40.3MB / 174kB","PIDs":"6"}
+{"BlockIO":"53.2MB / 8.19kB","CPUPerc":"0.00%","Container":"8bad98a17e49e980a57fa1c12cba9e450312b65821e4094670ad02d57fc3f1df","ID":"8bad98a17e49","MemPerc":"0.23%","MemUsage":"15.85MiB / 6.697GiB","Name":"memoria-caddy-1","NetIO":"1.65kB / 126B","PIDs":"14"}
+{"BlockIO":"26MB / 500kB","CPUPerc":"0.00%","Container":"0bca8ab8a77821d014952304535a355c5926aac0a7fa3b5478a3310b41675f03","ID":"0bca8ab8a778","MemPerc":"0.34%","MemUsage":"23.18MiB / 6.697GiB","Name":"memoria-mailpit-1","NetIO":"1.86kB / 126B","PIDs":"12"}

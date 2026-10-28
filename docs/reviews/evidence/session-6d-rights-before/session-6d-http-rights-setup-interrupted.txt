@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-10-27T13:44:43.993Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-http-rights-preparation-81cb06a7-1e30-4180-ac53-f70f31a38017.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-http-rights","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-27T13:44:44.620Z","windowsFreeBytes":4826652672,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5802397696,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:44:44.620Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+Fixture: containers ready.
+node:events:505
+    throw er; // Unhandled 'error' event
+    ^
+
+Error: Connection terminated unexpectedly
+    at Connection.<anonymous> (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg@8.23.1\node_modules\pg\lib\client.js:204:73)
+    at Connection.wrapper (node:events:639:12)
+    at Connection.emit (node:events:514:28)
+    at Socket.<anonymous> (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg@8.23.1\node_modules\pg\lib\connection.js:64:12)
+    at Socket.emit (node:events:514:28)
+    at TCP.<anonymous> (node:net:362:12)
+Emitted 'error' event on Client instance at:
+    at Client._handleErrorEvent (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg@8.23.1\node_modules\pg\lib\client.js:422:10)
+    at Connection.<anonymous> (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg@8.23.1\node_modules\pg\lib\client.js:222:16)
+    at Connection.wrapper (node:events:639:12)
+    at Connection.emit (node:events:514:28)
+    at Socket.<anonymous> (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg@8.23.1\node_modules\pg\lib\connection.js:64:12)
+    at Socket.emit (node:events:514:28)
+    at TCP.<anonymous> (node:net:362:12)
+
+Node.js v24.21.0

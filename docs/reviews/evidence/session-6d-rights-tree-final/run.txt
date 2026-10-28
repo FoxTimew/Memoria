@@ -1,0 +1,124 @@
+{
+  "observedAt": "2026-10-28T11:43:25.521Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-http-rights-preparation-1e5aabca-f09b-4f26-921c-4d095a2afde8.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-http-rights","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-28T11:43:26.152Z","windowsFreeBytes":5117407232,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5806981120,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:43:26.152Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+Fixture: containers ready.
+Fixture: memberships and grants committed.
+Fixture ready: 1,000 ordinary pages, 50 bases, 50,000 rows, 100 memberships, 5,000 grants, depth 50.
+(node:3588) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"hygiene":".local/measurement-hygiene/database-http-rights-move-1-attempt-1-1e0e64c6-9495-4344-a8ec-4bfe24dc187e.json","status":"valid","label":"database-http-rights-move-1","attempt":1,"before":{"observedAt":"2026-10-28T11:44:19.835Z","windowsFreeBytes":5034332160,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5738246144,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:44:19.835Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:45:29.869Z","windowsFreeBytes":4923240448,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5668663296,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:45:29.870Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"move","series":1,"p95":{"mutation":126.45419999999285,"blockedSqlWait":72.903999999995,"wire":92.05829999998969,"overlappingWire":98.30789999999979,"serverConfirmation":88.21980000000622},"overlap":120,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-move-2-attempt-1-b6843563-218c-4879-b197-87eb966bf18e.json","status":"valid","label":"database-http-rights-move-2","attempt":1,"before":{"observedAt":"2026-10-28T11:45:35.533Z","windowsFreeBytes":4877709312,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5705584640,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:45:35.533Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:46:45.568Z","windowsFreeBytes":4746924032,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5649444864,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:46:45.568Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"move","series":2,"p95":{"mutation":132.46760000000359,"blockedSqlWait":67.91049999999814,"wire":86.86960000000545,"overlappingWire":97.52439999999478,"serverConfirmation":82.71499999999651},"overlap":121,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-move-3-attempt-1-1472cbf2-fb9a-4a15-8dc7-72a18f7ac5d8.json","status":"valid","label":"database-http-rights-move-3","attempt":1,"before":{"observedAt":"2026-10-28T11:46:51.226Z","windowsFreeBytes":4705042432,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5668757504,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:46:51.226Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:48:01.276Z","windowsFreeBytes":5007003648,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5618540544,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:48:01.276Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"move","series":3,"p95":{"mutation":126.57810000001336,"blockedSqlWait":68.86220000000321,"wire":86.88320000001113,"overlappingWire":95.28840000001946,"serverConfirmation":82.68659999998636},"overlap":121,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-archive-1-attempt-1-b787315f-c6d8-47ba-90d7-53a183441b03.json","status":"valid","label":"database-http-rights-archive-1","attempt":1,"before":{"observedAt":"2026-10-28T11:48:06.904Z","windowsFreeBytes":4927803392,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5683159040,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:48:06.904Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:49:16.931Z","windowsFreeBytes":4823109632,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5615366144,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:49:16.931Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"archive","series":1,"p95":{"mutation":152.1777000000002,"blockedSqlWait":94.49499999999534,"wire":110.74139999999898,"overlappingWire":118.32120000000577,"serverConfirmation":106.19159999996191},"overlap":146,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-archive-2-attempt-1-669fab76-0679-45d3-823c-386e10f62c6c.json","status":"valid","label":"database-http-rights-archive-2","attempt":1,"before":{"observedAt":"2026-10-28T11:49:22.586Z","windowsFreeBytes":4703334400,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5668605952,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:49:22.586Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:50:32.614Z","windowsFreeBytes":4574736384,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5632339968,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:50:32.614Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"archive","series":2,"p95":{"mutation":151.0067000000272,"blockedSqlWait":80.68920000002254,"wire":91.38749999995343,"overlappingWire":101.24339999997756,"serverConfirmation":85.95389999996405},"overlap":123,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-archive-3-attempt-1-f9296440-40a1-4e1b-bed1-7b8166efb674.json","status":"valid","label":"database-http-rights-archive-3","attempt":1,"before":{"observedAt":"2026-10-28T11:50:38.230Z","windowsFreeBytes":4576174080,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5643468800,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:50:38.230Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:51:48.235Z","windowsFreeBytes":4576288768,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5623115776,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:51:48.235Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"archive","series":3,"p95":{"mutation":139.00750000000698,"blockedSqlWait":79.02210000000196,"wire":89.66809999995166,"overlappingWire":94.48999999999069,"serverConfirmation":84.75740000000224},"overlap":121,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-restore-1-attempt-1-4fa18047-bc14-4488-8015-c34725771b25.json","status":"valid","label":"database-http-rights-restore-1","attempt":1,"before":{"observedAt":"2026-10-28T11:51:53.826Z","windowsFreeBytes":4479983616,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5676933120,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:51:53.826Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:53:03.829Z","windowsFreeBytes":4476112896,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5637869568,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:53:03.829Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"restore","series":1,"p95":{"mutation":129.8807000000961,"blockedSqlWait":66.70749999990221,"wire":74.02569999999832,"overlappingWire":88.13909999991301,"serverConfirmation":69.53879999998026},"overlap":117,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-restore-2-attempt-1-5cea5d1d-8ccd-4883-b9a3-27826074af3e.json","status":"valid","label":"database-http-rights-restore-2","attempt":1,"before":{"observedAt":"2026-10-28T11:53:09.458Z","windowsFreeBytes":4430647296,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5658644480,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:53:09.458Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:54:19.501Z","windowsFreeBytes":4437925888,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5626040320,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:54:19.501Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"restore","series":2,"p95":{"mutation":123.55290000000969,"blockedSqlWait":61.88510000007227,"wire":75.38250000006519,"overlappingWire":86.51679999998305,"serverConfirmation":71.19639999989886},"overlap":120,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-restore-3-attempt-1-30e3153b-351c-43df-8b69-6357b4c02765.json","status":"valid","label":"database-http-rights-restore-3","attempt":1,"before":{"observedAt":"2026-10-28T11:54:25.261Z","windowsFreeBytes":4410294272,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5657972736,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:54:25.262Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:55:35.259Z","windowsFreeBytes":4356009984,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5634924544,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:55:35.259Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"restore","series":3,"p95":{"mutation":126.04949999996461,"blockedSqlWait":60.491299999994226,"wire":75.6482000000542,"overlappingWire":84.85629999998491,"serverConfirmation":71.01740000001155},"overlap":117,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-row-archive-1-attempt-1-7e8cec1b-3587-4bd9-b685-b8c42d183194.json","status":"valid","label":"database-http-rights-row-archive-1","attempt":1,"before":{"observedAt":"2026-10-28T11:55:40.963Z","windowsFreeBytes":4343857152,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5665480704,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:55:40.963Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:56:50.964Z","windowsFreeBytes":4438065152,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5657845760,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:56:50.964Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"row-archive","series":1,"p95":{"mutation":23.752100000041537,"blockedSqlWait":0,"wire":15.275299999979325,"overlappingWire":14.6205000000773,"serverConfirmation":10.407300000078976},"overlap":30,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-row-archive-2-attempt-1-a2186a79-4841-465f-93fe-7019027ec870.json","status":"valid","label":"database-http-rights-row-archive-2","attempt":1,"before":{"observedAt":"2026-10-28T11:56:56.517Z","windowsFreeBytes":4391682048,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5706416128,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:56:56.517Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:58:06.532Z","windowsFreeBytes":4423872512,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5679738880,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:58:06.532Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"row-archive","series":2,"p95":{"mutation":23.884199999971315,"blockedSqlWait":0,"wire":15.444100000080653,"overlappingWire":16.189300000085495,"serverConfirmation":10.461799999931827},"overlap":30,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-row-archive-3-attempt-1-27dcd9a1-9b0f-4803-9e60-65b20547d3e6.json","status":"valid","label":"database-http-rights-row-archive-3","attempt":1,"before":{"observedAt":"2026-10-28T11:58:12.041Z","windowsFreeBytes":4380221440,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5719502848,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:58:12.041Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:59:22.103Z","windowsFreeBytes":4467240960,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5684875264,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:59:22.103Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"row-archive","series":3,"p95":{"mutation":24.014699999941513,"blockedSqlWait":0,"wire":15.616500000003725,"overlappingWire":17.25990000006277,"serverConfirmation":10.483699999982491},"overlap":30,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-row-restore-1-attempt-1-dab4e0f1-ee77-4db2-8b5e-41aa1af25777.json","status":"valid","label":"database-http-rights-row-restore-1","attempt":1,"before":{"observedAt":"2026-10-28T11:59:27.416Z","windowsFreeBytes":4406087680,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5697196032,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:59:27.416Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T12:00:37.448Z","windowsFreeBytes":4427526144,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5687582720,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T12:00:37.448Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"row-restore","series":1,"p95":{"mutation":24.817100000102073,"blockedSqlWait":0,"wire":15.883400000049733,"overlappingWire":16.914600000018254,"serverConfirmation":10.707799999974668},"overlap":30,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-row-restore-2-attempt-1-0cfe664e-6711-47f7-8abf-7b56d1b507f5.json","status":"valid","label":"database-http-rights-row-restore-2","attempt":1,"before":{"observedAt":"2026-10-28T12:00:43.018Z","windowsFreeBytes":4367867904,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5707632640,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T12:00:43.018Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T12:01:53.059Z","windowsFreeBytes":4372762624,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5696794624,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T12:01:53.059Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"row-restore","series":2,"p95":{"mutation":25.98519999999553,"blockedSqlWait":0,"wire":15.567499999888241,"overlappingWire":17.892100000055507,"serverConfirmation":10.587599999969825},"overlap":30,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-row-restore-3-attempt-1-bb959bd2-ab34-454f-8d26-1cf22dae5e3a.json","status":"valid","label":"database-http-rights-row-restore-3","attempt":1,"before":{"observedAt":"2026-10-28T12:01:58.644Z","windowsFreeBytes":4382142464,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5714083840,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T12:01:58.644Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T12:03:08.680Z","windowsFreeBytes":4537090048,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5704966144,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T12:03:08.680Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"row-restore","series":3,"p95":{"mutation":26.812299999874085,"blockedSqlWait":0,"wire":15.98160000005737,"overlappingWire":15.669300000183284,"serverConfirmation":10.962500000139698},"overlap":30,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+EXIT_CODE=0

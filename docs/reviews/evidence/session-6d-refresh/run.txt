@@ -1,0 +1,74 @@
+{
+  "observedAt": "2026-10-27T12:51:13.298Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-refresh-50-preparation-e1464490-dfb1-4217-99fa-e2b1bbc961cf.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-refresh-50","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-27T12:51:13.968Z","windowsFreeBytes":3736641536,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5691461632,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T12:51:13.968Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+{"fixture":{"rows":10000,"properties":50,"relationTargets":50,"people":20,"optionsPerProperty":100,"holes":"n % 17","fullSets":"n % 1000"},"limits":{"server":200,"pageSize":50}}
+{"series":1,"seconds":30,"responses":1923,"statuses":{"200":1923},"queryP95":62.49670000000333,"cpuCores":0.4527816686793635}
+{"series":1,"seconds":60,"responses":3826,"statuses":{"200":3826},"queryP95":57.63550000000396,"cpuCores":0.40605514228831835}
+{"series":1,"seconds":90,"responses":5726,"statuses":{"200":5726},"queryP95":57.63550000000396,"cpuCores":0.4835161936965875}
+{"series":1,"seconds":120,"responses":7626,"statuses":{"200":7626},"queryP95":57.359700000000885,"cpuCores":0.3898313199878394}
+{"series":1,"seconds":150,"responses":9525,"statuses":{"200":9525},"queryP95":57.580100000006496,"cpuCores":0.3680984976463362}
+{"series":1,"seconds":180,"responses":11426,"statuses":{"200":11426},"queryP95":57.76140000000305,"cpuCores":0.2643630436825502}
+{"series":1,"seconds":210,"responses":13326,"statuses":{"200":13326},"queryP95":58.312100000010105,"cpuCores":0.2817225596232814}
+{"series":1,"seconds":240,"responses":15226,"statuses":{"200":15226},"queryP95":58.312100000010105,"cpuCores":0.24994338782266073}
+{"series":1,"seconds":270,"responses":17127,"statuses":{"200":17127},"queryP95":57.82630000001518,"cpuCores":0.5281902617063199}
+{"series":1,"seconds":300,"responses":19027,"statuses":{"200":19027},"queryP95":57.76140000000305,"cpuCores":0.37549319683224963}
+{"series":1,"seconds":330,"responses":20926,"statuses":{"200":20926},"queryP95":58.45139999999083,"cpuCores":0.5163506537289216}
+{"series":1,"seconds":360,"responses":22828,"statuses":{"200":22828},"queryP95":58.88939999998547,"cpuCores":0.39111025398059784}
+{"series":1,"seconds":390,"responses":24726,"statuses":{"200":24726},"queryP95":58.71889999997802,"cpuCores":0.39000312002494947}
+{"series":1,"seconds":420,"responses":26630,"statuses":{"200":26630},"queryP95":59.152099999999336,"cpuCores":0.40567452732673337}
+{"series":1,"seconds":450,"responses":28530,"statuses":{"200":28530},"queryP95":59.28389999998035,"cpuCores":0.39014185557868153}
+{"series":1,"seconds":480,"responses":30430,"statuses":{"200":30430},"queryP95":59.40490000002319,"cpuCores":0.39010560158634694}
+{"series":1,"seconds":510,"responses":32330,"statuses":{"200":32330},"queryP95":59.59409999998752,"cpuCores":0.4380434101019377}
+{"series":1,"seconds":540,"responses":34231,"statuses":{"200":34231},"queryP95":59.82490000000689,"cpuCores":0.2190852899033424}
+{"series":1,"seconds":570,"responses":36130,"statuses":{"200":36130},"queryP95":59.82490000000689,"cpuCores":0.375009525241957}
+{"hygiene":".local/measurement-hygiene/database-refresh-50-1-attempt-1-95a72ef2-e53c-4b78-9764-536f225276bf.json","status":"valid","label":"database-refresh-50-1","attempt":1,"before":{"observedAt":"2026-10-27T12:52:45.830Z","windowsFreeBytes":3257884672,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5698334720,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T12:52:45.830Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-27T13:02:46.954Z","windowsFreeBytes":3048361984,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5630836736,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:02:46.955Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":602,"deltaInPages":0,"deltaOutPages":0}}
+{"series":2,"seconds":30,"responses":1923,"statuses":{"200":1923},"queryP95":70.47010000003502,"cpuCores":0.3280287353172421}
+{"series":2,"seconds":60,"responses":3823,"statuses":{"200":3823},"queryP95":65.59960000007413,"cpuCores":0.35905619229410873}
+{"series":2,"seconds":90,"responses":5724,"statuses":{"200":5724},"queryP95":64.45079999999143,"cpuCores":0.3289154029583615}
+{"series":2,"seconds":120,"responses":7624,"statuses":{"200":7624},"queryP95":63.46629999997094,"cpuCores":0.5000538558002954}
+{"series":2,"seconds":150,"responses":9523,"statuses":{"200":9523},"queryP95":63.46629999997094,"cpuCores":0.40305786567427443}
+{"series":2,"seconds":180,"responses":11424,"statuses":{"200":11424},"queryP95":62.64319999993313,"cpuCores":0.24994888545292673}
+{"series":2,"seconds":210,"responses":13325,"statuses":{"200":13325},"queryP95":62.636599999968894,"cpuCores":0.3587599178629647}
+{"series":2,"seconds":240,"responses":15226,"statuses":{"200":15226},"queryP95":62.636599999968894,"cpuCores":0.3752066638304696}
+{"series":2,"seconds":270,"responses":17125,"statuses":{"200":17125},"queryP95":62.636599999968894,"cpuCores":0.3899677496670916}
+{"series":2,"seconds":300,"responses":19026,"statuses":{"200":19026},"queryP95":62.757400000002235,"cpuCores":0.3120602588359916}
+{"series":2,"seconds":330,"responses":20926,"statuses":{"200":20926},"queryP95":62.636599999968894,"cpuCores":0.4852381548864322}
+{"series":2,"seconds":360,"responses":22826,"statuses":{"200":22826},"queryP95":62.757400000002235,"cpuCores":0.29700065340143394}
+{"series":2,"seconds":390,"responses":24726,"statuses":{"200":24726},"queryP95":62.8469000000041,"cpuCores":0.34408323373420807}
+{"series":2,"seconds":420,"responses":26626,"statuses":{"200":26626},"queryP95":63.16790000000037,"cpuCores":0.358131541715287}
+{"series":2,"seconds":450,"responses":28526,"statuses":{"200":28526},"queryP95":63.16790000000037,"cpuCores":0.26493932889367}
+{"series":2,"seconds":480,"responses":30426,"statuses":{"200":30426},"queryP95":63.110700000077486,"cpuCores":0.4221956877012794}
+{"series":2,"seconds":510,"responses":32326,"statuses":{"200":32326},"queryP95":62.64319999993313,"cpuCores":0.36012010005334966}
+{"series":2,"seconds":540,"responses":34226,"statuses":{"200":34226},"queryP95":62.54280000005383,"cpuCores":0.40698892990114943}
+{"series":2,"seconds":570,"responses":36126,"statuses":{"200":36126},"queryP95":62.54280000005383,"cpuCores":0.34349091211918026}
+{"hygiene":".local/measurement-hygiene/database-refresh-50-2-attempt-1-35cede22-dfff-4611-842c-0a8aad1c04f6.json","status":"valid","label":"database-refresh-50-2","attempt":1,"before":{"observedAt":"2026-10-27T13:02:50.215Z","windowsFreeBytes":2997735424,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5631217664,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:02:50.215Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-27T13:12:51.375Z","windowsFreeBytes":3107643392,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5630328832,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:12:51.375Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":602,"deltaInPages":0,"deltaOutPages":0}}
+{"series":3,"seconds":30,"responses":1923,"statuses":{"200":1923},"queryP95":63.64030000008643,"cpuCores":0.35913830416087467}
+{"series":3,"seconds":60,"responses":3824,"statuses":{"200":3824},"queryP95":63.35070000006817,"cpuCores":0.42079713370188165}
+{"series":3,"seconds":90,"responses":5723,"statuses":{"200":5723},"queryP95":63.412000000011176,"cpuCores":0.4688296273134743}
+{"series":3,"seconds":120,"responses":7624,"statuses":{"200":7624},"queryP95":63.412000000011176,"cpuCores":0.4999580035276878}
+{"series":3,"seconds":150,"responses":9526,"statuses":{"200":9526},"queryP95":63.35400000005029,"cpuCores":0.4369982520070107}
+{"series":3,"seconds":180,"responses":11424,"statuses":{"200":11424},"queryP95":63.35400000005029,"cpuCores":0.37491755562955115}
+{"series":3,"seconds":210,"responses":13326,"statuses":{"200":13326},"queryP95":62.42550000012852,"cpuCores":0.24898301935805586}
+{"series":3,"seconds":240,"responses":15226,"statuses":{"200":15226},"queryP95":61.66659999988042,"cpuCores":0.3896021382963423}
+{"series":3,"seconds":270,"responses":17126,"statuses":{"200":17126},"queryP95":61.57920000003651,"cpuCores":0.40611935847942926}
+{"series":3,"seconds":300,"responses":19026,"statuses":{"200":19026},"queryP95":61.57920000003651,"cpuCores":0.37484043042875836}
+{"series":3,"seconds":330,"responses":20926,"statuses":{"200":20926},"queryP95":61.376200000057,"cpuCores":0.3741194937662791}
+{"series":3,"seconds":360,"responses":22826,"statuses":{"200":22826},"queryP95":61.376200000057,"cpuCores":0.468967547445704}
+{"series":3,"seconds":390,"responses":24726,"statuses":{"200":24726},"queryP95":61.306899999966845,"cpuCores":0.46880258723055496}
+{"series":3,"seconds":420,"responses":26626,"statuses":{"200":26626},"queryP95":61.57920000003651,"cpuCores":0.43795997045868523}
+{"series":3,"seconds":450,"responses":28527,"statuses":{"200":28527},"queryP95":61.57920000003651,"cpuCores":0.3282509149994208}
+{"series":3,"seconds":480,"responses":30427,"statuses":{"200":30427},"queryP95":61.376200000057,"cpuCores":0.4056815805275035}
+{"series":3,"seconds":510,"responses":32326,"statuses":{"200":32326},"queryP95":61.57920000003651,"cpuCores":0.31213234411394036}
+{"series":3,"seconds":540,"responses":34228,"statuses":{"200":34228},"queryP95":61.52940000011586,"cpuCores":0.3437796372525}
+{"series":3,"seconds":570,"responses":36129,"statuses":{"200":36129},"queryP95":61.376200000057,"cpuCores":0.4177550873590051}
+{"hygiene":".local/measurement-hygiene/database-refresh-50-3-attempt-1-14b7e362-4bc9-45dc-b1c9-bf52c0f6fabf.json","status":"valid","label":"database-refresh-50-3","attempt":1,"before":{"observedAt":"2026-10-27T13:12:54.742Z","windowsFreeBytes":2978217984,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5643825152,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:12:54.742Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-27T13:22:55.894Z","windowsFreeBytes":2838147072,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5666631680,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:22:55.894Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":602,"deltaInPages":0,"deltaOutPages":0}}

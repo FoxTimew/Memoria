@@ -1,0 +1,2150 @@
+[
+  {
+    "role": "owner",
+    "at": 1793107827968,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107827986,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828021,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828044,
+    "path": "/api/internal/workspaces/:id/members",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828045,
+    "path": "/api/internal/workspaces/:id/invitations",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828052,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828059,
+    "path": "/api/internal/workspaces/:id/pages",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828170,
+    "path": "/api/internal/workspaces/:id/pages/:id/shares",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828226,
+    "path": "/api/internal/workspaces/:id/pages/:id/shares/:id",
+    "method": "PUT",
+    "status": 403
+  },
+  {
+    "role": "owner",
+    "at": 1793107828339,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828355,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828372,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828391,
+    "path": "/api/auth/security/status",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828463,
+    "path": "/api/auth/passkey/generate-register-options",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828506,
+    "path": "/api/auth/passkey/verify-registration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828535,
+    "path": "/api/auth/security/status",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828588,
+    "path": "/api/auth/passkey/generate-authenticate-options",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828633,
+    "path": "/api/auth/passkey/verify-authentication",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828649,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828666,
+    "path": "/api/auth/security/status",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828679,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828746,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828765,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828794,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828802,
+    "path": "/api/internal/workspaces/:id/members",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828802,
+    "path": "/api/internal/workspaces/:id/invitations",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828859,
+    "path": "/api/internal/workspaces/:id/pages",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107828909,
+    "path": "/api/internal/workspaces/:id/pages/:id/shares",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829337,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829369,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829386,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829403,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829414,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829428,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829445,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829456,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829509,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829509,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829583,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 404
+  },
+  {
+    "role": "guest",
+    "at": 1793107829630,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 404
+  },
+  {
+    "role": "guest",
+    "at": 1793107829646,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 404
+  },
+  {
+    "role": "guest",
+    "at": 1793107829785,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829817,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829832,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829846,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829860,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829876,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107829894,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829894,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829902,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107829933,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829945,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107829948,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107829961,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829965,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107829970,
+    "path": "/api/internal/workspaces/:id/databases/:id/properties",
+    "method": "POST",
+    "status": 404
+  },
+  {
+    "role": "owner",
+    "at": 1793107829979,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107829984,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107830031,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107830039,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830056,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 400
+  },
+  {
+    "role": "guest",
+    "at": 1793107830111,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 400
+  },
+  {
+    "role": "guest",
+    "at": 1793107830267,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830296,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830307,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830320,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830330,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830343,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830367,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830367,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830609,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830636,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830648,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830661,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830671,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830676,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830709,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830710,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107830851,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107831082,
+    "path": "/api/internal/workspaces/:id/databases/:id/properties/:id/choices",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107831205,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107831236,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107831334,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107831563,
+    "path": "/api/internal/workspaces/:id/databases/:id/properties/:id/choices",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107831717,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107831748,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107831856,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832088,
+    "path": "/api/internal/workspaces/:id/databases/:id/properties/:id/choices",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832211,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832243,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832331,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832433,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 409
+  },
+  {
+    "role": "guest",
+    "at": 1793107832459,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832579,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832608,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832710,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832770,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107832777,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832802,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832863,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832930,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107832960,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833029,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833081,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833111,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833184,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833244,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833275,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833348,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833582,
+    "path": "/api/internal/workspaces/:id/databases/:id/properties/:id/choices",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833697,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/cells/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833726,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107833874,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107833911,
+    "path": "/api/internal/workspaces/:id/databases/:id/assignable-people",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107833930,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107833945,
+    "path": "/api/internal/workspaces/:id/databases/:id/properties",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107833971,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107833997,
+    "path": "/api/internal/workspaces/:id/databases/:id/assignable-people",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834005,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834112,
+    "path": "/api/internal/workspaces/:id/databases/:id/properties/:id/choices",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834488,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834514,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834524,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834535,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834547,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834551,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834586,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834586,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834593,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107834658,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834712,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107834818,
+    "path": "/api/internal/workspaces/:id/databases/:id/query",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835011,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835043,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835053,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835065,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835075,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835081,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835101,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835102,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835438,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835460,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835483,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835532,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835561,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835584,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835606,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107835645,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107835899,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107835928,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107835938,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107835951,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107835963,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107835966,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107835991,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107835991,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836341,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836364,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836387,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836427,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836455,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836477,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836499,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836536,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836774,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107836796,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107836897,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "PATCH",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107836924,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837421,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837452,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837463,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837478,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837488,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837492,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837508,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837508,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837533,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837533,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837874,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837896,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837920,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837943,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107837985,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838017,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838039,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838062,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838100,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838358,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838393,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838411,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838429,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838442,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838444,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838456,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838458,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838482,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838485,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838825,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838850,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838874,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838897,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838939,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838969,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107838996,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839019,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839065,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839768,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839781,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839792,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839802,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839816,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839818,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839836,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839856,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839856,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839871,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839891,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839923,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839939,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839964,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839965,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107839979,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107839984,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840012,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840013,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840024,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107840034,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840043,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840044,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840055,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840071,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840168,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840195,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840206,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840224,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840234,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840253,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840262,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840275,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840286,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840293,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840317,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840317,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840653,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840675,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840698,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840722,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840764,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107840782,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840794,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107840807,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840819,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840847,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107840890,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841272,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841304,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841315,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841328,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841339,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841352,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841361,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841365,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841387,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841387,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841715,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841737,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841760,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841782,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841819,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841845,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841867,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841891,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107841930,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842401,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842462,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842492,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842514,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842515,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842576,
+    "path": "/api/auth/get-session",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842610,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842626,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842628,
+    "path": "/api/internal/workspaces",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842639,
+    "path": "/api/internal/workspaces/:id/databases",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842647,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842670,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107842671,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107843004,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107843027,
+    "path": "/api/internal/workspaces/:id/page-access",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107843050,
+    "path": "/api/internal/workspaces/:id/row-access",
+    "method": "POST",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107843069,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id/collaboration",
+    "method": "POST",
+    "status": 429,
+    "code": "DATABASE_RATE_LIMITED",
+    "retryAfter": "47"
+  },
+  {
+    "role": "owner",
+    "at": 1793107843938,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107844771,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107846421,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107846610,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107847936,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107848772,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107850414,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107850602,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107851931,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107852772,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107853388,
+    "path": "/api/internal/workspaces/:id/databases/:id",
+    "method": "GET",
+    "status": 429,
+    "code": "DATABASE_RATE_LIMITED",
+    "retryAfter": "37"
+  },
+  {
+    "role": "guest",
+    "at": 1793107854152,
+    "path": "/api/internal/workspaces/:id/databases/:id/rows/:id",
+    "method": "GET",
+    "status": 429,
+    "code": "DATABASE_RATE_LIMITED",
+    "retryAfter": "36"
+  },
+  {
+    "role": "guest",
+    "at": 1793107854413,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "guest",
+    "at": 1793107854600,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107855931,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "role": "owner",
+    "at": 1793107856788,
+    "path": "/api/auth/security/cache-policy",
+    "method": "GET",
+    "status": 200
+  }
+]

@@ -1,0 +1,29 @@
+▶ 6a cell kernel: real PostgreSQL concurrency, rights, hidden links and rollback
+  ✔ version zero races; clear retains tombstone; response replay cannot overwrite (171.8409ms)
+  ✔ nine types validate; false/zero remain different from empty; title and Yjs versions untouched (409.0544ms)
+  ✔ different cells proceed while the other cell is locked; same set uses one CAS (144.8734ms)
+  ✔ hidden relations survive clearVisible; unavailable and invented IDs have identical errors (247.6255ms)
+  ✔ person visibility is explicit; withdrawal detaches without deleting assignments (109.0925ms)
+  ✔ guest read and schema/lifecycle spoofing fail; source access checked before validation (33.9592ms)
+  ✔ schema race waits, rechecks the version and preserves values (55.5488ms)
+  ✔ revocation first: queued write is refused with no value in the error (51.7571ms)
+  ✔ write first: rights commit waits until the authorized cell commit (80.1739ms)
+  ✔ lifecycle CAS, archive while waiting, and old lifecycle ticket rejection (45.4822ms)
+  ✔ write failure rolls back value, CAS version and row aggregate together (49.6875ms)
+  ✔ archived property rejects stale schema and new writes without deleting historical values (32.0128ms)
+  ✔ 10,000 person references survive withdrawal without identity resurrection (6200.7248ms)
+  ✔ value and version stay coherent while a previously empty cell is repeatedly written (2834.7266ms)
+  ✔ target revocation while adding a relation is rechecked after the wait (114.1066ms)
+  ✔ typed/base foreign keys reject populated type changes and foreign cell identities (11.8117ms)
+  ✔ archived options may be retained or removed, never newly assigned (218.9118ms)
+  ✔ option and assignable-list changes wait for the same base barrier (43.2978ms)
+✔ 6a cell kernel: real PostgreSQL concurrency, rights, hidden links and rollback (11943.8372ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11947.4509
+Collaboration database-cells.e2e.ts: EXIT_CODE=0

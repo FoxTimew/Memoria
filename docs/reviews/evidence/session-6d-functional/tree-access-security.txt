@@ -1,0 +1,31 @@
+▶ Cached authorization plans preserve the SQL oracle and independently expected decisions
+  ✔ live passkey (25.7607ms)
+  ✔ expired session (22.2271ms)
+  ✔ unverified email (22.4418ms)
+  ✔ future assurance (23.1541ms)
+  ✔ security generation changed (22.2995ms)
+  ✔ recovery session (24.6399ms)
+  ✔ account recovery required despite live proof (24.9745ms)
+  ✔ factor belongs to another user (22.6151ms)
+  ✔ verified TOTP (27.8268ms)
+  ✔ unverified TOTP (26.5587ms)
+  ✔ configured factor without proof cannot use grace (37.2801ms)
+  ✔ weak member with active grace (42.3642ms)
+  ✔ weak member after grace (37.8501ms)
+  ✔ weak member without obligation (38.4233ms)
+  ✔ membership removed (37.9066ms)
+  ✔ workspace archived (36.651ms)
+  ✔ page archived (36.8389ms)
+  ✔ session removed (21.1856ms)
+✔ Cached authorization plans preserve the SQL oracle and independently expected decisions (1739.2673ms)
+✔ Warmed journal plans see security revocation committed while the writer waits for its page lock (1122.7392ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2865.538
+Collaboration access-security.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

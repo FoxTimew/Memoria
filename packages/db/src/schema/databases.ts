@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import {
   boolean,
+  bigint,
   check,
   date,
   foreignKey,
@@ -9,13 +10,14 @@ import {
   numeric,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   unique,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import type { AnyPgColumn } from 'drizzle-orm/pg-core';
-import { member } from './auth.ts';
+import { member, organization } from './auth.ts';
 import { auditReferences, businessFields, rank, time } from './common.ts';
 import type { JsonObject } from './common.ts';
 import { pages, pageReference } from './content.ts';
@@ -37,6 +39,9 @@ export const databases = pgTable(
   {
     ...businessFields(),
     pageId: uuid('page_id').notNull(),
+    schemaVersion: bigint('schema_version', { mode: 'bigint' })
+      .default(sql`1`)
+      .notNull(),
   },
   (t) => [
     unique('databases_workspace_id_uq').on(t.workspaceId, t.id),
@@ -52,6 +57,9 @@ export const databaseRows = pgTable(
     ...businessFields(),
     databaseId: uuid('database_id').notNull(),
     pageId: uuid('page_id').notNull(),
+    lifecycleVersion: bigint('lifecycle_version', { mode: 'bigint' })
+      .default(sql`1`)
+      .notNull(),
   },
   (t) => [
     unique('rows_page_uq').on(t.workspaceId, t.pageId),
@@ -79,6 +87,7 @@ export const databaseProperties = pgTable(
   },
   (t) => [
     unique('properties_workspace_id_uq').on(t.workspaceId, t.id),
+    unique('properties_database_id_uq').on(t.workspaceId, t.databaseId, t.id),
     unique('properties_typed_uq').on(t.workspaceId, t.databaseId, t.id, t.kind),
     unique('properties_relation_target_uq').on(
       t.workspaceId,
@@ -238,6 +247,101 @@ export const multiSelectValues = pgTable(
   ],
 );
 
+// Stable identity without PII. Withdrawal detaches one reference, never its assignments.
+export const databasePeople = pgTable(
+  'database_people',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    workspaceId: uuid('workspace_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    memberId: uuid('member_id'),
+  },
+  (t) => [
+    unique('database_people_workspace_id_uq').on(t.workspaceId, t.id),
+    unique('database_people_member_uq').on(t.memberId),
+    foreignKey({
+      columns: [t.workspaceId, t.memberId],
+      foreignColumns: [member.organizationId, member.id],
+    }),
+  ],
+);
+
+export const databaseCellVersions = pgTable(
+  'database_cell_versions',
+  {
+    workspaceId: uuid('workspace_id').notNull(),
+    databaseId: uuid('database_id').notNull(),
+    rowPageId: uuid('row_page_id').notNull(),
+    propertyId: uuid('property_id').notNull(),
+    version: bigint('version', { mode: 'bigint' })
+      .default(sql`0`)
+      .notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.workspaceId, t.rowPageId, t.propertyId] }),
+    foreignKey({
+      columns: [t.workspaceId, t.databaseId, t.rowPageId],
+      foreignColumns: [databaseRows.workspaceId, databaseRows.databaseId, databaseRows.pageId],
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [t.workspaceId, t.databaseId, t.propertyId],
+      foreignColumns: [
+        databaseProperties.workspaceId,
+        databaseProperties.databaseId,
+        databaseProperties.id,
+      ],
+    }).onDelete('cascade'),
+    check('cell_version_ck', sql`${t.version} >= 0`),
+  ],
+);
+
+export const databaseAssignablePeople = pgTable(
+  'database_assignable_people',
+  {
+    workspaceId: uuid('workspace_id').notNull(),
+    databaseId: uuid('database_id').notNull(),
+    personId: uuid('person_id').notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.workspaceId, t.databaseId, t.personId] }),
+    foreignKey({
+      columns: [t.workspaceId, t.databaseId],
+      foreignColumns: [databases.workspaceId, databases.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [t.workspaceId, t.personId],
+      foreignColumns: [databasePeople.workspaceId, databasePeople.id],
+    }),
+  ],
+);
+
+// Separate from lifecycle and Yjs latches: concurrent cells never upgrade a row SHARE lock.
+export const databaseRowChanges = pgTable(
+  'database_row_changes',
+  {
+    workspaceId: uuid('workspace_id').notNull(),
+    databaseId: uuid('database_id').notNull(),
+    rowPageId: uuid('row_page_id').notNull(),
+    propertyRevision: bigint('property_revision', { mode: 'bigint' })
+      .default(sql`0`)
+      .notNull(),
+    firstDirtyAt: time('first_dirty_at'),
+    lastDirtyAt: time('last_dirty_at'),
+    eventRevision: bigint('event_revision', { mode: 'bigint' })
+      .default(sql`0`)
+      .notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.workspaceId, t.rowPageId] }),
+    foreignKey({
+      columns: [t.workspaceId, t.databaseId, t.rowPageId],
+      foreignColumns: [databaseRows.workspaceId, databaseRows.databaseId, databaseRows.pageId],
+    }).onDelete('cascade'),
+    check('row_property_revision_ck', sql`${t.propertyRevision}>=0`),
+  ],
+);
+
 export const personValues = pgTable(
   'person_values',
   {
@@ -248,8 +352,8 @@ export const personValues = pgTable(
     ...valueReferences(t),
     foreignKey({
       columns: [t.workspaceId, t.memberId],
-      foreignColumns: [member.organizationId, member.id],
-    }).onDelete('cascade'),
+      foreignColumns: [databasePeople.workspaceId, databasePeople.id],
+    }),
     uniqueIndex('person_values_live_uq')
       .on(t.workspaceId, t.rowPageId, t.propertyId, t.memberId)
       .where(sql`${t.deletedAt} is null`),

@@ -100,7 +100,8 @@ export async function collaborationServer(
           user: context.user,
           session: context.session,
           key: randomUUID(),
-          accessVersion: expected?.accessVersion,
+          accessVersion: expected?.scope === 'page' ? expected.accessVersion : undefined,
+          ...(expected?.scope === 'database-row' ? { rowScope: expected.rowScope } : {}),
         };
         const access = await store.authorize(identity);
         connectionConfig.readOnly = access.level === 'read';

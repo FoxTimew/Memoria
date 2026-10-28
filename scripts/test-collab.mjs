@@ -3,7 +3,22 @@ import { readdir } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { readMeasurementPower, assertMeasurementPower } from './measurement-power.mjs';
-const measurementSuites = new Set(['warm.e2e.ts', 'cold.e2e.ts', 'capacity.e2e.ts']);
+const measurementSuites = new Set([
+  'warm.e2e.ts',
+  'cold.e2e.ts',
+  'capacity.e2e.ts',
+  'database-cells-load.e2e.ts',
+  'database-table-load.e2e.ts',
+]);
+// Functional table smoke executes assertions only: no timer, p95, or performance report.
+if (process.env.MEMORIA_DATABASE_TABLE_SMOKE === 'true')
+  measurementSuites.delete('database-table-load.e2e.ts');
+if (
+  process.env.MEMORIA_MEASURE_DATABASES === 'true' ||
+  process.env.MEMORIA_MEASURE_DATABASE_TREE === 'true' ||
+  process.env.MEMORIA_PROFILE_DATABASES === 'true'
+)
+  measurementSuites.add('databases-barriers.e2e.ts');
 const powerPreflight = () => {
   const battery = readMeasurementPower();
   console.log(`Power: ${JSON.stringify(battery)}`);
@@ -71,7 +86,12 @@ for (const file of files) {
         },
         stdio: 'inherit',
         windowsHide: true,
-        timeout: 180000,
+        timeout:
+          file === 'database-table-load.e2e.ts'
+            ? 900000
+            : process.env.MEMORIA_MEASURE_DATABASE_TREE === 'true'
+              ? 360000
+              : 180000,
       },
     );
     child.on('error', (e) => {

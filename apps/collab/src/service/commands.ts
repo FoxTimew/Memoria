@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import * as Y from 'yjs';
 import type { BlockBatch } from '@memoria/contracts';
 import { createBlockRegistry } from '@memoria/block-catalog/server';
@@ -67,16 +66,7 @@ function contentNode(type: string, version: number, raw: Record<string, unknown>
   }
   return node;
 }
-export function emptyDocument() {
-  const doc = new Y.Doc(),
-    group = new Y.XmlElement('blockGroup'),
-    block = new Y.XmlElement('blockContainer');
-  block.setAttribute('id', randomUUID());
-  block.insert(0, [contentNode('core.paragraph', 1, { spans: [] })]);
-  group.insert(0, [block]);
-  doc.getXmlFragment('prosemirror').insert(0, [group]);
-  return doc;
-}
+export { emptyDocument } from '@memoria/collaboration-core';
 /** Run on an isolated command candidate. Existing fields keep their Yjs identities. */
 export function applyCommands(doc: Y.Doc, operations: BlockBatch['operations']) {
   const root = doc.getXmlFragment('prosemirror').get(0) as Y.XmlElement;

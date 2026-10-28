@@ -567,6 +567,56 @@ await test(
             parentId: marker,
             afterId: null,
           });
+          // Session 6: seed private database content, then try to smuggle it into errors/logs.
+          const database = await ok(writer.request(base + '/databases', { title: marker }));
+          const databasePath = `${base}/databases/${String(database.id)}`;
+          const property = await ok(
+            writer.request(databasePath + '/properties', {
+              expectedSchemaVersion: '1',
+              name: marker,
+              kind: 'text',
+            }),
+          );
+          const databaseRow = await ok(
+            writer.request(databasePath + '/rows', {
+              receipt: randomUUID(),
+              expectedSchemaVersion: '2',
+              title: marker,
+            }),
+          );
+          const cellPath = `${databasePath}/rows/${String(databaseRow.id)}/cells/${String(property.id)}`;
+          await writer.request(databasePath + '/query', {
+            filters: [{ field: marker, op: marker, value: marker }],
+            sorts: [],
+            password: marker,
+          });
+          await writer.request(databasePath + '/query', { filters: [], sorts: [], cursor: marker });
+          await writer.request(
+            cellPath,
+            {
+              expectedSchemaVersion: '2',
+              expectedCellVersion: '0',
+              value: marker,
+              password: marker,
+            },
+            'PATCH',
+          );
+          secrets.add('private-database-sql-canary');
+          await db.pool.query(
+            "CREATE FUNCTION adverse_database_failure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'private-database-sql-canary'; END $$; CREATE TRIGGER adverse_database_failure BEFORE INSERT ON property_values FOR EACH ROW EXECUTE FUNCTION adverse_database_failure()",
+          );
+          try {
+            const rejected = await writer.request(
+              cellPath,
+              { expectedSchemaVersion: '2', expectedCellVersion: '0', value: marker },
+              'PATCH',
+            );
+            assert.equal(rejected.status, 500, 'Database failure path must actually execute');
+          } finally {
+            await db.pool.query(
+              'DROP TRIGGER adverse_database_failure ON property_values; DROP FUNCTION adverse_database_failure()',
+            );
+          }
           await drain();
           assert(
             mails.some(
@@ -688,7 +738,8 @@ await test(
           assert(logs.some((line) => line.includes('auth_mail_retry')));
           const audit =
             JSON.stringify((await db.pool.query('SELECT * FROM auth_security_events')).rows) +
-            JSON.stringify((await db.pool.query('SELECT * FROM audit_logs')).rows);
+            JSON.stringify((await db.pool.query('SELECT * FROM audit_logs')).rows) +
+            JSON.stringify((await db.pool.query('SELECT * FROM outbox_events')).rows);
           const counters =
             JSON.stringify((await db.pool.query('SELECT * FROM auth_buckets')).rows) +
             JSON.stringify((await db.pool.query('SELECT * FROM auth_attempt_accounts')).rows);

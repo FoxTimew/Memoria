@@ -1,0 +1,278 @@
+{
+  "candidate": "850162f29715f911c9448b624f45494066a8dd1f",
+  "date": "2026-10-26",
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "notes": "Original .local paths are provenance; archived files have the same basenames in this directory. No invalidated attempts in this run.",
+  "rows": [
+    {
+      "label": "database-table-owner-broad-1",
+      "source": ".local/measurement-hygiene/database-table-owner-broad-1-attempt-1-fc5ca294-af8d-4a5a-9562-687b8d0db707.json",
+      "file": "database-table-owner-broad-1-attempt-1-fc5ca294-af8d-4a5a-9562-687b8d0db707.json",
+      "windowsBeforeGiB": 3.338165283203125,
+      "windowsAfterGiB": 3.2536697387695312,
+      "wslBeforeGiB": 5.497657775878906,
+      "wslAfterGiB": 5.492382049560547,
+      "intervals": 16
+    },
+    {
+      "label": "database-table-owner-broad-2",
+      "source": ".local/measurement-hygiene/database-table-owner-broad-2-attempt-1-00503efd-e55a-4e7a-84e5-971608161a2c.json",
+      "file": "database-table-owner-broad-2-attempt-1-00503efd-e55a-4e7a-84e5-971608161a2c.json",
+      "windowsBeforeGiB": 3.223613739013672,
+      "windowsAfterGiB": 3.2320098876953125,
+      "wslBeforeGiB": 5.4923858642578125,
+      "wslAfterGiB": 5.494342803955078,
+      "intervals": 16
+    },
+    {
+      "label": "database-table-owner-broad-3",
+      "source": ".local/measurement-hygiene/database-table-owner-broad-3-attempt-1-7b24ccdb-98e2-4ab1-8717-f4f558ce0528.json",
+      "file": "database-table-owner-broad-3-attempt-1-7b24ccdb-98e2-4ab1-8717-f4f558ce0528.json",
+      "windowsBeforeGiB": 3.223987579345703,
+      "windowsAfterGiB": 3.2234840393066406,
+      "wslBeforeGiB": 5.4925994873046875,
+      "wslAfterGiB": 5.495697021484375,
+      "intervals": 16
+    },
+    {
+      "label": "database-table-owner-deep-1",
+      "source": ".local/measurement-hygiene/database-table-owner-deep-1-attempt-1-ad9fe650-1811-45d8-ad9b-49a46e0a9b68.json",
+      "file": "database-table-owner-deep-1-attempt-1-ad9fe650-1811-45d8-ad9b-49a46e0a9b68.json",
+      "windowsBeforeGiB": 3.2047462463378906,
+      "windowsAfterGiB": 3.214855194091797,
+      "wslBeforeGiB": 5.498176574707031,
+      "wslAfterGiB": 5.494361877441406,
+      "intervals": 11
+    },
+    {
+      "label": "database-table-owner-deep-2",
+      "source": ".local/measurement-hygiene/database-table-owner-deep-2-attempt-1-fed37451-7402-40ab-b169-ae034d40e21e.json",
+      "file": "database-table-owner-deep-2-attempt-1-fed37451-7402-40ab-b169-ae034d40e21e.json",
+      "windowsBeforeGiB": 3.2279701232910156,
+      "windowsAfterGiB": 3.223804473876953,
+      "wslBeforeGiB": 5.495525360107422,
+      "wslAfterGiB": 5.501289367675781,
+      "intervals": 10
+    },
+    {
+      "label": "database-table-owner-deep-3",
+      "source": ".local/measurement-hygiene/database-table-owner-deep-3-attempt-1-242dab02-05e3-4fba-bf70-05ca2d783b61.json",
+      "file": "database-table-owner-deep-3-attempt-1-242dab02-05e3-4fba-bf70-05ca2d783b61.json",
+      "windowsBeforeGiB": 3.1891326904296875,
+      "windowsAfterGiB": 3.1997413635253906,
+      "wslBeforeGiB": 5.497657775878906,
+      "wslAfterGiB": 5.494239807128906,
+      "intervals": 10
+    },
+    {
+      "label": "database-table-owner-ten-filters-1",
+      "source": ".local/measurement-hygiene/database-table-owner-ten-filters-1-attempt-1-037d8ac7-4f1d-4283-a067-55bdb9d2471e.json",
+      "file": "database-table-owner-ten-filters-1-attempt-1-037d8ac7-4f1d-4283-a067-55bdb9d2471e.json",
+      "windowsBeforeGiB": 3.2070274353027344,
+      "windowsAfterGiB": 3.1297836303710938,
+      "wslBeforeGiB": 5.496089935302734,
+      "wslAfterGiB": 5.422092437744141,
+      "intervals": 33
+    },
+    {
+      "label": "database-table-owner-ten-filters-2",
+      "source": ".local/measurement-hygiene/database-table-owner-ten-filters-2-attempt-1-1a0ae3ce-0560-4013-8fa1-4f5e44d2b1db.json",
+      "file": "database-table-owner-ten-filters-2-attempt-1-1a0ae3ce-0560-4013-8fa1-4f5e44d2b1db.json",
+      "windowsBeforeGiB": 3.1245574951171875,
+      "windowsAfterGiB": 3.112548828125,
+      "wslBeforeGiB": 5.410392761230469,
+      "wslAfterGiB": 5.35247802734375,
+      "intervals": 32
+    },
+    {
+      "label": "database-table-owner-ten-filters-3",
+      "source": ".local/measurement-hygiene/database-table-owner-ten-filters-3-attempt-1-ddccfa89-4c44-4b22-9f91-908c5ae7e85f.json",
+      "file": "database-table-owner-ten-filters-3-attempt-1-ddccfa89-4c44-4b22-9f91-908c5ae7e85f.json",
+      "windowsBeforeGiB": 3.0893020629882812,
+      "windowsAfterGiB": 3.0609207153320312,
+      "wslBeforeGiB": 5.350872039794922,
+      "wslAfterGiB": 5.322338104248047,
+      "intervals": 32
+    },
+    {
+      "label": "database-table-owner-nulls-desc-1",
+      "source": ".local/measurement-hygiene/database-table-owner-nulls-desc-1-attempt-1-b680dade-c610-4b71-9f10-100a9f6a9c83.json",
+      "file": "database-table-owner-nulls-desc-1-attempt-1-b680dade-c610-4b71-9f10-100a9f6a9c83.json",
+      "windowsBeforeGiB": 3.06536865234375,
+      "windowsAfterGiB": 3.077533721923828,
+      "wslBeforeGiB": 5.324306488037109,
+      "wslAfterGiB": 5.322315216064453,
+      "intervals": 11
+    },
+    {
+      "label": "database-table-owner-nulls-desc-2",
+      "source": ".local/measurement-hygiene/database-table-owner-nulls-desc-2-attempt-1-24d68fa6-4028-4454-af31-1169924d9529.json",
+      "file": "database-table-owner-nulls-desc-2-attempt-1-24d68fa6-4028-4454-af31-1169924d9529.json",
+      "windowsBeforeGiB": 3.0561676025390625,
+      "windowsAfterGiB": 3.065826416015625,
+      "wslBeforeGiB": 5.333171844482422,
+      "wslAfterGiB": 5.338573455810547,
+      "intervals": 11
+    },
+    {
+      "label": "database-table-owner-nulls-desc-3",
+      "source": ".local/measurement-hygiene/database-table-owner-nulls-desc-3-attempt-1-fce00283-555b-40b6-9c73-b301a68cdb0e.json",
+      "file": "database-table-owner-nulls-desc-3-attempt-1-fce00283-555b-40b6-9c73-b301a68cdb0e.json",
+      "windowsBeforeGiB": 3.049072265625,
+      "windowsAfterGiB": 2.9693832397460938,
+      "wslBeforeGiB": 5.3361663818359375,
+      "wslAfterGiB": 5.33721923828125,
+      "intervals": 12
+    },
+    {
+      "label": "database-table-guest-broad-1",
+      "source": ".local/measurement-hygiene/database-table-guest-broad-1-attempt-1-9c366611-d4c4-454f-982e-e8b4270e1135.json",
+      "file": "database-table-guest-broad-1-attempt-1-9c366611-d4c4-454f-982e-e8b4270e1135.json",
+      "windowsBeforeGiB": 2.963054656982422,
+      "windowsAfterGiB": 2.907562255859375,
+      "wslBeforeGiB": 5.337215423583984,
+      "wslAfterGiB": 5.367183685302734,
+      "intervals": 16
+    },
+    {
+      "label": "database-table-guest-broad-2",
+      "source": ".local/measurement-hygiene/database-table-guest-broad-2-attempt-1-6329da81-f1e7-4e3f-8e1d-d73b946912b7.json",
+      "file": "database-table-guest-broad-2-attempt-1-6329da81-f1e7-4e3f-8e1d-d73b946912b7.json",
+      "windowsBeforeGiB": 2.8589134216308594,
+      "windowsAfterGiB": 2.925262451171875,
+      "wslBeforeGiB": 5.361991882324219,
+      "wslAfterGiB": 5.367755889892578,
+      "intervals": 16
+    },
+    {
+      "label": "database-table-guest-broad-3",
+      "source": ".local/measurement-hygiene/database-table-guest-broad-3-attempt-1-53f6d6de-28d7-4508-8e33-e88b425582ba.json",
+      "file": "database-table-guest-broad-3-attempt-1-53f6d6de-28d7-4508-8e33-e88b425582ba.json",
+      "windowsBeforeGiB": 2.9094314575195312,
+      "windowsAfterGiB": 3.05731201171875,
+      "wslBeforeGiB": 5.382476806640625,
+      "wslAfterGiB": 5.386257171630859,
+      "intervals": 16
+    },
+    {
+      "label": "database-table-guest-deep-1",
+      "source": ".local/measurement-hygiene/database-table-guest-deep-1-attempt-1-81ccf332-8681-4f57-a8ae-33791e49520e.json",
+      "file": "database-table-guest-deep-1-attempt-1-81ccf332-8681-4f57-a8ae-33791e49520e.json",
+      "windowsBeforeGiB": 3.0287399291992188,
+      "windowsAfterGiB": 3.0278053283691406,
+      "wslBeforeGiB": 5.391696929931641,
+      "wslAfterGiB": 5.394115447998047,
+      "intervals": 11
+    },
+    {
+      "label": "database-table-guest-deep-2",
+      "source": ".local/measurement-hygiene/database-table-guest-deep-2-attempt-1-5d7e2768-4414-4e11-89ec-c5f3f017e083.json",
+      "file": "database-table-guest-deep-2-attempt-1-5d7e2768-4414-4e11-89ec-c5f3f017e083.json",
+      "windowsBeforeGiB": 2.99224853515625,
+      "windowsAfterGiB": 2.9836044311523438,
+      "wslBeforeGiB": 5.3931427001953125,
+      "wslAfterGiB": 5.405513763427734,
+      "intervals": 11
+    },
+    {
+      "label": "database-table-guest-deep-3",
+      "source": ".local/measurement-hygiene/database-table-guest-deep-3-attempt-1-26203992-78bb-4cb3-bd83-c3a2a6e68fa4.json",
+      "file": "database-table-guest-deep-3-attempt-1-26203992-78bb-4cb3-bd83-c3a2a6e68fa4.json",
+      "windowsBeforeGiB": 2.9930801391601562,
+      "windowsAfterGiB": 2.9790725708007812,
+      "wslBeforeGiB": 5.408348083496094,
+      "wslAfterGiB": 5.403472900390625,
+      "intervals": 12
+    },
+    {
+      "label": "database-table-guest-ten-filters-1",
+      "source": ".local/measurement-hygiene/database-table-guest-ten-filters-1-attempt-1-6e669b4c-c10c-4e0e-b9e7-71750af130a9.json",
+      "file": "database-table-guest-ten-filters-1-attempt-1-6e669b4c-c10c-4e0e-b9e7-71750af130a9.json",
+      "windowsBeforeGiB": 2.9478492736816406,
+      "windowsAfterGiB": 2.986103057861328,
+      "wslBeforeGiB": 5.4116058349609375,
+      "wslAfterGiB": 5.367885589599609,
+      "intervals": 29
+    },
+    {
+      "label": "database-table-guest-ten-filters-2",
+      "source": ".local/measurement-hygiene/database-table-guest-ten-filters-2-attempt-1-5a1606a8-cb4c-45d4-8b68-af9ebc7befaa.json",
+      "file": "database-table-guest-ten-filters-2-attempt-1-5a1606a8-cb4c-45d4-8b68-af9ebc7befaa.json",
+      "windowsBeforeGiB": 2.974933624267578,
+      "windowsAfterGiB": 2.99896240234375,
+      "wslBeforeGiB": 5.363956451416016,
+      "wslAfterGiB": 5.356105804443359,
+      "intervals": 29
+    },
+    {
+      "label": "database-table-guest-ten-filters-3",
+      "source": ".local/measurement-hygiene/database-table-guest-ten-filters-3-attempt-1-f9a75c51-23aa-4d58-85e3-7114de4960ec.json",
+      "file": "database-table-guest-ten-filters-3-attempt-1-f9a75c51-23aa-4d58-85e3-7114de4960ec.json",
+      "windowsBeforeGiB": 2.978038787841797,
+      "windowsAfterGiB": 2.978252410888672,
+      "wslBeforeGiB": 5.357227325439453,
+      "wslAfterGiB": 5.342010498046875,
+      "intervals": 29
+    },
+    {
+      "label": "database-table-guest-nulls-desc-1",
+      "source": ".local/measurement-hygiene/database-table-guest-nulls-desc-1-attempt-1-08d7d7d2-04f3-4f6d-9f9a-a332cac12512.json",
+      "file": "database-table-guest-nulls-desc-1-attempt-1-08d7d7d2-04f3-4f6d-9f9a-a332cac12512.json",
+      "windowsBeforeGiB": 2.9602203369140625,
+      "windowsAfterGiB": 3.1379852294921875,
+      "wslBeforeGiB": 5.333782196044922,
+      "wslAfterGiB": 5.3422393798828125,
+      "intervals": 12
+    },
+    {
+      "label": "database-table-guest-nulls-desc-2",
+      "source": ".local/measurement-hygiene/database-table-guest-nulls-desc-2-attempt-1-b4d7ebca-630f-48af-8e8d-efbecf0843ff.json",
+      "file": "database-table-guest-nulls-desc-2-attempt-1-b4d7ebca-630f-48af-8e8d-efbecf0843ff.json",
+      "windowsBeforeGiB": 3.1277122497558594,
+      "windowsAfterGiB": 3.1335220336914062,
+      "wslBeforeGiB": 5.346473693847656,
+      "wslAfterGiB": 5.344825744628906,
+      "intervals": 12
+    },
+    {
+      "label": "database-table-guest-nulls-desc-3",
+      "source": ".local/measurement-hygiene/database-table-guest-nulls-desc-3-attempt-1-5d336ab3-6ec7-435b-b8da-234c9be643c6.json",
+      "file": "database-table-guest-nulls-desc-3-attempt-1-5d336ab3-6ec7-435b-b8da-234c9be643c6.json",
+      "windowsBeforeGiB": 3.1205902099609375,
+      "windowsAfterGiB": 3.1666259765625,
+      "wslBeforeGiB": 5.345737457275391,
+      "wslAfterGiB": 5.350170135498047,
+      "intervals": 12
+    },
+    {
+      "label": "database-cells-1",
+      "source": ".local/measurement-hygiene/database-cells-1-attempt-1-959012c7-fd73-4904-aa3a-b33c6e69e4a6.json",
+      "file": "database-cells-1-attempt-1-959012c7-fd73-4904-aa3a-b33c6e69e4a6.json",
+      "windowsBeforeGiB": 3.4292068481445312,
+      "windowsAfterGiB": 3.4873924255371094,
+      "wslBeforeGiB": 5.320705413818359,
+      "wslAfterGiB": 5.313323974609375,
+      "intervals": 9
+    },
+    {
+      "label": "database-cells-2",
+      "source": ".local/measurement-hygiene/database-cells-2-attempt-1-eda5f7fd-2fa9-4a9c-865c-bb29ddba4147.json",
+      "file": "database-cells-2-attempt-1-eda5f7fd-2fa9-4a9c-865c-bb29ddba4147.json",
+      "windowsBeforeGiB": 3.473114013671875,
+      "windowsAfterGiB": 3.572479248046875,
+      "wslBeforeGiB": 5.296215057373047,
+      "wslAfterGiB": 5.295627593994141,
+      "intervals": 9
+    },
+    {
+      "label": "database-cells-3",
+      "source": ".local/measurement-hygiene/database-cells-3-attempt-1-f61844b9-6f7a-4946-9e6e-b2a661d4eb3c.json",
+      "file": "database-cells-3-attempt-1-f61844b9-6f7a-4946-9e6e-b2a661d4eb3c.json",
+      "windowsBeforeGiB": 3.5686569213867188,
+      "windowsAfterGiB": 3.5496597290039062,
+      "wslBeforeGiB": 5.2886962890625,
+      "wslAfterGiB": 5.272926330566406,
+      "intervals": 9
+    }
+  ]
+}

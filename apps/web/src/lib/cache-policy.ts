@@ -1,6 +1,6 @@
 import { cachePolicySchema, pageAccessSnapshotSchema } from '@memoria/contracts';
 import { CacheForbidden, LocalSessionRevoked, yjsCache } from './yjs-cache.ts';
-import type { CacheTicket } from './yjs-cache.ts';
+import type { CacheTicket, RowSnapshot } from './yjs-cache.ts';
 
 export const cachePolicyEvent = 'memoria-cache-policy';
 export function notifyCachePolicy(user: string) {
@@ -54,9 +54,42 @@ export async function refreshCachePolicy(
         pageAccessSnapshotSchema.parse(await response.json()),
       );
     }
+    const rows = await yjsCache.cachedRows(user);
+    for (const workspace of new Set(rows.map((r) => r.workspace))) {
+      const targets = [
+        ...new Map(
+          rows
+            .filter((r) => r.workspace === workspace)
+            .map((r) => [r.page, { database: r.database!, row: r.page }]),
+        ).values(),
+      ];
+      for (let i = 0; i < targets.length; i += 100)
+        current = await refreshRowAccess(current, workspace, targets.slice(i, i + 100));
+    }
     return current;
   } finally {
     notifyCachePolicy(user);
   }
+}
+/** Ticket predates the request: delayed answers cannot undo a local revocation tombstone. */
+export async function refreshRowAccess(
+  ticket: CacheTicket,
+  workspace: string,
+  rows: { database: string; row: string }[],
+) {
+  const response = await fetch(`/api/internal/workspaces/${workspace}/row-access`, {
+    method: 'POST',
+    credentials: 'include',
+    cache: 'no-store',
+    signal: AbortSignal.timeout(4000),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rows }),
+  });
+  if ([401, 403, 404].includes(response.status)) {
+    await yjsCache.revokeWorkspace(ticket, workspace);
+    throw new LocalSessionRevoked();
+  }
+  if (!response.ok) throw new Error('Vérification des lignes indisponible. Réessayez en ligne.');
+  return yjsCache.applyRowAccess(ticket, workspace, (await response.json()) as RowSnapshot);
 }
 export { CacheForbidden };

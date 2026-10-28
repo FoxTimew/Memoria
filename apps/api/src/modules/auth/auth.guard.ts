@@ -8,6 +8,8 @@ import * as database from '../../database.module.ts';
 import { readConfig } from '../../config.ts';
 import { ACCESS_QUOTA, accessIp, accessAccount } from '../workspaces/access-quota.ts';
 import type { AccessFamily } from '../workspaces/access-quota.ts';
+import { DATABASE_QUOTA, databaseIp, databaseAccount } from '../databases/database-quota.ts';
+import type { DatabaseFamily } from '../databases/database-quota.ts';
 import {
   CONTENT_QUOTA,
   admitContentIp,
@@ -42,6 +44,17 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
     const secret = readConfig().BETTER_AUTH_SECRET;
+    const databaseFamily = this.reflector.getAllAndOverride<DatabaseFamily>(DATABASE_QUOTA, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (databaseFamily)
+      await databaseIp(
+        this.database.db,
+        secret,
+        databaseFamily,
+        request.ip ?? request.socket.remoteAddress ?? 'unknown',
+      );
     if (accessFamily)
       await accessIp(
         this.database.db,
@@ -59,6 +72,14 @@ export class AuthGuard implements CanActivate {
         request.ip ?? request.socket.remoteAddress ?? 'unknown',
       );
     const identity = await this.auth.authenticate(request.headers);
+    if (databaseFamily)
+      await databaseAccount(
+        this.database.db,
+        secret,
+        databaseFamily,
+        identity.user.id,
+        String(request.params.workspaceId ?? ''),
+      );
     if (accessFamily)
       await accessAccount(
         this.database.db,

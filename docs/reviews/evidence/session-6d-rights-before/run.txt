@@ -1,0 +1,40 @@
+{
+  "observedAt": "2026-10-27T13:49:51.779Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-http-rights-preparation-58b68a68-69d9-40d7-a9b3-c51a744c45ff.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-http-rights","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-27T13:49:52.436Z","windowsFreeBytes":4380626944,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5778989056,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:49:52.436Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+Fixture: containers ready.
+Fixture: memberships and grants committed.
+Fixture ready: 1,000 ordinary pages, 50 bases, 50,000 rows, 100 memberships, 5,000 grants, depth 50.
+(node:8880) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"hygiene":".local/measurement-hygiene/database-http-rights-share-1-attempt-1-1c8158b2-8db8-4815-af6b-8e73d081ba67.json","status":"valid","label":"database-http-rights-share-1","attempt":1,"before":{"observedAt":"2026-10-27T13:50:47.602Z","windowsFreeBytes":4167774208,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5724909568,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:50:47.602Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-27T13:51:58.657Z","windowsFreeBytes":3669381120,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5650169856,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-27T13:51:58.657Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":72,"deltaInPages":0,"deltaOutPages":0}}
+{"kind":"share","series":1,"p95":{"mutation":298.72789999999804,"blockedSqlWait":192.09910000000673,"wire":211.31639999999607,"overlappingWire":245.85699999998906,"serverConfirmation":188.15679999999702},"overlap":180,"failure":null}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: STOP_DATABASE_HTTP_RIGHTS_BUDGET
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-rights-load.mjs:53522:9 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,22 @@
+BEFORE_PREPARATION
+
+MemTotal:        7022236 kB
+MemFree:         4402964 kB
+MemAvailable:    5899352 kB
+Buffers:          111068 kB
+Cached:          1545600 kB
+SwapTotal:       2097152 kB
+SwapFree:        2097152 kB
+SReclaimable:      30496 kB
+
+AFTER_REJECTION_AND_CLEANUP
+
+MemTotal:        7022236 kB
+MemFree:         3395336 kB
+MemAvailable:    5751232 kB
+Buffers:          111620 kB
+Cached:          2523584 kB
+SwapTotal:       2097152 kB
+SwapFree:        2097152 kB
+SReclaimable:      53276 kB
+

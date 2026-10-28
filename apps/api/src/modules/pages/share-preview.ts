@@ -58,7 +58,7 @@ function predictor(all: StoredPage[], grants: Grant[]) {
     return level;
   };
 }
-export async function shareState(tx: WriteTransaction, workspace: string) {
+export async function shareState(tx: WriteTransaction, workspace: string, includeGrants = true) {
   const version = (
     await tx.execute<{ version: number }>(
       sql`SELECT access_version AS version FROM workspaces WHERE id=${workspace}::uuid`,
@@ -69,11 +69,13 @@ export async function shareState(tx: WriteTransaction, workspace: string) {
       sql`SELECT m.id AS member,u.name FROM workspace_members m JOIN auth_users u ON u.id=m.user_id WHERE m.workspace_id=${workspace}::uuid AND m.role='guest' ORDER BY m.id`,
     )
   ).rows;
-  const grants = (
-    await tx.execute<Grant>(
-      sql`SELECT s.member_id AS member,g.resource_id AS page,g.level,g.inherit FROM access_subjects s JOIN access_grants g ON g.subject_id=s.id AND g.workspace_id=s.workspace_id WHERE s.workspace_id=${workspace}::uuid AND s.kind='member' AND s.deleted_at IS NULL AND g.deleted_at IS NULL AND g.resource_type='page' ORDER BY g.id`,
-    )
-  ).rows;
+  const grants = includeGrants
+    ? (
+        await tx.execute<Grant>(
+          sql`SELECT s.member_id AS member,g.resource_id AS page,g.level,g.inherit FROM access_subjects s JOIN access_grants g ON g.subject_id=s.id AND g.workspace_id=s.workspace_id WHERE s.workspace_id=${workspace}::uuid AND s.kind='member' AND s.deleted_at IS NULL AND g.deleted_at IS NULL AND g.resource_type='page' ORDER BY g.id`,
+        )
+      ).rows
+    : [];
   return { version, guests, grants };
 }
 export async function accessPreview(
@@ -83,7 +85,7 @@ export async function accessPreview(
   affected: Set<string>,
   binding: object,
 ): Promise<AccessPreview> {
-  const state = await shareState(tx, workspace);
+  const state = await shareState(tx, workspace, false);
   const effects: AccessPreview['effects'] = [];
   // Same effective-permission calculation as the deferred per-page invalidation.
   const candidate = after.map((p) => ({
@@ -98,7 +100,7 @@ export async function accessPreview(
       before_level: 'none' | 'read' | 'edit';
       after_level: 'none' | 'read' | 'edit';
     }>(
-      sql`SELECT * FROM content_access_effects(${workspace}::uuid,${JSON.stringify(candidate)}::jsonb,false)`,
+      sql`SELECT * FROM content_access_effects_bounded(${workspace}::uuid,${JSON.stringify(candidate)}::jsonb,false,${sql.param(state.guests.map((g) => g.member))}::uuid[],${sql.param([...affected])}::uuid[])`,
     )
   ).rows;
   for (const guest of state.guests) {

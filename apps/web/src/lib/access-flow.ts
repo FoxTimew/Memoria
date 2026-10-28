@@ -4,7 +4,8 @@ const uuid = '[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}';
 /** Only our fixed destinations; never navigate to an arbitrary client-supplied returnTo. */
 export function accessReturnPath(value: string | null) {
   return value === '/invitation' ||
-    new RegExp(`^/workspaces/${uuid}/(?:acces|arrivee|securite)$`, 'i').test(value ?? '')
+    new RegExp(`^/workspaces/${uuid}/(?:acces|arrivee|securite)$`, 'i').test(value ?? '') ||
+    new RegExp(`^/workspaces/${uuid}/databases/${uuid}$`, 'i').test(value ?? '')
     ? value
     : null;
 }

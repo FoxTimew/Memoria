@@ -1,0 +1,3 @@
+#!/bin/sh
+# Memoria Git hook: controls are implemented in scripts/git-hooks.mjs.
+exec node scripts/git-hooks.mjs pre-commit "$@"

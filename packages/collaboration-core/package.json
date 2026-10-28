@@ -1,0 +1,14 @@
+{
+  "name": "@memoria/collaboration-core",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "yjs": "13.6.33"
+  }
+}

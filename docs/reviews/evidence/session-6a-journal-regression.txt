@@ -1,0 +1,13 @@
+$ node scripts/test-collab.mjs "--suite" "journal"
+✔ Journal rollback, replay receipt and file projection against real SQL (1960.5193ms)
+✔ Prepared journal keeps concurrent block ownership, page revisions and fresh permissions (1385.8164ms)
+✔ Pipelined failures drain the connection and roll back all queued writes (1221.8476ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4574.4531
+Collaboration journal.e2e.ts: EXIT_CODE=0

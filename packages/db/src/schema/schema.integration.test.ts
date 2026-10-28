@@ -89,7 +89,11 @@ describe.skipIf(!process.env.TEST_DATABASE_URL)('PostgreSQL schema invariants', 
 
   it('rejects scalar values with an incompatible property type', async () => {
     const host = await page(workspaceA, 'b04');
-    const row = await page(workspaceA, 'a0', host);
+    const row = randomUUID();
+    await pool.query(
+      "INSERT INTO pages(id,workspace_id,kind,position) VALUES($1,$2,'database_row','a0')",
+      [row, workspaceA],
+    );
     const database = randomUUID();
     const property = randomUUID();
     await pool.query('INSERT INTO databases (id,workspace_id,page_id) VALUES ($1,$2,$3)', [

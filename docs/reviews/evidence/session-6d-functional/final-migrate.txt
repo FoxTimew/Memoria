@@ -1,0 +1,2 @@
+$ pnpm --filter @memoria/db migrate
+$ node --env-file=../../.env --experimental-strip-types src/migrate.ts

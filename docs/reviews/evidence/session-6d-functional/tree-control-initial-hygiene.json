@@ -1,0 +1,55 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "database-http-rights-move-1",
+  "attempt": 1,
+  "preparation": {
+    "path": ".local/measurement-hygiene/database-http-rights-preparation-565b3055-0757-40e4-838c-8d640d0dff9f.json",
+    "observation": {
+      "observedAt": "2026-10-28T11:10:05.197Z",
+      "windowsFreeBytes": 4886065152,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5805850624,
+        "swapInPages": 0,
+        "swapOutPages": 0
+      },
+      "power": {
+        "observedAt": "2026-10-28T11:10:05.197Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 93
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "status": "error",
+  "before": {
+    "observedAt": "2026-10-28T11:10:58.425Z",
+    "windowsFreeBytes": 4616269824,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5730914304,
+      "swapInPages": 0,
+      "swapOutPages": 0
+    },
+    "power": {
+      "observedAt": "2026-10-28T11:10:58.425Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 94
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "workStartedAt": 1793185858891,
+  "error": "Unrelated native editor disconnected: {\"route\":\"/api/internal/workspaces/e217f3d0-164e-4add-ad3a-ec8e0a0f8982/databases/4a7d5aad-5c03-40ca-ad44-912a6be1caf4/rows/00251f3f-2058-4f41-ba2a-92c324ffd06e\",\"failure\":{\"kind\":\"close\",\"code\":1011,\"reason\":\"CONTROL_UNAVAILABLE\"}}"
+}

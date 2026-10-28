@@ -1,0 +1,13 @@
+{"seed":1780491792,"steps":500,"operations":1015}
+{"seed":1780491792,"status":"passed","effective":{"subject":40,"role":60,"archive":116,"join":60,"remove":68,"move":108,"grant":53,"restore":109,"unshare":2}}
+✔ random rights equivalence: 500 seeded transactions and durable epoch oracle (7698.6268ms)
+✔ delta reducer retains a verified minimal causal sequence (0.3975ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7703.0127
+Collaboration reconciliation-random.e2e.ts: EXIT_CODE=0

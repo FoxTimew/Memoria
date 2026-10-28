@@ -43,6 +43,7 @@ export const searchResultsSchema = z.array(
     id: z.uuid(),
     title: z.string(),
     excerpt: z.string(),
+    databaseId: z.uuid().optional(),
     contentRevision: z.int().nonnegative().nullable().optional(),
     projectionRevision: z.int().nonnegative().nullable().optional(),
   }),

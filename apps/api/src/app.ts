@@ -11,6 +11,8 @@ import { Public } from './modules/auth/public.decorator.ts';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module.ts';
 import { PagesModule } from './modules/pages/pages.module.ts';
 import { SecurityPolicyError } from '@memoria/auth';
+import { DatabaseFault } from '@memoria/db';
+import { DatabasesModule } from './modules/databases/databases.module.ts';
 
 @Controller('api/health')
 class HealthController {
@@ -27,7 +29,12 @@ class HealthController {
 class SafeExceptionFilter implements ExceptionFilter {
   catch(error: unknown, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<Response>();
-    if (error instanceof SecurityPolicyError) {
+    if (error instanceof DatabaseFault) {
+      response.status(error.status).json({
+        code: error.code,
+        ...(error.current === undefined ? {} : { current: error.current }),
+      });
+    } else if (error instanceof SecurityPolicyError) {
       response.status(error.status).json({ code: error.code, message: error.code });
     } else if (error instanceof HttpException) {
       const body = error.getResponse();
@@ -51,7 +58,7 @@ class SafeExceptionFilter implements ExceptionFilter {
 }
 
 @Module({
-  imports: [database.DatabaseModule, AuthModule, WorkspacesModule, PagesModule],
+  imports: [database.DatabaseModule, AuthModule, WorkspacesModule, PagesModule, DatabasesModule],
   controllers: [HealthController],
 })
 export class AppModule {}

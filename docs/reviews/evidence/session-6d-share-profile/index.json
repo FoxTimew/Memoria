@@ -1,0 +1,69 @@
+{
+  "source": ".local\\session-6d-share-profile.json",
+  "originalSha256": "28b7364c0573053fa154fc2ceb944abc255d3bb19746e837fc58f74d8d81c6a0",
+  "encoding": "JSON summaries + ordered, compact NDJSON shards, no samples removed. Array hashes use JSON.stringify(array). Hygiene result duplicates are replaced by their SHA256.",
+  "hygiene": [
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-preparation-31d4c5ca-ccc5-41e0-9a08-aee5b1d1649a.json",
+      "file": "database-http-rights-preparation-31d4c5ca-ccc5-41e0-9a08-aee5b1d1649a.json",
+      "originalSha256": "1df45ad278a03f365b86ef7061c5d927f568f5f4a499f0951df74a3432b573a6"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-share-profile-1-attempt-1-f38f2b92-67c1-493f-b94e-178b77961897.json",
+      "file": "database-http-share-profile-1-attempt-1-f38f2b92-67c1-493f-b94e-178b77961897.json",
+      "originalSha256": "92db2adf02e681c0b87cf77aea908666f0258061f6d8c366f8956ca951c36231"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-share-profile-2-attempt-1-d8ec81ac-de01-42a5-a3a7-da125452119d.json",
+      "file": "database-http-share-profile-2-attempt-1-d8ec81ac-de01-42a5-a3a7-da125452119d.json",
+      "originalSha256": "4965791d45210d3e8e18af1b424fc55bda3ddc9e0abadb9606c0b04f0d6f2d0a"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-share-profile-3-attempt-1-aa0edf1b-09a6-49d0-b36c-160f1d28aaad.json",
+      "file": "database-http-share-profile-3-attempt-1-aa0edf1b-09a6-49d0-b36c-160f1d28aaad.json",
+      "originalSha256": "91f8335513aa17ef71f1f0078709f746187a1e914315323d7beff72ac43373bd"
+    }
+  ],
+  "files": [
+    {
+      "name": "database-http-rights-preparation-31d4c5ca-ccc5-41e0-9a08-aee5b1d1649a.json",
+      "bytes": 676,
+      "sha256": "1df45ad278a03f365b86ef7061c5d927f568f5f4a499f0951df74a3432b573a6"
+    },
+    {
+      "name": "database-http-share-profile-1-attempt-1-f38f2b92-67c1-493f-b94e-178b77961897.json",
+      "bytes": 8442,
+      "sha256": "e9059abd1e2be44e9b523381ba1ce1d836086a3f158dbda03e997d4e558d027d"
+    },
+    {
+      "name": "database-http-share-profile-2-attempt-1-d8ec81ac-de01-42a5-a3a7-da125452119d.json",
+      "bytes": 8524,
+      "sha256": "4e3c29945cf9525836376866a8f07dbd9e7d8a3d1bd041ddbfdaa5ea36e1ac07"
+    },
+    {
+      "name": "database-http-share-profile-3-attempt-1-aa0edf1b-09a6-49d0-b36c-160f1d28aaad.json",
+      "bytes": 8444,
+      "sha256": "38aa84ae6656e80f5f4a3d501b268d5194d95c7938aab2daafbfd730c595cc35"
+    },
+    {
+      "name": "interrupted.txt",
+      "bytes": 15798,
+      "sha256": "79a607e68783083064470c013314e05a6311345b3371ca76b077f76751688204"
+    },
+    {
+      "name": "measurement.json",
+      "bytes": 261910,
+      "sha256": "6e0957d9925a71f455aa314dce78c84b53b5c79bade2c42cd68056e8842d9669"
+    },
+    {
+      "name": "run.txt",
+      "bytes": 48475,
+      "sha256": "c9f95763349a534532b5b091b25cb776790049de3ccc32c19fe77e34f56604c6"
+    },
+    {
+      "name": "summary.json",
+      "bytes": 14355,
+      "sha256": "11898d4a7e453643788d8506b0a3e0cec1a9dd9c92cda56d6270186c7be70298"
+    }
+  ]
+}

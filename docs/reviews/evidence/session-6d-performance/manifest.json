@@ -1,0 +1,1408 @@
+{
+  "commits": {
+    "reference": "4d611edfe7ae7e00bad1be3d9327e9e2acf2e55c",
+    "candidate": "fb8fb713d2ac2ec9f08e43d1ff462af497a7b31b"
+  },
+  "profiles": {
+    "content-1M": {
+      "bytes": 1045110,
+      "sha256": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896"
+    },
+    "history-1M": {
+      "bytes": 1042470,
+      "sha256": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+    }
+  },
+  "protocolHash": "0cec4aa0d5ce3c54d427cb08e98ed969961632ebb82c0d9ed97e8f0c243e656d",
+  "lockfileHash": "df1bc76b05a77464e619b6f92a6b2f130392b813f33bdc1299be88f117686961",
+  "startedAt": "2026-10-28T12:17:08.482Z",
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "node": "v24.21.0",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "availableCpus": 16,
+    "totalBytes": 14877257728
+  },
+  "protocol": "Session 6: AB / BA / AB, three paired series; immutable application/packages/migrations from each commit; same assurance, mandatory workspace policy AND per-page epoch in BOTH versions. Shared warm/cold harness, memory checks after profile preparation, WSL vmstat over entire child lifetime. Before preparation Windows >=3 GiB; after preparation Windows >=1.5 GiB and WSL MemAvailable >=2 GiB; AC required. Swap-invalidated process is replayed from scratch, no discarded samples hidden.",
+  "artifacts": {
+    "reference": {
+      "archiveHash": "9ef01bcb11ee4cc61a45cd8a4bbf0d233792d26890884768c20b8373d5c81fc5",
+      "adapter": "import { IncrementalValidator } from '../service/incremental-validator.ts';\nimport { ValidationPool } from '../service/validation-pool.ts';\nimport { readCollabConfig } from '../service/config.ts';\nexport function createValidationContext() {\n  const pool = new ValidationPool(readCollabConfig().COLLAB_VALIDATION_WORKERS);\n  return { create: () => new IncrementalValidator(pool), close: () => pool.close() };\n}",
+      "bundles": {
+        "incremental-worker": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-28T12-17-08-473Z\\reference\\incremental-worker.mjs",
+          "sha256": "d1fb06f9cb156a9fe4e88c53543f7a97b9905e7460ef3aa59ad702717faf6335"
+        },
+        "warm": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-28T12-17-08-473Z\\reference\\warm.mjs",
+          "sha256": "9bbbc38165740ba6cdb218f5f9f6fb5ad73af3a908abf1e36b3ded8a0fa17aff"
+        },
+        "cold": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-28T12-17-08-473Z\\reference\\cold.mjs",
+          "sha256": "d6a97dd6b822c89bc29f3c5063819f0fb81a66adb35b2a90ab9fa79a579ab523"
+        }
+      },
+      "migrations": ".local\\3d-alternating\\2026-10-28T12-17-08-473Z\\sources\\reference\\packages\\db\\drizzle"
+    },
+    "candidate": {
+      "archiveHash": "70dc04d3830d1bf9b9a52ea30de242268ab7f0bf20a47ae4801f14019cb3d408",
+      "adapter": "import { IncrementalValidator } from '../service/incremental-validator.ts';\nimport { ValidationPool } from '../service/validation-pool.ts';\nimport { readCollabConfig } from '../service/config.ts';\nexport function createValidationContext() {\n  const pool = new ValidationPool(readCollabConfig().COLLAB_VALIDATION_WORKERS);\n  return { create: () => new IncrementalValidator(pool), close: () => pool.close() };\n}",
+      "bundles": {
+        "incremental-worker": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-28T12-17-08-473Z\\candidate\\incremental-worker.mjs",
+          "sha256": "b7edee3902f5fe1e2d3ae9dd469b526818d8494bfe210b9572e067bc025df52b"
+        },
+        "warm": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-28T12-17-08-473Z\\candidate\\warm.mjs",
+          "sha256": "375137802cfed118ccb6f005eb00be402c2fac1b3d78f705f56efa22844a7ef2"
+        },
+        "cold": {
+          "path": "apps\\collab\\dist\\comparison\\2026-10-28T12-17-08-473Z\\candidate\\cold.mjs",
+          "sha256": "16be3687b73812946902946c12e380c6c2b5100036e6d75230504c3143cb73fe"
+        }
+      },
+      "migrations": ".local\\3d-alternating\\2026-10-28T12-17-08-473Z\\sources\\candidate\\packages\\db\\drizzle"
+    }
+  },
+  "series": [
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 1,
+      "startedAt": "2026-10-28T12:17:12.995Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/reference-warm-1-preparation-52c71278-873b-4137-941f-94e9ec63fe68.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:17:09.904Z",
+          "windowsFreeBytes": 4652093440,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5801005056,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:17:09.904Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/reference-warm-1-attempt-1-adee0de8-07cc-46a7-8182-80238ef8703f.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/reference-warm-1-attempt-1-adee0de8-07cc-46a7-8182-80238ef8703f.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:17:12.498Z",
+          "windowsFreeBytes": 4646944768,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5789376512,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:17:12.498Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:17:31.497Z",
+          "windowsFreeBytes": 4726063104,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5805084672,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:17:31.497Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 20,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4646944768,
+      "battery": {
+        "observedAt": "2026-10-28T12:17:12.498Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4747878400,
+      "code": 0,
+      "p95": {
+        "content-1M": 9.44399999999996,
+        "history-1M": 37.33300000000054
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 1,
+      "startedAt": "2026-10-28T12:17:35.292Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/candidate-warm-1-preparation-1af88b0d-8120-4f1e-bbc5-1b4984944cf3.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:17:32.369Z",
+          "windowsFreeBytes": 4720418816,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5806043136,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:17:32.369Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/candidate-warm-1-attempt-1-c915bca9-11ed-4d08-b62c-9786f08e50d6.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/candidate-warm-1-attempt-1-c915bca9-11ed-4d08-b62c-9786f08e50d6.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:17:34.829Z",
+          "windowsFreeBytes": 4672163840,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5810176000,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:17:34.829Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:17:54.827Z",
+          "windowsFreeBytes": 4916387840,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5795823616,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:17:54.827Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 21,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4672163840,
+      "battery": {
+        "observedAt": "2026-10-28T12:17:34.829Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4912865280,
+      "code": 0,
+      "p95": {
+        "content-1M": 9.18809999999985,
+        "history-1M": 39.785500000001775
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 1,
+      "startedAt": "2026-10-28T12:17:58.648Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/reference-cold-1-preparation-5feabf81-bf52-43d0-8676-b99e1a885c4d.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:17:55.693Z",
+          "windowsFreeBytes": 4921561088,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5802913792,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:17:55.693Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/reference-cold-1-attempt-1-e6e49182-7838-4ee3-8c51-28b4a35fb603.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/reference-cold-1-attempt-1-e6e49182-7838-4ee3-8c51-28b4a35fb603.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:17:58.164Z",
+          "windowsFreeBytes": 4865613824,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5798391808,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:17:58.165Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:18:14.154Z",
+          "windowsFreeBytes": 4787802112,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5767254016,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:18:14.154Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 17,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4865613824,
+      "battery": {
+        "observedAt": "2026-10-28T12:17:58.165Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4787847168,
+      "code": 0,
+      "p95": {
+        "content-1M": 163.89579999999978,
+        "history-1M": 272.1035000000011
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 1,
+      "startedAt": "2026-10-28T12:18:18.141Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/candidate-cold-1-preparation-b8254489-c365-41a6-bc84-6baea2b3c678.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:18:15.076Z",
+          "windowsFreeBytes": 4761710592,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5774532608,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:18:15.076Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/candidate-cold-1-attempt-1-bdf09986-fe24-44d3-8b43-3a00e6b8cb6b.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/candidate-cold-1-attempt-1-bdf09986-fe24-44d3-8b43-3a00e6b8cb6b.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:18:17.669Z",
+          "windowsFreeBytes": 4741349376,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5759406080,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:18:17.669Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:18:33.694Z",
+          "windowsFreeBytes": 4787785728,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5792600064,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:18:33.694Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 17,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4741349376,
+      "battery": {
+        "observedAt": "2026-10-28T12:18:17.669Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4804448256,
+      "code": 0,
+      "p95": {
+        "content-1M": 150.01969999999983,
+        "history-1M": 246.76560000000063
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 2,
+      "startedAt": "2026-10-28T12:18:37.550Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/candidate-warm-2-preparation-c95c6569-49cd-423d-ab2f-1448ff5894ac.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:18:34.648Z",
+          "windowsFreeBytes": 4787601408,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5782573056,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:18:34.648Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/candidate-warm-2-attempt-1-39da8bfd-15ca-4ffb-ba8e-961b9907f7eb.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/candidate-warm-2-attempt-1-39da8bfd-15ca-4ffb-ba8e-961b9907f7eb.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:18:37.093Z",
+          "windowsFreeBytes": 4821671936,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5762068480,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:18:37.093Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:18:57.105Z",
+          "windowsFreeBytes": 4859957248,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5752315904,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:18:57.105Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 21,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4821671936,
+      "battery": {
+        "observedAt": "2026-10-28T12:18:37.093Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4865048576,
+      "code": 0,
+      "p95": {
+        "content-1M": 11.653699999999844,
+        "history-1M": 37.64249999999993
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 2,
+      "startedAt": "2026-10-28T12:19:00.937Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/reference-warm-2-preparation-6689855f-87cc-4587-b0f2-66d6ed4c8f11.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:18:57.989Z",
+          "windowsFreeBytes": 4824317952,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5740277760,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:18:57.989Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/reference-warm-2-attempt-1-f9fc19bc-267e-4f88-b305-ab1b0d50c160.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/reference-warm-2-attempt-1-f9fc19bc-267e-4f88-b305-ab1b0d50c160.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:19:00.464Z",
+          "windowsFreeBytes": 4835549184,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5725962240,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:00.464Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:19:19.437Z",
+          "windowsFreeBytes": 4842217472,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5755379712,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:19.437Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 20,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4835549184,
+      "battery": {
+        "observedAt": "2026-10-28T12:19:00.464Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4859269120,
+      "code": 0,
+      "p95": {
+        "content-1M": 10.410300000000007,
+        "history-1M": 36.86579999999958
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 2,
+      "startedAt": "2026-10-28T12:19:23.206Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/candidate-cold-2-preparation-f8dda2ed-744c-49a4-a7d4-63e7f01e9318.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:19:20.308Z",
+          "windowsFreeBytes": 4842110976,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5755027456,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:20.308Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/candidate-cold-2-attempt-1-d2551117-22eb-4d2e-948c-7fbf512315a9.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/candidate-cold-2-attempt-1-d2551117-22eb-4d2e-948c-7fbf512315a9.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:19:22.736Z",
+          "windowsFreeBytes": 4800532480,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5748432896,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:22.736Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:19:38.774Z",
+          "windowsFreeBytes": 4794839040,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5748383744,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:38.774Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 17,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4800532480,
+      "battery": {
+        "observedAt": "2026-10-28T12:19:22.736Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4797825024,
+      "code": 0,
+      "p95": {
+        "content-1M": 178.3344000000002,
+        "history-1M": 294.53529999999955
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 2,
+      "startedAt": "2026-10-28T12:19:42.651Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/reference-cold-2-preparation-e10dc1ad-95e5-4439-aa9b-38064ddeb518.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:19:39.679Z",
+          "windowsFreeBytes": 4779569152,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5749555200,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:39.679Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/reference-cold-2-attempt-1-b5c670b2-fd82-4be1-a5c3-1261e6f4d576.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/reference-cold-2-attempt-1-b5c670b2-fd82-4be1-a5c3-1261e6f4d576.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:19:42.183Z",
+          "windowsFreeBytes": 4728266752,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5740204032,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:42.183Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:19:58.159Z",
+          "windowsFreeBytes": 4761571328,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5716041728,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:58.159Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 17,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4728266752,
+      "battery": {
+        "observedAt": "2026-10-28T12:19:42.183Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4771254272,
+      "code": 0,
+      "p95": {
+        "content-1M": 151.73239999999987,
+        "history-1M": 272.03320000000167
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "warm",
+      "iteration": 3,
+      "startedAt": "2026-10-28T12:20:01.925Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/reference-warm-3-preparation-6efd6aa7-5ea5-4c9f-9e3b-08e221cc348f.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:19:59.010Z",
+          "windowsFreeBytes": 4757536768,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5722664960,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:19:59.010Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/reference-warm-3-attempt-1-bb97eef0-ff61-4ff6-9895-c0993c620459.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/reference-warm-3-attempt-1-bb97eef0-ff61-4ff6-9895-c0993c620459.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:20:01.461Z",
+          "windowsFreeBytes": 4739780608,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5723856896,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:20:01.461Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:20:20.458Z",
+          "windowsFreeBytes": 4790005760,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5724966912,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:20:20.458Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 20,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4739780608,
+      "battery": {
+        "observedAt": "2026-10-28T12:20:01.461Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4813160448,
+      "code": 0,
+      "p95": {
+        "content-1M": 8.893399999999929,
+        "history-1M": 35.174699999999575
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 3,
+      "startedAt": "2026-10-28T12:20:24.232Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/candidate-warm-3-preparation-dea621b7-7fb3-4f5d-86a3-b203f8e68e3c.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:20:21.327Z",
+          "windowsFreeBytes": 4779819008,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5744398336,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:20:21.327Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/candidate-warm-3-attempt-1-02bf68ba-cc5d-482d-8b0f-0aa63ec27ce2.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/candidate-warm-3-attempt-1-02bf68ba-cc5d-482d-8b0f-0aa63ec27ce2.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:20:23.716Z",
+          "windowsFreeBytes": 4752338944,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5738635264,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:20:23.716Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:20:42.696Z",
+          "windowsFreeBytes": 4792967168,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5739229184,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:20:42.696Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 20,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4752338944,
+      "battery": {
+        "observedAt": "2026-10-28T12:20:23.716Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4811161600,
+      "code": 0,
+      "p95": {
+        "content-1M": 10.558199999999943,
+        "history-1M": 34.55320000000029
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 3,
+      "startedAt": "2026-10-28T12:20:46.642Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/reference-cold-3-preparation-0cdeeffa-7079-4f10-81d8-35522229c23c.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:20:43.575Z",
+          "windowsFreeBytes": 4779077632,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5739380736,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:20:43.575Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/reference-cold-3-attempt-1-16867e18-bd38-4e44-9141-6280771d8964.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/reference-cold-3-attempt-1-16867e18-bd38-4e44-9141-6280771d8964.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:20:46.163Z",
+          "windowsFreeBytes": 4750184448,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5720596480,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:20:46.163Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:21:01.200Z",
+          "windowsFreeBytes": 4809015296,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5746233344,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:21:01.200Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 16,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4750184448,
+      "battery": {
+        "observedAt": "2026-10-28T12:20:46.163Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4822364160,
+      "code": 0,
+      "p95": {
+        "content-1M": 149.74620000000004,
+        "history-1M": 269.83200000000033
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 3,
+      "startedAt": "2026-10-28T12:21:04.951Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/candidate-cold-3-preparation-dbbe941a-e02c-4a59-a9fb-3542a7886d1b.json",
+        "observation": {
+          "observedAt": "2026-10-28T12:21:02.044Z",
+          "windowsFreeBytes": 4803170304,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5737291776,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:21:02.044Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/candidate-cold-3-attempt-1-a227beaf-eeab-4f49-ae1b-4a6975e7af61.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/candidate-cold-3-attempt-1-a227beaf-eeab-4f49-ae1b-4a6975e7af61.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-28T12:21:04.485Z",
+          "windowsFreeBytes": 4745089024,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5740474368,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:21:04.485Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-28T12:21:20.488Z",
+          "windowsFreeBytes": 4786384896,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5738967040,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-28T12:21:20.488Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 17,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4745089024,
+      "battery": {
+        "observedAt": "2026-10-28T12:21:04.485Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4804009984,
+      "code": 0,
+      "p95": {
+        "content-1M": 151.48619999999983,
+        "history-1M": 255.3754000000008
+      }
+    }
+  ],
+  "harness": {
+    "warm.e2e.ts": "d4d4e240ba66692c56314330a999071d6d04baab700e03d0ff77c8a9b9df42f3",
+    "cold.e2e.ts": "1ab2f4b691aef8d615e179aaf238699a8b435c4b4b165709b28fe4dd78995d83",
+    "database.ts": "bd5582ec75b3e347612f560aa96e912050a6825f8269f5d86115b3a15aba0fba",
+    "profiles.ts": "fde9ad38dbdb48099b896165851a2c3bf59f42782837718863bdb37bfb218e87"
+  }
+}

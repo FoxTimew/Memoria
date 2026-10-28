@@ -1,0 +1,30 @@
+▶ 6a cell kernel: real PostgreSQL concurrency, rights, hidden links and rollback
+  ✔ version zero races; clear retains tombstone; response replay cannot overwrite (145.2106ms)
+  ✔ nine types validate; false/zero remain different from empty; title and Yjs versions untouched (351.8445ms)
+  ✔ different cells proceed while the other cell is locked; same set uses one CAS (163.2293ms)
+  ✔ hidden relations survive clearVisible; unavailable and invented IDs have identical errors (230.208ms)
+  ✔ person visibility is explicit; withdrawal detaches without deleting assignments (104.7961ms)
+  ✔ guest read and schema/lifecycle spoofing fail; source access checked before validation (31.326ms)
+  ✔ schema race waits, rechecks the version and preserves values (50.7806ms)
+  ✔ revocation first: queued write is refused with no value in the error (45.9461ms)
+  ✔ write first: rights commit waits until the authorized cell commit (59.4831ms)
+  ✔ lifecycle CAS, archive while waiting, and old lifecycle ticket rejection (37.8415ms)
+  ✔ write failure rolls back value, CAS version and row aggregate together (49.3144ms)
+  ✔ archived property rejects stale schema and new writes without deleting historical values (30.2945ms)
+  ✔ 10,000 person references survive withdrawal without identity resurrection (6166.7798ms)
+  ✔ value and version stay coherent while a previously empty cell is repeatedly written (3219.1986ms)
+  ✔ target revocation while adding a relation is rechecked after the wait (131.0703ms)
+  ✔ typed/base foreign keys reject populated type changes and foreign cell identities (11.4223ms)
+  ✔ archived options may be retained or removed, never newly assigned (258.0348ms)
+  ✔ option and assignable-list changes wait for the same base barrier (47.2074ms)
+✔ 6a cell kernel: real PostgreSQL concurrency, rights, hidden links and rollback (12332.3833ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12336.3305
+Collaboration database-cells.e2e.ts: EXIT_CODE=0
+EXIT_CODE=0

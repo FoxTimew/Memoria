@@ -1,0 +1,104 @@
+{
+  "source": ".local\\session-6d-refresh-load-incomplete-telemetry.json",
+  "originalSha256": "0ea844c2c2a120e79e777d18de190f87ede35e2d95ab9663894bccab2c8e9d8b",
+  "encoding": "JSON summaries + ordered, compact NDJSON shards, no samples removed. Array hashes use JSON.stringify(array). Hygiene result duplicates are replaced by their SHA256.",
+  "hygiene": [
+    {
+      "source": ".local/measurement-hygiene/database-refresh-50-preparation-2db77802-bcce-4462-8068-563de7094379.json",
+      "file": "database-refresh-50-preparation-2db77802-bcce-4462-8068-563de7094379.json",
+      "originalSha256": "65bfef24289116dd449f56a27aec34e343ba8784346080d2ea77958c550323dd"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-refresh-oracle-preparation-fd62aba3-4037-4af9-9f79-293c45aa9881.json",
+      "file": "database-refresh-oracle-preparation-fd62aba3-4037-4af9-9f79-293c45aa9881.json",
+      "originalSha256": "1e7eb3c7d9244ec78348d9a8e886900fe80e2ae1c60d4d860e1a5908578a5579"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-refresh-oracle-attempt-1-54ffdf55-e463-4860-866b-e5080eb851c3.json",
+      "file": "database-refresh-oracle-attempt-1-54ffdf55-e463-4860-866b-e5080eb851c3.json",
+      "originalSha256": "e7bc1fb366eb1564fc88aaa1f98a2bd44c619d0cf782269b3c8c8cd172960f82"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-refresh-50-1-attempt-1-49d57fd8-c3ff-4a35-8c6f-048f449d00a8.json",
+      "file": "database-refresh-50-1-attempt-1-49d57fd8-c3ff-4a35-8c6f-048f449d00a8.json",
+      "originalSha256": "c97c968960da6189f52268df0a19e2736277c83f95551352c27d0b6faa5684e8"
+    }
+  ],
+  "files": [
+    {
+      "name": "database-refresh-50-1-attempt-1-49d57fd8-c3ff-4a35-8c6f-048f449d00a8.json",
+      "bytes": 201100,
+      "sha256": "c7713a48fcc98fa615bdfce242957c8ea2a56f36ef1b4167c909eea51a1f4977"
+    },
+    {
+      "name": "database-refresh-50-preparation-2db77802-bcce-4462-8068-563de7094379.json",
+      "bytes": 675,
+      "sha256": "65bfef24289116dd449f56a27aec34e343ba8784346080d2ea77958c550323dd"
+    },
+    {
+      "name": "database-refresh-oracle-attempt-1-54ffdf55-e463-4860-866b-e5080eb851c3.json",
+      "bytes": 25393,
+      "sha256": "a271be868c09da7fdf4c409829686e5bc1b092cbd19b2ea974b33c2e84bfed57"
+    },
+    {
+      "name": "database-refresh-oracle-preparation-fd62aba3-4037-4af9-9f79-293c45aa9881.json",
+      "bytes": 679,
+      "sha256": "1e7eb3c7d9244ec78348d9a8e886900fe80e2ae1c60d4d860e1a5908578a5579"
+    },
+    {
+      "name": "measurement.json",
+      "bytes": 22721,
+      "sha256": "2950ab7b5803945a684fd5bd3e909ec7f7f4136c656f29b9716dddb2587051b3"
+    },
+    {
+      "name": "run.txt",
+      "bytes": 4748,
+      "sha256": "554d26049197bee91d5ed6a8599da327ba6d7c19fca6f5b2395eed58ca2f1980"
+    },
+    {
+      "name": "series-1-loads-1.ndjson",
+      "bytes": 87415,
+      "sha256": "da8b5494a36a907bb27ce3d36855ac4d35fbe641e80962ab6f3627761ba36f21"
+    },
+    {
+      "name": "series-1-responses-1.ndjson",
+      "bytes": 1567683,
+      "sha256": "97ef2a8a969c424a13643b490960d9ac1cedbb6af3fc52d1642ba95f7fdc5863"
+    },
+    {
+      "name": "series-1-responses-2.ndjson",
+      "bytes": 1558504,
+      "sha256": "54b72b6de989de08c69d221dcbcac9de85e9033c6d5546241e75d7b90de4d056"
+    },
+    {
+      "name": "series-1-responses-3.ndjson",
+      "bytes": 1551074,
+      "sha256": "b0c271c9eb3a132dbe395eb5a7ff755b94d00b646d297c040a01600d20cd6835"
+    },
+    {
+      "name": "series-1-responses-4.ndjson",
+      "bytes": 1237768,
+      "sha256": "f071d0c22393e1ba4f1d7522e6b07f0b0f2de1d13eaa9ad0d4d4f6eee48d128a"
+    },
+    {
+      "name": "series-1-serverSamples-1.ndjson",
+      "bytes": 1498257,
+      "sha256": "646843e43057338d941bee456f8df7a3c30dac1e9ab1d79b7c1b6ad3904ec6dc"
+    },
+    {
+      "name": "series-1-serverSamples-2.ndjson",
+      "bytes": 1497726,
+      "sha256": "1acf31b9e9c9fe0cabc5a10c97a3d88bed3428c4bc875452b5b70f00fb64d75c"
+    },
+    {
+      "name": "series-1-serverSamples-3.ndjson",
+      "bytes": 1497809,
+      "sha256": "4f814751c77d3b218bd214736a288b92db9dec9833944fb3f5adb17f78e7d932"
+    },
+    {
+      "name": "series-1-serverSamples-4.ndjson",
+      "bytes": 1198242,
+      "sha256": "c0b58efd284cab114f813d696d6f3ea5945f597dd34815cb3ef1a7a61b9f3b74"
+    }
+  ]
+}

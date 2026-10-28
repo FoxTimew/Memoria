@@ -20,6 +20,7 @@ export const pages = pgTable(
   'pages',
   {
     ...businessFields(),
+    kind: text('kind').default('page').notNull(),
     parentId: uuid('parent_id'),
     title: text('title').default('').notNull(),
     icon: text('icon'),
@@ -36,7 +37,11 @@ export const pages = pgTable(
         sql`coalesce(${t.parentId}, '00000000-0000-0000-0000-000000000000'::uuid)`,
         t.position,
       )
-      .where(sql`${t.deletedAt} is null`),
+      .where(sql`${t.deletedAt} is null and ${t.kind} = 'page'`),
+    check(
+      'pages_kind_ck',
+      sql`${t.kind} in ('page','database_row') and (${t.kind} = 'page' or ${t.parentId} is null)`,
+    ),
     index('pages_parent_idx').on(t.workspaceId, t.parentId),
     index('pages_trash_idx')
       .on(t.deletedAt)

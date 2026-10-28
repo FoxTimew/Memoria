@@ -485,6 +485,7 @@ await test(
       await t.test(
         'assurance is rechecked after waiting for the workspace lock, before any sensitive effect',
         async () => {
+          const sessionId = (await sid(alice.browser)).id;
           const blocker = await db.pool.connect();
           try {
             await blocker.query('BEGIN');
@@ -505,9 +506,11 @@ await test(
               assert(Date.now() < end);
               await delay(20);
             }
-            await db.pool.query(
+            // Security revocations now take the same workspace mutation mutex. Perform
+            // this change in the transaction already owning it, not a self-blocked third client.
+            await blocker.query(
               "UPDATE session_assurance SET verified_at=now()-interval '601 seconds' WHERE session_id=$1",
-              [(await sid(alice.browser)).id],
+              [sessionId],
             );
             await blocker.query('COMMIT');
             assert.equal((await waiting).status, 403);

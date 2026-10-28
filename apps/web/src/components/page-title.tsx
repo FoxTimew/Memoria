@@ -11,6 +11,7 @@ export function PageTitle({
   onDirty,
   onSaved,
   onValue,
+  row = false,
 }: {
   title: string;
   version: number;
@@ -19,6 +20,7 @@ export function PageTitle({
   onDirty: (dirty: boolean) => void;
   onSaved: () => void;
   onValue: (value: string) => void;
+  row?: boolean;
 }) {
   const [value, setValue] = useState(title),
     [base, setBase] = useState({ title, version });
@@ -37,9 +39,16 @@ export function PageTitle({
     async function check() {
       if (current.current.busy) return;
       try {
-        const next = pageVersionSchema.parse(await contentRequest(`${endpoint}/version`));
+        const result = row
+          ? ((await contentRequest(endpoint)) as { title: string; version: string })
+          : undefined;
+        const next = result
+          ? { version: Number(result.version) }
+          : pageVersionSchema.parse(await contentRequest(`${endpoint}/version`));
         if (!active || next.version === current.current.base.version) return;
-        const data = pageDocumentSchema.parse(await contentRequest(endpoint));
+        const data = result
+          ? { page: { title: result.title, version: Number(result.version) } }
+          : pageDocumentSchema.parse(await contentRequest(endpoint));
         if (!active || current.current.busy || data.page.version <= current.current.base.version)
           return;
         const changed = { title: data.page.title, version: data.page.version };
@@ -66,12 +75,23 @@ export function PageTitle({
     setError('');
     const captured = value;
     try {
-      const result = pageSaveResultSchema.parse(
-        await contentRequest(`${endpoint}/rename`, 'POST', {
-          expectedVersion: base.version,
-          title: captured,
-        }),
-      );
+      const result = row
+        ? {
+            version: Number(
+              (
+                (await contentRequest(endpoint, 'PATCH', {
+                  expectedVersion: String(base.version),
+                  title: captured,
+                })) as { version: string }
+              ).version,
+            ),
+          }
+        : pageSaveResultSchema.parse(
+            await contentRequest(`${endpoint}/rename`, 'POST', {
+              expectedVersion: base.version,
+              title: captured,
+            }),
+          );
       setBase({ title: captured, version: result.version });
       setRemote(undefined);
       onSaved();
@@ -79,7 +99,15 @@ export function PageTitle({
       setError(e instanceof Error ? e.message : 'Titre non enregistré.');
       if (e instanceof ContentError && e.status === 409) {
         try {
-          const data = pageDocumentSchema.parse(await contentRequest(endpoint));
+          const result = await contentRequest(endpoint);
+          const data = row
+            ? {
+                page: {
+                  title: (result as { title: string }).title,
+                  version: Number((result as { version: string }).version),
+                },
+              }
+            : pageDocumentSchema.parse(result);
           setRemote({ title: data.page.title, version: data.page.version });
         } catch {
           /* Keep the conflict and retry explicitly. */

@@ -1,0 +1,267 @@
+{
+  "source": "ea9f23063c85c1021392153e26813ae8746e6973",
+  "bundleSha256": "d1eb5e6d2dcfa539cf9b9c4ca051ba3fefc1be202cdf74c62326e16883b30544",
+  "preparation": {
+    "path": ".local/measurement-hygiene/database-refresh-50-preparation-e1464490-dfb1-4217-99fa-e2b1bbc961cf.json",
+    "observation": {
+      "observedAt": "2026-10-27T12:51:13.968Z",
+      "windowsFreeBytes": 3736641536,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5691461632,
+        "swapInPages": 0,
+        "swapOutPages": 0
+      },
+      "power": {
+        "observedAt": "2026-10-27T12:51:13.968Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "results": [
+    {
+      "series": 1,
+      "durationSeconds": 600.0545390999999,
+      "count": 38000,
+      "perSecond": 63.32757695157981,
+      "requestsPerAccount": 760,
+      "rateLimited": 0,
+      "skipped": {},
+      "routes": {
+        "cache-policy": {
+          "count": 15000,
+          "perMinute": 1500,
+          "serverP95": 31.95369999995455,
+          "roundTripP95": 33.1933999999892
+        },
+        "row-access": {
+          "count": 15000,
+          "perMinute": 1500,
+          "serverP95": 27.768000000040047,
+          "roundTripP95": 28.702400000067428
+        },
+        "base": {
+          "count": 4000,
+          "perMinute": 400,
+          "serverP95": 38.27840000001015,
+          "roundTripP95": 40.103399999963585
+        },
+        "query": {
+          "count": 2000,
+          "perMinute": 200,
+          "serverP95": 60.361000000004424,
+          "roundTripP95": 65.53819999995176
+        },
+        "title": {
+          "count": 2000,
+          "perMinute": 200,
+          "serverP95": 29.929300000017975,
+          "roundTripP95": 31.331600000034086
+        }
+      },
+      "cpuCores": {
+        "mean": 0.3907826419434452,
+        "p95": 0.5311459057802917,
+        "max": 0.7801662363432201
+      },
+      "serverRssMaxMiB": 510.5859375,
+      "eventLoopP95": 0.3778850815439206,
+      "poolWaitingMax": 11,
+      "roomCounts": [50],
+      "chargedMiB": [656],
+      "postgres": {
+        "samples": 1197,
+        "meanCpuPercent": 45.55258145363413,
+        "p95CpuPercent": 67.07,
+        "maxCpuPercent": 86.32,
+        "first": {
+          "elapsedMs": 1765.0111999999936,
+          "cpu": "7.03%",
+          "memory": "480.5MiB / 6.697GiB",
+          "io": "1.39GB / 11.1GB"
+        },
+        "last": {
+          "elapsedMs": 599764.5989,
+          "cpu": "45.13%",
+          "memory": "480.9MiB / 6.697GiB",
+          "io": "1.39GB / 12GB"
+        }
+      },
+      "windowsFreeGiB": [3.0341415405273438, 2.839008331298828],
+      "wslAvailableGiB": [5.306987762451172, 5.2441253662109375],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 602,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    {
+      "series": 2,
+      "durationSeconds": 600.0593583,
+      "count": 38000,
+      "perSecond": 63.32706835479746,
+      "requestsPerAccount": 760,
+      "rateLimited": 0,
+      "skipped": {},
+      "routes": {
+        "cache-policy": {
+          "count": 15000,
+          "perMinute": 1500,
+          "serverP95": 33.385599999921396,
+          "roundTripP95": 34.79330000001937
+        },
+        "row-access": {
+          "count": 15000,
+          "perMinute": 1500,
+          "serverP95": 29.90260000003036,
+          "roundTripP95": 30.914199999999255
+        },
+        "base": {
+          "count": 4000,
+          "perMinute": 400,
+          "serverP95": 40.03220000001602,
+          "roundTripP95": 41.91520000004675
+        },
+        "query": {
+          "count": 2000,
+          "perMinute": 200,
+          "serverP95": 62.54280000005383,
+          "roundTripP95": 68.47970000002533
+        },
+        "title": {
+          "count": 2000,
+          "perMinute": 200,
+          "serverP95": 32.56640000001062,
+          "roundTripP95": 33.95959999994375
+        }
+      },
+      "cpuCores": {
+        "mean": 0.38953442557230716,
+        "p95": 0.5156930594910004,
+        "max": 0.6569752320337614
+      },
+      "serverRssMaxMiB": 524.57421875,
+      "eventLoopP95": 0.37655397290389553,
+      "poolWaitingMax": 0,
+      "roomCounts": [50],
+      "chargedMiB": [656],
+      "postgres": {
+        "samples": 1199,
+        "meanCpuPercent": 45.44123436196834,
+        "p95CpuPercent": 62.54,
+        "maxCpuPercent": 80.35,
+        "first": {
+          "elapsedMs": 914.4237999999896,
+          "cpu": "7.87%",
+          "memory": "481.1MiB / 6.697GiB",
+          "io": "1.39GB / 12GB"
+        },
+        "last": {
+          "elapsedMs": 599914.7409000001,
+          "cpu": "41.60%",
+          "memory": "483.1MiB / 6.697GiB",
+          "io": "1.39GB / 12.9GB"
+        }
+      },
+      "windowsFreeGiB": [2.791858673095703, 2.8942184448242188],
+      "wslAvailableGiB": [5.244480133056641, 5.24365234375],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 602,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    {
+      "series": 3,
+      "durationSeconds": 600.0531893,
+      "count": 38000,
+      "perSecond": 63.32771940489043,
+      "requestsPerAccount": 760,
+      "rateLimited": 0,
+      "skipped": {},
+      "routes": {
+        "cache-policy": {
+          "count": 15000,
+          "perMinute": 1500,
+          "serverP95": 33.7844000000041,
+          "roundTripP95": 35.170700000133365
+        },
+        "row-access": {
+          "count": 15000,
+          "perMinute": 1500,
+          "serverP95": 29.79810000001453,
+          "roundTripP95": 30.8941000001505
+        },
+        "base": {
+          "count": 4000,
+          "perMinute": 400,
+          "serverP95": 39.653699999907985,
+          "roundTripP95": 41.50350000010803
+        },
+        "query": {
+          "count": 2000,
+          "perMinute": 200,
+          "serverP95": 61.57920000003651,
+          "roundTripP95": 67.22219999996014
+        },
+        "title": {
+          "count": 2000,
+          "perMinute": 200,
+          "serverP95": 32.538799999980256,
+          "roundTripP95": 34.21940000005998
+        }
+      },
+      "cpuCores": {
+        "mean": 0.3871946724329738,
+        "p95": 0.5159778129540104,
+        "max": 0.6878070701169168
+      },
+      "serverRssMaxMiB": 528.1171875,
+      "eventLoopP95": 0.3769852223096317,
+      "poolWaitingMax": 0,
+      "roomCounts": [50],
+      "chargedMiB": [656],
+      "postgres": {
+        "samples": 1199,
+        "meanCpuPercent": 44.68261884904083,
+        "p95CpuPercent": 53.97,
+        "maxCpuPercent": 80.44,
+        "first": {
+          "elapsedMs": 937.3945999999996,
+          "cpu": "8.67%",
+          "memory": "480.9MiB / 6.697GiB",
+          "io": "1.39GB / 12.9GB"
+        },
+        "last": {
+          "elapsedMs": 599937.3332,
+          "cpu": "52.28%",
+          "memory": "480.1MiB / 6.697GiB",
+          "io": "1.39GB / 13.7GB"
+        }
+      },
+      "windowsFreeGiB": [2.773681640625, 2.643230438232422],
+      "wslAvailableGiB": [5.256221771240234, 5.277462005615234],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 602,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    }
+  ],
+  "tableP95Median": 61.57920000003651,
+  "totalResponses": 114000
+}

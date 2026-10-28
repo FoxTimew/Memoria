@@ -7,7 +7,11 @@ import { fr } from '@blocknote/core/locales';
 import { BlockNoteView } from '@blocknote/mantine';
 import { SuggestionMenuController } from '@blocknote/react';
 import { createEditorKit } from '@memoria/block-catalog/client';
-import { collaborationAccessSchema, presenceUser } from '@memoria/contracts';
+import {
+  collaborationAccessSchema,
+  collaborationRowAccessSchema,
+  presenceUser,
+} from '@memoria/contracts';
 import type { PageDocument } from '@memoria/contracts';
 import { contentRequest } from '../lib/content-api.ts';
 import { CollaborationClient } from '../lib/collaboration-client.ts';
@@ -21,13 +25,16 @@ import {
   yjsCache,
   pageAccessKey,
 } from '../lib/yjs-cache.ts';
-import { refreshCachePolicy } from '../lib/cache-policy.ts';
+import { refreshCachePolicy, refreshRowAccess } from '../lib/cache-policy.ts';
 import type { CachePage, CacheTicket } from '../lib/yjs-cache.ts';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 
 type Kit = Awaited<ReturnType<typeof createEditorKit>>;
 type Editor = Kit['schema']['BlockNoteEditor'];
+export type EditorDocument = {
+  page: Pick<PageDocument['page'], 'id' | 'workspaceId' | 'title' | 'version'>;
+};
 export type EditorActions = { discard: () => Promise<unknown>; export: () => string };
 export default function PageEditor({
   actions,
@@ -41,9 +48,10 @@ export default function PageEditor({
   userId,
   userName,
   sessionId,
+  rowDatabaseId,
 }: {
   actions: RefObject<EditorActions | null>;
-  document: PageDocument;
+  document: EditorDocument;
   endpoint: string;
   onSaved: () => void;
   onDirty: (dirty: boolean) => void;
@@ -53,6 +61,7 @@ export default function PageEditor({
   userId: string;
   userName: string;
   sessionId: string;
+  rowDatabaseId?: string;
 }) {
   const [loaded, setLoaded] = useState<{ kit: Kit; editor: Editor; client: CollaborationClient }>();
   const [error, setError] = useState('');
@@ -68,6 +77,10 @@ export default function PageEditor({
         let ticket: CacheTicket | undefined;
         try {
           ticket = await refreshCachePolicy(userId, sessionId, document.page.workspaceId);
+          if (rowDatabaseId)
+            ticket = await refreshRowAccess(ticket, document.page.workspaceId, [
+              { database: rowDatabaseId, row: document.page.id },
+            ]);
         } catch (e) {
           if (!(e instanceof CacheForbidden)) throw e;
         }
@@ -75,13 +88,25 @@ export default function PageEditor({
           createEditorKit(),
           contentRequest(`${endpoint}/collaboration`, 'POST'),
         ]);
-        const meta = collaborationAccessSchema.parse(opened);
+        const meta = rowDatabaseId
+          ? collaborationRowAccessSchema.parse(opened)
+          : collaborationAccessSchema.parse(opened);
         if (meta.identity.user !== userId || meta.identity.session !== sessionId)
           throw new LocalSessionRevoked();
         if (
           ticket &&
+          !rowDatabaseId &&
+          'accessVersion' in meta &&
           ticket.pageAccess[pageAccessKey(document.page.workspaceId, document.page.id)]?.version !==
             meta.accessVersion
+        )
+          throw new AccessChanged();
+        if (
+          ticket &&
+          'rowScope' in meta &&
+          JSON.stringify(
+            ticket.rowChecks[pageAccessKey(document.page.workspaceId, document.page.id)],
+          ) !== JSON.stringify(meta.rowScope)
         )
           throw new AccessChanged();
         let cached: Awaited<ReturnType<typeof yjsCache.open>> | undefined;
@@ -106,22 +131,35 @@ export default function PageEditor({
           { url: url.href },
           async () => {
             try {
-              await refreshCachePolicy(userId, sessionId);
+              const current = await refreshCachePolicy(userId, sessionId);
+              if (rowDatabaseId)
+                await refreshRowAccess(current, document.page.workspaceId, [
+                  { database: rowDatabaseId, row: document.page.id },
+                ]);
             } catch (e) {
               if (!(e instanceof CacheForbidden)) throw e;
             }
-            const fresh = collaborationAccessSchema.parse(
-              await contentRequest(`${endpoint}/collaboration`, 'POST'),
-            );
+            const opened = await contentRequest(`${endpoint}/collaboration`, 'POST');
+            const fresh = rowDatabaseId
+              ? collaborationRowAccessSchema.parse(opened)
+              : collaborationAccessSchema.parse(opened);
             if (fresh.identity.user !== userId || fresh.identity.session !== sessionId)
               throw new LocalSessionRevoked();
-            if (fresh.accessVersion !== meta.accessVersion || fresh.level !== meta.level)
+            if (
+              fresh.level !== meta.level ||
+              ('rowScope' in fresh && 'rowScope' in meta
+                ? JSON.stringify(fresh.rowScope) !== JSON.stringify(meta.rowScope)
+                : 'accessVersion' in fresh &&
+                  'accessVersion' in meta &&
+                  fresh.accessVersion !== meta.accessVersion)
+            )
               throw new AccessChanged();
           },
           presenceUser(userId, userName),
           sessionId,
-          meta.accessVersion,
+          'accessVersion' in meta ? meta.accessVersion : undefined,
           meta.level === 'read',
+          'rowScope' in meta ? meta.rowScope : undefined,
         );
         const accessChanged = () => {
           if (cancelled) return;
@@ -225,6 +263,7 @@ export default function PageEditor({
         onDirty={onDirty}
         endpoint={endpoint}
         reload={reload}
+        row={!!rowDatabaseId}
       />
     </>
   );
@@ -240,17 +279,19 @@ function ActiveEditor({
   onSaved,
   onDirty,
   reload,
+  row,
 }: {
   kit: Kit;
   editor: Editor;
   client: CollaborationClient;
   actions: RefObject<EditorActions | null>;
   state: CollaborationStatus;
-  document: PageDocument;
+  document: EditorDocument;
   endpoint: string;
   onSaved: () => void;
   onDirty: (dirty: boolean) => void;
   reload: () => void;
+  row: boolean;
 }) {
   const [titleDirty, setTitleDirty] = useState(false),
     [discard, setDiscard] = useState(false);
@@ -435,6 +476,7 @@ function ActiveEditor({
       )}
       <div hidden={state.phase === 'checking'}>
         <PageTitle
+          row={row}
           title={document.page.title}
           version={document.page.version}
           endpoint={endpoint}

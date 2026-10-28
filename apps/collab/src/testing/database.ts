@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import pg from 'pg';
 /** Every integration suite applies the real migrations in its own disposable schema. */
-export async function testDatabase() {
+export async function testDatabase(options: { queryTimeoutMs?: number } = {}) {
   const base = process.env.DATABASE_URL;
   if (
     !base ||
@@ -20,7 +20,7 @@ export async function testDatabase() {
   const pool = new pg.Pool({
     connectionString: url.toString(),
     max: 12,
-    query_timeout: 10000,
+    query_timeout: options.queryTimeoutMs ?? 10000,
     connectionTimeoutMillis: 5000,
     pipeline: true,
   });

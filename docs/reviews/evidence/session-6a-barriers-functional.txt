@@ -1,0 +1,3 @@
+$ node scripts/test-collab.mjs "--suite" "databases-barriers"
+PASS database barriers: inherited access, closed legacy scope, bounded materialization, writer/revocation in both orders.
+Collaboration databases-barriers.e2e.ts: EXIT_CODE=0

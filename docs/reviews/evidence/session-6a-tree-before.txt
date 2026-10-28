@@ -1,0 +1,53 @@
+$ node scripts/test-collab.mjs "--suite" "databases-barriers"
+Power: {"observedAt":"2026-10-26T12:12:56.033Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-26T12:12:56.745Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}
+PASS database barriers: inherited access, closed legacy scope, bounded materialization, writer/revocation in both orders.
+Fixture: containers ready.
+Fixture: memberships and grants committed.
+Fixture ready: 1,000 ordinary pages, 50 bases, 50,000 rows, 100 memberships, 5,000 grants, depth 50.
+{"kind":"move","series":1,"power":{"observedAt":"2026-10-26T12:13:32.376Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3819204608}
+{"kind":"move","series":1,"p95":[154.80069999999978,134.0164999999979,149.71600000000035,153.7280000000028],"mutations":30,"receipts":240}
+{"kind":"move","series":2,"power":{"observedAt":"2026-10-26T12:13:54.736Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3776094208}
+{"kind":"move","series":2,"p95":[153.96450000000186,131.59290000000328,149.8819999999978,154.07309999999416],"mutations":30,"receipts":240}
+{"kind":"move","series":3,"power":{"observedAt":"2026-10-26T12:14:16.998Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3747131392}
+{"kind":"move","series":3,"p95":[160.58759999999893,130.84390000000712,149.59189999999944,153.4942999999912],"mutations":30,"receipts":240}
+{"kind":"archive","series":1,"power":{"observedAt":"2026-10-26T12:14:39.417Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3721441280}
+{"kind":"archive","series":1,"p95":[216.79409999999916,192.11119999999937,208.19689999999537,212.5338999999949],"mutations":30,"receipts":240}
+{"kind":"archive","series":2,"power":{"observedAt":"2026-10-26T12:15:03.619Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3950243840}
+{"kind":"archive","series":2,"p95":[211.03699999999662,188.6321000000171,206.54670000000624,210.34330000000773],"mutations":30,"receipts":240}
+{"kind":"archive","series":3,"power":{"observedAt":"2026-10-26T12:15:27.614Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3920642048}
+{"kind":"archive","series":3,"p95":[206.3925000000163,183.25269999998272,199.9951000000001,204.6069000000134],"mutations":30,"receipts":240}
+{"kind":"restore","series":1,"power":{"observedAt":"2026-10-26T12:15:51.615Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3878739968}
+{"kind":"restore","series":1,"p95":[206.38270000001648,185.5614999999816,202.2320999999938,206.58600000001024],"mutations":30,"receipts":240}
+{"kind":"restore","series":2,"power":{"observedAt":"2026-10-26T12:16:15.859Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3823038464}
+{"kind":"restore","series":2,"p95":[208.46199999999953,185.38370000000577,204.31810000000405,208.09940000000643],"mutations":30,"receipts":240}
+{"kind":"restore","series":3,"power":{"observedAt":"2026-10-26T12:16:40.083Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null},"freeBytes":3781754880}
+{"kind":"restore","series":3,"p95":[217.39570000002277,186.69570000001113,203.94490000000224,208.75960000001942],"mutations":30,"receipts":240}
+{"kind":"move","medianP95":[154.80069999999978,131.59290000000328,149.71600000000035,153.7280000000028],"limits":[500,100,200,200],"passed":false}
+{"kind":"archive","medianP95":[211.03699999999662,188.6321000000171,206.54670000000624,210.34330000000773],"limits":[500,100,200,200],"passed":false}
+{"kind":"restore","medianP95":[208.46199999999953,185.5614999999816,203.94490000000224,208.09940000000643],"limits":[500,100,200,200],"passed":false}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: STOP_6A_TREE_BUDGET
+    at measureDatabaseTree (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-databases-barriers.e2e.mjs:35984:5)
+    at async measureDatabaseBarriers (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-databases-barriers.e2e.mjs:36128:5)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-databases-barriers.e2e.mjs:36448:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration databases-barriers.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.
+
+EXIT_CODE=1

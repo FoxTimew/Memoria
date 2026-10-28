@@ -1,0 +1,338 @@
+{
+  "fixture": {
+    "ordinary": 1000,
+    "bases": 50,
+    "rows": 50000,
+    "members": 100,
+    "grants": 5000,
+    "shareTarget": "root container; no inherited edit can mask its read/edit transition",
+    "subtree": 40,
+    "properties": "empty; rights cardinality, not table workload"
+  },
+  "protocol": "Three series/case; 32 HTTP mutations with two explicit warmups, one genuine owner with recent WebAuthn. Five native WSS documents (four rows in different bases and one ordinary page), paced 5 updates/s. Setup/reset and fresh previews outside measured writer windows. 2150ms between mutations respects unchanged per-account access quotas. Lock waits sampled every 5ms (approximate), wire time ends at durable receipt. Retain blocked-wait p95 and overlapping editor confirmations separately from all confirmations.",
+  "preparation": {
+    "path": ".local/measurement-hygiene/database-http-rights-preparation-f61b23ec-1e4e-414a-9caa-36a979fc961c.json",
+    "observation": {
+      "observedAt": "2026-10-27T15:02:19.566Z",
+      "windowsFreeBytes": 3941679104,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5820284928,
+        "swapInPages": 0,
+        "swapOutPages": 0
+      },
+      "power": {
+        "observedAt": "2026-10-27T15:02:19.566Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "selectedCases": ["remove", "move", "archive", "restore", "row-archive", "row-restore"],
+  "reports": [
+    {
+      "kind": "remove",
+      "series": 1,
+      "hygiene": {
+        "path": ".local/measurement-hygiene/database-http-rights-remove-1-attempt-1-2644d3ad-252b-4059-8588-e6644c923054.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/database-http-rights-remove-1-attempt-1-2644d3ad-252b-4059-8588-e6644c923054.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-27T15:03:11.744Z",
+          "windowsFreeBytes": 3958976512,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5723648000,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T15:03:11.744Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-27T15:04:21.780Z",
+          "windowsFreeBytes": 3956695040,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5701902336,
+            "swapInPages": 0,
+            "swapOutPages": 0
+          },
+          "power": {
+            "observedAt": "2026-10-27T15:04:21.780Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 100
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 71,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "failure": null,
+      "mutations": [
+        {
+          "start": 59551.8984,
+          "end": 59755.2619,
+          "server": 199.08209999999963,
+          "roundTrip": 203.3362000000052
+        },
+        {
+          "start": 61676.1504,
+          "end": 61871.3112,
+          "server": 190.0524000000005,
+          "roundTrip": 195.1356999999989
+        },
+        {
+          "start": 63827.4461,
+          "end": 64021.6077,
+          "server": 190.1661000000022,
+          "roundTrip": 194.12000000000262
+        },
+        {
+          "start": 65978.8111,
+          "end": 66132.7657,
+          "server": 150.3509000000049,
+          "roundTrip": 153.93069999999716
+        },
+        {
+          "start": 68140.8838,
+          "end": 68292.6261,
+          "server": 145.8335999999981,
+          "roundTrip": 151.71710000000894
+        },
+        {
+          "start": 70279.3714,
+          "end": 70434.5446,
+          "server": 149.35490000000573,
+          "roundTrip": 155.1412999999884
+        },
+        {
+          "start": 72442.0107,
+          "end": 72590.1843,
+          "server": 144.6750000000029,
+          "roundTrip": 148.1531999999861
+        },
+        {
+          "start": 74600.3344,
+          "end": 74749.3483,
+          "server": 144.04720000000088,
+          "roundTrip": 148.99199999999837
+        },
+        {
+          "start": 76748.7723,
+          "end": 76896.8198,
+          "server": 144.18079999998736,
+          "roundTrip": 148.03119999999763
+        },
+        {
+          "start": 78904.9609,
+          "end": 79064.5497,
+          "server": 156.37239999999292,
+          "roundTrip": 159.57690000000002
+        },
+        {
+          "start": 81057.1855,
+          "end": 81208.2081,
+          "server": 147.72299999999814,
+          "roundTrip": 151.0054999999993
+        },
+        {
+          "start": 83259.6243,
+          "end": 83421.7933,
+          "server": 158.57769999999437,
+          "roundTrip": 162.15260000000126
+        },
+        {
+          "start": 85375.743,
+          "end": 85531.8482,
+          "server": 152.8189999999886,
+          "roundTrip": 156.09120000000985
+        },
+        {
+          "start": 87526.5308,
+          "end": 87667.4134,
+          "server": 137.80879999999888,
+          "roundTrip": 140.8695000000007
+        },
+        {
+          "start": 89681.2463,
+          "end": 89827.5298,
+          "server": 143.0734000000084,
+          "roundTrip": 146.26920000000973
+        },
+        {
+          "start": 91840.4865,
+          "end": 91980.1612,
+          "server": 136.3798999999999,
+          "roundTrip": 139.6588999999949
+        },
+        {
+          "start": 93992.0779,
+          "end": 94134.1758,
+          "server": 136.61179999999877,
+          "roundTrip": 142.0734999999986
+        },
+        {
+          "start": 96147.7762,
+          "end": 96295.7637,
+          "server": 144.12429999999586,
+          "roundTrip": 147.96919999999227
+        },
+        {
+          "start": 98298.5375,
+          "end": 98438.0154,
+          "server": 136.55990000000747,
+          "roundTrip": 139.4670000000042
+        },
+        {
+          "start": 100445.8943,
+          "end": 100584.9772,
+          "server": 135.28850000000966,
+          "roundTrip": 139.06960000000254
+        },
+        {
+          "start": 102610.2637,
+          "end": 102748.4046,
+          "server": 135.06409999998868,
+          "roundTrip": 138.12790000000678
+        },
+        {
+          "start": 104771.4627,
+          "end": 104910.3322,
+          "server": 135.857600000003,
+          "roundTrip": 138.85529999999562
+        },
+        {
+          "start": 106921.715,
+          "end": 107066.1039,
+          "server": 141.13289999999688,
+          "roundTrip": 144.37660000000324
+        },
+        {
+          "start": 109073.466,
+          "end": 109215.5212,
+          "server": 138.5356000000029,
+          "roundTrip": 142.03949999999895
+        },
+        {
+          "start": 111240.5994,
+          "end": 111378.9837,
+          "server": 134.6033000000025,
+          "roundTrip": 138.36659999999392
+        },
+        {
+          "start": 113392.4284,
+          "end": 113530.6869,
+          "server": 135.3576999999932,
+          "roundTrip": 138.24069999999483
+        },
+        {
+          "start": 115548.4,
+          "end": 115686.9518,
+          "server": 135.88030000000435,
+          "roundTrip": 138.5396999999939
+        },
+        {
+          "start": 117695.5955,
+          "end": 117834.4424,
+          "server": 135.83269999999902,
+          "roundTrip": 138.83340000000317
+        },
+        {
+          "start": 119846.8261,
+          "end": 119985.2605,
+          "server": 134.93760000000475,
+          "roundTrip": 138.41650000000664
+        },
+        {
+          "start": 121998.9868,
+          "end": 122136.9603,
+          "server": 134.6594999999943,
+          "roundTrip": 137.95879999999306
+        }
+      ],
+      "waits": [
+        139.50679999999556, 103.1730000000025, 66.5656999999992, 36.56330000000162,
+        136.34550000000309, 90.97550000000047, 53.18960000000516, 22.22330000000511,
+        140.4152000000031, 102.98769999999786, 66.38450000000012, 26.876400000001013,
+        98.17819999999483, 56.03089999999793, 14.183199999999488, 87.55280000000494,
+        57.46360000000277, 11.62850000000617, 95.81140000000596, 58.87639999999374,
+        24.913899999999558, 96.80370000000403, 68.10490000000573, 22.76140000000305,
+        82.158500000005, 46.0398000000132, 0, 88.24279999999271, 36.743900000001304,
+        6.613199999992503, 110.59440000000177, 75.69490000000224, 17.504999999990105,
+        87.24439999999595, 45.43029999999271, 9.187599999990198, 107.175900000002,
+        73.26050000000396, 29.377599999992526, 7.963199999998324, 93.75960000000487,
+        60.567600000009406, 28.006500000003143, 83.97019999999611, 39.190300000002026, 0,
+        83.21360000000277, 56.076600000000326, 8.831999999994878, 73.23319999998785,
+        27.591199999995297, 0, 84.54750000000058, 14.830100000006496, 0, 69.09560000000056,
+        45.57619999999588, 9.034799999993993, 94.22419999999693, 40.94310000000405,
+        16.137199999997392, 83.51000000000931, 31.53399999999965, 0, 75.85010000001057,
+        32.17940000000817, 0, 70.81560000000172, 49.20419999999285, 0, 87.13719999999739,
+        39.4435000000085, 9.919900000008056, 82.3460999999952, 37.070999999996275, 0,
+        66.0515000000014, 42.10120000000461, 0, 68.10369999999239, 36.65879999999015,
+        73.8469999999943, 39.59449999999197, 7.958299999998417, 91.65499999999884,
+        45.35920000000624, 0, 78.94759999999951, 35.924400000003516, 0, 66.80280000000494,
+        42.384799999999814, 0
+      ],
+      "previews": [],
+      "p95": {
+        "mutation": 190.1661000000022,
+        "blockedSqlWait": 107.175900000002,
+        "wire": 112.50840000000608,
+        "overlappingWire": 129.86000000000058,
+        "serverConfirmation": 108.20650000000023
+      },
+      "aggregatedEvents": 129,
+      "rawArrays": {
+        "wire": {
+          "count": 456,
+          "sha256": "ac115b8638dd4f32f71f51020aa0540067f3f3d478251bf83cd641c4bb1e2004",
+          "files": ["series-1-wire-1.ndjson"]
+        },
+        "overlap": {
+          "count": 140,
+          "sha256": "7b466d8d33427015c13addeb6c25c64de9095fe399d59b6f1fb21832c7809508",
+          "files": ["series-1-overlap-1.ndjson"]
+        },
+        "confirmations": {
+          "count": 456,
+          "sha256": "3f2d1feb3507477d3044927247dd972feaa90757b7afbec003f2deaba327e9a0",
+          "files": ["series-1-confirmations-1.ndjson"]
+        }
+      }
+    }
+  ]
+}

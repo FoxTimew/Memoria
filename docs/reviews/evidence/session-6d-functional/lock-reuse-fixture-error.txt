@@ -1,0 +1,41 @@
+✖ workspace barrier reuse follows real PostgreSQL transactions and savepoints (1010.8133ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1015.0367
+
+✖ failing tests:
+
+test at apps\collab\dist\test-database-lock-reuse.e2e.mjs:92:7
+✖ workspace barrier reuse follows real PostgreSQL transactions and savepoints (1010.8133ms)
+  error: inconsistent types deduced for parameter $1
+      at C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg-pool@3.14.0_pg@8.23.1\node_modules\pg-pool\index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-database-lock-reuse.e2e.mjs:139:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-database-lock-reuse.e2e.mjs:92:1 {
+    length: 141,
+    severity: 'ERROR',
+    code: '42P08',
+    detail: 'uuid versus text',
+    hint: undefined,
+    position: '56',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_param.c',
+    line: '219',
+    routine: 'variable_coerce_param_hook'
+  }
+Collaboration database-lock-reuse.e2e.ts: EXIT_CODE=1
+EXIT_CODE=1

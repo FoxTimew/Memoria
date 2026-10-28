@@ -1,0 +1,44 @@
+PASS 6d final UI attacks: forged read-only write and hidden native row denied, hidden/missing replies identical
+PASS guest read: immutable table, hidden schema, neutral relation/person without title/id/count
+PASS 6d final UI attacks: forged guest schema, hidden relation removal and javascript URL denied; HTML text stays inert
+PASS original use case: guest editor updates task status through final UI
+PASS cell conflict shows current value, preserves input, explicit reapply; hidden references retained
+PASS nine cell editors, filters/sort and schema creation visible only to authorized role
+PASS final UI signed cursor pagination: no repeated rows and return to previous page
+PASS native row WSS collaboration between two browsers, relational title and local Yjs cache
+PASS final UI offline edit survives closing/reopening a row tab and merges after access recheck
+PASS real browser freeze/resume events and suspended timer
+PASS final UI frozen/offline old ticket cannot resurrect after removal/regrant; unrelated base survives; read-only body receives fresh document
+PASS real browser freeze/resume events and suspended timer
+✖ 6c final UI: typed table, guest task, CAS, selectors, native rows and cache resurrection attacks (35641.3467ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35648.3951
+
+✖ failing tests:
+
+test at scripts\test-databases-browser.mjs:96:7
+✖ 6c final UI: typed table, guest task, CAS, selectors, native rows and cache resurrection attacks (35641.3467ms)
+  ExpectError: expect(locator).toBeVisible() failed
+  
+  Locator: locator('.bn-editor')
+  Expected: visible
+  Timeout: 15000ms
+  Error: element(s) not found
+  
+  Call log:
+    - Expect "toBeVisible" locator('.bn-editor') with timeout 15000ms
+    - waiting for locator('.bn-editor')
+  
+      at captureRawStack (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\playwright-core@1.64.1\node_modules\playwright-core\lib\coreBundle.js:9282:17)
+      at callMatcherAsStep (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\playwright@1.64.1\node_modules\playwright\lib\matchers\expect.js:13316:57)
+      at Object.toBeVisible (C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\playwright@1.64.1\node_modules\playwright\lib\matchers\expect.js:13308:23)
+      at TestContext.<anonymous> (C:\Users\Foxti\Documents\Projets\Memoria\scripts\test-databases-browser.mjs:653:36)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/test-databases-browser.mjs:96:1 {
+    matcherResult: { message: `expect(locator).toBeVisible() failed\n\nLocator: locator('.bn-editor')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n  - Expect "toBeVisible" locator('.bn-editor') with timeout 15000ms\n  - waiting for locator('.bn-editor')\n`, pass: false, actual: undefined, name: 'toBeVisible', expected: 'visible', log: [ `  - Expect "toBeVisible" locator('.bn-editor') with timeout 15000ms`, "  - waiting for locator('.bn-editor')" ], timeout: 15000, ariaSnapshot: '- alert\n- main:\n  - navigation:\n    - link "Retour aux pages":\n      - /url: /workspaces/7eb2d12d-5c88-4806-a15a-603a7e0c1c50\n    - link "Retour au tableau":\n      - /url: /workspaces/7eb2d12d-5c88-4806-a15a-603a7e0c1c50/databases/32d319be-bf5f-4eb3-8d1c-9d2261d1634d\n    - link "Accueil et déconnexion":\n      - /url: /\n  - heading "Tâches 6c" [level=1]\n  - status: "Lecture seule : cette base vous est partagée pour consultation. Demandez un accès en édition pour modifier les cellules ou les lignes."\n  - alert:\n    - paragraph: Trop de demandes. Réessayez dans 46 secondes.\n    - button "Réessayer"' }
+  }

@@ -91,6 +91,7 @@ export class CollaborationClient {
     expectedSession?: string,
     readonly accessVersion?: number,
     readonly readOnly = false,
+    readonly rowScope?: { database: string; baseVersion: number; lifecycle: string },
   ) {
     this.doc.getXmlFragment('prosemirror');
     this.durable = new DurableState(generation, () => this.emit());
@@ -129,10 +130,10 @@ export class CollaborationClient {
       token:
         expectedSession && user
           ? JSON.stringify({
-              scope: 'page',
+              scope: rowScope ? 'database-row' : 'page',
               user: user.id,
               session: expectedSession,
-              accessVersion,
+              ...(rowScope ? { rowScope } : { accessVersion }),
             })
           : '',
       flushDelay: 100,

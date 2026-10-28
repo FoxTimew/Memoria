@@ -1,0 +1,581 @@
+[
+  {
+    "series": 1,
+    "samples": 6,
+    "hygiene": {
+      "path": ".local/measurement-hygiene/database-http-share-profile-1-attempt-1-f38f2b92-67c1-493f-b94e-178b77961897.json",
+      "attempts": [
+        {
+          "path": ".local/measurement-hygiene/database-http-share-profile-1-attempt-1-f38f2b92-67c1-493f-b94e-178b77961897.json",
+          "status": "valid",
+          "reason": null
+        }
+      ],
+      "before": {
+        "observedAt": "2026-10-27T14:08:33.348Z",
+        "windowsFreeBytes": 4054417408,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5764583424,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T14:08:33.348Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-27T14:08:47.325Z",
+        "windowsFreeBytes": 3557343232,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5753593856,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T14:08:47.325Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 15,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    "metrics": {
+      "pageQuery": {
+        "mean": 89.21213333333314,
+        "p95": 106.3773000000001
+      },
+      "afterPageGap": {
+        "mean": 94.03626666666848,
+        "p95": 98.93360000000393
+      },
+      "grantsQuery": {
+        "mean": 7.208566666668048,
+        "p95": 7.498800000001211
+      },
+      "barrier": {
+        "mean": 5.5211666666643096,
+        "p95": 6.852500000000873
+      },
+      "reconcile": {
+        "mean": 18.76436666666632,
+        "p95": 20.19050000000425
+      },
+      "http": {
+        "mean": 273.4188499999982,
+        "p95": 300.98419999999896
+      }
+    },
+    "plans": [
+      {
+        "name": "pages",
+        "node": "Seq Scan",
+        "rows": 51000,
+        "time": 8.994,
+        "buffers": 732
+      },
+      {
+        "name": "grants",
+        "node": "Sort",
+        "rows": 5000,
+        "time": 3.248,
+        "buffers": 83
+      }
+    ],
+    "functions": [
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 18.906616,
+          "self_time": 18.774668
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.980398,
+          "self_time": 21.980398
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 17.000474,
+          "self_time": 16.98287
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.753743,
+          "self_time": 21.753743
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.844299,
+          "self_time": 16.82941
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 20.187317,
+          "self_time": 20.187317
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 17.875767,
+          "self_time": 17.855006
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 22.391031,
+          "self_time": 22.391031
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.831767,
+          "self_time": 16.819793
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.057895,
+          "self_time": 21.057895
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 19.110618,
+          "self_time": 19.083644
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.191322,
+          "self_time": 21.191322
+        }
+      ]
+    ]
+  },
+  {
+    "series": 2,
+    "samples": 6,
+    "hygiene": {
+      "path": ".local/measurement-hygiene/database-http-share-profile-2-attempt-1-d8ec81ac-de01-42a5-a3a7-da125452119d.json",
+      "attempts": [
+        {
+          "path": ".local/measurement-hygiene/database-http-share-profile-2-attempt-1-d8ec81ac-de01-42a5-a3a7-da125452119d.json",
+          "status": "valid",
+          "reason": null
+        }
+      ],
+      "before": {
+        "observedAt": "2026-10-27T14:08:50.174Z",
+        "windowsFreeBytes": 3503415296,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5737259008,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T14:08:50.174Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-27T14:09:04.218Z",
+        "windowsFreeBytes": 3447947264,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5735235584,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T14:09:04.218Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 15,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    "metrics": {
+      "pageQuery": {
+        "mean": 90.87435000000308,
+        "p95": 114.56970000000729
+      },
+      "afterPageGap": {
+        "mean": 96.43409999999858,
+        "p95": 100.86449999999604
+      },
+      "grantsQuery": {
+        "mean": 7.992016666673105,
+        "p95": 9.040800000002491
+      },
+      "barrier": {
+        "mean": 5.980816666667427,
+        "p95": 9.535600000002887
+      },
+      "reconcile": {
+        "mean": 18.91204999999415,
+        "p95": 21.407599999991362
+      },
+      "http": {
+        "mean": 280.6386833333357,
+        "p95": 316.40260000000126
+      }
+    },
+    "plans": [
+      {
+        "name": "pages",
+        "node": "Seq Scan",
+        "rows": 51000,
+        "time": 9.07,
+        "buffers": 732
+      },
+      {
+        "name": "grants",
+        "node": "Sort",
+        "rows": 5000,
+        "time": 3.556,
+        "buffers": 83
+      }
+    ],
+    "functions": [
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 19.216597,
+          "self_time": 19.196198
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 22.544668,
+          "self_time": 22.544668
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.806804,
+          "self_time": 16.791494
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.538775,
+          "self_time": 21.538775
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.917489,
+          "self_time": 16.900877
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.715522,
+          "self_time": 21.715522
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.862932,
+          "self_time": 16.847001
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 25.473271,
+          "self_time": 25.473271
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 20.206411,
+          "self_time": 20.187204
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 22.775161,
+          "self_time": 22.775161
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 17.215607,
+          "self_time": 17.20196
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.765244,
+          "self_time": 21.765244
+        }
+      ]
+    ]
+  },
+  {
+    "series": 3,
+    "samples": 6,
+    "hygiene": {
+      "path": ".local/measurement-hygiene/database-http-share-profile-3-attempt-1-aa0edf1b-09a6-49d0-b36c-160f1d28aaad.json",
+      "attempts": [
+        {
+          "path": ".local/measurement-hygiene/database-http-share-profile-3-attempt-1-aa0edf1b-09a6-49d0-b36c-160f1d28aaad.json",
+          "status": "valid",
+          "reason": null
+        }
+      ],
+      "before": {
+        "observedAt": "2026-10-27T14:09:07.040Z",
+        "windowsFreeBytes": 3424681984,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5729058816,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T14:09:07.040Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-27T14:09:21.074Z",
+        "windowsFreeBytes": 3485032448,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5736960000,
+          "swapInPages": 0,
+          "swapOutPages": 0
+        },
+        "power": {
+          "observedAt": "2026-10-27T14:09:21.074Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 100
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 15,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    "metrics": {
+      "pageQuery": {
+        "mean": 87.6461166666583,
+        "p95": 110.30089999998745
+      },
+      "afterPageGap": {
+        "mean": 90.69160000000072,
+        "p95": 94.90929999999935
+      },
+      "grantsQuery": {
+        "mean": 7.319150000002992,
+        "p95": 7.997199999997974
+      },
+      "barrier": {
+        "mean": 5.225066666665953,
+        "p95": 5.819600000002538
+      },
+      "reconcile": {
+        "mean": 17.852133333336194,
+        "p95": 18.76249999999709
+      },
+      "http": {
+        "mean": 264.45046666666894,
+        "p95": 283.74400000000605
+      }
+    },
+    "plans": [
+      {
+        "name": "pages",
+        "node": "Seq Scan",
+        "rows": 51000,
+        "time": 8.998,
+        "buffers": 732
+      },
+      {
+        "name": "grants",
+        "node": "Sort",
+        "rows": 5000,
+        "time": 3.507,
+        "buffers": 84
+      }
+    ],
+    "functions": [
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 17.733824,
+          "self_time": 17.715789
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 22.564818,
+          "self_time": 22.564818
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.497481,
+          "self_time": 16.485658
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 20.431908,
+          "self_time": 20.431908
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 17.498656,
+          "self_time": 17.482635
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.453614,
+          "self_time": 21.453614
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.513864,
+          "self_time": 16.499987
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.33125,
+          "self_time": 21.33125
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.603087,
+          "self_time": 16.586886
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.001239,
+          "self_time": 21.001239
+        }
+      ],
+      [
+        {
+          "funcname": "content_reconcile_access",
+          "calls": "1",
+          "total_time": 16.687131,
+          "self_time": 16.675919
+        },
+        {
+          "funcname": "database_lock_workspace",
+          "calls": "5",
+          "total_time": 21.770925,
+          "self_time": 21.770925
+        }
+      ]
+    ]
+  }
+]

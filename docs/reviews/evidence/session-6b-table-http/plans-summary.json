@@ -1,0 +1,1983 @@
+[
+  {
+    "role": "owner",
+    "scenario": "broad",
+    "general": {
+      "planning": 2.742,
+      "execution": 1.794,
+      "hits": 651,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 1.661
+        },
+        {
+          "type": "Incremental Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 1.657
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 1.518
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 1.198
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 0.476
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 58,
+          "loops": 1,
+          "ms": 0.133
+        },
+        {
+          "type": "Memoize",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.006
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.004
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.012
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.005
+        }
+      ]
+    },
+    "closed": {
+      "planning": 2.046,
+      "execution": 37.678,
+      "hits": 508,
+      "reads": 385,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 37.125
+        },
+        {
+          "type": "Incremental Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 37.121
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 37.047
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 36.702
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 36.304
+        },
+        {
+          "type": "Gather Merge",
+          "rows": 58,
+          "loops": 1,
+          "ms": 35.891
+        },
+        {
+          "type": "Sort",
+          "rows": 29,
+          "loops": 2,
+          "ms": 4.16
+        },
+        {
+          "type": "Bitmap Heap Scan",
+          "table": "property_values",
+          "rows": 4706,
+          "loops": 2,
+          "ms": 1.534
+        },
+        {
+          "type": "Bitmap Index Scan",
+          "index": "values_number_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.409
+        },
+        {
+          "type": "Memoize",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.007
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.005
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.007
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.005
+        }
+      ]
+    }
+  },
+  {
+    "role": "owner",
+    "scenario": "deep",
+    "general": {
+      "planning": 1.521,
+      "execution": 2.479,
+      "hits": 682,
+      "reads": 2,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 2.348
+        },
+        {
+          "type": "Incremental Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 2.344
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 54,
+          "loops": 1,
+          "ms": 2.306
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 54,
+          "loops": 1,
+          "ms": 2.102
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 57,
+          "loops": 1,
+          "ms": 1.597
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 57,
+          "loops": 1,
+          "ms": 1.376
+        },
+        {
+          "type": "Memoize",
+          "rows": 1,
+          "loops": 57,
+          "ms": 0.004
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 57,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 57,
+          "ms": 0.008
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 54,
+          "ms": 0.003
+        }
+      ]
+    },
+    "closed": {
+      "planning": 1.072,
+      "execution": 13.817,
+      "hits": 1686,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 13.215
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 13.211
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 411,
+          "loops": 1,
+          "ms": 12.996
+        },
+        {
+          "type": "Hash Join",
+          "rows": 411,
+          "loops": 1,
+          "ms": 11.872
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_text_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 2.478
+        },
+        {
+          "type": "Hash",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 6.975
+        },
+        {
+          "type": "Hash Join",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 4.94
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 0.889
+        },
+        {
+          "type": "Hash",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 2.365
+        },
+        {
+          "type": "Seq Scan",
+          "table": "pages",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 0.921
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 411,
+          "ms": 0.002
+        }
+      ]
+    }
+  },
+  {
+    "role": "owner",
+    "scenario": "ten-filters",
+    "general": {
+      "planning": 89.429,
+      "execution": 31.38,
+      "hits": 22174,
+      "reads": 18,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 30.683
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 30.679
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 30.498
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 29.101
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 27.15
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 24.696
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 23.779
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 385,
+          "loops": 1,
+          "ms": 22.672
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 385,
+          "loops": 1,
+          "ms": 21.38
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 385,
+          "loops": 1,
+          "ms": 20.01
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 8.182
+        },
+        {
+          "type": "Hash Join",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 4.382
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 0.352
+        },
+        {
+          "type": "Hash",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 3.19
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_date_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.456
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 1892,
+          "ms": 0.002
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 0,
+          "loops": 1892,
+          "ms": 0.006
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 385,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 385,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 385,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.004
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.011
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.009
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "relation_values",
+          "index": "relations_live_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.006
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.002
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.002
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.009
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.008
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "person_values",
+          "index": "person_values_live_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.006
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_people",
+          "index": "database_people_workspace_id_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.001
+        },
+        {
+          "type": "Memoize",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.001
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "workspace_members",
+          "index": "members_workspace_id_uq",
+          "rows": 1,
+          "loops": 8,
+          "ms": 0.004
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "multi_select_values",
+          "index": "multi_select_live_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.005
+        }
+      ]
+    },
+    "closed": {
+      "planning": 78.025,
+      "execution": 91.034,
+      "hits": 226736,
+      "reads": 1028,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 90.098
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 90.093
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 89.82
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 86.327
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 83.829
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 82.503
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 79.975
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 78.818
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 952,
+          "loops": 1,
+          "ms": 32.094
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 952,
+          "loops": 1,
+          "ms": 28.734
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 12.83
+        },
+        {
+          "type": "Hash Join",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 8.305
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 0.416
+        },
+        {
+          "type": "Hash",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 6.594
+        },
+        {
+          "type": "Aggregate",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 5.197
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_date_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 2.11
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 1892,
+          "ms": 0.002
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 1892,
+          "ms": 0.008
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 952,
+          "ms": 0.003
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 0,
+          "loops": 952,
+          "ms": 0.049
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 952,
+          "ms": 0.002
+        },
+        {
+          "type": "Limit",
+          "rows": 18,
+          "loops": 952,
+          "ms": 0.045
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_options",
+          "index": "property_options_pkey",
+          "rows": 18,
+          "loops": 952,
+          "ms": 0.044
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.005
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.011
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.01
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "person_values",
+          "index": "person_values_live_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.008
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_people",
+          "index": "database_people_workspace_id_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.001
+        },
+        {
+          "type": "Memoize",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.001
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "workspace_members",
+          "index": "workspace_members_pkey",
+          "rows": 1,
+          "loops": 8,
+          "ms": 0.006
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.005
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "multi_select_values",
+          "index": "multi_select_live_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.011
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.015
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.012
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "relation_values",
+          "index": "relations_live_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.009
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.002
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.002
+        }
+      ]
+    }
+  },
+  {
+    "role": "owner",
+    "scenario": "nulls-desc",
+    "general": {
+      "planning": 0.512,
+      "execution": 19.045,
+      "hits": 608,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 18.418
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 18.414
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 16.447
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 10.019
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_text_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.021
+        },
+        {
+          "type": "Hash",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 6.702
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 5.133
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 0.895
+        },
+        {
+          "type": "Hash",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 2.384
+        },
+        {
+          "type": "Seq Scan",
+          "table": "database_rows",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 0.997
+        },
+        {
+          "type": "Hash",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 2.816
+        },
+        {
+          "type": "Seq Scan",
+          "table": "pages",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 1.042
+        }
+      ]
+    },
+    "closed": {
+      "planning": 0.675,
+      "execution": 21.018,
+      "hits": 608,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 20.418
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 20.414
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 17.758
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 10.343
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_text_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.455
+        },
+        {
+          "type": "Hash",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 6.905
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 5.404
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.128
+        },
+        {
+          "type": "Hash",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 2.668
+        },
+        {
+          "type": "Seq Scan",
+          "table": "database_rows",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 1.174
+        },
+        {
+          "type": "Hash",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 2.561
+        },
+        {
+          "type": "Seq Scan",
+          "table": "pages",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 1.112
+        }
+      ]
+    }
+  },
+  {
+    "role": "guest",
+    "scenario": "broad",
+    "general": {
+      "planning": 1.183,
+      "execution": 0.945,
+      "hits": 585,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 0.837
+        },
+        {
+          "type": "Incremental Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 0.833
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 0.743
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 0.562
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 58,
+          "loops": 1,
+          "ms": 0.271
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 58,
+          "loops": 1,
+          "ms": 0.033
+        },
+        {
+          "type": "Memoize",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.004
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.005
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 58,
+          "ms": 0.003
+        }
+      ]
+    },
+    "closed": {
+      "planning": 1.304,
+      "execution": 33.69,
+      "hits": 28689,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 33.107
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 33.102
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 30.384
+        },
+        {
+          "type": "Hash Join",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 13.225
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_text_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 2.968
+        },
+        {
+          "type": "Hash",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 7.214
+        },
+        {
+          "type": "Hash Join",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 5.145
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 0.936
+        },
+        {
+          "type": "Hash",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 2.52
+        },
+        {
+          "type": "Seq Scan",
+          "table": "pages",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 0.982
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 9412,
+          "ms": 0.001
+        }
+      ]
+    }
+  },
+  {
+    "role": "guest",
+    "scenario": "deep",
+    "general": {
+      "planning": 1.165,
+      "execution": 2.137,
+      "hits": 684,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 2.019
+        },
+        {
+          "type": "Incremental Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 2.015
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 54,
+          "loops": 1,
+          "ms": 1.978
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 54,
+          "loops": 1,
+          "ms": 1.807
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 57,
+          "loops": 1,
+          "ms": 1.5
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 57,
+          "loops": 1,
+          "ms": 1.266
+        },
+        {
+          "type": "Memoize",
+          "rows": 1,
+          "loops": 57,
+          "ms": 0.004
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 57,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 57,
+          "ms": 0.005
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 54,
+          "ms": 0.003
+        }
+      ]
+    },
+    "closed": {
+      "planning": 1.326,
+      "execution": 13.568,
+      "hits": 1686,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 13.029
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 13.024
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 411,
+          "loops": 1,
+          "ms": 12.792
+        },
+        {
+          "type": "Hash Join",
+          "rows": 411,
+          "loops": 1,
+          "ms": 11.793
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_text_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 2.491
+        },
+        {
+          "type": "Hash",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 7.227
+        },
+        {
+          "type": "Hash Join",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 5.18
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 0.921
+        },
+        {
+          "type": "Hash",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 2.5
+        },
+        {
+          "type": "Seq Scan",
+          "table": "pages",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 1.024
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 411,
+          "ms": 0.002
+        }
+      ]
+    }
+  },
+  {
+    "role": "guest",
+    "scenario": "ten-filters",
+    "general": {
+      "planning": 92.277,
+      "execution": 19.464,
+      "hits": 19972,
+      "reads": 11,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 29,
+          "loops": 1,
+          "ms": 18.813
+        },
+        {
+          "type": "Sort",
+          "rows": 29,
+          "loops": 1,
+          "ms": 18.809
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 29,
+          "loops": 1,
+          "ms": 18.724
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 29,
+          "loops": 1,
+          "ms": 18.701
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 29,
+          "loops": 1,
+          "ms": 18.563
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 17.091
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 16.367
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 385,
+          "loops": 1,
+          "ms": 15.469
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 385,
+          "loops": 1,
+          "ms": 14.397
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 385,
+          "loops": 1,
+          "ms": 13.292
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 6.715
+        },
+        {
+          "type": "Hash Join",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 3.737
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 0.277
+        },
+        {
+          "type": "Hash",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 2.666
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_date_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.149
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 1892,
+          "ms": 0.001
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 0,
+          "loops": 1892,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 385,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 385,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 385,
+          "ms": 0.002
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.003
+        },
+        {
+          "type": "Hash Join",
+          "rows": 0,
+          "loops": 217,
+          "ms": 0.007
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.006
+        },
+        {
+          "type": "Index Scan",
+          "table": "person_values",
+          "index": "person_values_live_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.004
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_people",
+          "index": "database_people_workspace_id_uq",
+          "rows": 1,
+          "loops": 267,
+          "ms": 0.001
+        },
+        {
+          "type": "Hash",
+          "rows": 44,
+          "loops": 1,
+          "ms": 0.027
+        },
+        {
+          "type": "Seq Scan",
+          "table": "workspace_members",
+          "rows": 44,
+          "loops": 1,
+          "ms": 0.013
+        },
+        {
+          "type": "Seq Scan",
+          "table": "database_assignable_people",
+          "rows": 2,
+          "loops": 1,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "multi_select_values",
+          "index": "multi_select_live_uq",
+          "rows": 1,
+          "loops": 29,
+          "ms": 0.004
+        },
+        {
+          "type": "Result",
+          "rows": 0,
+          "loops": 29,
+          "ms": 0
+        }
+      ]
+    },
+    "closed": {
+      "planning": 65.019,
+      "execution": 87.155,
+      "hits": 224580,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 29,
+          "loops": 1,
+          "ms": 85.849
+        },
+        {
+          "type": "Sort",
+          "rows": 29,
+          "loops": 1,
+          "ms": 85.845
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 29,
+          "loops": 1,
+          "ms": 85.774
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 29,
+          "loops": 1,
+          "ms": 85.725
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 29,
+          "loops": 1,
+          "ms": 85.499
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 29,
+          "loops": 1,
+          "ms": 85.286
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 82.799
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 217,
+          "loops": 1,
+          "ms": 81.572
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 952,
+          "loops": 1,
+          "ms": 33.06
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 952,
+          "loops": 1,
+          "ms": 29.685
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 14.012
+        },
+        {
+          "type": "Hash Join",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 8.346
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 1892,
+          "loops": 1,
+          "ms": 0.516
+        },
+        {
+          "type": "Hash",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 6.305
+        },
+        {
+          "type": "Aggregate",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 4.926
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_date_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.7
+        },
+        {
+          "type": "Index Scan",
+          "table": "pages",
+          "index": "pages_pkey",
+          "rows": 1,
+          "loops": 1892,
+          "ms": 0.003
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 1892,
+          "ms": 0.008
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 952,
+          "ms": 0.003
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 0,
+          "loops": 952,
+          "ms": 0.051
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 952,
+          "ms": 0.002
+        },
+        {
+          "type": "Limit",
+          "rows": 18,
+          "loops": 952,
+          "ms": 0.047
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_options",
+          "index": "property_options_pkey",
+          "rows": 18,
+          "loops": 952,
+          "ms": 0.046
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_rows",
+          "index": "rows_page_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.005
+        },
+        {
+          "type": "Hash Join",
+          "rows": 0,
+          "loops": 217,
+          "ms": 0.011
+        },
+        {
+          "type": "Nested Loop",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.009
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "person_values",
+          "index": "person_values_live_uq",
+          "rows": 1,
+          "loops": 217,
+          "ms": 0.007
+        },
+        {
+          "type": "Index Scan",
+          "table": "database_people",
+          "index": "database_people_workspace_id_uq",
+          "rows": 1,
+          "loops": 267,
+          "ms": 0.001
+        },
+        {
+          "type": "Hash",
+          "rows": 44,
+          "loops": 1,
+          "ms": 0.034
+        },
+        {
+          "type": "Seq Scan",
+          "table": "workspace_members",
+          "rows": 44,
+          "loops": 1,
+          "ms": 0.017
+        },
+        {
+          "type": "Seq Scan",
+          "table": "database_assignable_people",
+          "rows": 2,
+          "loops": 1,
+          "ms": 0.006
+        },
+        {
+          "type": "Index Scan",
+          "table": "property_values",
+          "index": "values_live_cell_uq",
+          "rows": 1,
+          "loops": 29,
+          "ms": 0.006
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "multi_select_values",
+          "index": "multi_select_live_uq",
+          "rows": 1,
+          "loops": 29,
+          "ms": 0.007
+        },
+        {
+          "type": "Result",
+          "rows": 0,
+          "loops": 29,
+          "ms": 0
+        }
+      ]
+    }
+  },
+  {
+    "role": "guest",
+    "scenario": "nulls-desc",
+    "general": {
+      "planning": 0.43,
+      "execution": 19.563,
+      "hits": 608,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 18.916
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 18.912
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 16.936
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 10.325
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_text_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 0.951
+        },
+        {
+          "type": "Hash",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 6.68
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 5.061
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 0.881
+        },
+        {
+          "type": "Hash",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 2.277
+        },
+        {
+          "type": "Seq Scan",
+          "table": "database_rows",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 0.922
+        },
+        {
+          "type": "Hash",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 2.865
+        },
+        {
+          "type": "Seq Scan",
+          "table": "pages",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 1.073
+        }
+      ]
+    },
+    "closed": {
+      "planning": 0.625,
+      "execution": 21.465,
+      "hits": 608,
+      "reads": 0,
+      "tempWritten": 0,
+      "nodes": [
+        {
+          "type": "Limit",
+          "rows": 51,
+          "loops": 1,
+          "ms": 20.81
+        },
+        {
+          "type": "Sort",
+          "rows": 51,
+          "loops": 1,
+          "ms": 20.806
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 18.193
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 10.601
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_text_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.219
+        },
+        {
+          "type": "Hash",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 6.756
+        },
+        {
+          "type": "Hash Join",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 5.181
+        },
+        {
+          "type": "Index Only Scan",
+          "table": "property_values",
+          "index": "values_number_sort_idx",
+          "rows": 9412,
+          "loops": 1,
+          "ms": 1.024
+        },
+        {
+          "type": "Hash",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 2.313
+        },
+        {
+          "type": "Seq Scan",
+          "table": "database_rows",
+          "rows": 10000,
+          "loops": 1,
+          "ms": 0.999
+        },
+        {
+          "type": "Hash",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 2.623
+        },
+        {
+          "type": "Seq Scan",
+          "table": "pages",
+          "rows": 10051,
+          "loops": 1,
+          "ms": 1.141
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,62 @@
+Two independent clients, local isolated fixture
+COMMAND owner read text
+{
+  "version": "0",
+  "schemaVersion": "1",
+  "value": null
+}
+COMMAND guest read text
+{
+  "version": "0",
+  "schemaVersion": "1",
+  "value": null
+}
+COMMAND owner write text 0 A
+{
+  "version": "1",
+  "schemaVersion": "1",
+  "value": "A"
+}
+COMMAND guest write number 0 42
+{
+  "version": "1",
+  "schemaVersion": "1",
+  "value": "42.00000000"
+}
+COMMAND guest write text 0 B
+{
+  "status": 409,
+  "code": "CELL_VERSION_CONFLICT",
+  "current": {
+    "version": "1",
+    "schemaVersion": "1",
+    "value": "A"
+  }
+}
+COMMAND grant read
+Fixture guest grant: read
+COMMAND guest write number 1 43
+{
+  "status": 404,
+  "code": "ACCESS_DENIED"
+}
+COMMAND guest read text
+{
+  "version": "1",
+  "schemaVersion": "1",
+  "value": "A"
+}
+COMMAND grant none
+Fixture guest grant: none
+COMMAND guest read text
+{
+  "status": 404,
+  "code": "ACCESS_DENIED"
+}
+COMMAND owner read text
+{
+  "version": "1",
+  "schemaVersion": "1",
+  "value": "A"
+}
+MANUAL_HARNESS_SMOKE=PASS

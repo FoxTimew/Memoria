@@ -16,6 +16,8 @@ import { ContentError, contentRequest } from '../lib/content-api.ts';
 import { onLocalSignOut } from '../lib/local-sign-out.ts';
 import { cachePolicyEvent, refreshCachePolicy } from '../lib/cache-policy.ts';
 import { CacheForbidden, LocalSessionRevoked, yjsCache } from '../lib/yjs-cache.ts';
+import { databaseRequest } from '../lib/database-ui.ts';
+import type { BaseSummary } from '../lib/database-ui.ts';
 import type { EditorActions } from './page-editor.tsx';
 const PageEditor = dynamic(() => import('./page-editor.tsx'), {
   ssr: false,
@@ -42,7 +44,10 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
   const [pendingPage, setPendingPage] = useState<string>();
   const [query, setQuery] = useState('');
   const [searchRevision, setSearchRevision] = useState(0);
-  const [results, setResults] = useState<{ id: string; title: string; excerpt: string }[]>([]);
+  const [results, setResults] = useState<
+    { id: string; title: string; excerpt: string; databaseId?: string | undefined }[]
+  >([]);
+  const [databases, setDatabases] = useState<BaseSummary[]>([]);
   const [parent, setParent] = useState('');
   const [after, setAfter] = useState('');
   const [showMove, setShowMove] = useState(false);
@@ -67,6 +72,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     if (snapshot) setExported((old) => (snapshot.includes('"blocks":[]') && old ? old : snapshot));
     setDocument(undefined);
     setTree({ pages: [], trash: [] });
+    setDatabases([]);
     setResults([]);
     setDirty(false);
     setShowMove(false);
@@ -82,6 +88,7 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
     setDocument(undefined);
     setDirty(false);
     setTree({ pages: [], trash: [] });
+    setDatabases([]);
     setResults([]);
     setExported('');
     viewEpoch.current++;
@@ -100,13 +107,15 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
   async function refresh() {
     if (locallyClosed.current) return;
     const epoch = viewEpoch.current;
-    const [listed, workspaces] = await Promise.all([
+    const [listed, workspaces, dbs] = await Promise.all([
       contentRequest(`${base}/pages`),
       contentRequest('/api/internal/workspaces'),
+      databaseRequest<{ databases: BaseSummary[] }>(`${base}/databases`),
     ]);
     const data = pageTreeSchema.parse(listed);
     if (locallyClosed.current || epoch !== viewEpoch.current) return;
     setTree(data);
+    setDatabases(dbs.databases);
     setRole(
       workspaceListSchema.parse(workspaces).find((w) => w.id === workspaceId)?.role ?? 'guest',
     );
@@ -126,6 +135,9 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
         const pages = pageTreeSchema.parse(await contentRequest(`${base}/pages`));
         if (cancelled || locallyClosed.current || epoch !== viewEpoch.current) return;
         setTree(pages);
+        const dbs = await databaseRequest<{ databases: BaseSummary[] }>(`${base}/databases`);
+        if (!cancelled && !locallyClosed.current && epoch === viewEpoch.current)
+          setDatabases(dbs.databases);
       })
       .catch((e: unknown) => {
         if (!cancelled) {
@@ -430,7 +442,13 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
                     disabled={busy}
                     className="search-result"
                     key={item.id}
-                    onClick={() => void open(item.id)}
+                    onClick={() =>
+                      item.databaseId
+                        ? location.assign(
+                            `/workspaces/${workspaceId}/databases/${item.databaseId}/rows/${item.id}`,
+                          )
+                        : void open(item.id)
+                    }
                   >
                     <strong>{item.title || 'Sans titre'}</strong>
                     <span>{item.excerpt}</span>
@@ -454,6 +472,35 @@ export default function WorkspacePages({ workspaceId }: { workspaceId: string })
             )}
           </div>
           <nav aria-label="Arbre des pages">{branches(null)}</nav>
+          <section aria-label="Bases de données" className="mt-6">
+            <h2 className="font-semibold">Bases de données</h2>
+            {databases.map((b) => (
+              <a
+                className="page-tree-item"
+                key={b.id}
+                href={`/workspaces/${workspaceId}/databases/${b.id}`}
+              >
+                {b.title || 'Sans titre'} — tableau
+              </a>
+            ))}
+            {role !== 'guest' && (
+              <button
+                className="quiet-link"
+                disabled={busy || dirty}
+                onClick={() => {
+                  const title = prompt('Nom de la nouvelle base');
+                  if (title === null) return;
+                  setBusy(true);
+                  void databaseRequest<{ id: string }>(`${base}/databases`, 'POST', { title })
+                    .then((b) => location.assign(`/workspaces/${workspaceId}/databases/${b.id}`))
+                    .catch((e) => setError(e.message))
+                    .finally(() => setBusy(false));
+                }}
+              >
+                Nouvelle base
+              </button>
+            )}
+          </section>
           {tree.pages.length === 0 && (
             <p className="mt-5 text-sm leading-relaxed text-[#73806f]">
               {role === 'guest'

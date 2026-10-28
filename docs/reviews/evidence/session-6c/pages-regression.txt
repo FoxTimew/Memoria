@@ -1,0 +1,16 @@
+PASS retained no-factor share action; partial tree/search/breadcrumbs; read-only title, text and character card; live updates received
+PASS 5d targeted invalidation: unrelated archive and ineffective move preserve member/guest sockets and original IndexedDB update IDs
+PASS real browser freeze/resume events and suspended timer
+PASS online downgrade purges affected pages; offline frozen editor cannot resurrect its cache or replay after regrant; memory export retained
+PASS real browser freeze/resume events and suspended timer
+PASS sole guest tab offline/frozen: first online check purges without an awake sibling, no replay
+PASS share removal, restore of fresh read, preview then actual move changes inherited access; no browser errors
+✔ 5d HTTPS: targeted invalidation, guided shares, partial tree, read-only, frozen cache and move preview (39262.9952ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39269.868

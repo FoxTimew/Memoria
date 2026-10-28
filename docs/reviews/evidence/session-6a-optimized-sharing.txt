@@ -1,0 +1,67 @@
+$ node scripts/build-server.mjs api --sharing-e2e && node --env-file=.env apps/api/dist/sharing.e2e.mjs
+▶ 5a: real Nest, Better Auth sessions, PostgreSQL grants, HMAC and hostile WebSockets
+  ✔ A01/A02: inherited maximum, hidden ancestors and SQL/API decisions agree (647.4562ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ R12: every page route rejects anonymous calls; alternate read/write routes keep guest boundaries (335.7109ms)
+  ✔ A02: inaccessible matches cannot fill the first hundred search results (1312.4899ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ A01/A04: read cannot mutate; edit can rename/create children but cannot manage the tree (952.3286ms)
+[beforeSync] READ_ONLY
+closing connection 82cb3ed2-6be6-443b-978a-1031aa102971 (while handling 7f9e298a-7b86-4918-9306-dcf74c48b918:3c3cb1b8-7f3d-46a0-9f2f-17e4aae6fa16:9b7d7166-fb67-4d6c-a538-b267f47c7d85) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49658:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49944:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46954:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46889:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47162:11)
+[beforeSync] READ_ONLY
+closing connection c68d8c07-06fc-4007-a028-dd3997f670a5 (while handling 7f9e298a-7b86-4918-9306-dcf74c48b918:3c3cb1b8-7f3d-46a0-9f2f-17e4aae6fa16:9b7d7166-fb67-4d6c-a538-b267f47c7d85) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49658:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49944:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46954:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46889:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47162:11)
+[beforeSync] READ_ONLY
+closing connection 8c42b3a9-7492-4f4e-847d-5ee03e46d1a8 (while handling 7f9e298a-7b86-4918-9306-dcf74c48b918:3c3cb1b8-7f3d-46a0-9f2f-17e4aae6fa16:9b7d7166-fb67-4d6c-a538-b267f47c7d85) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49658:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49944:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46954:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46889:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47162:11)
+  ✔ C01/L01: read receives live Yjs but cannot send update, sync2, delete-set or writer commands (2544.078ms)
+  ✔ A03: relational rename also rechecks rights after waiting for a committed downgrade (134.6222ms)
+  ✔ A03/C02: committed downgrade beats a real HTTP writer waiting on access locks (54.5468ms)
+[beforeSync] ACCESS_DENIED
+closing connection e000e982-3421-433b-9856-4e62bb370485 (while handling 7f9e298a-7b86-4918-9306-dcf74c48b918:3c3cb1b8-7f3d-46a0-9f2f-17e4aae6fa16:9b7d7166-fb67-4d6c-a538-b267f47c7d85) because of exception Error: ACCESS_DENIED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49658:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:49944:22)
+    at async MessageReceiver2.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46954:21)
+    at async MessageReceiver2.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:46889:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/sharing.e2e.mjs:47162:11)
+  ✔ A03/C02: a real WebSocket update waits for the page lock then sees the committed downgrade (143.7905ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ C02: missed notification still disconnects descendants within five seconds (199.2692ms)
+  ✔ A01/A02: strongest ancestor wins; archive hides direct grants; move recalculates inheritance (306.843ms)
+[onAuthenticate] ACCESS_DENIED
+  ✔ I05: policy, recovery and expired sessions cannot bypass page or socket rights (74.2806ms)
+  ✔ A03: promotion/removal cannot resurrect dormant grants; anonymous audit records cleanup (135.6824ms)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+  ✔ Q01: matched route/IP and shared account budgets resist header and UUID rotation (9516.1123ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ 5a: real Nest, Better Auth sessions, PostgreSQL grants, HMAC and hostile WebSockets (21304.0679ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21307.4851

@@ -1,0 +1,59 @@
+{
+  "source": ".local\\session-6d-role-profile.json",
+  "originalSha256": "052b915f5bf7f49d54cd014ad955fc4ee12a3d672656da7752899f073db6ff92",
+  "encoding": "JSON summaries + ordered, compact NDJSON shards, no samples removed. Array hashes use JSON.stringify(array). Hygiene result duplicates are replaced by their SHA256.",
+  "hygiene": [
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-preparation-333ae0c4-9fef-4015-9174-8a63f90c1063.json",
+      "file": "database-http-rights-preparation-333ae0c4-9fef-4015-9174-8a63f90c1063.json",
+      "originalSha256": "f6f4d51217cffea8715d04968a154e870ebb80a553e207389ee6f5606837cbeb"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-role-profile-1-attempt-1-750922f7-92bf-43fd-9cce-c119cf01599a.json",
+      "file": "database-http-role-profile-1-attempt-1-750922f7-92bf-43fd-9cce-c119cf01599a.json",
+      "originalSha256": "6c806aef501461445c1e29dca4a1e19e642bd18b73becbb11916740f296f5c77"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-role-profile-2-attempt-1-6bc4d385-f64a-49c9-9b17-49676a161dd7.json",
+      "file": "database-http-role-profile-2-attempt-1-6bc4d385-f64a-49c9-9b17-49676a161dd7.json",
+      "originalSha256": "399ead624419eb07ce716f08db88217321b6215580717002d336b4bc9442192b"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-role-profile-3-attempt-1-253c02b7-658e-4bf4-8e7d-7f82a5d4c2c1.json",
+      "file": "database-http-role-profile-3-attempt-1-253c02b7-658e-4bf4-8e7d-7f82a5d4c2c1.json",
+      "originalSha256": "310fa3792cf4401629aef0310defd44cf91676e34c774797f84daf6df8978df2"
+    }
+  ],
+  "files": [
+    {
+      "name": "database-http-rights-preparation-333ae0c4-9fef-4015-9174-8a63f90c1063.json",
+      "bytes": 676,
+      "sha256": "f6f4d51217cffea8715d04968a154e870ebb80a553e207389ee6f5606837cbeb"
+    },
+    {
+      "name": "database-http-role-profile-1-attempt-1-750922f7-92bf-43fd-9cce-c119cf01599a.json",
+      "bytes": 8845,
+      "sha256": "a339e6e4f0d5797c8d6572b5274a212d7b6076065f44125c97eb741f7b09b887"
+    },
+    {
+      "name": "database-http-role-profile-2-attempt-1-6bc4d385-f64a-49c9-9b17-49676a161dd7.json",
+      "bytes": 8849,
+      "sha256": "4e46c22c4e2cd3623215b675ce46c101c9e882ea3b2eb95a2a8e99cf1a5bd7f0"
+    },
+    {
+      "name": "database-http-role-profile-3-attempt-1-253c02b7-658e-4bf4-8e7d-7f82a5d4c2c1.json",
+      "bytes": 8845,
+      "sha256": "c2ca43359fe81137b95c05fbfb2110b7cd57960b3e86d279d986830ffcfea89a"
+    },
+    {
+      "name": "measurement.json",
+      "bytes": 276650,
+      "sha256": "320769c0cebf491bdf0878286d5edcbb443c9c9da3e57881ed1234146efed659"
+    },
+    {
+      "name": "run.txt",
+      "bytes": 53219,
+      "sha256": "5db7d4e680c6fef1eb311edf26439aa4e85955b804791d2ac874b19278610ddd"
+    }
+  ]
+}

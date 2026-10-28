@@ -1,0 +1,46 @@
+{
+  "observedAt": "2026-10-28T11:10:04.573Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 93
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-http-rights-preparation-565b3055-0757-40e4-838c-8d640d0dff9f.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-http-rights","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-28T11:10:05.197Z","windowsFreeBytes":4886065152,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5805850624,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:10:05.197Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":93}],"allowed":true,"reason":null}}}
+Fixture: containers ready.
+Fixture: memberships and grants committed.
+Fixture ready: 1,000 ordinary pages, 50 bases, 50,000 rows, 100 memberships, 5,000 grants, depth 50.
+(node:27768) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/database-http-rights-move-1-attempt-1-772f4eb4-a9cf-43a2-a8c4-334ecfc6239a.json","status":"error","label":"database-http-rights-move-1","attempt":1,"before":{"observedAt":"2026-10-28T11:10:58.425Z","windowsFreeBytes":4616269824,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5730914304,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:10:58.425Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":94}],"allowed":true,"reason":null}}}
+{"event":"collaboration.scheduler.failed"}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Unrelated native editor disconnected: {"route":"/api/internal/workspaces/e217f3d0-164e-4add-ad3a-ec8e0a0f8982/databases/4a7d5aad-5c03-40ca-ad44-912a6be1caf4/rows/00251f3f-2058-4f41-ba2a-92c324ffd06e","failure":{"kind":"close","code":1011,"reason":"CONTROL_UNAVAILABLE"}}
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-rights-load.mjs:53265:13
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:644:9)
+    at process.processTimers (node:internal/timers:618:7)
+    at async Promise.all (index 0) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+EXIT_CODE=1

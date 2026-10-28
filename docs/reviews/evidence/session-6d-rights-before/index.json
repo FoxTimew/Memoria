@@ -1,0 +1,74 @@
+{
+  "source": ".local\\session-6d-http-rights.json",
+  "originalSha256": "bd50f5a9e4744bcf53c5ffc08eae29da8159a2eed2aae4631295594eca3ee5ec",
+  "encoding": "JSON summaries + ordered, compact NDJSON shards, no samples removed. Array hashes use JSON.stringify(array). Hygiene result duplicates are replaced by their SHA256.",
+  "hygiene": [
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-preparation-58b68a68-69d9-40d7-a9b3-c51a744c45ff.json",
+      "file": "database-http-rights-preparation-58b68a68-69d9-40d7-a9b3-c51a744c45ff.json",
+      "originalSha256": "725b99e3a8fcb7c37ef9fb9cc1b73d0c1b06e93e363edf4371c9114e3c7ac69e"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-share-1-attempt-1-1c8158b2-8db8-4815-af6b-8e73d081ba67.json",
+      "file": "database-http-rights-share-1-attempt-1-1c8158b2-8db8-4815-af6b-8e73d081ba67.json",
+      "originalSha256": "7200fff1d377b4d0311fd19353de4ef6c76953d2f1ed588d7b43f37278456f1a"
+    }
+  ],
+  "files": [
+    {
+      "name": "database-http-rights-preparation-58b68a68-69d9-40d7-a9b3-c51a744c45ff.json",
+      "bytes": 676,
+      "sha256": "725b99e3a8fcb7c37ef9fb9cc1b73d0c1b06e93e363edf4371c9114e3c7ac69e"
+    },
+    {
+      "name": "database-http-rights-share-1-attempt-1-1c8158b2-8db8-4815-af6b-8e73d081ba67.json",
+      "bytes": 26943,
+      "sha256": "5bb2859f49a3e69a5ba6d4034c1d84b6bbf8001c23e851642fbc22a8eb0103c2"
+    },
+    {
+      "name": "measurement.json",
+      "bytes": 9429,
+      "sha256": "a4a3ed5fc4b22a501be09cabbb18db039a66275d04447789ecc3983e6d7db3c4"
+    },
+    {
+      "name": "run.txt",
+      "bytes": 3107,
+      "sha256": "60a44ac4616eca05168241b06284db7a713a23a656444b26d361356c3a49298b"
+    },
+    {
+      "name": "series-1-confirmations-1.ndjson",
+      "bytes": 9705,
+      "sha256": "a7fb7ba46939ef822da9aa45cbe4c50fdfd3557155a16793c1847b90a582a8d5"
+    },
+    {
+      "name": "series-1-overlap-1.ndjson",
+      "bytes": 3288,
+      "sha256": "3023ef986e68bfecb16e316e3e6f18ff65748215d822a4c2c5fe25b1aa670d59"
+    },
+    {
+      "name": "series-1-waits-1.ndjson",
+      "bytes": 2757,
+      "sha256": "7a0a8ab80ec96567be03c8af10c3a107b908a038f44d6ca9c15dae6649ea305b"
+    },
+    {
+      "name": "series-1-wire-1.ndjson",
+      "bytes": 9847,
+      "sha256": "bda5cc2eb29a9875b3a5ab2603645a90cdcc96cc66fa06cae173a431c2859488"
+    },
+    {
+      "name": "session-6d-http-rights-setup-interrupted.txt",
+      "bytes": 2055,
+      "sha256": "58b6926159fa3c7a87ba71cccf9bce21f9780067d0deaffd27b24479e104737d"
+    },
+    {
+      "name": "session-6d-http-rights-ticket-assertion.txt",
+      "bytes": 1775,
+      "sha256": "dc6435c077d97c240157dca87fdf72c4cd5c7f0b17156c1651813da08223682c"
+    },
+    {
+      "name": "session-6d-http-rights-ticket-scope.txt",
+      "bytes": 1732,
+      "sha256": "6cdbcb9251d4aa39072a960f96024060c180b454ebd0a82d1013f3e108502354"
+    }
+  ]
+}

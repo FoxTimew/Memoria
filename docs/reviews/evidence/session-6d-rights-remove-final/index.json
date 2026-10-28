@@ -1,0 +1,94 @@
+{
+  "source": ".local\\session-6d-http-rights-remove-final.json",
+  "originalSha256": "4c568212226e084d2bd5c00696a1f4825225b01306a1b505f3acf8628094b512",
+  "encoding": "JSON summaries + ordered, compact NDJSON shards, no samples removed. Array hashes use JSON.stringify(array). Hygiene result duplicates are replaced by their SHA256.",
+  "hygiene": [
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-preparation-b78ebd97-db91-4f94-a396-894ffc78b9c0.json",
+      "file": "database-http-rights-preparation-b78ebd97-db91-4f94-a396-894ffc78b9c0.json",
+      "originalSha256": "ae00939e766b6941b96ad40e77f0208a797121fc30c35db60eec41738b62df0b"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-remove-1-attempt-1-ccf6e5b2-3169-45ff-b1c9-cd23c9d61f23.json",
+      "file": "database-http-rights-remove-1-attempt-1-ccf6e5b2-3169-45ff-b1c9-cd23c9d61f23.json",
+      "originalSha256": "a4aa02afa8dc1fd8526acc5e83c7ff16fe17461bc5179d5bcb9efd30d45d80f1"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-remove-2-attempt-1-3d692c7c-1aa2-4f9e-8b91-bce51667f411.json",
+      "file": "database-http-rights-remove-2-attempt-1-3d692c7c-1aa2-4f9e-8b91-bce51667f411.json",
+      "originalSha256": "c67e176b4f4295c8bd18d5dbd5e517701227ae0757beeedd9c6d7175d7ed73f4"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-remove-3-attempt-1-aaa60a97-f40f-4544-b5aa-0aa7031cc472.json",
+      "file": "database-http-rights-remove-3-attempt-1-aaa60a97-f40f-4544-b5aa-0aa7031cc472.json",
+      "originalSha256": "e674de2c35236445cff9100415a5d733d2c9782ab7f278f1922c2fcb2db0b7f1"
+    }
+  ],
+  "files": [
+    {
+      "name": "database-http-rights-preparation-b78ebd97-db91-4f94-a396-894ffc78b9c0.json",
+      "bytes": 676,
+      "sha256": "ae00939e766b6941b96ad40e77f0208a797121fc30c35db60eec41738b62df0b"
+    },
+    {
+      "name": "database-http-rights-remove-1-attempt-1-ccf6e5b2-3169-45ff-b1c9-cd23c9d61f23.json",
+      "bytes": 26718,
+      "sha256": "a6cd4930247dbee8d1951bd0a53f63aa0142d0d6207e8c2b4cc2126fd05172b3"
+    },
+    {
+      "name": "database-http-rights-remove-2-attempt-1-3d692c7c-1aa2-4f9e-8b91-bce51667f411.json",
+      "bytes": 26726,
+      "sha256": "bf31e632979cb839f6268f3a6b4e908718999fae9c8a00387379b0c52bb02714"
+    },
+    {
+      "name": "database-http-rights-remove-3-attempt-1-aaa60a97-f40f-4544-b5aa-0aa7031cc472.json",
+      "bytes": 26716,
+      "sha256": "fbde5c6974e9acd6a0d9459568c3bcf758413b457ae8add2d700e128d59e0e84"
+    },
+    {
+      "name": "measurement.json",
+      "bytes": 28768,
+      "sha256": "2c555422656e896e900ffec1f24934f9e5a27847b0e8035c0177c906cc5de7aa"
+    },
+    {
+      "name": "preview-fixture-error.json",
+      "bytes": 1527,
+      "sha256": "96bff9f9898ff05ba9a8d7741efbbf7391c04ec96829dbb38b7a5f154d69a8b9"
+    },
+    {
+      "name": "run.txt",
+      "bytes": 7176,
+      "sha256": "7376425346814702c6996ddbb08922c510e01c77b1bed2742b6d6ac8ee8877b6"
+    },
+    {
+      "name": "series-1-confirmations-1.ndjson",
+      "bytes": 7089,
+      "sha256": "59257ce97f98b848db50cfd6c12cf74307773bdaa646635ef731334b15360976"
+    },
+    {
+      "name": "series-1-wire-1.ndjson",
+      "bytes": 7359,
+      "sha256": "f4df0580b2105c0007d0a68e378d9a47419378f7560f538742b292190a080255"
+    },
+    {
+      "name": "series-2-confirmations-1.ndjson",
+      "bytes": 7031,
+      "sha256": "d0608741272a7e1f0bc37d0b62dfba4a43c59d92168d3a142a915312c32f6558"
+    },
+    {
+      "name": "series-2-wire-1.ndjson",
+      "bytes": 7339,
+      "sha256": "18023629b42bfdedae7ed28fc544732046cc4abf9fad09c741463792ac28e645"
+    },
+    {
+      "name": "series-3-confirmations-1.ndjson",
+      "bytes": 7047,
+      "sha256": "81c1db77b562dddee41d94e484a2a919b8c73fd93f659c7e39d65a47847db759"
+    },
+    {
+      "name": "series-3-wire-1.ndjson",
+      "bytes": 7307,
+      "sha256": "3b5d73b0c216fd32586fd3e43f82962af0360ecbd31ec7e002a1cc155b9d4201"
+    }
+  ]
+}

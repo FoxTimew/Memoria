@@ -1,5 +1,40 @@
 @import 'tailwindcss';
 
+.database-screen {
+  padding: 2rem;
+  max-width: 100%;
+}
+.database-table {
+  border-collapse: collapse;
+  min-width: 100%;
+}
+.database-table th,
+.database-table td {
+  border: 1px solid #d7ded3;
+  padding: 0.6rem;
+  min-width: 10rem;
+  text-align: left;
+  vertical-align: top;
+}
+.database-table td button {
+  text-align: left;
+  width: 100%;
+  min-height: 2rem;
+  overflow-wrap: anywhere;
+}
+.database-dialog {
+  position: fixed;
+  z-index: 50;
+  inset: 10% max(1rem, calc((100vw - 42rem) / 2));
+  background: #fff;
+  border: 2px solid #687566;
+  padding: 1.5rem;
+  overflow-y: auto;
+  box-shadow: 0 0 0 100vmax #0005;
+  display: grid;
+  gap: 1rem;
+}
+
 .workspace-layout {
   display: flex;
   min-height: 100vh;
