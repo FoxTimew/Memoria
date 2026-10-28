@@ -1,0 +1,71 @@
+$ node scripts/test-storage.mjs
+FAIL CORS exact origin configured and preflight returned: NotImplemented HTTP 501
+PASS POST accepts exact reserved size
+PASS POST rejects oversized object
+PASS POST rejects undersized object
+PASS immutable copy survives staging replay
+PASS private object rejects anonymous read
+PASS Range reads exact requested bytes in a stream
+PASS UploadPart capability signs length checksum and part number
+PASS UploadPart valid 16 MiB
+PASS UploadPart rejects tampered bytes with unchanged checksum
+PASS UploadPart rejects excess length
+PASS UploadPart rejects chunked unsigned length
+PASS UploadPart rejects substituted part number
+OBSERVE resume valid first part status: 200
+OBSERVE last part status: 200
+OBSERVE server part numbers and sizes: [[1,16777216],[2,5242880]]
+OBSERVE completed size and hash equality: {"bytes":22020096,"expectedBytes":22020096,"hashMatches":true}
+PASS multipart list resume and complete from server list
+PASS abort prevents replay and leaves no ready object
+OBSERVE clean parts retry=false: [[1,16777216],[2,5242880]]
+OBSERVE single ListParts response retry=false: {"isTruncated":false,"parts":[{"number":1,"bytes":16777216,"hasChecksum":true},{"number":2,"bytes":5242880,"hasChecksum":true}]}
+OBSERVE clean result retry=false: {"bytes":22020096,"hashMatches":true}
+PASS isolated multipart without hostile requests; retry=false
+OBSERVE clean parts retry=true: [[1,16777216],[2,5242880]]
+OBSERVE single ListParts response retry=true: {"isTruncated":false,"parts":[{"number":1,"bytes":16777216,"hasChecksum":true},{"number":2,"bytes":5242880,"hasChecksum":true}]}
+OBSERVE clean result retry=true: {"bytes":22020096,"hashMatches":true}
+PASS isolated multipart without hostile requests; retry=true
+PASS replacement hides old part and rejects superseded ETag
+PASS concurrent retries preserve one part and correct final bytes
+OBSERVE unique part pagination: [1,2,1000,10000]
+PASS pagination counts unique part numbers including 10000 after retries
+PASS expired 120 second upload capability cannot store a part
+PASS abort during an in-flight HTTP body cannot resurrect the upload
+PASS owned fixture cleanup
+minio-local: 22/23 functional scenarios passed
+PASS CORS exact origin configured and preflight returned
+PASS POST accepts exact reserved size
+PASS POST rejects oversized object
+PASS POST rejects undersized object
+PASS immutable copy survives staging replay
+PASS private object rejects anonymous read
+PASS Range reads exact requested bytes in a stream
+PASS UploadPart capability signs length checksum and part number
+PASS UploadPart valid 16 MiB
+PASS UploadPart rejects tampered bytes with unchanged checksum
+PASS UploadPart rejects excess length
+PASS UploadPart rejects chunked unsigned length
+PASS UploadPart rejects substituted part number
+OBSERVE resume valid first part status: 200
+OBSERVE last part status: 200
+OBSERVE server part numbers and sizes: [[1,16777216],[1,16777216],[2,5242880]]
+FAIL multipart list resume and complete from server list: AssertionError
+PASS abort prevents replay and leaves no ready object
+OBSERVE clean parts retry=false: [[1,16777216],[2,5242880]]
+OBSERVE single ListParts response retry=false: {"isTruncated":false,"parts":[{"number":1,"bytes":16777216,"hasChecksum":false},{"number":2,"bytes":5242880,"hasChecksum":false}]}
+OBSERVE clean result retry=false: {"bytes":22020096,"hashMatches":true}
+PASS isolated multipart without hostile requests; retry=false
+OBSERVE clean parts retry=true: [[1,16777216],[1,16777216],[2,5242880]]
+OBSERVE single ListParts response retry=true: {"isTruncated":false,"parts":[{"number":1,"bytes":16777216,"hasChecksum":false},{"number":1,"bytes":16777216,"hasChecksum":false},{"number":2,"bytes":5242880,"hasChecksum":false}]}
+FAIL isolated multipart without hostile requests; retry=true: AssertionError
+FAIL replacement hides old part and rejects superseded ETag: AssertionError
+FAIL concurrent retries preserve one part and correct final bytes: AssertionError
+OBSERVE unique part pagination: [1,2,10000]
+FAIL pagination counts unique part numbers including 10000 after retries: AssertionError
+PASS expired 120 second upload capability cannot store a part
+PASS abort during an in-flight HTTP body cannot resurrect the upload
+PASS owned fixture cleanup
+seaweedfs-4.51: 18/23 functional scenarios passed
+[ELIFECYCLE] Command failed with exit code 1.
+Exit code: 1

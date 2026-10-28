@@ -7,13 +7,17 @@ import {
   DeleteBucketCommand,
   ListPartsCommand,
   PutBucketCorsCommand,
+  UploadPartCommand,
 } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { S3ObjectStorage } from './index.ts';
 
 const provider = process.env.STORAGE_TEST_PROVIDER!;
 const endpoint = process.env.STORAGE_TEST_ENDPOINT!;
 // Explicit loopback fixture only. Never accept a production endpoint in this destructive suite.
-if (!['http://127.0.0.1:9000', 'http://127.0.0.1:18333'].includes(endpoint))
+if (
+  !['http://127.0.0.1:9000', 'http://127.0.0.1:18333', 'http://127.0.0.1:19000'].includes(endpoint)
+)
   throw new Error('LOCAL_STORAGE_FIXTURE_REQUIRED');
 const bucket = `memoria-proof-files-${randomUUID()}`;
 const storage = new S3ObjectStorage({
@@ -123,21 +127,22 @@ try {
   created = true;
   const origin = 'https://localhost';
   await scenario('CORS exact origin configured and preflight returned', async () => {
-    await storage.client.send(
-      new PutBucketCorsCommand({
-        Bucket: bucket,
-        CORSConfiguration: {
-          CORSRules: [
-            {
-              AllowedOrigins: [origin],
-              AllowedMethods: ['POST', 'PUT'],
-              AllowedHeaders: ['content-type', 'x-amz-checksum-sha256'],
-              ExposeHeaders: ['ETag'],
-            },
-          ],
-        },
-      }),
-    );
+    if (process.env.STORAGE_TEST_CORS !== 'global')
+      await storage.client.send(
+        new PutBucketCorsCommand({
+          Bucket: bucket,
+          CORSConfiguration: {
+            CORSRules: [
+              {
+                AllowedOrigins: [origin],
+                AllowedMethods: ['POST', 'PUT'],
+                AllowedHeaders: ['content-type', 'x-amz-checksum-sha256'],
+                ExposeHeaders: ['ETag'],
+              },
+            ],
+          },
+        }),
+      );
     const r = await fetch(`${endpoint}/${bucket}/staging/preflight`, {
       method: 'OPTIONS',
       headers: {
@@ -148,6 +153,16 @@ try {
     });
     assert.equal(r.headers.get('access-control-allow-origin'), origin);
     await r.body?.cancel();
+    const foreign = await fetch(`${endpoint}/${bucket}/staging/preflight`, {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'https://untrusted.invalid',
+        'Access-Control-Request-Method': 'PUT',
+        'Access-Control-Request-Headers': 'x-amz-checksum-sha256',
+      },
+    });
+    assert.equal(foreign.headers.get('access-control-allow-origin'), null);
+    await foreign.body?.cancel();
   });
   const key = `staging/${randomUUID()}`;
   keys.add(key);
@@ -306,6 +321,162 @@ try {
       assert.deepEqual(actual, { bytes: first.length + last.length, hash: expected });
     });
   }
+  await scenario('replacement hides old part and rejects superseded ETag', async () => {
+    const key = `staging/${randomUUID()}`;
+    keys.add(key);
+    const id = await storage.initiate(key);
+    uploads.set(key, id);
+    const old = await storage.signPart(key, id, 1, first.length, sha(first));
+    assert.equal(await sendPart(old.url, old.headers, first), 200);
+    const oldParts = await storage.parts(key, id);
+    const replacement = new Uint8Array(first.length).fill(91);
+    const updated = await storage.signPart(key, id, 1, replacement.length, sha(replacement));
+    assert.equal(await sendPart(updated.url, updated.headers, replacement), 200);
+    const end = await storage.signPart(key, id, 2, last.length, sha(last));
+    assert.equal(await sendPart(end.url, end.headers, last), 200);
+    const current = plannedParts(await storage.parts(key, id), replacement, last);
+    assert.notEqual(current[0]!.etag, oldParts[0]!.etag);
+    const stale = [{ ...oldParts[0]!, checksum: sha(first) }, current[1]!];
+    await assert.rejects(storage.complete(key, id, stale));
+    assert.equal(await storage.head(key), null);
+    await storage.complete(key, id, current);
+    uploads.delete(key);
+    const expected = createHash('sha256').update(replacement).update(last).digest('base64');
+    assert.deepEqual(await hashRead(key), {
+      bytes: replacement.length + last.length,
+      hash: expected,
+    });
+  });
+  await scenario('concurrent retries preserve one part and correct final bytes', async () => {
+    const key = `staging/${randomUUID()}`;
+    keys.add(key);
+    const id = await storage.initiate(key);
+    uploads.set(key, id);
+    const one = await storage.signPart(key, id, 1, first.length, sha(first));
+    const two = await storage.signPart(key, id, 2, last.length, sha(last));
+    const statuses = await Promise.all([
+      ...Array.from({ length: 4 }, () => sendPart(one.url, one.headers, first)),
+      sendPart(two.url, two.headers, last),
+    ]);
+    assert.ok(statuses.every((status) => status === 200));
+    const parts = plannedParts(await storage.parts(key, id), first, last);
+    await storage.complete(key, id, parts);
+    uploads.delete(key);
+    const expected = createHash('sha256').update(first).update(last).digest('base64');
+    assert.deepEqual(await hashRead(key), { bytes: first.length + last.length, hash: expected });
+  });
+  await scenario(
+    'pagination counts unique part numbers including 10000 after retries',
+    async () => {
+      const key = `staging/${randomUUID()}`;
+      const id = await storage.initiate(key);
+      uploads.set(key, id);
+      const tiny = new Uint8Array(1024).fill(19);
+      for (const number of [1, 2, 1000, 10000, 1, 10000]) {
+        const signed = await storage.signPart(key, id, number, tiny.length, sha(tiny));
+        assert.equal(await sendPart(signed.url, signed.headers, tiny), 200);
+      }
+      let marker: string | undefined;
+      const numbers: number[] = [];
+      for (let page = 0; page < 6; page++) {
+        const raw = await storage.client.send(
+          new ListPartsCommand({
+            Bucket: bucket,
+            Key: key,
+            UploadId: id,
+            MaxParts: 1,
+            ...(marker ? { PartNumberMarker: marker } : {}),
+          }),
+        );
+        numbers.push(...(raw.Parts ?? []).map((p) => p.PartNumber!));
+        if (!raw.IsTruncated) break;
+        assert.ok(raw.NextPartNumberMarker && raw.NextPartNumberMarker !== marker);
+        marker = raw.NextPartNumberMarker;
+      }
+      observe('unique part pagination', numbers);
+      assert.deepEqual(numbers, [1, 2, 1000, 10000]);
+      await storage.abort(key, id);
+      uploads.delete(key);
+      await assert.rejects(storage.parts(key, id));
+    },
+  );
+  await scenario('expired 120 second upload capability cannot store a part', async () => {
+    const key = `staging/${randomUUID()}`;
+    const id = await storage.initiate(key);
+    uploads.set(key, id);
+    const bytes = new Uint8Array(1024).fill(22);
+    const checksum = sha(bytes);
+    const url = await getSignedUrl(
+      storage.client,
+      new UploadPartCommand({
+        Bucket: bucket,
+        Key: key,
+        UploadId: id,
+        PartNumber: 1,
+        ContentLength: bytes.length,
+        ChecksumSHA256: checksum,
+      }),
+      {
+        expiresIn: 120,
+        signingDate: new Date(Date.now() - 180000),
+        signableHeaders: new Set(['content-length']),
+        unhoistableHeaders: new Set(['x-amz-checksum-sha256']),
+      },
+    );
+    assert.ok((await sendPart(url, { 'x-amz-checksum-sha256': checksum }, bytes)) >= 400);
+    assert.deepEqual(await storage.parts(key, id), []);
+    await storage.abort(key, id);
+    uploads.delete(key);
+  });
+  await scenario('abort during an in-flight HTTP body cannot resurrect the upload', async () => {
+    const key = `staging/${randomUUID()}`;
+    const id = await storage.initiate(key);
+    uploads.set(key, id);
+    const signed = await storage.signPart(key, id, 1, first.length, sha(first));
+    let continued!: () => void;
+    let failed!: (error: Error) => void;
+    const ready = new Promise<void>((resolve, reject) => {
+      continued = resolve;
+      failed = reject;
+    });
+    let finish!: () => void;
+    const result = new Promise<number>((resolve, reject) => {
+      const req = request(
+        signed.url,
+        {
+          method: 'PUT',
+          headers: {
+            ...signed.headers,
+            'content-length': String(first.length),
+            expect: '100-continue',
+          },
+        },
+        (res) => {
+          res.resume();
+          resolve(res.statusCode ?? 0);
+          failed(new Error('RESPONSE_BEFORE_UPLOAD_CONTINUED'));
+        },
+      );
+      req.setTimeout(10000, () => req.destroy(new Error('TIMEOUT')));
+      req.once('continue', () => {
+        req.write(first.subarray(0, 1024), (error) => (error ? failed(error) : continued()));
+      });
+      req.on('error', (error) => {
+        failed(error);
+        reject(error);
+      });
+      finish = () => req.end(first.subarray(1024));
+      req.flushHeaders();
+    });
+    void result.catch(() => {});
+    await ready;
+    await storage.abort(key, id);
+    finish();
+    assert.ok((await result) >= 400);
+    assert.equal(await storage.head(key), null);
+    await assert.rejects(storage.parts(key, id));
+    uploads.delete(key);
+  });
 } catch (error) {
   scenarios.push({
     name: 'fixture setup/protocol continuation',

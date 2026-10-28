@@ -8,6 +8,7 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "build:storage:fixture": "node scripts/build-storage-fixture.mjs",
     "test:storage": "node scripts/test-storage.mjs",
     "test:databases:browser": "node --env-file=.env --use-system-ca scripts/test-databases-browser.mjs",
     "proof:databases": "node scripts/proof-databases.mjs",

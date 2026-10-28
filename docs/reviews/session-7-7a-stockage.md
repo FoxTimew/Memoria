@@ -2,6 +2,8 @@
 
 Date : **28 octobre 2026**. Branche **`codex/session-7-files`**. **7a commencée, non terminée : arrêt avant migrations, routes et raccordement applicatif.** Les ADR 021/022 sont acceptés ; leurs ajustements 8K, avertissement de téléchargement et options de sauvegarde sont consignés. L'arrêt applique la règle de conformance de l'ADR 021, sans diminuer les garanties pour faire passer la preuve.
 
+**Suite après arbitrage :** le développeur a choisi de qualifier une correction SeaweedFS. Le [correctif et sa preuve](session-7-7a-seaweedfs.md) lèvent cet arrêt initial sur le protocole fournisseur. Cette fiche conserve le diagnostic historique de `f97b9086` et ses 18 scénarios ; la suite actuelle est enrichie à 23.
+
 ## À lire en priorité
 
 1. Cette fiche : résultat réel, explication et choix de reprise.

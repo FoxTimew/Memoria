@@ -1,0 +1,8 @@
+{
+  "image": "sha256:0274f2fd3838ae8f6e22bf6c255cf2d07f0c8806ce08ccb57bfa3aad7c063f63",
+  "minioImage": "sha256:8b9ec971b37de2656321ae9b0680a2dd419b4374efed85c2952c8eb0d8b8697f",
+  "minioCors": "global exact origin",
+  "loopbackOnly": true,
+  "isolatedEphemeralData": true,
+  "performanceMeasurement": false
+}

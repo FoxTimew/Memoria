@@ -1,0 +1,17 @@
+{
+  "sourceCommit": "153ab668c99731a6d29492bf6c61d0b4fa701101",
+  "sourceSha": "316c9ef7d43bf7a90d6eefa269b2b4ef250992a44320c7c1c1466d3c788f6b08",
+  "toolchain": "golang:1.26.8-bookworm@sha256:dc9ad6c05acc7a88e5b71bde60a5fe3bd4b9f0db209011711b464107438a8107",
+  "inputs": {
+    "multipart.patch": "3e56352bfc24cf999fa9352556c8b977f8dacd7af7f584ef29b4360a7c51a05c",
+    "memoria_multipart.go": "fbcdabdc8b069d0405091fae25f43acd868768f848bea6b0c01ec61a469a72eb",
+    "memoria_multipart_test.go": "f1c25f31a5148505fb9e85ed009bace5e0aad666cf55675e7db1750a1a0c8790",
+    "build.sh": "3f55495542cf3a5f385f9d1f040ab35b7cef68accc59070fe3157b21468ba1b0",
+    "Dockerfile": "4b752a46f3f47067af883224bc484ebc22725b083df09d8bb4616ad55ba3dfa0"
+  },
+  "image": "sha256:0274f2fd3838ae8f6e22bf6c255cf2d07f0c8806ce08ccb57bfa3aad7c063f63",
+  "tag": "memoria-seaweedfs:4.51-memoria1",
+  "binarySha": "34002bd61427b31d452f5c8e6911890d7a2658dc47c2729f3dd8b2ad31a2acf1",
+  "builtAt": "2026-10-28T15:13:07.857Z",
+  "performanceMeasurement": false
+}

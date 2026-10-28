@@ -1,0 +1,51 @@
+$ node scripts/build-storage-fixture.mjs
+/upstream.tar.gz: OK
+--- PASS: TestValidateTagsUnicodeLength (0.00s)
+PASS
+ok  	github.com/seaweedfs/seaweedfs/weed/s3api	14.326s
+34002bd61427b31d452f5c8e6911890d7a2658dc47c2729f3dd8b2ad31a2acf1  /work/weed
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 593B done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/chrislusf/seaweedfs:4.51@sha256:f7a49e3f3972ebed5be2ed4befa4a0c68eb7bdddba6e692d42729ceb545134b8
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context:
+#3 transferring context: 61B done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 ...
+
+#5 [1/2] FROM docker.io/chrislusf/seaweedfs:4.51@sha256:f7a49e3f3972ebed5be2ed4befa4a0c68eb7bdddba6e692d42729ceb545134b8
+#5 resolve docker.io/chrislusf/seaweedfs:4.51@sha256:f7a49e3f3972ebed5be2ed4befa4a0c68eb7bdddba6e692d42729ceb545134b8 0.1s done
+#5 DONE 0.5s
+
+#4 [internal] load build context
+#4 transferring context: 75.15MB 5.0s
+#4 transferring context: 155.28MB 10.0s
+#4 transferring context: 228.69MB 13.3s done
+#4 DONE 13.4s
+
+#6 [2/2] COPY --chmod=755 weed /usr/bin/weed
+#6 DONE 0.7s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 6.6s done
+#7 exporting manifest sha256:ad986788a162a5fddee7cfefa0e0b11c1ea7c3a3b0f315d60c003ce27cae9664 0.0s done
+#7 exporting config sha256:506c5900b0f9d3c9f9bb74d31bce6d70c4b85e3a51a3394465ffabf6b9579948 0.0s done
+#7 exporting attestation manifest sha256:34ccc8fc85921b77382d3ae016c9daba4d59b120a73557f9bd796dd8658d2a0a
+#7 exporting attestation manifest sha256:34ccc8fc85921b77382d3ae016c9daba4d59b120a73557f9bd796dd8658d2a0a 0.0s done
+#7 exporting manifest list sha256:0274f2fd3838ae8f6e22bf6c255cf2d07f0c8806ce08ccb57bfa3aad7c063f63 0.0s done
+#7 naming to docker.io/library/memoria-seaweedfs:4.51-memoria1 done
+#7 unpacking to docker.io/library/memoria-seaweedfs:4.51-memoria1
+#7 unpacking to docker.io/library/memoria-seaweedfs:4.51-memoria1 0.7s done
+#7 DONE 7.5s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/o2bjkqtw2o3tm0udh6kl72s1y
+{"image":"sha256:0274f2fd3838ae8f6e22bf6c255cf2d07f0c8806ce08ccb57bfa3aad7c063f63","binarySha":"34002bd61427b31d452f5c8e6911890d7a2658dc47c2729f3dd8b2ad31a2acf1","passedTests":1142}
