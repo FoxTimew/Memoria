@@ -1,0 +1,75 @@
+▶ 6b native row protocol, effects and hostile HTTP/WSS clients
+  ✔ D01 D02 D11 D12: native routes authenticate, check Origin, declare quotas and hide unknown rows (174.3106ms)
+  ✔ D04: long workspace contention cannot starve leadership for append, open or projection (10123.8412ms)
+[beforeSync] READ_ONLY
+closing connection 661c1ac2-af91-49c2-b645-9cd248ec2b9d (while handling af480d76-8595-4718-b1ea-599d9df069a0:c81b0e3e-5031-42ae-a69a-ffe789817bc8:3b32c0b6-bba0-4b93-8055-c4b7df4f5c7e) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:51248:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:51535:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48590:21)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48525:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48798:11)
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] SESSION_CHANGED
+  ✔ D11: native row ticket converges, read-only cannot commit; old page scope, wrong base and identity fail (224.7703ms)
+  ✖ D06 D09: property search and Yjs projection share the index without leaking hidden rows (146.2069ms)
+  ✔ D09: failed outbox transaction retains the window, retry groups authors once and emits no cell values (33.3117ms)
+  ✔ D11: killed worker and concurrent flush retain every committed change (4609.7865ms)
+  ✔ D11: non-editor row writes use HMAC/journal/projection and cannot escape their row (1303.823ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+[onAuthenticate] ACCESS_DENIED
+  ✔ D11: archive closes only the row, stale lifecycle cannot reopen after restore, base reduction closes its rows (410.0568ms)
+[onAuthenticate] ACCESS_DENIED
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ D11: Chromium cache with real HTTP decisions, sleeping tab, lifecycle and logout (1315.6321ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] ACCESS_DENIED
+  ✔ D04: recovery assurance and revoked session cannot open native rows or reconnect (307.6825ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] UPDATE_REJECTED
+closing connection 11980a95-b45b-4ae2-ac1f-d08b8b91d627 (while handling af480d76-8595-4718-b1ea-599d9df069a0:c81b0e3e-5031-42ae-a69a-ffe789817bc8:3b32c0b6-bba0-4b93-8055-c4b7df4f5c7e) because of exception Error: UPDATE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:51248:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:51535:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48590:21)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48525:9)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:48798:11)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:49387:7
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ D04: leadership lost while native writer waits still prevents the journal commit (169.4712ms)
+✖ 6b native row protocol, effects and hostile HTTP/WSS clients (22752.3632ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 10
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22755.7288
+
+✖ failing tests:
+
+test at apps\api\dist\database-services.e2e.mjs:53086:13
+✖ D06 D09: property search and Yjs projection share the index without leaking hidden rows (146.2069ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert4(JSON.stringify(r.data).includes(f.rows[0]))
+  
+      at TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:53094:9)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:53086:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/database-services.e2e.mjs:52965:1 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+EXIT_CODE=1

@@ -12,6 +12,7 @@ import { databaseLiveWriters } from './testing/database-live-writers.ts';
 import { databaseEventWorker } from './testing/database-event-worker.ts';
 import { profileDatabaseShare } from './testing/database-share-profile.ts';
 import { databaseControlDiagnostic } from '../../collab/src/testing/database-control-diagnostic.ts';
+import { profileDatabaseTree } from './testing/database-tree-profile.ts';
 
 const p95 = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.ceil(xs.length * 0.95) - 1] ?? 0;
 const cases = [
@@ -175,7 +176,9 @@ const restoreMember = async () => {
   }
 };
 try {
-  if (process.argv.includes('--tree-preflight')) {
+  if (process.argv.includes('--profile-tree')) {
+    await profileDatabaseTree(h, owner, preparation, fixture.tree);
+  } else if (process.argv.includes('--tree-preflight')) {
     await h.prove(owner);
     const value = (
       await db.pool.query('SELECT version FROM pages WHERE id=$1', [fixture.tree.root])

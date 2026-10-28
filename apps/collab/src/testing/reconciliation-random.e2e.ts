@@ -157,6 +157,53 @@ async function replay(steps: Step[]) {
     }
     effective[op.kind] = (effective[op.kind] ?? 0) + (r.rowCount ?? 0);
   };
+  const comparePreview = async (op: Op) => {
+    if (!['move', 'archive', 'restore'].includes(op.kind)) return;
+    const tree = (
+      await c.query<{ id: string; parent_id: string | null; archived: boolean }>(
+        "SELECT id,parent_id,deleted_at IS NOT NULL AS archived FROM pages WHERE workspace_id=$1 AND kind='page'",
+        [w],
+      )
+    ).rows;
+    const affected = new Set([p(op.page)]);
+    for (let size = -1; size !== affected.size;) {
+      size = affected.size;
+      for (const page of tree)
+        if (page.parent_id && affected.has(page.parent_id)) affected.add(page.id);
+    }
+    const target = tree.find((page) => page.id === p(op.page))!;
+    if (op.kind === 'move') target.parent_id = op.choice === 0 ? null : p(op.parent);
+    else target.archived = op.kind === 'archive';
+    const guests = (
+      await c.query<{ id: string }>(
+        "SELECT id FROM workspace_members WHERE workspace_id=$1 AND role='guest'",
+        [w],
+      )
+    ).rows.map((m) => m.id);
+    const candidate = JSON.stringify(tree);
+    const full = (
+      await c.query(
+        'SELECT * FROM content_access_effects($1,$2::jsonb,false) ORDER BY member_id,page_id',
+        [w, candidate],
+      )
+    ).rows;
+    const bounded = (
+      await c.query(
+        'SELECT * FROM content_access_effects_bounded($1,$2::jsonb,false,$3::uuid[],$4::uuid[]) ORDER BY member_id,page_id',
+        [w, candidate, guests, [...affected]],
+      )
+    ).rows;
+    try {
+      assert.deepEqual(
+        bounded,
+        full.filter((row) => guests.includes(row.member_id) && affected.has(row.page_id)),
+        'targeted preview equals full oracle after arbitrary preceding mutations',
+      );
+    } catch (error) {
+      throw new EquivalenceError(`preview=${op.kind}: ${String(error)}`);
+    }
+    effective.preview = (effective.preview ?? 0) + 1;
+  };
   try {
     await c.query('BEGIN');
     for (let n = 1; n < 40; n++)
@@ -188,7 +235,10 @@ async function replay(steps: Step[]) {
       const before = await snapshot(c);
       const priorGenerations = [...generations];
       await c.query('BEGIN');
-      for (const op of steps[i]!.ops) await apply(op);
+      for (const op of steps[i]!.ops) {
+        await comparePreview(op);
+        await apply(op);
+      }
       await c.query(steps[i]!.rollback ? 'ROLLBACK' : 'COMMIT');
       if (steps[i]!.rollback) generations.splice(0, generations.length, ...priorGenerations);
       const actual = (await snapshot(c)).rows;

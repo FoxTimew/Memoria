@@ -1,0 +1,23 @@
+{
+  "observedAt": "2026-10-28T11:22:26.276Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/database-http-rights-preparation-1a6ec5b8-f6ab-436b-9621-bbba725b627f.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"database-http-rights","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-28T11:22:26.939Z","windowsFreeBytes":4828864512,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5821136896,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:22:26.939Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}}}
+Fixture: containers ready.
+Fixture: memberships and grants committed.
+Fixture ready: 1,000 ordinary pages, 50 bases, 50,000 rows, 100 memberships, 5,000 grants, depth 50.
+{"hygiene":".local/measurement-hygiene/database-http-tree-profile-1-attempt-1-05a246d5-d228-4b69-ae6a-6ccbf92aaf77.json","status":"valid","label":"database-http-tree-profile-1","attempt":1,"before":{"observedAt":"2026-10-28T11:23:18.202Z","windowsFreeBytes":4824887296,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5772193792,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:23:18.202Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:23:27.196Z","windowsFreeBytes":4770762752,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5754011648,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:23:27.196Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":10,"deltaInPages":0,"deltaOutPages":0}}
+{"treeProfile":1,"previewMs":1988.1961999999985,"mutationMs":2330.113599999997}
+{"hygiene":".local/measurement-hygiene/database-http-tree-profile-2-attempt-1-bc721070-66be-4c00-810b-6b5b87fdb467.json","status":"valid","label":"database-http-tree-profile-2","attempt":1,"before":{"observedAt":"2026-10-28T11:23:30.009Z","windowsFreeBytes":4746358784,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5749133312,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:23:30.009Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:23:39.033Z","windowsFreeBytes":4810051584,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5758660608,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:23:39.033Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":10,"deltaInPages":0,"deltaOutPages":0}}
+{"treeProfile":2,"previewMs":2020.5831999999937,"mutationMs":2250.327099999995}
+{"hygiene":".local/measurement-hygiene/database-http-tree-profile-3-attempt-1-51c797a8-42d4-4ed9-bc64-a7e67bb4b42c.json","status":"valid","label":"database-http-tree-profile-3","attempt":1,"before":{"observedAt":"2026-10-28T11:23:41.867Z","windowsFreeBytes":4759068672,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5754613760,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:23:41.867Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-28T11:23:50.862Z","windowsFreeBytes":4801626112,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5747318784,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-10-28T11:23:50.862Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":10,"deltaInPages":0,"deltaOutPages":0}}
+{"treeProfile":3,"previewMs":2046.5531000000046,"mutationMs":2220.0831999999937}
+EXIT_CODE=0

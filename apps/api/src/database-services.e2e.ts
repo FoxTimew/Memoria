@@ -10,6 +10,7 @@ import { until, firstText } from '../../collab/src/testing/pool-helpers.ts';
 import { processDatabaseRowEvent, createDatabase } from '@memoria/db';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
+import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { collaborationRowAccessSchema } from '@memoria/contracts';
 import { DatabaseAccessController } from './modules/databases/database-access.controller.ts';
@@ -136,6 +137,72 @@ await test('6b native row protocol, effects and hostile HTTP/WSS clients', async
       reader = await connect(guest, readerMeta);
     assert(
       writer.provider.synced && reader.provider.synced && !writer.closed() && !reader.closed(),
+    );
+    await t.test(
+      'D04: long workspace contention cannot starve leadership for append, open or projection',
+      async () => {
+        for (const operation of ['append', 'open', 'projection'] as const) {
+          const blocker = await f.db.pool.connect();
+          try {
+            const lease = async () =>
+              (await f.db.pool.query('SELECT lease_until FROM collaboration_leadership WHERE id=1'))
+                .rows[0].lease_until as Date;
+            const before = await lease();
+            await blocker.query('BEGIN');
+            await blocker.query('SELECT database_lock_workspace($1)', [f.db.workspace]);
+            const pid = (await blocker.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
+            let finished = false;
+            const work =
+              operation === 'append'
+                ? writer.edit('contention ')
+                : operation === 'open'
+                  ? host.store.open({
+                      key: 'blocked-open',
+                      user: owner.user,
+                      session: owner.session,
+                      workspace: f.db.workspace,
+                      page: f.containers[0]!,
+                    })
+                  : host.projections.project(f.rows[0]!, meta.room.split(':')[2]!);
+            const outcome = work.then(
+              (value) => {
+                finished = true;
+                return { value };
+              },
+              (error: unknown) => {
+                finished = true;
+                return { error };
+              },
+            );
+            await until(
+              async () =>
+                (
+                  await f.db.pool.query(
+                    "SELECT 1 FROM pg_stat_activity WHERE $1=ANY(pg_blocking_pids(pid)) AND wait_event_type='Lock'",
+                    [pid],
+                  )
+                ).rowCount! > 0,
+              'real workspace contention',
+            );
+            // Exceeds both the 1.5s control timeout and the 3s lease, without changing either.
+            await delay(3300);
+            assert(!finished, operation + ' remains behind the held barrier');
+            assert((await lease()).getTime() > before.getTime() + 2500, 'leader actually renewed');
+            assert(
+              !writer.closed() && !reader.closed(),
+              'unrelated native sockets remain connected',
+            );
+            await blocker.query('ROLLBACK');
+            const result = await outcome;
+            assert(!('error' in result), String('error' in result ? result.error : ''));
+            if (operation === 'append')
+              assert.equal(result.value, true, 'native durable receipt after release');
+          } finally {
+            await blocker.query('ROLLBACK');
+            blocker.release();
+          }
+        }
+      },
     );
     await t.test(
       'D11: native row ticket converges, read-only cannot commit; old page scope, wrong base and identity fail',
@@ -505,6 +572,56 @@ await test('6b native row protocol, effects and hostile HTTP/WSS clients', async
         retry.close();
         await f.db.pool.query('DELETE FROM auth_sessions WHERE id=$1', [account.session]);
         assert.equal((await h.call(account, {}, R + '/collaboration')).status, 401);
+      },
+    );
+    await t.test(
+      'D04: leadership lost while native writer waits still prevents the journal commit',
+      async () => {
+        const fresh = await open(),
+          live = await connect(owner, fresh);
+        const before = (
+          await f.db.pool.query(
+            'SELECT content_revision FROM collaboration_documents WHERE page_id=$1',
+            [f.rows[0]],
+          )
+        ).rows[0].content_revision;
+        const blocker = await f.db.pool.connect();
+        try {
+          await blocker.query('BEGIN');
+          await blocker.query('SELECT database_lock_workspace($1)', [f.db.workspace]);
+          const pid = (await blocker.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
+          const write = live.edit('must-not-commit');
+          await until(
+            async () =>
+              (
+                await f.db.pool.query(
+                  "SELECT 1 FROM pg_stat_activity WHERE $1=ANY(pg_blocking_pids(pid)) AND query LIKE '%content_lock_document%'",
+                  [pid],
+                )
+              ).rowCount! > 0,
+            'writer waiting before leadership loss',
+          );
+          await f.db.pool.query('SELECT pg_terminate_backend($1)', [host.leadership.fence.pid]);
+          await until(() => live.closed(), 'leadership failure closes native socket');
+          await blocker.query('ROLLBACK');
+          assert.equal(await write, false);
+          await until(
+            () => [...host.rooms.values()].every((room) => !room.pending),
+            'failed journal drained',
+          );
+          assert.equal(
+            (
+              await f.db.pool.query(
+                'SELECT content_revision FROM collaboration_documents WHERE page_id=$1',
+                [f.rows[0]],
+              )
+            ).rows[0].content_revision,
+            before,
+          );
+        } finally {
+          await blocker.query('ROLLBACK');
+          blocker.release();
+        }
       },
     );
   } finally {

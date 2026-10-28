@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
-import { and, eq, isNull, sql, inArray } from 'drizzle-orm';
+import { and, eq, isNull, sql, inArray, getTableColumns } from 'drizzle-orm';
 import { blocks, pages, searchDocuments, collaborationDocuments } from '@memoria/db';
 import type { WriteTransaction } from '@memoria/db';
 import {
@@ -23,7 +23,7 @@ import {
 } from './content-access.ts';
 import type { StoredPage, PageRights } from './content-access.ts';
 import { compareRank, positionAfter } from '../blocks/block-plan.ts';
-import { pageEffects } from './page-effects.ts';
+import { pageEffects, pageEffectsMany } from './page-effects.ts';
 import { accessPreview } from './share-preview.ts';
 import * as databaseObjects from '../databases/database-objects.service.ts';
 
@@ -74,6 +74,22 @@ export class PagesService {
     private readonly writer: writer.BlockWriteService,
     private readonly databaseObjects: databaseObjects.DatabaseObjectsService,
   ) {}
+  private withPages<T>(
+    session: SessionIdentity,
+    workspaceId: string,
+    write: boolean,
+    work: (tx: WriteTransaction, ctx: RequestContext, all: StoredPage[]) => Promise<T>,
+  ) {
+    return this.database.db.transaction(async (tx) => {
+      const ctx = await contentContext(tx, session, workspaceId, write);
+      const all = await tx
+        .select()
+        .from(pages)
+        .where(and(eq(pages.workspaceId, workspaceId), eq(pages.kind, 'page')))
+        .orderBy(pages.id);
+      return work(tx, ctx, all);
+    });
+  }
   private run<T>(
     session: SessionIdentity,
     workspaceId: string,
@@ -85,15 +101,9 @@ export class PagesService {
       rights: PageRights,
     ) => Promise<T>,
   ) {
-    return this.database.db.transaction(async (tx) => {
-      const ctx = await contentContext(tx, session, workspaceId, write);
-      const all = await tx
-        .select()
-        .from(pages)
-        .where(and(eq(pages.workspaceId, workspaceId), eq(pages.kind, 'page')))
-        .orderBy(pages.id);
-      return work(tx, ctx, all, await pageRights(tx, session, workspaceId, all));
-    });
+    return this.withPages(session, workspaceId, write, async (tx, ctx, all) =>
+      work(tx, ctx, all, await pageRights(tx, session, workspaceId, all)),
+    );
   }
   list(session: SessionIdentity, workspaceId: string) {
     return this.run(session, workspaceId, false, async (_tx, ctx, all, rights) => ({
@@ -269,7 +279,9 @@ export class PagesService {
       action === 'move' ? { expectedVersion: parse(pageMoveSchema, input).expectedVersion } : input,
     );
     const move = action === 'move' ? parse(pageMoveSchema, input) : undefined;
-    return this.run(session, workspaceId, !previewOnly, async (tx, ctx, all) => {
+    return this.withPages(session, workspaceId, !previewOnly, async (tx, ctx, all) => {
+      // Tree mutations are member-only. contentContext rechecks session, workspace
+      // policy and membership under the same locks; no per-page guest map is used.
       requireTreeManager(ctx);
       const page = requirePage(pageId, all, action === 'restore');
       if (page.version !== data.expectedVersion)
@@ -335,30 +347,44 @@ export class PagesService {
           .where(and(eq(pages.workspaceId, workspaceId), eq(pages.id, page.id)));
       for (const id of affected) previous.delete(id);
       await this.persistRebalanced(tx, ctx, all, previous);
-      for (const target of all
+      const targets = all
         .filter((p) => affected.has(p.id))
-        .sort((a, b) => a.id.localeCompare(b.id))) {
-        const [updated] = await tx
-          .update(pages)
-          .set({
-            parentId: target.parentId,
-            position: target.position,
-            deletedAt: target.deletedAt,
-            version: sql`${pages.version} + 1`,
-            updatedBy: ctx.actorId,
-          })
-          .where(
-            and(
-              eq(pages.workspaceId, workspaceId),
-              eq(pages.id, target.id),
-              eq(pages.version, target.version),
-            ),
-          )
-          .returning();
-        if (!updated) throw new ConflictException({ code: 'VERSION_CONFLICT' });
-        Object.assign(target, updated);
-        await pageEffects(ctx, tx, target, all, `page.${action}`);
-      }
+        .sort((a, b) => a.id.localeCompare(b.id));
+      const input = targets.map((p) => ({
+        id: p.id,
+        parent_id: p.parentId,
+        position: p.position,
+        deleted_at: p.deletedAt,
+        version: p.version,
+      }));
+      const updated = await tx
+        .update(pages)
+        .set({
+          parentId: sql`input.parent_id`,
+          position: sql`input.position`,
+          deletedAt: sql`input.deleted_at`,
+          version: sql`${pages.version} + 1`,
+          updatedBy: ctx.actorId,
+        })
+        .from(
+          sql`jsonb_to_recordset(${JSON.stringify(input)}::jsonb) AS input(id uuid,parent_id uuid,position text,deleted_at timestamptz,version bigint)`,
+        )
+        .where(
+          and(
+            eq(pages.workspaceId, workspaceId),
+            sql`${pages.id}=input.id`,
+            sql`${pages.version}=input.version`,
+          ),
+        )
+        .returning(getTableColumns(pages));
+      if (updated.length !== targets.length)
+        throw new ConflictException({ code: 'VERSION_CONFLICT' });
+      for (const target of targets)
+        Object.assign(
+          target,
+          updated.find((p) => p.id === target.id)!,
+        );
+      await pageEffectsMany(ctx, tx, targets, all, `page.${action}`);
       return pageResponse(page);
     });
   }

@@ -1,0 +1,59 @@
+{
+  "source": ".local\\session-6d-tree-profile.json",
+  "originalSha256": "e5a8a3e0757da98c4edbfaf390c45515ea1bb93a02b71b1054736902d53ca106",
+  "encoding": "JSON summaries + ordered, compact NDJSON shards, no samples removed. Array hashes use JSON.stringify(array). Hygiene result duplicates are replaced by their SHA256.",
+  "hygiene": [
+    {
+      "source": ".local/measurement-hygiene/database-http-rights-preparation-1a6ec5b8-f6ab-436b-9621-bbba725b627f.json",
+      "file": "database-http-rights-preparation-1a6ec5b8-f6ab-436b-9621-bbba725b627f.json",
+      "originalSha256": "79ef31f5e4ada7fca32cfed0471afb22cb5578ff20690e5caacc9005f355bb4b"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-tree-profile-1-attempt-1-05a246d5-d228-4b69-ae6a-6ccbf92aaf77.json",
+      "file": "database-http-tree-profile-1-attempt-1-05a246d5-d228-4b69-ae6a-6ccbf92aaf77.json",
+      "originalSha256": "a685aba695a11f3f559f4893ee81bb0dffcbc628c56456c372f30ca0c0ac5fec"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-tree-profile-2-attempt-1-bc721070-66be-4c00-810b-6b5b87fdb467.json",
+      "file": "database-http-tree-profile-2-attempt-1-bc721070-66be-4c00-810b-6b5b87fdb467.json",
+      "originalSha256": "25252202b9056db4a5ee68a2c6e6e745d9451662efbd305fe08d52c152414418"
+    },
+    {
+      "source": ".local/measurement-hygiene/database-http-tree-profile-3-attempt-1-51c797a8-42d4-4ed9-bc64-a7e67bb4b42c.json",
+      "file": "database-http-tree-profile-3-attempt-1-51c797a8-42d4-4ed9-bc64-a7e67bb4b42c.json",
+      "originalSha256": "8c5f2274aaef64d1d023c4531708a6d8ee0c2fb8576f0860dabf63c00f1f94f6"
+    }
+  ],
+  "files": [
+    {
+      "name": "database-http-rights-preparation-1a6ec5b8-f6ab-436b-9621-bbba725b627f.json",
+      "bytes": 675,
+      "sha256": "79ef31f5e4ada7fca32cfed0471afb22cb5578ff20690e5caacc9005f355bb4b"
+    },
+    {
+      "name": "database-http-tree-profile-1-attempt-1-05a246d5-d228-4b69-ae6a-6ccbf92aaf77.json",
+      "bytes": 6900,
+      "sha256": "4992f12885d45d99b6bc313181ed7864e0e0fc9dbcb8708a618c331aaa998d9d"
+    },
+    {
+      "name": "database-http-tree-profile-2-attempt-1-bc721070-66be-4c00-810b-6b5b87fdb467.json",
+      "bytes": 6900,
+      "sha256": "d21fa4c10d337450d0e920fa4f2649cb1c0f21ee3ca20de845ab93c73842bb18"
+    },
+    {
+      "name": "database-http-tree-profile-3-attempt-1-51c797a8-42d4-4ed9-bc64-a7e67bb4b42c.json",
+      "bytes": 6900,
+      "sha256": "1fd1dac8951f224daa1cd3dd5012707e28df72f9cbac628400e7846090da0f72"
+    },
+    {
+      "name": "measurement.json",
+      "bytes": 487656,
+      "sha256": "11d9c1288fe5866f332f1d737eb654b2321cb6b9d610b12ffcad6596cbce9e6f"
+    },
+    {
+      "name": "run.txt",
+      "bytes": 4263,
+      "sha256": "4648212969902b5b1d98f2edc4d519f5462cb39dc8474dc0e0d3175e46a2a28f"
+    }
+  ]
+}
