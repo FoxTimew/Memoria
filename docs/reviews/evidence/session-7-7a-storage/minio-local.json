@@ -1,0 +1,170 @@
+{
+  "provider": "minio-local",
+  "observedAt": "2026-10-28T14:36:06.409Z",
+  "performanceMeasurement": false,
+  "scenarios": [
+    {
+      "name": "CORS exact origin configured and preflight returned",
+      "passed": false,
+      "error": "NotImplemented HTTP 501"
+    },
+    {
+      "name": "POST accepts exact reserved size",
+      "passed": true
+    },
+    {
+      "name": "POST rejects oversized object",
+      "passed": true
+    },
+    {
+      "name": "POST rejects undersized object",
+      "passed": true
+    },
+    {
+      "name": "immutable copy survives staging replay",
+      "passed": true
+    },
+    {
+      "name": "private object rejects anonymous read",
+      "passed": true
+    },
+    {
+      "name": "Range reads exact requested bytes in a stream",
+      "passed": true
+    },
+    {
+      "name": "UploadPart capability signs length checksum and part number",
+      "passed": true
+    },
+    {
+      "name": "UploadPart valid 16 MiB",
+      "passed": true
+    },
+    {
+      "name": "UploadPart rejects tampered bytes with unchanged checksum",
+      "passed": true
+    },
+    {
+      "name": "UploadPart rejects excess length",
+      "passed": true
+    },
+    {
+      "name": "UploadPart rejects chunked unsigned length",
+      "passed": true
+    },
+    {
+      "name": "UploadPart rejects substituted part number",
+      "passed": true
+    },
+    {
+      "name": "multipart list resume and complete from server list",
+      "passed": true
+    },
+    {
+      "name": "abort prevents replay and leaves no ready object",
+      "passed": true
+    },
+    {
+      "name": "isolated multipart without hostile requests; retry=false",
+      "passed": true
+    },
+    {
+      "name": "isolated multipart without hostile requests; retry=true",
+      "passed": true
+    },
+    {
+      "name": "owned fixture cleanup",
+      "passed": true
+    }
+  ],
+  "observations": [
+    {
+      "stage": "resume valid first part status",
+      "value": 200
+    },
+    {
+      "stage": "last part status",
+      "value": 200
+    },
+    {
+      "stage": "server part numbers and sizes",
+      "value": [
+        [1, 16777216],
+        [2, 5242880]
+      ]
+    },
+    {
+      "stage": "completed size and hash equality",
+      "value": {
+        "bytes": 22020096,
+        "expectedBytes": 22020096,
+        "hashMatches": true
+      }
+    },
+    {
+      "stage": "clean parts retry=false",
+      "value": [
+        [1, 16777216],
+        [2, 5242880]
+      ]
+    },
+    {
+      "stage": "single ListParts response retry=false",
+      "value": {
+        "isTruncated": false,
+        "parts": [
+          {
+            "number": 1,
+            "bytes": 16777216,
+            "hasChecksum": true
+          },
+          {
+            "number": 2,
+            "bytes": 5242880,
+            "hasChecksum": true
+          }
+        ]
+      }
+    },
+    {
+      "stage": "clean result retry=false",
+      "value": {
+        "bytes": 22020096,
+        "hashMatches": true
+      }
+    },
+    {
+      "stage": "clean parts retry=true",
+      "value": [
+        [1, 16777216],
+        [2, 5242880]
+      ]
+    },
+    {
+      "stage": "single ListParts response retry=true",
+      "value": {
+        "isTruncated": false,
+        "parts": [
+          {
+            "number": 1,
+            "bytes": 16777216,
+            "hasChecksum": true
+          },
+          {
+            "number": 2,
+            "bytes": 5242880,
+            "hasChecksum": true
+          }
+        ]
+      }
+    },
+    {
+      "stage": "clean result retry=true",
+      "value": {
+        "bytes": 22020096,
+        "hashMatches": true
+      }
+    }
+  ],
+  "passed": false
+}
