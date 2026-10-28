@@ -29,8 +29,15 @@ const fromCase = process.argv.includes('--from-case')
   ? process.argv[process.argv.indexOf('--from-case') + 1]
   : 'share';
 assert(fromCase && cases.includes(fromCase), 'Unknown starting case');
+const throughCase = process.argv.includes('--through-case')
+  ? process.argv[process.argv.indexOf('--through-case') + 1]
+  : cases.at(-1);
+assert(throughCase && cases.includes(throughCase), 'Unknown ending case');
+assert(cases.indexOf(throughCase) >= cases.indexOf(fromCase), 'Reversed case range');
 const diagnostic = process.argv.includes('--diagnose-tree');
-const selectedCases = diagnostic ? ['move'] : cases.slice(cases.indexOf(fromCase));
+const selectedCases = diagnostic
+  ? ['move']
+  : cases.slice(cases.indexOf(fromCase), cases.indexOf(throughCase) + 1);
 const preparation = await prepareMeasurement('database-http-rights');
 const h = await databaseHttpHarness(async () => {
   // Bulk setup uses the same timeout as the 6a bound fixture; it is outside measured samples.

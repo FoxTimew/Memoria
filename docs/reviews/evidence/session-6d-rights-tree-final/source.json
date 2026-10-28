@@ -1,0 +1,7 @@
+{
+  "applicationCommit": "fb8fb713d2ac2ec9f08e43d1ff462af497a7b31b",
+  "command": "node --env-file=.env apps/api/dist/database-rights-load.mjs --from-case move",
+  "buildCommand": "node scripts/build-server.mjs api --database-rights-load",
+  "applicationChangesAfterCommit": false,
+  "note": "The through-case selector was added to the source while this already-built benchmark was running. It was not present in the measured bundle and changes only which complete cases are selected in later runs. No build or test ran concurrently."
+}

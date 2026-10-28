@@ -1,0 +1,37 @@
+$ node ../../scripts/run-web.mjs build
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 898ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 529ms
+  Running TypeScript ...
+  Finished TypeScript in 2.8s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/9) ...
+  Generating static pages using 15 workers (2/9)
+  Generating static pages using 15 workers (4/9)
+  Generating static pages using 15 workers (6/9)
+✓ Generating static pages using 15 workers (9/9) in 428ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /connexion
+├ ○ /inscription
+├ ○ /invitation
+├ ○ /recuperation
+├ ○ /securite
+├ ○ /verification
+├ ƒ /workspaces/[workspaceId]
+├ ƒ /workspaces/[workspaceId]/acces
+├ ƒ /workspaces/[workspaceId]/arrivee
+├ ƒ /workspaces/[workspaceId]/databases/[databaseId]
+├ ƒ /workspaces/[workspaceId]/databases/[databaseId]/rows/[rowId]
+└ ƒ /workspaces/[workspaceId]/securite
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+EXIT_CODE=0

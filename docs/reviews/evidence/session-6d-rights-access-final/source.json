@@ -1,0 +1,7 @@
+{
+  "applicationCommit": "fb8fb713d2ac2ec9f08e43d1ff462af497a7b31b",
+  "command": "node --env-file=.env apps/api/dist/database-rights-load.mjs --from-case share --through-case remove",
+  "buildCommand": "node scripts/build-server.mjs api --database-rights-load",
+  "applicationChangesAfterCommit": false,
+  "harnessChanges": "Added a validated inclusive --through-case selector. Each selected case retains all three series, warmups, fixtures, guards, quotas and ceilings. No build or test ran concurrently."
+}

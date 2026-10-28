@@ -1,0 +1,28 @@
+$ node --env-file=.env --use-system-ca scripts/test-databases-browser.mjs
+PASS 6d final UI attacks: forged read-only write and hidden native row denied, hidden/missing replies identical
+PASS guest read: immutable table, hidden schema, neutral relation/person without title/id/count
+PASS 6d final UI attacks: forged guest schema, hidden relation removal and javascript URL denied; HTML text stays inert
+PASS original use case: guest editor updates task status through final UI
+PASS cell conflict shows current value, preserves input, explicit reapply; hidden references retained
+PASS nine cell editors, filters/sort and schema creation visible only to authorized role
+PASS final UI signed cursor pagination: no repeated rows and return to previous page
+PASS native row WSS collaboration between two browsers, relational title and local Yjs cache
+PACING: 65 seconds before cache attacks, unchanged production quotas and refresh timers
+PASS final UI offline edit survives closing/reopening a row tab and merges after access recheck
+PASS real browser freeze/resume events and suspended timer
+PASS final UI frozen/offline old ticket cannot resurrect after removal/regrant; unrelated base survives; read-only body receives fresh document
+PASS real browser freeze/resume events and suspended timer
+PASS 6d final UI: workspace cache prohibition purges rows and fences a frozen tab/reload; fresh authorization can create a new cache
+PASS real browser freeze/resume events and suspended timer
+PASS archive/restore lifecycle and logout fence frozen row UI, cache remains empty
+PASS 6d canaries absent from browser errors, denial bodies and workspace audit/outbox metadata; functional document responses excluded
+✔ 6c final UI: typed table, guest task, CAS, selectors, native rows and cache resurrection attacks (97555.0616ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97565.6483
+EXIT_CODE=0
