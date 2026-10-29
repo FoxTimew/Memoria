@@ -1,0 +1,2381 @@
+{
+  "diagnosticOnly": true,
+  "source": "Raw CPU samples weighted by timeDeltas; inclusive stacks overlap and must not be summed. Medians only from three completed, hygiene-valid series per configuration.",
+  "series": [
+    {
+      "mode": "shared",
+      "series": 1,
+      "authors": 1,
+      "server": {
+        "samples": 100,
+        "p95": 45.63900000000285,
+        "max": 60.066899999997986
+      },
+      "validationWall": {
+        "samples": 100,
+        "p95": 34.621799999997165,
+        "max": 43.47450000000026
+      },
+      "worker": {
+        "samples": 100,
+        "p95": 34.30079999999725,
+        "max": 42.989599999997154
+      },
+      "poolWait": {
+        "samples": 100,
+        "p95": 0.00999999999839929,
+        "max": 0.014599999994970858
+      },
+      "ipcAndScheduling": {
+        "samples": 100,
+        "p95": 0.39029999999911524,
+        "max": 0.6021999999975378
+      },
+      "sql": {
+        "samples": 100,
+        "p95": 12.595600000000559,
+        "max": 26.136099999999715
+      },
+      "wire": {
+        "samples": 100,
+        "p95": 218.2573999999986,
+        "max": 255.38450000000012
+      },
+      "clientEdit": {
+        "samples": 100,
+        "p95": 40.674700000001394,
+        "max": 44.10149999999703
+      },
+      "eventLoopP95Ms": 60.227583,
+      "eventLoopMaxMs": 96.534527,
+      "gcMs": 389.00630009174347,
+      "mainThreadCpuMs": 18890,
+      "workerThreadCpuMs": 3891,
+      "meetsHistoricalLimit": true,
+      "completeProcess": true,
+      "hygieneValid": true,
+      "batchSizes": [1],
+      "maxPoolOccupancy": 0,
+      "maxRoomWaiting": 0,
+      "snapshotBytes": 1042017,
+      "clientIds": 41164
+    },
+    {
+      "mode": "shared",
+      "series": 1,
+      "authors": 2,
+      "server": {
+        "samples": 200,
+        "p95": 109.13790000000154,
+        "max": 132.07890000000043
+      },
+      "validationWall": {
+        "samples": 200,
+        "p95": 99.57710000000225,
+        "max": 118.93660000000091
+      },
+      "worker": {
+        "samples": 200,
+        "p95": 37.92260000000533,
+        "max": 50.744699999995646
+      },
+      "poolWait": {
+        "samples": 200,
+        "p95": 0.013800000000628643,
+        "max": 0.05219999999826541
+      },
+      "ipcAndScheduling": {
+        "samples": 200,
+        "p95": 63.37010000000009,
+        "max": 85.09870000000956
+      },
+      "sql": {
+        "samples": 200,
+        "p95": 12.204399999995076,
+        "max": 52.15260000000126
+      },
+      "wire": {
+        "samples": 200,
+        "p95": 341.15639999999985,
+        "max": 388.65759999999864
+      },
+      "clientEdit": {
+        "samples": 200,
+        "p95": 40.51640000000043,
+        "max": 46.84340000001248
+      },
+      "eventLoopP95Ms": 66.289663,
+      "eventLoopMaxMs": 106.495999,
+      "gcMs": 801.0904000997543,
+      "mainThreadCpuMs": 36000,
+      "workerThreadCpuMs": 7859,
+      "meetsHistoricalLimit": false,
+      "completeProcess": true,
+      "hygieneValid": true,
+      "batchSizes": [1],
+      "maxPoolOccupancy": 0,
+      "maxRoomWaiting": 0,
+      "snapshotBytes": 1042017,
+      "clientIds": 41164
+    },
+    {
+      "mode": "isolated",
+      "series": 1,
+      "authors": 1,
+      "server": {
+        "samples": 100,
+        "p95": 56.6694000000025,
+        "max": 71.54939999999624
+      },
+      "validationWall": {
+        "samples": 100,
+        "p95": 41.860099999998056,
+        "max": 53.85659999999916
+      },
+      "worker": {
+        "samples": 100,
+        "p95": 39.79899999999907,
+        "max": 53.455800000003364
+      },
+      "poolWait": {
+        "samples": 100,
+        "p95": 0.011200000000826549,
+        "max": 0.01840000000083819
+      },
+      "ipcAndScheduling": {
+        "samples": 100,
+        "p95": 0.41529999999693246,
+        "max": 7.330100000006496
+      },
+      "sql": {
+        "samples": 100,
+        "p95": 13.242200000000594,
+        "max": 38.70590000000084
+      },
+      "wire": {
+        "samples": 100,
+        "p95": 182.49779999999737,
+        "max": 210.31430000000182
+      },
+      "clientEdit": {
+        "samples": 100,
+        "p95": 41.088800000001356,
+        "max": 59.343299999996816
+      },
+      "eventLoopP95Ms": 6.504447,
+      "eventLoopMaxMs": 101.056511,
+      "gcMs": 180.38880002498627,
+      "mainThreadCpuMs": 8453,
+      "workerThreadCpuMs": 4078,
+      "meetsHistoricalLimit": true,
+      "completeProcess": true,
+      "hygieneValid": true,
+      "batchSizes": [1],
+      "maxPoolOccupancy": 0,
+      "maxRoomWaiting": 0,
+      "snapshotBytes": 1042017,
+      "clientIds": 41164
+    },
+    {
+      "mode": "isolated",
+      "series": 1,
+      "authors": 2,
+      "server": {
+        "samples": 200,
+        "p95": 67.72980000000098,
+        "max": 93.2335999999923
+      },
+      "validationWall": {
+        "samples": 200,
+        "p95": 52.851599999994505,
+        "max": 80.52829999999085
+      },
+      "worker": {
+        "samples": 200,
+        "p95": 52.26029999999446,
+        "max": 79.86149999999907
+      },
+      "poolWait": {
+        "samples": 200,
+        "p95": 0.010500000003958121,
+        "max": 0.1279999999969732
+      },
+      "ipcAndScheduling": {
+        "samples": 200,
+        "p95": 0.5719000000099186,
+        "max": 5.457299999994575
+      },
+      "sql": {
+        "samples": 200,
+        "p95": 13.467400000001362,
+        "max": 34.60139999999956
+      },
+      "wire": {
+        "samples": 200,
+        "p95": 309.64360000000306,
+        "max": 502.17519999999786
+      },
+      "clientEdit": {
+        "samples": 200,
+        "p95": 53.59810000000289,
+        "max": 76.77240000000165
+      },
+      "eventLoopP95Ms": 11.452415,
+      "eventLoopMaxMs": 171.311103,
+      "gcMs": 404.29320016503334,
+      "mainThreadCpuMs": 17281,
+      "workerThreadCpuMs": 9078,
+      "meetsHistoricalLimit": true,
+      "completeProcess": true,
+      "hygieneValid": true,
+      "batchSizes": [1],
+      "maxPoolOccupancy": 0,
+      "maxRoomWaiting": 0,
+      "snapshotBytes": 1042017,
+      "clientIds": 41164
+    },
+    {
+      "mode": "isolated",
+      "series": 2,
+      "authors": 1,
+      "server": {
+        "samples": 100,
+        "p95": 58.37280000000101,
+        "max": 71.32510000000184
+      },
+      "validationWall": {
+        "samples": 100,
+        "p95": 45.681299999996554,
+        "max": 56.94180000000051
+      },
+      "worker": {
+        "samples": 100,
+        "p95": 45.366500000003725,
+        "max": 56.21089999999822
+      },
+      "poolWait": {
+        "samples": 100,
+        "p95": 0.011200000000826549,
+        "max": 0.02260000000023865
+      },
+      "ipcAndScheduling": {
+        "samples": 100,
+        "p95": 0.5072999999974854,
+        "max": 3.8682000000007974
+      },
+      "sql": {
+        "samples": 100,
+        "p95": 19.32430000000022,
+        "max": 39.137400000003254
+      },
+      "wire": {
+        "samples": 100,
+        "p95": 199.9398000000001,
+        "max": 253.01430000000255
+      },
+      "clientEdit": {
+        "samples": 100,
+        "p95": 43.80069999999978,
+        "max": 58.78940000000148
+      },
+      "eventLoopP95Ms": 6.541311,
+      "eventLoopMaxMs": 96.665599,
+      "gcMs": 194.0349000096321,
+      "mainThreadCpuMs": 9312,
+      "workerThreadCpuMs": 4625,
+      "meetsHistoricalLimit": true,
+      "completeProcess": true,
+      "hygieneValid": true,
+      "batchSizes": [1],
+      "maxPoolOccupancy": 0,
+      "maxRoomWaiting": 0,
+      "snapshotBytes": 1042017,
+      "clientIds": 41164
+    },
+    {
+      "mode": "isolated",
+      "series": 2,
+      "authors": 2,
+      "server": {
+        "samples": 200,
+        "p95": 64.35310000000027,
+        "max": 78.33389999999781
+      },
+      "validationWall": {
+        "samples": 200,
+        "p95": 50.281800000004296,
+        "max": 64.86450000000332
+      },
+      "worker": {
+        "samples": 200,
+        "p95": 49.860200000002806,
+        "max": 64.40660000000207
+      },
+      "poolWait": {
+        "samples": 200,
+        "p95": 0.012900000001536682,
+        "max": 0.05130000000644941
+      },
+      "ipcAndScheduling": {
+        "samples": 200,
+        "p95": 0.5208999999886146,
+        "max": 7.517900000020745
+      },
+      "sql": {
+        "samples": 200,
+        "p95": 19.855300000010175,
+        "max": 41.955199999996694
+      },
+      "wire": {
+        "samples": 200,
+        "p95": 317.71169999999984,
+        "max": 364.85029999999824
+      },
+      "clientEdit": {
+        "samples": 200,
+        "p95": 53.73730000000069,
+        "max": 69.619200000001
+      },
+      "eventLoopP95Ms": 9.625599,
+      "eventLoopMaxMs": 110.690303,
+      "gcMs": 407.27720007300377,
+      "mainThreadCpuMs": 18406,
+      "workerThreadCpuMs": 9953,
+      "meetsHistoricalLimit": true,
+      "completeProcess": true,
+      "hygieneValid": true,
+      "batchSizes": [1],
+      "maxPoolOccupancy": 0,
+      "maxRoomWaiting": 0,
+      "snapshotBytes": 1042017,
+      "clientIds": 41164
+    },
+    {
+      "mode": "shared",
+      "series": 2,
+      "authors": 1,
+      "server": {
+        "samples": 100,
+        "p95": 53.240099999999074,
+        "max": 70.72580000000016
+      },
+      "validationWall": {
+        "samples": 100,
+        "p95": 42.13379999999961,
+        "max": 56.99840000000404
+      },
+      "worker": {
+        "samples": 100,
+        "p95": 41.76369999999952,
+        "max": 54.47040000000197
+      },
+      "poolWait": {
+        "samples": 100,
+        "p95": 0.01209999999991851,
+        "max": 0.03770000000076834
+      },
+      "ipcAndScheduling": {
+        "samples": 100,
+        "p95": 0.4477000000006228,
+        "max": 5.741100000002916
+      },
+      "sql": {
+        "samples": 100,
+        "p95": 13.662700000000768,
+        "max": 26.86460000000079
+      },
+      "wire": {
+        "samples": 100,
+        "p95": 227.3040000000001,
+        "max": 286.23809999999867
+      },
+      "clientEdit": {
+        "samples": 100,
+        "p95": 40.17039999999906,
+        "max": 54.640299999999115
+      },
+      "eventLoopP95Ms": 63.602687,
+      "eventLoopMaxMs": 112.328703,
+      "gcMs": 402.1478999853134,
+      "mainThreadCpuMs": 19499,
+      "workerThreadCpuMs": 4079,
+      "meetsHistoricalLimit": true,
+      "completeProcess": false,
+      "hygieneValid": true,
+      "batchSizes": [1],
+      "maxPoolOccupancy": 0,
+      "maxRoomWaiting": 0,
+      "snapshotBytes": 1042017,
+      "clientIds": 41164
+    }
+  ],
+  "medians": [],
+  "profiles": [
+    {
+      "file": "isolated-1-client1.cpuprofile.gz",
+      "sampledMs": 66614.95399999968,
+      "stateVectorInclusiveMs": 12420.506999999989,
+      "decodeDocumentInclusiveMs": 0,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 46822.252999999604
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 12151.479999999992
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1352,
+            14
+          ],
+          "ms": 1574.3730000000023
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1477.772999999999
+        },
+        {
+          "frame": [
+            "getState",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2827,
+            17
+          ],
+          "ms": 664.911
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1358,
+            32
+          ],
+          "ms": 603.0769999999994
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3126,
+            83
+          ],
+          "ms": 577.8960000000001
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 476.76799999999986
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 367.3829999999999
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 333.96899999999977
+        },
+        {
+          "frame": [
+            "writeClientsStructs",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1349,
+            28
+          ],
+          "ms": 302.809
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 290.8979999999999
+        },
+        {
+          "frame": [
+            "any",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/map.js",
+            91,
+            19
+          ],
+          "ms": 280.0389999999999
+        },
+        {
+          "frame": [
+            "writeUpdateMessageFromTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3125,
+            42
+          ],
+          "ms": 181.601
+        },
+        {
+          "frame": ["post", "node:inspector", 114, 6],
+          "ms": 83.574
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 65.994
+        },
+        {
+          "frame": [
+            "next",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            7562,
+            7
+          ],
+          "ms": 29.104999999999993
+        },
+        {
+          "frame": ["writeBuffer", "", -1, -1],
+          "ms": 25.728
+        },
+        {
+          "frame": [
+            "emit",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/observable.js",
+            79,
+            7
+          ],
+          "ms": 24.921
+        },
+        {
+          "frame": [
+            "Encoder",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/encoding.js",
+            38,
+            14
+          ],
+          "ms": 16.759
+        }
+      ]
+    },
+    {
+      "file": "isolated-1-client2.cpuprofile.gz",
+      "sampledMs": 66530.3200000001,
+      "stateVectorInclusiveMs": 12538.405000000068,
+      "decodeDocumentInclusiveMs": 0,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 46600.307000000044
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 12264.520000000053
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1352,
+            14
+          ],
+          "ms": 1522.0630000000006
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1492.964000000001
+        },
+        {
+          "frame": [
+            "getState",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2827,
+            17
+          ],
+          "ms": 751.6660000000002
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3126,
+            83
+          ],
+          "ms": 600.5639999999992
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1358,
+            32
+          ],
+          "ms": 576.2820000000003
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 509.11999999999995
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 439.76200000000006
+        },
+        {
+          "frame": [
+            "writeClientsStructs",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1349,
+            28
+          ],
+          "ms": 314.39200000000005
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 312.07099999999986
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 278.236
+        },
+        {
+          "frame": [
+            "any",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/map.js",
+            91,
+            19
+          ],
+          "ms": 230.02700000000016
+        },
+        {
+          "frame": [
+            "writeUpdateMessageFromTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3125,
+            42
+          ],
+          "ms": 166.148
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 94.48700000000001
+        },
+        {
+          "frame": ["post", "node:inspector", 114, 6],
+          "ms": 82.873
+        },
+        {
+          "frame": [
+            "next",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            7562,
+            7
+          ],
+          "ms": 31.568000000000005
+        },
+        {
+          "frame": [
+            "emit",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/observable.js",
+            79,
+            7
+          ],
+          "ms": 28.398999999999997
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 23.416000000000007
+        },
+        {
+          "frame": ["writeBuffer", "", -1, -1],
+          "ms": 13.789
+        }
+      ]
+    },
+    {
+      "file": "isolated-1-server.cpuprofile.gz",
+      "sampledMs": 66726.59700000005,
+      "stateVectorInclusiveMs": 13531.947000000104,
+      "decodeDocumentInclusiveMs": 0,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 41778.753000000026
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 13060.225000000106
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1866.9089999999978
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1352,
+            14
+          ],
+          "ms": 1064.705999999999
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3126,
+            83
+          ],
+          "ms": 773.2830000000004
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 740.486
+        },
+        {
+          "frame": [
+            "getState",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2827,
+            17
+          ],
+          "ms": 643.4000000000002
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 613.4949999999992
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 600.9080000000001
+        },
+        {
+          "frame": ["writev", "", -1, -1],
+          "ms": 564.6030000000002
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 485.5629999999998
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 458.55899999999997
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1358,
+            32
+          ],
+          "ms": 436.6889999999998
+        },
+        {
+          "frame": [
+            "writeClientsStructs",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1349,
+            28
+          ],
+          "ms": 430.28000000000003
+        },
+        {
+          "frame": [
+            "writeUpdateMessageFromTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3125,
+            42
+          ],
+          "ms": 277.3139999999999
+        },
+        {
+          "frame": [
+            "any",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/map.js",
+            91,
+            19
+          ],
+          "ms": 258.40899999999993
+        },
+        {
+          "frame": ["post", "node:inspector", 114, 6],
+          "ms": 129.908
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 110.60400000000001
+        },
+        {
+          "frame": ["nextTick", "node:internal/process/task_queues", 112, 17],
+          "ms": 91.06300000000002
+        },
+        {
+          "frame": ["runMicrotasks", "", -1, -1],
+          "ms": 84.83999999999997
+        }
+      ]
+    },
+    {
+      "file": "isolated-1-validator.cpuprofile.gz",
+      "sampledMs": 66645.54600000006,
+      "stateVectorInclusiveMs": 7147.862999999997,
+      "decodeDocumentInclusiveMs": 459.3480000000002,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 53328.81400000002
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 6856.499999999996
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 2178.352
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1601.0800000000006
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 956.3149999999987
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 327.89399999999995
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 304.02699999999993
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 302.478
+        },
+        {
+          "frame": [
+            "walk",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20155,
+            15
+          ],
+          "ms": 162.20799999999994
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 123.76499999999999
+        },
+        {
+          "frame": [
+            "typeMapGetAll",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            5626,
+            22
+          ],
+          "ms": 60.763000000000005
+        },
+        {
+          "frame": [
+            "element",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20023,
+            16
+          ],
+          "ms": 25.650000000000002
+        },
+        {
+          "frame": [
+            "emit",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/observable.js",
+            79,
+            7
+          ],
+          "ms": 25.222999999999995
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            5632,
+            22
+          ],
+          "ms": 24.693
+        },
+        {
+          "frame": [
+            "prepare",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20371,
+            9
+          ],
+          "ms": 24.414
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20491,
+            2
+          ],
+          "ms": 24.027999999999995
+        },
+        {
+          "frame": [
+            "decodeDocument",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20140,
+            23
+          ],
+          "ms": 23.64
+        },
+        {
+          "frame": [
+            "get",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            7882,
+            6
+          ],
+          "ms": 22.119
+        },
+        {
+          "frame": [
+            "check._a3.check",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            2406,
+            44
+          ],
+          "ms": 21.396
+        },
+        {
+          "frame": [
+            "attributes",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20015,
+            19
+          ],
+          "ms": 15.67
+        }
+      ]
+    },
+    {
+      "file": "isolated-2-client1.cpuprofile.gz",
+      "sampledMs": 70555.43799999949,
+      "stateVectorInclusiveMs": 13345.044000000034,
+      "decodeDocumentInclusiveMs": 0,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 49758.074999999444
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 13135.929000000046
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1352,
+            14
+          ],
+          "ms": 1682.6689999999994
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1487.5809999999985
+        },
+        {
+          "frame": [
+            "getState",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2827,
+            17
+          ],
+          "ms": 766.8810000000003
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1358,
+            32
+          ],
+          "ms": 611.0099999999996
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3126,
+            83
+          ],
+          "ms": 548.735
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 426.8169999999998
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 369.8939999999999
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 337.601
+        },
+        {
+          "frame": [
+            "writeClientsStructs",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1349,
+            28
+          ],
+          "ms": 293.609
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 212.19599999999988
+        },
+        {
+          "frame": [
+            "writeUpdateMessageFromTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3125,
+            42
+          ],
+          "ms": 205.71099999999996
+        },
+        {
+          "frame": [
+            "any",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/map.js",
+            91,
+            19
+          ],
+          "ms": 182.22199999999998
+        },
+        {
+          "frame": ["post", "node:inspector", 114, 6],
+          "ms": 87.408
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 52.077999999999996
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 46.303
+        },
+        {
+          "frame": [
+            "next",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            7562,
+            7
+          ],
+          "ms": 35.93000000000001
+        },
+        {
+          "frame": [
+            "emit",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/observable.js",
+            79,
+            7
+          ],
+          "ms": 26.568
+        },
+        {
+          "frame": ["writeBuffer", "", -1, -1],
+          "ms": 25.791999999999998
+        }
+      ]
+    },
+    {
+      "file": "isolated-2-client2.cpuprofile.gz",
+      "sampledMs": 70466.89799999923,
+      "stateVectorInclusiveMs": 12848.703000000058,
+      "decodeDocumentInclusiveMs": 0,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 50055.92999999923
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 12599.072000000046
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1352,
+            14
+          ],
+          "ms": 1574.1089999999976
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1505.6670000000006
+        },
+        {
+          "frame": [
+            "getState",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2827,
+            17
+          ],
+          "ms": 722.6429999999998
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1358,
+            32
+          ],
+          "ms": 648.4330000000001
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3126,
+            83
+          ],
+          "ms": 628.1790000000003
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 541.8710000000001
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 437.48799999999994
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 345.986
+        },
+        {
+          "frame": [
+            "writeClientsStructs",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1349,
+            28
+          ],
+          "ms": 266.1739999999999
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 259.36299999999994
+        },
+        {
+          "frame": [
+            "any",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/map.js",
+            91,
+            19
+          ],
+          "ms": 230.17999999999998
+        },
+        {
+          "frame": [
+            "writeUpdateMessageFromTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3125,
+            42
+          ],
+          "ms": 178.27099999999996
+        },
+        {
+          "frame": ["post", "node:inspector", 114, 6],
+          "ms": 87.131
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 78.21
+        },
+        {
+          "frame": [
+            "emit",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/observable.js",
+            79,
+            7
+          ],
+          "ms": 34.074
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 24.011
+        },
+        {
+          "frame": [
+            "next",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            7562,
+            7
+          ],
+          "ms": 17.98
+        },
+        {
+          "frame": ["writeBuffer", "", -1, -1],
+          "ms": 12.629999999999999
+        }
+      ]
+    },
+    {
+      "file": "isolated-2-server.cpuprofile.gz",
+      "sampledMs": 70661.77400000009,
+      "stateVectorInclusiveMs": 14971.74400000015,
+      "decodeDocumentInclusiveMs": 0,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 43391.92199999979
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 14639.129000000125
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1922.368999999998
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1352,
+            14
+          ],
+          "ms": 1419.0120000000013
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 783.3770000000003
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3126,
+            83
+          ],
+          "ms": 771.237
+        },
+        {
+          "frame": [
+            "getState",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2827,
+            17
+          ],
+          "ms": 681.9720000000002
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 662.5539999999999
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 637.0180000000004
+        },
+        {
+          "frame": ["writev", "", -1, -1],
+          "ms": 607.0370000000004
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1358,
+            32
+          ],
+          "ms": 540.8940000000001
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 485.81099999999964
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 345.0969999999999
+        },
+        {
+          "frame": [
+            "writeClientsStructs",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1349,
+            28
+          ],
+          "ms": 269.4310000000001
+        },
+        {
+          "frame": [
+            "any",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/map.js",
+            91,
+            19
+          ],
+          "ms": 251.07799999999995
+        },
+        {
+          "frame": [
+            "writeUpdateMessageFromTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3125,
+            42
+          ],
+          "ms": 249.79400000000004
+        },
+        {
+          "frame": ["post", "node:inspector", 114, 6],
+          "ms": 131.326
+        },
+        {
+          "frame": [
+            "store.transaction.page.page",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs",
+            121546,
+            6
+          ],
+          "ms": 117.726
+        },
+        {
+          "frame": ["runMicrotasks", "", -1, -1],
+          "ms": 113.61100000000003
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 104.57400000000005
+        }
+      ]
+    },
+    {
+      "file": "isolated-2-validator.cpuprofile.gz",
+      "sampledMs": 70584.40099999933,
+      "stateVectorInclusiveMs": 8052.437000000012,
+      "decodeDocumentInclusiveMs": 453.15300000000036,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 56205.33699999935
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 7695.390000000008
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 2208.253000000001
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1792.744999999997
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 877.7939999999988
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 379.3879999999998
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 362.18700000000007
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 314.67499999999995
+        },
+        {
+          "frame": [
+            "walk",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20155,
+            15
+          ],
+          "ms": 152.231
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 116.522
+        },
+        {
+          "frame": [
+            "typeMapGetAll",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            5626,
+            22
+          ],
+          "ms": 72.10399999999998
+        },
+        {
+          "frame": [
+            "prepare",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20371,
+            9
+          ],
+          "ms": 31.174
+        },
+        {
+          "frame": [
+            "get",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            7882,
+            6
+          ],
+          "ms": 26.930999999999997
+        },
+        {
+          "frame": [
+            "element",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20023,
+            16
+          ],
+          "ms": 24.061000000000003
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            5632,
+            22
+          ],
+          "ms": 23.331
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20491,
+            2
+          ],
+          "ms": 17.991000000000003
+        },
+        {
+          "frame": [
+            "emit",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/observable.js",
+            79,
+            7
+          ],
+          "ms": 16.599999999999998
+        },
+        {
+          "frame": [
+            "decodeDocument",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20140,
+            23
+          ],
+          "ms": 15.729999999999999
+        },
+        {
+          "frame": [
+            "inst._zod.parse",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            2755,
+            20
+          ],
+          "ms": 12.199000000000002
+        },
+        {
+          "frame": [
+            "check._a3.check",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            2406,
+            44
+          ],
+          "ms": 11.403999999999998
+        }
+      ]
+    },
+    {
+      "file": "shared-1-server.cpuprofile.gz",
+      "sampledMs": 74767.5989999992,
+      "stateVectorInclusiveMs": 33260.891999999345,
+      "decodeDocumentInclusiveMs": 0,
+      "topSelf": [
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 32639.897999999317
+        },
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 20008.50000000001
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1352,
+            14
+          ],
+          "ms": 4082.5139999999988
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 3843.5239999999953
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3126,
+            83
+          ],
+          "ms": 1754.6899999999969
+        },
+        {
+          "frame": [
+            "getState",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2827,
+            17
+          ],
+          "ms": 1625.5520000000006
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1358,
+            32
+          ],
+          "ms": 1378.6649999999995
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 1375.5060000000037
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 1075.0149999999996
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 929.7909999999986
+        },
+        {
+          "frame": [
+            "any",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/map.js",
+            91,
+            19
+          ],
+          "ms": 702.474
+        },
+        {
+          "frame": [
+            "writeClientsStructs",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1349,
+            28
+          ],
+          "ms": 696.5810000000002
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 682.3530000000005
+        },
+        {
+          "frame": [
+            "writeUpdateMessageFromTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3125,
+            42
+          ],
+          "ms": 519.0409999999999
+        },
+        {
+          "frame": ["writev", "", -1, -1],
+          "ms": 386.2490000000002
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 344.2600000000001
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 222.66599999999988
+        },
+        {
+          "frame": ["post", "node:inspector", 114, 6],
+          "ms": 206.182
+        },
+        {
+          "frame": [
+            "store.transaction.page.page",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs",
+            121546,
+            6
+          ],
+          "ms": 87.32000000000001
+        },
+        {
+          "frame": ["writeBuffer", "", -1, -1],
+          "ms": 83.35700000000001
+        }
+      ]
+    },
+    {
+      "file": "shared-1-validator.cpuprofile.gz",
+      "sampledMs": 74628.75800000073,
+      "stateVectorInclusiveMs": 6346.79899999998,
+      "decodeDocumentInclusiveMs": 398.86599999999976,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 63029.07700000074
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 6085.635999999988
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 2040.7979999999984
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1378.261999999998
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 641.6719999999996
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 278.66200000000003
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 267.4630000000001
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 225.45099999999996
+        },
+        {
+          "frame": [
+            "walk",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20155,
+            15
+          ],
+          "ms": 149.91700000000003
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 114.38799999999999
+        },
+        {
+          "frame": [
+            "typeMapGetAll",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            5626,
+            22
+          ],
+          "ms": 52.588
+        },
+        {
+          "frame": [
+            "prepare",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20371,
+            9
+          ],
+          "ms": 31.5
+        },
+        {
+          "frame": [
+            "get",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            7882,
+            6
+          ],
+          "ms": 22.925
+        },
+        {
+          "frame": [
+            "element",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20023,
+            16
+          ],
+          "ms": 18.659
+        },
+        {
+          "frame": [
+            "check._a3.check",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            2406,
+            44
+          ],
+          "ms": 16.513
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20491,
+            2
+          ],
+          "ms": 15.197
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            5632,
+            22
+          ],
+          "ms": 15.120999999999999
+        },
+        {
+          "frame": [
+            "emit",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/observable.js",
+            79,
+            7
+          ],
+          "ms": 14.159
+        },
+        {
+          "frame": ["", "node:internal/per_context/messageport", 18, 30],
+          "ms": 11.728
+        },
+        {
+          "frame": [
+            "attributes",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20015,
+            19
+          ],
+          "ms": 11.536
+        }
+      ]
+    },
+    {
+      "file": "shared-2-server.cpuprofile.gz",
+      "sampledMs": 69133.60599999988,
+      "stateVectorInclusiveMs": 30483.358999999877,
+      "decodeDocumentInclusiveMs": 0,
+      "topSelf": [
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 29904.577999999874
+        },
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 18384.37300000003
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1352,
+            14
+          ],
+          "ms": 3839.2179999999958
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 3624.443999999994
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3126,
+            83
+          ],
+          "ms": 1600.788
+        },
+        {
+          "frame": [
+            "getState",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2827,
+            17
+          ],
+          "ms": 1558.1379999999992
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1358,
+            32
+          ],
+          "ms": 1337.4270000000004
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 1318.8459999999995
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 1028.7659999999998
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 933.5779999999994
+        },
+        {
+          "frame": [
+            "any",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/map.js",
+            91,
+            19
+          ],
+          "ms": 666.8810000000001
+        },
+        {
+          "frame": [
+            "writeClientsStructs",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            1349,
+            28
+          ],
+          "ms": 653.6949999999998
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 616.2099999999994
+        },
+        {
+          "frame": [
+            "writeUpdateMessageFromTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3125,
+            42
+          ],
+          "ms": 516.0010000000002
+        },
+        {
+          "frame": ["writev", "", -1, -1],
+          "ms": 352.18399999999986
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 344.66299999999984
+        },
+        {
+          "frame": ["post", "node:inspector", 114, 6],
+          "ms": 204.113
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 198.99599999999992
+        },
+        {
+          "frame": ["writeBuffer", "", -1, -1],
+          "ms": 85.27799999999999
+        },
+        {
+          "frame": [
+            "store.transaction.page.page",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs",
+            121546,
+            6
+          ],
+          "ms": 72.117
+        }
+      ]
+    },
+    {
+      "file": "shared-2-validator.cpuprofile.gz",
+      "sampledMs": 68986.55999999992,
+      "stateVectorInclusiveMs": 5701.475999999993,
+      "decodeDocumentInclusiveMs": 358.0959999999996,
+      "topSelf": [
+        {
+          "frame": ["(idle)", "", -1, -1],
+          "ms": 58003.837
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2812,
+            24
+          ],
+          "ms": 5474.901999999999
+        },
+        {
+          "frame": ["(garbage collector)", "", -1, -1],
+          "ms": 1840.6150000000007
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3317,
+            37
+          ],
+          "ms": 1229.0710000000004
+        },
+        {
+          "frame": [
+            "cleanupYTextAfterTransaction",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            6686,
+            37
+          ],
+          "ms": 983.3620000000003
+        },
+        {
+          "frame": [
+            "cleanupTransactions",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3244,
+            28
+          ],
+          "ms": 301.349
+        },
+        {
+          "frame": ["(program)", "", -1, -1],
+          "ms": 235.9590000000001
+        },
+        {
+          "frame": [
+            "getStateVector",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            2810,
+            23
+          ],
+          "ms": 234.79699999999985
+        },
+        {
+          "frame": [
+            "walk",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20155,
+            15
+          ],
+          "ms": 140.23999999999998
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3300,
+            16
+          ],
+          "ms": 108.61400000000003
+        },
+        {
+          "frame": [
+            "typeMapGetAll",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            5626,
+            22
+          ],
+          "ms": 46.565999999999995
+        },
+        {
+          "frame": [
+            "prepare",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20371,
+            9
+          ],
+          "ms": 28.948000000000004
+        },
+        {
+          "frame": [
+            "emit",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/lib0@0.2.119/node_modules/lib0/observable.js",
+            79,
+            7
+          ],
+          "ms": 28.172
+        },
+        {
+          "frame": [
+            "decodeDocument",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20140,
+            23
+          ],
+          "ms": 21.972000000000005
+        },
+        {
+          "frame": [
+            "transact",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            3399,
+            17
+          ],
+          "ms": 21.869
+        },
+        {
+          "frame": [
+            "",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20491,
+            2
+          ],
+          "ms": 19.606
+        },
+        {
+          "frame": ["", "node:internal/per_context/messageport", 18, 30],
+          "ms": 19.605
+        },
+        {
+          "frame": [
+            "element",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            20023,
+            16
+          ],
+          "ms": 18.632
+        },
+        {
+          "frame": [
+            "check._a3.check",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs",
+            2406,
+            44
+          ],
+          "ms": 18.4
+        },
+        {
+          "frame": [
+            "get",
+            "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+            7882,
+            6
+          ],
+          "ms": 13.433000000000002
+        }
+      ]
+    }
+  ]
+}

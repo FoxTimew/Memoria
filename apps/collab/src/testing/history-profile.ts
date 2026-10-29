@@ -27,29 +27,91 @@ import { readCollabConfig } from '../service/config.ts';
 import { receiptFor } from '../service/store.ts';
 import type { ValidationPool } from '../service/validation-pool.ts';
 import { Revocations } from '../service/revocations.ts';
+import { Leadership } from '../service/leadership.ts';
 
 let diagnosticStage = 'fixture';
+let diagnosticPool: import('pg').Pool | undefined;
 // Keep the fail-closed behavior intact; identify a control failure instead of guessing its cause.
-const revocationStart = Revocations.prototype.start;
-Revocations.prototype.start = async function () {
-  const control = (this as unknown as { control: import('pg').Client }).control;
+function traceControl(label: string, control: import('pg').Client) {
+  const report = (kind: string, error?: Error & { code?: string }, elapsedMs?: number) => {
+    console.error(
+      JSON.stringify({
+        diagnostic: kind,
+        control: label,
+        stage: diagnosticStage,
+        name: error?.name,
+        code: error?.code,
+        message: error?.message,
+        elapsedMs,
+      }),
+    );
+  };
+  control.on('error', (error) => report('control-error', error));
+  control.on('end', () => report('control-ended'));
   const original = control.query;
   control.query = function (this: import('pg').Client, ...args: unknown[]) {
+    const started = performance.now();
+    const timer = setTimeout(() => {
+      const pid = (control as unknown as { processID: number }).processID;
+      void diagnosticPool
+        ?.query(
+          `SELECT a.pid,a.wait_event_type,a.wait_event,a.state,
+          extract(epoch FROM (clock_timestamp()-a.query_start))*1000 AS query_age_ms,
+          pg_blocking_pids(a.pid) AS blockers
+         FROM pg_stat_activity a
+         WHERE a.pid=$1 OR a.pid=ANY(pg_blocking_pids($1))`,
+          [pid],
+        )
+        .then((r) =>
+          console.error(
+            JSON.stringify({
+              diagnostic: 'slow-control-query',
+              control: label,
+              stage: diagnosticStage,
+              elapsedMs: performance.now() - started,
+              activity: r.rows,
+            }),
+          ),
+        )
+        .catch(() => report('slow-control-observation-failed'));
+    }, 500);
     const result = Reflect.apply(original, this, args) as Promise<unknown>;
-    return result.catch((error: Error & { code?: string }) => {
+    return result
+      .catch((error: Error & { code?: string }) => {
+        report('control-query-failed', error, performance.now() - started);
+        throw error;
+      })
+      .finally(() => clearTimeout(timer));
+  } as typeof control.query;
+}
+const revocationStart = Revocations.prototype.start;
+Revocations.prototype.start = async function () {
+  const probe = this as unknown as { control: import('pg').Client; recheck: () => Promise<void> };
+  traceControl('revocations', probe.control);
+  const recheck = probe.recheck;
+  probe.recheck = async () => {
+    try {
+      await recheck();
+    } catch (error) {
+      const e = error as Error & { code?: string };
       console.error(
         JSON.stringify({
-          diagnostic: 'control-query-failed',
+          diagnostic: 'access-recheck-failed',
           stage: diagnosticStage,
-          name: error.name,
-          code: error.code,
-          message: error.message,
+          name: e.name,
+          code: e.code,
+          message: e.message,
         }),
       );
       throw error;
-    });
-  } as typeof control.query;
+    }
+  };
   return revocationStart.call(this);
+};
+const leadershipStart = Leadership.prototype.start;
+Leadership.prototype.start = async function () {
+  traceControl('leadership', (this as unknown as { control: import('pg').Client }).control);
+  return leadershipStart.call(this);
 };
 
 const root = resolve(process.env.MEMORIA_HISTORY_OUTPUT!);
@@ -276,6 +338,7 @@ async function runServer(mode: Mode, series: number) {
   const db = await testDatabase(),
     auth = await testAuth(db),
     accounts = [await auth.account('First writer'), await auth.account('Second writer')];
+  diagnosticPool = db.pool;
   let host: Awaited<ReturnType<typeof collaborationServer>> | undefined,
     proxy: Awaited<ReturnType<typeof caddyFixture>> | undefined;
   const peers: (LocalPeer | Awaited<ReturnType<typeof remotePeer>>)[] = [];

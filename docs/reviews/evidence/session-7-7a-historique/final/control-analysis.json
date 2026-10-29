@@ -1,0 +1,2808 @@
+{
+  "source": "run.txt; diagnostic events only, no SQL or tokens recorded",
+  "groups": {
+    "history-profile-1-shared": {
+      "slow": 34,
+      "lock": 33,
+      "maxObservationMs": 914.9066999999923,
+      "workloadErrors": [],
+      "shutdownEvents": 3
+    },
+    "history-profile-1-isolated": {
+      "slow": 4,
+      "lock": 3,
+      "maxObservationMs": 794.6586000000002,
+      "workloadErrors": [],
+      "shutdownEvents": 2
+    },
+    "history-profile-2-isolated": {
+      "slow": 8,
+      "lock": 7,
+      "maxObservationMs": 801.7409000000002,
+      "workloadErrors": [],
+      "shutdownEvents": 2
+    },
+    "history-profile-2-shared": {
+      "slow": 36,
+      "lock": 35,
+      "maxObservationMs": 808.9256999999998,
+      "workloadErrors": [],
+      "shutdownEvents": 2
+    },
+    "history-profile-3-shared": {
+      "slow": 26,
+      "lock": 24,
+      "maxObservationMs": 784.9200999999998,
+      "workloadErrors": [],
+      "shutdownEvents": 3
+    },
+    "history-profile-3-isolated": {
+      "slow": 1,
+      "lock": 0,
+      "maxObservationMs": 832.2438999999999,
+      "workloadErrors": [],
+      "shutdownEvents": 2
+    }
+  },
+  "events": [
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "fixture",
+      "elapsedMs": 856.2329,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle",
+          "query_age_ms": "852.631000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-32",
+      "elapsedMs": 511.98519999999917,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "510.753000",
+          "blockers": [107765]
+        },
+        {
+          "pid": 107765,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.496000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-37",
+      "elapsedMs": 503.92649999999776,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "503.138000",
+          "blockers": [107765]
+        },
+        {
+          "pid": 107765,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.547000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-44",
+      "elapsedMs": 505.29469999999856,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "503.757000",
+          "blockers": [107784]
+        },
+        {
+          "pid": 107784,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "active",
+          "query_age_ms": "0.868000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-56",
+      "elapsedMs": 512.229800000001,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "511.115000",
+          "blockers": [107765]
+        },
+        {
+          "pid": 107765,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.770000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-62",
+      "elapsedMs": 529.3859000000011,
+      "activity": [
+        {
+          "pid": 107768,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.768000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "528.646000",
+          "blockers": [107768]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-69",
+      "elapsedMs": 500.999200000002,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.290000",
+          "blockers": [107765]
+        },
+        {
+          "pid": 107765,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.849000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-81",
+      "elapsedMs": 502.2039999999979,
+      "activity": [
+        {
+          "pid": 107768,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "7.320000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "499.789000",
+          "blockers": [107768]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-88",
+      "elapsedMs": 504.52770000000237,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "503.203000",
+          "blockers": [107765]
+        },
+        {
+          "pid": 107765,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "1.124000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-105",
+      "elapsedMs": 501.97439999999915,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.634000",
+          "blockers": [107765]
+        },
+        {
+          "pid": 107765,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.805000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-1",
+      "elapsedMs": 502.7523999999976,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "501.144000",
+          "blockers": [107784]
+        },
+        {
+          "pid": 107784,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.872000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-6",
+      "elapsedMs": 510.8600000000006,
+      "activity": [
+        {
+          "pid": 107768,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.138000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "510.103000",
+          "blockers": [107768]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-12",
+      "elapsedMs": 514.0647000000026,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "512.409000",
+          "blockers": [107784]
+        },
+        {
+          "pid": 107784,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.971000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-16",
+      "elapsedMs": 610.0469000000012,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "561.212000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.854000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-20",
+      "elapsedMs": 609.5750999999946,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "552.786000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.764000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-24",
+      "elapsedMs": 501.393799999998,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.093000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.724000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-29",
+      "elapsedMs": 501.5020999999979,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.178000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.783000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-34",
+      "elapsedMs": 501.9300000000003,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.784000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.100000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-39",
+      "elapsedMs": 528.9112000000023,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "528.166000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.130000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-44",
+      "elapsedMs": 519.5190000000002,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "518.269000",
+          "blockers": [107765]
+        },
+        {
+          "pid": 107765,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.080000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-49",
+      "elapsedMs": 579.738599999997,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "529.231000",
+          "blockers": [107765]
+        },
+        {
+          "pid": 107765,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "3.159000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-53",
+      "elapsedMs": 546.6405999999988,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "545.417000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.399000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-59",
+      "elapsedMs": 614.8101999999999,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "565.437000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.847000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-63",
+      "elapsedMs": 598.8581999999951,
+      "activity": [
+        {
+          "pid": 107845,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.685000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "540.831000",
+          "blockers": [107845]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-68",
+      "elapsedMs": 530.7137999999977,
+      "activity": [
+        {
+          "pid": 107845,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.229000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "529.839000",
+          "blockers": [107845]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-73",
+      "elapsedMs": 538.5025000000023,
+      "activity": [
+        {
+          "pid": 107845,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.199000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "537.435000",
+          "blockers": [107845]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-78",
+      "elapsedMs": 503.3935000000056,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "502.580000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.671000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-82",
+      "elapsedMs": 501.4643000000069,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.193000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.761000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-86",
+      "elapsedMs": 506.70269999999437,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "505.779000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.714000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-92",
+      "elapsedMs": 534.1714999999967,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "533.150000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.141000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-96",
+      "elapsedMs": 501.5043999999907,
+      "activity": [
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.211000",
+          "blockers": [107823]
+        },
+        {
+          "pid": 107823,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.734000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-101",
+      "elapsedMs": 559.1066999999894,
+      "activity": [
+        {
+          "pid": 107768,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.723000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "558.042000",
+          "blockers": [107768]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-105",
+      "elapsedMs": 502.5673999999999,
+      "activity": [
+        {
+          "pid": 107768,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.481000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "501.261000",
+          "blockers": [107768]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "export-profiles-after-workloads",
+      "elapsedMs": 914.9066999999923,
+      "activity": [
+        {
+          "pid": 107768,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.678000",
+          "blockers": []
+        },
+        {
+          "pid": 107766,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "911.835000",
+          "blockers": [107768]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "control-ended",
+      "control": "revocations",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "control-query-failed",
+      "control": "revocations",
+      "stage": "export-profiles-after-workloads",
+      "name": "Error",
+      "message": "Connection terminated",
+      "elapsedMs": 4.235000000000582
+    },
+    {
+      "label": "history-profile-1-shared",
+      "diagnostic": "control-ended",
+      "control": "leadership",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-1-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "fixture",
+      "elapsedMs": 794.6586000000002,
+      "activity": [
+        {
+          "pid": 107900,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle",
+          "query_age_ms": "787.367000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-108",
+      "elapsedMs": 518.1939999999959,
+      "activity": [
+        {
+          "pid": 107900,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "516.758000",
+          "blockers": [107902]
+        },
+        {
+          "pid": 107902,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "1.890000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-44",
+      "elapsedMs": 575.0750999999946,
+      "activity": [
+        {
+          "pid": 107900,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "573.471000",
+          "blockers": [107956]
+        },
+        {
+          "pid": 107956,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.425000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-74",
+      "elapsedMs": 503.27939999999944,
+      "activity": [
+        {
+          "pid": 107900,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "501.916000",
+          "blockers": [107918]
+        },
+        {
+          "pid": 107918,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.820000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-1-isolated",
+      "diagnostic": "control-ended",
+      "control": "revocations",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-1-isolated",
+      "diagnostic": "control-ended",
+      "control": "leadership",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "fixture",
+      "elapsedMs": 801.7409000000002,
+      "activity": [
+        {
+          "pid": 108034,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle",
+          "query_age_ms": "795.064000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-77",
+      "elapsedMs": 504.9423999999999,
+      "activity": [
+        {
+          "pid": 108034,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "503.648000",
+          "blockers": [108036]
+        },
+        {
+          "pid": 108036,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.231000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-95",
+      "elapsedMs": 503.4519,
+      "activity": [
+        {
+          "pid": 108034,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "502.008000",
+          "blockers": [108082]
+        },
+        {
+          "pid": 108082,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "19.300000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-58",
+      "elapsedMs": 570.3238999999958,
+      "activity": [
+        {
+          "pid": 108034,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "568.795000",
+          "blockers": [108082]
+        },
+        {
+          "pid": 108082,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.645000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-68",
+      "elapsedMs": 519.9710999999952,
+      "activity": [
+        {
+          "pid": 108034,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "518.158000",
+          "blockers": [108036]
+        },
+        {
+          "pid": 108036,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.813000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-71",
+      "elapsedMs": 561.242499999993,
+      "activity": [
+        {
+          "pid": 108034,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "560.146000",
+          "blockers": [108036]
+        },
+        {
+          "pid": 108036,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.857000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-106",
+      "elapsedMs": 501.4435999999987,
+      "activity": [
+        {
+          "pid": 108034,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.541000",
+          "blockers": [108059]
+        },
+        {
+          "pid": 108059,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.826000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-109",
+      "elapsedMs": 504.6112000000139,
+      "activity": [
+        {
+          "pid": 108034,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "503.299000",
+          "blockers": [108059]
+        },
+        {
+          "pid": 108059,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.751000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "control-ended",
+      "control": "revocations",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-2-isolated",
+      "diagnostic": "control-ended",
+      "control": "leadership",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "fixture",
+      "elapsedMs": 808.9256999999998,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle",
+          "query_age_ms": "804.977000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-24",
+      "elapsedMs": 530.6436999999987,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "529.028000",
+          "blockers": [108160]
+        },
+        {
+          "pid": 108160,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "4.434000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-30",
+      "elapsedMs": 603.029599999998,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "537.926000",
+          "blockers": [108160]
+        },
+        {
+          "pid": 108160,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.572000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-37",
+      "elapsedMs": 502.4618999999984,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "501.325000",
+          "blockers": [108160]
+        },
+        {
+          "pid": 108160,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.896000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-44",
+      "elapsedMs": 561.4591,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "512.729000",
+          "blockers": [108160]
+        },
+        {
+          "pid": 108160,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "18.193000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-50",
+      "elapsedMs": 518.4078000000009,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "516.997000",
+          "blockers": [108160]
+        },
+        {
+          "pid": 108160,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.641000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-58",
+      "elapsedMs": 513.9062999999987,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "512.971000",
+          "blockers": [108160]
+        },
+        {
+          "pid": 108160,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.806000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-70",
+      "elapsedMs": 501.2070999999996,
+      "activity": [
+        {
+          "pid": 108170,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.093000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "499.909000",
+          "blockers": [108170]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-77",
+      "elapsedMs": 501.1141000000025,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.192000",
+          "blockers": [108186]
+        },
+        {
+          "pid": 108186,
+          "wait_event_type": "IO",
+          "wait_event": "DataFileExtend",
+          "state": "active",
+          "query_age_ms": "0.125000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-83",
+      "elapsedMs": 501.4372999999978,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.579000",
+          "blockers": [108186]
+        },
+        {
+          "pid": 108186,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.935000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-96",
+      "elapsedMs": 503.60549999999785,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "502.535000",
+          "blockers": [108186]
+        },
+        {
+          "pid": 108186,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.419000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-102",
+      "elapsedMs": 503.1322,
+      "activity": [
+        {
+          "pid": 108170,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "17.574000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "502.002000",
+          "blockers": [108170]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-108",
+      "elapsedMs": 501.8990000000049,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.568000",
+          "blockers": [108186]
+        },
+        {
+          "pid": 108186,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.776000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-2",
+      "elapsedMs": 531.3301999999967,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "530.243000",
+          "blockers": [108186]
+        },
+        {
+          "pid": 108186,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.293000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-6",
+      "elapsedMs": 503.8603000000003,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "502.673000",
+          "blockers": [108226]
+        },
+        {
+          "pid": 108226,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.198000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-11",
+      "elapsedMs": 556.6266000000032,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "511.548000",
+          "blockers": [108226]
+        },
+        {
+          "pid": 108226,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "17.000000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-16",
+      "elapsedMs": 543.7782000000007,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "542.455000",
+          "blockers": [108186]
+        },
+        {
+          "pid": 108186,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.079000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-20",
+      "elapsedMs": 504.0060000000012,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.102000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "502.756000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-25",
+      "elapsedMs": 548.146799999995,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "503.680000",
+          "blockers": [108226]
+        },
+        {
+          "pid": 108226,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "17.210000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-30",
+      "elapsedMs": 502.8695999999982,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "501.805000",
+          "blockers": [108226]
+        },
+        {
+          "pid": 108226,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.203000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-34",
+      "elapsedMs": 500.78510000000097,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "499.362000",
+          "blockers": [108226]
+        },
+        {
+          "pid": 108226,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.113000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-40",
+      "elapsedMs": 559.2160999999978,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.008000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "558.137000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-45",
+      "elapsedMs": 508.0775999999969,
+      "activity": [
+        {
+          "pid": 108249,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.230000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "506.989000",
+          "blockers": [108249]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-50",
+      "elapsedMs": 554.7852999999959,
+      "activity": [
+        {
+          "pid": 108249,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "idle in transaction",
+          "query_age_ms": "1.212000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "553.293000",
+          "blockers": [108249]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-55",
+      "elapsedMs": 568.9147000000012,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.714000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "504.002000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-60",
+      "elapsedMs": 544.4867999999988,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "idle in transaction",
+          "query_age_ms": "1.093000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "543.121000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-65",
+      "elapsedMs": 533.8433000000077,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "IO",
+          "wait_event": "WalSync",
+          "state": "active",
+          "query_age_ms": "0.624000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "532.748000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-68",
+      "elapsedMs": 501.2299000000057,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.120000",
+          "blockers": [108226]
+        },
+        {
+          "pid": 108226,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.112000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-74",
+      "elapsedMs": 592.9248999999982,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.786000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "530.989000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-79",
+      "elapsedMs": 572.4585999999981,
+      "activity": [
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "514.008000",
+          "blockers": [108226]
+        },
+        {
+          "pid": 108226,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.961000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-84",
+      "elapsedMs": 556.6230000000069,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.945000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "555.348000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-89",
+      "elapsedMs": 566.8916000000027,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "3.238000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "511.232000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-93",
+      "elapsedMs": 501.1198999999906,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "idle in transaction",
+          "query_age_ms": "0.798000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "499.866000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-98",
+      "elapsedMs": 501.8836999999912,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.675000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.683000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-104",
+      "elapsedMs": 576.725299999991,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.680000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "510.502000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-108",
+      "elapsedMs": 592.9297999999981,
+      "activity": [
+        {
+          "pid": 108218,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.658000",
+          "blockers": []
+        },
+        {
+          "pid": 108161,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "527.355000",
+          "blockers": [108218]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "control-ended",
+      "control": "revocations",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-2-shared",
+      "diagnostic": "control-ended",
+      "control": "leadership",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "fixture",
+      "elapsedMs": 784.9200999999998,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle",
+          "query_age_ms": "781.814000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-32",
+      "elapsedMs": 601.6233000000011,
+      "activity": [
+        {
+          "pid": 108305,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.634000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "555.455000",
+          "blockers": [108305]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-39",
+      "elapsedMs": 519.3647999999994,
+      "activity": [
+        {
+          "pid": 108305,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.855000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "518.145000",
+          "blockers": [108305]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-45",
+      "elapsedMs": 501.3768000000018,
+      "activity": [
+        {
+          "pid": 108331,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.944000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.408000",
+          "blockers": [108331]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-84",
+      "elapsedMs": 621.6412999999993,
+      "activity": [
+        {
+          "pid": 108305,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.194000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "620.156000",
+          "blockers": [108305]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-1-wave-89",
+      "elapsedMs": 504.9254000000001,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "503.729000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.491000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-3",
+      "elapsedMs": 587.3691000000035,
+      "activity": [
+        {
+          "pid": 108305,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "3.774000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "534.175000",
+          "blockers": [108305]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-8",
+      "elapsedMs": 526.5455000000002,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "524.990000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.997000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-14",
+      "elapsedMs": 506.99900000000343,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "505.664000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.610000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-19",
+      "elapsedMs": 501.78340000000026,
+      "activity": [
+        {
+          "pid": 108331,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.988000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.625000",
+          "blockers": [108331]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-25",
+      "elapsedMs": 501.4546000000046,
+      "activity": [
+        {
+          "pid": 108331,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.734000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.159000",
+          "blockers": [108331]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-31",
+      "elapsedMs": 515.6777000000002,
+      "activity": [
+        {
+          "pid": 108331,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.131000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "514.615000",
+          "blockers": [108331]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-37",
+      "elapsedMs": 517.1061999999947,
+      "activity": [
+        {
+          "pid": 108305,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.079000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "516.249000",
+          "blockers": [108305]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-43",
+      "elapsedMs": 501.703499999996,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "499.821000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.813000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-48",
+      "elapsedMs": 511.7589000000007,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "510.646000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.114000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-53",
+      "elapsedMs": 590.2571000000025,
+      "activity": [
+        {
+          "pid": 108368,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.711000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "546.958000",
+          "blockers": [108368]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-58",
+      "elapsedMs": 528.035100000001,
+      "activity": [
+        {
+          "pid": 108368,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "1.028000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "526.888000",
+          "blockers": [108368]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-63",
+      "elapsedMs": 597.1975999999995,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "540.209000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.781000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-68",
+      "elapsedMs": 600.4727000000057,
+      "activity": [
+        {
+          "pid": 108368,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.826000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "548.937000",
+          "blockers": [108368]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-73",
+      "elapsedMs": 558.6710000000021,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle",
+          "query_age_ms": "511.913000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-77",
+      "elapsedMs": 603.3147000000026,
+      "activity": [
+        {
+          "pid": 108368,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.781000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "547.223000",
+          "blockers": [108368]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-82",
+      "elapsedMs": 501.30070000000705,
+      "activity": [
+        {
+          "pid": 108305,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.776000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "500.109000",
+          "blockers": [108305]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-88",
+      "elapsedMs": 607.7367000000086,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "564.079000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.941000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-96",
+      "elapsedMs": 506.32450000000244,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "505.411000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.644000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-105",
+      "elapsedMs": 506.50109999999404,
+      "activity": [
+        {
+          "pid": 108305,
+          "wait_event_type": null,
+          "wait_event": null,
+          "state": "active",
+          "query_age_ms": "0.653000",
+          "blockers": []
+        },
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "505.027000",
+          "blockers": [108305]
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "workload-2-wave-109",
+      "elapsedMs": 510.9762999999948,
+      "activity": [
+        {
+          "pid": 108306,
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "state": "active",
+          "query_age_ms": "509.814000",
+          "blockers": [108353]
+        },
+        {
+          "pid": 108353,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle in transaction",
+          "query_age_ms": "0.700000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "control-ended",
+      "control": "revocations",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "control-query-failed",
+      "control": "revocations",
+      "stage": "export-profiles-after-workloads",
+      "name": "Error",
+      "message": "Connection terminated",
+      "elapsedMs": 4.953800000002957
+    },
+    {
+      "label": "history-profile-3-shared",
+      "diagnostic": "control-ended",
+      "control": "leadership",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-3-isolated",
+      "diagnostic": "slow-control-query",
+      "control": "leadership",
+      "stage": "fixture",
+      "elapsedMs": 832.2438999999999,
+      "activity": [
+        {
+          "pid": 108441,
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "state": "idle",
+          "query_age_ms": "825.517000",
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "label": "history-profile-3-isolated",
+      "diagnostic": "control-ended",
+      "control": "revocations",
+      "stage": "export-profiles-after-workloads"
+    },
+    {
+      "label": "history-profile-3-isolated",
+      "diagnostic": "control-ended",
+      "control": "leadership",
+      "stage": "export-profiles-after-workloads"
+    }
+  ]
+}

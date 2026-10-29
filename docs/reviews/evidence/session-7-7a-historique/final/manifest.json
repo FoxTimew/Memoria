@@ -1,0 +1,18 @@
+{
+  "startedAt": "2026-10-29T11:53:09.500Z",
+  "diagnosticOnly": true,
+  "sourceCommit": "c9ab90a514f66c91341bf9ecfd9715ebd595bd1c",
+  "node": "v24.21.0",
+  "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+  "sources": {
+    "apps/collab/src/testing/history-profile.ts": "74381577eac02f645b0254ae1b4a67c89737478250ded59f3147ca3518198851",
+    "scripts/profile-files-history.mjs": "b04b1fe8bf4564ac80cda684150f89d3fad6f0b7e31141a7febb5e88148898e4",
+    "apps/collab/src/service/incremental-replica.ts": "578b9690d44ecb8e38cbe5a0e6b81de99e0555b42081479e39b9c45d227accd8",
+    "apps/collab/src/service/incremental-worker.ts": "81461793a530a8e5593173040582d868d922e9cec58771e369cb0b386aeb4882",
+    "apps/collab/src/service/validation-pool.ts": "1b1135968fb557b2eb2bff6d13f092db94b4e397c40c023865815dfaa5b61842",
+    "apps/collab/src/service/room.ts": "45bd6dcf6a5264ba0a706c0c5ae06ab2ccc9fac03c260ead4804eaf2a0fde7a2",
+    "apps/collab/src/service/store.ts": "2c27355a43d5cd201363d5c3c8ea697bf50bc0842595cfe3f127232f9710ac81",
+    ".local/incremental/history-1M.bin": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+  },
+  "protocol": "Three diagnostic pairs AB/BA/AB: shared loop vs two separate client processes; unchanged live server and limits. 110 waves (10 warmup) at one author then 110 at two. CPU sampling is enabled in both configurations. Profiling overhead prevents treating these results as qualification. Preserve all threshold exceedances. No application optimization."
+}

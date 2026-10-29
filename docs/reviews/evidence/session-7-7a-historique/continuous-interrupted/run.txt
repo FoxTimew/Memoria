@@ -1,0 +1,165 @@
+{"power":{"observedAt":"2026-10-29T11:44:09.501Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}}
+{"output":"C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\history-profile\\2026-10-29T11-44-10-532Z"}
+{
+  "observedAt": "2026-10-29T11:44:11.992Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/history-profile-1-shared-preparation-a749102b-62d3-45eb-aa22-05a0c9690369.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"history-profile-1-shared","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T11:44:12.633Z","windowsFreeBytes":5427621888,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5690232832,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:44:12.633Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T11:44:14.343Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"832b7c34-9a85-4d7a-9dd6-deea569a83a1","generation":"83588ade-9c97-48e0-af8a-65771549e5c6","revision":21,"encodedBytes":1042055,"businessBytes":100459,"ratio":10.372938213599578}
+{"mode":"shared","series":1,"authors":1,"server":{"samples":100,"p95":45.63900000000285,"max":60.066899999997986},"validationWall":{"samples":100,"p95":34.621799999997165,"max":43.47450000000026},"worker":{"samples":100,"p95":34.30079999999725,"max":42.989599999997154},"poolWait":{"samples":100,"p95":0.00999999999839929,"max":0.014599999994970858},"ipcAndScheduling":{"samples":100,"p95":0.39029999999911524,"max":0.6021999999975378},"sql":{"samples":100,"p95":12.595600000000559,"max":26.136099999999715},"wire":{"samples":100,"p95":218.2573999999986,"max":255.38450000000012},"clientEdit":{"samples":100,"p95":40.674700000001394,"max":44.10149999999703},"eventLoopP95Ms":60.227583,"eventLoopMaxMs":96.534527,"gcMs":389.00630009174347,"mainThreadCpuMs":18890,"workerThreadCpuMs":3891,"meetsHistoricalLimit":true}
+{"mode":"shared","series":1,"authors":2,"server":{"samples":200,"p95":109.13790000000154,"max":132.07890000000043},"validationWall":{"samples":200,"p95":99.57710000000225,"max":118.93660000000091},"worker":{"samples":200,"p95":37.92260000000533,"max":50.744699999995646},"poolWait":{"samples":200,"p95":0.013800000000628643,"max":0.05219999999826541},"ipcAndScheduling":{"samples":200,"p95":63.37010000000009,"max":85.09870000000956},"sql":{"samples":200,"p95":12.204399999995076,"max":52.15260000000126},"wire":{"samples":200,"p95":341.15639999999985,"max":388.65759999999864},"clientEdit":{"samples":200,"p95":40.51640000000043,"max":46.84340000001248},"eventLoopP95Ms":66.289663,"eventLoopMaxMs":106.495999,"gcMs":801.0904000997543,"mainThreadCpuMs":36000,"workerThreadCpuMs":7859,"meetsHistoricalLimit":false}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/history-profile-1-shared-attempt-1-750f73cb-6002-466a-9bf4-5ee3ac1f095e.json","status":"valid","label":"history-profile-1-shared","attempt":1,"before":{"observedAt":"2026-10-29T11:44:21.455Z","windowsFreeBytes":5045157888,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5676335104,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:44:21.455Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T11:45:38.468Z","windowsFreeBytes":5585399808,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5708529664,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:45:38.468Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":78,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/history-profile-1-isolated-preparation-8513e132-ef8b-42fe-a070-8f6eed894409.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"history-profile-1-isolated","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T11:45:39.379Z","windowsFreeBytes":5612580864,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5712658432,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:45:39.379Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T11:45:41.017Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T11:45:45.594Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T11:45:48.220Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"75822b87-716d-4dc2-8067-51c2d74e84bc","generation":"62a10043-f63e-485a-9565-b43ff28dded8","revision":22,"encodedBytes":1042040,"businessBytes":100420,"ratio":10.376817367058354}
+{"mode":"isolated","series":1,"authors":1,"server":{"samples":100,"p95":56.6694000000025,"max":71.54939999999624},"validationWall":{"samples":100,"p95":41.860099999998056,"max":53.85659999999916},"worker":{"samples":100,"p95":39.79899999999907,"max":53.455800000003364},"poolWait":{"samples":100,"p95":0.011200000000826549,"max":0.01840000000083819},"ipcAndScheduling":{"samples":100,"p95":0.41529999999693246,"max":7.330100000006496},"sql":{"samples":100,"p95":13.242200000000594,"max":38.70590000000084},"wire":{"samples":100,"p95":182.49779999999737,"max":210.31430000000182},"clientEdit":{"samples":100,"p95":41.088800000001356,"max":59.343299999996816},"eventLoopP95Ms":6.504447,"eventLoopMaxMs":101.056511,"gcMs":180.38880002498627,"mainThreadCpuMs":8453,"workerThreadCpuMs":4078,"meetsHistoricalLimit":true}
+{"mode":"isolated","series":1,"authors":2,"server":{"samples":200,"p95":67.72980000000098,"max":93.2335999999923},"validationWall":{"samples":200,"p95":52.851599999994505,"max":80.52829999999085},"worker":{"samples":200,"p95":52.26029999999446,"max":79.86149999999907},"poolWait":{"samples":200,"p95":0.010500000003958121,"max":0.1279999999969732},"ipcAndScheduling":{"samples":200,"p95":0.5719000000099186,"max":5.457299999994575},"sql":{"samples":200,"p95":13.467400000001362,"max":34.60139999999956},"wire":{"samples":200,"p95":309.64360000000306,"max":502.17519999999786},"clientEdit":{"samples":200,"p95":53.59810000000289,"max":76.77240000000165},"eventLoopP95Ms":11.452415,"eventLoopMaxMs":171.311103,"gcMs":404.29320016503334,"mainThreadCpuMs":17281,"workerThreadCpuMs":9078,"meetsHistoricalLimit":true}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/history-profile-1-isolated-attempt-1-7300b996-34c0-4bd4-bfaa-3bc054a24e56.json","status":"valid","label":"history-profile-1-isolated","attempt":1,"before":{"observedAt":"2026-10-29T11:45:51.047Z","windowsFreeBytes":4655816704,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5642473472,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:45:51.047Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T11:47:01.059Z","windowsFreeBytes":5424590848,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5724057600,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:47:01.059Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":71,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/history-profile-2-isolated-preparation-17178e52-5d2f-4006-95e6-dbf8b9fe3470.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"history-profile-2-isolated","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T11:47:01.928Z","windowsFreeBytes":5435691008,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5711486976,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:47:01.928Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T11:47:03.636Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T11:47:08.347Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T11:47:10.984Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"d1a254e3-b5cd-4649-b2cc-d15eca362e93","generation":"3bd36a41-f4d7-4337-9d0d-4047d678e20e","revision":21,"encodedBytes":1042055,"businessBytes":100459,"ratio":10.372938213599578}
+{"mode":"isolated","series":2,"authors":1,"server":{"samples":100,"p95":58.37280000000101,"max":71.32510000000184},"validationWall":{"samples":100,"p95":45.681299999996554,"max":56.94180000000051},"worker":{"samples":100,"p95":45.366500000003725,"max":56.21089999999822},"poolWait":{"samples":100,"p95":0.011200000000826549,"max":0.02260000000023865},"ipcAndScheduling":{"samples":100,"p95":0.5072999999974854,"max":3.8682000000007974},"sql":{"samples":100,"p95":19.32430000000022,"max":39.137400000003254},"wire":{"samples":100,"p95":199.9398000000001,"max":253.01430000000255},"clientEdit":{"samples":100,"p95":43.80069999999978,"max":58.78940000000148},"eventLoopP95Ms":6.541311,"eventLoopMaxMs":96.665599,"gcMs":194.0349000096321,"mainThreadCpuMs":9312,"workerThreadCpuMs":4625,"meetsHistoricalLimit":true}
+{"mode":"isolated","series":2,"authors":2,"server":{"samples":200,"p95":64.35310000000027,"max":78.33389999999781},"validationWall":{"samples":200,"p95":50.281800000004296,"max":64.86450000000332},"worker":{"samples":200,"p95":49.860200000002806,"max":64.40660000000207},"poolWait":{"samples":200,"p95":0.012900000001536682,"max":0.05130000000644941},"ipcAndScheduling":{"samples":200,"p95":0.5208999999886146,"max":7.517900000020745},"sql":{"samples":200,"p95":19.855300000010175,"max":41.955199999996694},"wire":{"samples":200,"p95":317.71169999999984,"max":364.85029999999824},"clientEdit":{"samples":200,"p95":53.73730000000069,"max":69.619200000001},"eventLoopP95Ms":9.625599,"eventLoopMaxMs":110.690303,"gcMs":407.27720007300377,"mainThreadCpuMs":18406,"workerThreadCpuMs":9953,"meetsHistoricalLimit":true}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/history-profile-2-isolated-attempt-1-6477fd78-b642-433f-9a4e-be797a65d33e.json","status":"valid","label":"history-profile-2-isolated","attempt":1,"before":{"observedAt":"2026-10-29T11:47:13.870Z","windowsFreeBytes":4478672896,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5651202048,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:47:13.870Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T11:48:27.905Z","windowsFreeBytes":5520244736,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5699616768,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:48:27.905Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":75,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/history-profile-2-shared-preparation-d175e182-ed16-4016-8ca7-fb631c91f082.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"history-profile-2-shared","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T11:48:28.790Z","windowsFreeBytes":5543059456,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5711552512,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:48:28.790Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T11:48:30.471Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"17c31968-7417-49c4-ac0c-0edddbfeaba6","generation":"6a4f5bf6-493d-4051-be5d-c6e482eb4c0f","revision":20,"encodedBytes":1042040,"businessBytes":100420,"ratio":10.376817367058354}
+{"mode":"shared","series":2,"authors":1,"server":{"samples":100,"p95":53.240099999999074,"max":70.72580000000016},"validationWall":{"samples":100,"p95":42.13379999999961,"max":56.99840000000404},"worker":{"samples":100,"p95":41.76369999999952,"max":54.47040000000197},"poolWait":{"samples":100,"p95":0.01209999999991851,"max":0.03770000000076834},"ipcAndScheduling":{"samples":100,"p95":0.4477000000006228,"max":5.741100000002916},"sql":{"samples":100,"p95":13.662700000000768,"max":26.86460000000079},"wire":{"samples":100,"p95":227.3040000000001,"max":286.23809999999867},"clientEdit":{"samples":100,"p95":40.17039999999906,"max":54.640299999999115},"eventLoopP95Ms":63.602687,"eventLoopMaxMs":112.328703,"gcMs":402.1478999853134,"mainThreadCpuMs":19499,"workerThreadCpuMs":4079,"meetsHistoricalLimit":true}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"event":"collaboration.scheduler.failed"}
+AssertionError [ERR_ASSERTION]: CONTROL_UNAVAILABLE
+    at Object.edit (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:122539:7)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:122788:58
+    at Array.map (<anonymous>)
+    at runServer (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:122788:39)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:122914:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+{"hygiene":".local/measurement-hygiene/history-profile-2-shared-attempt-1-6f0bcc9c-579e-4f12-9b0c-957496bab6aa.json","status":"valid","label":"history-profile-2-shared","attempt":1,"before":{"observedAt":"2026-10-29T11:48:36.968Z","windowsFreeBytes":4867203072,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5671534592,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:48:36.968Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T11:49:48.972Z","windowsFreeBytes":5373554688,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5700161536,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:49:48.972Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":73,"deltaInPages":0,"deltaOutPages":0}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:122979:17 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
