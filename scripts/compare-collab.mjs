@@ -345,6 +345,9 @@ for (let iteration = 1; iteration <= 3; iteration++) {
       manifest.series.push(row);
       await save();
       console.log(JSON.stringify(row));
+      // Preserve the failed series, then honor the stop rule before starting another one.
+      if (code !== 0)
+        throw new Error(`STOP ${name}: child exited ${code}; report and hygiene retained`);
     }
   }
 }
