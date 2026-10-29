@@ -1,0 +1,42 @@
+{
+  "profile": "shared-1-2authors-server",
+  "self": [
+    [" dist/yjs.mjs:2812", 20722.408000000276],
+    ["(idle) :-1", 11034.196000000033],
+    [" dist/yjs.mjs:3317", 2578.9000000000015],
+    [" dist/yjs.mjs:1352", 2179.9809999999975],
+    ["getState dist/yjs.mjs:2827", 1209.4539999999993],
+    [" dist/yjs.mjs:3126", 1086.5959999999993],
+    ["(garbage collector) :-1", 941.9530000000003],
+    [" dist/yjs.mjs:1358", 911.5489999999999],
+    ["cleanupTransactions dist/yjs.mjs:3244", 690.4569999999998],
+    ["cleanupYTextAfterTransaction dist/yjs.mjs:6686", 670.6860000000003],
+    ["getStateVector dist/yjs.mjs:2810", 656.6520000000004],
+    ["writeClientsStructs dist/yjs.mjs:1349", 576.5079999999998],
+    ["writeUpdateMessageFromTransaction dist/yjs.mjs:3125", 378.349]
+  ],
+  "inclusive": [
+    ["transact dist/yjs.mjs:3399", 32264.635000000348],
+    ["applyUpdate dist/yjs.mjs:1760", 25944.504000000255],
+    ["readUpdateV2 dist/yjs.mjs:1650", 25942.931000000255],
+    ["applyUpdateV2 dist/yjs.mjs:1744", 25942.931000000255],
+    ["cleanupTransactions dist/yjs.mjs:3244", 25437.67200000029],
+    ["getStateVector dist/yjs.mjs:2810", 21369.08100000022],
+    [" dist/yjs.mjs:2812", 20722.408000000276],
+    ["readSyncStep2 y-protocols/sync.js:81", 16553.382000000263],
+    ["onStreamRead node:internal/stream_base_commons:165", 13364.303000000156],
+    ["Readable.push streams/readable:393", 13332.753000000157],
+    ["readableAddChunkPushByteMode streams/readable:469", 13331.194000000158],
+    ["addChunk streams/readable:556", 13328.088000000158],
+    ["emit node:events:488", 13277.013000000152],
+    ["Writable.write streams/writable:505", 13168.179000000164],
+    ["writeOrBuffer streams/writable:549", 13165.588000000163],
+    ["_write streams/writable:451", 13165.588000000163],
+    ["socketOnData lib/websocket.js:1358", 13119.238000000158],
+    ["_write lib/receiver.js:88", 13118.182000000157],
+    ["startLoop lib/receiver.js:148", 13114.383000000156],
+    ["dataMessage lib/receiver.js:540", 13111.592000000155],
+    ["getData lib/receiver.js:456", 13111.592000000155],
+    ["receiverOnMessage lib/websocket.js:1223", 13108.955000000155]
+  ]
+}

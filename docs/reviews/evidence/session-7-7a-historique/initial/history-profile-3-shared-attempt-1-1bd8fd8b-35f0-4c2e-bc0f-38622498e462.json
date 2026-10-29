@@ -1,0 +1,5206 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "history-profile-3-shared",
+  "attempt": 1,
+  "preparation": {
+    "path": ".local/measurement-hygiene/history-profile-3-shared-preparation-d9c4b834-97cd-4110-9639-7308f9fa4cf1.json",
+    "observation": {
+      "observedAt": "2026-10-29T11:24:30.161Z",
+      "windowsFreeBytes": 3763200000,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5700898816,
+        "swapInPages": 386,
+        "swapOutPages": 2163
+      },
+      "power": {
+        "observedAt": "2026-10-29T11:24:30.161Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 100
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "status": "valid",
+  "before": {
+    "observedAt": "2026-10-29T11:24:38.793Z",
+    "windowsFreeBytes": 3263184896,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5667061760,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-29T11:24:38.793Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 100
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "workStartedAt": 1793273079260,
+  "workEndedAt": 1793273117486,
+  "swap": {
+    "raw": "BOOT dc1818ce-057f-406e-9e82-a0bb01fa6a48\nvmstat from procps-ng 4.0.4\n--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n   0    0            0      4434520        39924      1429920    0    0     0    88 3253 4655   0   0  99   0   0   0\n   2    0            0      4425436        39924      1429936    0    0     0   100 4232 6316   1   1  99   0   0   0\n   0    0            0      4420524        40264      1430188    0    0   192  1080 4001 6247   0   1  99   0   0   0\n   0    0            0      4419768        40264      1430188    0    0     0   296 2916 4441   0   1  99   0   0   0\n   0    0            0      4420416        40268      1430196    0    0     0    64 2794 4231   0   0  99   0   0   0\n   0    0            0      4420416        40268      1430204    0    0     0    64 3118 4705   0   0 100   0   0   0\n   0    0            0      4407580        40268      1430212    0    0     0   296 5565 8396   0   1  99   0   0   0\n   0    0            0      4415572        40408      1430260    0    0   128   136 11419 20409   2   1  97   0   0   0\n   0    0            0      4416804        40408      1430668    0    0     0   224 14022 24419   2   2  96   0   0   0\n   0    0            0      4415636        40408      1432112    0    0     0   992 5595 8802   1   1  98   0   0   0\n   1    0            0      4414584        40408      1432328    0    0     0   144 4689 7303   1   1  99   0   0   0\n   1    0            0      4417844        40408      1434600    0    0     0  2000 6952 10616   2   2  96   0   0   0\n   0    0            0      4419196        40416      1434948    0    0     0   720 4146 6241   1   1  99   0   0   0\n   0    0            0      4417532        40416      1435792    0    0     0   816 5997 9488   1   1  98   0   0   0\n   0    0            0      4417964        40416      1436052    0    0     0   216 5043 7864   1   1  99   0   0   0\n   0    0            0      4424044        40416      1437060    0    0     0  1024 4904 7658   1   1  98   0   0   0\n   3    0            0      4420840        40416      1437436    0    0     0   288 7509 12209   1   2  98   0   0   0\n   0    0            0      4414992        40424      1438680    0    0     0   776 11163 19567   2   2  96   0   0   0\n   0    0            0      4411280        40424      1439080    0    0     0   560 14839 26049   2   2  95   0   0   0\n   0    0            0      4407212        40424      1440344    0    0     0   664 4662 7374   0   1  99   0   0   0\n   0    0            0      4405944        40424      1440688    0    0     0   280 5673 9387   1   1  98   0   0   0\n   1    0            0      4401236        40424      1441936    0    0     0   936 7148 11034   1   1  98   0   0   0\n   0    0            0      4393960        40432      1443528    0    0     0  1000 6686 11018   1   1  98   0   0   0\n   2    0            0      4396624        40432      1443716    0    0     0   200 5420 8633   1   1  99   0   0   0\n   0    0            0      4393524        40432      1445116    0    0     0  1024 4960 8066   1   1  98   0   0   0\n   0    0            0      4393272        40432      1445424    0    0     0   312 6218 9862   1   2  97   0   0   0\n   0    0            0      4398832        40432      1446760    0    0     0   664 5091 7893   0   1  99   0   0   0\n   0    0            0      4397616        40440      1447232    0    0     0   666 14575 25419   2   2  96   0   0   0\n   0    0            0      4398048        40440      1448444    0    0     0   632 11269 19949   2   2  96   0   0   0\n   0    0            0      4395412        40440      1450152    0    0     0   936 8620 13833   1   2  97   0   0   0\n   0    0            0      4394352        40440      1450364    0    0     0   696 4334 6883   0   1  99   0   0   0\n   0    0            0      4396104        40440      1451884    0    0     0   824 7317 11534   1   2  98   0   0   0\n   1    0            0      4393888        40448      1452120    0    0     0   228 4463 6908   0   1  99   0   0   0\n   0    0            0      4379644        40448      1453616    0    0     0   808 5264 8188   1   1  98   0   0   0\n   0    0            0      4379380        40448      1453804    0    0     0   376 3861 5796   0   1  99   0   0   0\n   0    0            0      4377320        40448      1455324    0    0     0   864 6159 9747   0   1  98   0   0   0\n   0    0            0      4374236        40448      1455404    0    0     0    88 6451 10006   1   1  98   0   0   0\n   0    0            0      4372728        40456      1455608    0    0     0   500 12731 22101   2   2  95   0   0   0\n   0    0            0      4385740        40472      1455644    0    0     0   304 14596 24917   2   3  96   0   0   0\n   0    0            0      4440956        40528      1444008    0    0     0 12176 11172 19082   3   4  93   0   0   0\n",
+    "chunks": [
+      {
+        "observedAt": "2026-10-29T11:24:37.642Z",
+        "text": "BOOT "
+      },
+      {
+        "observedAt": "2026-10-29T11:24:37.642Z",
+        "text": "dc1818ce-057f-406e-9e82-a0bb01fa6a48\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:37.644Z",
+        "text": "vmstat from procps-ng 4.0.4\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:37.647Z",
+        "text": "--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:38.648Z",
+        "text": "   0    0            0      4434520        39924      1429920    0    0     0    88 3253 4655   0   0  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:39.648Z",
+        "text": "   2    0            0      4425436        39924      1429936    0    0     0   100 4232 6316   1   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:40.648Z",
+        "text": "   0    0            0      4420524        40264      1430188    0    0   192  1080 4001 6247   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:41.649Z",
+        "text": "   0    0            0      4419768        40264      1430188    0    0     0   296 2916 4441   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:42.649Z",
+        "text": "   0    0            0      4420416        40268      1430196    0    0     0    64 2794 4231   0   0  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:43.649Z",
+        "text": "   0    0            0      4420416        40268      1430204    0    0     0    64 3118 4705   0   0 100   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:44.649Z",
+        "text": "   0    0            0      4407580        40268      1430212    0    0     0   296 5565 8396   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:45.650Z",
+        "text": "   0    0            0      4415572        40408      1430260    0    0   128   136 11419 20409   2   1  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:46.650Z",
+        "text": "   0    0            0      4416804        40408      1430668    0    0     0   224 14022 24419   2   2  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:47.650Z",
+        "text": "   0    0            0      4415636        40408      1432112    0    0     0   992 5595 8802   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:48.650Z",
+        "text": "   1    0            0      4414584        40408      1432328    0    0     0   144 4689 7303   1   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:49.651Z",
+        "text": "   1    0            0      4417844        40408      1434600    0    0     0  2000 6952 10616   2   2  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:50.651Z",
+        "text": "   0    0            0      4419196        40416      1434948    0    0     0   720 4146 6241   1   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:51.651Z",
+        "text": "   0    0            0      4417532        40416      1435792    0    0     0   816 5997 9488   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:52.651Z",
+        "text": "   0    0            0      4417964        40416      1436052    0    0     0   216 5043 7864   1   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:53.652Z",
+        "text": "   0    0            0      4424044        40416      1437060    0    0     0  1024 4904 7658   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:54.652Z",
+        "text": "   3    0            0      4420840        40416      1437436    0    0     0   288 7509 12209   1   2  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:55.653Z",
+        "text": "   0    0            0      4414992        40424      1438680    0    0     0   776 11163 19567   2   2  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:56.653Z",
+        "text": "   0    0            0      4411280        40424      1439080    0    0     0   560 14839 26049   2   2  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:57.653Z",
+        "text": "   0    0            0      4407212        40424      1440344    0    0     0   664 4662 7374   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:58.653Z",
+        "text": "   0    0            0      4405944        40424      1440688    0    0     0   280 5673 9387   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:24:59.653Z",
+        "text": "   1    0            0      4401236        40424      1441936    0    0     0   936 7148 11034   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:00.654Z",
+        "text": "   0    0            0      4393960        40432      1443528    0    0     0  1000 6686 11018   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:01.654Z",
+        "text": "   2    0            0      4396624        40432      1443716    0    0     0   200 5420 8633   1   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:02.654Z",
+        "text": "   0    0            0      4393524        40432      1445116    0    0     0  1024 4960 8066   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:03.654Z",
+        "text": "   0    0            0      4393272        40432      1445424    0    0     0   312 6218 9862   1   2  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:04.655Z",
+        "text": "   0    0            0      4398832        40432      1446760    0    0     0   664 5091 7893   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:05.655Z",
+        "text": "   0    0            0      4397616        40440      1447232    0    0     0   666 14575 25419   2   2  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:06.656Z",
+        "text": "   0    0            0      4398048        40440      1448444    0    0     0   632 11269 19949   2   2  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:07.656Z",
+        "text": "   0    0            0      4395412        40440      1450152    0    0     0   936 8620 13833   1   2  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:08.656Z",
+        "text": "   0    0            0      4394352        40440      1450364    0    0     0   696 4334 6883   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:09.656Z",
+        "text": "   0    0            0      4396104        40440      1451884    0    0     0   824 7317 11534   1   2  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:10.656Z",
+        "text": "   1    0            0      4393888        40448      1452120    0    0     0   228 4463 6908   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:11.657Z",
+        "text": "   0    0            0      4379644        40448      1453616    0    0     0   808 5264 8188   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:12.657Z",
+        "text": "   0    0            0      4379380        40448      1453804    0    0     0   376 3861 5796   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:13.657Z",
+        "text": "   0    0            0      4377320        40448      1455324    0    0     0   864 6159 9747   0   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:14.658Z",
+        "text": "   0    0            0      4374236        40448      1455404    0    0     0    88 6451 10006   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:15.658Z",
+        "text": "   0    0            0      4372728        40456      1455608    0    0     0   500 12731 22101   2   2  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:16.658Z",
+        "text": "   0    0            0      4385740        40472      1455644    0    0     0   304 14596 24917   2   3  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T11:25:17.659Z",
+        "text": "   0    0            0      4440956        40528      1444008    0    0     0 12176 11172 19082   3   4  93   0   0   0\n"
+      }
+    ],
+    "startedAt": 1793273077401,
+    "endedAt": 1793273117679,
+    "probeError": null,
+    "stderr": "",
+    "imageId": "sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac",
+    "command": "vmstat -w -n -y 1",
+    "intervalSeconds": 1,
+    "workStartedAt": 1793273079260,
+    "workEndedAt": 1793273117486
+  },
+  "after": {
+    "observedAt": "2026-10-29T11:25:17.796Z",
+    "windowsFreeBytes": 3807813632,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5692153856,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-29T11:25:17.796Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 100
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "assessment": {
+    "valid": true,
+    "reason": null,
+    "intervals": 40,
+    "deltaInPages": 0,
+    "deltaOutPages": 0
+  },
+  "result": {
+    "code": 1,
+    "results": [
+      {
+        "summary": {
+          "mode": "shared",
+          "series": 3,
+          "authors": 1,
+          "server": {
+            "samples": 100,
+            "p95": 59.91849999999977,
+            "max": 71.02479999999923
+          },
+          "validationWall": {
+            "samples": 100,
+            "p95": 44.659199999998236,
+            "max": 51.105600000002596
+          },
+          "worker": {
+            "samples": 100,
+            "p95": 44.247300000002724,
+            "max": 50.588800000001356
+          },
+          "poolWait": {
+            "samples": 100,
+            "p95": 0.012600000001839362,
+            "max": 0.02990000000136206
+          },
+          "ipcAndScheduling": {
+            "samples": 100,
+            "p95": 0.49239999999917927,
+            "max": 10.63300000000163
+          },
+          "sql": {
+            "samples": 100,
+            "p95": 11.373600000002625,
+            "max": 35.27570000000196
+          },
+          "wire": {
+            "samples": 100,
+            "p95": 234.33960000000297,
+            "max": 284.1273000000001
+          },
+          "clientEdit": {
+            "samples": 100,
+            "p95": 43.69759999999951,
+            "max": 50.44100000000071
+          },
+          "eventLoopP95Ms": 76.742655,
+          "eventLoopMaxMs": 132.448255,
+          "gcMs": 540.1529000103474,
+          "mainThreadCpuMs": 21766,
+          "workerThreadCpuMs": 4423,
+          "meetsHistoricalLimit": true
+        },
+        "snapshotBytes": 1042017,
+        "businessBytes": 100420,
+        "clientIds": 41164,
+        "phases": [
+          {
+            "validationWallMs": 31.760199999998804,
+            "workerMs": 31.298799999998664,
+            "beforeAppendMs": 0.08780000000115251,
+            "sqlMs": 8.288300000000163,
+            "serverMs": 40.13630000000012,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.383599999999205,
+            "workerMs": 32.80290000000059,
+            "beforeAppendMs": 0.045700000000579166,
+            "sqlMs": 7.27770000000055,
+            "serverMs": 40.707000000000335,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 31.976199999999153,
+            "workerMs": 31.613800000000992,
+            "beforeAppendMs": 0.059900000000197906,
+            "sqlMs": 8.727100000000064,
+            "serverMs": 40.763199999999415,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.91409999999996,
+            "workerMs": 32.43840000000091,
+            "beforeAppendMs": 0.07120000000031723,
+            "sqlMs": 7.0649000000012165,
+            "serverMs": 40.050200000001496,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 30.292900000000373,
+            "workerMs": 29.93919999999889,
+            "beforeAppendMs": 0.0488999999997759,
+            "sqlMs": 7.751000000000204,
+            "serverMs": 38.09280000000035,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 34.61579999999958,
+            "workerMs": 34.15940000000046,
+            "beforeAppendMs": 0.06819999999970605,
+            "sqlMs": 6.658900000000358,
+            "serverMs": 41.342899999999645,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 31.9375,
+            "workerMs": 31.50680000000102,
+            "beforeAppendMs": 0.08219999999892025,
+            "sqlMs": 8.070000000001528,
+            "serverMs": 40.08970000000045,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.513199999999415,
+            "workerMs": 32.132400000000416,
+            "beforeAppendMs": 0.07430000000022119,
+            "sqlMs": 6.840099999999438,
+            "serverMs": 39.427599999999074,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 30.469499999999243,
+            "workerMs": 29.998199999999997,
+            "beforeAppendMs": 0.04960000000028231,
+            "sqlMs": 7.704799999999523,
+            "serverMs": 38.22389999999905,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 31.827699999999822,
+            "workerMs": 31.22110000000066,
+            "beforeAppendMs": 0.10519999999996799,
+            "sqlMs": 7.699800000000323,
+            "serverMs": 39.63270000000011,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 38.73489999999947,
+            "workerMs": 38.28660000000127,
+            "beforeAppendMs": 0.06530000000020664,
+            "sqlMs": 9.173399999999674,
+            "serverMs": 47.97359999999935,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 43.34970000000067,
+            "workerMs": 42.9380000000001,
+            "beforeAppendMs": 0.05249999999978172,
+            "sqlMs": 9.784599999999045,
+            "serverMs": 53.186799999999494,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 44.64609999999993,
+            "workerMs": 44.338700000000244,
+            "beforeAppendMs": 0.09610000000066066,
+            "sqlMs": 7.4922999999998865,
+            "serverMs": 52.23450000000048,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.68660000000091,
+            "workerMs": 37.17120000000068,
+            "beforeAppendMs": 0.049999999999272404,
+            "sqlMs": 6.540899999999965,
+            "serverMs": 44.277500000000146,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.2489000000005,
+            "workerMs": 35.90819999999985,
+            "beforeAppendMs": 0.1550999999999476,
+            "sqlMs": 7.7093000000004395,
+            "serverMs": 44.11330000000089,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 38.72330000000147,
+            "workerMs": 38.28469999999834,
+            "beforeAppendMs": 0.044799999999668216,
+            "sqlMs": 6.362699999999677,
+            "serverMs": 45.13080000000082,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.0625,
+            "workerMs": 36.77649999999994,
+            "beforeAppendMs": 0.04349999999976717,
+            "sqlMs": 7.4121999999988475,
+            "serverMs": 44.518199999998615,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 39.08660000000236,
+            "workerMs": 38.62840000000142,
+            "beforeAppendMs": 0.07089999999880092,
+            "sqlMs": 7.358599999999569,
+            "serverMs": 46.51610000000073,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 42.08859999999913,
+            "workerMs": 41.682199999999284,
+            "beforeAppendMs": 0.10740000000077998,
+            "sqlMs": 10.369399999999587,
+            "serverMs": 52.5653999999995,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 49.991799999999785,
+            "workerMs": 49.60580000000118,
+            "beforeAppendMs": 0.049699999999575084,
+            "sqlMs": 7.58640000000014,
+            "serverMs": 57.6278999999995,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 35.52839999999924,
+            "workerMs": 35.15459999999803,
+            "beforeAppendMs": 0.04530000000158907,
+            "sqlMs": 7.340499999998428,
+            "serverMs": 42.914199999999255,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 39.89340000000084,
+            "workerMs": 39.51919999999882,
+            "beforeAppendMs": 0.037000000000261934,
+            "sqlMs": 6.218600000000151,
+            "serverMs": 46.14900000000125,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.253600000000006,
+            "workerMs": 35.85679999999775,
+            "beforeAppendMs": 0.048800000000483124,
+            "sqlMs": 9.093899999999849,
+            "serverMs": 45.39630000000034,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.50260000000344,
+            "workerMs": 36.34389999999985,
+            "beforeAppendMs": 0.04349999999976717,
+            "sqlMs": 30.18239999999787,
+            "serverMs": 67.72850000000108,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.449799999998504,
+            "workerMs": 36.13170000000173,
+            "beforeAppendMs": 0.0485000000007858,
+            "sqlMs": 10.03859999999986,
+            "serverMs": 46.53689999999915,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 44.85499999999956,
+            "workerMs": 44.45369999999821,
+            "beforeAppendMs": 0.05649999999877764,
+            "sqlMs": 8.711500000001251,
+            "serverMs": 53.62299999999959,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 44.659199999998236,
+            "workerMs": 44.247300000002724,
+            "beforeAppendMs": 0.0937999999987369,
+            "sqlMs": 8.554700000000594,
+            "serverMs": 53.30769999999757,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 42.71510000000126,
+            "workerMs": 42.23519999999917,
+            "beforeAppendMs": 0.03779999999824213,
+            "sqlMs": 7.391100000000733,
+            "serverMs": 50.14400000000023,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.92540000000008,
+            "workerMs": 37.620999999999185,
+            "beforeAppendMs": 0.04990000000179862,
+            "sqlMs": 7.000499999998283,
+            "serverMs": 44.97580000000016,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 39.07129999999961,
+            "workerMs": 38.70999999999913,
+            "beforeAppendMs": 0.038499999998748535,
+            "sqlMs": 6.716300000000047,
+            "serverMs": 45.826099999998405,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 40.64919999999984,
+            "workerMs": 40.28060000000187,
+            "beforeAppendMs": 0.052999999999883585,
+            "sqlMs": 22.081099999999424,
+            "serverMs": 62.783299999999144,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 41.77219999999943,
+            "workerMs": 41.3166999999994,
+            "beforeAppendMs": 0.08599999999933061,
+            "sqlMs": 7.141200000001845,
+            "serverMs": 48.999400000000605,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.914999999997235,
+            "workerMs": 33.529600000001665,
+            "beforeAppendMs": 0.052700000000186265,
+            "sqlMs": 8.138800000000629,
+            "serverMs": 42.10649999999805,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.64890000000014,
+            "workerMs": 32.33329999999842,
+            "beforeAppendMs": 0.04169999999794527,
+            "sqlMs": 6.386700000002747,
+            "serverMs": 39.07730000000083,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.82339999999749,
+            "workerMs": 37.431000000000495,
+            "beforeAppendMs": 0.061400000002322486,
+            "sqlMs": 7.219699999997829,
+            "serverMs": 45.10449999999764,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.67239999999947,
+            "workerMs": 37.169200000000274,
+            "beforeAppendMs": 0.03980000000228756,
+            "sqlMs": 5.973299999997835,
+            "serverMs": 43.68549999999959,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 31.049399999999878,
+            "workerMs": 30.722999999998137,
+            "beforeAppendMs": 0.041500000002997695,
+            "sqlMs": 6.9636999999966065,
+            "serverMs": 38.05459999999948,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 27.42000000000189,
+            "workerMs": 26.989699999998265,
+            "beforeAppendMs": 0.042099999998754356,
+            "sqlMs": 6.988300000000891,
+            "serverMs": 34.45040000000154,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.15770000000339,
+            "workerMs": 35.763599999998405,
+            "beforeAppendMs": 0.07179999999789288,
+            "sqlMs": 9.149600000000646,
+            "serverMs": 45.37910000000193,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.53750000000218,
+            "workerMs": 37.226400000003196,
+            "beforeAppendMs": 0.041199999999662396,
+            "sqlMs": 6.686699999998382,
+            "serverMs": 44.26540000000023,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.85080000000016,
+            "workerMs": 33.50350000000253,
+            "beforeAppendMs": 0.046300000001792796,
+            "sqlMs": 6.80909999999858,
+            "serverMs": 40.706200000000536,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 40.979000000003,
+            "workerMs": 40.5637999999999,
+            "beforeAppendMs": 0.06589999999778229,
+            "sqlMs": 5.84690000000046,
+            "serverMs": 46.89180000000124,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.09449999999924,
+            "workerMs": 35.78859999999986,
+            "beforeAppendMs": 0.043600000000878936,
+            "sqlMs": 7.078300000001036,
+            "serverMs": 43.21640000000116,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 35.70839999999953,
+            "workerMs": 35.35979999999836,
+            "beforeAppendMs": 0.04069999999774154,
+            "sqlMs": 35.27570000000196,
+            "serverMs": 71.02479999999923,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 35.29279999999926,
+            "workerMs": 34.91979999999967,
+            "beforeAppendMs": 0.059300000000803266,
+            "sqlMs": 9.725899999997637,
+            "serverMs": 45.0779999999977,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 46.115499999999884,
+            "workerMs": 45.69870000000083,
+            "beforeAppendMs": 0.05679999999847496,
+            "sqlMs": 8.187900000000809,
+            "serverMs": 54.36019999999917,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.817299999998795,
+            "workerMs": 37.44270000000324,
+            "beforeAppendMs": 0.04219999999986612,
+            "sqlMs": 9.003600000000006,
+            "serverMs": 46.86309999999867,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.59600000000137,
+            "workerMs": 36.30660000000353,
+            "beforeAppendMs": 0.033999999999650754,
+            "sqlMs": 6.284599999999045,
+            "serverMs": 42.914600000000064,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.9336000000003,
+            "workerMs": 32.63440000000264,
+            "beforeAppendMs": 0.04439999999885913,
+            "sqlMs": 7.121899999998277,
+            "serverMs": 40.09989999999743,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 39.197000000000116,
+            "workerMs": 38.69470000000001,
+            "beforeAppendMs": 0.1400000000030559,
+            "sqlMs": 6.779499999996915,
+            "serverMs": 46.11650000000009,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 28.941500000000815,
+            "workerMs": 28.56760000000213,
+            "beforeAppendMs": 0.05159999999887077,
+            "sqlMs": 7.962700000000041,
+            "serverMs": 36.955799999999726,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 35.76380000000063,
+            "workerMs": 35.21849999999904,
+            "beforeAppendMs": 0.04620000000068103,
+            "sqlMs": 9.32050000000163,
+            "serverMs": 45.13050000000294,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 40.402500000000146,
+            "workerMs": 39.90699999999924,
+            "beforeAppendMs": 0.05799999999726424,
+            "sqlMs": 11.373600000002625,
+            "serverMs": 51.834100000000035,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 38.65520000000106,
+            "workerMs": 38.29729999999836,
+            "beforeAppendMs": 0.04329999999754364,
+            "sqlMs": 6.615800000003219,
+            "serverMs": 45.31430000000182,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.613100000002305,
+            "workerMs": 37.31420000000071,
+            "beforeAppendMs": 0.047599999998055864,
+            "sqlMs": 7.346000000001368,
+            "serverMs": 45.00670000000173,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 34.11990000000151,
+            "workerMs": 33.76039999999921,
+            "beforeAppendMs": 0.06039999999848078,
+            "sqlMs": 6.372900000002119,
+            "serverMs": 40.55320000000211,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.04360000000088,
+            "workerMs": 35.70539999999892,
+            "beforeAppendMs": 0.04320000000006985,
+            "sqlMs": 7.119099999999889,
+            "serverMs": 43.20590000000084,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 28.548000000002503,
+            "workerMs": 28.19850000000224,
+            "beforeAppendMs": 0.03709999999773572,
+            "sqlMs": 6.749299999999494,
+            "serverMs": 35.33439999999973,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 51.105600000002596,
+            "workerMs": 50.588800000001356,
+            "beforeAppendMs": 0.0911999999989348,
+            "sqlMs": 8.721699999998236,
+            "serverMs": 59.91849999999977,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.87359999999899,
+            "workerMs": 33.505700000001525,
+            "beforeAppendMs": 0.053599999999278225,
+            "sqlMs": 6.616900000000896,
+            "serverMs": 40.54409999999916,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.53030000000217,
+            "workerMs": 32.070700000000215,
+            "beforeAppendMs": 0.04079999999885331,
+            "sqlMs": 6.707300000001851,
+            "serverMs": 39.278400000002875,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.82049999999799,
+            "workerMs": 32.50249999999869,
+            "beforeAppendMs": 0.03720000000248547,
+            "sqlMs": 5.84059999999954,
+            "serverMs": 38.69830000000002,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.02299999999741,
+            "workerMs": 32.647100000001956,
+            "beforeAppendMs": 0.06340000000272994,
+            "sqlMs": 7.702499999999418,
+            "serverMs": 40.78889999999956,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 30.849500000000262,
+            "workerMs": 30.5086999999985,
+            "beforeAppendMs": 0.042699999998148996,
+            "sqlMs": 5.768800000001647,
+            "serverMs": 36.66100000000006,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 31.230100000000675,
+            "workerMs": 30.865200000000186,
+            "beforeAppendMs": 0.0632000000005064,
+            "sqlMs": 8.975099999999657,
+            "serverMs": 40.26840000000084,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 28.252700000000914,
+            "workerMs": 27.91779999999926,
+            "beforeAppendMs": 0.042099999998754356,
+            "sqlMs": 6.552899999998772,
+            "serverMs": 34.84769999999844,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.37869999999748,
+            "workerMs": 32.01800000000003,
+            "beforeAppendMs": 0.06750000000101863,
+            "sqlMs": 6.974500000000262,
+            "serverMs": 39.42069999999876,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 34.014899999998306,
+            "workerMs": 33.66489999999976,
+            "beforeAppendMs": 0.04640000000290456,
+            "sqlMs": 5.974099999999453,
+            "serverMs": 40.035400000000664,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.3765999999996,
+            "workerMs": 31.959399999999732,
+            "beforeAppendMs": 0.046600000001490116,
+            "sqlMs": 32.99039999999877,
+            "serverMs": 65.41359999999986,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.47220000000016,
+            "workerMs": 33.071499999998196,
+            "beforeAppendMs": 0.05470000000059372,
+            "sqlMs": 7.277200000000448,
+            "serverMs": 40.8041000000012,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 27.77939999999944,
+            "workerMs": 27.394900000002963,
+            "beforeAppendMs": 0.069100000000617,
+            "sqlMs": 8.478899999998248,
+            "serverMs": 36.327399999998306,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.570299999999406,
+            "workerMs": 32.25640000000203,
+            "beforeAppendMs": 0.07739999999830616,
+            "sqlMs": 5.945800000001327,
+            "serverMs": 38.59349999999904,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.328700000001845,
+            "workerMs": 32.91790000000037,
+            "beforeAppendMs": 0.07589999999981956,
+            "sqlMs": 7.532299999998941,
+            "serverMs": 40.936900000000605,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 34.42309999999998,
+            "workerMs": 34.07839999999851,
+            "beforeAppendMs": 0.06229999999777647,
+            "sqlMs": 6.269099999997707,
+            "serverMs": 40.75449999999546,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.836999999999534,
+            "workerMs": 33.38590000000113,
+            "beforeAppendMs": 0.12829999999667052,
+            "sqlMs": 6.757900000004156,
+            "serverMs": 40.72320000000036,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.1252999999997,
+            "workerMs": 31.767899999998917,
+            "beforeAppendMs": 0.04189999999653082,
+            "sqlMs": 6.297200000000885,
+            "serverMs": 38.46439999999711,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 34.227899999998044,
+            "workerMs": 33.839599999999336,
+            "beforeAppendMs": 0.06349999999656575,
+            "sqlMs": 9.221700000001874,
+            "serverMs": 43.513099999996484,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.76299999999901,
+            "workerMs": 37.40649999999732,
+            "beforeAppendMs": 0.06559999999444699,
+            "sqlMs": 7.69380000000092,
+            "serverMs": 45.52239999999438,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.01770000000397,
+            "workerMs": 32.67109999999957,
+            "beforeAppendMs": 0.05849999999918509,
+            "sqlMs": 7.227500000000873,
+            "serverMs": 40.30370000000403,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.66169999999693,
+            "workerMs": 33.349499999996624,
+            "beforeAppendMs": 0.04430000000138534,
+            "sqlMs": 6.048500000004424,
+            "serverMs": 39.754500000002736,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 35.794800000003306,
+            "workerMs": 35.44999999999709,
+            "beforeAppendMs": 0.04029999999329448,
+            "sqlMs": 9.377700000004552,
+            "serverMs": 45.21280000000115,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 50.61240000000544,
+            "workerMs": 39.95299999999406,
+            "beforeAppendMs": 0.04099999999743886,
+            "sqlMs": 6.390800000001036,
+            "serverMs": 57.04420000000391,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 38.730799999997544,
+            "workerMs": 38.33879999999772,
+            "beforeAppendMs": 0.06990000000223517,
+            "sqlMs": 9.909200000001874,
+            "serverMs": 48.70990000000165,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.43189999999595,
+            "workerMs": 33.02189999999973,
+            "beforeAppendMs": 0.06090000000403961,
+            "sqlMs": 7.177199999998265,
+            "serverMs": 40.669999999998254,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 39.08849999999802,
+            "workerMs": 38.67059999999765,
+            "beforeAppendMs": 0.05700000000069849,
+            "sqlMs": 9.30000000000291,
+            "serverMs": 48.44550000000163,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 41.16169999999693,
+            "workerMs": 40.73460000000341,
+            "beforeAppendMs": 0.05680000000575092,
+            "sqlMs": 6.611299999996845,
+            "serverMs": 47.82979999999952,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.01009999999951,
+            "workerMs": 35.72759999999835,
+            "beforeAppendMs": 0.04400000000168802,
+            "sqlMs": 6.920799999999872,
+            "serverMs": 42.97490000000107,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.19279999999708,
+            "workerMs": 31.850500000000466,
+            "beforeAppendMs": 0.05000000000291038,
+            "sqlMs": 30.806400000001304,
+            "serverMs": 63.04920000000129,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 38.36750000000029,
+            "workerMs": 37.93280000000232,
+            "beforeAppendMs": 0.07409999999799766,
+            "sqlMs": 10.682099999998172,
+            "serverMs": 49.12369999999646,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 40.364699999998265,
+            "workerMs": 40.009500000000116,
+            "beforeAppendMs": 0.04740000000310829,
+            "sqlMs": 7.518799999998009,
+            "serverMs": 47.93089999999938,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 29.595000000001164,
+            "workerMs": 29.245300000002317,
+            "beforeAppendMs": 0.045400000002700835,
+            "sqlMs": 7.0152000000016415,
+            "serverMs": 36.655600000005506,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 38.84440000000177,
+            "workerMs": 38.35109999999986,
+            "beforeAppendMs": 0.04680000000371365,
+            "sqlMs": 6.1875,
+            "serverMs": 45.07870000000548,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.716400000004796,
+            "workerMs": 36.32070000000385,
+            "beforeAppendMs": 0.04559999999764841,
+            "sqlMs": 7.251499999998487,
+            "serverMs": 44.01350000000093,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 36.81109999999899,
+            "workerMs": 36.44890000000305,
+            "beforeAppendMs": 0.05000000000291038,
+            "sqlMs": 6.255899999996473,
+            "serverMs": 43.11699999999837,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 32.70999999999913,
+            "workerMs": 32.372300000002724,
+            "beforeAppendMs": 0.05550000000221189,
+            "sqlMs": 8.500599999999395,
+            "serverMs": 41.26610000000073,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.703199999996286,
+            "workerMs": 33.28729999999632,
+            "beforeAppendMs": 0.0742000000027474,
+            "sqlMs": 7.379399999997986,
+            "serverMs": 41.15679999999702,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 33.03770000000077,
+            "workerMs": 32.653400000002875,
+            "beforeAppendMs": 0.05010000000038417,
+            "sqlMs": 7.654399999999441,
+            "serverMs": 40.742200000000594,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 35.617200000000594,
+            "workerMs": 35.2387000000017,
+            "beforeAppendMs": 0.04389999999693828,
+            "sqlMs": 6.010500000003958,
+            "serverMs": 41.67160000000149,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 35.96910000000207,
+            "workerMs": 35.63320000000385,
+            "beforeAppendMs": 0.04619999999704305,
+            "sqlMs": 7.123599999998987,
+            "serverMs": 43.1388999999981,
+            "contributions": 1
+          },
+          {
+            "validationWallMs": 37.540899999999965,
+            "workerMs": 37.132799999999406,
+            "beforeAppendMs": 0.038800000002083834,
+            "sqlMs": 6.214399999997113,
+            "serverMs": 43.79409999999916,
+            "contributions": 1
+          }
+        ],
+        "poolSamples": [
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007099999998899875,
+            "workerMs": 31.298799999998664,
+            "roundTripMs": 31.687799999999697,
+            "outsideWorkerMs": 0.3819000000021333
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007600000000820728,
+            "workerMs": 0.025499999999738066,
+            "roundTripMs": 1.9162000000014814,
+            "outsideWorkerMs": 1.8831000000009226
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005600000000413274,
+            "workerMs": 32.80290000000059,
+            "roundTripMs": 33.373600000000806,
+            "outsideWorkerMs": 0.5650999999998021
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005400000000008731,
+            "workerMs": 0.015800000001036096,
+            "roundTripMs": 0.16790000000037253,
+            "outsideWorkerMs": 0.1466999999993277
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005600000000413274,
+            "workerMs": 31.613800000000992,
+            "roundTripMs": 31.961600000000544,
+            "outsideWorkerMs": 0.3421999999991385
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009400000000823638,
+            "workerMs": 0.0216999999993277,
+            "roundTripMs": 2.4601000000002387,
+            "outsideWorkerMs": 2.4290000000000873
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006100000000515138,
+            "workerMs": 32.43840000000091,
+            "roundTripMs": 32.89140000000043,
+            "outsideWorkerMs": 0.44689999999900465
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006299999999100692,
+            "workerMs": 0.019500000000334694,
+            "roundTripMs": 0.2205999999987398,
+            "outsideWorkerMs": 0.19479999999930442
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0072000000000116415,
+            "workerMs": 29.93919999999889,
+            "roundTripMs": 30.27219999999943,
+            "outsideWorkerMs": 0.3258000000005268
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.047899999999572174,
+            "workerMs": 0.018600000001242734,
+            "roundTripMs": 2.6054000000003725,
+            "outsideWorkerMs": 2.5388999999995576
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009200000000419095,
+            "workerMs": 34.15940000000046,
+            "roundTripMs": 34.5692999999992,
+            "outsideWorkerMs": 0.4006999999983236
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0055000000011204975,
+            "workerMs": 0.013800000000628643,
+            "roundTripMs": 0.13150000000132422,
+            "outsideWorkerMs": 0.11219999999957508
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006199999999807915,
+            "workerMs": 31.50680000000102,
+            "roundTripMs": 31.92369999999937,
+            "outsideWorkerMs": 0.4106999999985419
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007400000000416185,
+            "workerMs": 0.0239000000001397,
+            "roundTripMs": 2.719600000000355,
+            "outsideWorkerMs": 2.688299999999799
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008099999999103602,
+            "workerMs": 32.132400000000416,
+            "roundTripMs": 32.49549999999908,
+            "outsideWorkerMs": 0.35499999999956344
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005199999999604188,
+            "workerMs": 0.01209999999991851,
+            "roundTripMs": 0.12910000000010768,
+            "outsideWorkerMs": 0.11180000000058499
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.004899999999906868,
+            "workerMs": 29.998199999999997,
+            "roundTripMs": 30.45139999999992,
+            "outsideWorkerMs": 0.44830000000001746
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009099999999307329,
+            "workerMs": 0.021000000000640284,
+            "roundTripMs": 3.621900000000096,
+            "outsideWorkerMs": 3.5918000000001484
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007999999999810825,
+            "workerMs": 31.22110000000066,
+            "roundTripMs": 31.806400000001304,
+            "outsideWorkerMs": 0.5773000000008324
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008499999999912689,
+            "workerMs": 0.012300000000323053,
+            "roundTripMs": 0.16530000000057044,
+            "outsideWorkerMs": 0.1445000000003347
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006699999999909778,
+            "workerMs": 38.28660000000127,
+            "roundTripMs": 38.71850000000086,
+            "outsideWorkerMs": 0.42519999999967695
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010500000000320142,
+            "workerMs": 0.017700000000331784,
+            "roundTripMs": 0.23140000000057626,
+            "outsideWorkerMs": 0.20319999999992433
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.013100000000122236,
+            "workerMs": 42.9380000000001,
+            "roundTripMs": 43.33309999999983,
+            "outsideWorkerMs": 0.3819999999996071
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007999999999810825,
+            "workerMs": 0.017700000000331784,
+            "roundTripMs": 0.21370000000024447,
+            "outsideWorkerMs": 0.18800000000010186
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.02170000000114669,
+            "workerMs": 617.0001999999986,
+            "roundTripMs": 822.4408000000003,
+            "outsideWorkerMs": 205.41890000000058
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010000000000218279,
+            "workerMs": 0.1268000000000029,
+            "roundTripMs": 79.70830000000024,
+            "outsideWorkerMs": 79.57150000000001
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010700000000724685,
+            "workerMs": 74.86119999999937,
+            "roundTripMs": 75.88770000000113,
+            "outsideWorkerMs": 1.015800000001036
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008299999999508145,
+            "workerMs": 0.1859999999996944,
+            "roundTripMs": 0.3783999999996013,
+            "outsideWorkerMs": 0.18410000000039872
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006100000000515138,
+            "workerMs": 44.338700000000244,
+            "roundTripMs": 44.63260000000082,
+            "outsideWorkerMs": 0.2878000000000611
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009400000000823638,
+            "workerMs": 0.011200000000826549,
+            "roundTripMs": 0.15979999999944994,
+            "outsideWorkerMs": 0.13919999999779975
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006199999999807915,
+            "workerMs": 37.17120000000068,
+            "roundTripMs": 37.66979999999967,
+            "outsideWorkerMs": 0.49239999999917927
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006099999998696148,
+            "workerMs": 0.013100000000122236,
+            "roundTripMs": 0.1437999999998283,
+            "outsideWorkerMs": 0.1246000000010099
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009600000001228182,
+            "workerMs": 35.90819999999985,
+            "roundTripMs": 36.23190000000068,
+            "outsideWorkerMs": 0.31409999999959837
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009000000000014552,
+            "workerMs": 0.01630000000113796,
+            "roundTripMs": 0.24089999999887368,
+            "outsideWorkerMs": 0.21559999999772117
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0059999999994033715,
+            "workerMs": 38.28469999999834,
+            "roundTripMs": 38.69030000000021,
+            "outsideWorkerMs": 0.3996000000024651
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006900000000314321,
+            "workerMs": 0.05409999999938009,
+            "roundTripMs": 0.21519999999873107,
+            "outsideWorkerMs": 0.15419999999903666
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005799999998998828,
+            "workerMs": 36.77649999999994,
+            "roundTripMs": 37.0496000000021,
+            "outsideWorkerMs": 0.2673000000031607
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010699999998905696,
+            "workerMs": 0.028500000000349246,
+            "roundTripMs": 2.839399999997113,
+            "outsideWorkerMs": 2.800199999997858
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009600000001228182,
+            "workerMs": 38.62840000000142,
+            "roundTripMs": 39.070599999999104,
+            "outsideWorkerMs": 0.43259999999645515
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010700000002543675,
+            "workerMs": 0.019500000002153683,
+            "roundTripMs": 0.2080000000023574,
+            "outsideWorkerMs": 0.17779999999766005
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007900000000518048,
+            "workerMs": 41.682199999999284,
+            "roundTripMs": 42.071200000002136,
+            "outsideWorkerMs": 0.3811000000023341
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.01510000000052969,
+            "workerMs": 0.02449999999953434,
+            "roundTripMs": 0.47330000000147265,
+            "outsideWorkerMs": 0.4337000000014086
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010200000000622822,
+            "workerMs": 49.60580000000118,
+            "roundTripMs": 49.975500000000466,
+            "outsideWorkerMs": 0.3594999999986612
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.01869999999689753,
+            "workerMs": 0.029099999999743886,
+            "roundTripMs": 0.27229999999690335,
+            "outsideWorkerMs": 0.22450000000026193
+          },
+          {
+            "worker": 65,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010399999999208376,
+            "workerMs": 586.6376999999993,
+            "roundTripMs": 794.533199999998,
+            "outsideWorkerMs": 207.8850999999995
+          },
+          {
+            "worker": 65,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.017100000000937143,
+            "workerMs": 0.05949999999938882,
+            "roundTripMs": 76.60429999999906,
+            "outsideWorkerMs": 76.52769999999873
+          },
+          {
+            "worker": 65,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005099999998492422,
+            "workerMs": 54.17870000000039,
+            "roundTripMs": 89.33770000000004,
+            "outsideWorkerMs": 35.15390000000116
+          },
+          {
+            "worker": 65,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006299999997281702,
+            "workerMs": 0.2746999999981199,
+            "roundTripMs": 0.5357999999978347,
+            "outsideWorkerMs": 0.2548000000024331
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0067000000017287675,
+            "workerMs": 35.15459999999803,
+            "roundTripMs": 35.51710000000094,
+            "outsideWorkerMs": 0.3558000000011816
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008799999999610009,
+            "workerMs": 0.019500000002153683,
+            "roundTripMs": 0.3356999999996333,
+            "outsideWorkerMs": 0.3073999999978696
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007100000002537854,
+            "workerMs": 39.51919999999882,
+            "roundTripMs": 39.88050000000294,
+            "outsideWorkerMs": 0.35420000000158325
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006499999999505235,
+            "workerMs": 0.03739999999743304,
+            "roundTripMs": 0.41820000000006985,
+            "outsideWorkerMs": 0.37430000000313157
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008799999999610009,
+            "workerMs": 35.85679999999775,
+            "roundTripMs": 36.237199999999575,
+            "outsideWorkerMs": 0.3716000000022177
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011599999997997656,
+            "workerMs": 0.02530000000115251,
+            "roundTripMs": 3.7841000000007625,
+            "outsideWorkerMs": 3.7472000000016124
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00999999999839929,
+            "workerMs": 36.34389999999985,
+            "roundTripMs": 37.48630000000048,
+            "outsideWorkerMs": 1.1324000000022352
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007700000001932494,
+            "workerMs": 0.01540000000022701,
+            "roundTripMs": 0.4377999999996973,
+            "outsideWorkerMs": 0.4146999999975378
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010200000000622822,
+            "workerMs": 36.13170000000173,
+            "roundTripMs": 36.4359000000004,
+            "outsideWorkerMs": 0.29399999999805004
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.014299999998911517,
+            "workerMs": 0.075700000001234,
+            "roundTripMs": 1.6244000000006054,
+            "outsideWorkerMs": 1.5344000000004598
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010500000000320142,
+            "workerMs": 44.45369999999821,
+            "roundTripMs": 44.83680000000095,
+            "outsideWorkerMs": 0.37260000000242144
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010300000001734588,
+            "workerMs": 0.02449999999953434,
+            "roundTripMs": 1.0457000000023982,
+            "outsideWorkerMs": 1.0109000000011292
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009399999999004649,
+            "workerMs": 44.247300000002724,
+            "roundTripMs": 44.638199999997596,
+            "outsideWorkerMs": 0.38149999999586726
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.01420000000143773,
+            "workerMs": 0.02289999999993597,
+            "roundTripMs": 0.23150000000168802,
+            "outsideWorkerMs": 0.19440000000031432
+          },
+          {
+            "worker": 85,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010699999998905696,
+            "workerMs": 590.2158999999992,
+            "roundTripMs": 803.8276000000005,
+            "outsideWorkerMs": 213.6010000000024
+          },
+          {
+            "worker": 85,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.01450000000113505,
+            "workerMs": 0.05730000000039581,
+            "roundTripMs": 83.68610000000263,
+            "outsideWorkerMs": 83.6143000000011
+          },
+          {
+            "worker": 85,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0075000000033469405,
+            "workerMs": 67.01880000000165,
+            "roundTripMs": 67.97850000000108,
+            "outsideWorkerMs": 0.9521999999960826
+          },
+          {
+            "worker": 85,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009700000002339948,
+            "workerMs": 0.30059999999866704,
+            "roundTripMs": 0.5313999999998487,
+            "outsideWorkerMs": 0.22109999999884167
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.01989999999932479,
+            "workerMs": 42.23519999999917,
+            "roundTripMs": 42.69739999999729,
+            "outsideWorkerMs": 0.4422999999987951
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007199999996373663,
+            "workerMs": 0.01540000000022701,
+            "roundTripMs": 0.27629999999771826,
+            "outsideWorkerMs": 0.2537000000011176
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008000000001629815,
+            "workerMs": 37.620999999999185,
+            "roundTripMs": 37.90729999999894,
+            "outsideWorkerMs": 0.2782999999981257
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009099999999307329,
+            "workerMs": 0.01629999999931897,
+            "roundTripMs": 0.19840000000112923,
+            "outsideWorkerMs": 0.17300000000250293
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008300000001327135,
+            "workerMs": 38.70999999999913,
+            "roundTripMs": 39.058100000002014,
+            "outsideWorkerMs": 0.33980000000155997
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006000000001222361,
+            "workerMs": 0.01510000000052969,
+            "roundTripMs": 0.1555000000007567,
+            "outsideWorkerMs": 0.13439999999900465
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008600000001024455,
+            "workerMs": 40.28060000000187,
+            "roundTripMs": 40.63390000000072,
+            "outsideWorkerMs": 0.34469999999782885
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009399999999004649,
+            "workerMs": 0.01449999999749707,
+            "roundTripMs": 0.30609999999796855,
+            "outsideWorkerMs": 0.28220000000146683
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008200000000215368,
+            "workerMs": 41.3166999999994,
+            "roundTripMs": 41.75669999999809,
+            "outsideWorkerMs": 0.43179999999847496
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.01329999999870779,
+            "workerMs": 0.024899999996705446,
+            "roundTripMs": 0.25069999999686843,
+            "outsideWorkerMs": 0.2125000000014552
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008700000002136221,
+            "workerMs": 33.529600000001665,
+            "roundTripMs": 33.89749999999913,
+            "outsideWorkerMs": 0.3591999999953259
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010399999999208376,
+            "workerMs": 0.027099999999336433,
+            "roundTripMs": 2.991599999997561,
+            "outsideWorkerMs": 2.9540999999990163
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009000000001833541,
+            "workerMs": 527.2908000000025,
+            "roundTripMs": 547.536500000002,
+            "outsideWorkerMs": 20.236699999997654
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0072000000000116415,
+            "workerMs": 0.08339999999952852,
+            "roundTripMs": 70.99359999999797,
+            "outsideWorkerMs": 70.90299999999843
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005300000000715954,
+            "workerMs": 64.08079999999973,
+            "roundTripMs": 71.78099999999904,
+            "outsideWorkerMs": 7.694899999998597
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007999999997991836,
+            "workerMs": 0.32129999999961,
+            "roundTripMs": 0.5386999999973341,
+            "outsideWorkerMs": 0.20939999999973224
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009099999999307329,
+            "workerMs": 32.33329999999842,
+            "roundTripMs": 32.632299999997485,
+            "outsideWorkerMs": 0.28989999999976135
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009600000001228182,
+            "workerMs": 0.018500000001949957,
+            "roundTripMs": 0.19840000000112923,
+            "outsideWorkerMs": 0.1702999999979511
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009500000000116415,
+            "workerMs": 37.431000000000495,
+            "roundTripMs": 37.78410000000076,
+            "outsideWorkerMs": 0.34360000000015134
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009000000001833541,
+            "workerMs": 0.02019999999902211,
+            "roundTripMs": 0.19980000000214204,
+            "outsideWorkerMs": 0.1706000000012864
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0072000000000116415,
+            "workerMs": 37.169200000000274,
+            "roundTripMs": 37.65799999999945,
+            "outsideWorkerMs": 0.4815999999991618
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007599999997182749,
+            "workerMs": 0.01629999999931897,
+            "roundTripMs": 0.17559999999866704,
+            "outsideWorkerMs": 0.15170000000216532
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009299999997892883,
+            "workerMs": 30.722999999998137,
+            "roundTripMs": 31.034999999999854,
+            "outsideWorkerMs": 0.30270000000382424
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009200000000419095,
+            "workerMs": 0.016800000001239823,
+            "roundTripMs": 0.18539999999848078,
+            "outsideWorkerMs": 0.15939999999682186
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.02959999999802676,
+            "workerMs": 26.989699999998265,
+            "roundTripMs": 27.403800000000047,
+            "outsideWorkerMs": 0.3845000000037544
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010099999999511056,
+            "workerMs": 0.02179999999862048,
+            "roundTripMs": 0.1771999999982654,
+            "outsideWorkerMs": 0.14530000000013388
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007499999999708962,
+            "workerMs": 35.763599999998405,
+            "roundTripMs": 36.1375999999982,
+            "outsideWorkerMs": 0.3665000000000873
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.015799999997398118,
+            "workerMs": 0.04200000000128057,
+            "roundTripMs": 3.5285000000003492,
+            "outsideWorkerMs": 3.4707000000016706
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006800000002840534,
+            "workerMs": 37.226400000003196,
+            "roundTripMs": 37.52520000000004,
+            "outsideWorkerMs": 0.2919999999940046
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008099999999103602,
+            "workerMs": 0.01900000000023283,
+            "roundTripMs": 0.17799999999988358,
+            "outsideWorkerMs": 0.15090000000054715
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007600000000820728,
+            "workerMs": 450.4105000000018,
+            "roundTripMs": 475.8179000000018,
+            "outsideWorkerMs": 25.39979999999923
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005499999999301508,
+            "workerMs": 0.021600000000034925,
+            "roundTripMs": 74.48959999999715,
+            "outsideWorkerMs": 74.46249999999782
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0059000000001105946,
+            "workerMs": 65.34929999999804,
+            "roundTripMs": 68.26369999999952,
+            "outsideWorkerMs": 2.908500000001368
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0067000000017287675,
+            "workerMs": 0.06859999999869615,
+            "roundTripMs": 2.5702000000019325,
+            "outsideWorkerMs": 2.4949000000015076
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.013399999999819556,
+            "workerMs": 33.50350000000253,
+            "roundTripMs": 33.829499999999825,
+            "outsideWorkerMs": 0.3125999999974738
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009099999999307329,
+            "workerMs": 0.023799999999027932,
+            "roundTripMs": 0.18319999999948777,
+            "outsideWorkerMs": 0.1503000000011525
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.02990000000136206,
+            "workerMs": 40.5637999999999,
+            "roundTripMs": 40.96640000000116,
+            "outsideWorkerMs": 0.3726999999998952
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008799999999610009,
+            "workerMs": 0.017400000000634464,
+            "roundTripMs": 0.1790000000000873,
+            "outsideWorkerMs": 0.15279999999984284
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006900000000314321,
+            "workerMs": 35.78859999999986,
+            "roundTripMs": 36.079900000000634,
+            "outsideWorkerMs": 0.28440000000045984
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009400000002642628,
+            "workerMs": 0.022700000001350418,
+            "roundTripMs": 0.23910000000250875,
+            "outsideWorkerMs": 0.2069999999985157
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009200000000419095,
+            "workerMs": 35.35979999999836,
+            "roundTripMs": 35.69410000000062,
+            "outsideWorkerMs": 0.32510000000183936
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007799999999406282,
+            "workerMs": 0.018200000002252636,
+            "roundTripMs": 0.14879999999902793,
+            "outsideWorkerMs": 0.12279999999736901
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007099999998899875,
+            "workerMs": 34.91979999999967,
+            "roundTripMs": 35.27360000000044,
+            "outsideWorkerMs": 0.3467000000018743
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011599999997997656,
+            "workerMs": 0.03110000000015134,
+            "roundTripMs": 3.1068000000013853,
+            "outsideWorkerMs": 3.0641000000032363
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008499999999912689,
+            "workerMs": 45.69870000000083,
+            "roundTripMs": 46.098699999998644,
+            "outsideWorkerMs": 0.3914999999979045
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008700000002136221,
+            "workerMs": 0.01989999999932479,
+            "roundTripMs": 0.2595000000001164,
+            "outsideWorkerMs": 0.2308999999986554
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011899999997694977,
+            "workerMs": 510.9285999999993,
+            "roundTripMs": 530.3548999999985,
+            "outsideWorkerMs": 19.41440000000148
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.018000000000029104,
+            "workerMs": 0.009899999997287523,
+            "roundTripMs": 74.33759999999893,
+            "outsideWorkerMs": 74.30970000000161
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006499999999505235,
+            "workerMs": 59.365899999997055,
+            "roundTripMs": 71.50400000000081,
+            "outsideWorkerMs": 12.131600000004255
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.014300000002549496,
+            "workerMs": 0.04219999999986612,
+            "roundTripMs": 0.25900000000183354,
+            "outsideWorkerMs": 0.20249999999941792
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.012600000001839362,
+            "workerMs": 37.44270000000324,
+            "roundTripMs": 37.772799999998824,
+            "outsideWorkerMs": 0.3174999999937427
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009299999997892883,
+            "workerMs": 0.03280000000086147,
+            "roundTripMs": 3.5062999999972817,
+            "outsideWorkerMs": 3.4641999999985273
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006100000002334127,
+            "workerMs": 36.30660000000353,
+            "roundTripMs": 36.583700000002864,
+            "outsideWorkerMs": 0.2709999999970023
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0067000000017287675,
+            "workerMs": 0.01779999999780557,
+            "roundTripMs": 0.20100000000093132,
+            "outsideWorkerMs": 0.17650000000139698
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006599999996979022,
+            "workerMs": 32.63440000000264,
+            "roundTripMs": 32.91859999999724,
+            "outsideWorkerMs": 0.2775999999976193
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008000000001629815,
+            "workerMs": 0.028599999997823033,
+            "roundTripMs": 0.19039999999949941,
+            "outsideWorkerMs": 0.15380000000004657
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008499999999912689,
+            "workerMs": 38.69470000000001,
+            "roundTripMs": 39.182300000000396,
+            "outsideWorkerMs": 0.4791000000004715
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.026399999998830026,
+            "workerMs": 0.0301999999974214,
+            "roundTripMs": 0.2514000000010128,
+            "outsideWorkerMs": 0.1948000000047614
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009500000000116415,
+            "workerMs": 28.56760000000213,
+            "roundTripMs": 28.924699999999575,
+            "outsideWorkerMs": 0.34759999999732827
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009399999999004649,
+            "workerMs": 0.027999999998428393,
+            "roundTripMs": 2.5296000000016647,
+            "outsideWorkerMs": 2.4922000000042317
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011500000000523869,
+            "workerMs": 35.21849999999904,
+            "roundTripMs": 35.747699999999895,
+            "outsideWorkerMs": 0.5177000000003318
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007499999999708962,
+            "workerMs": 0.029200000000855653,
+            "roundTripMs": 0.19329999999899883,
+            "outsideWorkerMs": 0.15659999999843421
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010300000001734588,
+            "workerMs": 39.90699999999924,
+            "roundTripMs": 40.38460000000123,
+            "outsideWorkerMs": 0.4673000000002503
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.015800000001036096,
+            "workerMs": 0.04070000000137952,
+            "roundTripMs": 3.7070999999996275,
+            "outsideWorkerMs": 3.650599999997212
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010399999999208376,
+            "workerMs": 486.21800000000076,
+            "roundTripMs": 514.0360000000001,
+            "outsideWorkerMs": 27.807600000000093
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006600000000617001,
+            "workerMs": 0.10740000000077998,
+            "roundTripMs": 67.9974000000002,
+            "outsideWorkerMs": 67.8833999999988
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006799999999202555,
+            "workerMs": 75.73569999999745,
+            "roundTripMs": 76.51000000000204,
+            "outsideWorkerMs": 0.7675000000053842
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006600000000617001,
+            "workerMs": 0.03979999999864958,
+            "roundTripMs": 0.16740000000208966,
+            "outsideWorkerMs": 0.12100000000282307
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009200000000419095,
+            "workerMs": 38.29729999999836,
+            "roundTripMs": 38.63839999999982,
+            "outsideWorkerMs": 0.3319000000010419
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009500000000116415,
+            "workerMs": 0.02050000000235741,
+            "roundTripMs": 0.17969999999695574,
+            "outsideWorkerMs": 0.1496999999944819
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006600000000617001,
+            "workerMs": 37.31420000000071,
+            "roundTripMs": 37.59850000000006,
+            "outsideWorkerMs": 0.2776999999987311
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010500000000320142,
+            "workerMs": 0.016100000000733417,
+            "roundTripMs": 0.2124999999978172,
+            "outsideWorkerMs": 0.18589999999676365
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005500000002939487,
+            "workerMs": 33.76039999999921,
+            "roundTripMs": 34.1069000000025,
+            "outsideWorkerMs": 0.34100000000034925
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007399999998597195,
+            "workerMs": 0.02260000000023865,
+            "roundTripMs": 0.245599999998376,
+            "outsideWorkerMs": 0.21559999999954016
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009600000001228182,
+            "workerMs": 35.70539999999892,
+            "roundTripMs": 36.00619999999981,
+            "outsideWorkerMs": 0.2911999999996624
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009599999997590203,
+            "workerMs": 0.026099999999132706,
+            "roundTripMs": 0.20489999999699648,
+            "outsideWorkerMs": 0.16920000000027358
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010800000000017462,
+            "workerMs": 28.19850000000224,
+            "roundTripMs": 28.530899999997928,
+            "outsideWorkerMs": 0.32159999999566935
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006400000002031447,
+            "workerMs": 0.017600000002857996,
+            "roundTripMs": 0.13470000000233995,
+            "outsideWorkerMs": 0.1106999999974505
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007099999998899875,
+            "workerMs": 50.588800000001356,
+            "roundTripMs": 51.07579999999871,
+            "outsideWorkerMs": 0.4798999999984517
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.01420000000143773,
+            "workerMs": 0.0507999999972526,
+            "roundTripMs": 2.730199999998149,
+            "outsideWorkerMs": 2.6651999999994587
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006699999998090789,
+            "workerMs": 33.505700000001525,
+            "roundTripMs": 33.857499999998254,
+            "outsideWorkerMs": 0.34509999999863794
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007799999999406282,
+            "workerMs": 0.017600000002857996,
+            "roundTripMs": 0.7681000000011409,
+            "outsideWorkerMs": 0.7426999999988766
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010399999999208376,
+            "workerMs": 474.3637999999992,
+            "roundTripMs": 510.438299999998,
+            "outsideWorkerMs": 36.0640999999996
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.012200000001030276,
+            "workerMs": 0.0650999999998021,
+            "roundTripMs": 74.70669999999882,
+            "outsideWorkerMs": 74.62939999999799
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007999999997991836,
+            "workerMs": 68.39789999999994,
+            "roundTripMs": 70.52649999999994,
+            "outsideWorkerMs": 2.120600000002014
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007000000001426088,
+            "workerMs": 0.24439999999958673,
+            "roundTripMs": 0.36200000000098953,
+            "outsideWorkerMs": 0.11059999999997672
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008499999999912689,
+            "workerMs": 32.070700000000215,
+            "roundTripMs": 32.5154999999977,
+            "outsideWorkerMs": 0.43629999999757274
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009300000001530861,
+            "workerMs": 0.026499999999941792,
+            "roundTripMs": 0.19110000000000582,
+            "outsideWorkerMs": 0.15529999999853317
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006400000002031447,
+            "workerMs": 32.50249999999869,
+            "roundTripMs": 32.80919999999969,
+            "outsideWorkerMs": 0.3002999999989697
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006199999999807915,
+            "workerMs": 0.018800000001647277,
+            "roundTripMs": 0.14069999999992433,
+            "outsideWorkerMs": 0.11569999999846914
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00819999999657739,
+            "workerMs": 32.647100000001956,
+            "roundTripMs": 33.008099999999104,
+            "outsideWorkerMs": 0.35280000000057044
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008300000001327135,
+            "workerMs": 0.03280000000086147,
+            "roundTripMs": 2.5221000000019558,
+            "outsideWorkerMs": 2.480999999999767
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009799999999813735,
+            "workerMs": 30.5086999999985,
+            "roundTripMs": 30.83339999999953,
+            "outsideWorkerMs": 0.31490000000121654
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0072000000000116415,
+            "workerMs": 0.01989999999932479,
+            "roundTripMs": 0.151400000002468,
+            "outsideWorkerMs": 0.12430000000313157
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0067000000017287675,
+            "workerMs": 30.865200000000186,
+            "roundTripMs": 31.212100000000646,
+            "outsideWorkerMs": 0.3401999999987311
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009500000000116415,
+            "workerMs": 0.036400000000867294,
+            "roundTripMs": 3.041000000001077,
+            "outsideWorkerMs": 2.995100000000093
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008200000000215368,
+            "workerMs": 27.91779999999926,
+            "roundTripMs": 28.23960000000079,
+            "outsideWorkerMs": 0.3136000000013155
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008799999999610009,
+            "workerMs": 0.019200000002456363,
+            "roundTripMs": 0.15829999999914435,
+            "outsideWorkerMs": 0.13029999999707798
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011099999999714782,
+            "workerMs": 447.89730000000054,
+            "roundTripMs": 459.40020000000004,
+            "outsideWorkerMs": 11.491799999999785
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010300000001734588,
+            "workerMs": 0.09439999999813153,
+            "roundTripMs": 68.8077000000012,
+            "outsideWorkerMs": 68.70300000000134
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005099999998492422,
+            "workerMs": 61.126000000000204,
+            "roundTripMs": 61.806000000000495,
+            "outsideWorkerMs": 0.6749000000017986
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011699999999109423,
+            "workerMs": 0.27369999999791617,
+            "roundTripMs": 2.1032000000013795,
+            "outsideWorkerMs": 1.817800000004354
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006400000002031447,
+            "workerMs": 32.01800000000003,
+            "roundTripMs": 32.3637000000017,
+            "outsideWorkerMs": 0.3392999999996391
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008200000000215368,
+            "workerMs": 0.02750000000014552,
+            "roundTripMs": 0.24750000000130967,
+            "outsideWorkerMs": 0.21180000000094878
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008699999998498242,
+            "workerMs": 33.66489999999976,
+            "roundTripMs": 33.99250000000029,
+            "outsideWorkerMs": 0.31890000000203145
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0063999999983934686,
+            "workerMs": 0.020099999997910345,
+            "roundTripMs": 0.1614000000008673,
+            "outsideWorkerMs": 0.13490000000456348
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008300000001327135,
+            "workerMs": 31.959399999999732,
+            "roundTripMs": 32.35540000000037,
+            "outsideWorkerMs": 0.38769999999931315
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007499999999708962,
+            "workerMs": 0.029500000000552973,
+            "roundTripMs": 0.19050000000061118,
+            "outsideWorkerMs": 0.15350000000034925
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009700000002339948,
+            "workerMs": 33.071499999998196,
+            "roundTripMs": 33.45460000000094,
+            "outsideWorkerMs": 0.37340000000040163
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008799999999610009,
+            "workerMs": 0.022100000001955777,
+            "roundTripMs": 0.1716999999989639,
+            "outsideWorkerMs": 0.14079999999739812
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008099999999103602,
+            "workerMs": 27.394900000002963,
+            "roundTripMs": 27.755199999999604,
+            "outsideWorkerMs": 0.3521999999975378
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009799999999813735,
+            "workerMs": 0.033400000000256114,
+            "roundTripMs": 1.7582000000002154,
+            "outsideWorkerMs": 1.7150000000001455
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008699999998498242,
+            "workerMs": 454.07800000000134,
+            "roundTripMs": 525.2477999999974,
+            "outsideWorkerMs": 71.16109999999753
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007900000000518048,
+            "workerMs": 0.0724000000009255,
+            "roundTripMs": 2.164600000000064,
+            "outsideWorkerMs": 2.0842999999986205
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0033000000003085006,
+            "workerMs": 60.44840000000113,
+            "roundTripMs": 72.04650000000038,
+            "outsideWorkerMs": 11.59479999999894
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005199999999604188,
+            "workerMs": 0.2566999999980908,
+            "roundTripMs": 0.5191999999988184,
+            "outsideWorkerMs": 0.2573000000011234
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005600000000413274,
+            "workerMs": 32.25640000000203,
+            "roundTripMs": 32.553899999998976,
+            "outsideWorkerMs": 0.2918999999965308
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006599999996979022,
+            "workerMs": 0.03139999999984866,
+            "roundTripMs": 0.16939999999885913,
+            "outsideWorkerMs": 0.13140000000203145
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008700000002136221,
+            "workerMs": 32.91790000000037,
+            "roundTripMs": 33.30580000000191,
+            "outsideWorkerMs": 0.37919999999940046
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009100000002945308,
+            "workerMs": 0.036399999997229315,
+            "roundTripMs": 2.6172000000005937,
+            "outsideWorkerMs": 2.571700000000419
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007700000001932494,
+            "workerMs": 34.07839999999851,
+            "roundTripMs": 34.406199999997625,
+            "outsideWorkerMs": 0.32009999999718275
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0063999999983934686,
+            "workerMs": 0.021500000002561137,
+            "roundTripMs": 0.1687999999994645,
+            "outsideWorkerMs": 0.14089999999850988
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0063999999983934686,
+            "workerMs": 33.38590000000113,
+            "roundTripMs": 33.818700000003446,
+            "outsideWorkerMs": 0.4264000000039232
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009799999999813735,
+            "workerMs": 0.021000000000640284,
+            "roundTripMs": 0.22959999999875436,
+            "outsideWorkerMs": 0.19879999999830034
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010899999993853271,
+            "workerMs": 31.767899999998917,
+            "roundTripMs": 32.10809999999765,
+            "outsideWorkerMs": 0.3293000000048778
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008000000001629815,
+            "workerMs": 0.023099999998521525,
+            "roundTripMs": 0.16440000000147847,
+            "outsideWorkerMs": 0.13330000000132713
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008200000003853347,
+            "workerMs": 33.839599999999336,
+            "roundTripMs": 34.20980000000418,
+            "outsideWorkerMs": 0.36200000000098953
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008500000003550667,
+            "workerMs": 0.03879999999480788,
+            "roundTripMs": 1.8793000000005122,
+            "outsideWorkerMs": 1.8320000000021537
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.015399999996589031,
+            "workerMs": 432.4757000000027,
+            "roundTripMs": 433.3724999999977,
+            "outsideWorkerMs": 0.8813999999983935
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008600000001024455,
+            "workerMs": 0.00480000000243308,
+            "roundTripMs": 2.613499999999476,
+            "outsideWorkerMs": 2.6000999999960186
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010799999996379483,
+            "workerMs": 37.40649999999732,
+            "roundTripMs": 37.74239999999554,
+            "outsideWorkerMs": 0.32510000000183936
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011100000003352761,
+            "workerMs": 0.02530000000115251,
+            "roundTripMs": 0.1871000000028289,
+            "outsideWorkerMs": 0.15069999999832362
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00909999999566935,
+            "workerMs": 84.03270000000339,
+            "roundTripMs": 111.4513999999981,
+            "outsideWorkerMs": 27.409599999999045
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005399999994551763,
+            "workerMs": 0.2474000000001979,
+            "roundTripMs": 77.85669999999664,
+            "outsideWorkerMs": 77.60390000000189
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006700000005366746,
+            "workerMs": 32.67109999999957,
+            "roundTripMs": 33.00430000000051,
+            "outsideWorkerMs": 0.3264999999955762
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008200000003853347,
+            "workerMs": 0.019400000004679896,
+            "roundTripMs": 0.1642000000065309,
+            "outsideWorkerMs": 0.13659999999799766
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007599999997182749,
+            "workerMs": 33.349499999996624,
+            "roundTripMs": 33.646099999998114,
+            "outsideWorkerMs": 0.28900000000430737
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007499999999708962,
+            "workerMs": 0.023300000000745058,
+            "roundTripMs": 0.27410000000236323,
+            "outsideWorkerMs": 0.2433000000019092
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006900000000314321,
+            "workerMs": 35.44999999999709,
+            "roundTripMs": 35.781300000002375,
+            "outsideWorkerMs": 0.32440000000497093
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008000000001629815,
+            "workerMs": 0.046399999999266583,
+            "roundTripMs": 2.2053999999989173,
+            "outsideWorkerMs": 2.150999999998021
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009299999997892883,
+            "workerMs": 39.95299999999406,
+            "roundTripMs": 50.595299999993586,
+            "outsideWorkerMs": 10.63300000000163
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007100000002537854,
+            "workerMs": 0.023300000000745058,
+            "roundTripMs": 0.2014000000053784,
+            "outsideWorkerMs": 0.17100000000209548
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007599999997182749,
+            "workerMs": 38.33879999999772,
+            "roundTripMs": 38.7100999999966,
+            "outsideWorkerMs": 0.36370000000169966
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00969999999506399,
+            "workerMs": 0.02599999999802094,
+            "roundTripMs": 2.5530999999973574,
+            "outsideWorkerMs": 2.5174000000042724
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00939999999536667,
+            "workerMs": 33.02189999999973,
+            "roundTripMs": 33.41769999999815,
+            "outsideWorkerMs": 0.3864000000030501
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008699999998498242,
+            "workerMs": 0.024900000003981404,
+            "roundTripMs": 0.16649999999935972,
+            "outsideWorkerMs": 0.13289999999688007
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010600000001431908,
+            "workerMs": 38.67059999999765,
+            "roundTripMs": 39.06910000000062,
+            "outsideWorkerMs": 0.3879000000015367
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010100000006787013,
+            "workerMs": 0.1088000000017928,
+            "roundTripMs": 2.7783000000054017,
+            "outsideWorkerMs": 2.659399999996822
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011200000000826549,
+            "workerMs": 506.9956999999995,
+            "roundTripMs": 555.9400999999998,
+            "outsideWorkerMs": 48.93319999999949
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010399999999208376,
+            "workerMs": 0.07630000000062864,
+            "roundTripMs": 2.2920999999987544,
+            "outsideWorkerMs": 2.2053999999989173
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0034999999988940544,
+            "workerMs": 67.53590000000258,
+            "roundTripMs": 68.72310000000289,
+            "outsideWorkerMs": 1.1837000000014086
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.011400000003050081,
+            "workerMs": 0.07220000000233995,
+            "roundTripMs": 0.25209999999788124,
+            "outsideWorkerMs": 0.1684999999924912
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009400000002642628,
+            "workerMs": 40.73460000000341,
+            "roundTripMs": 41.12700000000041,
+            "outsideWorkerMs": 0.38299999999435386
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0072000000000116415,
+            "workerMs": 0.023099999998521525,
+            "roundTripMs": 0.16670000000158325,
+            "outsideWorkerMs": 0.13640000000305008
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006600000000617001,
+            "workerMs": 35.72759999999835,
+            "roundTripMs": 35.99569999999949,
+            "outsideWorkerMs": 0.26150000000052387
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008999999998195563,
+            "workerMs": 0.03319999999803258,
+            "roundTripMs": 0.17259999999805586,
+            "outsideWorkerMs": 0.13040000000182772
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00930000000516884,
+            "workerMs": 31.850500000000466,
+            "roundTripMs": 32.17550000000483,
+            "outsideWorkerMs": 0.31569999999919673
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007700000001932494,
+            "workerMs": 0.026799999999639113,
+            "roundTripMs": 0.18510000000242144,
+            "outsideWorkerMs": 0.15060000000084983
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007900000004156027,
+            "workerMs": 37.93280000000232,
+            "roundTripMs": 38.343800000002375,
+            "outsideWorkerMs": 0.4030999999959022
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00999999999476131,
+            "workerMs": 0.039100000001781154,
+            "roundTripMs": 2.818299999998999,
+            "outsideWorkerMs": 2.7692000000024564
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009899999997287523,
+            "workerMs": 40.009500000000116,
+            "roundTripMs": 40.3492999999944,
+            "outsideWorkerMs": 0.3298999999969965
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007799999999406282,
+            "workerMs": 0.0437000000019907,
+            "roundTripMs": 0.20630000000528526,
+            "outsideWorkerMs": 0.15480000000388827
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.010399999999208376,
+            "workerMs": 446.2774999999965,
+            "roundTripMs": 511.71809999999823,
+            "outsideWorkerMs": 65.43020000000251
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008699999998498242,
+            "workerMs": 0.07939999999507563,
+            "roundTripMs": 73.34580000000278,
+            "outsideWorkerMs": 73.25770000000921
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00930000000516884,
+            "workerMs": 69.50219999999536,
+            "roundTripMs": 70.49599999999919,
+            "outsideWorkerMs": 0.9844999999986612
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008099999999103602,
+            "workerMs": 0.23559999999997672,
+            "roundTripMs": 0.4213000000017928,
+            "outsideWorkerMs": 0.17760000000271248
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008599999993748497,
+            "workerMs": 29.245300000002317,
+            "roundTripMs": 29.579899999996996,
+            "outsideWorkerMs": 0.3260000000009313
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00819999999657739,
+            "workerMs": 0.02239999999437714,
+            "roundTripMs": 0.21509999999398133,
+            "outsideWorkerMs": 0.1845000000030268
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008999999998195563,
+            "workerMs": 38.35109999999986,
+            "roundTripMs": 38.82860000000073,
+            "outsideWorkerMs": 0.46850000000267755
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008399999998800922,
+            "workerMs": 0.04129999999713618,
+            "roundTripMs": 0.25899999999819556,
+            "outsideWorkerMs": 0.20930000000225846
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006999999997788109,
+            "workerMs": 36.32070000000385,
+            "roundTripMs": 36.70019999999931,
+            "outsideWorkerMs": 0.3724999999976717
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009200000000419095,
+            "workerMs": 0.031000000002677552,
+            "roundTripMs": 0.18879999999626307,
+            "outsideWorkerMs": 0.14859999999316642
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006499999995867256,
+            "workerMs": 36.44890000000305,
+            "roundTripMs": 36.79649999999674,
+            "outsideWorkerMs": 0.34109999999782303
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008500000003550667,
+            "workerMs": 0.02239999999437714,
+            "roundTripMs": 0.7472000000052503,
+            "outsideWorkerMs": 0.7163000000073225
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0072000000000116415,
+            "workerMs": 32.372300000002724,
+            "roundTripMs": 32.69389999999839,
+            "outsideWorkerMs": 0.3143999999956577
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007599999997182749,
+            "workerMs": 0.04439999999885913,
+            "roundTripMs": 3.386899999997695,
+            "outsideWorkerMs": 3.334900000001653
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0063999999983934686,
+            "workerMs": 33.28729999999632,
+            "roundTripMs": 33.688499999996566,
+            "outsideWorkerMs": 0.394800000001851
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.009500000000116415,
+            "workerMs": 0.06410000000323635,
+            "roundTripMs": 0.2423999999955413,
+            "outsideWorkerMs": 0.16879999999218853
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008999999998195563,
+            "workerMs": 32.653400000002875,
+            "roundTripMs": 33.021999999997206,
+            "outsideWorkerMs": 0.359599999996135
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.012000000002444722,
+            "workerMs": 0.1106999999974505,
+            "roundTripMs": 3.92790000000241,
+            "outsideWorkerMs": 3.8052000000025146
+          },
+          {
+            "worker": 43,
+            "operation": "init",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0102000000042608,
+            "workerMs": 435.5208999999959,
+            "roundTripMs": 442.01630000000296,
+            "outsideWorkerMs": 6.485200000002806
+          },
+          {
+            "worker": 43,
+            "operation": "inspect",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.015200000001641456,
+            "workerMs": 0.007799999999406282,
+            "roundTripMs": 75.97559999999794,
+            "outsideWorkerMs": 75.95259999999689
+          },
+          {
+            "worker": 43,
+            "operation": "snapshot",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008399999998800922,
+            "workerMs": 52.9204000000027,
+            "roundTripMs": 67.21340000000055,
+            "outsideWorkerMs": 14.284599999999045
+          },
+          {
+            "worker": 43,
+            "operation": "dispose",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.005499999999301508,
+            "workerMs": 0.2583999999988009,
+            "roundTripMs": 0.47780000000057044,
+            "outsideWorkerMs": 0.213900000002468
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007599999997182749,
+            "workerMs": 35.2387000000017,
+            "roundTripMs": 35.60080000000016,
+            "outsideWorkerMs": 0.35450000000128057
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.0070000000050640665,
+            "workerMs": 0.02380000000266591,
+            "roundTripMs": 0.14210000000457512,
+            "outsideWorkerMs": 0.11129999999684514
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.008600000001024455,
+            "workerMs": 35.63320000000385,
+            "roundTripMs": 35.95390000000043,
+            "outsideWorkerMs": 0.31209999999555293
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.00939999999536667,
+            "workerMs": 0.028299999998125713,
+            "roundTripMs": 0.23859999999694992,
+            "outsideWorkerMs": 0.20090000000345754
+          },
+          {
+            "worker": 1,
+            "operation": "prepare",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.006600000000617001,
+            "workerMs": 37.132799999999406,
+            "roundTripMs": 37.52730000000156,
+            "outsideWorkerMs": 0.3879000000015367
+          },
+          {
+            "worker": 1,
+            "operation": "commit",
+            "queueAtEnqueue": 0,
+            "waitMs": 0.007100000002537854,
+            "workerMs": 0.04039999999804422,
+            "roundTripMs": 0.18579999999928987,
+            "outsideWorkerMs": 0.1382999999987078
+          }
+        ],
+        "edits": [
+          {
+            "wireMs": 153.48030000000108,
+            "editMs": 33.36280000000079,
+            "bytes": 24
+          },
+          {
+            "wireMs": 175.02100000000064,
+            "editMs": 36.60980000000018,
+            "bytes": 10
+          },
+          {
+            "wireMs": 162.29420000000027,
+            "editMs": 34.560600000000704,
+            "bytes": 24
+          },
+          {
+            "wireMs": 147.04290000000037,
+            "editMs": 29.661799999999857,
+            "bytes": 10
+          },
+          {
+            "wireMs": 211.89320000000043,
+            "editMs": 32.8729000000003,
+            "bytes": 24
+          },
+          {
+            "wireMs": 226.58279999999831,
+            "editMs": 34.14099999999962,
+            "bytes": 10
+          },
+          {
+            "wireMs": 152.5606000000007,
+            "editMs": 30.719300000000658,
+            "bytes": 24
+          },
+          {
+            "wireMs": 222.7533000000003,
+            "editMs": 31.550499999999374,
+            "bytes": 10
+          },
+          {
+            "wireMs": 209.64090000000033,
+            "editMs": 34.48060000000078,
+            "bytes": 24
+          },
+          {
+            "wireMs": 163.07639999999992,
+            "editMs": 36.98350000000028,
+            "bytes": 10
+          },
+          {
+            "wireMs": 225.79110000000037,
+            "editMs": 42.03859999999986,
+            "bytes": 24
+          },
+          {
+            "wireMs": 178.53969999999936,
+            "editMs": 40.89300000000003,
+            "bytes": 10
+          },
+          {
+            "wireMs": 195.5624000000007,
+            "editMs": 50.44100000000071,
+            "bytes": 24
+          },
+          {
+            "wireMs": 159.89660000000003,
+            "editMs": 33.00909999999931,
+            "bytes": 10
+          },
+          {
+            "wireMs": 162.83420000000115,
+            "editMs": 33.89890000000014,
+            "bytes": 24
+          },
+          {
+            "wireMs": 155.82860000000073,
+            "editMs": 31.779500000000553,
+            "bytes": 10
+          },
+          {
+            "wireMs": 164.2565999999988,
+            "editMs": 32.082500000002256,
+            "bytes": 24
+          },
+          {
+            "wireMs": 180.16730000000098,
+            "editMs": 37.29989999999816,
+            "bytes": 10
+          },
+          {
+            "wireMs": 233.0642000000007,
+            "editMs": 42.351299999998446,
+            "bytes": 24
+          },
+          {
+            "wireMs": 197.3747000000003,
+            "editMs": 33.681500000002416,
+            "bytes": 10
+          },
+          {
+            "wireMs": 170.79079999999885,
+            "editMs": 44.85429999999906,
+            "bytes": 24
+          },
+          {
+            "wireMs": 238.22490000000107,
+            "editMs": 32.700800000002346,
+            "bytes": 10
+          },
+          {
+            "wireMs": 191.55379999999786,
+            "editMs": 33.60120000000097,
+            "bytes": 24
+          },
+          {
+            "wireMs": 199.23279999999795,
+            "editMs": 32.612199999999575,
+            "bytes": 10
+          },
+          {
+            "wireMs": 208.46620000000257,
+            "editMs": 32.815300000002026,
+            "bytes": 24
+          },
+          {
+            "wireMs": 190.15429999999833,
+            "editMs": 38.450700000001234,
+            "bytes": 10
+          },
+          {
+            "wireMs": 181.5122999999985,
+            "editMs": 34.362199999999575,
+            "bytes": 24
+          },
+          {
+            "wireMs": 168.1053000000029,
+            "editMs": 35.126500000002125,
+            "bytes": 10
+          },
+          {
+            "wireMs": 160.65209999999934,
+            "editMs": 31.726699999999255,
+            "bytes": 24
+          },
+          {
+            "wireMs": 234.9470999999976,
+            "editMs": 39.99059999999736,
+            "bytes": 10
+          },
+          {
+            "wireMs": 231.88170000000173,
+            "editMs": 39.13220000000001,
+            "bytes": 24
+          },
+          {
+            "wireMs": 206.91239999999743,
+            "editMs": 38.7583999999988,
+            "bytes": 10
+          },
+          {
+            "wireMs": 182.952699999998,
+            "editMs": 35.58389999999781,
+            "bytes": 24
+          },
+          {
+            "wireMs": 167.5723999999973,
+            "editMs": 40.88289999999688,
+            "bytes": 10
+          },
+          {
+            "wireMs": 160.60599999999977,
+            "editMs": 34.550100000000384,
+            "bytes": 24
+          },
+          {
+            "wireMs": 168.87249999999767,
+            "editMs": 28.894799999998213,
+            "bytes": 10
+          },
+          {
+            "wireMs": 224.96919999999955,
+            "editMs": 32.359300000000076,
+            "bytes": 24
+          },
+          {
+            "wireMs": 157.8140999999996,
+            "editMs": 29.666799999999057,
+            "bytes": 10
+          },
+          {
+            "wireMs": 189.09209999999803,
+            "editMs": 37.014899999998306,
+            "bytes": 24
+          },
+          {
+            "wireMs": 165.3579000000027,
+            "editMs": 38.56560000000172,
+            "bytes": 10
+          },
+          {
+            "wireMs": 223.8060000000005,
+            "editMs": 41.304400000000896,
+            "bytes": 24
+          },
+          {
+            "wireMs": 163.2531999999992,
+            "editMs": 31.046399999999267,
+            "bytes": 10
+          },
+          {
+            "wireMs": 168.2530000000006,
+            "editMs": 34.66080000000147,
+            "bytes": 24
+          },
+          {
+            "wireMs": 183.8087000000014,
+            "editMs": 30.403400000002875,
+            "bytes": 10
+          },
+          {
+            "wireMs": 223.91009999999733,
+            "editMs": 41.77349999999933,
+            "bytes": 24
+          },
+          {
+            "wireMs": 193.53510000000097,
+            "editMs": 41.60689999999886,
+            "bytes": 10
+          },
+          {
+            "wireMs": 193.37259999999878,
+            "editMs": 43.69759999999951,
+            "bytes": 24
+          },
+          {
+            "wireMs": 151.75209999999788,
+            "editMs": 30.170500000000175,
+            "bytes": 10
+          },
+          {
+            "wireMs": 184.59250000000247,
+            "editMs": 42.01300000000265,
+            "bytes": 24
+          },
+          {
+            "wireMs": 226.08560000000216,
+            "editMs": 34.894899999999325,
+            "bytes": 10
+          },
+          {
+            "wireMs": 159.23699999999735,
+            "editMs": 33.92079999999987,
+            "bytes": 24
+          },
+          {
+            "wireMs": 181.34609999999884,
+            "editMs": 34.93189999999959,
+            "bytes": 10
+          },
+          {
+            "wireMs": 209.36449999999968,
+            "editMs": 38.271199999999226,
+            "bytes": 24
+          },
+          {
+            "wireMs": 173.06229999999778,
+            "editMs": 41.41769999999815,
+            "bytes": 10
+          },
+          {
+            "wireMs": 155.29209999999875,
+            "editMs": 30.884799999999814,
+            "bytes": 24
+          },
+          {
+            "wireMs": 151.7605999999978,
+            "editMs": 31.70639999999912,
+            "bytes": 10
+          },
+          {
+            "wireMs": 206.0064999999995,
+            "editMs": 32.65299999999843,
+            "bytes": 24
+          },
+          {
+            "wireMs": 138.06649999999718,
+            "editMs": 28.08339999999953,
+            "bytes": 10
+          },
+          {
+            "wireMs": 222.6925999999985,
+            "editMs": 44.570299999999406,
+            "bytes": 24
+          },
+          {
+            "wireMs": 182.5645000000004,
+            "editMs": 35.81330000000162,
+            "bytes": 10
+          },
+          {
+            "wireMs": 167.35869999999704,
+            "editMs": 43.02059999999983,
+            "bytes": 24
+          },
+          {
+            "wireMs": 165.82570000000123,
+            "editMs": 31.121299999998882,
+            "bytes": 10
+          },
+          {
+            "wireMs": 227.9375,
+            "editMs": 32.92370000000301,
+            "bytes": 24
+          },
+          {
+            "wireMs": 141.53389999999854,
+            "editMs": 34.616399999998976,
+            "bytes": 10
+          },
+          {
+            "wireMs": 187.6203999999998,
+            "editMs": 39.98979999999938,
+            "bytes": 24
+          },
+          {
+            "wireMs": 234.33960000000297,
+            "editMs": 33.39440000000104,
+            "bytes": 10
+          },
+          {
+            "wireMs": 236.0087999999996,
+            "editMs": 34.320299999999406,
+            "bytes": 24
+          },
+          {
+            "wireMs": 164.56850000000122,
+            "editMs": 29.84570000000167,
+            "bytes": 10
+          },
+          {
+            "wireMs": 177.15199999999822,
+            "editMs": 33.30309999999736,
+            "bytes": 24
+          },
+          {
+            "wireMs": 181.72239999999874,
+            "editMs": 36.30619999999908,
+            "bytes": 10
+          },
+          {
+            "wireMs": 171.1787000000004,
+            "editMs": 35.28310000000056,
+            "bytes": 24
+          },
+          {
+            "wireMs": 164.4399999999987,
+            "editMs": 44.717899999999645,
+            "bytes": 10
+          },
+          {
+            "wireMs": 172.80299999999988,
+            "editMs": 33.150000000001455,
+            "bytes": 24
+          },
+          {
+            "wireMs": 170.85970000000088,
+            "editMs": 35.33589999999822,
+            "bytes": 10
+          },
+          {
+            "wireMs": 163.80230000000302,
+            "editMs": 35.20270000000164,
+            "bytes": 24
+          },
+          {
+            "wireMs": 156.00820000000385,
+            "editMs": 30.97830000000249,
+            "bytes": 10
+          },
+          {
+            "wireMs": 260.6926999999996,
+            "editMs": 37.93770000000222,
+            "bytes": 24
+          },
+          {
+            "wireMs": 172.8107999999993,
+            "editMs": 34.91769999999815,
+            "bytes": 10
+          },
+          {
+            "wireMs": 155.15269999999873,
+            "editMs": 33.52360000000044,
+            "bytes": 24
+          },
+          {
+            "wireMs": 150.16399999999703,
+            "editMs": 34.83579999999347,
+            "bytes": 10
+          },
+          {
+            "wireMs": 196.4010000000053,
+            "editMs": 32.811399999998685,
+            "bytes": 24
+          },
+          {
+            "wireMs": 171.5850999999966,
+            "editMs": 34.300899999994726,
+            "bytes": 10
+          },
+          {
+            "wireMs": 177.95880000000034,
+            "editMs": 36.57440000000497,
+            "bytes": 24
+          },
+          {
+            "wireMs": 178.13320000000385,
+            "editMs": 36.81230000000505,
+            "bytes": 10
+          },
+          {
+            "wireMs": 180.58959999999934,
+            "editMs": 33.44090000000142,
+            "bytes": 24
+          },
+          {
+            "wireMs": 213.79329999999754,
+            "editMs": 40.08729999999923,
+            "bytes": 10
+          },
+          {
+            "wireMs": 232.7210999999952,
+            "editMs": 32.51489999999467,
+            "bytes": 24
+          },
+          {
+            "wireMs": 180.68959999999788,
+            "editMs": 32.10070000000269,
+            "bytes": 10
+          },
+          {
+            "wireMs": 284.1273000000001,
+            "editMs": 33.70600000000559,
+            "bytes": 24
+          },
+          {
+            "wireMs": 222.00120000000607,
+            "editMs": 33.32850000000326,
+            "bytes": 10
+          },
+          {
+            "wireMs": 148.0734999999986,
+            "editMs": 30.196299999995972,
+            "bytes": 24
+          },
+          {
+            "wireMs": 156.14110000000073,
+            "editMs": 31.95270000000164,
+            "bytes": 10
+          },
+          {
+            "wireMs": 163.3882999999987,
+            "editMs": 30.797099999996135,
+            "bytes": 24
+          },
+          {
+            "wireMs": 157.83120000000054,
+            "editMs": 31.30290000000241,
+            "bytes": 10
+          },
+          {
+            "wireMs": 172.96539999999368,
+            "editMs": 35.447699999996985,
+            "bytes": 24
+          },
+          {
+            "wireMs": 186.70500000000175,
+            "editMs": 29.211200000005192,
+            "bytes": 10
+          },
+          {
+            "wireMs": 189.6458000000057,
+            "editMs": 44.76800000000367,
+            "bytes": 24
+          },
+          {
+            "wireMs": 162.79159999999683,
+            "editMs": 40.48500000000058,
+            "bytes": 10
+          },
+          {
+            "wireMs": 179.90030000000115,
+            "editMs": 34.46480000000156,
+            "bytes": 24
+          },
+          {
+            "wireMs": 154.1872000000003,
+            "editMs": 29.158699999999953,
+            "bytes": 10
+          }
+        ],
+        "roomWaiting": [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        ],
+        "roomIngress": [
+          {
+            "waiting": 0,
+            "wallMs": 98.01550000000134
+          },
+          {
+            "waiting": 0,
+            "wallMs": 95.94549999999981
+          },
+          {
+            "waiting": 0,
+            "wallMs": 103.47110000000066
+          },
+          {
+            "waiting": 0,
+            "wallMs": 95.179900000001
+          },
+          {
+            "waiting": 0,
+            "wallMs": 102.94859999999971
+          },
+          {
+            "waiting": 0,
+            "wallMs": 95.94549999999981
+          },
+          {
+            "waiting": 0,
+            "wallMs": 97.72229999999945
+          },
+          {
+            "waiting": 0,
+            "wallMs": 88.7512999999999
+          },
+          {
+            "waiting": 0,
+            "wallMs": 97.34319999999934
+          },
+          {
+            "waiting": 0,
+            "wallMs": 101.75900000000001
+          },
+          {
+            "waiting": 0,
+            "wallMs": 140.63910000000033
+          },
+          {
+            "waiting": 0,
+            "wallMs": 112.07389999999941
+          },
+          {
+            "waiting": 0,
+            "wallMs": 119.65239999999903
+          },
+          {
+            "waiting": 0,
+            "wallMs": 101.61249999999927
+          },
+          {
+            "waiting": 0,
+            "wallMs": 101.21429999999964
+          },
+          {
+            "waiting": 0,
+            "wallMs": 100.86280000000079
+          },
+          {
+            "waiting": 0,
+            "wallMs": 106.47940000000017
+          },
+          {
+            "waiting": 0,
+            "wallMs": 113.91039999999703
+          },
+          {
+            "waiting": 0,
+            "wallMs": 138.34560000000056
+          },
+          {
+            "waiting": 0,
+            "wallMs": 117.42669999999998
+          },
+          {
+            "waiting": 0,
+            "wallMs": 101.60670000000027
+          },
+          {
+            "waiting": 0,
+            "wallMs": 107.49669999999969
+          },
+          {
+            "waiting": 0,
+            "wallMs": 116.59230000000025
+          },
+          {
+            "waiting": 0,
+            "wallMs": 127.65329999999813
+          },
+          {
+            "waiting": 0,
+            "wallMs": 117.9297000000006
+          },
+          {
+            "waiting": 0,
+            "wallMs": 124.37169999999969
+          },
+          {
+            "waiting": 0,
+            "wallMs": 121.47000000000116
+          },
+          {
+            "waiting": 0,
+            "wallMs": 108.35090000000127
+          },
+          {
+            "waiting": 0,
+            "wallMs": 105.88870000000315
+          },
+          {
+            "waiting": 0,
+            "wallMs": 104.08169999999882
+          },
+          {
+            "waiting": 0,
+            "wallMs": 119.46710000000166
+          },
+          {
+            "waiting": 0,
+            "wallMs": 137.76729999999952
+          },
+          {
+            "waiting": 0,
+            "wallMs": 116.12169999999969
+          },
+          {
+            "waiting": 0,
+            "wallMs": 94.66689999999653
+          },
+          {
+            "waiting": 0,
+            "wallMs": 103.39460000000327
+          },
+          {
+            "waiting": 0,
+            "wallMs": 96.8794999999991
+          },
+          {
+            "waiting": 0,
+            "wallMs": 94.89919999999984
+          },
+          {
+            "waiting": 0,
+            "wallMs": 86.43569999999818
+          },
+          {
+            "waiting": 0,
+            "wallMs": 125.0599000000002
+          },
+          {
+            "waiting": 0,
+            "wallMs": 102.71930000000066
+          },
+          {
+            "waiting": 0,
+            "wallMs": 103.08320000000094
+          },
+          {
+            "waiting": 0,
+            "wallMs": 109.54009999999835
+          },
+          {
+            "waiting": 0,
+            "wallMs": 109.49569999999949
+          },
+          {
+            "waiting": 0,
+            "wallMs": 123.97439999999915
+          },
+          {
+            "waiting": 0,
+            "wallMs": 126.12289999999848
+          },
+          {
+            "waiting": 0,
+            "wallMs": 126.07990000000063
+          },
+          {
+            "waiting": 0,
+            "wallMs": 119.61290000000008
+          },
+          {
+            "waiting": 0,
+            "wallMs": 97.27829999999813
+          },
+          {
+            "waiting": 0,
+            "wallMs": 99.80420000000231
+          },
+          {
+            "waiting": 0,
+            "wallMs": 99.92699999999968
+          },
+          {
+            "waiting": 0,
+            "wallMs": 101.51789999999892
+          },
+          {
+            "waiting": 0,
+            "wallMs": 119.44859999999971
+          },
+          {
+            "waiting": 0,
+            "wallMs": 135.94100000000253
+          },
+          {
+            "waiting": 0,
+            "wallMs": 105.70639999999912
+          },
+          {
+            "waiting": 0,
+            "wallMs": 100.15880000000107
+          },
+          {
+            "waiting": 0,
+            "wallMs": 95.48300000000017
+          },
+          {
+            "waiting": 0,
+            "wallMs": 98.65420000000086
+          },
+          {
+            "waiting": 0,
+            "wallMs": 86.0518000000011
+          },
+          {
+            "waiting": 0,
+            "wallMs": 146.5724999999984
+          },
+          {
+            "waiting": 0,
+            "wallMs": 121.85019999999713
+          },
+          {
+            "waiting": 0,
+            "wallMs": 94.74789999999848
+          },
+          {
+            "waiting": 0,
+            "wallMs": 92.23790000000008
+          },
+          {
+            "waiting": 0,
+            "wallMs": 98.48250000000189
+          },
+          {
+            "waiting": 0,
+            "wallMs": 83.76799999999639
+          },
+          {
+            "waiting": 0,
+            "wallMs": 117.43759999999747
+          },
+          {
+            "waiting": 0,
+            "wallMs": 101.65589999999793
+          },
+          {
+            "waiting": 0,
+            "wallMs": 99.93470000000161
+          },
+          {
+            "waiting": 0,
+            "wallMs": 93.41410000000178
+          },
+          {
+            "waiting": 0,
+            "wallMs": 119.27460000000065
+          },
+          {
+            "waiting": 0,
+            "wallMs": 112.21880000000237
+          },
+          {
+            "waiting": 0,
+            "wallMs": 105.29069999999774
+          },
+          {
+            "waiting": 0,
+            "wallMs": 95.05519999999888
+          },
+          {
+            "waiting": 0,
+            "wallMs": 100.14290000000256
+          },
+          {
+            "waiting": 0,
+            "wallMs": 94.1189000000013
+          },
+          {
+            "waiting": 0,
+            "wallMs": 106.82190000000264
+          },
+          {
+            "waiting": 0,
+            "wallMs": 94.10689999999886
+          },
+          {
+            "waiting": 0,
+            "wallMs": 126.66109999999753
+          },
+          {
+            "waiting": 0,
+            "wallMs": 108.9114000000045
+          },
+          {
+            "waiting": 0,
+            "wallMs": 98.51060000000143
+          },
+          {
+            "waiting": 0,
+            "wallMs": 92.03340000000026
+          },
+          {
+            "waiting": 0,
+            "wallMs": 118.77709999999934
+          },
+          {
+            "waiting": 0,
+            "wallMs": 107.04739999999583
+          },
+          {
+            "waiting": 0,
+            "wallMs": 114.56330000000162
+          },
+          {
+            "waiting": 0,
+            "wallMs": 109.36529999999766
+          },
+          {
+            "waiting": 0,
+            "wallMs": 120.47750000000087
+          },
+          {
+            "waiting": 0,
+            "wallMs": 97.32360000000335
+          },
+          {
+            "waiting": 0,
+            "wallMs": 105.49919999999838
+          },
+          {
+            "waiting": 0,
+            "wallMs": 118.67149999999674
+          },
+          {
+            "waiting": 0,
+            "wallMs": 132.43450000000303
+          },
+          {
+            "waiting": 0,
+            "wallMs": 112.6131000000023
+          },
+          {
+            "waiting": 0,
+            "wallMs": 93.80520000000251
+          },
+          {
+            "waiting": 0,
+            "wallMs": 101.47789999999804
+          },
+          {
+            "waiting": 0,
+            "wallMs": 108.27810000000318
+          },
+          {
+            "waiting": 0,
+            "wallMs": 101.12109999999666
+          },
+          {
+            "waiting": 0,
+            "wallMs": 103.20730000000185
+          },
+          {
+            "waiting": 0,
+            "wallMs": 103.40069999999832
+          },
+          {
+            "waiting": 0,
+            "wallMs": 111.94870000000083
+          },
+          {
+            "waiting": 0,
+            "wallMs": 98.11469999999827
+          },
+          {
+            "waiting": 0,
+            "wallMs": 105.60779999999795
+          },
+          {
+            "waiting": 0,
+            "wallMs": 100.64949999999953
+          }
+        ],
+        "gc": [
+          {
+            "at": 12107.3027,
+            "durationMs": 3.9787000119686127
+          },
+          {
+            "at": 12459.0829,
+            "durationMs": 3.26010000705719
+          },
+          {
+            "at": 12726.771,
+            "durationMs": 3.938400000333786
+          },
+          {
+            "at": 13009.7137,
+            "durationMs": 4.220299988985062
+          },
+          {
+            "at": 13339.7788,
+            "durationMs": 3.88400000333786
+          },
+          {
+            "at": 13684.3625,
+            "durationMs": 3.6998000144958496
+          },
+          {
+            "at": 13957.3574,
+            "durationMs": 4.185699999332428
+          },
+          {
+            "at": 14312.3335,
+            "durationMs": 3.7811999917030334
+          },
+          {
+            "at": 14677.5545,
+            "durationMs": 5.539400011301041
+          },
+          {
+            "at": 15029.8042,
+            "durationMs": 5.245400011539459
+          },
+          {
+            "at": 15399.8717,
+            "durationMs": 4.284700006246567
+          },
+          {
+            "at": 15690.1373,
+            "durationMs": 4.67849999666214
+          },
+          {
+            "at": 15977.4518,
+            "durationMs": 3.770900011062622
+          },
+          {
+            "at": 16258.3828,
+            "durationMs": 4.609600007534027
+          },
+          {
+            "at": 16565.705,
+            "durationMs": 4.469300001859665
+          },
+          {
+            "at": 16865.0242,
+            "durationMs": 6.275099992752075
+          },
+          {
+            "at": 17210.927,
+            "durationMs": 6.240599989891052
+          },
+          {
+            "at": 17567.9686,
+            "durationMs": 7.583099991083145
+          },
+          {
+            "at": 17913.653,
+            "durationMs": 6.355199992656708
+          },
+          {
+            "at": 18274.7866,
+            "durationMs": 7.153499990701675
+          },
+          {
+            "at": 18605.7768,
+            "durationMs": 6.614300012588501
+          },
+          {
+            "at": 18924.8773,
+            "durationMs": 7.164099991321564
+          },
+          {
+            "at": 19267.904,
+            "durationMs": 7.487399995326996
+          },
+          {
+            "at": 19570.2753,
+            "durationMs": 7.051899999380112
+          },
+          {
+            "at": 19861.2209,
+            "durationMs": 5.554499983787537
+          },
+          {
+            "at": 20171.3601,
+            "durationMs": 7.339899986982346
+          },
+          {
+            "at": 20528.0127,
+            "durationMs": 7.450500011444092
+          },
+          {
+            "at": 20939.7047,
+            "durationMs": 7.7058999836444855
+          },
+          {
+            "at": 21269.3998,
+            "durationMs": 5.779199987649918
+          },
+          {
+            "at": 21571.8143,
+            "durationMs": 5.133799999952316
+          },
+          {
+            "at": 21858.4011,
+            "durationMs": 4.625500023365021
+          },
+          {
+            "at": 22127.2456,
+            "durationMs": 4.67849999666214
+          },
+          {
+            "at": 22418.8913,
+            "durationMs": 4.597099989652634
+          },
+          {
+            "at": 22751.2067,
+            "durationMs": 5.6875
+          },
+          {
+            "at": 23107.7395,
+            "durationMs": 6.066300004720688
+          },
+          {
+            "at": 23455.4414,
+            "durationMs": 5.844999998807907
+          },
+          {
+            "at": 23789.2191,
+            "durationMs": 5.708799988031387
+          },
+          {
+            "at": 24081.2269,
+            "durationMs": 6.318599998950958
+          },
+          {
+            "at": 24386.6396,
+            "durationMs": 5.463700026273727
+          },
+          {
+            "at": 24709.7242,
+            "durationMs": 6.5804000198841095
+          },
+          {
+            "at": 25049.7244,
+            "durationMs": 5.961500018835068
+          },
+          {
+            "at": 25375.3376,
+            "durationMs": 6.6478999853134155
+          },
+          {
+            "at": 25670.1333,
+            "durationMs": 6.4917000234127045
+          },
+          {
+            "at": 25975.0353,
+            "durationMs": 5.039400011301041
+          },
+          {
+            "at": 26365.2173,
+            "durationMs": 4.258899986743927
+          },
+          {
+            "at": 26667.3192,
+            "durationMs": 7.1128000020980835
+          },
+          {
+            "at": 27001.7757,
+            "durationMs": 6.0999999940395355
+          },
+          {
+            "at": 27304.5466,
+            "durationMs": 5.04559999704361
+          },
+          {
+            "at": 27578.2811,
+            "durationMs": 5.026399999856949
+          },
+          {
+            "at": 27847.472,
+            "durationMs": 5.084600001573563
+          },
+          {
+            "at": 28123.63,
+            "durationMs": 4.723100006580353
+          },
+          {
+            "at": 28445.2511,
+            "durationMs": 0.8394999802112579
+          },
+          {
+            "at": 28501.9715,
+            "durationMs": 39.9273000061512
+          },
+          {
+            "at": 28901.553,
+            "durationMs": 10.171599984169006
+          },
+          {
+            "at": 29212.4399,
+            "durationMs": 4.45320001244545
+          },
+          {
+            "at": 29498.1143,
+            "durationMs": 5.205700010061264
+          },
+          {
+            "at": 29808.4205,
+            "durationMs": 4.019900023937225
+          },
+          {
+            "at": 30248.3591,
+            "durationMs": 5.406000018119812
+          },
+          {
+            "at": 30557.2566,
+            "durationMs": 5.580199986696243
+          },
+          {
+            "at": 30931.6741,
+            "durationMs": 4.221599996089935
+          },
+          {
+            "at": 31291.0184,
+            "durationMs": 5.59510001540184
+          },
+          {
+            "at": 31627.2222,
+            "durationMs": 5.689300000667572
+          },
+          {
+            "at": 32020.3355,
+            "durationMs": 5.076099991798401
+          },
+          {
+            "at": 32337.2761,
+            "durationMs": 4.775200009346008
+          },
+          {
+            "at": 32376.2266,
+            "durationMs": 0.924699991941452
+          },
+          {
+            "at": 32433.0359,
+            "durationMs": 11.962099999189377
+          },
+          {
+            "at": 32776.9647,
+            "durationMs": 5.085200011730194
+          },
+          {
+            "at": 33140.7528,
+            "durationMs": 4.913599997758865
+          },
+          {
+            "at": 33428.3995,
+            "durationMs": 5.207300007343292
+          },
+          {
+            "at": 33774.0527,
+            "durationMs": 5.085999995470047
+          },
+          {
+            "at": 34141.7698,
+            "durationMs": 4.745100021362305
+          },
+          {
+            "at": 34457.0802,
+            "durationMs": 4.55009999871254
+          },
+          {
+            "at": 34804.2113,
+            "durationMs": 4.4070999920368195
+          },
+          {
+            "at": 35134.3178,
+            "durationMs": 5.241300016641617
+          },
+          {
+            "at": 35454.8818,
+            "durationMs": 6.8508999943733215
+          },
+          {
+            "at": 35786.9508,
+            "durationMs": 7.552899986505508
+          },
+          {
+            "at": 36145.7897,
+            "durationMs": 9.437700003385544
+          },
+          {
+            "at": 36515.1405,
+            "durationMs": 7.723800003528595
+          },
+          {
+            "at": 36914.132,
+            "durationMs": 7.815400004386902
+          },
+          {
+            "at": 37270.6307,
+            "durationMs": 8.439399987459183
+          },
+          {
+            "at": 37710.6899,
+            "durationMs": 8.501599997282028
+          },
+          {
+            "at": 38054.2639,
+            "durationMs": 5.2423000037670135
+          },
+          {
+            "at": 38348.722,
+            "durationMs": 6.681199997663498
+          },
+          {
+            "at": 38651.7042,
+            "durationMs": 6.701199978590012
+          },
+          {
+            "at": 38957.1387,
+            "durationMs": 6.183899998664856
+          },
+          {
+            "at": 39312.4596,
+            "durationMs": 7.482899993658066
+          },
+          {
+            "at": 39689.4197,
+            "durationMs": 4.984999984502792
+          },
+          {
+            "at": 39984.2705,
+            "durationMs": 6.983699977397919
+          },
+          {
+            "at": 40299.5928,
+            "durationMs": 4.989499986171722
+          }
+        ],
+        "cpuMain": {
+          "path": "shared-3-1authors-server.cpuprofile.gz",
+          "sampledMs": 31670.28500000002,
+          "topSelf": [
+            {
+              "ms": 8785.87100000003,
+              "functionName": "(idle)",
+              "scriptId": "0",
+              "url": "",
+              "lineNumber": -1,
+              "columnNumber": -1
+            },
+            {
+              "ms": 1545.1439999999996,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 1478.8129999999992,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 853.0089999999997,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 849.7630000000001,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 816.2619999999994,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 814.1819999999992,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 813.2900000000003,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 785.5890000000005,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 763.6579999999999,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 763.2130000000006,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 741.5319999999995,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 740.6729999999993,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 726.5670000000005,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 716.898,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 716.6659999999997,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2812,
+              "columnNumber": 24
+            },
+            {
+              "ms": 630.4769999999999,
+              "functionName": "(garbage collector)",
+              "scriptId": "0",
+              "url": "",
+              "lineNumber": -1,
+              "columnNumber": -1
+            },
+            {
+              "ms": 526.6649999999992,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 1352,
+              "columnNumber": 14
+            },
+            {
+              "ms": 463.095,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 1352,
+              "columnNumber": 14
+            },
+            {
+              "ms": 459.7750000000002,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 1352,
+              "columnNumber": 14
+            },
+            {
+              "ms": 386.7239999999994,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 3317,
+              "columnNumber": 37
+            },
+            {
+              "ms": 266.14399999999983,
+              "functionName": "getState",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 2827,
+              "columnNumber": 17
+            },
+            {
+              "ms": 257.74899999999997,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 3317,
+              "columnNumber": 37
+            },
+            {
+              "ms": 253.78,
+              "functionName": "post",
+              "scriptId": "158",
+              "url": "node:inspector",
+              "lineNumber": 114,
+              "columnNumber": 6
+            },
+            {
+              "ms": 244.50599999999997,
+              "functionName": "cleanupYTextAfterTransaction",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 6686,
+              "columnNumber": 37
+            },
+            {
+              "ms": 232.92399999999992,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 3317,
+              "columnNumber": 37
+            },
+            {
+              "ms": 227.42000000000004,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 3317,
+              "columnNumber": 37
+            },
+            {
+              "ms": 220.54599999999996,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 3317,
+              "columnNumber": 37
+            },
+            {
+              "ms": 220.13399999999993,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 3317,
+              "columnNumber": 37
+            },
+            {
+              "ms": 213.926,
+              "functionName": "",
+              "scriptId": "177",
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs",
+              "lineNumber": 1358,
+              "columnNumber": 32
+            }
+          ],
+          "idleMs": 8785.87100000003
+        },
+        "cpuWorker": {
+          "path": "shared-3-1authors-validator.cpuprofile.gz",
+          "sampledMs": 31459.735000000084,
+          "topSelf": [
+            {
+              "ms": 26816.5160000001,
+              "functionName": "(idle)",
+              "lineNumber": -1,
+              "columnNumber": -1,
+              "scriptId": 0,
+              "url": ""
+            },
+            {
+              "ms": 799.4420000000001,
+              "functionName": "(garbage collector)",
+              "lineNumber": -1,
+              "columnNumber": -1,
+              "scriptId": 0,
+              "url": ""
+            },
+            {
+              "ms": 607.6289999999999,
+              "functionName": "",
+              "lineNumber": 2812,
+              "columnNumber": 24,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 581.3280000000001,
+              "functionName": "",
+              "lineNumber": 2812,
+              "columnNumber": 24,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 554.9910000000001,
+              "functionName": "",
+              "lineNumber": 2812,
+              "columnNumber": 24,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 554.6589999999998,
+              "functionName": "",
+              "lineNumber": 2812,
+              "columnNumber": 24,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 310.04099999999994,
+              "functionName": "cleanupYTextAfterTransaction",
+              "lineNumber": 6686,
+              "columnNumber": 37,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 272.274,
+              "functionName": "",
+              "lineNumber": 3317,
+              "columnNumber": 37,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 249.2139999999999,
+              "functionName": "",
+              "lineNumber": 3317,
+              "columnNumber": 37,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 138.958,
+              "functionName": "(program)",
+              "lineNumber": -1,
+              "columnNumber": -1,
+              "scriptId": 0,
+              "url": ""
+            },
+            {
+              "ms": 74.08100000000002,
+              "functionName": "cleanupTransactions",
+              "lineNumber": 3244,
+              "columnNumber": 28,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 72.12799999999997,
+              "functionName": "cleanupTransactions",
+              "lineNumber": 3244,
+              "columnNumber": 28,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 53.909000000000006,
+              "functionName": "getStateVector",
+              "lineNumber": 2810,
+              "columnNumber": 23,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 53.8,
+              "functionName": "",
+              "lineNumber": 3300,
+              "columnNumber": 16,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 46.27599999999999,
+              "functionName": "walk",
+              "lineNumber": 20155,
+              "columnNumber": 15,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 28.938,
+              "functionName": "walk",
+              "lineNumber": 20155,
+              "columnNumber": 15,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 28.743999999999993,
+              "functionName": "getStateVector",
+              "lineNumber": 2810,
+              "columnNumber": 23,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 28.596999999999998,
+              "functionName": "getStateVector",
+              "lineNumber": 2810,
+              "columnNumber": 23,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 16.145,
+              "functionName": "getStateVector",
+              "lineNumber": 2810,
+              "columnNumber": 23,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 13.729,
+              "functionName": "walk",
+              "lineNumber": 20155,
+              "columnNumber": 15,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 12.325999999999997,
+              "functionName": "prepare",
+              "lineNumber": 20371,
+              "columnNumber": 9,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 8.083,
+              "functionName": "decodeDocument",
+              "lineNumber": 20140,
+              "columnNumber": 23,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 6.723999999999999,
+              "functionName": "transact",
+              "lineNumber": 3399,
+              "columnNumber": 17,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 5.798,
+              "functionName": "typeMapGetAll",
+              "lineNumber": 5626,
+              "columnNumber": 22,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 5.703,
+              "functionName": "element",
+              "lineNumber": 20023,
+              "columnNumber": 16,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 5.386,
+              "functionName": "",
+              "lineNumber": 20491,
+              "columnNumber": 2,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 5.339,
+              "functionName": "typeMapGetAll",
+              "lineNumber": 5626,
+              "columnNumber": 22,
+              "scriptId": 201,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/yjs@13.6.33/node_modules/yjs/dist/yjs.mjs"
+            },
+            {
+              "ms": 4.375,
+              "functionName": "inst._zod.run",
+              "lineNumber": 2700,
+              "columnNumber": 20,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 4.128,
+              "functionName": "runChecks",
+              "lineNumber": 2641,
+              "columnNumber": 22,
+              "scriptId": 200,
+              "url": "file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/incremental-worker.mjs"
+            },
+            {
+              "ms": 3.8419999999999996,
+              "functionName": "",
+              "lineNumber": 18,
+              "columnNumber": 30,
+              "scriptId": 89,
+              "url": "node:internal/per_context/messageport"
+            }
+          ],
+          "idleMs": 26816.5160000001
+        },
+        "clientProfiles": [null, null]
+      }
+    ]
+  }
+}

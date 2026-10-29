@@ -1,0 +1,42 @@
+{
+  "profile": "isolated-1-2authors-server",
+  "self": [
+    ["(idle) :-1", 22541.92300000017],
+    [" dist/yjs.mjs:2812", 8554.950000000048],
+    [" dist/yjs.mjs:3317", 1195.089999999997],
+    ["(garbage collector) :-1", 553.5359999999995],
+    [" dist/yjs.mjs:3126", 513.5289999999997],
+    [" dist/yjs.mjs:1352", 510.74899999999974],
+    ["writeClientsStructs dist/yjs.mjs:1349", 408.80599999999964],
+    ["getState dist/yjs.mjs:2827", 403.49799999999993],
+    ["cleanupYTextAfterTransaction dist/yjs.mjs:6686", 387.34799999999984],
+    ["(program) :-1", 377.07499999999993],
+    ["writev :-1", 336.5260000000002],
+    ["getStateVector dist/yjs.mjs:2810", 334.7419999999998],
+    ["cleanupTransactions dist/yjs.mjs:3244", 318.81999999999994]
+  ],
+  "inclusive": [
+    ["(idle) :-1", 22541.92300000017],
+    ["applyUpdateV2 dist/yjs.mjs:1744", 13462.305000000073],
+    ["applyUpdate dist/yjs.mjs:1760", 13462.305000000073],
+    ["readUpdateV2 dist/yjs.mjs:1650", 13459.126000000073],
+    ["transact dist/yjs.mjs:3399", 13457.595000000072],
+    ["cleanupTransactions dist/yjs.mjs:3244", 10687.659000000052],
+    ["attempt history-profile/profile.mjs:121352", 10062.373000000072],
+    ["getStateVector dist/yjs.mjs:2810", 8885.165000000054],
+    [" dist/yjs.mjs:2812", 8554.950000000048],
+    ["Transaction dist/yjs.mjs:3049", 3991.4009999999885],
+    ["writeUpdateMessageFromTransaction dist/yjs.mjs:3125", 3694.544999999996],
+    ["readSyncMessage dist/hocuspocus-server.esm.js:250", 3504.458999999996],
+    ["readSyncStep2 y-protocols/sync.js:81", 3460.6979999999976],
+    ["writeStructsFromTransaction dist/yjs.mjs:1636", 2832.014000000002],
+    ["writeClientsStructs dist/yjs.mjs:1349", 2830.310000000002],
+    ["callAll lib0/function.js:16", 1748.4830000000015],
+    [" dist/yjs.mjs:3300", 1739.6030000000012],
+    ["cleanupYTextAfterTransaction dist/yjs.mjs:6686", 1647.5010000000007],
+    [" dist/yjs.mjs:3317", 1196.131999999997],
+    ["processTicksAndRejections process/task_queues:71", 1188.174],
+    ["runMicrotasks :-1", 1020.2129999999999],
+    [" dist/yjs.mjs:1352", 914.2469999999996]
+  ]
+}

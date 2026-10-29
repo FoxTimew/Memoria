@@ -1,0 +1,45 @@
+{"power":{"observedAt":"2026-10-29T11:34:07.766Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}}
+{"output":"C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\history-profile\\2026-10-29T11-34-09-071Z"}
+{
+  "observedAt": "2026-10-29T11:34:10.622Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/history-profile-1-shared-preparation-e30f7693-c0a6-4f18-b5d0-85fff0861061.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"history-profile-1-shared","phase":"before-preparation","status":"refused","observation":{"observedAt":"2026-10-29T11:34:11.311Z","windowsFreeBytes":3152285696,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5725794304,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T11:34:11.311Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"reason":"WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB"}
+file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:115015
+var fail = (reason, observation) => Object.assign(new Error(reason), { reason, observation });
+                                                  ^
+
+Error: WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB
+    at fail (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:115015:51)
+    at assertMemoryStage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:115061:11)
+    at prepareMeasurement (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:115089:5)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/history-profile/profile.mjs:122929:78 {
+  reason: 'WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB',
+  observation: {
+    observedAt: '2026-10-29T11:34:11.311Z',
+    windowsFreeBytes: 3152285696,
+    wsl: {
+      bootId: 'dc1818ce-057f-406e-9e82-a0bb01fa6a48',
+      memAvailableBytes: 5725794304,
+      swapInPages: 386,
+      swapOutPages: 2163
+    },
+    power: {
+      observedAt: '2026-10-29T11:34:11.311Z',
+      platform: 'win32',
+      batteries: [ { BatteryStatus: 2, EstimatedChargeRemaining: 98 } ],
+      allowed: true,
+      reason: null
+    }
+  }
+}
+
+Node.js v24.21.0

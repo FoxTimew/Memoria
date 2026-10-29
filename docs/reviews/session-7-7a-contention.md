@@ -2,6 +2,8 @@
 
 29 octobre 2026. Suite au profilage puis à la correction autorisés par le développeur. **Contention corrigée, nouvel arrêt sur le profil historique ; 7a non clôturée, 7b non commencée.** Cette fiche complète le [diagnostic initial](session-7-7a-transferts.md) sans effacer ses résultats.
 
+Suite autorisée : [diagnostic du scénario historique](session-7-7a-historique.md), deux paires comparant les clients dans le serveur ou dans des processus séparés, profils CPU et traces conservés. Troisième paire interrompue, puis reprise bloquée par la mémoire ; pas de correction applicative ni de clôture déduite de ce diagnostic partiel.
+
 ## Fichiers à lire
 
 1. [Migration 0033](../../packages/db/drizzle/0033_file_projection_latch.sql) et [FileBoundary](../../packages/db/src/file-boundary.ts) : les deux prises du même verrou métier.

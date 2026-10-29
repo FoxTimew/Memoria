@@ -1,0 +1,42 @@
+{
+  "profile": "isolated-1-2authors-client1",
+  "self": [
+    ["(idle) :-1", 24515.309000000023],
+    [" dist/yjs.mjs:2812", 8745.287000000011],
+    [" dist/yjs.mjs:1352", 1078.0119999999993],
+    [" dist/yjs.mjs:3317", 955.3489999999997],
+    ["getState dist/yjs.mjs:2827", 487.3210000000001],
+    [" dist/yjs.mjs:1358", 432.2749999999997],
+    ["(garbage collector) :-1", 348.8939999999999],
+    [" dist/yjs.mjs:3126", 294.3599999999998],
+    ["cleanupYTextAfterTransaction dist/yjs.mjs:6686", 278.65700000000004],
+    ["cleanupTransactions dist/yjs.mjs:3244", 257.5089999999999],
+    ["writeClientsStructs dist/yjs.mjs:1349", 252.70100000000005],
+    ["writeUpdateMessageFromTransaction dist/yjs.mjs:3125", 244.8460000000001],
+    ["getStateVector dist/yjs.mjs:2810", 222.00399999999993]
+  ],
+  "inclusive": [
+    ["(idle) :-1", 24515.309000000023],
+    ["emit node:events:488", 13584.081000000084],
+    ["transact dist/yjs.mjs:3399", 13534.159000000087],
+    ["cleanupTransactions dist/yjs.mjs:3244", 10744.287000000015],
+    ["_write streams/writable:451", 9346.558000000023],
+    ["Writable.write streams/writable:505", 9346.558000000023],
+    ["writeOrBuffer streams/writable:549", 9345.504000000023],
+    ["addChunk streams/readable:556", 9344.99200000002],
+    ["readableAddChunkPushByteMode streams/readable:469", 9344.99200000002],
+    ["Readable.push streams/readable:393", 9344.99200000002],
+    ["onStreamRead node:internal/stream_base_commons:165", 9344.99200000002],
+    ["socketOnData lib/websocket.js:1358", 9329.897000000024],
+    ["dataMessage lib/receiver.js:540", 9328.843000000024],
+    ["getData lib/receiver.js:456", 9328.843000000024],
+    ["startLoop lib/receiver.js:148", 9328.843000000024],
+    ["_write lib/receiver.js:88", 9328.843000000024],
+    ["onMessage lib/event-target.js:202", 9325.992000000024],
+    ["receiverOnMessage lib/websocket.js:1223", 9325.992000000024],
+    ["onMessageHandler dist/hocuspocus-provider.esm.js:264", 9324.899000000025],
+    ["callListener lib/event-target.js:285", 9324.899000000025],
+    ["onMessage dist/hocuspocus-provider.esm.js:313", 9323.783000000025],
+    [" dist/hocuspocus-provider.esm.js:24", 9323.783000000025]
+  ]
+}

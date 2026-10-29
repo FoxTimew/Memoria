@@ -1,0 +1,42 @@
+{
+  "profile": "shared-1-2authors-validator",
+  "self": [
+    ["(idle) :-1", 37078.286000000306],
+    [" dist/yjs.mjs:2812", 4288.074999999993],
+    ["(garbage collector) :-1", 1555.6020000000008],
+    [" dist/yjs.mjs:3317", 965.2510000000003],
+    ["cleanupYTextAfterTransaction dist/yjs.mjs:6686", 768.1159999999995],
+    ["getStateVector dist/yjs.mjs:2810", 226.51999999999995],
+    ["cleanupTransactions dist/yjs.mjs:3244", 194.9850000000001],
+    ["(program) :-1", 186.50099999999998],
+    ["walk history-profile/incremental-worker.mjs:20155", 123.11899999999999],
+    [" dist/yjs.mjs:3300", 91.52100000000003],
+    ["typeMapGetAll dist/yjs.mjs:5626", 30.326],
+    ["decodeDocument history-profile/incremental-worker.mjs:20140", 18.642000000000003],
+    [" history-profile/incremental-worker.mjs:20491", 16.939999999999998]
+  ],
+  "inclusive": [
+    ["(idle) :-1", 37078.286000000306],
+    [" per_context/messageport:18", 6942.1609999999855],
+    [" node:internal/event_target:792", 6931.980999999984],
+    [" history-profile/incremental-worker.mjs:20491", 6930.9059999999845],
+    ["prepare history-profile/incremental-worker.mjs:20371", 6904.283999999982],
+    ["prepareMany history-profile/incremental-worker.mjs:20414", 6904.283999999982],
+    ["transact dist/yjs.mjs:3399", 6579.743999999981],
+    ["readUpdateV2 dist/yjs.mjs:1650", 6579.743999999981],
+    ["applyUpdateV2 dist/yjs.mjs:1744", 6579.743999999981],
+    ["applyUpdate dist/yjs.mjs:1760", 6579.743999999981],
+    ["cleanupTransactions dist/yjs.mjs:3244", 5346.869999999977],
+    ["getStateVector dist/yjs.mjs:2810", 4511.521999999989],
+    [" dist/yjs.mjs:2812", 4288.074999999993],
+    ["Transaction dist/yjs.mjs:3049", 2323.4020000000005],
+    ["callAll lib0/function.js:16", 1991.1739999999977],
+    [" dist/yjs.mjs:3300", 1980.799999999998],
+    ["cleanupYTextAfterTransaction dist/yjs.mjs:6686", 1885.5429999999985],
+    ["(garbage collector) :-1", 1555.6020000000008],
+    [" dist/yjs.mjs:3317", 965.2510000000003],
+    ["decodeDocument history-profile/incremental-worker.mjs:20140", 296.26899999999995],
+    ["walk history-profile/incremental-worker.mjs:20155", 276.101],
+    ["(program) :-1", 186.50099999999998]
+  ]
+}

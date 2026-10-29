@@ -1,0 +1,42 @@
+{
+  "profile": "shared-3-2authors-server",
+  "self": [
+    [" dist/yjs.mjs:2812", 2573.181999999994],
+    ["(idle) :-1", 866.9079999999997],
+    [" dist/yjs.mjs:3317", 297.8050000000001],
+    [" dist/yjs.mjs:1352", 263.049],
+    ["post node:inspector:114", 177.908],
+    [" dist/yjs.mjs:3126", 141.88100000000003],
+    ["getState dist/yjs.mjs:2827", 131.428],
+    ["(garbage collector) :-1", 124.67299999999997],
+    [" dist/yjs.mjs:1358", 106.25800000000001],
+    ["cleanupTransactions dist/yjs.mjs:3244", 87.25399999999998],
+    ["cleanupYTextAfterTransaction dist/yjs.mjs:6686", 81.31099999999999],
+    ["getStateVector dist/yjs.mjs:2810", 75.27100000000002],
+    ["writeClientsStructs dist/yjs.mjs:1349", 60.976]
+  ],
+  "inclusive": [
+    ["transact dist/yjs.mjs:3399", 3922.651999999993],
+    ["readUpdateV2 dist/yjs.mjs:1650", 3185.0449999999933],
+    ["applyUpdateV2 dist/yjs.mjs:1744", 3185.0449999999933],
+    ["applyUpdate dist/yjs.mjs:1760", 3185.0449999999933],
+    ["cleanupTransactions dist/yjs.mjs:3244", 3109.3809999999953],
+    ["getStateVector dist/yjs.mjs:2810", 2646.9329999999954],
+    [" dist/yjs.mjs:2812", 2573.181999999994],
+    ["readSyncStep2 y-protocols/sync.js:81", 1975.010999999998],
+    ["onStreamRead node:internal/stream_base_commons:165", 1550.9759999999985],
+    ["addChunk streams/readable:556", 1545.7359999999983],
+    ["readableAddChunkPushByteMode streams/readable:469", 1545.7359999999983],
+    ["Readable.push streams/readable:393", 1545.7359999999983],
+    ["emit node:events:488", 1539.2279999999982],
+    ["Writable.write streams/writable:505", 1524.7089999999982],
+    ["_write streams/writable:451", 1523.2349999999983],
+    ["writeOrBuffer streams/writable:549", 1523.1739999999984],
+    ["socketOnData lib/websocket.js:1358", 1509.570999999998],
+    ["startLoop lib/receiver.js:148", 1508.0969999999982],
+    ["_write lib/receiver.js:88", 1508.0969999999982],
+    ["getData lib/receiver.js:456", 1507.8159999999982],
+    ["dataMessage lib/receiver.js:540", 1507.1399999999983],
+    ["receiverOnMessage lib/websocket.js:1223", 1504.4639999999984]
+  ]
+}

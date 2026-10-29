@@ -1,0 +1,22 @@
+{"power":{"observedAt":"2026-10-29T11:30:35.701Z","platform":"win32","batteries":[{"BatteryStatus":1,"EstimatedChargeRemaining":99}],"allowed":false,"reason":"AC_POWER_NOT_CONFIRMED"}}
+file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/measurement-power.mjs:41
+    throw Object.assign(new Error(POWER_REQUIRED_MESSAGE), { exitCode: 3, observation });
+                        ^
+
+Error: Mesure refusée : BatteryStatus doit valoir 2. Branche le portable sur secteur, puis relance le contrôle. Si le relevé reste indisponible ou différent de 2, vérifier la sonde avant toute mesure.
+    at assertMeasurementPower (file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/measurement-power.mjs:41:25)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/profile-files-history.mjs:10:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  exitCode: 3,
+  observation: {
+    observedAt: '2026-10-29T11:30:35.701Z',
+    platform: 'win32',
+    batteries: [ { BatteryStatus: 1, EstimatedChargeRemaining: 99 } ],
+    allowed: false,
+    reason: 'AC_POWER_NOT_CONFIRMED'
+  }
+}
+
+Node.js v24.21.0
