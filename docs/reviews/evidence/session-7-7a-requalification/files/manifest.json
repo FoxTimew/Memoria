@@ -1,0 +1,17 @@
+{
+  "startedAt": "2026-10-29T12:30:54.115Z",
+  "commit": "1e40bcef5add72a142f6a4f6474fa674d76661db",
+  "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+  "node": "v24.21.0",
+  "profiler": false,
+  "protocol": "Three series per profile; four scenarios; clients in distinct processes; unchanged application and thresholds; stop on first excess or disconnection.",
+  "sources": {
+    "apps/collab/src/testing/files-load.e2e.ts": "864f117ea0b97d0e5ff9f94bf4cc95e05ab012ed1469fe8713f19f78d1c6c84e",
+    "apps/collab/src/testing/file-load-client.ts": "e59454e9c8cc26eaa7bb3e29ba6f6a1384c84ddea4f7e7fa8a2cd49d6c2df561",
+    "apps/collab/src/testing/file-load-controls.ts": "66c8da1d6a62671e8d29fda5958cd59a5d983be35072ffba4f49d97e549d77d5",
+    "apps/collab/src/service/room.ts": "45bd6dcf6a5264ba0a706c0c5ae06ab2ccc9fac03c260ead4804eaf2a0fde7a2",
+    "apps/collab/src/service/store.ts": "2c27355a43d5cd201363d5c3c8ea697bf50bc0842595cfe3f127232f9710ac81",
+    "apps/collab/src/service/validation-pool.ts": "1b1135968fb557b2eb2bff6d13f092db94b4e397c40c023865815dfaa5b61842",
+    "packages/db/src/file-boundary.ts": "61972218d6342d1635714798c02f440a0af939adcb807becc0fec8b38595083a"
+  }
+}

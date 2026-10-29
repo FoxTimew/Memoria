@@ -1,0 +1,669 @@
+{
+  "metrics": [
+    {
+      "profile": "content-1M",
+      "references": false,
+      "authors": 1,
+      "server": {
+        "values": [16.41059999999925, 14.079999999998108, 13.952699999999822],
+        "median": 14.079999999998108
+      },
+      "wire": {
+        "values": [24.40349999999853, 22.413500000000568, 21.505600000000413],
+        "median": 22.413500000000568
+      },
+      "transaction": {
+        "values": [13.957600000001548, 10.872800000001007, 9.718399999997928],
+        "median": 10.872800000001007
+      },
+      "locks": {
+        "values": [0, 0, 0],
+        "median": 0
+      },
+      "registry": {
+        "values": [0, 0, 0],
+        "median": 0
+      }
+    },
+    {
+      "profile": "content-1M",
+      "references": false,
+      "authors": 2,
+      "server": {
+        "values": [15.434400000001915, 15.740799999999581, 16.14470000000074],
+        "median": 15.740799999999581
+      },
+      "wire": {
+        "values": [35.06910000000062, 35.35959999999977, 34.25470000000132],
+        "median": 35.06910000000062
+      },
+      "transaction": {
+        "values": [11.236599999996542, 11.532399999996414, 13.077100000002247],
+        "median": 11.532399999996414
+      },
+      "locks": {
+        "values": [0, 0, 0],
+        "median": 0
+      },
+      "registry": {
+        "values": [0, 0, 0],
+        "median": 0
+      }
+    },
+    {
+      "profile": "content-1M",
+      "references": true,
+      "authors": 1,
+      "server": {
+        "values": [26.924499999993714, 30.669499999996333, 30.39310000000114],
+        "median": 30.39310000000114
+      },
+      "wire": {
+        "values": [35.69159999999829, 40.33759999999893, 37.83499999999913],
+        "median": 37.83499999999913
+      },
+      "transaction": {
+        "values": [22.812299999997776, 27.9516999999978, 27.657500000001164],
+        "median": 27.657500000001164
+      },
+      "locks": {
+        "values": [5.252200000002631, 4.959999999999127, 5.027800000003481],
+        "median": 5.027800000003481
+      },
+      "registry": {
+        "values": [8.005799999998999, 9.820800000001327, 10.152200000004086],
+        "median": 9.820800000001327
+      }
+    },
+    {
+      "profile": "content-1M",
+      "references": true,
+      "authors": 2,
+      "server": {
+        "values": [29.860499999995227, 33.32289999999921, 27.15219999999681],
+        "median": 29.860499999995227
+      },
+      "wire": {
+        "values": [56.03369999999995, 62.268700000000536, 54.13429999999789],
+        "median": 56.03369999999995
+      },
+      "transaction": {
+        "values": [26.800199999997858, 30.15450000000419, 24.730999999999767],
+        "median": 26.800199999997858
+      },
+      "locks": {
+        "values": [6.049599999998463, 6.403100000003178, 4.755199999999604],
+        "median": 6.049599999998463
+      },
+      "registry": {
+        "values": [8.356599999999162, 10.264900000001944, 8.9375],
+        "median": 8.9375
+      }
+    },
+    {
+      "profile": "history-1M",
+      "references": false,
+      "authors": 1,
+      "server": {
+        "values": [62.789199999999255, 74.46909999999843, 51.435300000004645],
+        "median": 62.789199999999255
+      },
+      "wire": {
+        "values": [235.56700000000092, 283.134399999999, 200.60139999999956],
+        "median": 235.56700000000092
+      },
+      "transaction": {
+        "values": [16.138400000003458, 13.953499999999622, 13.374499999999898],
+        "median": 13.953499999999622
+      },
+      "locks": {
+        "values": [0, 0, 0],
+        "median": 0
+      },
+      "registry": {
+        "values": [0, 0, 0],
+        "median": 0
+      }
+    },
+    {
+      "profile": "history-1M",
+      "references": false,
+      "authors": 2,
+      "server": {
+        "values": [52.41820000000007, 75.6880999999994, 61.16659999999683],
+        "median": 61.16659999999683
+      },
+      "wire": {
+        "values": [277.5881999999983, 348.90559999999823, 300.2459999999992],
+        "median": 300.2459999999992
+      },
+      "transaction": {
+        "values": [12.088700000000244, 14.032599999991362, 13.552800000004936],
+        "median": 13.552800000004936
+      },
+      "locks": {
+        "values": [0, 0, 0],
+        "median": 0
+      },
+      "registry": {
+        "values": [0, 0, 0],
+        "median": 0
+      }
+    },
+    {
+      "profile": "history-1M",
+      "references": true,
+      "authors": 1,
+      "server": {
+        "values": [38.697199999995064, 49.8125, 54.648300000000745],
+        "median": 49.8125
+      },
+      "wire": {
+        "values": [164.67320000000473, 177.44580000000133, 200.74689999999828],
+        "median": 177.44580000000133
+      },
+      "transaction": {
+        "values": [22.148600000000442, 28.734700000000885, 33.582500000004075],
+        "median": 28.734700000000885
+      },
+      "locks": {
+        "values": [4.319700000007288, 5.688699999998789, 5.652000000001863],
+        "median": 5.652000000001863
+      },
+      "registry": {
+        "values": [8.21480000000156, 9.527200000011362, 11.079100000002654],
+        "median": 9.527200000011362
+      }
+    },
+    {
+      "profile": "history-1M",
+      "references": true,
+      "authors": 2,
+      "server": {
+        "values": [63.35030000000552, 59.89039999997476, 61.53750000000582],
+        "median": 61.53750000000582
+      },
+      "wire": {
+        "values": [295.59520000001066, 272.0318000000261, 276.6091000000015],
+        "median": 276.6091000000015
+      },
+      "transaction": {
+        "values": [33.332399999999325, 33.05830000000424, 36.87259999998787],
+        "median": 33.332399999999325
+      },
+      "locks": {
+        "values": [7.039900000003399, 7.484699999971781, 7.391999999992549],
+        "median": 7.391999999992549
+      },
+      "registry": {
+        "values": [10.415800000017043, 11.090700000000652, 13.123500000016065],
+        "median": 11.090700000000652
+      }
+    }
+  ],
+  "hygiene": [
+    {
+      "profile": "content-1M",
+      "series": 1,
+      "preparation": {
+        "observedAt": "2026-10-29T12:30:58.419Z",
+        "windowsFreeBytes": 4229750784,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5710024704,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:30:58.419Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "before": {
+        "observedAt": "2026-10-29T12:31:10.520Z",
+        "windowsFreeBytes": 3898134528,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5686149120,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:31:10.520Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-29T12:32:10.531Z",
+        "windowsFreeBytes": 4295749632,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5677010944,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:32:10.532Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 61,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    {
+      "profile": "content-1M",
+      "series": 2,
+      "preparation": {
+        "observedAt": "2026-10-29T12:32:11.388Z",
+        "windowsFreeBytes": 4306866176,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5677932544,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:32:11.388Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "before": {
+        "observedAt": "2026-10-29T12:32:22.757Z",
+        "windowsFreeBytes": 3518423040,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5658882048,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:32:22.757Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-29T12:33:22.765Z",
+        "windowsFreeBytes": 3905806336,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5687820288,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:33:22.765Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 61,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    {
+      "profile": "content-1M",
+      "series": 3,
+      "preparation": {
+        "observedAt": "2026-10-29T12:33:23.653Z",
+        "windowsFreeBytes": 3929579520,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5688086528,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:33:23.653Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "before": {
+        "observedAt": "2026-10-29T12:33:34.729Z",
+        "windowsFreeBytes": 3268038656,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5650583552,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:33:34.729Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-29T12:34:33.759Z",
+        "windowsFreeBytes": 3789119488,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5691211776,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:34:33.759Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 60,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    {
+      "profile": "history-1M",
+      "series": 1,
+      "preparation": {
+        "observedAt": "2026-10-29T12:34:34.799Z",
+        "windowsFreeBytes": 3759194112,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5689864192,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:34:34.799Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "before": {
+        "observedAt": "2026-10-29T12:34:47.495Z",
+        "windowsFreeBytes": 2887245824,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5665947648,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:34:47.495Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-29T12:36:58.536Z",
+        "windowsFreeBytes": 3839012864,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5734105088,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:36:58.536Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 132,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    {
+      "profile": "history-1M",
+      "series": 2,
+      "preparation": {
+        "observedAt": "2026-10-29T12:36:59.535Z",
+        "windowsFreeBytes": 3799130112,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5728518144,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:36:59.535Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "before": {
+        "observedAt": "2026-10-29T12:37:12.284Z",
+        "windowsFreeBytes": 2860736512,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5675147264,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:37:12.284Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-29T12:39:30.333Z",
+        "windowsFreeBytes": 3592155136,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5725671424,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:39:30.333Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 139,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    },
+    {
+      "profile": "history-1M",
+      "series": 3,
+      "preparation": {
+        "observedAt": "2026-10-29T12:39:31.266Z",
+        "windowsFreeBytes": 3609567232,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5723082752,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:39:31.266Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "before": {
+        "observedAt": "2026-10-29T12:39:43.349Z",
+        "windowsFreeBytes": 2626326528,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5660647424,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:39:43.349Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "after": {
+        "observedAt": "2026-10-29T12:41:56.425Z",
+        "windowsFreeBytes": 3293753344,
+        "wsl": {
+          "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+          "memAvailableBytes": 5727780864,
+          "swapInPages": 386,
+          "swapOutPages": 2163
+        },
+        "power": {
+          "observedAt": "2026-10-29T12:41:56.425Z",
+          "platform": "win32",
+          "batteries": [
+            {
+              "BatteryStatus": 2,
+              "EstimatedChargeRemaining": 98
+            }
+          ],
+          "allowed": true,
+          "reason": null
+        }
+      },
+      "assessment": {
+        "valid": true,
+        "reason": null,
+        "intervals": 134,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      }
+    }
+  ],
+  "confirmations": 3600
+}

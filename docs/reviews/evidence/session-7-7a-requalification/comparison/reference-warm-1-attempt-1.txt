@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-10-29T12:44:19.872Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 98
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"profile":"content-1M","memoryAfterPreparation":{"observedAt":"2026-10-29T12:44:21.185Z","windowsFreeBytes":3103682560,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5707526144,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T12:44:21.185Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"guestDepth":0,"p95":9.069999999999709,"max":25.363700000000335,"iterations":200,"warmup":20,"preparedPlans":[{"name":"collaboration-append-update-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-assert-fence-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-receipt-v1","generic_plans":"215","custom_plans":"5"},{"name":"collaboration-reserve-block-ids-v1","generic_plans":"0","custom_plans":"1"},{"name":"content-resolve-access-v1","generic_plans":"215","custom_plans":"5"}],"samples":200}
+{"profile":"history-1M","memoryAfterPreparation":{"observedAt":"2026-10-29T12:44:24.203Z","windowsFreeBytes":2957991936,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5704146944,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T12:44:24.203Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":98}],"allowed":true,"reason":null}},"guestDepth":0,"p95":39.8781999999992,"max":50.46719999999914,"iterations":200,"warmup":20,"preparedPlans":[{"name":"collaboration-append-update-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-assert-fence-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-receipt-v1","generic_plans":"435","custom_plans":"5"},{"name":"collaboration-reserve-block-ids-v1","generic_plans":"0","custom_plans":"2"},{"name":"content-resolve-access-v1","generic_plans":"435","custom_plans":"5"}],"samples":200}
+✔ Production incremental validation and journal, 1 MiB profiles (17434.7434ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17438.6131
+
+EXIT_CODE=0
