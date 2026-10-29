@@ -1,0 +1,161 @@
+{
+  "recordedAt": "2026-10-29T15:50:05.087Z",
+  "baseCommit": "050786ce0e53242b6a20dbe68ccd8036c4db99b8",
+  "branch": "codex/session-7-files",
+  "scope": "7a closure correctness proofs; no new performance measurement; no 7b implementation",
+  "results": {
+    "rustfs": 23,
+    "recovery": 10,
+    "routes": 11,
+    "races": 6,
+    "boundaries": [16, 7, 3],
+    "browser": 1,
+    "check": {
+      "passed": 169,
+      "skipped": 6,
+      "filesPassed": 32
+    }
+  },
+  "failedAttempts": "Fixture UUID/text cast, missing second-tenant actor, optional headers TypeScript and JSON formatting; logs retained, final complete runs pass.",
+  "sources": [
+    {
+      "name": "apps/api/src/file-recovery.e2e.ts",
+      "sha256": "db65fba8572b8d59ba8169af3691f83f0f9414e286e2f548b8800aad07ec974f"
+    },
+    {
+      "name": "apps/api/src/files-browser.e2e.ts",
+      "sha256": "c02859d8ad8921c3c140f5702a417272787d0f965d96942aa48ed6d8c1234df2"
+    },
+    {
+      "name": "apps/api/src/files.e2e.ts",
+      "sha256": "8187bf89279868003f309074430166d93a3f78986a023af3ce21b7a9bdaa5610"
+    },
+    {
+      "name": "apps/collab/src/testing/files.e2e.ts",
+      "sha256": "ccabc14836ea2b682eddc7dab724e38a63752fef3d195134a632d0dd1f9d3fa8"
+    },
+    {
+      "name": "apps/worker/src/file-accounting.ts",
+      "sha256": "af36a70c2fe71276f8dcea6ffbf63898c79ee4666d1618bee2d5b83c75157ab3"
+    },
+    {
+      "name": "packages/db/src/file-capacity.ts",
+      "sha256": "5995881135bd23a7dcf9b95e858fb81392631283838ac77359b8dca183a897d2"
+    },
+    {
+      "name": "packages/db/src/file-boundary.ts",
+      "sha256": "a7397e8be8468185d35278b14057773050f17fccd6c8de1c87801fc725ca71d3"
+    },
+    {
+      "name": "packages/db/src/file-limits.ts",
+      "sha256": "fe763d83c9b112debeb5f24cc75d470ed4ce870735d8bcf353b143c1ef2ec4a6"
+    },
+    {
+      "name": "packages/db/src/file-fault.ts",
+      "sha256": "56e21b390042002ad74e10b197dd2a6329e145b8f1bc6a94dfc23f8abd6e14be"
+    },
+    {
+      "name": "packages/storage/src/uploads.ts",
+      "sha256": "01da5d7dbb9a14375f96cf82fccc7b174d921a959d4c06daf201986ecc54aec4"
+    },
+    {
+      "name": "packages/storage/src/index.ts",
+      "sha256": "34bd70b622eaff3860ea34c7d582a3f7d9e0a11faca7ac0f5d6815719aee86e2"
+    },
+    {
+      "name": "scripts/build-server.mjs",
+      "sha256": "5640a03a6f22007fc96ffd030a1ffc7f102582e27de91582feff98fac98553fc"
+    },
+    {
+      "name": "scripts/run-file-accounting.mjs",
+      "sha256": "6de295858333bfdbda96446664e65522b11b2dd301f67cfd3669c6571c2fba08"
+    },
+    {
+      "name": "package.json",
+      "sha256": "9a0c2028f1ec94126a578498d488ff2770546d1c01af0cdfa9819a5bcda2cdbb"
+    }
+  ],
+  "files": [
+    {
+      "name": "boundaries.txt",
+      "sha256": "182f14864939f3d37761567f4286e549a15b8889a945c1b686ba2e1276465552",
+      "bytes": 4695
+    },
+    {
+      "name": "browser.json",
+      "sha256": "4d9d2b74fd860dc10811689eb0809623b8933b516156b21d9c2a7c8cf79f1e60",
+      "bytes": 1313
+    },
+    {
+      "name": "browser.txt",
+      "sha256": "97b32b7533e7e3d9c1bb666cbfc5dc417b48c083083e799bdfff249bc4f3b5b8",
+      "bytes": 3411
+    },
+    {
+      "name": "caddy-after-final-browser.json",
+      "sha256": "afe0c87e7f2393865b8bd2663cbc0f89431a288e2a99a10cc6d3bd29c259cc6d",
+      "bytes": 309
+    },
+    {
+      "name": "caddy-diagnostic.json",
+      "sha256": "3dd693ca82fc5e7ed2ac25911f8314dc29b39baf300a21664419e9702f8a95ba",
+      "bytes": 395
+    },
+    {
+      "name": "caddy-restored.json",
+      "sha256": "b37b0384cd8696018fe1ca2349c31539efbdf136c82ee844cc7f00aa4b950742",
+      "bytes": 340
+    },
+    {
+      "name": "check-first-failed.txt",
+      "sha256": "eca54e06368be3683b871ffb03a3675a93f9bbb815c3cc4038d99f033adaa139",
+      "bytes": 4781
+    },
+    {
+      "name": "check-format-failed.txt",
+      "sha256": "8d018f3024e43b3fedd9d6abc5f5902eb01182c10d37bf2eb67e0ed08c2e1fa1",
+      "bytes": 681
+    },
+    {
+      "name": "check.txt",
+      "sha256": "b907cbbcb51130ce9f6a392487b5480216200c486fedf4501ddd343bca9bb182",
+      "bytes": 1825
+    },
+    {
+      "name": "races.txt",
+      "sha256": "39e92bd9770d4b1e52e0e9e63a337801ba6ec7a0f7f97319d4fd478e4c53dd9a",
+      "bytes": 929
+    },
+    {
+      "name": "recovery-fixture-first-failed.txt",
+      "sha256": "4f6295d9be1c3fe58b5922cb7eaa0d2e57c2eeeb07b962688fe2e4b152347e00",
+      "bytes": 3459
+    },
+    {
+      "name": "recovery-fixture-second-failed.txt",
+      "sha256": "f5e3994b25c4f27b41aa0b74724706a72a8e5274958f52883992835235cd38ba",
+      "bytes": 3154
+    },
+    {
+      "name": "recovery.txt",
+      "sha256": "f151e9c4dd2ac6be632754372400135373d31722039f7a018104f7353407d3be",
+      "bytes": 1752
+    },
+    {
+      "name": "routes.txt",
+      "sha256": "2ef7be7a0579f67470ac324cda3db77a16e9683c5e34de0e582691809ef747d7",
+      "bytes": 1542
+    },
+    {
+      "name": "rustfs.json",
+      "sha256": "bf9af7500c38e0c6447d47683b8738b352e8e06062c466f5b130263ae95c5f81",
+      "bytes": 4741
+    },
+    {
+      "name": "rustfs.txt",
+      "sha256": "6d00eff0d22c7e9966c85d98f2b5794902965e3c2d72d2010fa93a52aebba780",
+      "bytes": 2476
+    }
+  ],
+  "hashBasis": "Committed Git blobs, LF after repository line-ending normalization; manifest itself excluded"
+}

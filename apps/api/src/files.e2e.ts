@@ -6,6 +6,8 @@ import { storageFixture } from './testing/storage-fixture.ts';
 import { databaseHttpFixture } from './testing/database-http-fixture.ts';
 import { UploadService } from '@memoria/storage/uploads';
 import { FilesController } from './modules/files/files.controller.ts';
+import { FilesService } from './modules/files/files.service.ts';
+import { reconcileFileCapacity } from '@memoria/db';
 import { FILE_QUOTA } from './modules/files/file-quota.ts';
 import { IS_PUBLIC } from './modules/auth/public.decorator.ts';
 import { ipKey } from '@memoria/auth';
@@ -87,6 +89,45 @@ await test(
       return current;
     };
     try {
+      await t.test(
+        'global capacity fails before allocation; accounting drift is refused without leaking tenant data',
+        async () => {
+          const limits = h.app.get(FilesService).transport.limits;
+          const cap = limits.capacityBytes;
+          const input = {
+            pageId,
+            bytes: bytes.length,
+            name: 'capacity fixture',
+            checksum,
+            idempotency: randomUUID(),
+          };
+          const count = () =>
+            db
+              .query('SELECT count(*) FROM file_upload_intents')
+              .then((r) => Number(r.rows[0].count));
+          const before = await count();
+          try {
+            limits.capacityBytes = 1;
+            const denied = await call(owner, input);
+            assert.equal(denied.status, 429);
+            assert.equal(denied.headers.get('retry-after'), '1');
+            assert.deepEqual(denied.data, { code: 'FILE_STORAGE_CAPACITY' });
+            assert.equal(await count(), before);
+          } finally {
+            limits.capacityBytes = cap;
+          }
+          await db.query(
+            'INSERT INTO file_workspace_usage(workspace_id,reserved_bytes,files_count) VALUES($1,1,0) ON CONFLICT(workspace_id) DO UPDATE SET reserved_bytes=file_workspace_usage.reserved_bytes+1',
+            [h.f.db.workspace],
+          );
+          const drift = await call(owner, input);
+          assert.equal(drift.status, 503);
+          assert.deepEqual(drift.data, { code: 'FILE_ACCOUNTING_DRIFT' });
+          assert.equal(await count(), before);
+          assert.equal((await reconcileFileCapacity(db, true)).repaired, 1);
+          assert.equal((await reconcileFileCapacity(db)).driftWorkspaces, 0);
+        },
+      );
       await t.test(
         'U/P/L: all routes are guarded, quota classified, CSRF checked, bodies bounded',
         async () => {

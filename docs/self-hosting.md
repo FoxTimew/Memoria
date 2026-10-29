@@ -174,7 +174,51 @@ L'initialisation crée un bucket privé et un CORS exact pour `APP_ORIGIN`. `S3_
 
 Migration 0032 puis API/worker de la même version : les six routes d'intention sont authentifiées, limitées et réservées à l'éditeur de la page/ligne propriétaire. Le worker finalise en streaming vers une clé immuable et laisse l'état `validating` pour 7b. Aucun fichier n'est encore servi au public. Configurer les mêmes `FILES_*` dans API, collab et worker ; `FILES_COPY_BYTES=21474836480` borne les copies temporaires, en plus du staging et des quotas métier. `ORPHAN_FILE_RETENTION_HOURS=24`, `TRASH_RETENTION_DAYS=30`. Les rejets restent retenus 24 h ; une annulation explicite peut être collectée après expiration des capacités. Le quota reste réservé jusqu'à la suppression confirmée. Après huit erreurs de finalisation, surveiller `attempts`/`last_error` et faire réessayer explicitement la commande `complete` ; ne jamais modifier les compteurs à la main.
 
-Les paragraphes ci-dessous conservent le cadrage initial ; cette décision remplace son choix encore ouvert et l'absence de routage local.
+### Capacité globale et rapprochement — clôture 7a, 29 octobre 2026
+
+Configurer les mêmes plafonds dans API, worker et collab, **avant** d'admettre des fichiers. Ce sont des réservations logiques, pas une détection de l'espace libre du fournisseur :
+
+| Réglage                | Défaut                    | Ce qu'il réserve                                                                                                                                                                                          |
+| ---------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FILES_STAGING_BYTES`  | 68 719 476 736 (64 Gio)   | Taille déclarée des intentions dont le staging n'est pas confirmé nettoyé, même avant réception des octets. Permet la future campagne de dix fichiers de 5 Gio avec marge ; ce n'est pas un débit mesuré. |
+| `FILES_COPY_BYTES`     | 21 474 836 480 (20 Gio)   | Copies temporaires non supprimées, y compris réponses perdues ; la copie finale vérifiée est déjà couverte par la réserve métier.                                                                         |
+| `FILES_CAPACITY_BYTES` | 536 870 912 000 (500 Gio) | Somme des réserves métier (originaux et budget de dérivés), du staging et des copies temporaires, pour **tous** les workspaces.                                                                           |
+
+500 Gio laisse de la marge par rapport au quota métier initial de 250 Gio d'un workspace, sans promettre deux workspaces pleins ni un dimensionnement physique de 500 Gio. **Abaisser ce réglage à la capacité réellement allouée**, après déduction des marges fournisseur, PG/WAL et système ; sauvegardes séparées. Surveiller l'espace libre du volume RustFS : le protocole S3 ne fournit pas une réserve disque transactionnelle. Réplication, métadonnées, rejeu d'une URL et opérations déjà acceptées par un fournisseur en panne demandent leur propre marge et leur qualification. Un relèvement exige une mesure.
+
+Une transaction courte sérialise les admissions globales et les corrections de compteurs ; aucun appel S3 sous ce verrou. Une réservation dépassant un plafond renvoie `429 FILE_STAGING_CAPACITY` ou `FILE_STORAGE_CAPACITY`, sans intention créée ; une copie en attente de capacité reste réessayable. Une divergence de compteur du workspace bloque les nouvelles intentions (`503 FILE_ACCOUNTING_DRIFT`). Le worker compare chaque minute les compteurs aux métadonnées autoritatives et émet `file_accounting_drift` avec des totaux uniquement. Il ne corrige pas silencieusement une divergence.
+
+Depuis la racine, `.env` pointant vers l'installation voulue :
+
+```sh
+pnpm files:accounting
+```
+
+Lecture seule ; code de sortie 1 si divergence, 0 sinon. `reservedBytes`, `stagingBytes`, `copyBytes` sont des chaînes d'octets, sans nom, email, clé S3 ni jeton. `legacyFiles` compte les fichiers actifs sans intention ; `documentsToInspect` compte les registres absents ou décalés. Ce dernier indicateur **n'établit pas une corruption** : une ancienne page sans fichier peut n'avoir aucun registre et être amorcée normalement à son ouverture.
+
+En cas de divergence : conserver le rapport, sauvegarder PostgreSQL et les objets, identifier sa cause et comparer l'inventaire des fichiers/intents au stockage privé. Après avoir confirmé que seules les valeurs agrégées sont erronées, l'exploitant peut lancer explicitement :
+
+```sh
+pnpm files:accounting --repair
+pnpm files:accounting
+```
+
+La première commande recalcule uniquement `file_workspace_usage` sous le verrou d'admission ; la seconde doit sortir à 0. Aucun objet n'est supprimé, aucun fichier n'est publié, aucun droit ou registre Yjs n'est reconstruit. Elle ne vérifie pas les hashes des objets S3 et ne répare pas une métadonnée source corrompue. Le wrapper reconstruit le petit exécutable ; pour un artefact déjà construit : `node --env-file=.env apps/worker/dist/file-accounting.mjs [--repair]`. Test réel de ces deux modes dans `pnpm test:files:recovery`.
+
+### Anciens fichiers sans registre — procédure conservatrice
+
+Ne pas reconstruire `file_usages` depuis la projection asynchrone des blocs, ni rendre un ancien fichier accessible par son seul UUID. Une page Yjs contenant des fichiers avec registre absent/incohérent reste fermée par `FILE_LEDGER_REBUILD_REQUIRED`. Le test de frontière supprime le registre d'une page réellement journalisée et vérifie ce refus sans écriture de secours.
+
+1. Avant la mise à jour coordonnée, sauvegarder PostgreSQL, objets et secrets ; conserver aussi le volume MinIO historique si les données de test y sont encore. Le passage local à RustFS n'a pas copié ces objets.
+2. Exécuter le rapprochement en lecture seule, inventorier les pages/fichiers anciens en accès opérateur privé. Une correction de compteur ne corrige pas leur provenance.
+3. Pour des **données de test dispensables**, conserver l'ancien workspace en quarantaine (aucun accès invité), créer un workspace neuf et de nouvelles pages. Réimporter les assets par le parcours autorisé quand l'interface 7c sera disponible ; ne pas recopier les anciens IDs. Aucune suppression automatique des anciennes données dans 7a.
+4. Si ces données ont de la valeur, conserver la sauvegarde et arrêter leur migration. Une reconstruction auditée depuis le contenu Yjs validé, avec preuve de provenance des fichiers, devra être qualifiée séparément ; elle n'est pas livrée. Le service de lecture reste fermé en 7a.
+
+`pnpm dev:collab reset-legacy` concerne le passage de session 2 à Yjs : **ce n'est pas un outil de réparation du registre de fichiers 7a**. Ne pas l'employer pour ce problème. Aucune commande de suppression globale, aucun passage forcé à `ready` et aucune copie directe des droits ne sont nécessaires à la clôture des tests.
+
+La [fiche de clôture](reviews/session-7-7a-cloture.md) distingue les pannes injectées après opérations S3 réelles, le crash réel du worker et les crashs/restaurations du fournisseur encore à qualifier. Le test navigateur utilise une page de protocole, pas l'interface de fichiers prévue en 7c.
+
+Les paragraphes ci-dessous conservent le cadrage initial ; les décisions et résultats datés ci-dessus remplacent son choix encore ouvert et l'absence de routage local.
 
 MinIO communautaire local n'est pas un choix de production maintenu. SeaweedFS a été qualifié en premier ; le développeur garde son patch comme **déblocage temporaire**, sans engagement de maintenir un fork. Le [comparatif du 29 octobre](reviews/session-7-7a-decision-stockage.md) donne RustFS 1.0.4 à 23/23 et Garage 2.5.0 à 18/23, sans patch, avec licences, sources et limites. **Choix du développeur avant 7b** ; pas encore de procédure d'installation de production prête à exécuter, ni de remplacement du Compose local.
 

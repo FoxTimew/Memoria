@@ -1,0 +1,7 @@
+{
+  "checkedAt": "2026-10-29T15:46:58.134Z",
+  "equalBytes": true,
+  "activeSha256": "099e89c72f5c0468998298d5d27168fa2720ca691349def66b50368edaa1058e",
+  "savedSha256": "099e89c72f5c0468998298d5d27168fa2720ca691349def66b50368edaa1058e",
+  "scope": "Read-only verification after final isolated browser run"
+}

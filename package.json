@@ -64,7 +64,10 @@
     "test:storage:alternatives": "node scripts/test-storage-alternatives.mjs",
     "test:files:boundaries": "node scripts/test-collab.mjs --suite files && node scripts/test-collab.mjs --suite file-cells && node scripts/test-collab.mjs --suite files-wire",
     "test:files:races": "node scripts/build-server.mjs api --file-races-e2e && node --env-file=.env apps/api/dist/file-races.e2e.mjs",
-    "profile:files": "node scripts/test-collab.mjs --suite file-projection-profile"
+    "profile:files": "node scripts/test-collab.mjs --suite file-projection-profile",
+    "test:files:recovery": "node scripts/build-server.mjs worker --file-accounting && node scripts/build-server.mjs api --file-recovery-e2e && node --env-file=.env apps/api/dist/file-recovery.e2e.mjs",
+    "files:accounting": "node scripts/run-file-accounting.mjs",
+    "test:files:browser": "node scripts/build-server.mjs api --files-browser-e2e && node --env-file=.env --use-system-ca apps/api/dist/files-browser.e2e.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

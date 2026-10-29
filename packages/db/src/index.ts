@@ -18,3 +18,9 @@ export { FileCells } from './file-cells.ts';
 export type { FilePlan, FileReference, FileIntroduction } from './file-boundary.ts';
 export { readFileLimits, fileLimitDefaults, fileLimitVariable } from './file-limits.ts';
 export type { FileLimits } from './file-limits.ts';
+export {
+  admitFileCapacity,
+  lockFileCapacity,
+  readFileCapacity,
+  reconcileFileCapacity,
+} from './file-capacity.ts';

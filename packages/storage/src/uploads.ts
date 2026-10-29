@@ -1,6 +1,14 @@
 import { createHash, randomUUID } from 'node:crypto';
 import type { Pool, PoolClient } from 'pg';
-import { FileBoundary, FileFault, readFileLimits, resolvePageAccess } from '@memoria/db';
+import {
+  FileBoundary,
+  FileFault,
+  readFileLimits,
+  resolvePageAccess,
+  admitFileCapacity,
+  lockFileCapacity,
+  reconcileFileCapacity,
+} from '@memoria/db';
 import type { FileLimits, PageAccessRequest } from '@memoria/db';
 import { S3ObjectStorage } from './index.ts';
 import type { StorageConfig, StoragePart } from './index.ts';
@@ -37,6 +45,7 @@ type PartPlan = { number: number; bytes: number; checksum: string };
 /** Durable SQL state machine. S3 is never called inside a SQL transaction.
  * Copies are allocated once per attempt, so a stale worker cannot overwrite a verified object. */
 export class UploadService {
+  private lastReconciliation = 0;
   readonly boundary: FileBoundary;
   readonly storage: S3ObjectStorage;
   constructor(
@@ -386,6 +395,12 @@ export class UploadService {
   }
   /** Called by the worker; one object job at a time per process, durable retries in PG. */
   async tick() {
+    if (Date.now() - this.lastReconciliation >= 60000) {
+      const check = await reconcileFileCapacity(this.pool);
+      if (check.driftWorkspaces)
+        console.warn(JSON.stringify({ event: 'file_accounting_drift', ...check }));
+      this.lastReconciliation = Date.now();
+    }
     await this.orphans();
     await this.pool.query(
       `UPDATE files f SET state='deleting' FROM file_upload_intents i WHERE i.file_id=f.id AND f.state IN ('reserved','uploading','rejected') AND (i.expires_at<=clock_timestamp() OR i.absolute_expires_at<=clock_timestamp()) AND NOT EXISTS(SELECT 1 FROM file_usages u WHERE u.file_id=f.id)`,
@@ -427,16 +442,11 @@ export class UploadService {
         await this.locked(a, id, async (c, current) => {
           if (current.job_epoch !== epoch || current.state !== 'completing')
             throw new FileFault('UPLOAD_STATE_CHANGED', 409);
-          await c.query("SELECT pg_advisory_xact_lock(hashtextextended('file-copy-capacity',0))");
-          const used = Number(
-            (
-              await c.query<{ n: string }>(
-                `SELECT coalesce(sum(i.requested_bytes),0) n FROM file_object_copies o JOIN file_upload_intents i ON i.file_id=o.file_id WHERE o.deleted_at IS NULL AND NOT (i.final_key IS NOT DISTINCT FROM o.object_key AND i.bytes_verified_at IS NOT NULL)`,
-              )
-            ).rows[0]!.n,
-          );
-          if (used + Number(r.requested_bytes) > this.limits.copyBytes)
-            throw new FileFault('FILE_COPY_CAPACITY', 429);
+          await admitFileCapacity(c, this.limits, {
+            reserved: 0,
+            staging: 0,
+            copies: Number(r.requested_bytes),
+          });
           await c.query(
             'INSERT INTO file_object_copies(object_key,file_id,epoch) VALUES($1,$2,$3)',
             [key, id, epoch],
@@ -543,6 +553,7 @@ export class UploadService {
         (await c.query('SELECT 1 FROM file_usages WHERE file_id=$1 LIMIT 1', [r.file_id])).rowCount
       )
         throw new FileFault('UPLOAD_STATE_CHANGED', 409);
+      await lockFileCapacity(c);
       await c.query(
         "UPDATE files SET state='deleted',storage_deleted_at=clock_timestamp() WHERE id=$1",
         [r.file_id],

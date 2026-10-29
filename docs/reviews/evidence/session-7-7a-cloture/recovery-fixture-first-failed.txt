@@ -1,0 +1,61 @@
+$ node scripts/build-server.mjs api --file-recovery-e2e && node --env-file=.env apps/api/dist/file-recovery.e2e.mjs
+▶ 7a recovery and accounting against real PostgreSQL/RustFS
+  ✔ lost multipart initiation response is reconciled without a second upload or reservation (1724.1287ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost CompleteMultipartUpload response is recovered by HEAD and final bytes are verified (2519.2146ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost CopyObject response retains its capacity; retry publishes only a new verified immutable copy (1621.1254ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost SQL COMMIT acknowledgement does not double-charge finalization or deletion (1548.272ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost DELETE response keeps reservations until absence is confirmed after restart (1554.1266ms)
+  ✔ actual worker process crash after copy recovers from SQL and collects the uncommitted object (1766.6561ms)
+{"event":"file_job_retry","code":"UPLOAD_STATE_CHANGED"}
+  ✔ old job resumes after losing its PostgreSQL lock: it cannot publish or overwrite the new epoch (1601.828ms)
+  ✖ global staging/total/copy budgets are atomic across tenants and counters can be audited/repaired (1179.3523ms)
+{"event":"file_job_retry","code":"FILE_COPY_CAPACITY"}
+  ✔ copy capacity denial leaves SQL and S3 unchanged and resumes after capacity is available (1426.1815ms)
+✖ 7a recovery and accounting against real PostgreSQL/RustFS (16285.5552ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40642.5379
+
+✖ failing tests:
+
+test at apps\api\dist\file-recovery.e2e.mjs:47996:15
+✖ global staging/total/copy budgets are atomic across tenants and counters can be audited/repaired (1179.3523ms)
+  error: inconsistent types deduced for parameter $1
+      at C:\Users\Foxti\Documents\Projets\Memoria\node_modules\.pnpm\pg-pool@3.14.0_pg@8.23.1\node_modules\pg-pool\index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async newWorkspace (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:48277:11)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:48282:24
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:47999:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async scenario (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:47996:7)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:48273:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 141,
+    severity: 'ERROR',
+    code: '42P08',
+    detail: 'uuid versus text',
+    hint: undefined,
+    position: '64',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_param.c',
+    line: '219',
+    routine: 'variable_coerce_param_hook'
+  }
+[ELIFECYCLE] Command failed with exit code 1.

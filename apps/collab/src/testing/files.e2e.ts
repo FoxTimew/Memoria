@@ -432,6 +432,46 @@ test('7a actual Room journal: author attribution, rollback, independent usages a
         );
       },
     );
+    await t.test(
+      'legacy document without a verified ledger stays closed; opening never infers rights from projection',
+      async () => {
+        const saved = (
+          await db.pool.query('SELECT * FROM file_ledger_states WHERE page_id=$1', [db.page])
+        ).rows[0];
+        const before = await db.pool.query(
+          'SELECT count(*)::int n FROM collaboration_updates WHERE page_id=$1',
+          [db.page],
+        );
+        await db.pool.query('DELETE FROM file_ledger_states WHERE page_id=$1', [db.page]);
+        const reopenedDoc = new Y.Doc(),
+          reopened = new Room(store, db.page, state.generation, reopenedDoc, () => {});
+        try {
+          await assert.rejects(reopened.load(), /FILE_LEDGER_REBUILD_REQUIRED/);
+          assert.equal(
+            (await db.pool.query('SELECT 1 FROM file_ledger_states WHERE page_id=$1', [db.page]))
+              .rowCount,
+            0,
+          );
+          assert.equal(
+            (
+              await db.pool.query(
+                'SELECT count(*)::int n FROM collaboration_updates WHERE page_id=$1',
+                [db.page],
+              )
+            ).rows[0].n,
+            before.rows[0].n,
+          );
+        } finally {
+          await reopened.close();
+          reopenedDoc.destroy();
+          // Restore only the exact pre-test state; this is not an application repair path.
+          await db.pool.query(
+            'INSERT INTO file_ledger_states(page_id,generation,revision) VALUES($1,$2,$3)',
+            [saved.page_id, saved.generation, saved.revision],
+          );
+        }
+      },
+    );
     await t.test('deleting file cannot gain a new usage, even via direct SQL', async () => {
       await db.pool.query("UPDATE files SET state='deleting' WHERE id=$1", [file]);
       await assert.rejects(

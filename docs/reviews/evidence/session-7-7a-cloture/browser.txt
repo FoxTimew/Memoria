@@ -1,0 +1,32 @@
+$ node scripts/build-server.mjs api --files-browser-e2e && node --env-file=.env --use-system-ca apps/api/dist/files-browser.e2e.mjs
+PASS browser POST 1 KiB, multipart 33 MiB (16/16/1), offline reload/resume, byte verification, cookie isolation, untrusted CORS and upload-only proxy. Report: C:\Users\Foxti\Documents\Projets\Memoria\.local\files-browser\memoria-files-browser-37c0b80b-a65d-4a15-a67c-061db4db4983/report.json
+{"level":"info","ts":1793288512.3494887,"msg":"maxprocs: Leaving GOMAXPROCS=16: CPU quota undefined"}
+{"level":"info","ts":1793288512.349536,"msg":"GOMEMLIMIT is updated","GOMEMLIMIT":6471692697,"previous":9223372036854775807}
+{"level":"info","ts":1793288512.3495398,"msg":"using config from file","file":"/fixture/Caddyfile"}
+{"level":"info","ts":1793288512.3495424,"msg":"adapted config to JSON","adapter":"caddyfile"}
+{"level":"warn","ts":1793288512.3495436,"msg":"Caddyfile input is not formatted; run 'caddy fmt --overwrite' to fix inconsistencies","adapter":"caddyfile","file":"/fixture/Caddyfile","line":2}
+{"level":"warn","ts":1793288512.3495476,"logger":"admin","msg":"admin endpoint disabled"}
+{"level":"info","ts":1793288512.3498533,"logger":"tls.cache.maintenance","msg":"started background certificate maintenance","cache":"0x39b0daec600"}
+{"level":"warn","ts":1793288512.3509142,"logger":"tls","msg":"unmanaged certificate expires within 1 day","not_after":1793303328,"sans":["localhost"]}
+{"level":"warn","ts":1793288512.351042,"logger":"tls","msg":"unmanaged certificate expires within 1 day","not_after":1793310442,"sans":["uploads.localhost"]}
+{"level":"info","ts":1793288512.3511953,"logger":"http.auto_https","msg":"skipping automatic certificate management because one or more matching certificates are already loaded","domain":"localhost","server_name":"srv0"}
+{"level":"info","ts":1793288512.3512194,"logger":"http.auto_https","msg":"automatic HTTP->HTTPS redirects are disabled","server_name":"srv0"}
+{"level":"info","ts":1793288512.3512406,"logger":"http.auto_https","msg":"skipping automatic certificate management because one or more matching certificates are already loaded","domain":"uploads.localhost","server_name":"srv1"}
+{"level":"info","ts":1793288512.351244,"logger":"http.auto_https","msg":"automatic HTTP->HTTPS redirects are disabled","server_name":"srv1"}
+{"level":"info","ts":1793288512.3620384,"logger":"http","msg":"enabling HTTP/3 listener","addr":":8443"}
+{"level":"info","ts":1793288512.3622866,"logger":"http.log","msg":"server running","name":"srv0","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1793288512.3623824,"logger":"http","msg":"enabling HTTP/3 listener","addr":":8444"}
+{"level":"info","ts":1793288512.3625844,"logger":"http.log","msg":"server running","name":"srv1","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1793288512.3641307,"msg":"autosaved config (load with --resume flag)","file":"/config/caddy/autosave.json"}
+{"level":"info","ts":1793288512.3641565,"msg":"serving initial configuration"}
+{"level":"info","ts":1793288512.3668919,"logger":"tls","msg":"cleaning storage unit","storage":"FileStorage:/data/caddy"}
+{"level":"info","ts":1793288512.3688297,"logger":"tls","msg":"finished cleaning storage units"}
+✔ 7a browser HTTPS POST/multipart/resume, origin and cookie boundaries (10375.229ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10380.3652

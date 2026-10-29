@@ -33,6 +33,7 @@ export interface StorageConfig {
 /** Streaming transport. The UploadService owns authorization, reservation and keys.
  * Browser capabilities are restricted to POST and UploadPart. */
 export class S3ObjectStorage {
+  private stopped = false;
   readonly client: S3Client;
   readonly publicClient: S3Client;
   constructor(readonly config: StorageConfig) {
@@ -52,10 +53,12 @@ export class S3ObjectStorage {
     });
   }
   close() {
+    this.stopped = true;
     this.client.destroy();
     this.publicClient.destroy();
   }
   private key(key: string) {
+    if (this.stopped) throw new Error('STORAGE_CLOSED');
     if (!/^(staging|objects)\/[a-zA-Z0-9/-]{1,200}$/.test(key))
       throw new Error('INVALID_OBJECT_KEY');
     return { Bucket: this.config.bucket, Key: key };
@@ -229,6 +232,7 @@ export class S3ObjectStorage {
       .map((u) => u.UploadId!);
   }
   async initialize(origin: string) {
+    if (this.stopped) throw new Error('STORAGE_CLOSED');
     try {
       await this.client.send(new CreateBucketCommand({ Bucket: this.config.bucket }));
     } catch (error) {

@@ -4,15 +4,9 @@ import { resolvePageAccess } from './access.ts';
 import type { PageAccessRequest } from './access.ts';
 import { readFileLimits } from './file-limits.ts';
 import type { FileLimits } from './file-limits.ts';
-
-export class FileFault extends Error {
-  constructor(
-    public code: string,
-    public status = 404,
-  ) {
-    super(code);
-  }
-}
+import { FileFault } from './file-fault.ts';
+import { admitFileCapacity, assertFileAccounting } from './file-capacity.ts';
+export { FileFault } from './file-fault.ts';
 export type FileReference = { slot: string; file: string };
 export type FileIntroduction = FileReference & { author: PageAccessRequest };
 type Source = FileIntroduction & { source?: { id: string; page: string; database: string | null } };
@@ -275,11 +269,13 @@ export class FileBoundary {
         ).rows[0]!.n,
       );
       if (active >= this.limits.activeFiles) throw new FileFault('FILE_CONCURRENCY_LIMIT', 429);
+      const reserved = input.bytes + this.limits.derivativeBytes;
+      await admitFileCapacity(c, this.limits, { reserved, staging: input.bytes, copies: 0 });
+      await assertFileAccounting(c, a.workspace);
       await c.query(
         'INSERT INTO file_workspace_usage(workspace_id) VALUES($1) ON CONFLICT DO NOTHING',
         [a.workspace],
       );
-      const reserved = input.bytes + this.limits.derivativeBytes;
       const admitted = await c.query(
         'UPDATE file_workspace_usage SET reserved_bytes=reserved_bytes+$2,files_count=files_count+1 WHERE workspace_id=$1 AND reserved_bytes+$2<=$3 AND files_count<$4 RETURNING workspace_id',
         [a.workspace, reserved, this.limits.workspaceBytes, this.limits.workspaceFiles],

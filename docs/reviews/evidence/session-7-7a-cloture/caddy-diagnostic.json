@@ -1,0 +1,8 @@
+{
+  "container": "8bad98a17e49e980a57fa1c12cba9e450312b65821e4094670ad02d57fc3f1df",
+  "activeSha256": "099e89c72f5c0468998298d5d27168fa2720ca691349def66b50368edaa1058e",
+  "autosaveSha256": "7242be56a0d44a1442a236fec87e39b4907e466a22e74543dbbe039865e4c23f",
+  "activeListeners": [[":443"], [":9443"]],
+  "autosaveListeners": [[":8443"], [":8444"]],
+  "observedAt": "2026-10-29T15:19:02.796Z"
+}

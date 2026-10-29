@@ -91,6 +91,14 @@ Headers imposés par le serveur : `Cache-Control: private, no-store`, `X-Content
 
 Le gateway de lecture ajoute un processus, un saut réseau et des contrôles SQL ; le pipeline image ajoute CPU/RAM/disque. **Aucun chiffre de capacité n’est prouvé dans cet ADR.** La [fiche de cadrage](../reviews/session-7-etape-1-cadrage.md) fixe les preuves 7a–7d, les quotas retenus et les arrêts. La qualification dédiée 4 vCPU/8 Gio doit inclure ces coûts et le stockage avant le studio pilote.
 
+## Clôture du transport 7a et mesures 7d — 29 octobre 2026
+
+Les [preuves complémentaires](../reviews/session-7-7a-cloture.md) ajoutent le navigateur réel sur HTTPS/Caddy : POST, multipart 33 Mio, interruption réseau puis rechargement/reprise, absence de cookies sur l'origine d'upload, refus CORS d'une origine étrangère et refus GET/list au proxy. Le navigateur utilise une page de protocole dédiée ; l'interface produit, ses avertissements et son cache restent en 7c. Les réponses ambiguës, le job tardif et la capacité globale sont détaillés dans l'ADR 022. Aucun service de lecture ni décodage 7b ajouté.
+
+Décision du développeur après requalification : en **7d**, décomposer le reçu WSS historique (environ 61 ms serveur contre 300 ms reçus), avec mesures corrélées du traitement client, lot/file, réseau, diffusion et réception. Ne pas additionner des p95 non appariés ni attribuer au réseau un résidu sans mesure. Le plafond de **200 ms en charge mixte s'applique au profil contenu** ; l'historique reste un indicateur surveillé avec rebasage pré-pilote, conformément à 3d. Rapporter les deux, sans changer les plafonds serveur ni la marge de non-régression.
+
+Provoquer aussi une saturation CPU contrôlée et documentée pendant la saisie. Si le contrôle d'accès dépasse son délai et ferme par `CONTROL_UNAVAILABLE`, mesurer la reconnexion automatique du client réel et vérifier qu'aucune saisie n'est perdue. Présenter les options (délai, priorité du contrôle, comportement client), sans affaiblir l'échec fermé. Même scénario obligatoire sur les **4 vCPU pré-pilote**. Ces deux investigations sont planifiées, pas revendiquées comme exécutées par la clôture 7a.
+
 ## Ajustement accepté — téléchargements à risque et analyse locale
 
 L’interface de 7c affiche **avant téléchargement** d’un exécutable, script ou archive un avertissement explicite : « Ce fichier peut contenir un programme ou des instructions dangereuses. Ne l’ouvrez que si vous connaissez sa provenance. » Confirmation pour cet acte, type détecté serveur (extension suspecte ou type inconnu : traitement prudent également), sans nom de chemin système. Un statut antivirus négatif ne supprime pas cet avertissement. Aucun contenu actif inline.

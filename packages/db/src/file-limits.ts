@@ -17,6 +17,8 @@ export const fileLimitDefaults = {
   resumeSeconds: 24 * 3600,
   absoluteSeconds: 7 * 24 * 3600,
   copyBytes: 20 * 1024 ** 3,
+  stagingBytes: 64 * 1024 ** 3,
+  capacityBytes: 500 * 1024 ** 3,
 } as const;
 export type FileLimits = { -readonly [K in keyof typeof fileLimitDefaults]: number };
 export const fileLimitVariable = (key: keyof FileLimits) =>

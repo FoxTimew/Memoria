@@ -1,0 +1,52 @@
+$ node scripts/build-server.mjs api --file-recovery-e2e && node --env-file=.env apps/api/dist/file-recovery.e2e.mjs
+▶ 7a recovery and accounting against real PostgreSQL/RustFS
+  ✔ lost multipart initiation response is reconciled without a second upload or reservation (1436.2059ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost CompleteMultipartUpload response is recovered by HEAD and final bytes are verified (2054.6405ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost CopyObject response retains its capacity; retry publishes only a new verified immutable copy (1566.0936ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost SQL COMMIT acknowledgement does not double-charge finalization or deletion (1435.8632ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost DELETE response keeps reservations until absence is confirmed after restart (1602.6443ms)
+  ✔ actual worker process crash after copy recovers from SQL and collects the uncommitted object (1816.4806ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ old job resumes after losing its PostgreSQL lock: it cannot publish or overwrite the new epoch (1567.2163ms)
+  ✖ global staging/total/copy budgets are atomic across tenants and counters can be audited/repaired (1189.2639ms)
+{"event":"file_job_retry","code":"FILE_COPY_CAPACITY"}
+  ✔ copy capacity denial leaves SQL and S3 unchanged and resumes after capacity is available (1374.0584ms)
+✖ 7a recovery and accounting against real PostgreSQL/RustFS (15293.1894ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15298.7234
+
+✖ failing tests:
+
+test at apps\api\dist\file-recovery.e2e.mjs:48013:15
+✖ global staging/total/copy budgets are atomic across tenants and counters can be audited/repaired (1189.2639ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /FILE_STAGING_CAPACITY/. Input:
+  
+  'Error: FILE_UNAVAILABLE'
+  
+      at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:48318:16
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:48016:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async scenario (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:48013:7)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:48290:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/file-recovery.e2e.mjs:48008:3 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Error: FILE_UNAVAILABLE',
+    expected: /FILE_STAGING_CAPACITY/,
+    operator: 'match',
+    diff: 'simple'
+  }
+[ELIFECYCLE] Command failed with exit code 1.
