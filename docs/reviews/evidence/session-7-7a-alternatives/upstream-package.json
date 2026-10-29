@@ -1,0 +1,20 @@
+{
+  "preparedAt": "2026-10-29T08:48:17.536Z",
+  "published": false,
+  "directory": ".local/seaweedfs-upstream",
+  "files": {
+    "issue.md": "89814d2c1b23d75b8e84a83f37139a1c8e60d7341271ddf687e693ba3cebf15f",
+    "pull-request.md": "b118f0528431e56ecbfeb4d72e0040651087225267053535647c517c2caae59a",
+    "README.md": "056c21acf6c59a244006f25563bc374f39756d98c64938070a46717e71cae365",
+    "reproduce.mjs": "21b8b4c0982dee9faea5bb571536bdaaac78bfaaa9be53f7850b21e9c3e9ec33",
+    "package.json": "3d17b4e273716cd80c269b36a0f47f85cd40106ec2e0a0065a4e6b0a7da8a398",
+    "run-reproducer.mjs": "736b69d32c4eece7d6c2fcbf134542cd7e5da20f9605a83ed75f8c8c2457aaef",
+    "verify-master.mjs": "b174954fa11fa894f30f14846a94bfe6ba3565d892660b3d216c9d86db08f723",
+    "seaweedfs-multipart.patch": "bd9d4027f02278032710720bda315a659417df0de7b12ccffb1b293c5221cf6a",
+    "multipart.patch": "3e56352bfc24cf999fa9352556c8b977f8dacd7af7f584ef29b4360a7c51a05c",
+    "memoria_multipart.go": "fbcdabdc8b069d0405091fae25f43acd868768f848bea6b0c01ec61a469a72eb",
+    "memoria_multipart_test.go": "f1c25f31a5148505fb9e85ed009bace5e0aad666cf55675e7db1750a1a0c8790",
+    "go-results.txt": "1d8cff07b46ca6bf303bb649efd4d91d54c4e1571f1dc9179512d0109447f5c3",
+    "reproducer-result.txt": "0b86a6739a47d967a6f5b56bbf3f40fc3140394275a1b71648f905f6a12d2752"
+  }
+}

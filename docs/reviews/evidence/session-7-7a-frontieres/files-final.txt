@@ -1,0 +1,26 @@
+▶ 7a real PostgreSQL: atomic reservations, account/instance admission and immutable plans
+  ✔ concurrent idempotent initiation reserves exactly once (426.8356ms)
+  ✔ workspace cap remains atomic under racing reservations and includes pending files (143.2349ms)
+  ✔ same admission request never consumes a second lease; false progress cannot free it (133.3871ms)
+  ✔ instance limit aggregates distinct accounts; own limit also holds independently (94.1738ms)
+  ✔ expired lease does not allow changing its checksum and logical byte budget still applies (45.7273ms)
+  ✔ revoked session cannot reserve or sign; unknown ID is not an ownership proof (110.4048ms)
+✔ 7a real PostgreSQL: atomic reservations, account/instance admission and immutable plans (2852.8835ms)
+▶ 7a actual Room journal: author attribution, rollback, independent usages and GC fences
+  ✔ foreign workspace file and read-only destination cannot be admitted (57.1699ms)
+  ✔ same workspace UUID without readable source is rejected before journal (22.7001ms)
+  ✔ batched attacker cannot borrow a privileged author; innocent contribution succeeds (68.548ms)
+  ✔ usage is durable independently of lagging projection; destination remains a valid source (45.5368ms)
+  ✔ journal failure rolls back usage and ledger revision together (54.2411ms)
+  ✔ source removed after planning is rejected at the transaction boundary (27.7855ms)
+  ✔ deleting file cannot gain a new usage, even via direct SQL (90.792ms)
+✔ 7a actual Room journal: author attribution, rollback, independent usages and GC fences (2337.1734ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5197.2829
+Collaboration files.e2e.ts: EXIT_CODE=0

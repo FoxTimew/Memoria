@@ -9,6 +9,7 @@ export function securityPeer(
   cookie: string,
   origin: string,
   token = '',
+  ca?: string,
 ) {
   let closed = false,
     failed = false;
@@ -21,7 +22,7 @@ export function securityPeer(
     maxAttempts: 1,
     WebSocketPolyfill: class extends WebSocket {
       constructor(address: string) {
-        super(address, { headers: { cookie, origin } });
+        super(address, { headers: { cookie, origin }, ...(ca ? { ca } : {}) });
       }
     },
   });

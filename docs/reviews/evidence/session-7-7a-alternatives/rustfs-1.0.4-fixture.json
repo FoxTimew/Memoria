@@ -1,0 +1,12 @@
+{
+  "name": "rustfs-1.0.4",
+  "image": "rustfs/rustfs:1.0.4@sha256:ed9210d6411d77ffceb70d94b964a3cb7d225983368bc25bebe01e995293dcc2",
+  "port": 9000,
+  "imageId": "sha256:ed9210d6411d77ffceb70d94b964a3cb7d225983368bc25bebe01e995293dcc2",
+  "checkedAt": "2026-10-29T08:15:40.443Z",
+  "memoryBytes": 805306368,
+  "cpus": 1,
+  "loopbackOnly": true,
+  "performanceMeasurement": false,
+  "patched": false
+}

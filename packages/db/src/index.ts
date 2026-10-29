@@ -13,3 +13,7 @@ export type { PageAccess, PageAccessRequest } from './access.ts';
 export { DatabaseCells, DatabaseFault } from './database-cells.ts';
 export type { DatabaseSubject, CellAddress, CellWrite } from './database-cells.ts';
 export { processDatabaseRowEvent } from './database-events.ts';
+export { FileBoundary, FileFault } from './file-boundary.ts';
+export { FileCells } from './file-cells.ts';
+export type { FilePlan, FileReference, FileIntroduction } from './file-boundary.ts';
+export { readFileLimits, fileLimitDefaults, fileLimitVariable } from './file-limits.ts';

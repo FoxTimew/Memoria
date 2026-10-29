@@ -211,6 +211,20 @@
       "when": 1793114341974,
       "tag": "0029_cascade_subject_reconciliation",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1793232000000,
+      "tag": "0030_file_boundary",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1793232000001,
+      "tag": "0031_file_cell_kind",
+      "breakpoints": true
     }
   ]
 }

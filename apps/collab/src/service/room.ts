@@ -8,6 +8,7 @@ import { RoomBatchQueue } from './room-batch-queue.ts';
 import { Store, receiptFor, digest } from './store.ts';
 import { CollaborationError } from './internal-server.ts';
 import { replicaReservation } from './memory.ts';
+import { FileFault } from '@memoria/db';
 type WriteCommand = Extract<CollaborationCommand, { action: 'write' }>;
 type Entry =
   | { identity: AccessRequest; update: Uint8Array }
@@ -89,6 +90,15 @@ export class Room {
     await this.reserve(this.encodedUpperBound);
     this.replica.resize(replicaReservation(this.encodedUpperBound));
     this.revision = Number(loaded.state.content_revision);
+    const blocks = await this.replica.inspect();
+    await this.store.verifyFileLedger(
+      this.page,
+      this.generation,
+      this.revision,
+      blocks
+        .filter((b) => b.type === 'core.image' && typeof b.content.fileId === 'string')
+        .map((b) => ({ slot: b.id, file: b.content.fileId as string })),
+    );
   }
   private async enqueue(entry: Entry) {
     this.pending++;
@@ -147,7 +157,9 @@ export class Room {
       } else {
         update = Y.mergeUpdates(entries.map((e) => ('update' in e ? e.update : new Uint8Array())));
         await this.reserve(Math.min(1024 ** 2, this.encodedUpperBound + update.length));
-        validation = await this.replica.prepare(update);
+        validation = await this.replica.prepareMany(
+          entries.map((e) => ('update' in e ? e.update : new Uint8Array())),
+        );
       }
       const contributions = entries.map((e) => ({
         identity: e.identity,
@@ -172,6 +184,7 @@ export class Room {
         update,
         validation.blocks,
         validation.blockIdsToReserve,
+        validation.fileSteps,
       );
       committed = true;
       await this.replica.commit();
@@ -197,6 +210,7 @@ export class Room {
           this.onFatal();
         }
       }
+      if (error instanceof FileFault) throw new CollaborationError(error.code, error.status);
       throw error;
     }
   }

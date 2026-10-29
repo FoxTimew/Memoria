@@ -1,0 +1,64 @@
+$ node scripts/test-collab.mjs --suite files && node scripts/test-collab.mjs --suite file-cells && node scripts/test-collab.mjs --suite files-wire
+▶ 7a real PostgreSQL: atomic reservations, account/instance admission and immutable plans
+  ✔ concurrent idempotent initiation reserves exactly once (321.4379ms)
+  ✔ workspace cap remains atomic under racing reservations and includes pending files (127.4724ms)
+  ✔ same admission request never consumes a second lease; false progress cannot free it (112.6951ms)
+  ✔ expired lease does not allow changing its checksum and logical byte budget still applies (39.5907ms)
+  ✔ revoked session cannot reserve or sign; unknown ID is not an ownership proof (102.2502ms)
+✔ 7a real PostgreSQL: atomic reservations, account/instance admission and immutable plans (2379.9555ms)
+▶ 7a actual Room journal: author attribution, rollback, independent usages and GC fences
+  ✔ foreign workspace file and read-only destination cannot be admitted (57.469ms)
+  ✔ same workspace UUID without readable source is rejected before journal (22.1556ms)
+  ✔ batched attacker cannot borrow a privileged author; innocent contribution succeeds (77.8528ms)
+  ✔ usage is durable independently of lagging projection; destination remains a valid source (49.7115ms)
+  ✔ journal failure rolls back usage and ledger revision together (52.9573ms)
+  ✔ source removed after planning is rejected at the transaction boundary (27.1018ms)
+  ✔ deleting file cannot gain a new usage, even via direct SQL (89.2389ms)
+✔ 7a actual Room journal: author attribution, rollback, independent usages and GC fences (2158.9028ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4545.5058
+Collaboration files.e2e.ts: EXIT_CODE=0
+▶ 7a real SQL files cells: guest task, independent CAS, hidden links, revocation and rollback
+  ✔ guest edit can attach independently to two cells of the same task (133.6464ms)
+  ✔ same cell rejects stale version; schema version is independent (45.4889ms)
+  ✔ hidden file is preserved by clear-visible and emits only one neutral marker (55.1532ms)
+  ✔ read-only grant cannot change file values and known random IDs are rejected (55.95ms)
+  ✔ failure after usage removal rolls back links and cell version (30.2915ms)
+  ✔ two disjoint cells cannot race past the shared page reference quota (77.6218ms)
+✔ 7a real SQL files cells: guest task, independent CAS, hidden links, revocation and rollback (2142.4906ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2146.6579
+Collaboration file-cells.e2e.ts: EXIT_CODE=0
+[beforeSync] FILE_UNAVAILABLE
+closing connection 6d26c1c6-fa0c-40d4-8203-0a0f2a5be64c (while handling b7792627-796f-4e43-ae57-d0b34dfebd6b:14e355cb-dd67-4186-8645-3e92e929f207:c48daa4f-0eff-4fc2-8233-057f52e242df) because of exception Error: FILE_UNAVAILABLE
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-wire.e2e.mjs:33353:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-wire.e2e.mjs:33635:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+▶ 7a R12 real Caddy WSS and HMAC: guessed file IDs never enter the journal
+  ✔ raw Yjs UUID without authorized source is rejected, innocent socket remains usable (114.4338ms)
+  ✔ valid internal HMAC does not grant file access; errors contain no names or object keys (82.9296ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+✔ 7a R12 real Caddy WSS and HMAC: guessed file IDs never enter the journal (5074.8835ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5080.5239
+Collaboration files-wire.e2e.ts: EXIT_CODE=0

@@ -1,0 +1,12 @@
+{
+  "name": "garage-2.5.0",
+  "image": "dxflrs/garage:v2.5.0@sha256:677e5b758e4425a325b811c425c026bf35a4bf42f7ddbaa773de3f4fd779a5a5",
+  "port": 3900,
+  "imageId": "sha256:677e5b758e4425a325b811c425c026bf35a4bf42f7ddbaa773de3f4fd779a5a5",
+  "checkedAt": "2026-10-29T08:15:34.029Z",
+  "memoryBytes": 805306368,
+  "cpus": 1,
+  "loopbackOnly": true,
+  "performanceMeasurement": false,
+  "patched": false
+}

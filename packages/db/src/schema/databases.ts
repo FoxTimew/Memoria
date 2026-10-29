@@ -32,6 +32,8 @@ export const propertyKind = pgEnum('property_kind', [
   'person',
   'relation',
   'url',
+  'files',
+  'files',
 ]);
 
 export const databases = pgTable(

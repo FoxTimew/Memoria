@@ -1,7 +1,20 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, foreignKey, index, pgTable, text, unique, uuid } from 'drizzle-orm/pg-core';
+import {
+  bigint,
+  check,
+  foreignKey,
+  index,
+  integer,
+  numeric,
+  pgTable,
+  text,
+  unique,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { auditReferences, businessFields, time } from './common.ts';
-import { blocks, pageReference } from './content.ts';
+import { blocks, pages, pageReference } from './content.ts';
+import { organization, user } from './auth.ts';
+import { collaborationDocuments } from './collaboration.ts';
 
 export const files = pgTable(
   'files',
@@ -19,9 +32,138 @@ export const files = pgTable(
     unique('files_workspace_id_uq').on(t.workspaceId, t.id),
     unique('files_object_key_uq').on(t.objectKey),
     check('files_size_ck', sql`${t.byteSize} between 0 and 9007199254740991`),
-    check('files_state_ck', sql`${t.state} in ('pending','ready','deleting')`),
+    check(
+      'files_state_ck',
+      sql`${t.state} in ('pending','reserved','uploading','completing','validating','ready','rejected','deleting','deleted')`,
+    ),
     index('files_cleanup_idx').on(t.state, t.uploadExpiresAt),
     ...auditReferences(t),
+  ],
+);
+
+// Authoritative ledger; no FK to the asynchronous blocks projection.
+export const fileUsages = pgTable(
+  'file_usages',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    workspaceId: uuid('workspace_id').notNull(),
+    fileId: uuid('file_id').notNull(),
+    pageId: uuid('page_id').notNull(),
+    slotKind: text('slot_kind').notNull(),
+    slotId: uuid('slot_id').notNull(),
+    generation: uuid('generation'),
+    revision: bigint('revision', { mode: 'bigint' }).notNull(),
+  },
+  (t) => [
+    unique().on(t.workspaceId, t.pageId, t.slotKind, t.slotId, t.fileId),
+    foreignKey({
+      columns: [t.workspaceId, t.fileId],
+      foreignColumns: [files.workspaceId, files.id],
+    }),
+    pageReference(t.workspaceId, t.pageId),
+    check('file_usages_kind_ck', sql`${t.slotKind} in ('block','cell')`),
+    check('file_usages_revision_ck', sql`${t.revision}>=0`),
+    check('file_usages_generation_ck', sql`(${t.slotKind}='block')=(${t.generation} is not null)`),
+    index('file_usages_source_idx').on(t.workspaceId, t.fileId, t.pageId),
+  ],
+);
+export const fileLedgerStates = pgTable(
+  'file_ledger_states',
+  {
+    pageId: uuid('page_id')
+      .primaryKey()
+      .references(() => collaborationDocuments.pageId, { onDelete: 'cascade' }),
+    generation: uuid('generation').notNull(),
+    revision: bigint('revision', { mode: 'bigint' }).notNull(),
+  },
+  (t) => [check('file_ledger_revision_ck', sql`${t.revision}>=0`)],
+);
+export const fileWorkspaceUsage = pgTable(
+  'file_workspace_usage',
+  {
+    workspaceId: uuid('workspace_id')
+      .primaryKey()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    reservedBytes: bigint('reserved_bytes', { mode: 'bigint' }).default(0n).notNull(),
+    filesCount: integer('files_count').default(0).notNull(),
+  },
+  (t) => [
+    check('file_workspace_bytes_ck', sql`${t.reservedBytes}>=0`),
+    check('file_workspace_count_ck', sql`${t.filesCount}>=0`),
+  ],
+);
+export const fileUploadIntents = pgTable(
+  'file_upload_intents',
+  {
+    fileId: uuid('file_id').primaryKey(),
+    workspaceId: uuid('workspace_id').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id),
+    pageId: uuid('page_id').notNull(),
+    idempotencyKey: uuid('idempotency_key').notNull(),
+    requestedBytes: bigint('requested_bytes', { mode: 'bigint' }).notNull(),
+    reservedBytes: bigint('reserved_bytes', { mode: 'bigint' }).notNull(),
+    requestHash: text('request_hash').notNull(),
+    createdAt: time('created_at')
+      .default(sql`clock_timestamp()`)
+      .notNull(),
+    expiresAt: time('expires_at').notNull(),
+    absoluteExpiresAt: time('absolute_expires_at').notNull(),
+    attachUntil: time('attach_until'),
+    closedAt: time('closed_at'),
+  },
+  (t) => [
+    unique().on(t.userId, t.idempotencyKey),
+    foreignKey({
+      columns: [t.workspaceId, t.fileId],
+      foreignColumns: [files.workspaceId, files.id],
+    }),
+    foreignKey({
+      columns: [t.workspaceId, t.pageId],
+      foreignColumns: [pages.workspaceId, pages.id],
+    }),
+    check(
+      'file_intent_bytes_ck',
+      sql`${t.requestedBytes}>0 and ${t.reservedBytes}>=${t.requestedBytes}`,
+    ),
+    index('file_uploads_active_idx')
+      .on(t.userId, t.expiresAt)
+      .where(sql`${t.closedAt} is null`),
+  ],
+);
+export const fileAdmissionBuckets = pgTable(
+  'file_admission_buckets',
+  {
+    userId: uuid('user_id')
+      .primaryKey()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    tokens: numeric('tokens').notNull(),
+    updatedAt: time('updated_at').notNull(),
+  },
+  (t) => [check('file_admission_tokens_ck', sql`${t.tokens}>=0`)],
+);
+export const filePartLeases = pgTable(
+  'file_part_leases',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.id),
+    fileId: uuid('file_id')
+      .notNull()
+      .references(() => fileUploadIntents.fileId),
+    requestId: uuid('request_id').notNull(),
+    partNumber: integer('part_number').notNull(),
+    bytes: bigint('bytes', { mode: 'bigint' }).notNull(),
+    checksum: text('checksum').notNull(),
+    expiresAt: time('expires_at').notNull(),
+  },
+  (t) => [
+    unique().on(t.userId, t.requestId, t.partNumber),
+    check('file_part_number_ck', sql`${t.partNumber} between 1 and 10000`),
+    check('file_part_bytes_ck', sql`${t.bytes}>0`),
+    index('file_part_leases_expiry_idx').on(t.expiresAt),
   ],
 );
 

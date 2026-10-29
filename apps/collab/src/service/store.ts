@@ -9,6 +9,8 @@ import type { Leadership } from './leadership.ts';
 import { resolveAccess } from './access.ts';
 import type { AccessRequest } from './access.ts';
 import { CollaborationError } from './internal-server.ts';
+import { FileBoundary } from '@memoria/db';
+import type { FilePlan, FileReference } from '@memoria/db';
 export const digest = (bytes: Uint8Array | string) =>
   createHash('sha256').update(bytes).digest('hex');
 export const receiptFor = (bytes: Uint8Array) => {
@@ -49,7 +51,7 @@ export class Store {
   ) {}
   async transaction<T>(
     work: (client: PoolClient) => Promise<T>,
-    pageLock?: { page: string; workspace: string; mode?: 'projection' },
+    pageLock?: { page: string; workspace: string; mode?: 'projection'; files?: FilePlan },
   ) {
     const client = await this.pool.connect();
     try {
@@ -57,23 +59,28 @@ export class Store {
       // PostgreSQL executes this ordered pipeline serially. Wait for content locks
       // BEFORE retaining the shared fence row, so a blocked writer cannot starve
       // lease renewal. The SQL fence is still checked and held through COMMIT.
-      await drainQueries([
-        client.query('BEGIN'),
-        pageLock
-          ? client.query(
-              pageLock.mode === 'projection'
-                ? 'SELECT database_lock_rows($2::uuid,ARRAY[$1]::uuid[])'
-                : 'SELECT content_lock_document($2::uuid,$1::uuid)',
-              [pageLock.page, pageLock.workspace],
-            )
-          : Promise.resolve(),
-        pageLock?.mode === 'projection'
-          ? client.query("SELECT pg_advisory_xact_lock(hashtextextended('projection:'||$1,0))", [
-              pageLock.page,
-            ])
-          : Promise.resolve(),
-        assertFence(client, fence),
-      ]);
+      if (pageLock?.files) {
+        await client.query('BEGIN');
+        await new FileBoundary(this.pool).lock(client, pageLock.workspace, pageLock.files, true);
+        await assertFence(client, fence);
+      } else
+        await drainQueries([
+          client.query('BEGIN'),
+          pageLock
+            ? client.query(
+                pageLock.mode === 'projection'
+                  ? 'SELECT database_lock_rows($2::uuid,ARRAY[$1]::uuid[])'
+                  : 'SELECT content_lock_document($2::uuid,$1::uuid)',
+                [pageLock.page, pageLock.workspace],
+              )
+            : Promise.resolve(),
+          pageLock?.mode === 'projection'
+            ? client.query("SELECT pg_advisory_xact_lock(hashtextextended('projection:'||$1,0))", [
+                pageLock.page,
+              ])
+            : Promise.resolve(),
+          assertFence(client, fence),
+        ]);
       const result = await work(client);
       await client.query('COMMIT');
       return result;
@@ -83,6 +90,38 @@ export class Store {
     } finally {
       client.release();
     }
+  }
+  async verifyFileLedger(
+    page: string,
+    generation: string,
+    revision: number,
+    refs: FileReference[],
+  ) {
+    const state = (
+      await this.pool.query<{ workspace_id: string }>(
+        'SELECT workspace_id FROM collaboration_documents WHERE page_id=$1',
+        [page],
+      )
+    ).rows[0];
+    if (!state) throw new CollaborationError('GENERATION_CHANGED');
+    await this.transaction(
+      async (c) => {
+        const actual = (
+          await c.query<{ content_revision: string; generation: string }>(
+            'SELECT content_revision,generation FROM collaboration_documents WHERE page_id=$1',
+            [page],
+          )
+        ).rows[0];
+        if (
+          !actual ||
+          Number(actual.content_revision) !== revision ||
+          actual.generation !== generation
+        )
+          throw new CollaborationError('REVISION_CHANGED');
+        await new FileBoundary(this.pool).verifyLedger(c, page, generation, revision, refs);
+      },
+      { page, workspace: state.workspace_id },
+    );
   }
   async authorize(identity: AccessRequest, client: Pool | PoolClient = this.pool) {
     const access = (await this.access(client, [identity])).get(identity.key);
@@ -175,8 +214,20 @@ export class Store {
     merged: Uint8Array,
     images: BlockEnvelope[],
     blockIds: string[],
+    fileSteps?: { added: FileReference[]; removed: FileReference[] }[],
   ) {
     const { page, workspace } = entries[0]!.identity;
+    const boundary = new FileBoundary(this.pool);
+    const changed = fileSteps?.some((s) => s.added.length || s.removed.length);
+    const plan = changed
+      ? await boundary.plan(
+          fileSteps!.flatMap((s, i) =>
+            s.added.map((r) => ({ ...r, author: entries[i]!.identity })),
+          ),
+          page,
+          fileSteps!.flatMap((s) => s.removed.map((r) => r.file)),
+        )
+      : undefined;
     return this.transaction(
       async (client) => {
         // These reads start only AFTER the page lock. A waiting writer must see the new revision.
@@ -196,21 +247,21 @@ export class Store {
         const state = revision.rows[0];
         if (!state || Number(state.content_revision) !== expected)
           throw new CollaborationError('REVISION_CHANGED');
-        const fileIds = [
-          ...new Set(
-            images.map((b) => b.content.fileId).filter((v): v is string => typeof v === 'string'),
-          ),
-        ];
-        if (
-          fileIds.length &&
-          (
-            await client.query(
-              "SELECT id FROM files WHERE id=ANY($1::uuid[]) AND workspace_id=$2 AND deleted_at IS NULL AND state='ready'",
-              [fileIds, workspace],
-            )
-          ).rowCount !== fileIds.length
-        )
+        // Legacy internal callers cannot bypass attribution by omitting the candidate delta.
+        if (!fileSteps && images.some((b) => typeof b.content.fileId === 'string'))
           throw new CollaborationError('FILE_ACCESS_DENIED', 403);
+        if (plan)
+          await boundary.replaceBlocks(
+            client,
+            workspace,
+            page,
+            generation,
+            expected + 1,
+            images
+              .filter((b) => typeof b.content.fileId === 'string')
+              .map((b) => ({ slot: b.id, file: b.content.fileId as string })),
+            plan,
+          );
         // A CTE sees the statement's snapshot: newly reserved IDs are obtained through RETURNING.
         // A concurrent conflicting owner remains absent from both sets and is rejected.
         const next = expected + 1;
@@ -264,12 +315,13 @@ export class Store {
           text: `WITH journal AS (
           INSERT INTO collaboration_updates(workspace_id,page_id,generation,revision,update)
           VALUES($1,$2,$3,$4,$5) RETURNING page_id
-        ) UPDATE collaboration_documents SET content_revision=$4,journal_bytes=journal_bytes+octet_length($5::bytea),updated_at=clock_timestamp(),projection_first_pending_at=coalesce(projection_first_pending_at,clock_timestamp()),projection_due_at=least(clock_timestamp()+interval '1 second',coalesce(projection_first_pending_at,clock_timestamp())+interval '5 seconds') WHERE page_id IN (SELECT page_id FROM journal)`,
+        ), ledger AS (UPDATE file_ledger_states SET revision=$4 WHERE page_id=$2 AND generation=$3)
+        UPDATE collaboration_documents SET content_revision=$4,journal_bytes=journal_bytes+octet_length($5::bytea),updated_at=clock_timestamp(),projection_first_pending_at=coalesce(projection_first_pending_at,clock_timestamp()),projection_due_at=least(clock_timestamp()+interval '1 second',coalesce(projection_first_pending_at,clock_timestamp())+interval '5 seconds') WHERE page_id IN (SELECT page_id FROM journal)`,
           values: [workspace, page, generation, next, Buffer.from(merged)],
         });
         return { revision: next, revisions };
       },
-      { page, workspace },
+      { page, workspace, ...(plan ? { files: plan } : {}) },
     );
   }
 }

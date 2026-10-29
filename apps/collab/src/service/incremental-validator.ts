@@ -54,6 +54,13 @@ export class IncrementalValidator {
       validationMs: result.elapsed,
     };
   }
+  async prepareMany(updates: Uint8Array[]) {
+    const result = await this.request('prepare', { updates });
+    return {
+      ...(result.result as ReturnType<IncrementalReplica['prepareMany']>),
+      validationMs: result.elapsed,
+    };
+  }
   async command(operations: import('@memoria/contracts').BlockBatch['operations']) {
     return (await this.request('command', { operations }, 5000)).result as ReturnType<
       IncrementalReplica['command']

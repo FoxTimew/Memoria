@@ -21,6 +21,29 @@ function change(doc: Y.Doc, edit: () => void) {
   return update;
 }
 describe('persistent incremental candidate versus full validator', () => {
+  it('keeps author-step introductions even when a later contribution removes the file', async () => {
+    const { doc } = await representativeDocument(9),
+      replica = new IncrementalReplica(Y.encodeStateAsUpdate(doc));
+    try {
+      const image = nodes(doc).find(
+        (n): n is Y.XmlElement => n instanceof Y.XmlElement && n.nodeName === 'memoriaImage',
+      )!;
+      const file = fixtureId(5000);
+      const first = change(doc, () => image.setAttribute('fileId', file));
+      const second = change(doc, () => image.setAttribute('fileId', ''));
+      const candidate = replica.prepareMany([first, second]);
+      expect(candidate.files).toEqual([]);
+      expect(candidate.fileSteps[0]!.added.map((r) => r.file)).toEqual([file]);
+      expect(candidate.fileSteps[1]!.removed.map((r) => r.file)).toEqual([file]);
+      replica.abort();
+      expect(replica.prepareMany([first, second]).fileSteps).toEqual(candidate.fileSteps);
+      replica.commit();
+      expect(replica.inspect()).toEqual(decodeDocument(doc));
+    } finally {
+      replica.close();
+      doc.destroy();
+    }
+  });
   it('reuses ownership only after commit, retries after abort, and rechecks newly introduced IDs', async () => {
     const { doc } = await representativeDocument(9),
       replica = new IncrementalReplica(Y.encodeStateAsUpdate(doc));

@@ -62,6 +62,11 @@ export class IncrementalReplica {
     if (this.pending || this.tainted) throw new Error('Replica needs commit or abort');
     if (update.length > bounds.update) throw new Error('Maximum update size');
     try {
+      const oldFiles = new Map(
+        this.blocks
+          .filter((b) => b.type === 'core.image' && typeof b.content.fileId === 'string')
+          .map((b) => [b.id, b.content.fileId as string]),
+      );
       // Only clock changes from clients in this update. No history-wide structure scan.
       const meta = Y.parseUpdateMeta(update);
       const clock = (client: number) => {
@@ -78,8 +83,20 @@ export class IncrementalReplica {
       if (upper > bounds.document) throw new Error('Maximum document size');
       const blockIds = new Set(this.blocks.map((b) => b.id));
       this.pending = { update: new Uint8Array(update), upper, blockIds };
+      const files = this.blocks
+        .filter((b) => b.type === 'core.image' && typeof b.content.fileId === 'string')
+        .map((b) => ({ slot: b.id, file: b.content.fileId as string }));
       return {
         blocks: this.blocks.filter((b) => b.type === 'core.image'),
+        files,
+        fileSteps: [
+          {
+            added: files.filter((r) => oldFiles.get(r.slot) !== r.file),
+            removed: [...oldFiles]
+              .filter(([slot, file]) => !files.some((r) => r.slot === slot && r.file === file))
+              .map(([slot, file]) => ({ slot, file })),
+          },
+        ],
         // Ownership is immutable. Reuse it only after the caller confirms a durable SQL commit.
         // A fresh replica checks all IDs; deleted and later reintroduced IDs are checked again.
         blockIdsToReserve: [...blockIds].filter((id) => !this.committedBlockIds.has(id)),
@@ -90,6 +107,32 @@ export class IncrementalReplica {
     } catch (error) {
       this.tainted = true;
       throw error;
+    }
+  }
+  prepareMany(updates: Uint8Array[]) {
+    if (!updates.length) throw new Error('Empty contribution batch');
+    if (updates.length === 1) return this.prepare(updates[0]!);
+    const originalUpper = this.upper;
+    const steps: ReturnType<IncrementalReplica['prepare']>['fileSteps'] = [];
+    let result: ReturnType<IncrementalReplica['prepare']> | undefined;
+    try {
+      for (const update of updates) {
+        result = this.prepare(update);
+        steps.push(...result.fileSteps);
+        this.upper = result.encodedUpperBound;
+        this.pending = undefined; // Internal candidate only: no accepted journal entry yet.
+      }
+      this.pending = {
+        update: Y.mergeUpdates(updates),
+        upper: result!.encodedUpperBound,
+        blockIds: new Set(this.blocks.map((b) => b.id)),
+      };
+      return { ...result!, fileSteps: steps };
+    } catch (error) {
+      this.tainted = true;
+      throw error;
+    } finally {
+      this.upper = originalUpper;
     }
   }
   commit() {

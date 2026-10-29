@@ -1,0 +1,65 @@
+▶ Production service: twelve transport and durability scenarios
+  ✔ 01 Better Auth and nested BlockNote document (373.2044ms)
+  ✔ 02 SQL commit precedes broadcast and confirms every merged contributor (315.5569ms)
+  ✔ 03 simultaneous text and independent character fields converge (158.178ms)
+  ✔ 04 offline edits merge after session recheck and durable replay (189.422ms)
+  ✔ 05 projection failure rolls back effects while typing remains durable, then retries (4275.4735ms)
+  ✔ 06 signed API command waits own projection; retry survives automatic compaction (1328.0736ms)
+[onAuthenticate] GENERATION_CHANGED
+  ✔ 07 no cookie, foreign origin and generation refused before document load (59.6157ms)
+[beforeSync] READ_ONLY
+closing connection 98c740a6-8a9a-47da-ba0e-d478e3e0c8f1 (while handling 02214aed-b4c2-4a78-8b4b-5fec45b55ec1:3ec78dfd-c598-45a3-9b05-4a5e398c7c0b:68e00050-ce20-42b6-b40c-039de89a825f) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121089:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121371:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] READ_ONLY
+closing connection d258dbc8-8408-426d-a018-2ed355d565b6 (while handling 02214aed-b4c2-4a78-8b4b-5fec45b55ec1:3ec78dfd-c598-45a3-9b05-4a5e398c7c0b:68e00050-ce20-42b6-b40c-039de89a825f) because of exception Error: READ_ONLY
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121089:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121371:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+  ✔ 08 read-only access rejects live updates and offline SyncStep2 (383.5933ms)
+[beforeSync] UPDATE_REJECTED
+closing connection bc27ee49-1a39-4d85-b3ea-bb703da3c6f0 (while handling 02214aed-b4c2-4a78-8b4b-5fec45b55ec1:3ec78dfd-c598-45a3-9b05-4a5e398c7c0b:68e00050-ce20-42b6-b40c-039de89a825f) because of exception Error: UPDATE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121089:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121371:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] UPDATE_REJECTED
+closing connection bf92ad7a-384f-43f2-bdef-092bf0c77705 (while handling 02214aed-b4c2-4a78-8b4b-5fec45b55ec1:3ec78dfd-c598-45a3-9b05-4a5e398c7c0b:68e00050-ce20-42b6-b40c-039de89a825f) because of exception Error: UPDATE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121089:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121371:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] UPDATE_REJECTED
+closing connection 2e456e90-631f-4626-8a1f-58b06eda0f9a (while handling 02214aed-b4c2-4a78-8b4b-5fec45b55ec1:3ec78dfd-c598-45a3-9b05-4a5e398c7c0b:68e00050-ce20-42b6-b40c-039de89a825f) because of exception Error: UPDATE_REJECTED
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121089:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-transport.e2e.mjs:121371:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[onAuthenticate] REJECTION_LIMIT
+  ✔ 09 rejected batch isolates invalid loop while two healthy writers continue (1581.2629ms)
+  ✔ 10 session deletion closes every tab via fallback within five seconds (2353.5312ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ 11 membership deletion closes only affected user (63.2257ms)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+  ✔ 12 ancestor archive revokes descendants and leader loss closes remaining sockets (464.0079ms)
+✔ Production service: twelve transport and durability scenarios (14680.3518ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14685.6909
+Collaboration transport.e2e.ts: EXIT_CODE=0

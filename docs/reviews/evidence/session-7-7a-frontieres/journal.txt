@@ -1,0 +1,12 @@
+✔ Journal rollback, replay receipt and file projection against real SQL (2758.7318ms)
+✔ Prepared journal keeps concurrent block ownership, page revisions and fresh permissions (1903.0278ms)
+✔ Pipelined failures drain the connection and roll back all queued writes (1758.8199ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6428.2109
+Collaboration journal.e2e.ts: EXIT_CODE=0

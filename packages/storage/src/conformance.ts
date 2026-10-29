@@ -151,6 +151,10 @@ try {
         'Access-Control-Request-Headers': 'x-amz-checksum-sha256',
       },
     });
+    observe('CORS allowed preflight', {
+      status: r.status,
+      origin: r.headers.get('access-control-allow-origin'),
+    });
     assert.equal(r.headers.get('access-control-allow-origin'), origin);
     await r.body?.cancel();
     const foreign = await fetch(`${endpoint}/${bucket}/staging/preflight`, {
@@ -160,6 +164,10 @@ try {
         'Access-Control-Request-Method': 'PUT',
         'Access-Control-Request-Headers': 'x-amz-checksum-sha256',
       },
+    });
+    observe('CORS foreign preflight', {
+      status: foreign.status,
+      origin: foreign.headers.get('access-control-allow-origin'),
     });
     assert.equal(foreign.headers.get('access-control-allow-origin'), null);
     await foreign.body?.cancel();
@@ -272,7 +280,20 @@ try {
     const part = await storage.signPart(abandoned, id, 1, first.length, sha(first));
     await storage.abort(abandoned, id);
     uploads.delete(abandoned);
-    assert.ok((await sendPart(part.url, part.headers, first)) >= 400);
+    const replayStatus = await sendPart(part.url, part.headers, first).catch(async (error) => {
+      observe('aborted replay transport error', {
+        name: error.name,
+        code: error.cause?.code,
+        objectExists: !!(await storage.head(abandoned)),
+        listAvailable: await storage.parts(abandoned, id).then(
+          () => true,
+          () => false,
+        ),
+      });
+      throw error;
+    });
+    observe('aborted replay status', replayStatus);
+    assert.ok(replayStatus >= 400);
     assert.equal(await storage.head(abandoned), null);
   });
   for (const replay of [false, true]) {
@@ -472,7 +493,16 @@ try {
     await ready;
     await storage.abort(key, id);
     finish();
-    assert.ok((await result) >= 400);
+    const finishStatus = await result;
+    observe('abort in-flight result', {
+      status: finishStatus,
+      objectExists: !!(await storage.head(key)),
+      listAvailable: await storage.parts(key, id).then(
+        () => true,
+        () => false,
+      ),
+    });
+    assert.ok(finishStatus >= 400);
     assert.equal(await storage.head(key), null);
     await assert.rejects(storage.parts(key, id));
     uploads.delete(key);

@@ -66,7 +66,8 @@ parentPort!.on(
           arrayBuffers: memory.arrayBuffers,
           replicas: replicas.size,
         };
-      } else if (operation === 'prepare') result = replica!.prepare(update);
+      } else if (operation === 'prepare')
+        result = updates ? replica!.prepareMany(updates) : replica!.prepare(update);
       else if (operation === 'command') result = replica!.command(operations);
       else if (operation === 'inspect') result = replica!.inspect();
       else if (operation === 'commit') replica!.commit();

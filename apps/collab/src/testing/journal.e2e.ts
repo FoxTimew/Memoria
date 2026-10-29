@@ -73,6 +73,10 @@ test('Journal rollback, replay receipt and file projection against real SQL', as
       "INSERT INTO files(id,workspace_id,object_key,original_name,mime_type,byte_size,state) VALUES($1,$2,$1::uuid::text,'image.png','image/png',12,'ready')",
       [file, db.workspace],
     );
+    await db.pool.query(
+      `INSERT INTO file_upload_intents(file_id,workspace_id,user_id,page_id,idempotency_key,requested_bytes,reserved_bytes,request_hash,expires_at,absolute_expires_at,attach_until) VALUES($1,$2,$3,$4,$1,12,12,'fixture',now()+interval '1 day',now()+interval '7 days',now()+interval '1 day')`,
+      [file, db.workspace, db.user, db.page],
+    );
     const written = await room.command(identity, {
       action: 'write',
       user: db.user,

@@ -4,6 +4,8 @@ Statut : **accepté — 2026-10-28**, avec les trois ajustements du développeur
 
 ## Choix déjà retenus par le développeur
 
+**Complément du 29 octobre 2026 :** le développeur conserve le correctif SeaweedFS uniquement comme déblocage temporaire, sans engagement de maintenir un fork en production. Le choix de production reste ouvert **avant 7b**. Le [comparatif exécuté](../reviews/session-7-7a-decision-stockage.md) conserve le témoin rouge et qualifie les mêmes 23 scénarios sur Garage 2.5.0 et RustFS 1.0.4, sans patch. Le paquet issue/PR amont, reproduction et tests Go est prêt dans `.local/seaweedfs-upstream/`, sans publication. Les reçus de parties PostgreSQL pour supprimer la dépendance à ListParts sont **une option évaluée, pas une décision acceptée ni une implémentation** ; validation des octets finaux, immutabilité et rapprochement S3 restent obligatoires dans toutes les options.
+
 - Propriété **fichiers** dans les bases, pour les assets attachés aux tâches ; un guest edit peut en modifier les valeurs, jamais le schéma.
 - **5 Gio par fichier, 250 Gio par workspace**, réglages de déploiement ; réservations en cours et corbeille comptées. Une hausse exige une mesure.
 - **SeaweedFS qualifié en premier** pour la production auto-hébergée ; MinIO reste en local.
