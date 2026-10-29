@@ -1,19 +1,21 @@
 import { sql } from 'drizzle-orm';
 import {
   bigint,
+  boolean,
   check,
   foreignKey,
   index,
   integer,
   numeric,
   pgTable,
+  primaryKey,
   text,
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { auditReferences, businessFields, time } from './common.ts';
 import { blocks, pages, pageReference } from './content.ts';
-import { organization, user } from './auth.ts';
+import { organization, user, session } from './auth.ts';
 import { collaborationDocuments } from './collaboration.ts';
 
 export const files = pgTable(
@@ -27,6 +29,9 @@ export const files = pgTable(
     sha256: text('sha256'),
     state: text('state').default('pending').notNull(),
     uploadExpiresAt: time('upload_expires_at'),
+    everAttached: boolean('ever_attached').default(false).notNull(),
+    orphanedAt: time('orphaned_at'),
+    storageDeletedAt: time('storage_deleted_at'),
   },
   (t) => [
     unique('files_workspace_id_uq').on(t.workspaceId, t.id),
@@ -112,6 +117,20 @@ export const fileUploadIntents = pgTable(
     absoluteExpiresAt: time('absolute_expires_at').notNull(),
     attachUntil: time('attach_until'),
     closedAt: time('closed_at'),
+    transportMode: text('transport_mode'),
+    stagingKey: text('staging_key'),
+    finalKey: text('final_key').unique(),
+    uploadId: text('upload_id'),
+    sessionId: uuid('session_id').references(() => session.id, { onDelete: 'set null' }),
+    wholeChecksum: text('whole_checksum'),
+    bytesVerifiedAt: time('bytes_verified_at'),
+    stagingCleanedAt: time('staging_cleaned_at'),
+    nextAttemptAt: time('next_attempt_at')
+      .default(sql`clock_timestamp()`)
+      .notNull(),
+    attempts: integer('attempts').default(0).notNull(),
+    lastError: text('last_error'),
+    jobEpoch: bigint('job_epoch', { mode: 'bigint' }).default(0n).notNull(),
   },
   (t) => [
     unique().on(t.userId, t.idempotencyKey),
@@ -130,6 +149,8 @@ export const fileUploadIntents = pgTable(
     index('file_uploads_active_idx')
       .on(t.userId, t.expiresAt)
       .where(sql`${t.closedAt} is null`),
+    index('file_transport_job_idx').on(t.nextAttemptAt),
+    check('file_transport_mode_ck', sql`${t.transportMode} in ('post','multipart')`),
   ],
 );
 export const fileAdmissionBuckets = pgTable(
@@ -158,6 +179,7 @@ export const filePartLeases = pgTable(
     bytes: bigint('bytes', { mode: 'bigint' }).notNull(),
     checksum: text('checksum').notNull(),
     expiresAt: time('expires_at').notNull(),
+    reconciledAt: time('reconciled_at'),
   },
   (t) => [
     unique().on(t.userId, t.requestId, t.partNumber),
@@ -166,6 +188,34 @@ export const filePartLeases = pgTable(
     index('file_part_leases_expiry_idx').on(t.expiresAt),
   ],
 );
+
+export const filePartPlans = pgTable(
+  'file_part_plans',
+  {
+    fileId: uuid('file_id')
+      .notNull()
+      .references(() => fileUploadIntents.fileId),
+    partNumber: integer('part_number').notNull(),
+    bytes: bigint('bytes', { mode: 'bigint' }).notNull(),
+    checksum: text('checksum').notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.fileId, t.partNumber] }),
+    check('file_plan_part_ck', sql`${t.partNumber} between 1 and 10000`),
+    check('file_plan_bytes_ck', sql`${t.bytes}>0`),
+  ],
+);
+export const fileObjectCopies = pgTable('file_object_copies', {
+  objectKey: text('object_key').primaryKey(),
+  fileId: uuid('file_id')
+    .notNull()
+    .references(() => fileUploadIntents.fileId),
+  epoch: bigint('epoch', { mode: 'bigint' }).notNull(),
+  createdAt: time('created_at')
+    .default(sql`clock_timestamp()`)
+    .notNull(),
+  deletedAt: time('deleted_at'),
+});
 
 export const fileReferences = pgTable(
   'file_references',

@@ -35,7 +35,11 @@ const providers = [
   },
 ];
 let failed = false;
-for (const p of providers) {
+const requested = process.argv.includes('--provider')
+  ? process.argv[process.argv.indexOf('--provider') + 1]
+  : undefined;
+if (requested && !providers.some((p) => p.name === requested)) throw new Error('Unknown provider');
+for (const p of providers.filter((p) => !requested || requested === p.name)) {
   const name = `memoria-alternative-${p.name}-${process.pid}`;
   const access = 'GK' + randomBytes(16).toString('hex'),
     secret = randomBytes(32).toString('hex');

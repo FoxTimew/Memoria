@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-29T10:24:33.088Z",
+  "baseCommit": "e7152a8fcc027fbd0acbbecec812fa8ca6e78a54",
+  "branch": "codex/session-7-files",
+  "workingTree": true,
+  "scope": "Intermediate transport implementation, first performance stop. No completed three-series campaign, no main comparison.",
+  "measuredBundle": {
+    "path": "apps/collab/dist/test-files-load.e2e.mjs",
+    "sha256": "203bf7c2a4f0ee55aa827ef6940a7d530736cd11ea38bd0f96f1888b3856606a"
+  },
+  "profiles": {
+    "content-1M": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896",
+    "history-1M": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+  },
+  "changesAfterMeasurement": "Formatting; TypeScript declaration and cancelled-child cleanup in the harness; extra HTTP recovery/MFA tests. No production lock optimization.",
+  "files": {
+    "auth.txt": "bff704338a80a6d466cdcf0d076c17dbc2fd23cc108be47690e8597f33f6df42",
+    "boundaries.txt": "44f95a8b720129e00c088758f08efaab679fd12c09f877d5034e7165c5020106",
+    "check.txt": "81b305d762dbcce3ab861e3a3282769f49bf890215247d3b84adb37fca3c55c6",
+    "hygiene.json": "288af960e319ac3326abaa05c23243465c153b5e9124f75c71f6c187dff3fc03",
+    "lock-diagnostic.json": "c5b261c26701326c293c0336db661d2924cebde52f69fa2de3f26fb5efe8cecb",
+    "lock-diagnostic.txt": "886162af7a6586ca3b374b5af4de422a928a5fe7211f6eddb443f69535100bdd",
+    "measurement.json": "059042247992938acc3fcdd74aca632028b4d536358e4e1bb0030f8bd050169d",
+    "measurement.txt": "408552f32488d1361524ef5259c0b53882e93a426b4fbdc7b76894186dbd5f91",
+    "preparation.json": "e233aeac2159c661ad94bf6c33338daeb23a0526896b043af81aed9960166f1c",
+    "routes.txt": "b94a08754904ded0cdabf1b75e9a3ddd608260fbbfbaedc4b1df6fa7ffa5d89b",
+    "rustfs.txt": "6d00eff0d22c7e9966c85d98f2b5794902965e3c2d72d2010fa93a52aebba780"
+  },
+  "hashLineEndings": "LF"
+}

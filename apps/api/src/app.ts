@@ -11,7 +11,8 @@ import { Public } from './modules/auth/public.decorator.ts';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module.ts';
 import { PagesModule } from './modules/pages/pages.module.ts';
 import { SecurityPolicyError } from '@memoria/auth';
-import { DatabaseFault } from '@memoria/db';
+import { DatabaseFault, FileFault } from '@memoria/db';
+import { FilesModule } from './modules/files/files.module.ts';
 import { DatabasesModule } from './modules/databases/databases.module.ts';
 
 @Controller('api/health')
@@ -29,7 +30,10 @@ class HealthController {
 class SafeExceptionFilter implements ExceptionFilter {
   catch(error: unknown, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<Response>();
-    if (error instanceof DatabaseFault) {
+    if (error instanceof FileFault) {
+      if (error.status === 429) response.setHeader('Retry-After', '1');
+      response.status(error.status).json({ code: error.code });
+    } else if (error instanceof DatabaseFault) {
       response.status(error.status).json({
         code: error.code,
         ...(error.current === undefined ? {} : { current: error.current }),
@@ -58,7 +62,14 @@ class SafeExceptionFilter implements ExceptionFilter {
 }
 
 @Module({
-  imports: [database.DatabaseModule, AuthModule, WorkspacesModule, PagesModule, DatabasesModule],
+  imports: [
+    database.DatabaseModule,
+    AuthModule,
+    WorkspacesModule,
+    PagesModule,
+    DatabasesModule,
+    FilesModule,
+  ],
   controllers: [HealthController],
 })
 export class AppModule {}
@@ -88,8 +99,11 @@ export function configureApplication(app: NestExpressApplication) {
 
   // Better Auth must receive the unconsumed stream; its @Public controller owns parsing.
   const parseJson = express.json({ limit: '1mb' });
+  const parseFiles = express.json({ limit: '64kb' });
   app.use((request: Request, response: Response, next: NextFunction) => {
     if (/^\/api\/auth(?:\/|$)/i.test(request.path)) return next();
+    if (/^\/api\/internal\/workspaces\/[^/]+\/file-uploads(?:\/|$)/i.test(request.path))
+      return parseFiles(request, response, next);
     return parseJson(request, response, next);
   });
 }

@@ -1,3 +1,12 @@
+{
+  servers :9443 {
+    timeouts {
+      read_header 10s
+      read_body 120s
+    }
+  }
+}
+
 https://localhost {
   tls internal
   handle /collab {
@@ -27,7 +36,16 @@ https://localhost {
   }
 }
 
-https://localhost:9443 {
+https://uploads.localhost:9443 {
   tls internal
-  reverse_proxy minio:9000
+  @upload method POST PUT OPTIONS
+  handle @upload {
+    request_body {
+      max_size 33619968
+    }
+    reverse_proxy rustfs:9000
+  }
+  handle {
+    respond 403
+  }
 }

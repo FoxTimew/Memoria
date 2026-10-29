@@ -10,6 +10,8 @@ const values = {
   COLLAB_INTERNAL_SECRET: randomBytes(32).toString('hex'),
   DATA_ENCRYPTION_KEY: randomBytes(32).toString('hex'),
   MINIO_ROOT_PASSWORD: randomBytes(24).toString('hex'),
+  S3_ACCESS_KEY_ID: 'memoria-' + randomBytes(12).toString('hex'),
+  S3_SECRET_ACCESS_KEY: randomBytes(32).toString('hex'),
 };
 for (const [key, value] of Object.entries(values))
   template = template.replace(new RegExp(`^${key}=.*$`, 'm'), `${key}=${value}`);

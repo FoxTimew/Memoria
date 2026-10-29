@@ -1,0 +1,11 @@
+{"date":"2026-10-29T10:16:26.753Z","assertion":"INSERT file_references takes an FK KEY SHARE on files; the current FOR UPDATE writer waits on this projection transaction.","blockingPidMatched":true,"waiting":{"wait_event_type":"Lock","wait_event":"transactionid"},"writerSucceededAfterProjectionRollback":true,"scope":"Functional lock diagnosis, not a performance series or proposed optimization. No locks or checks changed."}
+✔ 7a diagnostic: projection FK key-share blocks the authoritative file FOR UPDATE latch (1235.304ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1238.9706
+Collaboration file-locks.e2e.ts: EXIT_CODE=0

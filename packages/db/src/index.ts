@@ -17,3 +17,4 @@ export { FileBoundary, FileFault } from './file-boundary.ts';
 export { FileCells } from './file-cells.ts';
 export type { FilePlan, FileReference, FileIntroduction } from './file-boundary.ts';
 export { readFileLimits, fileLimitDefaults, fileLimitVariable } from './file-limits.ts';
+export type { FileLimits } from './file-limits.ts';

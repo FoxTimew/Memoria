@@ -4,6 +4,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { readMeasurementPower, assertMeasurementPower } from './measurement-power.mjs';
 const measurementSuites = new Set([
+  'files-load.e2e.ts',
   'warm.e2e.ts',
   'cold.e2e.ts',
   'capacity.e2e.ts',
@@ -87,7 +88,7 @@ for (const file of files) {
         stdio: 'inherit',
         windowsHide: true,
         timeout:
-          file === 'database-table-load.e2e.ts'
+          file === 'database-table-load.e2e.ts' || file === 'files-load.e2e.ts'
             ? 900000
             : process.env.MEMORIA_MEASURE_DATABASE_TREE === 'true'
               ? 360000

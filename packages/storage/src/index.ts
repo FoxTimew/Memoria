@@ -7,6 +7,9 @@ import {
   GetObjectCommand,
   HeadObjectCommand,
   ListPartsCommand,
+  ListMultipartUploadsCommand,
+  CreateBucketCommand,
+  PutBucketCorsCommand,
   S3Client,
   UploadPartCommand,
 } from '@aws-sdk/client-s3';
@@ -24,13 +27,14 @@ export interface StorageConfig {
   region: string;
   bucket: string;
   credentials: { accessKeyId: string; secretAccessKey: string };
+  publicEndpoint?: string;
 }
 
-/** Experimental transport for the session 7a provider gate; not used by any app.
- * Authorization, reservation and immutable key allocation belong to the future
- * service. Browser capabilities are restricted to POST and UploadPart. */
+/** Streaming transport. The UploadService owns authorization, reservation and keys.
+ * Browser capabilities are restricted to POST and UploadPart. */
 export class S3ObjectStorage {
   readonly client: S3Client;
+  readonly publicClient: S3Client;
   constructor(readonly config: StorageConfig) {
     this.client = new S3Client({
       ...config,
@@ -38,10 +42,18 @@ export class S3ObjectStorage {
       requestChecksumCalculation: 'WHEN_REQUIRED',
       responseChecksumValidation: 'WHEN_REQUIRED',
       maxAttempts: 1,
+      requestHandler: { connectionTimeout: 5000, socketTimeout: 30000 },
+    });
+    this.publicClient = new S3Client({
+      ...config,
+      endpoint: config.publicEndpoint ?? config.endpoint,
+      forcePathStyle: true,
+      maxAttempts: 1,
     });
   }
   close() {
     this.client.destroy();
+    this.publicClient.destroy();
   }
   private key(key: string) {
     if (!/^(staging|objects)\/[a-zA-Z0-9/-]{1,200}$/.test(key))
@@ -56,11 +68,11 @@ export class S3ObjectStorage {
     if (!Number.isSafeInteger(bytes) || bytes < 1 || bytes > 5 * 1024 ** 3)
       throw new Error('INVALID_OBJECT_SIZE');
   }
-  async createUpload(key: string, bytes: number) {
+  async createUpload(key: string, bytes: number, expires = 120) {
     this.bytes(bytes);
-    return createPresignedPost(this.client, {
+    return createPresignedPost(this.publicClient, {
       ...this.upload(key),
-      Expires: 120,
+      Expires: expires,
       Fields: { 'Content-Type': 'application/octet-stream' },
       Conditions: [['content-length-range', bytes, bytes]],
     });
@@ -76,13 +88,20 @@ export class S3ObjectStorage {
     if (!r.UploadId) throw new Error('INVALID_STORAGE_RESPONSE');
     return r.UploadId;
   }
-  async signPart(key: string, upload: string, number: number, bytes: number, checksum: string) {
+  async signPart(
+    key: string,
+    upload: string,
+    number: number,
+    bytes: number,
+    checksum: string,
+    expires = 120,
+  ) {
     this.bytes(bytes);
     if (!Number.isInteger(number) || number < 1 || number > 10000)
       throw new Error('INVALID_PART_NUMBER');
     if (!/^[A-Za-z0-9+/]{43}=$/.test(checksum)) throw new Error('INVALID_CHECKSUM');
     const url = await getSignedUrl(
-      this.client,
+      this.publicClient,
       new UploadPartCommand({
         ...this.upload(key),
         UploadId: upload,
@@ -91,7 +110,7 @@ export class S3ObjectStorage {
         ChecksumSHA256: checksum,
       }),
       {
-        expiresIn: 120,
+        expiresIn: expires,
         signableHeaders: new Set(['content-length']),
         unhoistableHeaders: new Set(['x-amz-checksum-sha256']),
       },
@@ -121,7 +140,10 @@ export class S3ObjectStorage {
         });
       }
       const next = r.IsTruncated ? r.NextPartNumberMarker : undefined;
-      if (next && (next === marker || result.length > 10000))
+      if (
+        result.length > 10000 ||
+        (r.IsTruncated && (!next || Number(next) <= Number(marker ?? 0)))
+      )
         throw new Error('INVALID_STORAGE_RESPONSE');
       marker = next;
     } while (marker);
@@ -191,5 +213,43 @@ export class S3ObjectStorage {
   }
   async delete(key: string) {
     await this.client.send(new DeleteObjectCommand(this.key(key)));
+  }
+  async uploads(key: string) {
+    this.upload(key);
+    const result = await this.client.send(
+      new ListMultipartUploadsCommand({
+        Bucket: this.config.bucket,
+        Prefix: key,
+        MaxUploads: 1000,
+      }),
+    );
+    if (result.IsTruncated) throw new Error('STORAGE_INVENTORY_LIMIT');
+    return (result.Uploads ?? [])
+      .filter((u) => u.Key === key && u.UploadId)
+      .map((u) => u.UploadId!);
+  }
+  async initialize(origin: string) {
+    try {
+      await this.client.send(new CreateBucketCommand({ Bucket: this.config.bucket }));
+    } catch (error) {
+      if (!['BucketAlreadyExists', 'BucketAlreadyOwnedByYou'].includes((error as Error).name))
+        throw error;
+    }
+    await this.client.send(
+      new PutBucketCorsCommand({
+        Bucket: this.config.bucket,
+        CORSConfiguration: {
+          CORSRules: [
+            {
+              AllowedOrigins: [origin],
+              AllowedMethods: ['POST', 'PUT'],
+              AllowedHeaders: ['*'],
+              ExposeHeaders: ['ETag', 'x-amz-checksum-sha256'],
+              MaxAgeSeconds: 300,
+            },
+          ],
+        },
+      }),
+    );
   }
 }

@@ -227,7 +227,10 @@ export class FileBoundary {
     if (JSON.stringify(stored.map(key).sort()) !== JSON.stringify(refs.map(key).sort()))
       throw new FileFault('FILE_LEDGER_REBUILD_REQUIRED', 409);
   }
-  async reserve(a: PageAccessRequest, input: { bytes: number; name: string; idempotency: string }) {
+  async reserve(
+    a: PageAccessRequest,
+    input: { bytes: number; name: string; idempotency: string; checksum?: string },
+  ) {
     validIds(a.workspace, a.page, a.user, input.idempotency);
     if (
       !Number.isSafeInteger(input.bytes) ||
@@ -240,7 +243,9 @@ export class FileBoundary {
     )
       throw new FileFault('INVALID_FILE_REQUEST', 413);
     const hash = createHash('sha256')
-      .update(JSON.stringify([a.workspace, a.page, input.bytes, input.name]))
+      .update(
+        JSON.stringify([a.workspace, a.page, input.bytes, input.name, input.checksum ?? null]),
+      )
       .digest('hex');
     return this.transaction(async (c) => {
       const plan: FilePlan = { destination: a.page, sources: [], pages: [a.page], files: [] };
@@ -323,21 +328,28 @@ export class FileBoundary {
       });
       if ((await resolvePageAccess(c, [a])).get(a.key)?.level !== 'edit') deny();
       const intent = (
-        await c.query<{ requested_bytes: string }>(
-          `SELECT i.requested_bytes FROM file_upload_intents i JOIN files f ON f.workspace_id=i.workspace_id AND f.id=i.file_id WHERE i.file_id=$1 AND i.workspace_id=$2 AND i.user_id=$3 AND i.page_id=$4 AND i.closed_at IS NULL AND i.expires_at>clock_timestamp() AND i.absolute_expires_at>clock_timestamp() AND f.state IN ('reserved','uploading') AND f.deleted_at IS NULL`,
+        await c.query<{
+          requested_bytes: string;
+          transport_mode: string | null;
+          whole_checksum: string | null;
+        }>(
+          `SELECT i.requested_bytes,i.transport_mode,i.whole_checksum FROM file_upload_intents i JOIN files f ON f.workspace_id=i.workspace_id AND f.id=i.file_id WHERE i.file_id=$1 AND i.workspace_id=$2 AND i.user_id=$3 AND i.page_id=$4 AND i.closed_at IS NULL AND i.expires_at>clock_timestamp() AND i.absolute_expires_at>clock_timestamp() AND f.state IN ('reserved','uploading') AND f.deleted_at IS NULL`,
           [file, a.workspace, a.user, a.page],
         )
       ).rows[0];
       if (!intent) deny();
       const total = Number(intent.requested_bytes),
-        count = Math.ceil(total / this.limits.partBytes);
+        count = intent.transport_mode === 'post' ? 1 : Math.ceil(total / this.limits.partBytes);
       for (const p of parts)
         if (
           !Number.isInteger(p.number) ||
           p.number < 1 ||
           p.number > count ||
           p.bytes !==
-            Math.min(this.limits.partBytes, total - (p.number - 1) * this.limits.partBytes) ||
+            (intent.transport_mode === 'post'
+              ? total
+              : Math.min(this.limits.partBytes, total - (p.number - 1) * this.limits.partBytes)) ||
+          (intent.transport_mode === 'post' && p.checksum !== intent.whole_checksum) ||
           !/^[A-Za-z0-9+/]{43}=$/.test(p.checksum)
         )
           throw new FileFault('INVALID_PART_PLAN', 400);
@@ -372,7 +384,7 @@ export class FileBoundary {
       }
       const active = (
         await c.query<{ all_count: string; own_count: string }>(
-          'SELECT count(*) AS all_count,count(*) FILTER(WHERE user_id=$1) AS own_count FROM file_part_leases WHERE expires_at>clock_timestamp()',
+          'SELECT count(*) AS all_count,count(*) FILTER(WHERE user_id=$1) AS own_count FROM file_part_leases WHERE expires_at>clock_timestamp() AND reconciled_at IS NULL',
           [a.user],
         )
       ).rows[0]!;
@@ -392,6 +404,13 @@ export class FileBoundary {
           ).rowCount
         )
           throw new FileFault('PART_PLAN_CONFLICT', 409);
+      for (const p of parts) {
+        const inserted = await c.query(
+          'INSERT INTO file_part_plans(file_id,part_number,bytes,checksum) VALUES($1,$2,$3,$4) ON CONFLICT(file_id,part_number) DO UPDATE SET checksum=file_part_plans.checksum WHERE file_part_plans.bytes=EXCLUDED.bytes AND file_part_plans.checksum=EXCLUDED.checksum RETURNING part_number',
+          [file, p.number, p.bytes, p.checksum],
+        );
+        if (!inserted.rowCount) throw new FileFault('PART_PLAN_CONFLICT', 409);
+      }
       await c.query(
         'INSERT INTO file_admission_buckets VALUES($1,$2,clock_timestamp()) ON CONFLICT DO NOTHING',
         [a.user, this.limits.burstBytes],

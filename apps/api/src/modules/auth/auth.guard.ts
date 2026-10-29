@@ -6,6 +6,8 @@ import type { AuthenticatedRequest } from './current-user.decorator.ts';
 import { IS_PUBLIC } from './public.decorator.ts';
 import * as database from '../../database.module.ts';
 import { readConfig } from '../../config.ts';
+import { FILE_QUOTA, fileIp, fileAccount } from '../files/file-quota.ts';
+import type { FileFamily } from '../files/file-quota.ts';
 import { ACCESS_QUOTA, accessIp, accessAccount } from '../workspaces/access-quota.ts';
 import type { AccessFamily } from '../workspaces/access-quota.ts';
 import { DATABASE_QUOTA, databaseIp, databaseAccount } from '../databases/database-quota.ts';
@@ -44,6 +46,17 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
     const secret = readConfig().BETTER_AUTH_SECRET;
+    const fileFamily = this.reflector.getAllAndOverride<FileFamily>(FILE_QUOTA, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (fileFamily)
+      await fileIp(
+        this.database.db,
+        secret,
+        fileFamily,
+        request.ip ?? request.socket.remoteAddress ?? 'unknown',
+      );
     const databaseFamily = this.reflector.getAllAndOverride<DatabaseFamily>(DATABASE_QUOTA, [
       context.getHandler(),
       context.getClass(),
@@ -72,6 +85,7 @@ export class AuthGuard implements CanActivate {
         request.ip ?? request.socket.remoteAddress ?? 'unknown',
       );
     const identity = await this.auth.authenticate(request.headers);
+    if (fileFamily) await fileAccount(this.database.db, secret, fileFamily, identity.user.id);
     if (databaseFamily)
       await databaseAccount(
         this.database.db,

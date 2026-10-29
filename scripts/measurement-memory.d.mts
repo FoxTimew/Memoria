@@ -27,5 +27,5 @@ export function assertMemoryStage(
 export function runMeasuredSeries<T>(
   label: string,
   work: () => Promise<T>,
-  options?: { preparation?: Preparation },
+  options?: { preparation?: Preparation; maxAttempts?: number },
 ): Promise<{ result: T; hygiene: Hygiene }>;

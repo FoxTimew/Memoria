@@ -8,6 +8,11 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "storage:local": "node scripts/storage-local.mjs",
+    "storage:init": "node scripts/init-storage.mjs",
+    "test:storage:rustfs": "node scripts/test-storage-alternatives.mjs --provider rustfs-1.0.4",
+    "test:files:e2e": "node scripts/build-server.mjs api --files-e2e && node --env-file=.env apps/api/dist/files.e2e.mjs",
+    "measure:files": "node scripts/test-collab.mjs --suite files-load",
     "build:storage:fixture": "node scripts/build-storage-fixture.mjs",
     "test:storage": "node scripts/test-storage.mjs",
     "test:databases:browser": "node --env-file=.env --use-system-ca scripts/test-databases-browser.mjs",

@@ -1,0 +1,62 @@
+Power: {"observedAt":"2026-10-29T10:13:03.328Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":89}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-29T10:13:04.462Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":89}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-29T10:13:06.261Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 89
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/files-content-1m-1-preparation-84575be6-c9a7-4b32-9f81-0acfd95d87e4.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T10:13:06.906Z","windowsFreeBytes":5392420864,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5707956224,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:13:06.906Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":89}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T10:13:08.786Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 89
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"profile":"content-1M","series":1,"references":false,"authors":1,"p95":{"server":13.444499999999607,"wire":20.108000000000175,"transaction":10.788300000000163,"locks":0,"registry":0}}
+{"profile":"content-1M","series":1,"references":false,"authors":2,"p95":{"server":13.503899999999703,"wire":32.68109999999797,"transaction":10.681899999999587,"locks":0,"registry":0}}
+{"profile":"content-1M","series":1,"references":true,"authors":1,"p95":{"server":561.7088000000003,"wire":567.8812999999936,"transaction":548.4369000000006,"locks":533.8055999999997,"registry":7.657899999998335}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+AssertionError [ERR_ASSERTION]: STOP content-1M server 561.7088000000003
+    at measure (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122582:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122595:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+{"hygiene":".local/measurement-hygiene/files-content-1m-1-attempt-1-27774854-b998-468b-861b-da05ee81aaf3.json","status":"valid","label":"files-content-1m-1","attempt":1,"before":{"observedAt":"2026-10-29T10:13:14.544Z","windowsFreeBytes":4919595008,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5677535232,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:13:14.544Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":90}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T10:14:16.588Z","windowsFreeBytes":5242163200,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5673684992,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:14:16.588Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":90}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":63,"deltaInPages":0,"deltaOutPages":0}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Measurement child failed: retain partial report and stop
+
+1 !== 0
+
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122631:15 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration files-load.e2e.ts: EXIT_CODE=1

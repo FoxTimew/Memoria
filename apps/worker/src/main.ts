@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { createDatabase, processDatabaseRowEvent } from '@memoria/db';
 import { processAuthMail, purgeAuthCounters, purgeInvitations } from '@memoria/auth';
 import nodemailer from 'nodemailer';
+import { UploadService } from '@memoria/storage/uploads';
+import { storageConfig } from '@memoria/storage/config';
 
 const parsed = z
   .object({
@@ -27,6 +29,7 @@ const config = parsed.data;
 if (Boolean(config.SMTP_USER) !== Boolean(config.SMTP_PASSWORD))
   throw new Error('SMTP credentials must be paired');
 const connection = createDatabase(config.DATABASE_URL);
+const files = new UploadService(connection.pool, storageConfig());
 const smtp = nodemailer.createTransport({
   host: config.SMTP_HOST,
   port: config.SMTP_PORT,
@@ -89,6 +92,18 @@ const rowPoll = setInterval(() => {
       aggregating = undefined;
     });
 }, 250);
+// Independent queue: hashing an object never delays SMTP or row events.
+let transferring: Promise<void> | undefined;
+const filePoll = setInterval(() => {
+  if (stopping || transferring) return;
+  transferring = files
+    .tick()
+    .then(() => {})
+    .catch(() => console.error('File queue unavailable'))
+    .finally(() => {
+      transferring = undefined;
+    });
+}, 1000);
 const server = createServer(async (request, response) => {
   response.setHeader('Content-Type', 'application/json');
   response.setHeader('Cache-Control', 'no-store');
@@ -113,9 +128,12 @@ async function shutdown() {
   stopping = true;
   clearInterval(poll);
   clearInterval(rowPoll);
+  clearInterval(filePoll);
   server.close();
   await delivering;
   await aggregating;
+  await transferring;
+  files.close();
   smtp.close();
   await connection.pool.end();
   await boss.stop({ graceful: true, timeout: 10000 });

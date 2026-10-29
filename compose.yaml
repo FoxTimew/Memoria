@@ -13,13 +13,24 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  rustfs:
+    image: rustfs/rustfs:1.0.4@sha256:ed9210d6411d77ffceb70d94b964a3cb7d225983368bc25bebe01e995293dcc2
+    command: /data
+    environment:
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY_ID:?Run pnpm env:init}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_ACCESS_KEY:?Run pnpm env:init}
+      RUSTFS_CONSOLE_ENABLE: 'false'
+      RUSTFS_OBS_LOGGER_LEVEL: error
+    ports: ['127.0.0.1:9000:9000']
+    volumes: [rustfs-data:/data]
   minio:
+    profiles: [conformance]
     build: ./infra/minio
     command: server /data --console-address ':9001'
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-memoria-local}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Run pnpm env:init}
-    ports: ['127.0.0.1:9000:9000', '127.0.0.1:9001:9001']
+    ports: ['127.0.0.1:19001:9000', '127.0.0.1:19002:9001']
     volumes: [minio-data:/data]
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
@@ -40,5 +51,6 @@ services:
 volumes:
   postgres-data:
   minio-data:
+  rustfs-data:
   caddy-data:
   caddy-config:
