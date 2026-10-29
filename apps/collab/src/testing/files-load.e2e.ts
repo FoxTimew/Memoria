@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { randomUUID, randomBytes } from 'node:crypto';
+import { randomUUID, randomBytes, createHash } from 'node:crypto';
 import { writeFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fork } from 'node:child_process';
@@ -11,13 +11,12 @@ import { testDatabase } from './database.ts';
 import { testAuth } from './auth.ts';
 import { loadProfile } from './profiles.ts';
 import { caddyFixture } from './caddy-fixture.ts';
-import { securityPeer } from './security-peer.ts';
-import { until } from './pool-helpers.ts';
+import { fileLoadClient, serveFileLoadClient } from './file-load-client.ts';
 import { decodeDocument } from '../codec.ts';
 import { applyCommands } from '../service/commands.ts';
 import { collaborationServer, sessionVerifier } from '../service/server.ts';
 import { readCollabConfig } from '../service/config.ts';
-import { receiptFor } from '../service/store.ts';
+import { traceFileLoadControls, setFileLoadStage } from './file-load-controls.ts';
 
 const reports: object[] = [];
 const p95 = (values: number[]) =>
@@ -52,6 +51,8 @@ async function measure(profile: string, series: number) {
   const fixture = new Y.Doc();
   fixture.getXmlFragment('prosemirror');
   Y.applyUpdate(fixture, await loadProfile(profile));
+  for (const id of [0xeffffe00, 0xefffff00, 0xefffff01]) assert(!fixture.store.clients.has(id));
+  fixture.clientID = 0xeffffe00;
   const imageIds = decodeDocument(fixture)
     .filter((b) => b.type === 'core.paragraph')
     .slice(0, 2)
@@ -101,24 +102,36 @@ async function measure(profile: string, series: number) {
     sessionVerifier(auth.auth),
   );
   let proxy: Awaited<ReturnType<typeof caddyFixture>> | undefined;
-  const peers: ReturnType<typeof securityPeer>[] = [];
+  const peers: Awaited<ReturnType<typeof fileLoadClient>>[] = [];
   try {
     proxy = await caddyFixture(Number(new URL(host.ingress.url).port));
     const name = `${db.workspace}:${db.page}:${db.generation}`;
-    for (const account of accounts) {
-      const peer = securityPeer(proxy.url, name, account.cookie, auth.origin, '', proxy.ca);
-      peers.push(peer);
-      await until(() => peer.provider.synced || peer.closed, 'measure sync');
-      assert(!peer.closed, peer.reason);
+    for (const [index, account] of accounts.entries()) {
+      peers.push(
+        await fileLoadClient(import.meta.filename, {
+          url: proxy.url,
+          name,
+          cookie: account.cookie,
+          origin: auth.origin,
+          ca: proxy.ca,
+          index,
+          imageId: imageIds[index]!,
+          fileId: files[index]!,
+        }),
+      );
     }
+    assert.equal(new Set(peers.map((p) => p.pid)).size, 2);
     const room = host.rooms.get(name)!;
     let validationStart = 0,
       totals: number[] = [],
-      transactions: number[] = [];
+      transactions: number[] = [],
+      contributions: number[] = [];
+    let batchSize = 0;
     const prepare = room.replica.prepareMany.bind(room.replica),
       append = host.store.append.bind(host.store);
     room.replica.prepareMany = async (...args) => {
       validationStart = performance.now();
+      batchSize = args[0].length;
       return prepare(...args);
     };
     host.store.append = async (...args) => {
@@ -127,6 +140,7 @@ async function measure(profile: string, series: number) {
       if (collecting) {
         transactions.push(performance.now() - start);
         totals.push(performance.now() - validationStart);
+        contributions.push(batchSize);
       }
       return result;
     };
@@ -142,60 +156,35 @@ async function measure(profile: string, series: number) {
           registry = [];
           totals = [];
           transactions = [];
-          const wire: number[] = [];
+          contributions = [];
+          const wire: number[] = [],
+            edits: number[] = [],
+            receipts = new Set<string>();
           for (let wave = 0; wave < 110; wave++) {
+            setFileLoadStage(
+              `${profile}:${series}:references=${references}:authors=${authors}:wave=${wave}`,
+            );
             collecting = wave >= 10;
-            const pending = peers.slice(0, authors).map((peer, index) => {
-              assert(!peer.closed, peer.reason);
-              let key = '',
-                last = '';
-              const start = performance.now();
-              const promise = new Promise<void>((resolve, reject) => {
-                const receive = ({ payload }: { payload: string }) => {
-                  last = payload;
-                  const r = JSON.parse(payload);
-                  if (r.status === 'durable' && r.receipt === key) {
-                    clearTimeout(timer);
-                    peer.provider.off('stateless', receive);
-                    if (collecting) wire.push(performance.now() - start);
-                    resolve();
-                  }
-                };
-                const timer = setTimeout(() => {
-                  peer.provider.off('stateless', receive);
-                  reject(
-                    new Error(
-                      `DURABLE_RECEIPT_TIMEOUT wave=${wave} author=${index} expected=${key} last=${last} closed=${peer.closed} reason=${peer.reason}`,
-                    ),
-                  );
-                }, 5000);
-                peer.provider.on('stateless', receive);
-                peer.doc.once('update', (update: Uint8Array) => {
-                  key = receiptFor(update);
-                });
-              });
-              const nodes = [
-                ...peer.doc.getXmlFragment('prosemirror').createTreeWalker(() => true),
-              ];
-              if (references) {
-                const container = nodes.find(
-                  (n) => n instanceof Y.XmlElement && n.getAttribute('id') === imageIds[index],
-                ) as Y.XmlElement;
-                const image = container.get(0) as Y.XmlElement;
-                image.setAttribute('fileId', image.getAttribute('fileId') ? '' : files[index]!);
-              } else {
-                const text = nodes.filter((n): n is Y.XmlText => n instanceof Y.XmlText)[index]!;
-                peer.doc.transact(() => {
-                  if (wave % 2) text.delete(0, 1);
-                  else text.insert(0, 'x');
-                });
+            const confirmed = await Promise.all(
+              peers.slice(0, authors).map((peer) => peer.edit({ wave, references })),
+            );
+            if (collecting)
+              for (const r of confirmed) {
+                assert(!receipts.has(r.receipt), 'Receipt reused between distinct edits');
+                receipts.add(r.receipt);
+                wire.push(r.wireMs);
+                edits.push(r.editMs);
               }
-              return promise;
-            });
-            await Promise.all(pending);
             await delay(100); // Realistic typing; preserve the production per-account wire quota.
           }
           collecting = false;
+          await Promise.all(peers.map((peer) => peer.check()));
+          assert.equal(wire.length, authors * 100);
+          assert.equal(
+            contributions.reduce((sum, n) => sum + n, 0),
+            authors * 100,
+          );
+          assert.equal(contributions.length, totals.length);
           const count = Number(
             (await db.pool.query('SELECT count(*) n FROM file_usages WHERE page_id=$1', [db.page]))
               .rows[0].n,
@@ -208,9 +197,14 @@ async function measure(profile: string, series: number) {
             authors,
             encodedBytes: snapshot.length,
             businessBytes,
+            snapshotSha256: createHash('sha256').update(snapshot).digest('hex'),
+            serverPid: process.pid,
+            clientPids: peers.map((peer) => peer.pid),
             wire,
+            edits,
             totals,
             transactions,
+            contributions,
             locks,
             registry,
             p95: {
@@ -221,7 +215,25 @@ async function measure(profile: string, series: number) {
               registry: registry.length ? p95(registry) : 0,
             },
           };
-        })();
+        })().catch((error: Error) => {
+          process.send?.({
+            kind: 'result',
+            result: {
+              profile,
+              series,
+              references,
+              authors,
+              partial: true,
+              error: error.message,
+              totals,
+              transactions,
+              contributions,
+              locks,
+              registry,
+            },
+          });
+          throw error;
+        });
         process.send?.({ kind: 'result', result });
         console.log(JSON.stringify({ profile, series, references, authors, p95: result.p95 }));
         assert(
@@ -231,15 +243,19 @@ async function measure(profile: string, series: number) {
       }
   } finally {
     collecting = false;
-    peers.forEach((p) => p.destroy());
+    setFileLoadStage('cleanup');
+    await Promise.allSettled(peers.map((p) => p.close()));
     proxy?.close();
     await host.close();
     await auth.pool.end();
     await db.close();
   }
 }
-if (process.env.MEMORIA_FILES_PROFILE) {
+if (process.env.MEMORIA_FILES_CLIENT === 'true') {
+  serveFileLoadClient();
+} else if (process.env.MEMORIA_FILES_PROFILE) {
   try {
+    traceFileLoadControls();
     await measure(process.env.MEMORIA_FILES_PROFILE, Number(process.env.MEMORIA_FILES_SERIES));
   } catch (error) {
     console.error(error);
@@ -279,7 +295,7 @@ if (process.env.MEMORIA_FILES_PROFILE) {
       });
       try {
         await prepared;
-        const { hygiene } = await runMeasuredSeries(
+        const { result, hygiene } = await runMeasuredSeries(
           label,
           async () => {
             child.send({ kind: 'start' });
@@ -288,14 +304,14 @@ if (process.env.MEMORIA_FILES_PROFILE) {
           },
           { preparation, maxAttempts: 1 },
         );
-        reports.push({ profile, series, hygiene, results });
+        reports.push({ profile, series, code: result.code, hygiene, results });
         await writeFile(
           '.local/session-7-files-measurement.json',
           JSON.stringify(
             {
               date: new Date().toISOString(),
               scope:
-                'Real WSS/Caddy, parent-only OS probes. Server validation-to-SQL-commit timer per merged batch; lock timing includes queries, not pure contention. 10 warmups + 100 waves per scenario at 10 waves/second.',
+                'Real WSS/Caddy, two separate client processes, no CPU profiler, parent-only OS probes. Server validation-to-SQL-commit timer per merged batch; client-local WSS timer, IPC excluded. Lock timing includes queries, not pure contention. 10 warmups + 100 waves per scenario, 100ms pause after each confirmed wave (at most 10 waves/second).',
               reports,
             },
             null,
