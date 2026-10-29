@@ -1,0 +1,277 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "reference-cold-3",
+  "attempt": 1,
+  "preparation": {
+    "path": ".local/measurement-hygiene/reference-cold-3-preparation-291325f4-d4a6-40e5-aa2c-9c613c5a0cef.json",
+    "observation": {
+      "observedAt": "2026-10-29T13:10:25.208Z",
+      "windowsFreeBytes": 4988653568,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5699932160,
+        "swapInPages": 386,
+        "swapOutPages": 2163
+      },
+      "power": {
+        "observedAt": "2026-10-29T13:10:25.208Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 98
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "status": "valid",
+  "before": {
+    "observedAt": "2026-10-29T13:10:27.697Z",
+    "windowsFreeBytes": 4969893888,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5695115264,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-29T13:10:27.697Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 98
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "workStartedAt": 1793279428163,
+  "workEndedAt": 1793279444431,
+  "swap": {
+    "raw": "BOOT dc1818ce-057f-406e-9e82-a0bb01fa6a48\nvmstat from procps-ng 4.0.4\n--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n   0    0            0      4855616         3748      1069540    0    0     0    76 2824 4224   0   0  99   0   0   0\n   0    0            0      4855600         3748      1069540    0    0     0     0 2037 2982   0   0 100   0   0   0\n   0    0            0      4836164         3880      1075332    0    0   128  3032 3869 5527   1   3  95   0   0   0\n   0    0            0      4837192         3880      1075340    0    0     0    16 18949 34409   2   3  94   0   0   0\n   2    0            0      4818256         3880      1075344    0    0     0    16 7985 13182   1   2  97   0   0   0\n   0    0            0      4837344         3892      1075356    0    0     0   508 8740 14409   0   2  98   0   0   0\n   0    0            0      4817664         3892      1076476    0    0     0   600 7394 11820   1   2  97   0   0   0\n   0    0            0      4827600         3892      1076476    0    0     0    16 2423 3847   0   0  99   0   0   0\n   0    0            0      4730172        35064      1143852    0    0  5070    24 4488 7001   0   2  97   0   0   0\n   0    0            0      4724164        35068      1143852    0    0     0    24 4432 7095   0   1  99   0   0   0\n   0    0            0      4730620        35076      1143868    0    0     0    36 3358 5322   0   1  99   0   0   0\n   3    0            0      4735120        35076      1143868    0    0     0    16 3269 5298   0   1  99   0   0   0\n   0    0            0      4734300        35076      1143868    0    0     0    16 3376 5463   0   1  99   0   0   0\n   0    0            0      4735956        35076      1143876    0    0     0    16 19589 35467   3   3  94   0   0   0\n   0    0            0      4732972        35076      1143880    0    0     0   552 5281 8685   0   1  99   0   0   0\n   0    0            0      4743220        35084      1143884    0    0     0    36 4936 7908   0   1  98   0   0   0\n   0    0            0      4742800        35084      1143884    0    0     0     8 3104 4914   0   0  99   0   0   0\n   1    0            0      4746956        35084      1141868    0    0     0   584 3222 4608   1   3  96   0   0   0\n",
+    "chunks": [
+      {
+        "observedAt": "2026-10-29T13:10:26.535Z",
+        "text": "BOOT "
+      },
+      {
+        "observedAt": "2026-10-29T13:10:26.536Z",
+        "text": "dc1818ce-057f-406e-9e82-a0bb01fa6a48\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:26.538Z",
+        "text": "vmstat from procps-ng 4.0.4\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:26.541Z",
+        "text": "--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:27.541Z",
+        "text": "   0    0            0      4855616         3748      1069540    0    0     0    76 2824 4224   0   0  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:28.541Z",
+        "text": "   0    0            0      4855600         3748      1069540    0    0     0     0 2037 2982   0   0 100   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:29.542Z",
+        "text": "   0    0            0      4836164         3880      1075332    0    0   128  3032 3869 5527   1   3  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:30.542Z",
+        "text": "   0    0            0      4837192         3880      1075340    0    0     0    16 18949 34409   2   3  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:31.542Z",
+        "text": "   2    0            0      4818256         3880      1075344    0    0     0    16 7985 13182   1   2  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:32.542Z",
+        "text": "   0    0            0      4837344         3892      1075356    0    0     0   508 8740 14409   0   2  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:33.543Z",
+        "text": "   0    0            0      4817664         3892      1076476    0    0     0   600 7394 11820   1   2  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:34.543Z",
+        "text": "   0    0            0      4827600         3892      1076476    0    0     0    16 2423 3847   0   0  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:35.543Z",
+        "text": "   0    0            0      4730172        35064      1143852    0    0  5070    24 4488 7001   0   2  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:36.544Z",
+        "text": "   0    0            0      4724164        35068      1143852    0    0     0    24 4432 7095   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:37.544Z",
+        "text": "   0    0            0      4730620        35076      1143868    0    0     0    36 3358 5322   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:38.545Z",
+        "text": "   3    0            0      4735120        35076      1143868    0    0     0    16 3269 5298   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:39.545Z",
+        "text": "   0    0            0      4734300        35076      1143868    0    0     0    16 3376 5463   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:40.545Z",
+        "text": "   0    0            0      4735956        35076      1143876    0    0     0    16 19589 35467   3   3  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:41.546Z",
+        "text": "   0    0            0      4732972        35076      1143880    0    0     0   552 5281 8685   0   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:42.547Z",
+        "text": "   0    0            0      4743220        35084      1143884    0    0     0    36 4936 7908   0   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:43.547Z",
+        "text": "   0    0            0      4742800        35084      1143884    0    0     0     8 3104 4914   0   0  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T13:10:44.547Z",
+        "text": "   1    0            0      4746956        35084      1141868    0    0     0   584 3222 4608   1   3  96   0   0   0\n"
+      }
+    ],
+    "startedAt": 1793279426303,
+    "endedAt": 1793279444561,
+    "probeError": null,
+    "stderr": "",
+    "imageId": "sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac",
+    "command": "vmstat -w -n -y 1",
+    "intervalSeconds": 1,
+    "workStartedAt": 1793279428163,
+    "workEndedAt": 1793279444431
+  },
+  "after": {
+    "observedAt": "2026-10-29T13:10:44.676Z",
+    "windowsFreeBytes": 4882337792,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5689761792,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-29T13:10:44.676Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 98
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "assessment": {
+    "valid": true,
+    "reason": null,
+    "intervals": 18,
+    "deltaInPages": 0,
+    "deltaOutPages": 0
+  },
+  "result": {
+    "code": 0,
+    "report": {
+      "date": "2026-10-29T13:10:43.967Z",
+      "scope": "Real Hocuspocus cold room: memory admission, consistent PostgreSQL snapshot read, live Yjs document and fresh replica using the selected version worker lifecycle. No journal tail, session check, network or concurrent typing.",
+      "reports": [
+        {
+          "profile": "content-1M",
+          "memoryAfterPreparation": {
+            "observedAt": "2026-10-29T13:10:29.607Z",
+            "windowsFreeBytes": 4865163264,
+            "wsl": {
+              "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+              "memAvailableBytes": 5681528832,
+              "swapInPages": 386,
+              "swapOutPages": 2163
+            },
+            "power": {
+              "observedAt": "2026-10-29T13:10:29.607Z",
+              "platform": "win32",
+              "batteries": [
+                {
+                  "BatteryStatus": 2,
+                  "EstimatedChargeRemaining": 98
+                }
+              ],
+              "allowed": true,
+              "reason": null
+            }
+          },
+          "encodedBytes": 1045110,
+          "businessBytes": 1040382,
+          "warmup": 2,
+          "iterations": 30,
+          "p95": 148.52109999999993,
+          "max": 154.34929999999986,
+          "samples": [
+            154.34929999999986, 148.52109999999993, 51.62390000000005, 48.839800000000196,
+            50.2487000000001, 43.29330000000027, 50.102100000000064, 48.82370000000037,
+            52.05760000000009, 50.18339999999989, 58.99469999999974, 40.79809999999998,
+            51.901200000000244, 47.665100000000166, 39.5311999999999, 45.997899999999845,
+            42.82270000000017, 46.73720000000003, 49.49089999999978, 49.331999999999425,
+            48.262400000000525, 42.91120000000046, 47.963700000000244, 45.01630000000023,
+            38.363100000000486, 39.35780000000068, 44.01940000000013, 40.4433999999992,
+            45.24619999999959, 47.84850000000006
+          ]
+        },
+        {
+          "profile": "history-1M",
+          "memoryAfterPreparation": {
+            "observedAt": "2026-10-29T13:10:33.490Z",
+            "windowsFreeBytes": 4514471936,
+            "wsl": {
+              "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+              "memAvailableBytes": 5665058816,
+              "swapInPages": 386,
+              "swapOutPages": 2163
+            },
+            "power": {
+              "observedAt": "2026-10-29T13:10:33.490Z",
+              "platform": "win32",
+              "batteries": [
+                {
+                  "BatteryStatus": 2,
+                  "EstimatedChargeRemaining": 98
+                }
+              ],
+              "allowed": true,
+              "reason": null
+            }
+          },
+          "encodedBytes": 1042470,
+          "businessBytes": 100802,
+          "warmup": 2,
+          "iterations": 30,
+          "p95": 286.9333999999999,
+          "max": 294.1157000000003,
+          "samples": [
+            281.4258, 263.6769000000004, 268.35409999999956, 286.9333999999999, 262.0735999999997,
+            262.4351999999999, 268.5443000000014, 273.9503000000004, 278.3765999999996,
+            275.1298999999999, 294.1157000000003, 199.35670000000027, 258.21260000000075,
+            281.1814000000013, 258.8284999999996, 280.9438000000009, 283.2606999999989,
+            259.7526000000016, 280.2374, 270.6886000000013, 283.0206999999991, 251.2577000000001,
+            281.46819999999934, 278.40700000000106, 266.5481, 263.8646000000008, 243.86219999999958,
+            266.5767999999989, 257.60180000000037, 259.26300000000083
+          ]
+        }
+      ]
+    },
+    "start": 1793279428164
+  }
+}

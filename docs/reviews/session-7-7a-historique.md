@@ -4,7 +4,7 @@
 
 ## À lire en priorité
 
-Suite autorisée et exécutée : [requalification sans profiler](session-7-7a-requalification.md). Le banc officiel utilise désormais deux clients séparés ; 24 cas WSS passent. Comparaison main encore incomplète après arrêt matériel ; les résultats de profilage ci-dessous restent ceux de cette étape diagnostique.
+Suite autorisée et exécutée : [requalification sans profiler](session-7-7a-requalification.md). Le banc officiel utilise désormais deux clients séparés ; 24 cas WSS passent. La comparaison main est également complète et conforme après reprise des trois séries manquantes ; les résultats de profilage ci-dessous restent ceux de cette étape diagnostique.
 
 - [Banc](../../apps/collab/src/testing/history-profile.ts), [lanceur](../../scripts/profile-files-history.mjs) et [analyse reproductible](../../scripts/analyze-files-history.mjs).
 - **Campagne finale** : [données brutes](evidence/session-7-7a-historique/final/measurement.json), [analyse](evidence/session-7-7a-historique/final/analysis.json), [journal complet](evidence/session-7-7a-historique/final/run.txt) et [observations du contrôle](evidence/session-7-7a-historique/final/control-analysis.json).

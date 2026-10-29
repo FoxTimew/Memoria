@@ -1064,6 +1064,339 @@
         "content-1M": 14.310599999999795,
         "history-1M": 44.56210000000101
       }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "warm",
+      "iteration": 3,
+      "startedAt": "2026-10-29T13:10:06.841Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/candidate-warm-3-preparation-10030fcd-fa99-4274-ab6c-2a8c0f25e281.json",
+        "observation": {
+          "observedAt": "2026-10-29T13:10:03.799Z",
+          "windowsFreeBytes": 4943675392,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5738328064,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:10:03.800Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/candidate-warm-3-attempt-1-3b98142e-ca80-448d-97f3-c8444569678f.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/candidate-warm-3-attempt-1-3b98142e-ca80-448d-97f3-c8444569678f.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-29T13:10:06.333Z",
+          "windowsFreeBytes": 4890144768,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5742510080,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:10:06.333Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-29T13:10:24.325Z",
+          "windowsFreeBytes": 4996898816,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5702705152,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:10:24.325Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 19,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4890144768,
+      "battery": {
+        "observedAt": "2026-10-29T13:10:06.333Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 98
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 5019197440,
+      "code": 0,
+      "p95": {
+        "content-1M": 10.460000000000036,
+        "history-1M": 36.75770000000011
+      }
+    },
+    {
+      "configuration": "reference",
+      "suite": "cold",
+      "iteration": 3,
+      "startedAt": "2026-10-29T13:10:28.164Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/reference-cold-3-preparation-291325f4-d4a6-40e5-aa2c-9c613c5a0cef.json",
+        "observation": {
+          "observedAt": "2026-10-29T13:10:25.208Z",
+          "windowsFreeBytes": 4988653568,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5699932160,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:10:25.208Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/reference-cold-3-attempt-1-f1fdc865-6efc-45e4-835f-763d47ea7d83.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/reference-cold-3-attempt-1-f1fdc865-6efc-45e4-835f-763d47ea7d83.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-29T13:10:27.697Z",
+          "windowsFreeBytes": 4969893888,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5695115264,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:10:27.697Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-29T13:10:44.676Z",
+          "windowsFreeBytes": 4882337792,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5689761792,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:10:44.676Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 18,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4969893888,
+      "battery": {
+        "observedAt": "2026-10-29T13:10:27.697Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 98
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4910362624,
+      "code": 0,
+      "p95": {
+        "content-1M": 148.52109999999993,
+        "history-1M": 286.9333999999999
+      }
+    },
+    {
+      "configuration": "candidate",
+      "suite": "cold",
+      "iteration": 3,
+      "startedAt": "2026-10-29T13:10:48.514Z",
+      "preparation": {
+        "path": ".local/measurement-hygiene/candidate-cold-3-preparation-754d7be1-35f8-498e-9406-87afce3592cf.json",
+        "observation": {
+          "observedAt": "2026-10-29T13:10:45.565Z",
+          "windowsFreeBytes": 4879499264,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5685792768,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:10:45.565Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        }
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/candidate-cold-3-attempt-1-50346f2a-7731-447d-b9fc-78a1f83614f2.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/candidate-cold-3-attempt-1-50346f2a-7731-447d-b9fc-78a1f83614f2.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-29T13:10:48.048Z",
+          "windowsFreeBytes": 4858511360,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5683929088,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:10:48.048Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-29T13:11:06.072Z",
+          "windowsFreeBytes": 4873793536,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5691232256,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T13:11:06.072Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 98
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 19,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "freeBytes": 4858511360,
+      "battery": {
+        "observedAt": "2026-10-29T13:10:48.048Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 98
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      },
+      "endedFreeBytes": 4899381248,
+      "code": 0,
+      "p95": {
+        "content-1M": 161.8155999999999,
+        "history-1M": 311.3810999999987
+      }
     }
   ],
   "harness": {
