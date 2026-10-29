@@ -36,8 +36,11 @@ type Row = {
   job_epoch: string;
   attempts: number;
   last_error: string | null;
+  original_name: string;
+  detected_mime: string | null;
+  preview_status: string;
 };
-const select = `SELECT i.*,f.state,f.object_key,r.database_id FROM file_upload_intents i JOIN files f ON f.id=i.file_id LEFT JOIN database_rows r ON r.page_id=i.page_id AND r.workspace_id=i.workspace_id`;
+const select = `SELECT i.*,f.state,f.object_key,f.original_name,f.mime_type AS detected_mime,f.preview_status,r.database_id FROM file_upload_intents i JOIN files f ON f.id=i.file_id LEFT JOIN database_rows r ON r.page_id=i.page_id AND r.workspace_id=i.workspace_id`;
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const unavailable = () => new FileFault('FILE_UNAVAILABLE');
 type PartPlan = { number: number; bytes: number; checksum: string };
@@ -245,7 +248,33 @@ export class UploadService {
       expiresAt: r.expires_at.toISOString(),
       bytesVerified: !!r.bytes_verified_at,
       error: r.last_error,
+      name: r.original_name,
+      checksum: r.whole_checksum,
+      preview: r.preview_status,
+      mime: r.detected_mime,
     };
+  }
+  /** No browser manifest: resume discovery is scoped to the authenticated author and page. */
+  async pending(a: PageAccessRequest) {
+    return this.boundary.transaction(async (c) => {
+      await this.boundary.lock(c, a.workspace, {
+        destination: a.page,
+        pages: [a.page],
+        files: [],
+        sources: [],
+      });
+      if ((await resolvePageAccess(c, [a])).get(a.key)?.level !== 'edit') throw unavailable();
+      const rows = (
+        await c.query<{ id: string; name: string; state: string }>(
+          `SELECT f.id,f.original_name AS name,f.state FROM file_upload_intents i JOIN files f ON f.id=i.file_id
+         WHERE i.workspace_id=$1 AND i.page_id=$2 AND i.user_id=$3 AND i.expires_at>clock_timestamp() AND i.absolute_expires_at>clock_timestamp()
+         AND f.state IN ('reserved','uploading','completing','validating','ready')
+         AND NOT EXISTS(SELECT 1 FROM file_usages u WHERE u.file_id=f.id) ORDER BY i.created_at DESC LIMIT 20`,
+          [a.workspace, a.page, a.user],
+        )
+      ).rows;
+      return { items: rows };
+    });
   }
   async resume(a: PageAccessRequest, id: string) {
     await this.ensureUpload(a, id);
@@ -276,6 +305,23 @@ export class UploadService {
   async sign(a: PageAccessRequest, id: string, request: string, parts: PartPlan[]) {
     const r = await this.locked(a, id, async (_c, r) => r);
     if (r.state !== 'uploading') throw new FileFault('UPLOAD_STATE_CHANGED', 409);
+    // Sequential/browser uploads must release delivered leases before signing more parts.
+    // Only the verified provider listing can reconcile them; a client acknowledgement cannot.
+    if (r.transport_mode === 'multipart' && r.upload_id) {
+      const delivered = this.manifest(
+        r,
+        await this.storage.parts(r.staging_key!, r.upload_id),
+        await this.plans(id),
+      );
+      if (delivered.length)
+        await this.locked(a, id, async (c, current) => {
+          if (current.state !== 'uploading') throw new FileFault('UPLOAD_STATE_CHANGED', 409);
+          await c.query(
+            'UPDATE file_part_leases SET reconciled_at=clock_timestamp() WHERE file_id=$1 AND part_number=ANY($2::int[])',
+            [id, delivered.map((p) => p.number)],
+          );
+        });
+    }
     const expiry = await this.boundary.admitParts(a, id, request, parts);
     const signatures = [];
     for (let i = 0; i < parts.length; i++) {

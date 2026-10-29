@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import {
   DatabaseCells,
+  FileCells,
+  readFileLimits,
   DatabaseFault,
   readDatabaseLimits,
   resolvePageAccess,
@@ -469,7 +471,43 @@ export class DatabaseObjectsService {
       }),
       input,
     );
-    return this.admission.run(() => this.cells.write(s, { ...a, ...data }));
+    return this.admission.run(async () => {
+      if (![b, r, p].every((v) => id.safeParse(v).success)) fail('INVALID_DATABASE_INPUT', 400);
+      const kind = (
+        await this.database.pool.query<{ kind: string }>(
+          'SELECT kind FROM database_properties WHERE workspace_id=$1 AND database_id=$2 AND id=$3',
+          [w, b, p],
+        )
+      ).rows[0]?.kind;
+      if (kind !== 'files') return this.cells.write(s, { ...a, ...data });
+      const limit = readFileLimits().cellFiles;
+      const change = this.parse(
+        z.strictObject({
+          add: z.array(id).max(limit),
+          remove: z.array(id).max(limit),
+          clearVisible: z.boolean().optional(),
+        }),
+        data.value,
+      );
+      return new FileCells(this.database.pool).write(
+        {
+          key: session.id,
+          session: session.id,
+          user: session.userId,
+          workspace: w,
+          page: r,
+          rowScope: { database: b },
+        },
+        p,
+        data.expectedSchemaVersion,
+        data.expectedCellVersion,
+        {
+          add: change.add,
+          remove: change.remove,
+          ...(change.clearVisible === undefined ? {} : { clearVisible: change.clearVisible }),
+        },
+      );
+    });
   }
   async renameRow(session: SessionIdentity, w: string, b: string, r: string, input: unknown) {
     const s = this.subject(session, w),
@@ -538,6 +576,7 @@ export class DatabaseObjectsService {
               'person',
               'relation',
               'url',
+              'files',
             ])
             .optional(),
           config: z.strictObject({ mode: z.enum(['date', 'instant']).optional() }).optional(),

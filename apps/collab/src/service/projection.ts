@@ -122,7 +122,7 @@ export class Projections {
                 JSON.stringify(block.content),
               ],
             );
-            if (block.type === 'core.image' && block.content.fileId)
+            if ((block.type === 'core.image' || block.type === 'core.file') && block.content.fileId)
               await client.query(
                 'INSERT INTO file_references(workspace_id,page_id,block_id,file_id) VALUES($1,$2,$3,$4)',
                 [state.workspace_id, page, block.id, block.content.fileId],

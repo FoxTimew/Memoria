@@ -6,6 +6,16 @@ import * as reading from './read.service.ts';
 @Controller('api/internal/workspaces/:workspaceId/files')
 export class FileReadController {
   constructor(private readonly service: reading.FileReadService) {}
+  @Post('select')
+  @HttpCode(200)
+  @FileQuota('L')
+  select(
+    @CurrentSession() s: AuthenticatedSession,
+    @Param('workspaceId') w: string,
+    @Body() b: unknown,
+  ) {
+    return this.service.invoke(s, w, 'select', b);
+  }
   @Post('resolve')
   @HttpCode(200)
   @FileQuota('L')

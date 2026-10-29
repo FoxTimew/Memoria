@@ -64,7 +64,11 @@ export class IncrementalReplica {
     try {
       const oldFiles = new Map(
         this.blocks
-          .filter((b) => b.type === 'core.image' && typeof b.content.fileId === 'string')
+          .filter(
+            (b) =>
+              (b.type === 'core.image' || b.type === 'core.file') &&
+              typeof b.content.fileId === 'string',
+          )
           .map((b) => [b.id, b.content.fileId as string]),
       );
       // Only clock changes from clients in this update. No history-wide structure scan.
@@ -84,10 +88,14 @@ export class IncrementalReplica {
       const blockIds = new Set(this.blocks.map((b) => b.id));
       this.pending = { update: new Uint8Array(update), upper, blockIds };
       const files = this.blocks
-        .filter((b) => b.type === 'core.image' && typeof b.content.fileId === 'string')
+        .filter(
+          (b) =>
+            (b.type === 'core.image' || b.type === 'core.file') &&
+            typeof b.content.fileId === 'string',
+        )
         .map((b) => ({ slot: b.id, file: b.content.fileId as string }));
       return {
-        blocks: this.blocks.filter((b) => b.type === 'core.image'),
+        blocks: this.blocks.filter((b) => b.type === 'core.image' || b.type === 'core.file'),
         files,
         fileSteps: [
           {

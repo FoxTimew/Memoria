@@ -11,6 +11,7 @@ export const kinds = {
   person: 'Personnes',
   relation: 'Relation',
   url: 'Lien URL',
+  files: 'Fichiers',
 } as const;
 export type Kind = keyof typeof kinds;
 export type Property = {
@@ -70,6 +71,7 @@ export type Table = {
   multi: (Address & { items: string[] })[];
   person: (Address & References)[];
   relation: (Address & References)[];
+  files?: (Address & References)[];
 };
 export async function databaseRequest<T>(path: string, method = 'GET', body?: unknown): Promise<T> {
   try {
@@ -97,6 +99,7 @@ export async function databaseRequest<T>(path: string, method = 'GET', body?: un
 }
 export function tableValue(table: Table, row: string, p: Property): CellValue {
   const at = (v: Address) => v.row_page_id === row && v.property_id === p.id;
+  if (p.kind === 'files') return table.files?.find(at) ?? { items: [], hasHidden: false };
   if (p.kind === 'person' || p.kind === 'relation')
     return table[p.kind].find(at) ?? { items: [], hasHidden: false };
   if (p.kind === 'multi_select') return table.multi.find(at)?.items ?? [];
@@ -156,6 +159,7 @@ export function referenceDelta(before: CellValue, selected: string[]) {
 }
 export function operators(kind: Kind): DatabaseQuery['filters'][number]['op'][] {
   const empty = ['empty', 'notEmpty'] as const;
+  if (kind === 'files') return [...empty];
   if (['person', 'relation', 'multi_select'].includes(kind)) return ['any', ...empty];
   if (kind === 'select') return ['in', ...empty];
   if (kind === 'checkbox') return ['eq', ...empty];

@@ -144,10 +144,11 @@ await test(
     };
     try {
       await t.test(
-        'all four control routes have quotas and default authentication; no CSRF/recovery bypass',
+        'all file-read control routes have quotas and default authentication; no CSRF/recovery bypass',
         async () => {
           for (const [method, family] of [
             ['resolve', 'L'],
+            ['select', 'L'],
             ['tickets', 'L'],
             ['archive', 'M'],
             ['restore', 'M'],
@@ -158,6 +159,7 @@ await test(
           }
           for (const tail of [
             '/resolve',
+            '/select',
             '/read-tickets',
             '/' + randomUUID() + '/archive',
             '/' + randomUUID() + '/restore',
@@ -212,6 +214,100 @@ await test(
           for (const marker of ['EXIF', 'GPSLatitude', 'PRIVATE_ARTIST'])
             assert(!b.includes(Buffer.from(marker)));
           assert.equal((await reconcileFileCapacity(db)).driftWorkspaces, 0);
+        },
+      );
+      await t.test(
+        '7c real HTTP: resume discovery is author/page scoped, selector hides sources, files-cell CAS and schema boundary',
+        async () => {
+          for (const [path, body] of [
+            [uploadBase + '/pending', { pageId: page }],
+            [fileBase + '/select', { pageId: page }],
+          ] as const) {
+            assert.equal((await h.call(undefined, body, path)).status, 401);
+            assert.equal(
+              (await h.call(owner, body, path, { origin: 'https://attacker.invalid' })).status,
+              403,
+            );
+            assert.notEqual((await h.call(stranger, body, path)).status, 200); // restricted recovery session
+          }
+          const pending = await h.call(owner, { pageId: page }, uploadBase + '/pending');
+          assert.equal(pending.status, 200);
+          assert.deepEqual(pending.data.items, []); // attached files absent
+          const discovered = await h.call(guest, { pageId: page }, fileBase + '/select');
+          assert.equal(discovered.status, 200);
+          assert((discovered.data.items as { id: string }[]).some((f) => f.id === raster));
+          assert.deepEqual(
+            (await h.call(guest, { pageId: h.f.rows[2] }, fileBase + '/select')).data.items,
+            [],
+          );
+          const base = `/api/internal/workspaces/${workspace}/databases/${h.f.bases[0]}`;
+          const cell = base + `/rows/${h.f.rows[1]}/cells/${property}`;
+          const read = await h.call(owner, {}, cell, {}, 'GET');
+          assert.equal(read.status, 200);
+          const patch = {
+            expectedSchemaVersion: read.data.schemaVersion,
+            expectedCellVersion: read.data.version,
+            value: { add: [raster], remove: [] },
+          };
+          assert.equal((await h.call(guest, patch, cell, {}, 'PATCH')).status, 404);
+          assert.equal((await h.call(owner, patch, cell, {}, 'PATCH')).status, 200);
+          assert.equal((await h.call(owner, patch, cell, {}, 'PATCH')).status, 409);
+          const actual = await h.call(owner, {}, cell, {}, 'GET');
+          assert.equal((actual.data.value as { items: { id: string }[] }).items[0]?.id, raster);
+          const table = await h.call(
+            guest,
+            { filters: [{ field: property, op: 'notEmpty' }], sorts: [] },
+            base + '/query',
+          );
+          assert.equal(table.status, 200);
+          assert(
+            (table.data.files as { row_page_id: string }[]).some(
+              (f) => f.row_page_id === h.f.rows[1],
+            ),
+          );
+          assert.equal(
+            (
+              await h.call(
+                owner,
+                { expectedSchemaVersion: actual.data.schemaVersion, kind: 'text' },
+                base + '/properties/' + property,
+                {},
+                'PATCH',
+              )
+            ).status,
+            400,
+          );
+          await assert.rejects(
+            db.query("UPDATE database_properties SET kind='text' WHERE id=$1", [property]),
+            /populated file property/,
+          );
+          assert.equal(
+            (
+              await h.call(
+                owner,
+                {
+                  expectedSchemaVersion: actual.data.schemaVersion,
+                  expectedCellVersion: actual.data.version,
+                  value: { add: [], remove: [raster] },
+                },
+                cell,
+                {},
+                'PATCH',
+              )
+            ).status,
+            200,
+          );
+          // New resume route never accepts arbitrary owner or storage keys.
+          assert.equal(
+            (await h.call(owner, { pageId: page, user: guest.user }, uploadBase + '/pending'))
+              .status,
+            400,
+          );
+          assert.equal(
+            (await h.call(owner, { pageId: h.f.rows[2], files: [raster] }, fileBase + '/resolve'))
+              .data.unavailable,
+            true,
+          );
         },
       );
       await t.test(

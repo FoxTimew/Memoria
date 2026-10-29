@@ -161,7 +161,7 @@ export function DatabaseQueryPanel({
               }
             >
               {fields
-                .filter((p) => !['person', 'relation', 'multi_select'].includes(p.kind))
+                .filter((p) => !['person', 'relation', 'multi_select', 'files'].includes(p.kind))
                 .map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}

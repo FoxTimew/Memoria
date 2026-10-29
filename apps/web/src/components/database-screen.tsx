@@ -10,6 +10,7 @@ import type { Base, BaseSummary, Property, Row, Table } from '../lib/database-ui
 import { refreshCachePolicy } from '../lib/cache-policy.ts';
 import { CacheForbidden, LocalSessionRevoked } from '../lib/yjs-cache.ts';
 import { onLocalSignOut } from '../lib/local-sign-out.ts';
+import { FileScope } from './files.tsx';
 import { DatabaseCell } from './database-cell.tsx';
 import { DatabaseQueryPanel } from './database-query.tsx';
 import { DatabaseSchema } from './database-schema.tsx';
@@ -474,13 +475,13 @@ export default function DatabaseScreen({
                               .filter((p) => !hidden.includes(p.id))
                               .map((p) => (
                                 <td key={p.id}>
-                                  {base.level === 'read' ? (
+                                  {base.level === 'read' && p.kind !== 'files' ? (
                                     <span>
                                       {displayValue(tableValue(table, r.id, p), p, base.options)}
                                     </span>
                                   ) : (
                                     <button
-                                      aria-label={`Modifier ${p.name} de ${r.title || 'Sans titre'}`}
+                                      aria-label={`${base.level === 'read' ? 'Consulter' : 'Modifier'} ${p.name} de ${r.title || 'Sans titre'}`}
                                       onClick={() => setCell({ row: r.id, property: p })}
                                     >
                                       {displayValue(tableValue(table, r.id, p), p, base.options)}
@@ -555,15 +556,23 @@ export default function DatabaseScreen({
                     <button onClick={() => setTrash(undefined)}>Fermer la corbeille</button>
                   </section>
                 )}
-                {cell && base.level === 'edit' && (
-                  <DatabaseCell
+                {cell && (base.level === 'edit' || cell.property.kind === 'files') && (
+                  <FileScope
                     key={`${cell.row}:${cell.property.id}`}
-                    endpoint={endpoint}
-                    {...cell}
-                    options={base.options}
-                    close={() => setCell(undefined)}
-                    saved={saved}
-                  />
+                    workspace={workspaceId}
+                    page={cell.row}
+                    editable={base.level === 'edit'}
+                  >
+                    <DatabaseCell
+                      key={`${cell.row}:${cell.property.id}`}
+                      endpoint={endpoint}
+                      {...cell}
+                      readOnly={base.level === 'read'}
+                      options={base.options}
+                      close={() => setCell(undefined)}
+                      saved={saved}
+                    />
+                  </FileScope>
                 )}
               </>
             )}

@@ -1,6 +1,8 @@
 import type { BlockSpecs } from '@blocknote/core';
 import type { ComponentType } from 'react';
 import type { BlockData, BlockModel } from '@memoria/blocks-core';
+export { FileBlockContext, FileBlockView } from './file-view.tsx';
+export type { FileBlockProps } from './file-view.tsx';
 
 export type EditorProps = Record<string, string | number | boolean>;
 

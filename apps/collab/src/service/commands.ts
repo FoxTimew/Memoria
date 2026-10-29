@@ -12,6 +12,7 @@ const names: Record<string, string> = {
   'core.todo': 'checkListItem',
   'core.code': 'codeBlock',
   'core.image': 'memoriaImage',
+  'core.file': 'memoriaFile',
   'core.divider': 'divider',
   'gamedev.character-card': 'gamedevCharacterCard',
 };
@@ -23,7 +24,7 @@ function contentNode(type: string, version: number, raw: Record<string, unknown>
     set('schemaVersion', 2);
     for (const [key, value] of Object.entries(data))
       set(key, key === 'tags' ? JSON.stringify(value) : value);
-  } else if (type === 'core.image') {
+  } else if (type === 'core.image' || type === 'core.file') {
     for (const [key, value] of Object.entries(data))
       set(key, key === 'fileId' ? (value ?? '') : value);
   } else if (type !== 'core.divider') {

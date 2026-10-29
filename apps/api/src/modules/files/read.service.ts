@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException, HttpException } from '@nestjs/common';
 import { z } from 'zod';
-import { FileReading, FileFault } from '@memoria/db';
+import { FileReading, FileFault, resolvePageAccess } from '@memoria/db';
 import { ReadTickets } from '@memoria/storage/read-ticket';
 import * as database from '../../database.module.ts';
 import type { AuthenticatedSession } from '../auth/current-user.decorator.ts';
@@ -21,7 +21,7 @@ export class FileReadService {
   async invoke(
     s: AuthenticatedSession,
     w: string,
-    action: 'resolve' | 'tickets' | 'archive' | 'restore',
+    action: 'resolve' | 'select' | 'tickets' | 'archive' | 'restore',
     body: unknown,
     id?: string,
   ) {
@@ -37,6 +37,36 @@ export class FileReadService {
           workspace: w,
           page,
         });
+        if (action === 'select') {
+          const parsed = z.strictObject({ pageId: z.uuid() }).safeParse(body);
+          if (!parsed.success) throw new BadRequestException({ code: 'INVALID_FILE_REQUEST' });
+          const row = (
+            await this.database.pool.query<{ database_id: string }>(
+              'SELECT database_id FROM database_rows WHERE workspace_id=$1 AND page_id=$2',
+              [w, parsed.data.pageId],
+            )
+          ).rows[0];
+          const request = {
+            ...a(parsed.data.pageId),
+            ...(row ? { rowScope: { database: row.database_id } } : {}),
+          };
+          if (!(await resolvePageAccess(this.database.pool, [request])).has(request.key))
+            return { items: [] };
+          const candidates = (
+            await this.database.pool.query<{ file_id: string }>(
+              'SELECT DISTINCT file_id FROM file_usages WHERE workspace_id=$1 AND page_id=$2 ORDER BY file_id LIMIT 100',
+              [w, parsed.data.pageId],
+            )
+          ).rows;
+          const items = [];
+          for (const entry of candidates)
+            try {
+              items.push(await service.metadata(a(parsed.data.pageId), entry.file_id));
+            } catch (e) {
+              if (!(e instanceof FileFault && e.code === 'FILE_UNAVAILABLE')) throw e;
+            }
+          return { items };
+        }
         if (action === 'archive' || action === 'restore') {
           const parsed = lifecycle.safeParse(body);
           if (!parsed.success) throw new BadRequestException({ code: 'INVALID_FILE_REQUEST' });

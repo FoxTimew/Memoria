@@ -135,6 +135,7 @@ await test(
           for (const [method, family] of [
             ['initiate', 'U'],
             ['status', 'L'],
+            ['pending', 'L'],
             ['resume', 'U'],
             ['sign', 'P'],
             ['complete', 'U'],
@@ -146,6 +147,7 @@ await test(
           const id = randomUUID();
           for (const [tail, method] of [
             ['', 'POST'],
+            ['/pending', 'POST'],
             [`/${id}`, 'GET'],
             [`/${id}/resume`, 'POST'],
             [`/${id}/parts`, 'POST'],
@@ -187,6 +189,12 @@ await test(
           const a = await call(owner, body);
           assert.equal(a.status, 201, JSON.stringify(a.data));
           id = String(a.data.id);
+          const pending = await call(owner, { pageId }, '/pending');
+          assert.equal(pending.status, 200);
+          assert.equal((pending.data.items as { id: string }[])[0]?.id, id);
+          assert.deepEqual((await call(other, { pageId }, '/pending')).data.items, []);
+          assert.deepEqual((await call(owner, { pageId: h.f.rows[1] }, '/pending')).data.items, []);
+          assert.equal((await call(guest, { pageId }, '/pending')).status, 404);
           assert.equal((await call(owner, body)).data.id, id);
           assert.equal(
             (await call(owner, { ...body, checksum: sha(Buffer.alloc(bytes.length, 7)) })).status,

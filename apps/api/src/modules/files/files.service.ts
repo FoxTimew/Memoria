@@ -47,7 +47,7 @@ export class FilesService {
   async invoke(
     session: AuthenticatedSession,
     workspace: string,
-    action: 'initiate' | 'status' | 'resume' | 'sign' | 'complete' | 'cancel',
+    action: 'initiate' | 'pending' | 'status' | 'resume' | 'sign' | 'complete' | 'cancel',
     id: string | undefined,
     body: unknown = {},
   ) {
@@ -55,25 +55,28 @@ export class FilesService {
       throw new BadRequestException({ code: 'INVALID_FILE_REQUEST' });
     return this.admission.run(async () => {
       try {
-        if (action === 'initiate') {
-          const input = this.parse(initial, body);
+        if (action === 'initiate' || action === 'pending') {
+          const input = this.parse(
+            action === 'initiate' ? initial : z.strictObject({ pageId: z.uuid() }),
+            body,
+          );
           const row = (
             await this.database.pool.query<{ database_id: string }>(
               'SELECT database_id FROM database_rows WHERE workspace_id=$1 AND page_id=$2',
               [workspace, input.pageId],
             )
           ).rows[0];
-          return await this.transport.initiate(
-            {
-              key: session.id,
-              session: session.id,
-              user: session.userId,
-              workspace,
-              page: input.pageId,
-              ...(row ? { rowScope: { database: row.database_id } } : {}),
-            },
-            input,
-          );
+          const actor = {
+            key: session.id,
+            session: session.id,
+            user: session.userId,
+            workspace,
+            page: input.pageId,
+            ...(row ? { rowScope: { database: row.database_id } } : {}),
+          };
+          return action === 'pending'
+            ? await this.transport.pending(actor)
+            : await this.transport.initiate(actor, this.parse(initial, body));
         }
         const context = await this.transport.context(session.userId, session.id, workspace, id!);
         if (action === 'sign') {

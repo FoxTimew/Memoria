@@ -96,7 +96,11 @@ export class Room {
       this.generation,
       this.revision,
       blocks
-        .filter((b) => b.type === 'core.image' && typeof b.content.fileId === 'string')
+        .filter(
+          (b) =>
+            (b.type === 'core.image' || b.type === 'core.file') &&
+            typeof b.content.fileId === 'string',
+        )
         .map((b) => ({ slot: b.id, file: b.content.fileId as string })),
     );
   }

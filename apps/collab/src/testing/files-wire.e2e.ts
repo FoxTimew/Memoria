@@ -44,9 +44,9 @@ test('7a R12 real Caddy WSS and HMAC: guessed file IDs never enter the journal',
     id: randomUUID(),
     parentId: null,
     afterId: null,
-    type: 'core.image',
+    type: 'core.file',
     schemaVersion: 1,
-    content: { fileId: file, alt: '', caption: '', width: 512 },
+    content: { fileId: file, caption: '' },
   };
   try {
     proxy = await caddyFixture(Number(new URL(host.ingress.url).port));

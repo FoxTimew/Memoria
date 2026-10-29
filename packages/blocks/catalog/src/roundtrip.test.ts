@@ -41,6 +41,7 @@ function fixture(): BlockEnvelope[] {
       ...(model.type === 'core.image'
         ? { fileId: id(100), alt: 'Carte', caption: 'Étage 2', width: 640 }
         : {}),
+      ...(model.type === 'core.file' ? { fileId: id(101), caption: 'Asset de scène' } : {}),
     }),
   }));
 }
@@ -58,7 +59,7 @@ describe('actual BlockNote / ProseMirror roundtrip', () => {
       expect(result.map((block) => [block.id, block.parentId, block.content])).toEqual(
         source.map((block) => [block.id, block.parentId, block.content]),
       );
-      expect(result.at(-1)?.afterId).toBe(id(8));
+      expect(result.at(-1)?.afterId).toBe(source.at(-2)!.id);
     } finally {
       editor._tiptapEditor.destroy();
     }
@@ -110,7 +111,7 @@ describe('actual BlockNote / ProseMirror roundtrip', () => {
       expect(result.find((b) => b.id === id(3))?.parentId).toBe(id(2));
       const first = editor.document[0]!;
       editor.removeBlocks([first.id]);
-      editor.insertBlocks([first], id(9), 'after');
+      editor.insertBlocks([first], fixture().at(-1)!.id, 'after');
       expect(kit.fromEditor(editor.document).at(-1)?.id).toBe(first.id);
     } finally {
       editor._tiptapEditor.destroy();

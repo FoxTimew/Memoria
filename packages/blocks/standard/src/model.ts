@@ -85,6 +85,10 @@ export const imageSchema = z.strictObject({
   width: z.int().min(32).max(4096),
 });
 export const dividerSchema = z.strictObject({});
+export const fileSchema = z.strictObject({
+  fileId: z.uuid().nullable(),
+  caption: z.string().max(2000),
+});
 export function spansToText(value: Spans) {
   return value
     .map((span) => (span.type === 'text' ? span.text : span.content.map((s) => s.text).join('')))
@@ -139,6 +143,12 @@ export const imageModel = model(
   (d) => `${d.alt}\n${d.caption}`,
 );
 export const dividerModel = model('core.divider', dividerSchema, {}, () => '');
+export const fileModel = model(
+  'core.file',
+  fileSchema,
+  { fileId: null, caption: '' },
+  (d) => d.caption,
+);
 export const standardModels = [
   paragraphModel,
   headingModel,
@@ -148,4 +158,5 @@ export const standardModels = [
   codeModel,
   imageModel,
   dividerModel,
+  fileModel,
 ] as const;

@@ -1,0 +1,23 @@
+$ node scripts/build-server.mjs api --files-e2e && node --env-file=.env apps/api/dist/files.e2e.mjs
+▶ 7a R12 upload routes and object GC on real Nest, PostgreSQL and unpatched RustFS
+  ✔ global capacity fails before allocation; accounting drift is refused without leaking tenant data (157.306ms)
+  ✔ U/P/L: all routes are guarded, quota classified, CSRF checked, bodies bounded (64.2513ms)
+  ✔ guest read cannot upload; owner idempotence and opaque ownership resist UUID swaps (426.2636ms)
+  ✔ direct POST has exact size; final bytes are checked and staged replay cannot change the immutable copy (289.1226ms)
+{"event":"file_job_retry","code":"FILE_BYTES_REJECTED"}
+  ✔ false checksum never becomes ready; GC retains quota until capabilities and in-flight deadline end (396.296ms)
+  ✔ multipart resumes from the server, refuses client ETags and verifies every byte (1077.5981ms)
+{"event":"file_job_retry","code":"FILE_UNAVAILABLE"}
+  ✔ actual access revocation is rechecked after S3; no new capability or publication (220.6467ms)
+  ✔ cleanup preserves the immutable final, retained usages and the orphan retention window (197.8441ms)
+  ✔ every upload route rejects recovery-only sessions and enforced workspace MFA (170.0574ms)
+  ✔ quotas aggregate sessions and ignore forged proxy headers (2272.3345ms)
+✔ 7a R12 upload routes and object GC on real Nest, PostgreSQL and unpatched RustFS (9718.1265ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9723.6991

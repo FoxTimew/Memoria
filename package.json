@@ -73,7 +73,8 @@
     "files:validator:build": "node scripts/build-file-validator.mjs",
     "test:files:images": "node --test scripts/test-file-images.mjs",
     "measure:files:images": "node scripts/measure-file-images.mjs",
-    "test:files:reading": "node scripts/build-server.mjs api --file-reading-e2e && node --env-file=.env apps/api/dist/file-reading.e2e.mjs"
+    "test:files:reading": "node scripts/build-server.mjs api --file-reading-e2e && node --env-file=.env apps/api/dist/file-reading.e2e.mjs",
+    "test:files:ui": "node scripts/build-collab.mjs && node scripts/build-server.mjs api --files-ui-e2e && node --env-file=.env --use-system-ca apps/api/dist/files-ui.e2e.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

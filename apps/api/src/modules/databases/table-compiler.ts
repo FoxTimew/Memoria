@@ -166,6 +166,13 @@ export function compileTable(
       value = filter.value;
     const empty = op === 'empty' || op === 'notEmpty';
     if (empty && value !== undefined) invalidQuery();
+    if (kind === 'files') {
+      if (!empty) invalidQuery();
+      where.push(
+        `${op === 'empty' ? 'NOT ' : ''}EXISTS(SELECT 1 FROM file_usages u JOIN files f ON f.workspace_id=u.workspace_id AND f.id=u.file_id WHERE u.workspace_id=${w} AND u.page_id=p.id AND u.slot_kind='cell' AND u.slot_id=${param(prop!.id)} AND f.state='ready' AND f.deleted_at IS NULL)`,
+      );
+      continue;
+    }
     if (['multi_select', 'person', 'relation'].includes(kind)) {
       if (!empty && op !== 'any') invalidQuery();
       const table =

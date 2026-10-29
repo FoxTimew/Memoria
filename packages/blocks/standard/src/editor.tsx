@@ -3,10 +3,11 @@ import { defaultBlockSpecs, createHeadingBlockSpec } from '@blocknote/core';
 import type { BlockSpec } from '@blocknote/core';
 import { createReactBlockSpec } from '@blocknote/react';
 import type { BlockEditorModule, EditorProps } from '@memoria/blocks-ui';
+import { FileBlockView } from '@memoria/blocks-ui';
 import type { BlockData } from '@memoria/blocks-core';
-import { standardModels, imageSchema, spansSchema } from './model.ts';
+import { standardModels, imageSchema, fileSchema, spansSchema } from './model.ts';
 
-// A durable file ID, never an expiring URL. File delivery is implemented in session 6.
+// Durable IDs only; the host supplies a revocable view, never an expiring URL in Yjs.
 export const imageSpec = createReactBlockSpec(
   {
     type: 'memoriaImage',
@@ -21,7 +22,14 @@ export const imageSpec = createReactBlockSpec(
   {
     render: ({ block, editor }) => (
       <figure contentEditable={false} aria-label="Image">
-        <div>Emplacement d’image · import de fichiers à venir</div>
+        <FileBlockView
+          fileId={block.props.fileId}
+          image
+          editable={editor.isEditable}
+          alt={block.props.alt}
+          width={block.props.width}
+          onChange={(fileId) => editor.updateBlock(block, { props: { fileId } })}
+        />
         <label>
           Texte alternatif{' '}
           <input
@@ -62,6 +70,35 @@ export const imageSpec = createReactBlockSpec(
     ),
   },
 )();
+export const fileSpec = createReactBlockSpec(
+  {
+    type: 'memoriaFile',
+    content: 'none',
+    propSchema: { fileId: { default: '' }, caption: { default: '' } },
+  },
+  {
+    render: ({ block, editor }) => (
+      <figure contentEditable={false} aria-label="Fichier">
+        <FileBlockView
+          fileId={block.props.fileId}
+          image={false}
+          editable={editor.isEditable}
+          onChange={(fileId) => editor.updateBlock(block, { props: { fileId } })}
+        />
+        <label>
+          Légende{' '}
+          <input
+            aria-label="Légende du fichier"
+            maxLength={2000}
+            value={block.props.caption}
+            disabled={!editor.isEditable}
+            onChange={(e) => editor.updateBlock(block, { props: { caption: e.target.value } })}
+          />
+        </label>
+      </figure>
+    ),
+  },
+)();
 const entries = [
   ['paragraph', defaultBlockSpecs.paragraph],
   ['heading', createHeadingBlockSpec({ levels: [1, 2, 3] })],
@@ -71,6 +108,7 @@ const entries = [
   ['codeBlock', defaultBlockSpecs.codeBlock],
   ['memoriaImage', imageSpec],
   ['divider', defaultBlockSpecs.divider],
+  ['memoriaFile', fileSpec],
 ] as const;
 
 const heading = createHeadingBlockSpec({ levels: [1, 2, 3] });
@@ -87,12 +125,15 @@ export const standardSpecs = {
   codeBlock: defaultBlockSpecs.codeBlock,
   memoriaImage: imageSpec,
   divider: defaultBlockSpecs.divider,
+  memoriaFile: fileSpec,
 };
 
 export const standardAdapters: BlockEditorModule<BlockData>[] = standardModels.map(
   (model, index) => {
     const [editorType, spec] = entries[index]!;
     const from = (props: Record<string, string | number | boolean>, content: unknown) => {
+      if (editorType === 'memoriaFile')
+        return fileSchema.parse({ fileId: props.fileId || null, caption: props.caption });
       if (editorType === 'memoriaImage')
         return imageSchema.parse({
           fileId: props.fileId || null,
@@ -124,6 +165,10 @@ export const standardAdapters: BlockEditorModule<BlockData>[] = standardModels.m
       spec: spec as BlockEditorModule<BlockData>['spec'],
       toEditorProps(data): EditorProps {
         const value: BlockData = model.schema.parse(data);
+        if (editorType === 'memoriaFile') {
+          const file = fileSchema.parse(value);
+          return { ...file, fileId: file.fileId ?? '' };
+        }
         if (editorType === 'memoriaImage') {
           const image = imageSchema.parse(value);
           return { ...image, fileId: image.fileId ?? '' };

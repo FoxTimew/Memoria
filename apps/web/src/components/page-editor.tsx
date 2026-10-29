@@ -1,4 +1,5 @@
 'use client';
+import { FileScope } from './files.tsx';
 import { useEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { BlockNoteEditor, insertOrUpdateBlockForSlashMenu } from '@blocknote/core';
@@ -254,17 +255,23 @@ export default function PageEditor({
   return (
     <>
       {recovery && <LocalRecovery {...recovery} />}
-      <ActiveEditor
-        {...loaded}
-        actions={actions}
-        state={connection!}
-        document={document}
-        onSaved={onSaved}
-        onDirty={onDirty}
-        endpoint={endpoint}
-        reload={reload}
-        row={!!rowDatabaseId}
-      />
+      <FileScope
+        workspace={document.page.workspaceId}
+        page={document.page.id}
+        editable={!loaded.client.readOnly && connection?.phase !== 'blocked'}
+      >
+        <ActiveEditor
+          {...loaded}
+          actions={actions}
+          state={connection!}
+          document={document}
+          onSaved={onSaved}
+          onDirty={onDirty}
+          endpoint={endpoint}
+          reload={reload}
+          row={!!rowDatabaseId}
+        />
+      </FileScope>
     </>
   );
 }
@@ -487,6 +494,40 @@ function ActiveEditor({
         />
         <fieldset disabled={blocked} className="contents">
           <div className="editor-toolbar" role="toolbar" aria-label="Mise en forme">
+            <button
+              onClick={() =>
+                editor.insertBlocks(
+                  [
+                    {
+                      id: crypto.randomUUID(),
+                      type: 'memoriaFile',
+                      props: { fileId: '', caption: '' },
+                    },
+                  ],
+                  editor.getTextCursorPosition().block,
+                  'after',
+                )
+              }
+            >
+              Ajouter un fichier
+            </button>
+            <button
+              onClick={() =>
+                editor.insertBlocks(
+                  [
+                    {
+                      id: crypto.randomUUID(),
+                      type: 'memoriaImage',
+                      props: { fileId: '', alt: '', caption: '', width: 512 },
+                    },
+                  ],
+                  editor.getTextCursorPosition().block,
+                  'after',
+                )
+              }
+            >
+              Ajouter une image
+            </button>
             {(['bold', 'italic', 'underline', 'strike', 'code'] as const).map((style, i) => (
               <button
                 key={style}
@@ -569,29 +610,29 @@ function ActiveEditor({
               {linkError}
             </p>
           )}
-          <BlockNoteView
-            editor={editor}
-            editable={!blocked}
-            theme="light"
-            formattingToolbar={false}
-            linkToolbar={false}
-            sideMenu={false}
-            slashMenu={false}
-            filePanel={false}
-            tableHandles={false}
-          >
-            <SuggestionMenuController
-              triggerCharacter="/"
-              getItems={async (query) =>
-                items.filter((item) =>
-                  `${item.title} ${item.aliases.join(' ')}`
-                    .toLowerCase()
-                    .includes(query.toLowerCase()),
-                )
-              }
-            />
-          </BlockNoteView>
         </fieldset>
+        <BlockNoteView
+          editor={editor}
+          editable={!blocked}
+          theme="light"
+          formattingToolbar={false}
+          linkToolbar={false}
+          sideMenu={false}
+          slashMenu={false}
+          filePanel={false}
+          tableHandles={false}
+        >
+          <SuggestionMenuController
+            triggerCharacter="/"
+            getItems={async (query) =>
+              items.filter((item) =>
+                `${item.title} ${item.aliases.join(' ')}`
+                  .toLowerCase()
+                  .includes(query.toLowerCase()),
+              )
+            }
+          />
+        </BlockNoteView>
       </div>
       <p className="px-6 py-5 text-xs text-[#73806f]">
         Tapez / pour ajouter un bloc. Tab et Maj+Tab règlent l’imbrication. Ctrl+Z annule une

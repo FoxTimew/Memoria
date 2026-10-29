@@ -197,6 +197,18 @@ export class DatabasesService {
             [workspace, ids, readableTargets, propertyIds],
           )
         ).rows;
+        const files = properties.some((p) => p.kind === 'files')
+          ? (
+              await c.query(
+                `SELECT u.page_id AS row_page_id,u.slot_id AS property_id,
+           bool_or(f.state<>'ready' OR f.deleted_at IS NOT NULL) AS "hasHidden",
+           coalesce(jsonb_agg(jsonb_build_object('id',f.id,'name',f.original_name) ORDER BY f.id) FILTER(WHERE f.state='ready' AND f.deleted_at IS NULL),'[]') AS items
+           FROM file_usages u JOIN files f ON f.workspace_id=u.workspace_id AND f.id=u.file_id
+           WHERE u.workspace_id=$1 AND u.page_id=ANY($2::uuid[]) AND u.slot_kind='cell' AND u.slot_id=ANY($3::uuid[]) GROUP BY u.page_id,u.slot_id`,
+                [workspace, ids, properties.filter((p) => p.kind === 'files').map((p) => p.id)],
+              )
+            ).rows
+          : [];
         const versions = (
           await c.query(
             'SELECT row_page_id,property_id,version::text FROM database_cell_versions WHERE workspace_id=$1 AND row_page_id=ANY($2::uuid[]) AND property_id=ANY($3::uuid[])',
@@ -219,6 +231,7 @@ export class DatabasesService {
             multi: multi.filter((v) => kept.has(v.row_page_id)),
             person: person.filter((v) => kept.has(v.row_page_id)),
             relation: relation.filter((v) => kept.has(v.row_page_id)),
+            files: files.filter((v) => kept.has(v.row_page_id)),
             versions: versions.filter((v) => kept.has(v.row_page_id)),
             hasMore,
             cursor:

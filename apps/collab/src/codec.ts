@@ -103,6 +103,11 @@ function decodeContent(node: Y.XmlElement) {
     type = 'gamedev.character-card';
     data = { ...fields, tags: JSON.parse(tags) as unknown };
     requireShape(node.length === 0, 'Unexpected character content');
+  } else if (node.nodeName === 'memoriaFile') {
+    const props = attributes(node, ['fileId', 'caption']);
+    type = 'core.file';
+    data = { ...props, fileId: props.fileId === '' ? null : props.fileId };
+    requireShape(node.length === 0, 'Unexpected file content');
   } else if (node.nodeName === 'memoriaImage') {
     const props = attributes(node, ['fileId', 'alt', 'caption', 'width']);
     type = 'core.image';

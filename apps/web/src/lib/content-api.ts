@@ -11,11 +11,13 @@ export async function contentRequest(
   path: string,
   method = 'GET',
   body?: unknown,
+  signal?: AbortSignal,
 ): Promise<unknown> {
   const response = await globalThis.fetch(path, {
     method,
     credentials: 'include',
     cache: 'no-store',
+    ...(signal ? { signal } : {}),
     headers: { 'Content-Type': 'application/json' },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   });
@@ -26,6 +28,16 @@ export async function contentRequest(
         ? result.code
         : 'REQUEST_FAILED';
     const accessMessages: Record<string, string> = {
+      WORKSPACE_STORAGE_LIMIT:
+        'Le stockage de cet espace est plein. Demandez à un administrateur de libérer de la place.',
+      FILE_CELL_LIMIT:
+        'Cette cellule contient trop de fichiers. Retirez une pièce jointe avant de réessayer.',
+      FILE_REFERENCE_LIMIT: 'Cette page a atteint sa limite de références de fichiers.',
+      FILE_USAGE_LIMIT: 'Ce fichier a atteint sa limite de réutilisations.',
+      UPLOAD_EXPIRED: 'Le délai de reprise est dépassé. Commencez un nouvel envoi.',
+      UPLOAD_STATE_CHANGED:
+        'L’état de cet envoi a changé. Retrouvez-le avec « Reprendre un envoi ».',
+      FILE_BYTES_REJECTED: 'Le fichier reçu ne correspond pas à l’original. Recommencez l’envoi.',
       INVITATION_UNAVAILABLE:
         'Cette invitation est expirée, remplacée ou inaccessible avec ce compte.',
       INVALID_ACCESS_REQUEST: 'Vérifiez les champs et les pages choisies.',

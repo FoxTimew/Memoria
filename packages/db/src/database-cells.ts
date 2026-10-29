@@ -200,6 +200,20 @@ export class DatabaseCells {
   }
   private async value(c: PoolClient, s: DatabaseSubject, a: CellAddress, p: Property) {
     const args = [s.workspace, a.row, a.property];
+    if (p.kind === 'files') {
+      const rows = (
+        await c.query<{ id: string; name: string; visible: boolean }>(
+          `SELECT f.id,f.original_name AS name,(f.state='ready' AND f.deleted_at IS NULL) AS visible
+         FROM file_usages u JOIN files f ON f.workspace_id=u.workspace_id AND f.id=u.file_id
+         WHERE u.workspace_id=$1 AND u.page_id=$2 AND u.slot_kind='cell' AND u.slot_id=$3 ORDER BY f.id`,
+          args,
+        )
+      ).rows;
+      return {
+        items: rows.filter((r) => r.visible).map(({ id, name }) => ({ id, name })),
+        hasHidden: rows.some((r) => !r.visible),
+      };
+    }
     if (p.kind === 'relation' || p.kind === 'person') {
       const query =
         p.kind === 'relation'

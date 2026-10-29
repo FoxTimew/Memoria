@@ -5,7 +5,7 @@ import type { PageAccessRequest } from './access.ts';
 import { readFileLimits } from './file-limits.ts';
 import type { FileLimits } from './file-limits.ts';
 
-/** Internal files-cell CAS, deliberately not exposed by the general database HTTP schema yet.
+/** Files-cell CAS shared by internal writers and the guarded database HTTP route.
  * All values live in the authoritative usage ledger, in the same transaction as the cell version. */
 export class FileCells {
   private readonly boundary: FileBoundary;

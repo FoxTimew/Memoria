@@ -12,6 +12,7 @@ const labels = [
   'Code',
   'Image',
   'Séparateur',
+  'Fichier',
 ];
 export async function loadStandardSpecs() {
   return (await import('./editor.tsx')).standardSpecs;

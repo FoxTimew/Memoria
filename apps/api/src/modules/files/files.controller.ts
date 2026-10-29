@@ -6,6 +6,16 @@ import { FileQuota } from './file-quota.ts';
 @Controller('api/internal/workspaces/:workspaceId/file-uploads')
 export class FilesController {
   constructor(private readonly files: files.FilesService) {}
+  @Post('pending')
+  @HttpCode(200)
+  @FileQuota('L')
+  pending(
+    @CurrentSession() s: AuthenticatedSession,
+    @Param('workspaceId') w: string,
+    @Body() b: unknown,
+  ) {
+    return this.files.invoke(s, w, 'pending', undefined, b);
+  }
   @Post()
   @HttpCode(201)
   @FileQuota('U')
