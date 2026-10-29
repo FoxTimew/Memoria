@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-29T19:04:25.962Z",
+  "listenRecoveryMs": 227.10760000000028,
+  "postgresRecoveryAfterStartMs": 1730.3109000000004,
+  "oldFlowsClosed": true,
+  "pendingAdmissionRefused": true,
+  "revokedSessionRefused": true,
+  "scope": "Functional recovery timing, not a capacity benchmark"
+}

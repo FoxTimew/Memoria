@@ -1,0 +1,81 @@
+$ node scripts/test-collab.mjs --suite files-load
+Power: {"observedAt":"2026-10-29T19:13:40.635Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-29T19:13:41.957Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-29T19:13:44.353Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/files-content-1m-1-preparation-59cf5bed-1b34-4312-b052-163230cc50ab.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T19:13:45.018Z","windowsFreeBytes":4064395264,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5701849088,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:13:45.018Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T19:13:46.732Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:13:52.859Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:13:55.122Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"cleanup"}
+{"diagnostic":"control-ended","control":"leadership","stage":"cleanup"}
+Error: Client trace incomplete
+    at ChildProcess.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:121452:25)
+    at ChildProcess.emit (node:events:514:28)
+    at emit (node:internal/child_process:989:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+{"hygiene":".local/measurement-hygiene/files-content-1m-1-attempt-1-6cc3ef8f-213d-43ea-aa21-9ab207cb68ea.json","status":"valid","label":"files-content-1m-1","attempt":1,"before":{"observedAt":"2026-10-29T19:13:58.738Z","windowsFreeBytes":3602485248,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5654695936,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:13:58.738Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T19:14:00.729Z","windowsFreeBytes":4138987520,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5695418368,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:14:00.729Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":3,"deltaInPages":0,"deltaOutPages":0}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Measurement child failed: retain partial report and stop
+
+1 !== 0
+
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:123599:17 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration files-load.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.

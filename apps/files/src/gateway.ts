@@ -4,7 +4,7 @@ import { pipeline } from 'node:stream/promises';
 import type { Pool, PoolClient } from 'pg';
 import { FileReading, FileFault } from '@memoria/db';
 import type { Database, FileReadClaim } from '@memoria/db';
-import { consumeBucket, ipKey, throttleKey } from '@memoria/auth';
+import { consumeBucket, ipKey, throttleKey } from '@memoria/auth/throttle';
 import { ReadTickets } from '@memoria/storage/read-ticket';
 import type { S3ObjectStorage } from '@memoria/storage';
 type Flow = {
@@ -66,10 +66,14 @@ export async function fileGateway(options: {
   let pending = 0,
     ready = false,
     stopping = false,
+    controlEpoch = 0,
     listener: PoolClient | undefined;
+  let reconnecting: Promise<void> | undefined, retry: ReturnType<typeof setTimeout> | undefined;
+  let retryMs = 250;
   const schema = (await pool.query('SELECT current_schema() s')).rows[0].s;
   const allClose = () => {
     ready = false;
+    controlEpoch++;
     for (const flow of flows) flow.close();
   };
   const check = async (flow: Flow) => {
@@ -93,19 +97,57 @@ export async function fileGateway(options: {
     }
     for (const f of flows) void check(f);
   };
-  const listenerError = () => {
+  const lost = (client: PoolClient) => {
+    if (listener !== client) return;
     allClose();
+    listener = undefined;
+    client.removeAllListeners('notification');
+    client.release(true);
+    schedule();
   };
-  try {
-    listener = await pool.connect();
-    listener.on('error', listenerError);
-    listener.on('notification', notification);
-    await listener.query('LISTEN memoria_collaboration; LISTEN memoria_files');
-    ready = true;
-  } catch (e) {
-    listener?.release(true);
-    throw e;
+  function schedule() {
+    if (stopping || retry) return;
+    retry = setTimeout(() => {
+      retry = undefined;
+      void connect();
+    }, retryMs);
+    retryMs = Math.min(5000, retryMs * 2);
   }
+  function connect(): Promise<void> {
+    if (stopping || ready) return Promise.resolve();
+    if (reconnecting) return reconnecting;
+    reconnecting = (async () => {
+      let client: PoolClient | undefined;
+      try {
+        client = await pool.connect();
+        if (stopping) {
+          client.release(true);
+          return;
+        }
+        listener = client;
+        const current = client;
+        client.on('error', () => lost(current));
+        client.on('end', () => lost(current));
+        client.on('notification', notification);
+        await deadline(
+          client.query('LISTEN memoria_collaboration; LISTEN memoria_files; SELECT 1'),
+        );
+        if (listener === client && !stopping) {
+          // Every previous flow was closed. New reads must authorize again against PostgreSQL.
+          controlEpoch++;
+          ready = true;
+          retryMs = 250;
+        }
+      } catch {
+        if (client) lost(client);
+      } finally {
+        reconnecting = undefined;
+        if (!ready && !stopping) schedule();
+      }
+    })();
+    return reconnecting;
+  }
+  await connect();
   const watchdog = setInterval(() => {
     for (const f of flows) {
       if (Date.now() - f.last >= 3000) f.close();
@@ -117,8 +159,9 @@ export async function fileGateway(options: {
   const probe = setInterval(() => {
     if (probing || !listener || stopping) return;
     probing = true;
-    void deadline(listener.query('SELECT 1'))
-      .catch(allClose)
+    const current = listener;
+    void deadline(current.query('SELECT 1'))
+      .catch(() => lost(current))
       .finally(() => {
         probing = false;
       });
@@ -177,6 +220,7 @@ export async function fileGateway(options: {
     if (!ready || stopping) return error(503, 'FILE_CONTROL_UNAVAILABLE');
     if (pending >= 32 || flows.size + pending >= 32) return error(429, 'FILE_STREAM_CAPACITY');
     pending++;
+    const admittedEpoch = controlEpoch;
     let reserved = false,
       flow: Flow | undefined,
       timeout: ReturnType<typeof setTimeout> | undefined;
@@ -221,7 +265,8 @@ export async function fileGateway(options: {
       reserved = true;
       flow = { claim, abort, last: Date.now(), checking: false, close };
       const resource = await deadline(reading.authorize(claim));
-      if (abort.signal.aborted || !ready || stopping) return error(503, 'FILE_CONTROL_UNAVAILABLE');
+      if (abort.signal.aborted || !ready || stopping || admittedEpoch !== controlEpoch)
+        return error(503, 'FILE_CONTROL_UNAVAILABLE');
       let range;
       try {
         range = readRange(req.headers.range, resource.bytes);
@@ -281,11 +326,12 @@ export async function fileGateway(options: {
       allClose();
       clearInterval(watchdog);
       clearInterval(probe);
-      listener?.off('error', listenerError);
-      listener?.off('notification', notification);
-      await listener?.query('UNLISTEN *').catch(() => {});
-      listener?.release(true);
+      clearTimeout(retry);
+      await reconnecting;
+      const current = listener;
       listener = undefined;
+      current?.removeAllListeners('notification');
+      current?.release(true);
     },
     active: () => flows.size,
   };

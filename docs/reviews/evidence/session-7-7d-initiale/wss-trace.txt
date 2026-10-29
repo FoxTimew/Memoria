@@ -1,0 +1,348 @@
+$ node scripts/test-collab.mjs --suite files-load
+Power: {"observedAt":"2026-10-29T19:18:35.748Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-29T19:18:37.002Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-29T19:18:38.906Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/files-content-1m-1-preparation-09c5d406-b755-4801-a7f1-468fffd3d802.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T19:18:39.568Z","windowsFreeBytes":4377645056,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5670715392,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:18:39.568Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T19:18:41.371Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:18:47.328Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:18:49.493Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=1:wave=58","elapsedMs":689.790399999998}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=1:wave=67","elapsedMs":584.9107999999978}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=1:wave=84","elapsedMs":599.9821999999986}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=1:wave=93","elapsedMs":519.6979000000028}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=1:wave=102","elapsedMs":564.686700000002}
+{"profile":"content-1M","series":1,"references":false,"authors":1,"p95":{"server":14.763100000000122,"wire":23.006099999998696,"transaction":12.304599999999482,"locks":0,"registry":0}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=2:wave=1","elapsedMs":640.576299999997}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=2:wave=25","elapsedMs":634.1736999999994}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=2:wave=34","elapsedMs":567.683100000002}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=2:wave=43","elapsedMs":632.4183000000012}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=2:wave=52","elapsedMs":673.8936000000031}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=2:wave=61","elapsedMs":640.9087999999974}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=2:wave=71","elapsedMs":760.5338000000047}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:1:references=false:authors=2:wave=80","elapsedMs":661.5756000000038}
+{"profile":"content-1M","series":1,"references":false,"authors":2,"p95":{"server":15.888400000003458,"wire":32.19449999999779,"transaction":11.801899999998568,"locks":0,"registry":0}}
+{"profile":"content-1M","series":1,"references":true,"authors":1,"p95":{"server":22.928399999997055,"wire":29.074000000000524,"transaction":21.103200000005018,"locks":4.477499999993597,"registry":7.225099999996019}}
+{"profile":"content-1M","series":1,"references":true,"authors":2,"p95":{"server":26.441800000000512,"wire":52.00640000000567,"transaction":23.525300000001153,"locks":4.28859999999986,"registry":7.85109999999986}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"cleanup"}
+{"diagnostic":"control-ended","control":"leadership","stage":"cleanup"}
+{"hygiene":".local/measurement-hygiene/files-content-1m-1-attempt-1-b23ee7f9-82b8-4f39-8c61-09ec7f1f710c.json","status":"valid","label":"files-content-1m-1","attempt":1,"before":{"observedAt":"2026-10-29T19:18:53.137Z","windowsFreeBytes":3883376640,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5641572352,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:18:53.137Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T19:19:52.135Z","windowsFreeBytes":4415635456,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5652119552,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:19:52.135Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":60,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-content-1m-2-preparation-7abefa96-1696-40f2-b21c-bb94cbdbd67f.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-2","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T19:19:53.061Z","windowsFreeBytes":4411015168,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5661122560,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:19:53.061Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T19:19:54.830Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:20:00.619Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:20:02.855Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:2:references=false:authors=1:wave=56","elapsedMs":618.9758000000002}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:2:references=false:authors=1:wave=66","elapsedMs":621.0779000000002}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:2:references=false:authors=1:wave=74","elapsedMs":502.0116999999991}
+{"profile":"content-1M","series":2,"references":false,"authors":1,"p95":{"server":13.694700000000012,"wire":27.451600000000326,"transaction":11.295099999999366,"locks":0,"registry":0}}
+{"profile":"content-1M","series":2,"references":false,"authors":2,"p95":{"server":14.572800000001735,"wire":32.41019999999844,"transaction":10.302499999997963,"locks":0,"registry":0}}
+{"profile":"content-1M","series":2,"references":true,"authors":1,"p95":{"server":24.93680000000313,"wire":32.86189999999624,"transaction":22.631600000000617,"locks":6.016300000002957,"registry":9.08929999999964}}
+{"profile":"content-1M","series":2,"references":true,"authors":2,"p95":{"server":26.434199999996054,"wire":54.30819999999949,"transaction":24.672500000000582,"locks":5.714600000006612,"registry":8.073499999998603}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"cleanup"}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"cleanup","elapsedMs":984.08140000001}
+{"diagnostic":"control-ended","control":"leadership","stage":"cleanup"}
+{"hygiene":".local/measurement-hygiene/files-content-1m-2-attempt-1-e6b90ad4-28b6-40a7-970f-ecd81e17e76c.json","status":"valid","label":"files-content-1m-2","attempt":1,"before":{"observedAt":"2026-10-29T19:20:06.484Z","windowsFreeBytes":3780870144,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5586448384,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:20:06.484Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T19:21:05.538Z","windowsFreeBytes":4110139392,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5661859840,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:21:05.538Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":60,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-content-1m-3-preparation-c4f88709-626e-49a3-b12c-c0b0b05c0152.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-3","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T19:21:06.497Z","windowsFreeBytes":4114145280,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5668290560,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:21:06.497Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T19:21:08.221Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:21:14.358Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:21:16.595Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=1:wave=56","elapsedMs":529.1022000000012}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=1:wave=65","elapsedMs":573.8356999999996}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=1:wave=99","elapsedMs":519.5137000000032}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=1:wave=107","elapsedMs":534.3532000000014}
+{"profile":"content-1M","series":3,"references":false,"authors":1,"p95":{"server":13.27560000000085,"wire":24.769000000000233,"transaction":10.626800000001822,"locks":0,"registry":0}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=5","elapsedMs":500.39949999999953}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=14","elapsedMs":584.8009999999995}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=23","elapsedMs":693.0102000000006}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=32","elapsedMs":723.4442999999992}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=41","elapsedMs":602.9802999999993}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=51","elapsedMs":689.1891000000032}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=59","elapsedMs":599.0810999999958}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=68","elapsedMs":639.0973000000013}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=78","elapsedMs":715.6129999999976}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=87","elapsedMs":575.520199999999}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=false:authors=2:wave=103","elapsedMs":608.9196000000011}
+{"profile":"content-1M","series":3,"references":false,"authors":2,"p95":{"server":13.107299999999668,"wire":30.889000000002852,"transaction":10.31420000000071,"locks":0,"registry":0}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=true:authors=1:wave=31","elapsedMs":509.8480999999956}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=true:authors=1:wave=89","elapsedMs":549.5506000000023}
+{"profile":"content-1M","series":3,"references":true,"authors":1,"p95":{"server":27.75920000000042,"wire":33.848400000002584,"transaction":25.21519999999873,"locks":4.479299999999057,"registry":8.574599999999919}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=true:authors=2:wave=15","elapsedMs":511.6634999999951}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=true:authors=2:wave=22","elapsedMs":525.1550999999963}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=true:authors=2:wave=48","elapsedMs":503.38520000000426}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=true:authors=2:wave=69","elapsedMs":754.8575999999957}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=true:authors=2:wave=84","elapsedMs":570.4579999999987}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"content-1M:3:references=true:authors=2:wave=98","elapsedMs":500.75100000000384}
+{"profile":"content-1M","series":3,"references":true,"authors":2,"p95":{"server":25.45560000000114,"wire":49.861299999996845,"transaction":22.254699999997683,"locks":4.874199999998382,"registry":7.984899999995832}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"cleanup"}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"cleanup","elapsedMs":899.6983999999939}
+{"diagnostic":"control-ended","control":"leadership","stage":"cleanup"}
+{"hygiene":".local/measurement-hygiene/files-content-1m-3-attempt-1-eb87fd02-f274-4959-9bf5-edf43fb18217.json","status":"valid","label":"files-content-1m-3","attempt":1,"before":{"observedAt":"2026-10-29T19:21:20.196Z","windowsFreeBytes":3546722304,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5612331008,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:21:20.196Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T19:22:19.201Z","windowsFreeBytes":4068220928,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5661827072,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:22:19.201Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":60,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-history-1m-1-preparation-b13d6ca2-5c81-41b1-a9f3-8e2ed6a176ad.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-history-1m-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T19:22:20.115Z","windowsFreeBytes":4054560768,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5663334400,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:22:20.115Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T19:22:21.865Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:22:28.116Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:22:30.793Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"3b5ccb20-922b-4682-aa80-2e36da177333","generation":"4489c5df-0b32-40aa-a804-7fb121e759fb","revision":21,"encodedBytes":1042055,"businessBytes":100459,"ratio":10.372938213599578}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=false:authors=1:wave=53","elapsedMs":538.9483999999975}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=false:authors=1:wave=57","elapsedMs":559.3765999999996}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=false:authors=1:wave=61","elapsedMs":565.8587000000007}
+{"profile":"history-1M","series":1,"references":false,"authors":1,"p95":{"server":57.69759999999951,"wire":201.1972999999998,"transaction":12.524600000004284,"locks":0,"registry":0}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=false:authors=2:wave=16","elapsedMs":696.1180999999997}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=false:authors=2:wave=36","elapsedMs":651.6415999999954}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=false:authors=2:wave=69","elapsedMs":565.3678999999975}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=false:authors=2:wave=72","elapsedMs":580.1062999999995}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=false:authors=2:wave=102","elapsedMs":563.4098999999987}
+{"profile":"history-1M","series":1,"references":false,"authors":2,"p95":{"server":56.888099999996484,"wire":298.7416999999987,"transaction":14.304100000001199,"locks":0,"registry":0}}
+{"profile":"history-1M","series":1,"references":true,"authors":1,"p95":{"server":50.28079999999318,"wire":164.26429999999527,"transaction":33.959600000001956,"locks":6.655299999998533,"registry":9.501400000008289}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=true:authors=2:wave=9","elapsedMs":568.5085000000108}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:1:references=true:authors=2:wave=102","elapsedMs":506.2184999999881}
+{"profile":"history-1M","series":1,"references":true,"authors":2,"p95":{"server":55.86329999999725,"wire":238.12870000000112,"transaction":33.708499999993364,"locks":7.484499999991385,"registry":10.626000000003842}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"cleanup"}
+{"diagnostic":"control-ended","control":"leadership","stage":"cleanup"}
+{"hygiene":".local/measurement-hygiene/files-history-1m-1-attempt-1-a960a5ef-9f4c-43db-80ad-a9b02b527287.json","status":"valid","label":"files-history-1m-1","attempt":1,"before":{"observedAt":"2026-10-29T19:22:34.643Z","windowsFreeBytes":3063369728,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5640568832,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:22:34.643Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T19:24:45.650Z","windowsFreeBytes":3995627520,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5668872192,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:24:45.650Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":132,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-history-1m-2-preparation-2490fdc6-d455-4b68-9288-5bc336e7b63b.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-history-1m-2","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T19:24:46.624Z","windowsFreeBytes":4011380736,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5666004992,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:24:46.624Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T19:24:48.336Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:24:54.523Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:24:57.182Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"985b5a6d-ef0e-481e-8420-5889f8924623","generation":"e60fa3ce-0fa1-4626-a31e-cc581112f223","revision":22,"encodedBytes":1042040,"businessBytes":100420,"ratio":10.376817367058354}
+{"profile":"history-1M","series":2,"references":false,"authors":1,"p95":{"server":52.562599999997474,"wire":185.3179999999993,"transaction":14.701099999998405,"locks":0,"registry":0}}
+{"profile":"history-1M","series":2,"references":false,"authors":2,"p95":{"server":60.74829999999929,"wire":289.2641000000003,"transaction":13.790599999992992,"locks":0,"registry":0}}
+{"profile":"history-1M","series":2,"references":true,"authors":1,"p95":{"server":43.09560000000056,"wire":154.37639999999374,"transaction":26.295800000007148,"locks":6.166299999997136,"registry":9.498699999996461}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:2:references=true:authors=2:wave=46","elapsedMs":538.3484000000026}
+{"profile":"history-1M","series":2,"references":true,"authors":2,"p95":{"server":51.13259999998263,"wire":219.74790000000212,"transaction":31.809299999993527,"locks":6.501699999993434,"registry":10.622199999983422}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"cleanup"}
+{"diagnostic":"control-ended","control":"leadership","stage":"cleanup"}
+{"hygiene":".local/measurement-hygiene/files-history-1m-2-attempt-1-563e8910-0017-4518-8eb0-d1bcd9c1f26e.json","status":"valid","label":"files-history-1m-2","attempt":1,"before":{"observedAt":"2026-10-29T19:25:01.017Z","windowsFreeBytes":3076595712,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5604470784,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:25:01.017Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T19:27:07.038Z","windowsFreeBytes":3661787136,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5694255104,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:27:07.038Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":127,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-history-1m-3-preparation-ec6e8fb5-8f9e-46ee-828c-03e3de39ed7d.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-history-1m-3","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T19:27:08.025Z","windowsFreeBytes":3650478080,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5692985344,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:27:08.025Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T19:27:09.748Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:27:15.999Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-29T19:27:18.854Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 97
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"b732b827-417d-4ae5-b474-4ba7700599e4","generation":"7eb48c7f-7424-4070-ae54-d2e02bb4d06a","revision":22,"encodedBytes":1042040,"businessBytes":100420,"ratio":10.376817367058354}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:3:references=false:authors=1:wave=105","elapsedMs":563.9272000000055}
+{"profile":"history-1M","series":3,"references":false,"authors":1,"p95":{"server":53.192800000000716,"wire":186.7990000000027,"transaction":15.729999999999563,"locks":0,"registry":0}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:3:references=false:authors=2:wave=25","elapsedMs":594.6951999999947}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:3:references=false:authors=2:wave=86","elapsedMs":561.0099000000046}
+{"profile":"history-1M","series":3,"references":false,"authors":2,"p95":{"server":57.15020000000368,"wire":273.6868000000104,"transaction":13.938300000008894,"locks":0,"registry":0}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:3:references=true:authors=1:wave=73","elapsedMs":508.68129999999655}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:3:references=true:authors=1:wave=106","elapsedMs":543.3822000000073}
+{"profile":"history-1M","series":3,"references":true,"authors":1,"p95":{"server":47.98440000000119,"wire":166.28250000000116,"transaction":30.17829999999958,"locks":5.848299999997835,"registry":10.152499999996508}}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:3:references=true:authors=2:wave=16","elapsedMs":539.3034000000043}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"history-1M:3:references=true:authors=2:wave=27","elapsedMs":501.8018000000011}
+{"profile":"history-1M","series":3,"references":true,"authors":2,"p95":{"server":49.478699999992386,"wire":228.32480000000214,"transaction":26.862899999992806,"locks":5.956300000005285,"registry":9.699300000007497}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"cleanup"}
+{"diagnostic":"control-ended","control":"leadership","stage":"cleanup"}
+{"hygiene":".local/measurement-hygiene/files-history-1m-3-attempt-1-f80d8bd5-1527-4f72-a793-716040281819.json","status":"valid","label":"files-history-1m-3","attempt":1,"before":{"observedAt":"2026-10-29T19:27:22.891Z","windowsFreeBytes":2718658560,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5636259840,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:27:22.891Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T19:29:28.923Z","windowsFreeBytes":3564511232,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5695897600,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T19:29:28.923Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":97}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":127,"deltaInPages":0,"deltaOutPages":0}}
+Collaboration files-load.e2e.ts: EXIT_CODE=0

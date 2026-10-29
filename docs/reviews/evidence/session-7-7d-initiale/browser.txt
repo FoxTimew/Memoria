@@ -1,0 +1,11 @@
+$ node scripts/build-server.mjs api --files-browser-e2e && node --env-file=.env --use-system-ca apps/api/dist/files-browser.e2e.mjs
+PASS browser POST 1 KiB, multipart 33 MiB (16/16/1), offline reload/resume, byte verification, cookie isolation, untrusted CORS and upload-only proxy. Report: C:\Users\Foxti\Documents\Projets\Memoria\.local\files-browser\memoria-files-browser-24dde593-bb1b-4b71-9874-8b6f13ea046c/report.json
+✔ 7a browser HTTPS POST/multipart/resume, origin and cookie boundaries (18264.0861ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18269.2171

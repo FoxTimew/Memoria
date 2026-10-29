@@ -9,7 +9,7 @@ import ts from 'typescript';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const app = process.argv[2];
 if (!['api', 'worker', 'files'].includes(app)) throw new Error('Expected api, worker or files');
-const entry = process.argv.includes('--files-ui-e2e')
+let entry = process.argv.includes('--files-ui-e2e')
   ? 'files-ui.e2e'
   : process.argv.includes('--file-reading-e2e')
     ? 'file-reading.e2e'
@@ -70,6 +70,7 @@ const entry = process.argv.includes('--files-ui-e2e')
                                                         : process.argv.includes('--pages-e2e')
                                                           ? 'pages.e2e'
                                                           : 'main';
+if (app === 'files' && process.argv.includes('--recovery-e2e')) entry = 'recovery.e2e';
 const watching = process.argv.includes('--watch');
 const outfile = resolve(root, `apps/${app}/dist/${entry}.mjs`);
 let child;

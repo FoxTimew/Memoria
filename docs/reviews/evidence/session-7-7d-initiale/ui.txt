@@ -1,0 +1,11 @@
+$ node scripts/build-collab.mjs && node scripts/build-server.mjs api --files-ui-e2e && node --env-file=.env --use-system-ca apps/api/dist/files-ui.e2e.mjs
+PASS 7c product UI; report C:\Users\Foxti\Documents\Projets\Memoria\.local\files-browser\memoria-files-ui-160152b8-ec12-4f36-af43-05dbd66a6d74/report.json
+✔ 7c product UI: cells/editor, uploads, previews, warnings, guests and cache resurrection (52353.2625ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52357.7104

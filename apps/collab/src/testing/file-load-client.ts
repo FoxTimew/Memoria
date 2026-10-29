@@ -5,6 +5,7 @@ import * as Y from 'yjs';
 import { securityPeer } from './security-peer.ts';
 import { until } from './pool-helpers.ts';
 import { receiptFor } from '../service/store.ts';
+import { wireReceipt } from './file-load-trace.ts';
 
 export type FileLoadClientConfig = {
   url: string;
@@ -15,10 +16,18 @@ export type FileLoadClientConfig = {
   index: number;
   imageId: string;
   fileId: string;
+  trace?: boolean;
 };
 type Edit = { wave: number; references: boolean };
 type Reply = { id: number; result?: unknown; error?: string };
-export type FileLoadReceipt = { wireMs: number; editMs: number; receipt: string };
+export type FileLoadReceipt = {
+  wireMs: number;
+  editMs: number;
+  receipt: string;
+  beforeSendMs?: number;
+  transitMs?: number;
+  receiptHandlingMs?: number;
+};
 
 /** Timers start and end in this real WSS client, never across process clocks. */
 async function client(config: FileLoadClientConfig) {
@@ -27,6 +36,25 @@ async function client(config: FileLoadClientConfig) {
   await until(() => peer.provider.synced || peer.closed || peer.failed, 'file load client sync');
   assert(!peer.closed && !peer.failed, peer.reason);
   assert.equal(peer.doc.clientID, 0xefffff00 + config.index);
+  const sent = new Map<string, number>(),
+    received = new Map<string, number>();
+  if (config.trace) {
+    const send = peer.socket.send.bind(peer.socket);
+    peer.socket.send = (message) => {
+      if (message instanceof Uint8Array || message instanceof ArrayBuffer) {
+        const key = wireReceipt(message);
+        if (key) sent.set(key, performance.now());
+      }
+      return send(message);
+    };
+    (peer.socket.webSocket as unknown as import('ws').default).prependListener(
+      'message',
+      (data: Buffer | ArrayBuffer) => {
+        const key = wireReceipt(data, true);
+        if (key) received.set(key, performance.now());
+      },
+    );
+  }
   const check = () => assert(!peer.closed && !peer.failed, peer.reason);
   return {
     check,
@@ -77,7 +105,28 @@ async function client(config: FileLoadClientConfig) {
         assert(key, 'Each edit must emit a Yjs update');
         await confirmed;
         check();
-        return { wireMs: performance.now() - started, editMs, receipt: key };
+        const finished = performance.now(),
+          send = sent.get(key),
+          receive = received.get(key);
+        if (config.trace)
+          assert(
+            send !== undefined && receive !== undefined && receive >= send,
+            `Client trace incomplete: send=${send !== undefined}, receive=${receive !== undefined}`,
+          );
+        sent.delete(key);
+        received.delete(key);
+        return {
+          wireMs: finished - started,
+          editMs,
+          receipt: key,
+          ...(config.trace
+            ? {
+                beforeSendMs: send! - started,
+                transitMs: receive! - send!,
+                receiptHandlingMs: finished - receive!,
+              }
+            : {}),
+        };
       } finally {
         clearTimeout(timer);
         peer.provider.off('stateless', receive);

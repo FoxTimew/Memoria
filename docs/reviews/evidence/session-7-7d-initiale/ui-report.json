@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-29T19:33:49.078Z",
+  "tests": [
+    "cell-upload-real-decoder",
+    "preview-no-original",
+    "disguised-active-warning",
+    "guest-read-download",
+    "multipart-81MiB-six-parts-reopen-resume",
+    "mismatched-file-refused",
+    "guest-edit-task-attachment-no-schema",
+    "editor-Yjs-file-ledger",
+    "offline-frozen-tab-revocation-wake",
+    "no-persistent-file-payload",
+    "workspace-cache-ban-no-Yjs-data-after-reload",
+    "other-tab-logout-delayed-response-no-resurrection",
+    "no-cookie-upload-read",
+    "no-429"
+  ],
+  "scope": "Final product on built Next, real Nest/PostgreSQL/RustFS/WSS/HTTPS; isolated proxy and storage."
+}

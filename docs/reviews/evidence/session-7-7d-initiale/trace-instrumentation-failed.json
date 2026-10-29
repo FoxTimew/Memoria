@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-29T19:14:01.497Z",
+  "scope": "Real WSS/Caddy, two separate client processes, no CPU profiler, parent-only OS probes. Server validation-to-SQL-commit timer per merged batch; client-local WSS timer, IPC excluded. Lock timing includes queries, not pure contention. 10 warmups + 100 waves per scenario, 100ms pause after each confirmed wave (at most 10 waves/second).",
+  "reports": [
+    {
+      "profile": "content-1M",
+      "series": 1,
+      "code": 1,
+      "hygiene": {
+        "path": ".local/measurement-hygiene/files-content-1m-1-attempt-1-6cc3ef8f-213d-43ea-aa21-9ab207cb68ea.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/files-content-1m-1-attempt-1-6cc3ef8f-213d-43ea-aa21-9ab207cb68ea.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-29T19:13:58.738Z",
+          "windowsFreeBytes": 3602485248,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5654695936,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T19:13:58.738Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 97
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-29T19:14:00.729Z",
+          "windowsFreeBytes": 4138987520,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5695418368,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-29T19:14:00.729Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 97
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 3,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      "results": [
+        {
+          "profile": "content-1M",
+          "series": 1,
+          "references": false,
+          "authors": 1,
+          "partial": true,
+          "error": "Client trace incomplete",
+          "totals": [],
+          "transactions": [],
+          "contributions": [],
+          "locks": [],
+          "registry": []
+        }
+      ]
+    }
+  ]
+}

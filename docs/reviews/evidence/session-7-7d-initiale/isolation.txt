@@ -1,0 +1,10 @@
+$ node --test scripts/docker-test-isolation.e2e.mjs
+✔ actual Docker inventory refuses development volume before container creation (1996.5806ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2072.7559

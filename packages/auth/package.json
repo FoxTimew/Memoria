@@ -4,6 +4,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./throttle": "./src/throttle.ts",
     "./collaboration": "./src/collaboration.ts"
   },
   "scripts": {

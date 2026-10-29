@@ -1,0 +1,26 @@
+{"level":"info","ts":1793302509.8828013,"msg":"maxprocs: Leaving GOMAXPROCS=16: CPU quota undefined"}
+{"level":"info","ts":1793302509.882844,"msg":"GOMEMLIMIT is updated","GOMEMLIMIT":6471692697,"previous":9223372036854775807}
+{"level":"info","ts":1793302509.8828518,"msg":"using config from file","file":"/fixture/Caddyfile"}
+{"level":"info","ts":1793302509.8828564,"msg":"adapted config to JSON","adapter":"caddyfile"}
+{"level":"warn","ts":1793302509.8832614,"msg":"Caddyfile input is not formatted; run 'caddy fmt --overwrite' to fix inconsistencies","adapter":"caddyfile","file":"/fixture/Caddyfile","line":2}
+{"level":"warn","ts":1793302509.883271,"logger":"admin","msg":"admin endpoint disabled"}
+{"level":"info","ts":1793302509.883537,"logger":"tls.cache.maintenance","msg":"started background certificate maintenance","cache":"0x3739a6659000"}
+{"level":"warn","ts":1793302509.8837252,"logger":"tls","msg":"unmanaged certificate expires within 1 day","not_after":1793332726,"sans":["localhost"]}
+{"level":"warn","ts":1793302509.8838897,"logger":"tls","msg":"unmanaged certificate expires within 1 day","not_after":1793339331,"sans":["uploads.localhost"]}
+{"level":"info","ts":1793302509.8841026,"logger":"http.auto_https","msg":"skipping automatic certificate management because one or more matching certificates are already loaded","domain":"localhost","server_name":"srv0"}
+{"level":"info","ts":1793302509.884125,"logger":"http.auto_https","msg":"automatic HTTP->HTTPS redirects are disabled","server_name":"srv0"}
+{"level":"info","ts":1793302509.8841364,"logger":"http.auto_https","msg":"skipping automatic certificate management because one or more matching certificates are already loaded","domain":"uploads.localhost","server_name":"srv1"}
+{"level":"info","ts":1793302509.8841393,"logger":"http.auto_https","msg":"automatic HTTP->HTTPS redirects are disabled","server_name":"srv1"}
+{"level":"info","ts":1793302509.884146,"logger":"http.auto_https","msg":"skipping automatic certificate management because one or more matching certificates are already loaded","domain":"uploads.localhost","server_name":"srv2"}
+{"level":"info","ts":1793302509.884149,"logger":"http.auto_https","msg":"automatic HTTP->HTTPS redirects are disabled","server_name":"srv2"}
+{"level":"info","ts":1793302509.8882878,"logger":"tls","msg":"cleaning storage unit","storage":"FileStorage:/data/caddy"}
+{"level":"info","ts":1793302509.8888912,"logger":"http","msg":"enabling HTTP/3 listener","addr":":8443"}
+{"level":"info","ts":1793302509.8891299,"logger":"http.log","msg":"server running","name":"srv0","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1793302509.8892088,"logger":"http","msg":"enabling HTTP/3 listener","addr":":8444"}
+{"level":"info","ts":1793302509.8893538,"logger":"http.log","msg":"server running","name":"srv1","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1793302509.8894207,"logger":"http","msg":"enabling HTTP/3 listener","addr":":8445"}
+{"level":"info","ts":1793302509.8895638,"logger":"http.log","msg":"server running","name":"srv2","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1793302509.8899057,"logger":"tls","msg":"finished cleaning storage units"}
+{"level":"info","ts":1793302509.8906355,"msg":"autosaved config (load with --resume flag)","file":"/config/caddy/autosave.json"}
+{"level":"info","ts":1793302509.890658,"msg":"serving initial configuration"}
+{"level":"error","ts":1793302519.3772683,"logger":"http.log.error","msg":"dial tcp 192.168.65.254:57280: connect: connection refused","request":{"remote_ip":"172.17.0.1","remote_port":"58242","client_ip":"172.17.0.1","proto":"HTTP/1.1","method":"GET","host":"uploads.localhost:57267","tls":{"resumed":false,"version":772,"cipher_suite":4865,"proto":"","server_name":"uploads.localhost","ech":false}},"duration":0.001518251,"status":502,"err_id":"vc45zm3xz","err_trace":"reverseproxy.statusError (reverseproxy.go:1695)"}

@@ -44,6 +44,7 @@ export function securityPeer(
   provider.attach();
   void socket.connect();
   return {
+    socket,
     provider,
     doc,
     sendYjs(payload: Uint8Array, type: 1 | 2 = 2) {

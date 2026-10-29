@@ -1,0 +1,50 @@
+$ node scripts/build-server.mjs api --files-e2e && node --env-file=.env apps/api/dist/files.e2e.mjs
+▶ 7a R12 upload routes and object GC on real Nest, PostgreSQL and unpatched RustFS
+  ✔ global capacity fails before allocation; accounting drift is refused without leaking tenant data (156.6737ms)
+  ✔ U/P/L: all routes are guarded, quota classified, CSRF checked, bodies bounded (57.6397ms)
+  ✔ guest read cannot upload; owner idempotence and opaque ownership resist UUID swaps (380.2014ms)
+  ✔ direct POST has exact size; final bytes are checked and staged replay cannot change the immutable copy (328.4686ms)
+{"event":"file_job_retry","code":"FILE_BYTES_REJECTED"}
+  ✔ false checksum never becomes ready; GC retains quota until capabilities and in-flight deadline end (412.132ms)
+  ✔ multipart resumes from the server, refuses client ETags and verifies every byte (1084.498ms)
+{"event":"file_job_retry","code":"FILE_UNAVAILABLE"}
+  ✔ actual access revocation is rechecked after S3; no new capability or publication (204.6469ms)
+  ✔ cleanup preserves the immutable final, retained usages and the orphan retention window (192.5141ms)
+  ✔ every upload route rejects recovery-only sessions and enforced workspace MFA (173.5232ms)
+  ✖ SDK error canaries do not escape HTTP, retry logs, audit or outbox (240.7033ms)
+  ✔ quotas aggregate sessions and ignore forged proxy headers (2350.9221ms)
+✖ 7a R12 upload routes and object GC on real Nest, PostgreSQL and unpatched RustFS (9809.2223ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 10
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9813.7714
+
+✖ failing tests:
+
+test at apps\api\dist\files.e2e.mjs:83687:13
+✖ SDK error canaries do not escape HTTP, retry logs, audit or outbox (240.7033ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + null
+  - 'STORAGE_UNAVAILABLE'
+  
+      at TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/files.e2e.mjs:83722:17)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/files.e2e.mjs:83687:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/files.e2e.mjs:83415:1 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'STORAGE_UNAVAILABLE',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+[ELIFECYCLE] Command failed with exit code 1.

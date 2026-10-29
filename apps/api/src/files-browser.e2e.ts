@@ -74,7 +74,12 @@ await test(
     const name = 'memoria-files-browser-' + randomUUID(),
       directory = resolve('.local/files-browser', name);
     const observations: { method: string; cookie: boolean; origin: string | undefined }[] = [];
+    const observedSignatures = new Set<string>();
     const proxy = createServer((req, res) => {
+      const signature = new URL(req.url!, store.config.endpoint).searchParams.get(
+        'X-Amz-Signature',
+      );
+      if (signature) observedSignatures.add(signature);
       observations.push({
         method: req.method!,
         cookie: !!req.headers.cookie,
@@ -501,6 +506,19 @@ await test(
       assert(log.includes('http.log.error') && log.includes('502'));
       assert(!log.includes(new URL(readUrl).pathname));
       assert(!log.includes('browser asset'));
+      const providerLog = docker(['logs', store.name]);
+      assert(observedSignatures.size > 0, 'Real presigned PUTs must have been observed');
+      for (const marker of [
+        ...observedSignatures,
+        store.config.credentials.accessKeyId,
+        store.config.credentials.secretAccessKey,
+        owner.cookie,
+        new URL(readUrl).pathname,
+      ]) {
+        assert(!log.includes(marker), 'Proxy capability leak');
+        assert(!providerLog.includes(marker), 'Storage capability leak');
+      }
+      await writeFile(resolve(directory, 'rustfs.txt'), providerLog);
       await writeFile(
         resolve(directory, 'report.json'),
         JSON.stringify(
@@ -520,6 +538,7 @@ await test(
               untrustedCorsBlocked: true,
               revokedTicket404: true,
               proxyErrorWithoutTicket: true,
+              proxyAndStorageWithoutCredentialsOrObservedSignatures: true,
             },
             observations: observations.map((x) => ({
               method: x.method,

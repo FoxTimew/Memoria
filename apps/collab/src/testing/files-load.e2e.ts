@@ -17,6 +17,7 @@ import { applyCommands } from '../service/commands.ts';
 import { collaborationServer, sessionVerifier } from '../service/server.ts';
 import { readCollabConfig } from '../service/config.ts';
 import { traceFileLoadControls, setFileLoadStage } from './file-load-controls.ts';
+import { fileServerTrace } from './file-load-trace.ts';
 
 const reports: object[] = [];
 const p95 = (values: number[]) =>
@@ -117,6 +118,7 @@ async function measure(profile: string, series: number) {
           index,
           imageId: imageIds[index]!,
           fileId: files[index]!,
+          trace: process.env.MEMORIA_FILES_TRACE === 'true',
         }),
       );
     }
@@ -144,6 +146,8 @@ async function measure(profile: string, series: number) {
       }
       return result;
     };
+    const trace =
+      process.env.MEMORIA_FILES_TRACE === 'true' ? fileServerTrace(host, room) : undefined;
     // The parent performs synchronous OS probes. Never block the server's heartbeat with them.
     const start = once(process, 'message');
     process.send?.({ kind: 'prepared' });
@@ -160,6 +164,7 @@ async function measure(profile: string, series: number) {
           const wire: number[] = [],
             edits: number[] = [],
             receipts = new Set<string>();
+          const paired: object[] = [];
           for (let wave = 0; wave < 110; wave++) {
             setFileLoadStage(
               `${profile}:${series}:references=${references}:authors=${authors}:wave=${wave}`,
@@ -174,6 +179,14 @@ async function measure(profile: string, series: number) {
                 receipts.add(r.receipt);
                 wire.push(r.wireMs);
                 edits.push(r.editMs);
+                if (trace) {
+                  const server = trace(r.receipt);
+                  paired.push({
+                    ...r,
+                    ...server,
+                    transportAndSchedulingMs: r.transitMs! - server.serverResidenceMs,
+                  });
+                }
               }
             await delay(100); // Realistic typing; preserve the production per-account wire quota.
           }
@@ -207,6 +220,7 @@ async function measure(profile: string, series: number) {
             contributions,
             locks,
             registry,
+            paired,
             p95: {
               server: p95(totals),
               wire: p95(wire),
@@ -306,7 +320,9 @@ if (process.env.MEMORIA_FILES_CLIENT === 'true') {
         );
         reports.push({ profile, series, code: result.code, hygiene, results });
         await writeFile(
-          '.local/session-7-files-measurement.json',
+          process.env.MEMORIA_FILES_TRACE === 'true'
+            ? '.local/session-7-files-trace-measurement.json'
+            : '.local/session-7-files-measurement.json',
           JSON.stringify(
             {
               date: new Date().toISOString(),

@@ -5,12 +5,14 @@ import { createHash, randomUUID } from 'node:crypto';
 import { storageFixture } from './testing/storage-fixture.ts';
 import { databaseHttpFixture } from './testing/database-http-fixture.ts';
 import { UploadService } from '@memoria/storage/uploads';
+import { S3ObjectStorage } from '@memoria/storage';
 import { FilesController } from './modules/files/files.controller.ts';
 import { FilesService } from './modules/files/files.service.ts';
 import { reconcileFileCapacity } from '@memoria/db';
 import { FILE_QUOTA } from './modules/files/file-quota.ts';
 import { IS_PUBLIC } from './modules/auth/public.decorator.ts';
 import { ipKey } from '@memoria/auth';
+import { assertFileRouteMatrix } from './testing/file-route-matrix.ts';
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('base64');
 type Signature = {
   number: number;
@@ -131,6 +133,15 @@ await test(
       await t.test(
         'U/P/L: all routes are guarded, quota classified, CSRF checked, bodies bounded',
         async () => {
+          assertFileRouteMatrix(FilesController, {
+            initiate: 'U',
+            status: 'L',
+            pending: 'L',
+            resume: 'U',
+            sign: 'P',
+            complete: 'U',
+            cancel: 'U',
+          });
           const proto = FilesController.prototype;
           for (const [method, family] of [
             ['initiate', 'U'],
@@ -434,6 +445,66 @@ await test(
           await db.query('DELETE FROM workspace_policies WHERE workspace_id=$1', [
             h.f.db.workspace,
           ]);
+        },
+      );
+      await t.test(
+        'SDK error canaries do not escape HTTP, retry logs, audit or outbox',
+        async () => {
+          const canary = 'SENSITIVE-' + randomUUID();
+          const message = `https://store.invalid/private/${canary}?X-Amz-Signature=${canary}`;
+          const logs: string[] = [];
+          const warn = console.warn,
+            error = console.error;
+          console.warn = (...args: unknown[]) => {
+            logs.push(JSON.stringify(args));
+            warn(...args);
+          };
+          console.error = (...args: unknown[]) => {
+            logs.push(JSON.stringify(args));
+            error(...args);
+          };
+          const transport = h.app.get(FilesService).transport;
+          const create = transport.storage.createUpload.bind(transport.storage);
+          const head = S3ObjectStorage.prototype.head;
+          try {
+            const file = await start();
+            transport.storage.createUpload = async () => {
+              throw Error(message);
+            };
+            const denied = await sign(file);
+            assert.equal(denied.status, 503);
+            assert.deepEqual(denied.data, { code: 'STORAGE_UNAVAILABLE', retryAfter: 2 });
+            assert(!JSON.stringify(denied.data).includes(canary));
+            transport.storage.createUpload = create;
+            const signed = await sign(file);
+            assert.equal(signed.status, 200);
+            assert((await put((signed.data.signatures as Signature[])[0]!, bytes)).ok);
+            assert.equal((await call(owner, {}, `/${file}/complete`)).status, 202);
+            // Choose only this job in this isolated schema; leave production scheduling unchanged.
+            await db.query(
+              "UPDATE file_upload_intents SET next_attempt_at=clock_timestamp()+interval '1 hour' WHERE file_id<>$1",
+              [file],
+            );
+            S3ObjectStorage.prototype.head = async () => {
+              throw Error(message);
+            };
+            await jobs.tick();
+            assert.equal((await row(file)).last_error, 'STORAGE_UNAVAILABLE');
+            const status = await call(owner, {}, `/${file}`, 'GET');
+            assert.equal(status.status, 200);
+            assert(!JSON.stringify(status.data).includes(canary));
+            assert(logs.some((line) => line.includes('file_job_retry')));
+            assert(!logs.join('\n').includes(canary));
+            const audit = await db.query('SELECT to_jsonb(a) AS entry FROM audit_logs a');
+            assert(!JSON.stringify(audit.rows).includes(canary));
+            const outbox = await db.query('SELECT to_jsonb(e) AS entry FROM outbox_events e');
+            assert(!JSON.stringify(outbox.rows).includes(canary));
+          } finally {
+            transport.storage.createUpload = create;
+            S3ObjectStorage.prototype.head = head;
+            console.warn = warn;
+            console.error = error;
+          }
         },
       );
       await t.test('quotas aggregate sessions and ignore forged proxy headers', async () => {

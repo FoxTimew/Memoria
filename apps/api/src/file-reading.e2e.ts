@@ -22,11 +22,19 @@ import { FileReadController } from './modules/files/read.controller.ts';
 import { FILE_QUOTA } from './modules/files/file-quota.ts';
 import { IS_PUBLIC } from './modules/auth/public.decorator.ts';
 import { ipKey, throttleKey } from '@memoria/auth';
+import { assertFileRouteMatrix } from './testing/file-route-matrix.ts';
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('base64');
 await test(
   '7b real decoder, RustFS, guarded Nest and revocable HTTP gateway',
   { timeout: 240000 },
   async (t) => {
+    assertFileRouteMatrix(FileReadController, {
+      select: 'L',
+      resolve: 'L',
+      tickets: 'L',
+      archive: 'M',
+      restore: 'M',
+    });
     process.env.TRUSTED_PROXY_CIDRS = '10.255.255.0/24';
     const store = await storageFixture(),
       h = await databaseHttpFixture(),
@@ -745,7 +753,20 @@ await test(
           );
           await drained(0);
           last.destroy();
-          assert.equal((await fetch(fresh)).status, 503);
+          // LISTEN can recover before the next request. The isolated PostgreSQL restart
+          // suite proves the unavailable interval; here assert automatic recovery.
+          const recoveryStarted = performance.now();
+          let recovered = false;
+          while (performance.now() - recoveryStarted < 10000) {
+            const response: Response = await fetch(fresh, { method: 'HEAD' });
+            if (response.status === 200) {
+              recovered = true;
+              break;
+            }
+            assert.equal(response.status, 503);
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          }
+          assert(recovered, 'Gateway must recover automatically after LISTEN loss');
         },
       );
     } finally {
