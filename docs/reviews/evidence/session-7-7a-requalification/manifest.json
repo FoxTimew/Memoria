@@ -79,6 +79,7 @@
     "files/summary.json": "4c08237d708eb0cd6727bdbf33670baa04d8a6f0072035f6aeaab6d660bad44f",
     "push-retry.txt": "99ee77152ab76f7b5e7491e6e0997f01cdeca7a70efc6f10e8424c4e2da5a44a",
     "push-timeout.txt": "c096512cd76a5e59e2f69b34794ee72747a385c1e3010573ee6ae67998d4eabf",
-    "replica-recheck.txt": "19e7bda9eeb9dfc8dae8184692c103966bf7834e2756fbb5948cbbb6246cb866"
+    "replica-recheck.txt": "19e7bda9eeb9dfc8dae8184692c103966bf7834e2756fbb5948cbbb6246cb866",
+    "push-comparison-complete.txt": "1d3cbcb8bb2b4f2c7865c931d1cf0857a104f97ae25a242e79ec7d03d2ad0ac9"
   }
 }

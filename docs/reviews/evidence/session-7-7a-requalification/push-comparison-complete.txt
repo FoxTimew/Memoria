@@ -1,0 +1,47 @@
+[git hook] typecheck
+Scope: 14 of 15 workspace projects
+packages/blocks/core typecheck$ tsc --noEmit
+packages/collaboration-core typecheck$ tsc --noEmit
+packages/contracts typecheck$ tsc --noEmit
+packages/db typecheck$ tsc --noEmit
+packages/collaboration-core typecheck: Done
+packages/blocks/core typecheck: Done
+packages/blocks/ui typecheck$ tsc --noEmit
+packages/contracts typecheck: Done
+packages/db typecheck: Done
+packages/auth typecheck$ tsc --noEmit
+packages/storage typecheck$ tsc --noEmit
+packages/blocks/ui typecheck: Done
+packages/blocks/standard typecheck$ tsc --noEmit
+packages/blocks/character-card typecheck$ tsc --noEmit
+packages/blocks/standard typecheck: Done
+packages/blocks/character-card typecheck: Done
+packages/blocks/catalog typecheck$ tsc --noEmit
+packages/storage typecheck: Done
+packages/auth typecheck: Done
+apps/worker typecheck$ tsc --noEmit
+packages/blocks/catalog typecheck: Done
+apps/api typecheck$ tsc --noEmit
+apps/collab typecheck$ tsc --noEmit
+apps/web typecheck$ tsc --noEmit
+apps/web typecheck: Done
+apps/worker typecheck: Done
+apps/collab typecheck: Done
+apps/api typecheck: Done
+(node:12140) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[git hook] Nest build
+[git hook] Nest probe
+Nest decorators, dependency injection and workspace TypeScript exports: OK
+[git hook] tests
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+
+ Test Files  32 passed | 1 skipped (33)
+      Tests  169 passed | 6 skipped (175)
+   Start at  14:22:01
+   Duration  26.53s (tests 69%, import 28%, transform 3%, worker 1%)
+
+To https://github.com/FoxTimew/Memoria.git
+   e1384de..4daab07  codex/session-7-files -> codex/session-7-files
