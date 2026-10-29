@@ -1,0 +1,9 @@
+
+ RUN  v5.0.5 C:/Users/Foxti/Documents/Projets/Memoria
+
+
+ Test Files  1 passed (1)
+      Tests  20 passed (20)
+   Start at  13:57:45
+   Duration  2.51s (tests 83%, import 15%, transform 2%)
+
