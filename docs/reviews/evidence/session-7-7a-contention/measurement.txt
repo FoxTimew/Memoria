@@ -1,0 +1,141 @@
+$ node scripts/test-collab.mjs --suite files-load
+Power: {"observedAt":"2026-10-29T10:51:12.966Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-29T10:51:14.085Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-29T10:51:15.940Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/files-content-1m-1-preparation-18f1124e-83d2-40b5-ab6d-73f5f7d4b671.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T10:51:16.452Z","windowsFreeBytes":5027819520,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5699391488,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:51:16.452Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T10:51:18.267Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"profile":"content-1M","series":1,"references":false,"authors":1,"p95":{"server":14.403699999998935,"wire":21.389899999998306,"transaction":11.595499999999447,"locks":0,"registry":0}}
+{"profile":"content-1M","series":1,"references":false,"authors":2,"p95":{"server":13.549800000000687,"wire":30.28229999999894,"transaction":10.520700000000943,"locks":0,"registry":0}}
+{"profile":"content-1M","series":1,"references":true,"authors":1,"p95":{"server":26.940300000002026,"wire":33.58090000000084,"transaction":23.81659999999829,"locks":6.633900000000722,"registry":7.477700000003097}}
+{"profile":"content-1M","series":1,"references":true,"authors":2,"p95":{"server":27.394500000002154,"wire":51.924299999998766,"transaction":25.162600000003295,"locks":5.962400000003981,"registry":7.465199999998731}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/files-content-1m-1-attempt-1-56b25b0c-6f01-4cde-8495-76682233212a.json","status":"valid","label":"files-content-1m-1","attempt":1,"before":{"observedAt":"2026-10-29T10:51:23.880Z","windowsFreeBytes":4748419072,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5651079168,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:51:23.880Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T10:52:22.908Z","windowsFreeBytes":5144780800,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5672787968,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:52:22.908Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":60,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-content-1m-2-preparation-ed6624b6-e2bd-4609-b65c-7f27c0fa9449.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-2","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T10:52:23.802Z","windowsFreeBytes":5175713792,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5673558016,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:52:23.802Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T10:52:25.526Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"profile":"content-1M","series":2,"references":false,"authors":1,"p95":{"server":14.822500000000218,"wire":21.508099999999104,"transaction":12.269500000000335,"locks":0,"registry":0}}
+{"profile":"content-1M","series":2,"references":false,"authors":2,"p95":{"server":12.262699999999313,"wire":28.72519999999713,"transaction":9.65940000000046,"locks":0,"registry":0}}
+{"profile":"content-1M","series":2,"references":true,"authors":1,"p95":{"server":25.18300000000454,"wire":31.822800000001735,"transaction":22.395599999996193,"locks":6.5195999999996275,"registry":6.765700000003562}}
+{"profile":"content-1M","series":2,"references":true,"authors":2,"p95":{"server":26.001900000002934,"wire":50.44970000000467,"transaction":23.5653999999995,"locks":4.766999999999825,"registry":7.752800000002026}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/files-content-1m-2-attempt-1-daf99dba-fc8d-44a7-befe-c26f2511aa16.json","status":"valid","label":"files-content-1m-2","attempt":1,"before":{"observedAt":"2026-10-29T10:52:31.191Z","windowsFreeBytes":4826607616,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5637816320,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:52:31.191Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T10:53:30.210Z","windowsFreeBytes":5053952000,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5699858432,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:53:30.210Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":60,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-content-1m-3-preparation-95d51fac-9a10-4143-abc4-18e667de7a4e.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-3","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T10:53:31.070Z","windowsFreeBytes":5062828032,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5702721536,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:53:31.070Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T10:53:32.721Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"profile":"content-1M","series":3,"references":false,"authors":1,"p95":{"server":13.119399999999587,"wire":21.840700000000652,"transaction":10.157999999999447,"locks":0,"registry":0}}
+{"profile":"content-1M","series":3,"references":false,"authors":2,"p95":{"server":14.873700000000099,"wire":30.209899999998015,"transaction":12.510600000001432,"locks":0,"registry":0}}
+{"profile":"content-1M","series":3,"references":true,"authors":1,"p95":{"server":25.24829999999929,"wire":30.83299999999872,"transaction":22.42090000000462,"locks":5.431799999998475,"registry":8.008600000001024}}
+{"profile":"content-1M","series":3,"references":true,"authors":2,"p95":{"server":27.095399999998335,"wire":51.5708999999988,"transaction":25.325799999998708,"locks":5.572499999994761,"registry":7.1973999999972875}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/files-content-1m-3-attempt-1-54a4b559-a5cf-48bc-98a1-8d0850b3a8b5.json","status":"valid","label":"files-content-1m-3","attempt":1,"before":{"observedAt":"2026-10-29T10:53:38.341Z","windowsFreeBytes":4717436928,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5664047104,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:53:38.341Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T10:54:37.368Z","windowsFreeBytes":5049196544,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5698150400,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:54:37.368Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":60,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-history-1m-1-preparation-b6d7a025-19c9-4e4d-82b6-20d9e8411b35.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-history-1m-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T10:54:38.227Z","windowsFreeBytes":5050150912,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5692780544,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:54:38.227Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T10:54:39.895Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"041d6682-6997-4b5c-84b1-ed7964537e3d","generation":"8052ad8e-ae34-435b-947b-5350db90632e","revision":21,"encodedBytes":1042055,"businessBytes":100459,"ratio":10.372938213599578}
+{"profile":"history-1M","series":1,"references":false,"authors":1,"p95":{"server":50.74760000000242,"wire":182.2378000000008,"transaction":12.998799999999392,"locks":0,"registry":0}}
+{"profile":"history-1M","series":1,"references":false,"authors":2,"p95":{"server":84.44000000000233,"wire":299.7816000000021,"transaction":12.730300000002899,"locks":0,"registry":0}}
+{"profile":"history-1M","series":1,"references":true,"authors":1,"p95":{"server":44.759500000000116,"wire":154.46179999999003,"transaction":24.802999999999884,"locks":5.158400000000256,"registry":9.96119999999064}}
+{"profile":"history-1M","series":1,"references":true,"authors":2,"p95":{"server":86.98990000000049,"wire":247.90630000000237,"transaction":60.80249999999069,"locks":18.972199999989243,"registry":9.095499999995809}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"hygiene":".local/measurement-hygiene/files-history-1m-1-attempt-1-aac93e52-de98-4bb1-8a0b-62d02aa6a3c7.json","status":"valid","label":"files-history-1m-1","attempt":1,"before":{"observedAt":"2026-10-29T10:54:46.650Z","windowsFreeBytes":4438888448,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5647814656,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:54:46.650Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T10:57:02.650Z","windowsFreeBytes":4976422912,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5731782656,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:57:02.650Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":137,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-history-1m-2-preparation-bb78099f-2097-4f60-b27b-688984ee03a1.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-history-1m-2","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T10:57:03.543Z","windowsFreeBytes":4970946560,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5731717120,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:57:03.543Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T10:57:05.292Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"event":"collaboration.history.warning","page":"dc931fff-faa5-47a7-ae2a-5aeace368050","generation":"3d89eadb-d941-4bf6-a046-2a051bdc80c8","revision":20,"encodedBytes":1042040,"businessBytes":100420,"ratio":10.376817367058354}
+{"profile":"history-1M","series":2,"references":false,"authors":1,"p95":{"server":49.667199999999866,"wire":199.33840000000055,"transaction":14.0049999999992,"locks":0,"registry":0}}
+{"profile":"history-1M","series":2,"references":false,"authors":2,"p95":{"server":106.95010000000184,"wire":336.8741999999984,"transaction":11.436399999998685,"locks":0,"registry":0}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+AssertionError [ERR_ASSERTION]: STOP history-1M server 106.95010000000184
+    at measure (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122657:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122673:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+{"hygiene":".local/measurement-hygiene/files-history-1m-2-attempt-1-3a2fa694-e413-40b5-a8b0-dfeffb1b7012.json","status":"valid","label":"files-history-1m-2","attempt":1,"before":{"observedAt":"2026-10-29T10:57:11.847Z","windowsFreeBytes":4388245504,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5687115776,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:57:11.847Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T10:58:28.877Z","windowsFreeBytes":4937830400,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5700272128,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:58:28.877Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":78,"deltaInPages":0,"deltaOutPages":0}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Measurement child failed: retain partial report and stop
+
+1 !== 0
+
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122733:17 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration files-load.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.

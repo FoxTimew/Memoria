@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { writeFile } from 'node:fs/promises';
 import { testDatabase } from './database.ts';
+import { FileBoundary } from '@memoria/db';
 
 test('7a diagnostic: projection FK key-share blocks the authoritative file FOR UPDATE latch', async () => {
   const db = await testDatabase(),
@@ -64,6 +65,73 @@ test('7a diagnostic: projection FK key-share blocks the authoritative file FOR U
     await writer.query('ROLLBACK');
     projection.release();
     writer.release();
+    await db.close();
+  }
+});
+
+test('production file latch permits projection FK readers but excludes state writers and GC', async () => {
+  const db = await testDatabase(),
+    projection = await db.pool.connect(),
+    writer = await db.pool.connect(),
+    gc = await db.pool.connect(),
+    file = randomUUID();
+  try {
+    await db.pool.query(
+      "INSERT INTO files(id,workspace_id,object_key,original_name,mime_type,byte_size,state) VALUES($1,$2,$1::uuid::text,'fixture','application/octet-stream',1,'ready')",
+      [file, db.workspace],
+    );
+    await projection.query('BEGIN');
+    await projection.query(
+      'INSERT INTO file_references(workspace_id,page_id,file_id) VALUES($1,$2,$3)',
+      [db.workspace, db.page, file],
+    );
+    await writer.query('BEGIN');
+    await writer.query("SET LOCAL lock_timeout='250ms'");
+    await new FileBoundary(db.pool).lock(writer, db.workspace, {
+      destination: db.page,
+      pages: [db.page],
+      files: [file],
+      sources: [],
+    });
+    const slot = randomUUID();
+    // Exercise both SQL triggers, not only the explicit application latch.
+    await writer.query(
+      "INSERT INTO file_usages(workspace_id,file_id,page_id,slot_kind,slot_id,generation,revision) VALUES($1,$2,$3,'block',$4,$5,1)",
+      [db.workspace, file, db.page, slot, db.generation],
+    );
+    await writer.query('DELETE FROM file_usages WHERE file_id=$1', [file]);
+    assert(
+      (await writer.query('SELECT orphaned_at FROM files WHERE id=$1', [file])).rows[0].orphaned_at,
+    );
+    await projection.query('ROLLBACK'); // Isolate the business writer as the GC's remaining blocker.
+    const writerPid = (await writer.query('SELECT pg_backend_pid() pid')).rows[0].pid,
+      gcPid = (await gc.query('SELECT pg_backend_pid() pid')).rows[0].pid;
+    await gc.query('BEGIN');
+    await gc.query("SET LOCAL lock_timeout='1500ms'");
+    const pending = gc.query('SELECT id FROM files WHERE id=$1 FOR UPDATE', [file]).then(
+      () => null,
+      (e) => e,
+    );
+    let blockers: number[] = [];
+    for (let i = 0; i < 30 && !blockers.includes(writerPid); i++) {
+      blockers = (await db.pool.query('SELECT pg_blocking_pids($1) pids', [gcPid])).rows[0].pids;
+      if (!blockers.includes(writerPid)) await new Promise((r) => setTimeout(r, 10));
+    }
+    assert(blockers.includes(writerPid), 'GC must wait for the production business latch');
+    await projection.query('ROLLBACK');
+    await writer.query('ROLLBACK');
+    assert.equal(await pending, null);
+    await gc.query('ROLLBACK');
+    assert.equal(
+      (await db.pool.query('SELECT orphaned_at FROM files WHERE id=$1', [file])).rows[0]
+        .orphaned_at,
+      null,
+    );
+  } finally {
+    for (const c of [projection, writer, gc]) {
+      await c.query('ROLLBACK');
+      c.release();
+    }
     await db.close();
   }
 });

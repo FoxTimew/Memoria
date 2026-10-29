@@ -2,6 +2,8 @@
 
 29 octobre 2026. **Livraison intermédiaire, 7a non clôturée, 7b non commencée.** Le développeur a choisi RustFS officiel épinglé, parité locale/production et maintien des témoins de conformité. Le premier dépassement bloquant ci-dessous arrête la campagne ; aucune optimisation de verrou n'est incluse dans cette livraison.
 
+**Suite autorisée le même jour :** [profilage, correction des deux verrous et courses GC réelles](session-7-7a-contention.md). Le contenu passe trois séries après correction ; un nouvel arrêt historique à deux auteurs sans changement de fichier maintient 7a ouverte. Les chiffres ci-dessous restent ceux de la livraison `c3a8dee`.
+
 ## À lire en priorité
 
 1. [Diagnostic et mesures](#arrêt-et-diagnostic) : ce qui empêche la clôture.

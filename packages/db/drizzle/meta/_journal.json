@@ -232,6 +232,13 @@
       "when": 1793268000000,
       "tag": "0032_file_transport",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1793271600000,
+      "tag": "0033_file_projection_latch",
+      "breakpoints": true
     }
   ]
 }

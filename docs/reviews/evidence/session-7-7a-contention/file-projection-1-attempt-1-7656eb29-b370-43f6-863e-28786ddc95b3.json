@@ -1,0 +1,278 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "file-projection-1",
+  "attempt": 1,
+  "preparation": {
+    "path": ".local/measurement-hygiene/file-projection-1-preparation-76e2682d-6905-46c7-a69d-29b53dc37376.json",
+    "observation": {
+      "observedAt": "2026-10-29T10:35:30.196Z",
+      "windowsFreeBytes": 5476225024,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5723652096,
+        "swapInPages": 386,
+        "swapOutPages": 2163
+      },
+      "power": {
+        "observedAt": "2026-10-29T10:35:30.196Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 99
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "status": "valid",
+  "before": {
+    "observedAt": "2026-10-29T10:35:34.623Z",
+    "windowsFreeBytes": 5203640320,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5710995456,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-29T10:35:34.623Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 99
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "workStartedAt": 1793270135100,
+  "workEndedAt": 1793270136395,
+  "swap": {
+    "raw": "BOOT dc1818ce-057f-406e-9e82-a0bb01fa6a48\nvmstat from procps-ng 4.0.4\n--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n   0    0            0      4885076         4132      1054688    0    0    16   100 18237 32813   3   3  94   0   0   0\n   0    0            0      4883864         4132      1054764    0    0     0    96 5187 8251   1   1  98   0   0   0\n   0    0            0      4893604         4136      1053440    0    0     0  1104 10280 15844   2   5  93   0   0   0\n",
+    "chunks": [
+      {
+        "observedAt": "2026-10-29T10:35:33.462Z",
+        "text": "BOOT "
+      },
+      {
+        "observedAt": "2026-10-29T10:35:33.463Z",
+        "text": "dc1818ce-057f-406e-9e82-a0bb01fa6a48\n"
+      },
+      {
+        "observedAt": "2026-10-29T10:35:33.473Z",
+        "text": "vmstat from procps-ng 4.0.4\n"
+      },
+      {
+        "observedAt": "2026-10-29T10:35:33.476Z",
+        "text": "--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n"
+      },
+      {
+        "observedAt": "2026-10-29T10:35:34.477Z",
+        "text": "   0    0            0      4885076         4132      1054688    0    0    16   100 18237 32813   3   3  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T10:35:35.477Z",
+        "text": "   0    0            0      4883864         4132      1054764    0    0     0    96 5187 8251   1   1  98   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T10:35:36.477Z",
+        "text": "   0    0            0      4893604         4136      1053440    0    0     0  1104 10280 15844   2   5  93   0   0   0\n"
+      }
+    ],
+    "startedAt": 1793270133183,
+    "endedAt": 1793270136495,
+    "probeError": null,
+    "stderr": "",
+    "imageId": "sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac",
+    "command": "vmstat -w -n -y 1",
+    "intervalSeconds": 1,
+    "workStartedAt": 1793270135100,
+    "workEndedAt": 1793270136395
+  },
+  "after": {
+    "observedAt": "2026-10-29T10:35:36.604Z",
+    "windowsFreeBytes": 5707530240,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5718450176,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-29T10:35:36.604Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 99
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "assessment": {
+    "valid": true,
+    "reason": null,
+    "intervals": 3,
+    "deltaInPages": 0,
+    "deltaOutPages": 0
+  },
+  "result": {
+    "code": 0,
+    "report": {
+      "series": 1,
+      "projectionMs": 823.4041000000007,
+      "transactionMs": 617.0023000000001,
+      "afterFirstFileFkMs": 602.9489999999996,
+      "groups": {
+        "other": {
+          "calls": 10,
+          "milliseconds": 24.415800000000672
+        },
+        "blocks": {
+          "calls": 500,
+          "milliseconds": 518.4266999999982
+        },
+        "file_references": {
+          "calls": 1,
+          "milliseconds": 1.5466000000005806
+        },
+        "search": {
+          "calls": 1,
+          "milliseconds": 30.814900000000307
+        },
+        "audit": {
+          "calls": 1,
+          "milliseconds": 2.0721000000003187
+        },
+        "outbox": {
+          "calls": 1,
+          "milliseconds": 1.7962999999999738
+        }
+      },
+      "explain": [
+        {
+          "Plan": {
+            "Node Type": "ModifyTable",
+            "Operation": "Insert",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "file_references",
+            "Alias": "file_references",
+            "Startup Cost": 0,
+            "Total Cost": 0.02,
+            "Plan Rows": 0,
+            "Plan Width": 0,
+            "Actual Startup Time": 0.044,
+            "Actual Total Time": 0.045,
+            "Actual Rows": 0,
+            "Actual Loops": 1,
+            "Shared Hit Blocks": 7,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Result",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 0,
+                "Total Cost": 0.02,
+                "Plan Rows": 1,
+                "Plan Width": 136,
+                "Actual Startup Time": 0.019,
+                "Actual Total Time": 0.019,
+                "Actual Rows": 1,
+                "Actual Loops": 1,
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.012,
+          "Triggers": [
+            {
+              "Trigger Name": "RI_ConstraintTrigger_c_1000077",
+              "Constraint Name": "file_references_workspace_id_workspaces_id_fk",
+              "Relation": "file_references",
+              "Time": 0.079,
+              "Calls": 1
+            },
+            {
+              "Trigger Name": "RI_ConstraintTrigger_c_1000082",
+              "Constraint Name": "file_references_workspace_id_file_id_files_workspace_id_id_fk",
+              "Relation": "file_references",
+              "Time": 0.07,
+              "Calls": 1
+            },
+            {
+              "Trigger Name": "RI_ConstraintTrigger_c_1000087",
+              "Constraint Name": "file_references_workspace_id_page_id_pages_workspace_id_id_fk",
+              "Relation": "file_references",
+              "Time": 0.068,
+              "Calls": 1
+            },
+            {
+              "Trigger Name": "RI_ConstraintTrigger_c_1000092",
+              "Constraint Name": "file_references_workspace_id_page_id_block_id_blocks_workspace_",
+              "Relation": "file_references",
+              "Time": 0.078,
+              "Calls": 1
+            },
+            {
+              "Trigger Name": "RI_ConstraintTrigger_c_1000097",
+              "Constraint Name": "file_references_workspace_id_created_by_actors_workspace_id_id_",
+              "Relation": "file_references",
+              "Time": 0.002,
+              "Calls": 1
+            },
+            {
+              "Trigger Name": "RI_ConstraintTrigger_c_1000102",
+              "Constraint Name": "file_references_workspace_id_updated_by_actors_workspace_id_id_",
+              "Relation": "file_references",
+              "Time": 0.001,
+              "Calls": 1
+            }
+          ],
+          "Execution Time": 0.356
+        }
+      ],
+      "blockCount": 500,
+      "encodedBytes": 1044889,
+      "note": "Real production projection, isolated schema; durations include PG network round trips. FK hold time is a lower bound from statement completion to transaction completion. EXPLAIN is separate and rolled back."
+    }
+  }
+}

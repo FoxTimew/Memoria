@@ -1,0 +1,64 @@
+$ node scripts/test-collab.mjs --suite files-load
+Power: {"observedAt":"2026-10-29T10:42:46.602Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-29T10:42:47.734Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-29T10:42:49.565Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/files-content-1m-1-preparation-c06762d9-51b3-42ed-8ef3-83f96e1dc659.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-content-1m-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-29T10:42:50.209Z","windowsFreeBytes":5130993664,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5660807168,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:42:50.209Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-29T10:42:51.904Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 100
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"profile":"content-1M","series":1,"references":false,"authors":1,"p95":{"server":13.438500000000204,"wire":22.312699999998586,"transaction":10.699400000001333,"locks":0,"registry":0}}
+{"profile":"content-1M","series":1,"references":false,"authors":2,"p95":{"server":12.792200000003504,"wire":30.489000000001397,"transaction":10.667800000002899,"locks":0,"registry":0}}
+{"profile":"content-1M","series":1,"references":true,"authors":1,"p95":{"server":780.168700000002,"wire":785.309699999998,"transaction":778.1215000000011,"locks":8.45219999999972,"registry":767.402700000006}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+AssertionError [ERR_ASSERTION]: STOP content-1M server 780.168700000002
+    at measure (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122657:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122673:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+{"hygiene":".local/measurement-hygiene/files-content-1m-1-attempt-1-86cfb837-4796-4764-a1c5-a302ba3f5f4a.json","status":"valid","label":"files-content-1m-1","attempt":1,"before":{"observedAt":"2026-10-29T10:42:57.707Z","windowsFreeBytes":4846546944,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5639806976,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:42:57.707Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-29T10:43:57.705Z","windowsFreeBytes":5178683392,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5684109312,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-29T10:43:57.705Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":61,"deltaInPages":0,"deltaOutPages":0}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Measurement child failed: retain partial report and stop
+
+1 !== 0
+
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-load.e2e.mjs:122733:17 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration files-load.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.

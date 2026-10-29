@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-29T11:04:00.450Z",
+  "baseCommit": "c3a8deebc20c3824d6f847319516b256bb34b4de",
+  "branch": "codex/session-7-files",
+  "workingTree": true,
+  "scope": "Authorized projection/file contention profiling and fix. Three content series pass; second historical series stops at 106.9501 ms without reference changes. No cold or main comparison after stop. 7a incomplete.",
+  "measuredBundle": {
+    "path": "apps/collab/dist/test-files-load.e2e.mjs",
+    "sha256": "71a838c1f6e7aa99b3bb916eb7fe7b328a9a51a6c3327063886eed59f1510f07"
+  },
+  "profiles": {
+    "content-1M": "82854ab1a53e05b0397b4ac19aeebb49bb42aa7f1c7e0db3540eec15ea2bb896",
+    "history-1M": "80760d032f96b666f74627bcdd3f58efea02a75425d8d2bee22bb1a77ef99898"
+  },
+  "sourceFiles": {
+    "packages/db/src/file-boundary.ts": "61972218d6342d1635714798c02f440a0af939adcb807becc0fec8b38595083a",
+    "packages/db/drizzle/0033_file_projection_latch.sql": "772ca5040194903f1b38ac20e14178fdfe1df9a381b4fb37393381836ba17699",
+    "apps/collab/src/testing/files-load.e2e.ts": "bdf9c43b4c79e9d6a3417cf3a3fe2ce9de98dbb17905f613c55f99f098a32a18",
+    "apps/collab/src/testing/file-locks.e2e.ts": "c11b0cde4d022468a992b2f788162820df18b2c1517b5ecb6aea0372e6df96ad",
+    "apps/collab/src/testing/file-projection-profile.e2e.ts": "5830a29e1ddfecb7d2f9501ccb3f5d03f0e7b91c269ade2c19e88065140ff605",
+    "apps/api/src/file-races.e2e.ts": "1a0e5a7d6475d3a9be892b74d2a6011182cd834f9ec82884785d19920f5ad2af"
+  },
+  "changesAfterMeasurement": "Documentation and evidence only after the complete latch correction; no subsequent application optimization. Profiler source was formatted before the final WSS campaign.",
+  "files": {
+    "boundaries.txt": "c82dbc2ef9ffaa25c9ce83595922af736f799c1ab3011f11d02037a57a678d0c",
+    "check.txt": "5d72ba80829bb8a57ee62359dccb2c744a55e97b4a7f7077b193aad518a3e74a",
+    "file-projection-1-attempt-1-7656eb29-b370-43f6-863e-28786ddc95b3.json": "5f6772d0ed0b9cfaafd7380e3bb56ae1b6fa9808a0ec46c18cf83a67254eb96e",
+    "file-projection-1-preparation-76e2682d-6905-46c7-a69d-29b53dc37376.json": "a46adc37f667e487d3f80c031308152438d00442cbecb3cbd512c631e3b1897e",
+    "file-projection-2-attempt-1-bee1fd70-ea77-416e-b283-f8f66b1efea7.json": "d59e57c43bf6657dd75f045d64e31f84e9b55ee11dfac5c358377071b1352f05",
+    "file-projection-2-preparation-c00d1f9d-e6b5-4168-afd3-cda46b8f22c3.json": "36515538123d6e290d0eeaea8a8fb6dc4082949fac6a839beb3401fd2d75122a",
+    "file-projection-3-attempt-1-f051138b-4b73-485d-98e2-26cddc2228e0.json": "837ddfcb5926ad73fe48aff6b75527a8518c5f823906b7e9553a7d3f9266025c",
+    "file-projection-3-preparation-63dac187-5507-489c-bdf1-e2d38e830482.json": "441593e0c38074b4778a7ab0dddfa182369815f35eb4926839632880ed81a154",
+    "files-content-1m-1-attempt-1-56b25b0c-6f01-4cde-8495-76682233212a.json": "d387072d539f81af845fe5146a9ccb89aa9665d042e3da9327162b11ab754786",
+    "files-content-1m-1-attempt-1-86cfb837-4796-4764-a1c5-a302ba3f5f4a.json": "8cfc82afd3cee8de09ee31c25e25e517f5ea69cbd9d0f72982043ed2154e1381",
+    "files-content-1m-1-preparation-18f1124e-83d2-40b5-ab6d-73f5f7d4b671.json": "5026c80a5cfb5aeeac463615e5f2521e40c1af42b5cca767b49b2d8afca49a40",
+    "files-content-1m-1-preparation-c06762d9-51b3-42ed-8ef3-83f96e1dc659.json": "cc897157dee1e319b06acccc1dbafc52ac2f8d7eaea16cbdf4e5d561f830f446",
+    "files-content-1m-2-attempt-1-daf99dba-fc8d-44a7-befe-c26f2511aa16.json": "3578c4a8810c3f744c995fc1fcb3444acd1334b34b648b550d6ef04271e854b3",
+    "files-content-1m-2-preparation-ed6624b6-e2bd-4609-b65c-7f27c0fa9449.json": "15a6a9a247e665121911d48c94486f65027e92b803e4a61d687c1f0369064d96",
+    "files-content-1m-3-attempt-1-54a4b559-a5cf-48bc-98a1-8d0850b3a8b5.json": "70b80a1d8f0b1b7475bc8f834a737a5504e4abaa907b28eb7fd427e5ca047715",
+    "files-content-1m-3-preparation-95d51fac-9a10-4143-abc4-18e667de7a4e.json": "d022e9bb1b027d9f26478ae41b9d6aace2703ad54f46ed7aa0ef7f65c646827f",
+    "files-history-1m-1-attempt-1-aac93e52-de98-4bb1-8a0b-62d02aa6a3c7.json": "2b79b6a35ee43ecc8a94d2b75fdacb3480bc98ba683c8308790b6f49d662da9d",
+    "files-history-1m-1-preparation-b6d7a025-19c9-4e4d-82b6-20d9e8411b35.json": "df1146ffdbb19bcbafed99c61b825a5dea4391760c676ad16bb473f77b82b98b",
+    "files-history-1m-2-attempt-1-3a2fa694-e413-40b5-a8b0-dfeffb1b7012.json": "c1decd699b37eaf25d8a8a67d11b33aad10f497c8323df0949d37e6dc7798685",
+    "files-history-1m-2-preparation-bb78099f-2097-4f60-b27b-688984ee03a1.json": "1e515ac9b0af74edd7fdf7d742da96d4e81700f42155c8395b931e735cab1595",
+    "latch-only-measurement.json": "787178a89fee4fc82b2b611eb3645f95ba64ff05c390026b168b225e166a9710",
+    "latch-only-measurement.txt": "5c32c3887fe64f471d31449abddabe8e66fd0df805674d0b707d883ca8530379",
+    "measurement.json": "2f6ca5a913184fa0351cdffd212673ead8970199dda7004f5825267d15de6684",
+    "measurement.txt": "3e161739ab481966167532cd0f3dc662e23829b3dba2004bee5ca5a9bc749695",
+    "projection-profile.json": "be486c05447bb4f4ebe58ea685ce984519a8716b278b94e44ec6b81c2f8dec32",
+    "projection-profile.txt": "14a1f31a479e7997790ca8806c1692328f1346db8b5cb9a084fb0457d1636a50",
+    "races.txt": "4639bbfb2e1a17d3fdda1f821a97c39dac7e0514cf45dd2485917d8342d5ab2d",
+    "routes.txt": "e5fb28795218a04ebf7bbd9cba76a505e7cb7a854ef81a1b9c6a5b82d21ca8e2",
+    "trigger-green.txt": "3206627c299d933c363477a21487490625a0e5eb622ad2349325ccdc1f24ed6f",
+    "trigger-red.txt": "6e02618ab1abcf51ec9e647710ded2f75d073c0fc39199c8c70cb102b7d4f9dd"
+  },
+  "hashLineEndings": "LF"
+}

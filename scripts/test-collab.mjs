@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { readMeasurementPower, assertMeasurementPower } from './measurement-power.mjs';
 const measurementSuites = new Set([
   'files-load.e2e.ts',
+  'file-projection-profile.e2e.ts',
   'warm.e2e.ts',
   'cold.e2e.ts',
   'capacity.e2e.ts',

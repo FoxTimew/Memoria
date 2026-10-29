@@ -1,0 +1,17 @@
+$ node scripts/build-server.mjs api --file-races-e2e && node --env-file=.env apps/api/dist/file-races.e2e.mjs
+▶ 7a actual RustFS collector races, retries and transactional attachments
+  ✔ attachment commits first: waiting GC rechecks retained usage and keeps object/quota (456.8942ms)
+  ✔ attachment rolls back: waiting GC collects; a stale plan cannot resurrect it (406.7557ms)
+  ✔ GC marks deleting first: attachment fails during the actual S3 delete (326.7204ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ delete failure keeps quota; restart retries and releases it exactly once (349.6598ms)
+  ✔ rights mutation commits while attachment waits: live recheck rejects the stale plan (234.4131ms)
+✔ 7a actual RustFS collector races, retries and transactional attachments (4077.2706ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4083.9011

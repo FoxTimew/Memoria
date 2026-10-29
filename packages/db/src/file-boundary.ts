@@ -27,7 +27,7 @@ const validIds = (...ids: string[]) => {
 const key = (r: FileReference) => r.slot + ':' + r.file;
 
 /** Provider-independent transaction kernel; never calls S3 or accepts client receipts as proof.
- * The caller owns BEGIN/COMMIT for journal/cell composition. No public HTTP route yet. */
+ * The caller owns BEGIN/COMMIT for journal/cell composition. */
 export class FileBoundary {
   constructor(
     readonly pool: Pool,
@@ -109,7 +109,9 @@ export class FileBoundary {
     ]);
     if (plan.files.length)
       await c.query(
-        'SELECT id FROM files WHERE workspace_id=$1 AND id=ANY($2::uuid[]) ORDER BY id FOR UPDATE',
+        // Serialize business writers/GC without waiting for the projection's FK KEY SHARE.
+        // File identity keys are immutable here; changes of state/usages still conflict.
+        'SELECT id FROM files WHERE workspace_id=$1 AND id=ANY($2::uuid[]) ORDER BY id FOR NO KEY UPDATE',
         [workspace, plan.files],
       );
   }
