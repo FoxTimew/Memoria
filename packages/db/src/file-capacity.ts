@@ -20,8 +20,8 @@ export async function readFileCapacity(c: PoolClient) {
     WITH totals AS (${workspaceTotals})
     SELECT coalesce((SELECT sum(reserved_bytes::numeric) FROM totals),0)::text reserved,
     coalesce((SELECT sum(staging_bytes::numeric) FROM totals),0)::text staging,
-    coalesce((SELECT sum(i.requested_bytes) FROM file_object_copies o
-      JOIN file_upload_intents i ON i.file_id=o.file_id WHERE o.deleted_at IS NULL
+    coalesce((SELECT sum(coalesce(o.byte_size,i.requested_bytes)) FROM file_object_copies o
+      JOIN file_upload_intents i ON i.file_id=o.file_id WHERE o.deleted_at IS NULL AND NOT o.retained
       AND NOT (i.final_key IS NOT DISTINCT FROM o.object_key AND i.bytes_verified_at IS NOT NULL)),0)::text copies
   `)
   ).rows[0]!;

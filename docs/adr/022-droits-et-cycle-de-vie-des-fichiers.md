@@ -84,6 +84,14 @@ Restaurer en réseau fermé : PG, objets, clés/versions compatibles ; comparer 
 
 La session 7 livre les mécanismes et un premier exercice local ; la [Liste pré-pilote](../../ARCHITECTURE.md#liste-pré-pilote) impose l’exercice complet sur l’hôte cible et la politique RGPD. Fiche et matrice R12 dans le [cadrage](../reviews/session-7-etape-1-cadrage.md). Aucun risque de ce nouvel ADR n’est marqué accepté par simple fusion documentaire.
 
+## Réalisation 7b — 29 octobre 2026
+
+La migration 0034 conserve dimensions, statut d'aperçu, version de validation et variantes immuables. Le validateur inscrit chaque clé de dérivé avant son écriture S3, la publie sous les verrous métier et l'époque du job, après recontrôle de l'auteur. Le quota réservé de dérivés est remplacé par les octets réels ; le nettoyage du staging conserve les variantes publiées. Un ancien job ne peut pas publier après remplacement de son époque. Le nettoyage des temporaires ne parcourt que ses propres dossiers marqués âgés de plus d'une heure et leurs fichiers connus.
+
+Les tickets sont liés à un usage vivant du registre autoritatif, à sa génération, à la version de droits base/page, au cycle de vie de ligne et à la version du fichier. Aucun droit dérivé de la projection asynchrone. Archivage/restauration global du fichier : member/admin/owner, CAS et audit par IDs ; la restauration ne réactive pas un ancien ticket. Les réductions de droits ferment seulement les flux désormais interdits. Une autre référence autorisée reste utilisable. Les commandes exposées et leurs attaques réelles sont dans la [fiche 7b](../reviews/session-7-7b-validation-lecture.md).
+
+Premier exercice local réel : dump PostgreSQL et export logique de quatre objets RustFS, chiffrés, manifestes et hashes contrôlés, restauration dans un schéma et un stockage distincts. Objet manquant ou chiffré corrompu : refus avant restauration. Anciennes sessions invalidées, suppression postérieure à la sauvegarde rejouée avant réouverture. Les primitives `@memoria/storage/backup` streament les objets et authentifient chaque fichier ; elles exigent une installation figée et ne constituent pas encore une commande opérateur complète. Aucun volume de 250 Gio, RPO/RTO, crash interne de RustFS ou reprise de tous ses états intermédiaires n'est qualifié par cet exercice. Les options A/B ci-dessous restent au choix du développeur avant pré-pilote.
+
 ## Qualification pré-pilote — deux options à choisir
 
 Le choix du volume de qualification n’est pas arrêté en 7a. Publier les durées mesurées, le débit utile incluant vérification des hashes, les coûts fixes (dump/import PG, inventaire, reprise) et le pic disque. Deux options, sans transformer une extrapolation en preuve :

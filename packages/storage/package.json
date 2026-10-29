@@ -5,6 +5,9 @@
   "exports": {
     ".": "./src/index.ts",
     "./uploads": "./src/uploads.ts",
+    "./validate": "./src/validate.ts",
+    "./backup": "./src/backup.ts",
+    "./read-ticket": "./src/read-ticket.ts",
     "./config": "./src/config.ts"
   },
   "scripts": {

@@ -1,0 +1,26 @@
+$ node scripts/build-server.mjs worker --file-accounting && node scripts/build-server.mjs api --file-recovery-e2e && node --env-file=.env apps/api/dist/file-recovery.e2e.mjs
+▶ 7a recovery and accounting against real PostgreSQL/RustFS
+  ✔ lost multipart initiation response is reconciled without a second upload or reservation (1496.2796ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost CompleteMultipartUpload response is recovered by HEAD and final bytes are verified (2213.2754ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost CopyObject response retains its capacity; retry publishes only a new verified immutable copy (1605.5532ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost SQL COMMIT acknowledgement does not double-charge finalization or deletion (1567.2909ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ lost DELETE response keeps reservations until absence is confirmed after restart (1757.8656ms)
+  ✔ actual worker process crash after copy recovers from SQL and collects the uncommitted object (1801.5175ms)
+{"event":"file_job_retry","code":"STORAGE_UNAVAILABLE"}
+  ✔ old job resumes after losing its PostgreSQL lock: it cannot publish or overwrite the new epoch (1586.9426ms)
+  ✔ global staging/total/copy budgets are atomic across tenants and counters can be audited/repaired (1490.7203ms)
+{"event":"file_job_retry","code":"FILE_COPY_CAPACITY"}
+  ✔ copy capacity denial leaves SQL and S3 unchanged and resumes after capacity is available (1372.4001ms)
+✔ 7a recovery and accounting against real PostgreSQL/RustFS (16997.163ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17003.5976

@@ -239,6 +239,13 @@
       "when": 1793271600000,
       "tag": "0033_file_projection_latch",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1793289600000,
+      "tag": "0034_file_validation_reading",
+      "breakpoints": true
     }
   ]
 }

@@ -1,3 +1,4 @@
+import { guardTestDocker } from './docker-test-isolation.mjs';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { createReadStream, createWriteStream } from 'node:fs';
@@ -39,7 +40,7 @@ const files = [
 const inputs = {};
 for (const name of files) inputs[name] = await digest(resolve('infra/seaweedfs', name));
 function docker(args, capture = false) {
-  const r = spawnSync('docker', args, {
+  const r = spawnSync('docker', guardTestDocker(args), {
     stdio: capture ? 'pipe' : 'inherit',
     encoding: 'utf8',
     windowsHide: true,

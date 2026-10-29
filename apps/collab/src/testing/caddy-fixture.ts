@@ -1,4 +1,5 @@
-import { execFileSync } from 'node:child_process';
+import { execFileSync, execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { randomUUID } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -7,12 +8,20 @@ import { get } from 'node:https';
 
 /** Disposable real Caddy/TLS proxy. Never reloads the user's running proxy or trusts a cert globally. */
 export async function caddyFixture(backendPort: number) {
-  const docker = (args: string[]) =>
-    execFileSync('docker', args, { encoding: 'utf8', windowsHide: true, timeout: 20000 }).trim();
-  const current = docker(['compose', 'ps', '-q', 'caddy']);
+  // Inspect/start in a separate process: synchronous Docker inventory must not stall
+  // the fixture's in-process collaboration leadership heartbeat.
+  const docker = async (args: string[]) =>
+    (
+      await promisify(execFile)(process.execPath, [resolve('scripts/test-docker.mjs'), ...args], {
+        encoding: 'utf8',
+        windowsHide: true,
+        timeout: 30000,
+      })
+    ).stdout.trim();
+  const current = await docker(['compose', 'ps', '-q', 'caddy']);
   if (!/^[a-f0-9]{12,64}$/.test(current))
     throw new Error('Start the development Caddy container first');
-  const image = docker(['inspect', '--format', '{{.Image}}', current]);
+  const image = await docker(['inspect', '--format', '{{.Image}}', current]);
   const id = randomUUID(),
     name = 'memoria-6a-tls-' + id,
     directory = resolve('.local/caddy-6a', id);
@@ -24,12 +33,16 @@ export async function caddyFixture(backendPort: number) {
   let created = false;
   const close = () => {
     if (created) {
-      docker(['rm', '--force', name]);
+      execFileSync('docker', ['rm', '--force', name], {
+        windowsHide: true,
+        timeout: 20000,
+        stdio: 'ignore',
+      });
       created = false;
     }
   };
   try {
-    docker([
+    await docker([
       'run',
       '--pull=never',
       '--rm',
@@ -45,12 +58,12 @@ export async function caddyFixture(backendPort: number) {
       image,
     ]);
     created = true;
-    const port = Number(docker(['port', name, '443/tcp']).match(/127\.0\.0\.1:(\d+)/)?.[1]);
+    const port = Number((await docker(['port', name, '443/tcp'])).match(/127\.0\.0\.1:(\d+)/)?.[1]);
     if (!port) throw new Error('Missing local TLS mapping');
     let ca = '';
     for (let i = 0; i < 50; i++) {
       try {
-        ca = docker(['exec', name, 'cat', '/data/caddy/pki/authorities/local/root.crt']);
+        ca = await docker(['exec', name, 'cat', '/data/caddy/pki/authorities/local/root.crt']);
         break;
       } catch {
         await delay(100);

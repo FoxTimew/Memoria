@@ -1,3 +1,4 @@
+import { guardTestDocker } from './docker-test-isolation.mjs';
 import { build, stop } from 'esbuild';
 import { spawnSync } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
@@ -57,7 +58,7 @@ const dockerEnv = {
   MINIO_API_CORS_ALLOW_ORIGIN: 'https://localhost',
 };
 function docker(args) {
-  const r = spawnSync('docker', args, {
+  const r = spawnSync('docker', guardTestDocker(args), {
     env: dockerEnv,
     encoding: 'utf8',
     windowsHide: true,
@@ -68,11 +69,11 @@ function docker(args) {
 }
 const providers = [
   {
-    name: candidate ? 'minio-global-cors' : 'minio-local',
-    endpoint: candidate ? 'http://127.0.0.1:19000' : 'http://127.0.0.1:9000',
-    access: candidate ? access : process.env.MINIO_ROOT_USER || 'memoria-local',
-    secret: candidate ? secret : process.env.MINIO_ROOT_PASSWORD,
-    cors: candidate ? 'global' : 'bucket',
+    name: 'minio-global-cors',
+    endpoint: 'http://127.0.0.1:19000',
+    access,
+    secret,
+    cors: 'global',
   },
   {
     name: candidate ? 'seaweedfs-4.51-memoria1' : 'seaweedfs-4.51',
@@ -85,9 +86,17 @@ const started = [];
 let failed = false;
 try {
   let minioImage;
-  if (candidate) {
+  {
     const config = JSON.parse(
-      docker(['compose', 'config', '--format', 'json', '--no-interpolate']),
+      docker([
+        'compose',
+        '--profile',
+        'conformance',
+        'config',
+        '--format',
+        'json',
+        '--no-interpolate',
+      ]),
     );
     const localImage = config.services.minio.image ?? `${config.name}-minio:latest`;
     minioImage = docker(['image', 'inspect', localImage, '--format', '{{.Id}}']);

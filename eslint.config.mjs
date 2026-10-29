@@ -17,7 +17,13 @@ export default tseslint.config(
   {
     files: ['**/*.{js,mjs,ts,tsx}'],
     languageOptions: {
-      globals: { console: 'readonly', process: 'readonly', Buffer: 'readonly', URL: 'readonly' },
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        Buffer: 'readonly',
+        URL: 'readonly',
+        performance: 'readonly',
+      },
     },
     rules: { '@typescript-eslint/no-explicit-any': 'error' },
   },

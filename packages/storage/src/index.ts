@@ -10,6 +10,7 @@ import {
   ListMultipartUploadsCommand,
   CreateBucketCommand,
   PutBucketCorsCommand,
+  PutObjectCommand,
   S3Client,
   UploadPartCommand,
 } from '@aws-sdk/client-s3';
@@ -196,7 +197,7 @@ export class S3ObjectStorage {
       }),
     );
   }
-  async read(key: string, range?: { start: number; end: number }) {
+  async read(key: string, range?: { start: number; end: number }, signal?: AbortSignal) {
     if (
       range &&
       (!Number.isSafeInteger(range.start) ||
@@ -210,9 +211,52 @@ export class S3ObjectStorage {
         ...this.key(key),
         ...(range ? { Range: `bytes=${range.start}-${range.end}` } : {}),
       }),
+      signal ? { abortSignal: signal } : {},
     );
     if (!r.Body) throw new Error('INVALID_STORAGE_RESPONSE');
     return r.Body as AsyncIterable<Uint8Array>;
+  }
+  async putDerivative(
+    key: string,
+    body: import('node:stream').Readable,
+    bytes: number,
+    checksum: string,
+  ) {
+    if (
+      !key.startsWith('objects/') ||
+      !Number.isSafeInteger(bytes) ||
+      bytes < 1 ||
+      bytes > 10 * 1024 ** 2
+    )
+      throw new Error('INVALID_DERIVATIVE');
+    await this.client.send(
+      new PutObjectCommand({
+        ...this.key(key),
+        Body: body,
+        ContentLength: bytes,
+        ContentType: 'application/octet-stream',
+        ChecksumSHA256: checksum,
+      }),
+    );
+  }
+  async restoreObject(
+    key: string,
+    body: import('node:stream').Readable,
+    bytes: number,
+    checksum: string,
+  ) {
+    if (!key.startsWith('objects/')) throw Error('INVALID_RESTORE_KEY');
+    this.bytes(bytes);
+    await this.client.send(
+      new PutObjectCommand({
+        ...this.key(key),
+        Body: body,
+        ContentLength: bytes,
+        ChecksumSHA256: checksum,
+        ContentType: 'application/octet-stream',
+        IfNoneMatch: '*',
+      }),
+    );
   }
   async delete(key: string) {
     await this.client.send(new DeleteObjectCommand(this.key(key)));

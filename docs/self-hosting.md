@@ -218,6 +218,37 @@ Ne pas reconstruire `file_usages` depuis la projection asynchrone des blocs, ni 
 
 La [fiche de clôture](reviews/session-7-7a-cloture.md) distingue les pannes injectées après opérations S3 réelles, le crash réel du worker et les crashs/restaurations du fournisseur encore à qualifier. Le test navigateur utilise une page de protocole, pas l'interface de fichiers prévue en 7c.
 
+### Validation et lecture des fichiers — 7b, 29 octobre 2026
+
+Construire le convertisseur depuis les sources et le lockfile versionnés. Il contient sharp/libvips, s'exécute hors de l'API et n'a aucun accès réseau ni secret S3. Depuis la racine du clone de développement :
+
+```sh
+node scripts/build-file-validator.mjs --configure-local
+pnpm db:migrate
+pnpm --filter @memoria/files build
+pnpm --filter @memoria/worker build
+```
+
+`--configure-local` inscrit l'identifiant **immuable** de l'image dans `.env` ; il refuse le mode production. En production, construire/publier l'image avec son digest et définir `FILES_VALIDATOR_IMAGE` explicitement. Une simple étiquette mutable est refusée. Démarrer le worker et `@memoria/files` avec leur environnement. Sans image configurée, le worker avertit et laisse les fichiers privés en validation ; ne pas interpréter son health check mail/PG comme une validation du pipeline image.
+
+`FILES_ORIGIN=https://files.<domaine>` doit être distinct de `APP_ORIGIN` et de l'origine S3 publique d'upload. DNS/TLS et Caddy desservent seulement `/v1/files/*`, le port `FILES_PORT=3005` reste privé. Le Caddyfile local ajoute `files.localhost` ; appliquer sa mise à jour contrôlée lors de l'installation. La livraison 7b n'a pas rechargé le Caddy de développement existant. `FILES_HOST=0.0.0.0` permet au Caddy Docker local de joindre le service ; en production, limiter l'écoute/réseau à Caddy. Les cookies applicatifs restent host-only. Le service utilise `APP_ORIGIN`, `BETTER_AUTH_SECRET`, `DATABASE_URL`, `TRUSTED_PROXY_CIDRS` et la configuration S3 ; **`S3_READ_ACCESS_KEY_ID`/`S3_READ_SECRET_ACCESS_KEY` distincts, GetObject seulement sur les objets finaux**, obligatoires en production. Aucune console, clé ou route de lecture directe S3 publique.
+
+Originaux : `attachment` et `application/octet-stream`, jamais inline. Dérivés WebP réencodés : au plus 2 048/512 px, sans EXIF/GPS. Tous : `no-store`, `nosniff`, CSP sandbox, aucun cache CDN. Ticket porteur chiffré valable 60 s pour démarrer une lecture ; un flux commencé continue uniquement tant que ses droits restent valides. Révocation/contrôle indisponible : flux interrompu, pas de redirection de secours vers S3. Après perte de la connexion PostgreSQL de notification, **redémarrer le service files** après rétablissement du contrôle ; il reste fermé jusque-là. Les octets déjà remis au navigateur ne sont pas récupérables.
+
+Conserver le filtre global Caddy supprimant URI et en-têtes dans les journaux, y compris erreurs de proxy ; ne pas ajouter un access log brut, ni tracer les URL dans l'observabilité. Test 502 réel dans `pnpm test:files:browser`. Les diagnostics applicatifs sont des codes fixes, l'audit conserve des IDs, pas des noms de fichier.
+
+#### Ressources du convertisseur
+
+Une conversion à la fois pour l'installation, 1 CPU et 512 Mio sans swap, délai parent 30 s. La texture PNG RGB8 8K bruitée coûte ≈13,6 s au p95 ; le pic RSS observé est 154,2 Mio, pas une promesse pour tous les formats. Voir les trois séries dans la [fiche 7b](reviews/session-7-7b-validation-lecture.md). Ne pas augmenter la concurrence avant mesure de l'impact sur la collaboration en 7d. Les sources trop grandes/multipages restent téléchargeables sans aperçu ; un raster malformé reste rejeté. Aucun antivirus implicite.
+
+`FILES_VALIDATOR_DIRECTORY` désigne un espace temporaire **privé, hors des volumes publics et sauvegardés**, par défaut `.local/file-validation`. Prévoir au moins **5 Gio +128 Mio libres** pour l'unique job maximal, en plus du stockage S3. Le contrôle `statfs` précède la copie mais ne constitue pas un quota disque dur : réserver un volume/quota dédié et surveiller son espace. Sous Linux, le worker et les dossiers montés doivent être accessibles à l'UID 1000 du conteneur ; ne pas les rendre inscriptibles à tous. Le worker de confiance pilote Docker, privilège d'exploitation à isoler des services publics ; aucun socket Docker dans le conteneur décodeur. Après crash, seuls ses dossiers marqués de plus d'une heure et leurs fichiers connus sont nettoyés ; un contenu inattendu est laissé à l'inspection opérateur. Les retries de validation restent privés, avec 30 s d'attente ; surveiller un backlog durable, ne jamais forcer `ready`.
+
+#### Tests Docker isolés et premier exercice de restauration
+
+Tout nouveau banc passe ses commandes de démarrage par `node scripts/test-docker.mjs …` ou par `guardTestDocker`. Projet Compose explicite distinct, volumes/chemins/ports inspectés, pas de réseau host ni de `volumes-from`. `pnpm test:docker:isolation` tente réellement de monter un volume du développement et vérifie que le conteneur n'est pas créé. Ne jamais contourner ce refus en renommant seulement le conteneur. Les fixtures TLS copient uniquement les certificats/clefs **feuilles** précis dans leur stockage jetable, jamais un volume Caddy ni la clé de CA.
+
+`pnpm test:files:reading` réalise un premier aller-retour : vrai dump PG et quatre objets RustFS, chiffrement authentifié, hashes, stockage de restauration indépendant, refus d'un objet manquant/corrompu, invalidation des sessions et replay d'une suppression. Les primitives `@memoria/storage/backup` exigent des métadonnées stables et une destination vide ; aucune CLI opérateur complète ni restauration du volume maximal n'est annoncée. La procédure pré-pilote reste : fermer l'accès, suspendre admissions/écritures/GC, drainer les jobs, exporter PG et manifeste/objets en streaming, chiffrer et vérifier, stocker clé de backup **et BETTER_AUTH_SECRET hors serveur**. Restaurer en réseau fermé, revérifier les hashes et registres, réappliquer les suppressions et invalider les sessions avant réouverture. Tester crash, capacité/RPO/RTO et automatisation sur l'hôte cible ; les options A/B restent à choisir. Les secrets temporaires du test ne sont pas une sauvegarde exploitable de vos données.
+
 Les paragraphes ci-dessous conservent le cadrage initial ; les décisions et résultats datés ci-dessus remplacent son choix encore ouvert et l'absence de routage local.
 
 MinIO communautaire local n'est pas un choix de production maintenu. SeaweedFS a été qualifié en premier ; le développeur garde son patch comme **déblocage temporaire**, sans engagement de maintenir un fork. Le [comparatif du 29 octobre](reviews/session-7-7a-decision-stockage.md) donne RustFS 1.0.4 à 23/23 et Garage 2.5.0 à 18/23, sans patch, avec licences, sources et limites. **Choix du développeur avant 7b** ; pas encore de procédure d'installation de production prête à exécuter, ni de remplacement du Compose local.

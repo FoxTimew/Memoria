@@ -27,6 +27,10 @@ export const files = pgTable(
     mimeType: text('mime_type').notNull(),
     byteSize: bigint('byte_size', { mode: 'number' }).notNull(),
     sha256: text('sha256'),
+    validationVersion: integer('validation_version').default(1).notNull(),
+    previewStatus: text('preview_status').default('pending').notNull(),
+    pixelWidth: integer('pixel_width'),
+    pixelHeight: integer('pixel_height'),
     state: text('state').default('pending').notNull(),
     uploadExpiresAt: time('upload_expires_at'),
     everAttached: boolean('ever_attached').default(false).notNull(),
@@ -129,6 +133,9 @@ export const fileUploadIntents = pgTable(
       .default(sql`clock_timestamp()`)
       .notNull(),
     attempts: integer('attempts').default(0).notNull(),
+    validationAttemptAt: time('validation_attempt_at')
+      .default(sql`clock_timestamp()`)
+      .notNull(),
     lastError: text('last_error'),
     jobEpoch: bigint('job_epoch', { mode: 'bigint' }).default(0n).notNull(),
   },
@@ -211,6 +218,8 @@ export const fileObjectCopies = pgTable('file_object_copies', {
     .notNull()
     .references(() => fileUploadIntents.fileId),
   epoch: bigint('epoch', { mode: 'bigint' }).notNull(),
+  byteSize: bigint('byte_size', { mode: 'bigint' }),
+  retained: boolean('retained').default(false).notNull(),
   createdAt: time('created_at')
     .default(sql`clock_timestamp()`)
     .notNull(),
@@ -238,5 +247,30 @@ export const fileReferences = pgTable(
     index('file_refs_page_idx').on(t.workspaceId, t.pageId),
     index('file_refs_file_idx').on(t.workspaceId, t.fileId),
     ...auditReferences(t),
+  ],
+);
+
+export const fileVariants = pgTable(
+  'file_variants',
+  {
+    fileId: uuid('file_id')
+      .notNull()
+      .references(() => files.id),
+    variant: text('variant').notNull(),
+    objectKey: text('object_key')
+      .notNull()
+      .unique()
+      .references(() => fileObjectCopies.objectKey),
+    byteSize: bigint('byte_size', { mode: 'bigint' }).notNull(),
+    width: integer('width').notNull(),
+    height: integer('height').notNull(),
+    sha256: text('sha256').notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.fileId, t.variant] }),
+    check('file_variants_variant_check', sql`${t.variant} in ('display','thumbnail')`),
+    check('file_variants_byte_size_check', sql`${t.byteSize} between 1 and 10485760`),
+    check('file_variants_width_check', sql`${t.width} between 1 and 2048`),
+    check('file_variants_height_check', sql`${t.height} between 1 and 2048`),
   ],
 );

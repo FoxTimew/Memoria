@@ -1,0 +1,12 @@
+{
+  "image": "sha256:c1f86b63d0401c9295060c7d9386c966b4f3742e1ebfd9ef572ea4712800abbc",
+  "sourceMatchesImage": true,
+  "inputs": {
+    "Dockerfile": "fdbf80d90ae8415c249a6f6b6e3c25a84d1e13c2944b8c8ca275595a12d43cc7",
+    "package.json": "e1c23d4d84b89806e09f65e8c2397a9e91e49be9ba9bba01c83c029bf537b415",
+    "package-lock.json": "0ec8c7fb09be8ce19835fcd2b092784208a5881542351ae8e24cd19d38103714",
+    "validate.mjs": "57d86d15d19436d539773c2d7d5d6f5ef5d2681d6c5027cc8d7abf6758983418",
+    "fixture.mjs": "b2326d4ffafd305c333a6eca0c57b122862bc0c26dc914272c903c7308c59213"
+  },
+  "checkedAt": "2026-10-29T17:35:35.186Z"
+}

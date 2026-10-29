@@ -1,3 +1,4 @@
+import { guardTestDocker } from '../../../../scripts/docker-test-isolation.mjs';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -10,7 +11,7 @@ export async function storageFixture() {
   const image =
     'rustfs/rustfs:1.0.4@sha256:ed9210d6411d77ffceb70d94b964a3cb7d225983368bc25bebe01e995293dcc2';
   const docker = (args: string[]) => {
-    const r = spawnSync('docker', args, {
+    const r = spawnSync('docker', guardTestDocker(args), {
       env,
       encoding: 'utf8',
       windowsHide: true,

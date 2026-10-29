@@ -1,0 +1,26 @@
+$ node scripts/build-server.mjs api --file-reading-e2e && node --env-file=.env apps/api/dist/file-reading.e2e.mjs
+▶ 7b real decoder, RustFS, guarded Nest and revocable HTTP gateway
+  ✔ all four control routes have quotas and default authentication; no CSRF/recovery bypass (86.3038ms)
+  ✔ real type ignores name/MIME; EXIF/GPS raster reencoded, active original download-only (4600.4467ms)
+  ✔ encrypted local PG/object backup: missing/corrupt data blocks restoration; sessions revoked (4107.2163ms)
+  ✔ invalid raster rejected; dimensions over the limit stay download-only (4144.7062ms)
+  ✔ late derivative job cannot publish; abandoned variants are collected even after staging cleanup (4960.0182ms)
+  ✔ inaccessible identifiers and cross-tenant pages reveal no metadata or read capability (78.2433ms)
+  ✔ GET/HEAD/Range: modified/expired capabilities, query injection, CORS and methods (278.1958ms)
+  ✔ archive/restore CAS and guest denial; old ticket never reactivates (254.8339ms)
+  ✔ forged forwarding headers do not escape IP nor account download budgets (68.0521ms)
+  ✔ real slow HTTP flow closes within five seconds after page reference withdrawal (2857.3573ms)
+  ✔ lost file notification still closes an existing flow; read grant removal targets only the guest (1209.7232ms)
+  ✔ workspace strong-auth policy denies control and previously issued ticket (137.4273ms)
+Database idle connection failed
+Database idle connection failed
+  ✔ logout and database control loss fail closed for existing and new reads (236.3725ms)
+✔ 7b real decoder, RustFS, guarded Nest and revocable HTTP gateway (29119.7413ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29124.7601

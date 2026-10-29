@@ -1,0 +1,506 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "files-images-solid-1",
+  "attempt": 1,
+  "preparation": ".local/measurement-hygiene/files-images-solid-1-preparation-c2656bb1-5e09-467e-81ce-cbb7a6cdd4ff.json",
+  "status": "valid",
+  "before": {
+    "observedAt": "2026-10-29T16:22:37.473Z",
+    "windowsFreeBytes": 3622576128,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5708058624,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-29T16:22:37.473Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 97
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "workStartedAt": 1793290958009,
+  "workEndedAt": 1793290979927,
+  "swap": {
+    "raw": "BOOT dc1818ce-057f-406e-9e82-a0bb01fa6a48\nvmstat from procps-ng 4.0.4\n--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n   0    0            0      4731132         4192      1205792    0    0     0     0 1729 2314   0   0 100   0   0   0\n   1    0            0      4725124         4192      1205792    0    0     0     0 20160 35935   3   3  94   0   0   0\n   1    0            0      4658748         4792      1206232    0    0   808  1692 17012 30027   4   3  93   0   0   0\n   0    0            0      4696424         4856      1206144    0    0     4   744 17669 31553   5   4  91   0   0   0\n   4    0            0      4694464         4932      1206156    0    0     0  1340 13933 25310   2   2  96   0   0   0\n   0    0            0      4674732         5020      1206144    0    0     0  1060 15205 27090   5   3  92   0   0   0\n   0    0            0      4675756         5020      1206144    0    0     0     8 5692 9955   0   1  99   0   0   0\n   0    0            0      4564904        36360      1273032    0    0  5054  2376 25725 46644   6   6  87   1   0   0\n   0    0            0      4564148        36360      1273000    0    0     0     8 7474 12652   1   1  98   0   0   0\n   0    0            0      4500296        36444      1273096    0    0     0  1640 16914 30577   4   5  91   0   0   0\n   0    0            0      4562084        36500      1272968    0    0     0   704 13543 24495   2   2  96   0   0   0\n   1    0            0      4497644        36600      1273072    0    0     8  1676 30754 55280   7   6  87   0   0   0\n   0    0            0      4538204        36656      1272976    0    0     0   684 14526 26538   2   3  95   0   0   0\n   1    0            0      4479296        36740      1273076    0    0     0  1628 18730 33012   3   4  93   0   0   0\n   0    0            0      4506408        36796      1272984    0    0     0   704 14024 25638   3   2  95   0   0   0\n   0    0            0      4503536        36888      1273084    0    0     0  1684 15479 27575   3   3  94   0   0   0\n   0    0            0      4517384        36944      1272988    0    0     0   708 16909 30171   4   4  91   0   0   0\n   1    0            0      4515912        36996      1272976    0    0     0  1326 13871 25086   2   2  96   0   0   0\n   1    0            0      4535008        37084      1272928    0    0     0  1056 17021 29945   5   4  91   0   0   0\n   0    0            0      4535000        37084      1272932    0    0     0     0 5566 9846   0   1  99   0   0   0\n   6    0            0      4542616        37232      1272996    0    0     0  2364 19376 34761   5   5  90   0   0   0\n   0    0            0      4542604        37232      1272932    0    0     0     0 24700 45011   4   3  93   0   0   0\n   1    0            0      4491468        37316      1273032    0    0     0  1624 16697 29306   4   4  92   0   0   0\n   0    0            0      4548944        37372      1272936    0    0     0   720 14898 26642   3   3  94   0   0   0\n",
+    "chunks": [
+      {
+        "observedAt": "2026-10-29T16:22:36.317Z",
+        "text": "BOOT "
+      },
+      {
+        "observedAt": "2026-10-29T16:22:36.319Z",
+        "text": "dc1818ce-057f-406e-9e82-a0bb01fa6a48\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:36.330Z",
+        "text": "vmstat from procps-ng 4.0.4\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:36.333Z",
+        "text": "--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:37.334Z",
+        "text": "   0    0            0      4731132         4192      1205792    0    0     0     0 1729 2314   0   0 100   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:40.048Z",
+        "text": "   1    0            0      4725124         4192      1205792    0    0     0     0 20160 35935   3   3  94   0   0   0\n   1    0            0      4658748         4792      1206232    0    0   808  1692 17012 30027   4   3  93   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:42.224Z",
+        "text": "   0    0            0      4696424         4856      1206144    0    0     4   744 17669 31553   5   4  91   0   0   0\n   4    0            0      4694464         4932      1206156    0    0     0  1340 13933 25310   2   2  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:42.393Z",
+        "text": "   0    0            0      4674732         5020      1206144    0    0     0  1060 15205 27090   5   3  92   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:44.370Z",
+        "text": "   0    0            0      4675756         5020      1206144    0    0     0     8 5692 9955   0   1  99   0   0   0\n   0    0            0      4564904        36360      1273032    0    0  5054  2376 25725 46644   6   6  87   1   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:46.599Z",
+        "text": "   0    0            0      4564148        36360      1273000    0    0     0     8 7474 12652   1   1  98   0   0   0\n   0    0            0      4500296        36444      1273096    0    0     0  1640 16914 30577   4   5  91   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:48.825Z",
+        "text": "   0    0            0      4562084        36500      1272968    0    0     0   704 13543 24495   2   2  96   0   0   0\n   1    0            0      4497644        36600      1273072    0    0     8  1676 30754 55280   7   6  87   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:50.936Z",
+        "text": "   0    0            0      4538204        36656      1272976    0    0     0   684 14526 26538   2   3  95   0   0   0\n   1    0            0      4479296        36740      1273076    0    0     0  1628 18730 33012   3   4  93   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:53.080Z",
+        "text": "   0    0            0      4506408        36796      1272984    0    0     0   704 14024 25638   3   2  95   0   0   0\n   0    0            0      4503536        36888      1273084    0    0     0  1684 15479 27575   3   3  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:55.281Z",
+        "text": "   0    0            0      4517384        36944      1272988    0    0     0   708 16909 30171   4   4  91   0   0   0\n   1    0            0      4515912        36996      1272976    0    0     0  1326 13871 25086   2   2  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:55.445Z",
+        "text": "   1    0            0      4535008        37084      1272928    0    0     0  1056 17021 29945   5   4  91   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:57.434Z",
+        "text": "   0    0            0      4535000        37084      1272932    0    0     0     0 5566 9846   0   1  99   0   0   0\n   6    0            0      4542616        37232      1272996    0    0     0  2364 19376 34761   5   5  90   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:22:59.758Z",
+        "text": "   0    0            0      4542604        37232      1272932    0    0     0     0 24700 45011   4   3  93   0   0   0\n   1    0            0      4491468        37316      1273032    0    0     0  1624 16697 29306   4   4  92   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-29T16:23:00.340Z",
+        "text": "   0    0            0      4548944        37372      1272936    0    0     0   720 14898 26642   3   3  94   0   0   0\n"
+      }
+    ],
+    "startedAt": 1793290955379,
+    "endedAt": 1793290980368,
+    "probeError": null,
+    "stderr": "",
+    "imageId": "sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac",
+    "command": "vmstat -w -n -y 1",
+    "intervalSeconds": 1,
+    "workStartedAt": 1793290958009,
+    "workEndedAt": 1793290979927
+  },
+  "after": {
+    "observedAt": "2026-10-29T16:23:00.472Z",
+    "windowsFreeBytes": 3586940928,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5623554048,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-29T16:23:00.472Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 97
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "assessment": {
+    "valid": true,
+    "reason": null,
+    "intervals": 24,
+    "deltaInPages": 0,
+    "deltaOutPages": 0
+  },
+  "result": {
+    "sourceBytes": 917951,
+    "results": [
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 564.043447,
+        "elapsedMs": 582.236447,
+        "maxRssKiB": 130400,
+        "cgroupPeakBytes": 82116608,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1169.9370000000017,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-q2SZ0i"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 525.0995959999999,
+        "elapsedMs": 541.916873,
+        "maxRssKiB": 130104,
+        "cgroupPeakBytes": 81129472,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1108.2685999999994,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-C6KxYE"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 528.382687,
+        "elapsedMs": 542.783093,
+        "maxRssKiB": 130076,
+        "cgroupPeakBytes": 81616896,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1086.7082999999984,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-hT6xhN"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 594.762795,
+        "elapsedMs": 612.108892,
+        "maxRssKiB": 130348,
+        "cgroupPeakBytes": 81174528,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1202.8011000000006,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-e0UJpI"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 537.675174,
+        "elapsedMs": 554.2863520000001,
+        "maxRssKiB": 129944,
+        "cgroupPeakBytes": 81375232,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1180.9029999999984,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-AdQPvd"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 528.845503,
+        "elapsedMs": 542.749847,
+        "maxRssKiB": 130440,
+        "cgroupPeakBytes": 81690624,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1075.9585999999981,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-xSYtC3"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 526.0264930000001,
+        "elapsedMs": 544.005144,
+        "maxRssKiB": 130016,
+        "cgroupPeakBytes": 81747968,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1101.920299999998,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-1C87Nt"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 582.665888,
+        "elapsedMs": 599.576599,
+        "maxRssKiB": 130528,
+        "cgroupPeakBytes": 81928192,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1157.4530000000013,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-Zho8nC"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 523.792172,
+        "elapsedMs": 540.87933,
+        "maxRssKiB": 130324,
+        "cgroupPeakBytes": 82288640,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1115.3655999999974,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-Gq57Vs"
+      },
+      {
+        "status": "validated",
+        "variants": [
+          {
+            "variant": "display",
+            "mime": "image/webp",
+            "bytes": 7394,
+            "width": 2048,
+            "height": 2048,
+            "sha256": "912bb9b9c81a22aa6733758b859e0326d84d53b4d98a540a834cda802373a5bb"
+          },
+          {
+            "variant": "thumbnail",
+            "mime": "image/webp",
+            "bytes": 584,
+            "width": 512,
+            "height": 512,
+            "sha256": "c9c5daf4ec3433deb91fb6be1ffb84ad32eb01d57e2c568a863ff01f314e372a"
+          }
+        ],
+        "mime": "image/png",
+        "preview": "available",
+        "width": 8192,
+        "height": 8192,
+        "decodeAndEncodeMs": 593.4824,
+        "elapsedMs": 611.204833,
+        "maxRssKiB": 130224,
+        "cgroupPeakBytes": 81612800,
+        "versions": {
+          "sharp": "0.35.5",
+          "vips": "8.18.7"
+        },
+        "wallMs": 1239.296000000002,
+        "output": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\image-tests\\result-lWhgQ1"
+      }
+    ],
+    "p95ElapsedMs": 612.108892,
+    "p95DecodeEncodeMs": 594.762795,
+    "p95WallMs": 1239.296000000002,
+    "maxCgroupBytes": 82288640,
+    "maxRssKiB": 130528
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "memoria-file-validator",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "file-type": "22.3.0",
+    "sharp": "0.35.5"
+  }
+}

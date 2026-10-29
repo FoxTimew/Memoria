@@ -6,6 +6,7 @@ import { processAuthMail, purgeAuthCounters, purgeInvitations } from '@memoria/a
 import nodemailer from 'nodemailer';
 import { UploadService } from '@memoria/storage/uploads';
 import { storageConfig } from '@memoria/storage/config';
+import { FileValidator, validatorConfig } from '@memoria/storage/validate';
 
 const parsed = z
   .object({
@@ -30,6 +31,13 @@ if (Boolean(config.SMTP_USER) !== Boolean(config.SMTP_PASSWORD))
   throw new Error('SMTP credentials must be paired');
 const connection = createDatabase(config.DATABASE_URL);
 const files = new UploadService(connection.pool, storageConfig());
+const validator = process.env.FILES_VALIDATOR_IMAGE
+  ? new FileValidator(files, validatorConfig())
+  : undefined;
+if (!validator)
+  console.warn(
+    'File image validator disabled: configure FILES_VALIDATOR_IMAGE; files stay private',
+  );
 const smtp = nodemailer.createTransport({
   host: config.SMTP_HOST,
   port: config.SMTP_PORT,
@@ -104,6 +112,17 @@ const filePoll = setInterval(() => {
       transferring = undefined;
     });
 }, 1000);
+let validating: Promise<void> | undefined;
+const validationPoll = setInterval(() => {
+  if (stopping || validating || !validator) return;
+  validating = validator
+    .tick()
+    .then(() => {})
+    .catch(() => console.error('File validation unavailable'))
+    .finally(() => {
+      validating = undefined;
+    });
+}, 1000);
 const server = createServer(async (request, response) => {
   response.setHeader('Content-Type', 'application/json');
   response.setHeader('Cache-Control', 'no-store');
@@ -129,10 +148,12 @@ async function shutdown() {
   clearInterval(poll);
   clearInterval(rowPoll);
   clearInterval(filePoll);
+  clearInterval(validationPoll);
   server.close();
   await delivering;
   await aggregating;
   await transferring;
+  await validating;
   files.close();
   smtp.close();
   await connection.pool.end();

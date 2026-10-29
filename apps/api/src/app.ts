@@ -102,7 +102,7 @@ export function configureApplication(app: NestExpressApplication) {
   const parseFiles = express.json({ limit: '64kb' });
   app.use((request: Request, response: Response, next: NextFunction) => {
     if (/^\/api\/auth(?:\/|$)/i.test(request.path)) return next();
-    if (/^\/api\/internal\/workspaces\/[^/]+\/file-uploads(?:\/|$)/i.test(request.path))
+    if (/^\/api\/internal\/workspaces\/[^/]+\/(?:file-uploads|files)(?:\/|$)/i.test(request.path))
       return parseFiles(request, response, next);
     return parseJson(request, response, next);
   });

@@ -1,7 +1,8 @@
+import { guardTestDocker } from '../../../scripts/docker-test-isolation.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createServer, request } from 'node:http';
 import { createServer as tcpServer } from 'node:net';
 import { pipeline } from 'node:stream';
@@ -11,6 +12,10 @@ import { chromium } from '@playwright/test';
 import { storageFixture } from './testing/storage-fixture.ts';
 import { databaseHttpFixture } from './testing/database-http-fixture.ts';
 import { UploadService } from '@memoria/storage/uploads';
+import { FileValidator } from '@memoria/storage/validate';
+import { FileCells, createDatabase } from '@memoria/db';
+import { fileGateway } from '../../files/src/gateway.ts';
+import { imageId } from '../../../scripts/file-image-fixture.mjs';
 
 // Protocol harness, not the future 7c product UI. Real browser fetch, cookies, TLS/CORS,
 // real Nest session guard and private disposable PostgreSQL/RustFS behind Caddy.
@@ -18,19 +23,19 @@ await test(
   '7a browser HTTPS POST/multipart/resume, origin and cookie boundaries',
   { timeout: 180000 },
   async () => {
-    const docker = (args: string[]) =>
-      execFileSync('docker', args, { encoding: 'utf8', windowsHide: true, timeout: 30000 }).trim();
+    const docker = (args: string[]) => {
+      const result = spawnSync('docker', guardTestDocker(args), {
+        encoding: 'utf8',
+        windowsHide: true,
+        timeout: 30000,
+        stdio: 'pipe',
+      });
+      if (result.status !== 0) throw Error('BROWSER_DOCKER_FIXTURE_FAILED');
+      return (args[0] === 'logs' ? result.stdout + result.stderr : result.stdout).trim();
+    };
     const current = docker(['compose', 'ps', '-q', 'caddy']);
     if (!/^[0-9a-f]{12,64}$/.test(current)) throw Error('Start local Caddy first');
     const image = docker(['inspect', '--format', '{{.Image}}', current]);
-    const certificateVolume = docker([
-      'inspect',
-      '--format',
-      '{{range .Mounts}}{{if eq .Destination "/data"}}{{.Name}}{{end}}{{end}}',
-      current,
-    ]);
-    if (!/^[a-zA-Z0-9_-]+$/.test(certificateVolume))
-      throw Error('Expected a named Caddy TLS volume');
     const freePort = async () => {
       const s = tcpServer();
       await new Promise<void>((r) => s.listen(0, '127.0.0.1', r));
@@ -39,15 +44,33 @@ await test(
       return p;
     };
     const appPort = await freePort(),
-      uploadPort = await freePort();
+      uploadPort = await freePort(),
+      filesPort = await freePort();
     const origin = `https://localhost:${appPort}`,
       uploads = `https://uploads.localhost:${uploadPort}`;
     process.env.APP_ORIGIN = origin;
+    const filesOrigin = `https://uploads.localhost:${filesPort}`;
+    process.env.FILES_ORIGIN = filesOrigin;
     const store = await storageFixture();
     process.env.S3_PUBLIC_ENDPOINT = uploads;
     const h = await databaseHttpFixture(),
       owner = await h.account('owner');
     const jobs = new UploadService(h.f.db.pool, { ...store.config, publicEndpoint: uploads });
+    const readDb = createDatabase(h.f.db.url, { max: 6, timeout: 1500 });
+    const reading = await fileGateway({
+      ...readDb,
+      storage: store.storage,
+      secret: h.config.BETTER_AUTH_SECRET,
+      origin,
+      trustedProxy: ['loopback', '172.16.0.0/12'],
+    });
+    const readCookies: boolean[] = [];
+    const readServer = createServer((req, res) => {
+      readCookies.push(!!req.headers.cookie);
+      reading.app(req, res);
+    });
+    await new Promise<void>((r) => readServer.listen(0, '0.0.0.0', r));
+    const readPort = (readServer.address() as { port: number }).port;
     const name = 'memoria-files-browser-' + randomUUID(),
       directory = resolve('.local/files-browser', name);
     const observations: { method: string; cookie: boolean; origin: string | undefined }[] = [];
@@ -75,6 +98,13 @@ await test(
     const proxyPort = (proxy.address() as { port: number }).port;
     await mkdir(directory, { recursive: true });
     const config = `{
+    log default {
+      format filter {
+        request>uri delete
+        request>headers delete
+        resp_headers delete
+      }
+    }
     admin off
     auto_https disable_redirects
     servers :8444 {
@@ -85,7 +115,7 @@ await test(
     }
   }
   https://localhost:8443 {
-    tls /trusted/caddy/certificates/local/localhost/localhost.crt /trusted/caddy/certificates/local/localhost/localhost.key
+    tls /etc/localhost/localhost.crt /etc/localhost/localhost.key
     handle /fixture {
       header Content-Type text/html
       respond "<!doctype html><title>Memoria transport fixture</title><h1>Fixture de transport 7a</h1>" 200
@@ -95,7 +125,7 @@ await test(
     }
   }
   https://uploads.localhost:8444 {
-    tls /trusted/caddy/certificates/local/uploads.localhost/uploads.localhost.crt /trusted/caddy/certificates/local/uploads.localhost/uploads.localhost.key
+    tls /etc/uploads.localhost/uploads.localhost.crt /etc/uploads.localhost/uploads.localhost.key
     @upload method POST PUT OPTIONS
     handle @upload {
       request_body {
@@ -107,6 +137,10 @@ await test(
       respond 403
     }
   }
+  https://uploads.localhost:8445 {
+    tls /etc/uploads.localhost/uploads.localhost.crt /etc/uploads.localhost/uploads.localhost.key
+    reverse_proxy host.docker.internal:${readPort}
+  }
   `;
     await writeFile(resolve(directory, 'Caddyfile'), config);
     let started = false;
@@ -116,23 +150,21 @@ await test(
       headless: true,
     });
     try {
-      // Read only the existing trusted leaf certificates. Separate anonymous /data and
-      // /config volumes; no shared autosave, CA write, exported key or TLS bypass.
+      // Copy exactly four leaf files, never mount development volumes or copy the CA key.
       docker([
-        'run',
+        'create',
         '--pull=never',
         '--rm',
-        '-d',
         '--name',
         name,
-        '--mount',
-        `type=volume,src=${certificateVolume},dst=/trusted,readonly`,
         '--mount',
         `type=bind,src=${resolve(directory, 'Caddyfile')},dst=/fixture/Caddyfile,readonly`,
         '--publish',
         `127.0.0.1:${appPort}:8443`,
         '--publish',
         `127.0.0.1:${uploadPort}:8444`,
+        '--publish',
+        `127.0.0.1:${filesPort}:8445`,
         '--add-host',
         'host.docker.internal:host-gateway',
         image,
@@ -144,6 +176,25 @@ await test(
         'caddyfile',
       ]);
       started = true;
+      const leaves = execFileSync(
+        'docker',
+        [
+          'exec',
+          current,
+          'tar',
+          '-C',
+          '/data/caddy/certificates/local',
+          '-cf',
+          '-',
+          'localhost/localhost.crt',
+          'localhost/localhost.key',
+          'uploads.localhost/uploads.localhost.crt',
+          'uploads.localhost/uploads.localhost.key',
+        ],
+        { windowsHide: true, maxBuffer: 1024 * 1024 },
+      );
+      execFileSync('docker', ['cp', '-', name + ':/etc/'], { input: leaves, windowsHide: true });
+      docker(['start', name]);
       const context = await browser.newContext();
       await context.addCookies(
         owner.cookie.split('; ').map((pair) => {
@@ -367,6 +418,89 @@ await test(
         403,
       );
       assert.equal((await context.request.get(uploads + '/fixture?list-type=2')).status(), 403);
+      // 7b: a dedicated HTTPS origin, no application cookie, real authorization and download headers.
+      const validator = new FileValidator(jobs, {
+        image: imageId(),
+        directory: resolve(directory, 'validation'),
+        guard: guardTestDocker,
+      });
+      await validator.tick();
+      await validator.tick();
+      const property = randomUUID(),
+        db = h.f.db.pool;
+      await db.query(
+        "INSERT INTO database_properties(id,workspace_id,database_id,key,name,kind,position) VALUES($1,$2,$3,'assets','Assets','files','a8')",
+        [property, h.f.db.workspace, h.f.bases[0]],
+      );
+      const schema = (
+        await db.query('SELECT schema_version FROM databases WHERE id=$1', [h.f.bases[0]])
+      ).rows[0].schema_version;
+      await new FileCells(db).write(
+        {
+          ...owner,
+          key: 'browser-file',
+          page: h.f.rows[0]!,
+          rowScope: { database: h.f.bases[0]! },
+        },
+        property,
+        String(schema),
+        '0',
+        { add: [post.id], remove: [] },
+      );
+      const readUrl = await page.evaluate(
+        async ({ workspace, pageId, file }) => {
+          const r = await fetch(`/api/internal/workspaces/${workspace}/files/read-tickets`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pageId, files: [{ id: file, variant: 'original' }] }),
+          });
+          if (r.status !== 200) throw Error('ticket failed');
+          return (await r.json()).items[0].url as string;
+        },
+        { workspace: h.f.db.workspace, pageId: h.f.rows[0]!, file: post.id },
+      );
+      const readResult = await page.evaluate(async (url) => {
+        const r = await fetch(url, { credentials: 'omit', headers: { Range: 'bytes=1-3' } });
+        return {
+          status: r.status,
+          bytes: [...new Uint8Array(await r.arrayBuffer())],
+          type: r.headers.get('content-type'),
+          disposition: r.headers.get('content-disposition'),
+          cache: r.headers.get('cache-control'),
+        };
+      }, readUrl);
+      assert.equal(readResult.status, 206);
+      assert.deepEqual(readResult.bytes, [27, 27, 27]);
+      assert.equal(readResult.type, 'application/octet-stream');
+      assert.match(readResult.disposition!, /^attachment/);
+      assert.match(readResult.cache!, /no-store/);
+      assert(
+        await evil.evaluate(async (url) => {
+          try {
+            await fetch(url);
+            return false;
+          } catch {
+            return true;
+          }
+        }, readUrl),
+      );
+      assert(readCookies.length > 0 && readCookies.every((c) => !c));
+      await db.query('DELETE FROM file_usages WHERE file_id=$1', [post.id]);
+      assert.equal(
+        await page.evaluate(
+          async (url) => (await fetch(url, { credentials: 'omit' })).status,
+          readUrl,
+        ),
+        404,
+      );
+      // Trigger an actual reverse-proxy error; signed URL must not be serialized in its error log.
+      readServer.closeAllConnections();
+      await new Promise<void>((r) => readServer.close(() => r()));
+      assert.equal((await context.request.get(readUrl)).status(), 502);
+      const log = docker(['logs', name]);
+      assert(log.includes('http.log.error') && log.includes('502'));
+      assert(!log.includes(new URL(readUrl).pathname));
+      assert(!log.includes('browser asset'));
       await writeFile(
         resolve(directory, 'report.json'),
         JSON.stringify(
@@ -379,6 +513,14 @@ await test(
             resumedParts: [1],
             allUploadsWithoutCookie: true,
             untrustedPutPreflightBlocked: true,
+            readGateway: {
+              dedicatedHttps: true,
+              range: true,
+              noCookie: true,
+              untrustedCorsBlocked: true,
+              revokedTicket404: true,
+              proxyErrorWithoutTicket: true,
+            },
             observations: observations.map((x) => ({
               method: x.method,
               cookie: x.cookie,
@@ -406,6 +548,10 @@ await test(
         }
       }
       jobs.close();
+      await reading.close();
+      readServer.closeAllConnections();
+      await new Promise<void>((r) => readServer.close(() => r()));
+      await readDb.pool.end();
       await new Promise<void>((r) => proxy.close(() => r()));
       await h.close();
       await store.close();

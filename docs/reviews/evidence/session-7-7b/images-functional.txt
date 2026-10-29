@@ -1,0 +1,15 @@
+$ node --test scripts/test-file-images.mjs
+▶ sandbox validates actual format, strips metadata, bounds previews and never renders active originals
+  ✔ real JPEG is reencoded without EXIF/GPS (1907.8379ms)
+  ✔ HTML named JPEG is download-only (1823.8908ms)
+  ✔ active SVG never reaches the raster decoder (1768.8463ms)
+  ✔ 8193 pixels is download-only without a large decode (1796.7592ms)
+✔ sandbox validates actual format, strips metadata, bounds previews and never renders active originals (7299.5862ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9120.2801

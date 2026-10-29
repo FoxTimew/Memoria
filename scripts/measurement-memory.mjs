@@ -1,3 +1,4 @@
+import { guardTestDocker } from './docker-test-isolation.mjs';
 import { execFileSync, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { freemem, platform } from 'node:os';
@@ -172,7 +173,7 @@ export async function startSwapMonitor() {
   const startedAt = Date.now();
   const child = spawn(
     'docker',
-    [
+    guardTestDocker([
       'run',
       '--rm',
       '--pull=never',
@@ -189,7 +190,7 @@ export async function startSwapMonitor() {
       'sh',
       '-c',
       "printf 'BOOT '; cat /proc/sys/kernel/random/boot_id; vmstat -V; exec vmstat -w -n -y 1",
-    ],
+    ]),
     { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] },
   );
   let raw = '',

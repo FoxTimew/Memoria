@@ -1,3 +1,4 @@
+import { guardTestDocker } from './docker-test-isolation.mjs';
 import { build, stop } from 'esbuild';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
@@ -40,7 +41,7 @@ const requested = process.argv.includes('--provider')
   : undefined;
 if (requested && !providers.some((p) => p.name === requested)) throw new Error('Unknown provider');
 for (const p of providers.filter((p) => !requested || requested === p.name)) {
-  const name = `memoria-alternative-${p.name}-${process.pid}`;
+  const name = `memoria-alternative-${p.name.replaceAll('.', '-')}-${process.pid}`;
   const access = 'GK' + randomBytes(16).toString('hex'),
     secret = randomBytes(32).toString('hex');
   const env = {
@@ -52,7 +53,7 @@ for (const p of providers.filter((p) => !requested || requested === p.name)) {
     GARAGE_RPC_SECRET: randomBytes(32).toString('hex'),
   };
   function docker(args) {
-    const r = spawnSync('docker', args, {
+    const r = spawnSync('docker', guardTestDocker(args), {
       env,
       encoding: 'utf8',
       windowsHide: true,

@@ -117,9 +117,9 @@ export class UploadService {
       )
     ).rows.map((p) => ({ number: p.part_number, bytes: Number(p.bytes), checksum: p.checksum }));
   }
-  private async objectLock<T>(
+  async objectLock<T>(
     id: string,
-    work: (s: S3ObjectStorage, epoch: string) => Promise<T>,
+    work: (s: S3ObjectStorage, epoch: string, assertLease: () => void) => Promise<T>,
   ): Promise<T> {
     const c = await this.pool.connect(),
       s = new S3ObjectStorage(this.config);
@@ -148,7 +148,9 @@ export class UploadService {
       pulse = setInterval(() => {
         void c.query('SELECT 1').catch(fail);
       }, 2000);
-      const result = await work(s, epoch);
+      const result = await work(s, epoch, () => {
+        if (lost) throw new FileFault('STORAGE_UNAVAILABLE', 503);
+      });
       if (lost) throw new FileFault('STORAGE_UNAVAILABLE', 503);
       return result;
     } finally {
@@ -407,7 +409,7 @@ export class UploadService {
     );
     const id = (
       await this.pool.query<{ file_id: string }>(
-        `SELECT i.file_id FROM file_upload_intents i JOIN files f ON f.id=i.file_id WHERE (f.state='deleting' OR (f.state='completing' AND i.attempts<8) OR (f.state IN ('validating','ready') AND i.bytes_verified_at IS NOT NULL AND i.staging_cleaned_at IS NULL)) AND i.next_attempt_at<=clock_timestamp() ORDER BY i.next_attempt_at LIMIT 1`,
+        `SELECT i.file_id FROM file_upload_intents i JOIN files f ON f.id=i.file_id WHERE (f.state='deleting' OR (f.state='completing' AND i.attempts<8) OR (f.state IN ('validating','ready') AND i.bytes_verified_at IS NOT NULL AND (i.staging_cleaned_at IS NULL OR EXISTS(SELECT 1 FROM file_object_copies o WHERE o.file_id=i.file_id AND o.object_key<>i.final_key AND NOT o.retained AND o.deleted_at IS NULL)))) AND i.next_attempt_at<=clock_timestamp() ORDER BY i.next_attempt_at LIMIT 1`,
       )
     ).rows[0]?.file_id;
     if (!id) return false;
@@ -591,7 +593,7 @@ export class UploadService {
       for (const upload of await s.uploads(r.staging_key)) await s.abort(r.staging_key, upload);
     const obsolete = (
       await this.pool.query<{ object_key: string }>(
-        'SELECT object_key FROM file_object_copies WHERE file_id=$1 AND object_key<>$2 AND deleted_at IS NULL',
+        'SELECT object_key FROM file_object_copies WHERE file_id=$1 AND object_key<>$2 AND NOT retained AND deleted_at IS NULL',
         [r.file_id, r.final_key],
       )
     ).rows.map((x) => x.object_key);
@@ -611,7 +613,7 @@ export class UploadService {
       )
         throw new FileFault('UPLOAD_STATE_CHANGED', 409);
       await c.query(
-        'UPDATE file_object_copies SET deleted_at=clock_timestamp() WHERE file_id=$1 AND object_key<>$2',
+        'UPDATE file_object_copies SET deleted_at=clock_timestamp() WHERE file_id=$1 AND object_key<>$2 AND NOT retained',
         [r.file_id, r.final_key],
       );
       await c.query(

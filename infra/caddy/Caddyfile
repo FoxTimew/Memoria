@@ -1,9 +1,27 @@
 {
+  log default {
+    format filter {
+      request>uri delete
+      request>headers delete
+      resp_headers delete
+    }
+  }
   servers :9443 {
     timeouts {
       read_header 10s
       read_body 120s
     }
+  }
+}
+
+https://files.localhost {
+  tls internal
+  @reading path /v1/files/*
+  handle @reading {
+    reverse_proxy host.docker.internal:3005
+  }
+  handle {
+    respond 404
   }
 }
 

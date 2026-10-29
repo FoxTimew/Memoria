@@ -67,7 +67,13 @@
     "profile:files": "node scripts/test-collab.mjs --suite file-projection-profile",
     "test:files:recovery": "node scripts/build-server.mjs worker --file-accounting && node scripts/build-server.mjs api --file-recovery-e2e && node --env-file=.env apps/api/dist/file-recovery.e2e.mjs",
     "files:accounting": "node scripts/run-file-accounting.mjs",
-    "test:files:browser": "node scripts/build-server.mjs api --files-browser-e2e && node --env-file=.env --use-system-ca apps/api/dist/files-browser.e2e.mjs"
+    "test:files:browser": "node scripts/build-server.mjs api --files-browser-e2e && node --env-file=.env --use-system-ca apps/api/dist/files-browser.e2e.mjs",
+    "test:docker": "node scripts/test-docker.mjs",
+    "test:docker:isolation": "node --test scripts/docker-test-isolation.e2e.mjs",
+    "files:validator:build": "node scripts/build-file-validator.mjs",
+    "test:files:images": "node --test scripts/test-file-images.mjs",
+    "measure:files:images": "node scripts/measure-file-images.mjs",
+    "test:files:reading": "node scripts/build-server.mjs api --file-reading-e2e && node --env-file=.env apps/api/dist/file-reading.e2e.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

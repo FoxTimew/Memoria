@@ -24,3 +24,6 @@ export {
   readFileCapacity,
   reconcileFileCapacity,
 } from './file-capacity.ts';
+
+export { FileReading } from './file-reading.ts';
+export type { FileReadClaim, FileVariant } from './file-reading.ts';
