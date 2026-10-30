@@ -1,0 +1,56 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 861B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:24.21.0-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 126B done
+#3 DONE 0.0s
+
+#4 [isolation 1/4] FROM docker.io/library/node:24.21.0-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20
+#4 resolve docker.io/library/node:24.21.0-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 8.36kB done
+#5 DONE 0.0s
+
+#6 [isolation 2/4] RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev linux-libc-dev && rm -rf /var/lib/apt/lists/*
+#6 CACHED
+
+#7 [isolation 3/4] COPY isolate.c /src/isolate.c
+#7 CACHED
+
+#8 [isolation 4/4] RUN gcc -O2 -Wall -Wextra -Werror /src/isolate.c -o /isolate
+#8 CACHED
+
+#9 [stage-1 3/6] COPY package.json package-lock.json ./
+#9 CACHED
+
+#10 [stage-1 2/6] WORKDIR /validator
+#10 CACHED
+
+#11 [stage-1 4/6] RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
+#11 CACHED
+
+#12 [stage-1 5/6] COPY validate.mjs fixture.mjs service.mjs ./
+#12 DONE 0.0s
+
+#13 [stage-1 6/6] COPY --from=isolation /isolate /validator/isolate
+#13 DONE 0.0s
+
+#14 exporting to image
+#14 exporting layers 0.1s done
+#14 exporting manifest sha256:bb36bc76bb0b8310fff9ad13469df91cf3d5c0c55040a7bf0868f3a671b46279 done
+#14 exporting config sha256:76d94f4cfd77b7f096fd0a81c72219b3caf307c5aac60cc1e3e7f6fb1cd37e23 done
+#14 exporting attestation manifest sha256:4c50e992bd417fd953b4c1f149b49295d79618f07bc6d4b8005c7da6131ac5ca 0.0s done
+#14 exporting manifest list sha256:a81a1233e3149456572289790c91cc8528553f1ebb90a39f91443746dfd486d6 done
+#14 naming to docker.io/library/memoria-file-validator:7d done
+#14 unpacking to docker.io/library/memoria-file-validator:7d 0.0s done
+#14 DONE 0.2s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/k72t0wh42kq5h1gn8tmyq5r7x

@@ -1,24 +1,20 @@
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-import { createReadStream, createWriteStream } from 'node:fs';
-import {
-  mkdir,
-  mkdtemp,
-  readFile,
-  lstat,
-  statfs,
-  unlink,
-  rmdir,
-  readdir,
-  writeFile,
-} from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { mkdir, readFile, lstat, unlink, rmdir, readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { createHash, randomUUID } from 'node:crypto';
-import { Transform } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
+import { randomUUID } from 'node:crypto';
 import { FileFault, resolvePageAccess, admitFileCapacity, lockFileCapacity } from '@memoria/db';
 import { UploadService } from './uploads.ts';
-const exec = promisify(execFile);
+import {
+  cleanupExchange,
+  createExchangeJob,
+  convertExchange,
+  writeSource,
+  removeJob,
+  removePrivate,
+  type ExchangeJob,
+  type ValidatorConfig,
+} from './exchange.ts';
+export { validatorConfig, type ValidatorConfig } from './exchange.ts';
 const marker = 'memoria-file-validation-v1';
 export async function cleanupValidationDirectory(root: string, now = Date.now()) {
   await mkdir(root, { recursive: true, mode: 0o700 });
@@ -59,138 +55,12 @@ export async function cleanupValidationDirectory(root: string, now = Date.now())
   }
   return count;
 }
-type Variant = {
-  variant: 'display' | 'thumbnail';
-  bytes: number;
-  width: number;
-  height: number;
-  sha256: string;
-};
-type Result = {
-  status: 'validated' | 'rejected';
-  mime?: string;
-  preview?: string;
-  width?: number;
-  height?: number;
-  variants: Variant[];
-};
-export type ValidatorConfig = {
-  image: string;
-  directory: string;
-  guard?: (args: string[]) => string[];
-};
-export function validatorConfig(env: NodeJS.ProcessEnv = process.env): ValidatorConfig {
-  const image = env.FILES_VALIDATOR_IMAGE;
-  if (!image || !/^(?:sha256:[a-f0-9]{64}|[^\s]+@sha256:[a-f0-9]{64})$/.test(image))
-    throw Error('FILES_VALIDATOR_IMAGE must pin an immutable digest');
-  return { image, directory: resolve(env.FILES_VALIDATOR_DIRECTORY ?? '.local/file-validation') };
-}
-/** One decoder for the instance. PostgreSQL fencing and immutable derivative keys protect publication.
- * The sandbox has no network, credential, original name or access to another source. */
+/** Only this worker owns the private publication copy. The exchange is polled; no Docker client. */
 export class FileValidator {
   constructor(
     readonly uploads: UploadService,
     readonly config: ValidatorConfig,
   ) {}
-  private async sandbox(input: string, output: string, assertLease: () => void) {
-    const name = 'memoria-file-validator-' + randomUUID();
-    let args = [
-      'run',
-      '--rm',
-      '--name',
-      name,
-      '--pull=never',
-      '--network',
-      'none',
-      '--read-only',
-      '--memory',
-      '512m',
-      '--memory-swap',
-      '512m',
-      '--cpus',
-      '1',
-      '--pids-limit',
-      '64',
-      '--cap-drop',
-      'ALL',
-      '--security-opt',
-      'no-new-privileges',
-      '--tmpfs',
-      '/tmp:rw,noexec,nosuid,size=16m',
-      '--mount',
-      `type=bind,src=${input},dst=/input,readonly`,
-      '--mount',
-      `type=bind,src=${output},dst=/output`,
-      this.config.image,
-    ];
-    if (this.config.guard) args = this.config.guard(args);
-    let checking = false;
-    const pulse = setInterval(() => {
-      if (checking) return;
-      try {
-        assertLease();
-      } catch {
-        checking = true;
-        void exec('docker', ['rm', '--force', name], { windowsHide: true, timeout: 10000 }).catch(
-          () => {},
-        );
-      }
-    }, 500);
-    try {
-      await exec('docker', args, { windowsHide: true, timeout: 30000, maxBuffer: 65536 });
-    } catch {
-      throw new FileFault('FILE_VALIDATION_SANDBOX_FAILED', 503);
-    } finally {
-      clearInterval(pulse);
-      await exec('docker', ['rm', '--force', name], { windowsHide: true, timeout: 10000 }).catch(
-        () => {},
-      );
-    }
-    const info = await lstat(resolve(output, 'result.json'));
-    if (!info.isFile() || info.size > 16384) throw Error('INVALID_VALIDATOR_RESULT');
-    const r = JSON.parse(await readFile(resolve(output, 'result.json'), 'utf8')) as Result;
-    if (r.status === 'rejected') return { status: 'rejected', variants: [] } as Result;
-    if (
-      r.status !== 'validated' ||
-      typeof r.mime !== 'string' ||
-      !/^[-a-z0-9.+]+\/[-a-z0-9.+]+$/.test(r.mime) ||
-      typeof r.preview !== 'string' ||
-      !['available', 'unsupported', 'multiple-frames', 'dimensions'].includes(r.preview) ||
-      !Array.isArray(r.variants)
-    )
-      throw Error('INVALID_VALIDATOR_RESULT');
-    if (r.preview === 'available') {
-      if (
-        r.variants.length !== 2 ||
-        r.variants[0]?.variant !== 'display' ||
-        r.variants[1]?.variant !== 'thumbnail'
-      )
-        throw Error('INVALID_VALIDATOR_RESULT');
-    } else if (r.variants.length) throw Error('INVALID_VALIDATOR_RESULT');
-    let total = 0;
-    for (const v of r.variants) {
-      const bound = v.variant === 'display' ? 2048 : 512;
-      if (
-        ![v.width, v.height, v.bytes].every((n) => Number.isSafeInteger(n) && n > 0) ||
-        v.width > bound ||
-        v.height > bound ||
-        !/^[a-f0-9]{64}$/.test(v.sha256)
-      )
-        throw Error('INVALID_VALIDATOR_RESULT');
-      const path = resolve(output, v.variant + '.webp'),
-        st = await lstat(path);
-      if (
-        !st.isFile() ||
-        st.size !== v.bytes ||
-        (total += v.bytes) > this.uploads.limits.derivativeBytes
-      )
-        throw Error('INVALID_VALIDATOR_RESULT');
-      const h = createHash('sha256');
-      for await (const c of createReadStream(path)) h.update(c);
-      if (h.digest('hex') !== v.sha256) throw Error('INVALID_VALIDATOR_RESULT');
-    }
-    return r;
-  }
   async tick() {
     const c = await this.uploads.pool.connect();
     let acquired = false,
@@ -205,7 +75,7 @@ export class FileValidator {
         await c.query("SELECT pg_try_advisory_lock(hashtextextended('file-image-worker',0)) ok")
       ).rows[0].ok;
       if (!acquired) return false;
-      await cleanupValidationDirectory(this.config.directory);
+      await cleanupExchange(this.config.directory);
       pulse = setInterval(() => {
         void c.query('SELECT 1').catch(fail);
       }, 1000);
@@ -232,7 +102,9 @@ export class FileValidator {
     }
   }
   private async validate(id: string, assertLease: () => void) {
-    let directory: string | undefined, claimedEpoch: string | undefined;
+    let job: ExchangeJob | undefined,
+      privatePath: string | undefined,
+      claimedEpoch: string | undefined;
     try {
       await this.uploads.objectLock(id, async (s, epoch, assertJob) => {
         claimedEpoch = epoch;
@@ -251,37 +123,23 @@ export class FileValidator {
           page: r.page_id,
           ...(r.database_id ? { rowScope: { database: r.database_id } } : {}),
         };
-        await mkdir(this.config.directory, { recursive: true, mode: 0o700 });
-        const disk = await statfs(this.config.directory);
-        if (disk.bavail * disk.bsize < Number(r.requested_bytes) + 128 * 1024 ** 2)
-          throw new FileFault('FILE_SCRATCH_CAPACITY', 503);
-        directory = await mkdtemp(resolve(this.config.directory, 'job-'));
-        await writeFile(resolve(directory, 'owner'), marker, { flag: 'wx', mode: 0o600 });
-        const input = resolve(directory, 'input'),
-          output = resolve(directory, 'output');
-        await mkdir(input, { mode: 0o700 });
-        await mkdir(output, { mode: 0o700 });
-        // Transfer in bounded chunks; recompute the checksum of the immutable source.
-        let bytes = 0;
-        const h = createHash('sha256');
-        await pipeline(
-          await s.read(r.object_key),
-          new Transform({
-            transform(chunk, _, done) {
-              bytes += chunk.length;
-              if (bytes > Number(r.requested_bytes)) return done(Error('INVALID_SOURCE_SIZE'));
-              h.update(chunk);
-              done(null, chunk);
-            },
-          }),
-          createWriteStream(resolve(input, 'source'), { flags: 'wx', mode: 0o600 }),
-        );
-        if (bytes !== Number(r.requested_bytes) || h.digest('base64') !== r.whole_checksum)
-          throw new FileFault('FILE_SOURCE_CORRUPT', 422);
-        const result = await this.sandbox(input, output, () => {
+        job = await createExchangeJob(this.config, Number(r.requested_bytes));
+        const check = () => {
           assertLease();
           assertJob();
-        });
+        };
+        await writeSource(
+          job,
+          await s.read(r.object_key),
+          Number(r.requested_bytes),
+          r.whole_checksum,
+          check,
+        );
+        const converted = await convertExchange(job, this.config, Number(r.requested_bytes), check);
+        privatePath = converted.privatePath;
+        const result = converted.result;
+        if (result.variants.reduce((n, v) => n + v.bytes, 0) > this.uploads.limits.derivativeBytes)
+          throw Error('INVALID_DERIVATIVE_BUDGET');
         const variants = result.variants.map((v) => ({
           ...v,
           key: 'objects/' + r.workspace_id + '/' + id + '/' + randomUUID(),
@@ -319,7 +177,7 @@ export class FileValidator {
           assertLease();
           await s.putDerivative(
             v.key,
-            createReadStream(resolve(output, v.variant + '.webp')),
+            createReadStream(resolve(privatePath!, v.variant + '.webp')),
             v.bytes,
             Buffer.from(v.sha256, 'hex').toString('base64'),
           );
@@ -389,18 +247,14 @@ export class FileValidator {
         );
       throw e;
     } finally {
-      if (directory) {
-        // Only exact paths created for this job, never recursive traversal or a caller path.
-        for (const name of [
-          'owner',
-          'input/source',
-          'output/display.webp',
-          'output/thumbnail.webp',
-          'output/result.json',
-        ])
-          await unlink(resolve(directory, name)).catch(() => {});
-        for (const name of ['input', 'output', ''])
-          await rmdir(resolve(directory, name)).catch(() => {});
+      if (privatePath) await removePrivate(privatePath);
+      if (job) {
+        // Finished jobs can be removed. A decoder still running owns its directory until expiry.
+        const finished = await lstat(resolve(job.path, 'result.json')).catch(() => null);
+        const submitted =
+          (await lstat(resolve(job.path, 'request.json')).catch(() => null)) ??
+          (await lstat(resolve(job.path, 'running.json')).catch(() => null));
+        if (finished || !submitted) await removeJob(job.path).catch(() => {});
       }
     }
   }

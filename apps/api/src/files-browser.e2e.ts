@@ -1,3 +1,4 @@
+import { converterFixture } from '../../../scripts/file-converter-fixture.mjs';
 import { guardTestDocker } from '../../../scripts/docker-test-isolation.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -15,14 +16,16 @@ import { UploadService } from '@memoria/storage/uploads';
 import { FileValidator } from '@memoria/storage/validate';
 import { FileCells, createDatabase } from '@memoria/db';
 import { fileGateway } from '../../files/src/gateway.ts';
-import { imageId } from '../../../scripts/file-image-fixture.mjs';
 
 // Protocol harness, not the future 7c product UI. Real browser fetch, cookies, TLS/CORS,
 // real Nest session guard and private disposable PostgreSQL/RustFS behind Caddy.
 await test(
   '7a browser HTTPS POST/multipart/resume, origin and cookie boundaries',
   { timeout: 180000 },
-  async () => {
+  async (t) => {
+    const converter = await converterFixture();
+    t.after(() => converter.close());
+
     const docker = (args: string[]) => {
       const result = spawnSync('docker', guardTestDocker(args), {
         encoding: 'utf8',
@@ -424,11 +427,7 @@ await test(
       );
       assert.equal((await context.request.get(uploads + '/fixture?list-type=2')).status(), 403);
       // 7b: a dedicated HTTPS origin, no application cookie, real authorization and download headers.
-      const validator = new FileValidator(jobs, {
-        image: imageId(),
-        directory: resolve(directory, 'validation'),
-        guard: guardTestDocker,
-      });
+      const validator = new FileValidator(jobs, converter.config);
       await validator.tick();
       await validator.tick();
       const property = randomUUID(),

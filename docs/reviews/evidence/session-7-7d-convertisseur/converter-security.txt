@@ -1,0 +1,16 @@
+$ node --test scripts/test-file-converter.mjs
+▶ permanent converter: actual kernel confinement, expiry and restart
+  ✔ Compose hardening, exclusive mount, no credentials or Docker socket (169.1426ms)
+  ✔ TCP external/loopback/IPv6, UDP and UNIX sockets all denied by the inherited filter (698.7457ms)
+  ✔ decoder cannot write exchange/root, create links, or exceed its 12 MiB output tmpfs (248.6325ms)
+  ✔ incomplete atomic request is ignored; worker crash leaves an expiring directory (1436.6649ms)
+  ✔ converter SIGKILL restarts automatically; interrupted work is retried, never published (1007.902ms)
+✔ permanent converter: actual kernel confinement, expiry and restart (6021.692ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6111.1117

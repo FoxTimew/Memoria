@@ -1,0 +1,10 @@
+$ pnpm hooks:check && pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test
+$ node scripts/check-git-hooks.mjs
+Hooks Memoria installés et à jour dans ce clone.
+$ eslint . --max-warnings=0 && prettier --check .
+Checking formatting...
+[warn] docs/reviews/evidence/session-7-7d-convertisseur/hygiene-mixed-content-1m-false-1-attempt-1-05f5d62e-ff6b-438f-a6b6-cc3a9e4d51e6.json
+[warn] docs/reviews/evidence/session-7-7d-convertisseur/ui-report.json
+[warn] Code style issues found in 2 files. Run Prettier with --write to fix.
+[ELIFECYCLE] Command failed with exit code 1.
+[ELIFECYCLE] Command failed with exit code 1.

@@ -1,11 +1,17 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { imageFixture, decodeFixture, imageId } from './file-image-fixture.mjs';
+import {
+  imageFixture,
+  decodeFixture,
+  imageId,
+  startImageConverter,
+  closeImageConverter,
+} from './file-image-fixture.mjs';
 import { prepareMeasurement, runMeasuredSeries } from './measurement-memory.mjs';
 const reports = [];
 const directory = resolve(
-  '.local/7b-images-measurement-' + new Date().toISOString().replaceAll(':', '-'),
+  '.local/7d-images-measurement-' + new Date().toISOString().replaceAll(':', '-'),
 );
 await mkdir(directory, { recursive: true });
 const p95 = (v) => [...v].sort((a, b) => a - b)[Math.ceil(v.length * 0.95) - 1];
@@ -26,6 +32,7 @@ const save = () =>
 try {
   const preparation = await prepareMeasurement('files-images-8k');
   const fixture = await imageFixture(true);
+  await startImageConverter();
   for (let series = 1; series <= 3; series++) {
     for (const profile of ['solid', 'noise']) {
       const check = await prepareMeasurement(`files-images-${profile}-${series}`);
@@ -85,3 +92,5 @@ try {
   console.error(JSON.stringify({ error: error.message, directory, details: error.details }));
   process.exitCode = 1;
 }
+
+await closeImageConverter();

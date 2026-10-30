@@ -1,0 +1,208 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "mixed-content-1m-true-1",
+  "attempt": 1,
+  "preparation": {
+    "path": ".local/measurement-hygiene/mixed-content-1m-true-1-preparation-9cb82d73-6241-4478-a218-25e2777058cc.json",
+    "observation": {
+      "observedAt": "2026-10-30T11:11:03.227Z",
+      "windowsFreeBytes": 3627458560,
+      "wsl": {
+        "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+        "memAvailableBytes": 5576200192,
+        "swapInPages": 386,
+        "swapOutPages": 2163
+      },
+      "power": {
+        "observedAt": "2026-10-30T11:11:03.227Z",
+        "platform": "win32",
+        "batteries": [
+          {
+            "BatteryStatus": 2,
+            "EstimatedChargeRemaining": 95
+          }
+        ],
+        "allowed": true,
+        "reason": null
+      }
+    }
+  },
+  "status": "valid",
+  "before": {
+    "observedAt": "2026-10-30T11:11:54.055Z",
+    "windowsFreeBytes": 1612029952,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5521723392,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-30T11:11:54.055Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 95
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "workStartedAt": 1793358714537,
+  "workEndedAt": 1793358731870,
+  "swap": {
+    "raw": "BOOT dc1818ce-057f-406e-9e82-a0bb01fa6a48\nvmstat from procps-ng 4.0.4\n--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n   1    0            0      4097136        43888      1618236    0    0     0    92 5270 7835   1   1  99   0   0   0\n   0    0            0      4085200        43888      1618704    0    0     0   336 3992 5961   1   2  97   0   0   0\n   2    0            0      4055916        43888      1618704    0    0     0    24 10584 19904   1   3  96   0   0   0\n   7    0            0      4021392        43892      1620252    0    0     0   776 41714 81638   5   7  88   0   0   0\n   4    0            0      4019556        43892      1620868    0    0     0   392 31358 64980   1   6  93   0   0   0\n   2    0            0      4017540        43904      1620880    0    0     0   136 28368 60308   1   5  94   0   0   0\n   1    0            0      4017088        43904      1620880    0    0     0    16 25097 54715   1   4  95   0   0   0\n   0    0            0      4015600        43952      1620920    0    0     0   164 25797 56226   0   5  95   0   0   0\n   1    0            0      4012108        43952      1620924    0    0     0    24 24356 52940   0   4  95   0   0   0\n   1    0            0      4004364        43952      1620924    0    0     0    16 21397 46019   1   4  94   0   0   0\n   1    0            0      4006208        43952      1622496    0    0     0   280 25059 53784   1   5  94   0   0   0\n   1    0            0      4037628        43952      1622496    0    0     0    24 28549 60733   1   5  94   0   0   0\n   0    0            0      4050828        43960      1622496    0    0     0    44 25418 55384   0   4  95   0   0   0\n   1    0            0      4049568        43960      1622496    0    0     0   280 39714 81434   3   6  90   0   0   0\n   2    0            0      4047984        43960      1622496    0    0     0    24 28083 60206   0   5  95   0   0   0\n   0    0            0      4043708        43960      1622496    0    0     0    16 25663 53780   1   6  94   0   0   0\n   0    0            0      4101464        43960      1620932    0    0     0   272 23817 51640   1   4  95   0   0   0\n   3    0            0      4127576        44056      1620784    0    0     4  2616 13702 23758   2   2  96   0   0   0\n   0    0            0      4139740        44104      1618864    0    0     0  2804 10290 17163   2   4  94   0   0   0\n",
+    "chunks": [
+      {
+        "observedAt": "2026-10-30T11:11:52.916Z",
+        "text": "BOOT "
+      },
+      {
+        "observedAt": "2026-10-30T11:11:52.916Z",
+        "text": "dc1818ce-057f-406e-9e82-a0bb01fa6a48\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:52.919Z",
+        "text": "vmstat from procps-ng 4.0.4\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:52.922Z",
+        "text": "--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------\n   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:53.923Z",
+        "text": "   1    0            0      4097136        43888      1618236    0    0     0    92 5270 7835   1   1  99   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:54.923Z",
+        "text": "   0    0            0      4085200        43888      1618704    0    0     0   336 3992 5961   1   2  97   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:55.923Z",
+        "text": "   2    0            0      4055916        43888      1618704    0    0     0    24 10584 19904   1   3  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:56.924Z",
+        "text": "   7    0            0      4021392        43892      1620252    0    0     0   776 41714 81638   5   7  88   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:57.924Z",
+        "text": "   4    0            0      4019556        43892      1620868    0    0     0   392 31358 64980   1   6  93   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:58.925Z",
+        "text": "   2    0            0      4017540        43904      1620880    0    0     0   136 28368 60308   1   5  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:11:59.925Z",
+        "text": "   1    0            0      4017088        43904      1620880    0    0     0    16 25097 54715   1   4  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:00.925Z",
+        "text": "   0    0            0      4015600        43952      1620920    0    0     0   164 25797 56226   0   5  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:01.925Z",
+        "text": "   1    0            0      4012108        43952      1620924    0    0     0    24 24356 52940   0   4  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:02.926Z",
+        "text": "   1    0            0      4004364        43952      1620924    0    0     0    16 21397 46019   1   4  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:03.926Z",
+        "text": "   1    0            0      4006208        43952      1622496    0    0     0   280 25059 53784   1   5  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:04.926Z",
+        "text": "   1    0            0      4037628        43952      1622496    0    0     0    24 28549 60733   1   5  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:05.927Z",
+        "text": "   0    0            0      4050828        43960      1622496    0    0     0    44 25418 55384   0   4  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:06.927Z",
+        "text": "   1    0            0      4049568        43960      1622496    0    0     0   280 39714 81434   3   6  90   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:07.928Z",
+        "text": "   2    0            0      4047984        43960      1622496    0    0     0    24 28083 60206   0   5  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:08.928Z",
+        "text": "   0    0            0      4043708        43960      1622496    0    0     0    16 25663 53780   1   6  94   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:09.928Z",
+        "text": "   0    0            0      4101464        43960      1620932    0    0     0   272 23817 51640   1   4  95   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:10.929Z",
+        "text": "   3    0            0      4127576        44056      1620784    0    0     4  2616 13702 23758   2   2  96   0   0   0\n"
+      },
+      {
+        "observedAt": "2026-10-30T11:12:11.929Z",
+        "text": "   0    0            0      4139740        44104      1618864    0    0     0  2804 10290 17163   2   4  94   0   0   0\n"
+      }
+    ],
+    "startedAt": 1793358711802,
+    "endedAt": 1793358731929,
+    "probeError": null,
+    "stderr": "",
+    "imageId": "sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac",
+    "command": "vmstat -w -n -y 1",
+    "intervalSeconds": 1,
+    "workStartedAt": 1793358714537,
+    "workEndedAt": 1793358731870
+  },
+  "after": {
+    "observedAt": "2026-10-30T11:12:12.059Z",
+    "windowsFreeBytes": 2695323648,
+    "wsl": {
+      "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+      "memAvailableBytes": 5565693952,
+      "swapInPages": 386,
+      "swapOutPages": 2163
+    },
+    "power": {
+      "observedAt": "2026-10-30T11:12:12.059Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 95
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "assessment": {
+    "valid": true,
+    "reason": null,
+    "intervals": 19,
+    "deltaInPages": 0,
+    "deltaOutPages": 0
+  },
+  "result": {
+    "code": 1,
+    "results": [
+      {
+        "profile": "content-1M",
+        "conversions": true,
+        "partial": true,
+        "error": "Error: DURABLE_RECEIPT_TIMEOUT wave=0 author=4 closed=true reason=",
+        "samples": [],
+        "totals": [],
+        "transactions": [],
+        "conversionsDone": []
+      },
+      {
+        "error": "Error: DURABLE_RECEIPT_TIMEOUT wave=0 author=4 closed=true reason="
+      }
+    ]
+  }
+}

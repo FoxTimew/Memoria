@@ -1,5 +1,24 @@
 name: memoria
 services:
+  file-converter:
+    init: true
+    build: ./infra/file-validator
+    image: memoria-file-validator:7d
+    network_mode: none
+    read_only: true
+    user: '1000:1000'
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    memswap_limit: 512m
+    cpus: 1
+    pids_limit: 64
+    restart: unless-stopped
+    tmpfs:
+      - /scratch:rw,noexec,nosuid,size=12m,uid=1000,gid=1000,mode=0700
+      - /tmp:rw,noexec,nosuid,size=1m,uid=1000,gid=1000,mode=0700
+    volumes:
+      - ${FILES_VALIDATOR_DIRECTORY:-./.local/file-exchange}:/exchange
   postgres:
     image: postgres:17-alpine
     environment:

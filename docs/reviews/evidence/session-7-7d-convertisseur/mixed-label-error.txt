@@ -1,0 +1,34 @@
+$ node scripts/test-collab.mjs --suite files-mixed
+Power: {"observedAt":"2026-10-30T10:57:08.527Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-30T10:57:09.756Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-30T10:57:11.573Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:106121
+var fail2 = (reason, observation) => Object.assign(new Error(reason), { reason, observation });
+                                                   ^
+
+Error: INVALID_MEASUREMENT_LABEL
+    at fail2 (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:106121:52)
+    at safeLabel (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:106177:43)
+    at prepareMeasurement (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:106185:3)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:123439:88
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  reason: 'INVALID_MEASUREMENT_LABEL',
+  observation: undefined
+}
+
+Node.js v24.21.0
+Collaboration files-mixed.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.

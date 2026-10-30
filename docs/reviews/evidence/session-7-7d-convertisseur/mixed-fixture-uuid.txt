@@ -1,0 +1,86 @@
+$ node scripts/test-collab.mjs --suite files-mixed
+Power: {"observedAt":"2026-10-30T11:08:50.144Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-30T11:08:51.404Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-30T11:08:53.271Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/mixed-content-1m-false-1-preparation-54405570-b1e0-4668-9aa5-2ca0bf0ce1cb.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"mixed-content-1m-false-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-30T11:08:53.931Z","windowsFreeBytes":3540553728,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5595439104,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:08:53.931Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-30T11:08:55.583Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:09:02.814Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:09:05.121Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:09:07.195Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+[onLoadDocument] DOCUMENT_LOAD_FAILED
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"fixture"}
+{"diagnostic":"control-ended","control":"leadership","stage":"fixture"}
+Error: permission-denied
+    at ChildProcess.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:121353:25)
+    at ChildProcess.emit (node:events:514:28)
+    at emit (node:internal/child_process:989:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:123537
+            child.once("exit", () => no2(Error("Mixed fixture exited before ready")));
+                                         ^
+
+Error: Mixed fixture exited before ready
+    at ChildProcess.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:123537:42)
+    at ChildProcess.wrapper (node:events:639:12)
+    at ChildProcess.emit (node:events:526:24)
+    at ChildProcess._handle.onexit (node:internal/child_process:295:12)
+
+Node.js v24.21.0
+Collaboration files-mixed.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.

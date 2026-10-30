@@ -1,0 +1,371 @@
+$ node scripts/test-collab.mjs --suite files-mixed
+Power: {"observedAt":"2026-10-30T11:07:00.939Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-30T11:07:02.191Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-30T11:07:04.034Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/mixed-content-1m-false-1-preparation-bbfe6893-4b4c-4a08-9d0c-078436f5314b.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"mixed-content-1m-false-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-30T11:07:04.713Z","windowsFreeBytes":3561287680,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5572239360,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:07:04.713Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-30T11:07:06.567Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:13.777Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:16.440Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:18.672Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:20.869Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:22.855Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:24.973Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:27.034Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:29.183Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:31.137Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:07:33.138Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 87b5b212-5a7d-4591-bb5f-eb0df562bb72 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:7d7f0127-e9e5-46c8-a2ef-2f64c9ad17d9:b1bf710f-116d-4084-897b-fec80ab28023) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 1f40ecca-7291-499d-ad6d-2e05db9e6cdf (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:91ca42ad-84fd-4b0d-8677-15bf51aea609:0c44e814-cec1-4b2e-b307-df60dcaa88bc) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection e867a775-de15-4815-9e40-3f43a6d07d8e (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:4a734f4e-336d-4531-9534-49a8297677b3:5d26e20d-4995-4101-a698-9bd73ff236e3) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 057e8c97-712a-4788-b471-28a81da50407 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:34af8a2a-61a5-44b8-9c15-02ea2d0cc4fe:cf70aa5b-f462-417c-89d9-789310625e8c) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 1d1af1c4-3849-45ea-9356-18ef0dd5bf96 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:91ca42ad-84fd-4b0d-8677-15bf51aea609:0c44e814-cec1-4b2e-b307-df60dcaa88bc) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 0a825b74-2885-41ae-9af3-5ade2997ebf0 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:7d7f0127-e9e5-46c8-a2ef-2f64c9ad17d9:b1bf710f-116d-4084-897b-fec80ab28023) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection ae117e72-0bd9-4105-a418-2e29e2b1f754 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:4a734f4e-336d-4531-9534-49a8297677b3:5d26e20d-4995-4101-a698-9bd73ff236e3) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 780c0b97-7393-42f8-9133-456aa6698295 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:34af8a2a-61a5-44b8-9c15-02ea2d0cc4fe:cf70aa5b-f462-417c-89d9-789310625e8c) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 15bd8f52-33ef-498c-8f3d-db2b2d5c31e0 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:7d7f0127-e9e5-46c8-a2ef-2f64c9ad17d9:b1bf710f-116d-4084-897b-fec80ab28023) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 0624146e-a8d1-4246-a996-db51f7dcb8b9 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:91ca42ad-84fd-4b0d-8677-15bf51aea609:0c44e814-cec1-4b2e-b307-df60dcaa88bc) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection f55a8df1-98e9-4df0-9554-191ff6b986d5 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:4a734f4e-336d-4531-9534-49a8297677b3:5d26e20d-4995-4101-a698-9bd73ff236e3) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 86f847f4-6ce5-4136-ae1f-48ff7bc6392f (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:7d7f0127-e9e5-46c8-a2ef-2f64c9ad17d9:b1bf710f-116d-4084-897b-fec80ab28023) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection d1695b0a-a51d-4761-bdc7-b1c8a21b7ae5 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:91ca42ad-84fd-4b0d-8677-15bf51aea609:0c44e814-cec1-4b2e-b307-df60dcaa88bc) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 8b313254-2bd1-4294-b2ef-dd19a34a0478 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:34af8a2a-61a5-44b8-9c15-02ea2d0cc4fe:cf70aa5b-f462-417c-89d9-789310625e8c) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection ebc04504-0ae8-44ba-9cd9-8d68f50f4f95 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:4a734f4e-336d-4531-9534-49a8297677b3:5d26e20d-4995-4101-a698-9bd73ff236e3) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 15bb6c87-f18d-43d1-a452-8eb83010c545 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:34af8a2a-61a5-44b8-9c15-02ea2d0cc4fe:cf70aa5b-f462-417c-89d9-789310625e8c) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection a5a4c35d-0c49-4485-89e4-304f4519e4d0 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:7d7f0127-e9e5-46c8-a2ef-2f64c9ad17d9:b1bf710f-116d-4084-897b-fec80ab28023) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection bf87fa17-8d6a-48d9-bf06-5ddb0f6d9636 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:91ca42ad-84fd-4b0d-8677-15bf51aea609:0c44e814-cec1-4b2e-b307-df60dcaa88bc) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 78e6a4c1-5434-484c-9b47-8535acd37d76 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:4a734f4e-336d-4531-9534-49a8297677b3:5d26e20d-4995-4101-a698-9bd73ff236e3) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 01f1a7ae-ec18-4eb9-9d2d-81527b2a1041 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:7d7f0127-e9e5-46c8-a2ef-2f64c9ad17d9:b1bf710f-116d-4084-897b-fec80ab28023) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 97b0c40d-90dd-40aa-9963-a683c92b7b02 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:91ca42ad-84fd-4b0d-8677-15bf51aea609:0c44e814-cec1-4b2e-b307-df60dcaa88bc) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 054f72ca-3adf-425d-aa38-31da0942a412 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:4a734f4e-336d-4531-9534-49a8297677b3:5d26e20d-4995-4101-a698-9bd73ff236e3) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 79d6fe71-92e1-40b0-8f2f-b730dd622167 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:34af8a2a-61a5-44b8-9c15-02ea2d0cc4fe:cf70aa5b-f462-417c-89d9-789310625e8c) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeSync] BLOCK_ID_CONFLICT
+closing connection 19319c8d-3c4a-4d84-85e9-bffc6154a893 (while handling 5d0bccd4-fcfd-4a9d-9e9b-c74385913193:34af8a2a-61a5-44b8-9c15-02ea2d0cc4fe:cf70aa5b-f462-417c-89d9-789310625e8c) because of exception Error: BLOCK_ID_CONFLICT
+    at publicError (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122652:10)
+    at Object.beforeSync (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:122934:22)
+    at async MessageReceiver.readSyncMessage (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:254:19)
+    at async MessageReceiver.apply (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:190:5)
+    at async Connection.processMessages (file:///C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/@hocuspocus+server@4.7.1_y-_00759934456fdfa4a898533e624e1ea5/node_modules/@hocuspocus/server/dist/hocuspocus-server.esm.js:463:6)
+[beforeUnloadDocument] RESIDENT_REPLICA
+[onAuthenticate] REJECTION_LIMIT
+[onAuthenticate] REJECTION_LIMIT
+[onAuthenticate] REJECTION_LIMIT
+[onAuthenticate] REJECTION_LIMIT
+[onAuthenticate] REJECTION_LIMIT
+[onAuthenticate] REJECTION_LIMIT
+[onAuthenticate] REJECTION_LIMIT
+[onAuthenticate] REJECTION_LIMIT
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"mixed:content-1M:conversions=false:wave=0"}
+{"diagnostic":"control-ended","control":"leadership","stage":"mixed:content-1M:conversions=false:wave=0"}
+Error: DURABLE_RECEIPT_TIMEOUT wave=0 author=2 closed=true reason=permission-denied
+    at ChildProcess.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:121353:25)
+    at ChildProcess.emit (node:events:514:28)
+    at emit (node:internal/child_process:989:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:91:21)
+{"hygiene":".local/measurement-hygiene/mixed-content-1m-false-1-attempt-1-47c7ae47-7182-490a-8408-1af0f0fddec2.json","status":"valid","label":"mixed-content-1m-false-1","attempt":1,"before":{"observedAt":"2026-10-30T11:07:36.750Z","windowsFreeBytes":2239840256,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5523496960,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:07:36.750Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-30T11:07:43.740Z","windowsFreeBytes":3652222976,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5569806336,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:07:43.740Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":8,"deltaInPages":0,"deltaOutPages":0}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: STOP_MIXED_KEEP_REPORT
+
+1 !== 0
+
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:123547:19 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration files-mixed.e2e.ts: EXIT_CODE=1
+[ELIFECYCLE] Command failed with exit code 1.

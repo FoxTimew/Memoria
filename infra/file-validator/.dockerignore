@@ -3,3 +3,5 @@
 !package-lock.json
 !validate.mjs
 !fixture.mjs
+!service.mjs
+!isolate.c

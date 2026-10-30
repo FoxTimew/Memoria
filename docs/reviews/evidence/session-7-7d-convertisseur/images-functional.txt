@@ -1,0 +1,14 @@
+▶ sandbox validates actual format, strips metadata, bounds previews and never renders active originals
+  ✔ real JPEG is reencoded without EXIF/GPS (2398.4062ms)
+  ✔ HTML named JPEG is download-only (274.9684ms)
+  ✔ active SVG never reaches the raster decoder (270.5522ms)
+  ✔ 8193 pixels is download-only without a large decode (533.1493ms)
+✔ sandbox validates actual format, strips metadata, bounds previews and never renders active originals (4120.2537ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5849.6766

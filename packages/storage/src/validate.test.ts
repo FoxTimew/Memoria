@@ -2,11 +2,15 @@ import { it, expect } from 'vitest';
 import { mkdtemp, mkdir, writeFile, access, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { cleanupValidationDirectory, validatorConfig } from './validate.ts';
-it('decoder configuration rejects mutable images', () => {
-  expect(() => validatorConfig({ FILES_VALIDATOR_IMAGE: 'latest' })).toThrow('immutable digest');
-  expect(validatorConfig({ FILES_VALIDATOR_IMAGE: 'sha256:' + 'a'.repeat(64) }).image).toMatch(
-    /^sha256:/,
-  );
+it('worker private snapshots cannot be mounted into the exchange, quota is bounded', () => {
+  expect(() =>
+    validatorConfig({
+      FILES_VALIDATOR_DIRECTORY: '.local/ex',
+      FILES_VALIDATOR_PRIVATE_DIRECTORY: '.local/ex/private',
+    }),
+  ).toThrow('OUTSIDE_EXCHANGE');
+  expect(() => validatorConfig({ FILES_VALIDATOR_EXCHANGE_BYTES: '1' })).toThrow('BUDGET');
+  expect(validatorConfig({}).budgetBytes).toBe(6 * 1024 ** 3);
 });
 it('reclaims only marked stale job files, preserves active and unknown folders', async () => {
   await mkdir('.local/validator-unit', { recursive: true });

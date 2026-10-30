@@ -31,12 +31,12 @@ if (Boolean(config.SMTP_USER) !== Boolean(config.SMTP_PASSWORD))
   throw new Error('SMTP credentials must be paired');
 const connection = createDatabase(config.DATABASE_URL);
 const files = new UploadService(connection.pool, storageConfig());
-const validator = process.env.FILES_VALIDATOR_IMAGE
+const validator = process.env.FILES_VALIDATOR_DIRECTORY
   ? new FileValidator(files, validatorConfig())
   : undefined;
 if (!validator)
   console.warn(
-    'File image validator disabled: configure FILES_VALIDATOR_IMAGE; files stay private',
+    'File image validator disabled: configure FILES_VALIDATOR_DIRECTORY; files stay private',
   );
 const smtp = nodemailer.createTransport({
   host: config.SMTP_HOST,

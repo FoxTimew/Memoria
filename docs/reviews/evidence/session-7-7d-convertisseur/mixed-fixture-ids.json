@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-30T11:07:44.503Z",
+  "scope": "10 real WSS clients in separate processes, 5 pages, actual other-client application; optional permanent 8K converter. No uploads yet: staged mixed-load qualification, stop at first failed ceiling.",
+  "reports": [
+    {
+      "profile": "content-1M",
+      "series": 1,
+      "conversions": false,
+      "result": {
+        "code": 1,
+        "results": [
+          {
+            "profile": "content-1M",
+            "conversions": false,
+            "partial": true,
+            "error": "Error: DURABLE_RECEIPT_TIMEOUT wave=0 author=2 closed=true reason=permission-denied",
+            "samples": [],
+            "totals": [],
+            "transactions": [],
+            "conversionsDone": []
+          },
+          {
+            "error": "Error: DURABLE_RECEIPT_TIMEOUT wave=0 author=2 closed=true reason=permission-denied"
+          }
+        ]
+      },
+      "hygiene": {
+        "path": ".local/measurement-hygiene/mixed-content-1m-false-1-attempt-1-47c7ae47-7182-490a-8408-1af0f0fddec2.json",
+        "attempts": [
+          {
+            "path": ".local/measurement-hygiene/mixed-content-1m-false-1-attempt-1-47c7ae47-7182-490a-8408-1af0f0fddec2.json",
+            "status": "valid",
+            "reason": null
+          }
+        ],
+        "before": {
+          "observedAt": "2026-10-30T11:07:36.750Z",
+          "windowsFreeBytes": 2239840256,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5523496960,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-30T11:07:36.750Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 95
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "after": {
+          "observedAt": "2026-10-30T11:07:43.740Z",
+          "windowsFreeBytes": 3652222976,
+          "wsl": {
+            "bootId": "dc1818ce-057f-406e-9e82-a0bb01fa6a48",
+            "memAvailableBytes": 5569806336,
+            "swapInPages": 386,
+            "swapOutPages": 2163
+          },
+          "power": {
+            "observedAt": "2026-10-30T11:07:43.740Z",
+            "platform": "win32",
+            "batteries": [
+              {
+                "BatteryStatus": 2,
+                "EstimatedChargeRemaining": 95
+              }
+            ],
+            "allowed": true,
+            "reason": null
+          }
+        },
+        "assessment": {
+          "valid": true,
+          "reason": null,
+          "intervals": 8,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      }
+    }
+  ]
+}

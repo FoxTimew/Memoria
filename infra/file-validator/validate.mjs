@@ -11,8 +11,8 @@ sharp.block({ operation: ['VipsForeignLoad'] });
 sharp.unblock({
   operation: ['VipsForeignLoadJpegFile', 'VipsForeignLoadPngFile', 'VipsForeignLoadWebpFile'],
 });
-const input = '/input/source',
-  out = '/output';
+const input = process.argv[2] ?? '/input/source',
+  out = process.argv[3] ?? '/output';
 const maximum = 5 * 1024 ** 3,
   maxPixels = 8192 ** 2;
 const started = performance.now();

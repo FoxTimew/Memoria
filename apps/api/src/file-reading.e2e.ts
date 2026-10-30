@@ -1,3 +1,4 @@
+import { converterFixture } from '../../../scripts/file-converter-fixture.mjs';
 import 'reflect-metadata';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -16,8 +17,7 @@ import { ReadTickets } from '@memoria/storage/read-ticket';
 import { exportFiles, verifyFilesBackup, restoreFiles } from '@memoria/storage/backup';
 import { createDatabase, FileCells, FileReading, reconcileFileCapacity } from '@memoria/db';
 import { fileGateway } from '../../files/src/gateway.ts';
-import { imageId, imageFixture } from '../../../scripts/file-image-fixture.mjs';
-import { guardTestDocker } from '../../../scripts/docker-test-isolation.mjs';
+import { imageFixture } from '../../../scripts/file-image-fixture.mjs';
 import { FileReadController } from './modules/files/read.controller.ts';
 import { FILE_QUOTA } from './modules/files/file-quota.ts';
 import { IS_PUBLIC } from './modules/auth/public.decorator.ts';
@@ -35,6 +35,8 @@ await test(
       archive: 'M',
       restore: 'M',
     });
+    const converter = await converterFixture();
+    t.after(() => converter.close());
     process.env.TRUSTED_PROXY_CIDRS = '10.255.255.0/24';
     const store = await storageFixture(),
       h = await databaseHttpFixture(),
@@ -59,11 +61,7 @@ await test(
     assert(address && typeof address !== 'string');
     const origin = 'http://127.0.0.1:' + address.port;
     const jobs = new UploadService(db, store.config),
-      validator = new FileValidator(jobs, {
-        image: imageId(),
-        directory: resolve('.local/validator-integration-' + randomUUID()),
-        guard: guardTestDocker,
-      });
+      validator = new FileValidator(jobs, converter.config);
     const page = h.f.rows[0]!,
       workspace = h.f.db.workspace,
       property = randomUUID();

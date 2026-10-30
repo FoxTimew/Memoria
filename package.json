@@ -8,6 +8,8 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "test:files:converter": "node --test scripts/test-file-converter.mjs",
+    "measure:files:mixed": "node scripts/test-collab.mjs --suite files-mixed",
     "test:files:gateway-recovery": "node scripts/build-server.mjs files --recovery-e2e && node --env-file=.env apps/files/dist/recovery.e2e.mjs",
     "storage:local": "node scripts/storage-local.mjs",
     "storage:init": "node scripts/init-storage.mjs",

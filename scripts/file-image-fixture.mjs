@@ -1,11 +1,16 @@
-import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdir, readFile, mkdtemp, copyFile, unlink, rmdir } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { build, stop } from 'esbuild';
+import { pathToFileURL } from 'node:url';
+import { converterFixture } from './file-converter-fixture.mjs';
+import { execFileSync } from 'node:child_process';
+import { mkdir, mkdtemp, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { guardTestDocker } from './docker-test-isolation.mjs';
 
 export const imageId = () =>
-  execFileSync('docker', ['image', 'inspect', 'memoria-file-validator:7b', '--format', '{{.Id}}'], {
+  execFileSync('docker', ['image', 'inspect', 'memoria-file-validator:7d', '--format', '{{.Id}}'], {
     encoding: 'utf8',
     windowsHide: true,
   }).trim();
@@ -44,56 +49,50 @@ export async function imageFixture(large = false) {
   });
   return path;
 }
+
+let converter, exchange;
+export async function startImageConverter() {
+  if (converter) return converter;
+  const outfile = resolve('.local/converter/dist/exchange.mjs');
+  await build({
+    entryPoints: ['packages/storage/src/exchange.ts'],
+    outfile,
+    bundle: true,
+    platform: 'node',
+    format: 'esm',
+    target: 'node24',
+    banner: {
+      js: "import {createRequire} from 'node:module';const require=createRequire(import.meta.url);",
+    },
+  });
+  exchange = await import(pathToFileURL(outfile).href);
+  stop();
+  converter = await converterFixture();
+  return converter;
+}
+export async function closeImageConverter() {
+  if (converter) {
+    await converter.close();
+    converter = undefined;
+  }
+}
 export async function decodeFixture(path) {
-  const output = await mkdtemp(resolve('.local/image-tests/result-'));
-  const input = await mkdtemp(resolve('.local/image-tests/input-'));
-  await copyFile(path, resolve(input, 'source'));
-  const name = 'memoria-image-decode-' + randomUUID();
-  const args = guardTestDocker([
-    'run',
-    '--rm',
-    '--name',
-    name,
-    '--network',
-    'none',
-    '--read-only',
-    '--memory',
-    '512m',
-    '--memory-swap',
-    '512m',
-    '--cpus',
-    '1',
-    '--pids-limit',
-    '64',
-    '--cap-drop',
-    'ALL',
-    '--security-opt',
-    'no-new-privileges',
-    '--tmpfs',
-    '/tmp:rw,noexec,nosuid,size=16m',
-    '--mount',
-    `type=bind,src=${input},dst=/input,readonly`,
-    '--mount',
-    `type=bind,src=${output},dst=/output`,
-    imageId(),
-  ]);
+  await startImageConverter();
+  const bytes = (await stat(path)).size;
+  const hash = createHash('sha256');
+  for await (const chunk of createReadStream(path)) hash.update(chunk);
+  const job = await exchange.createExchangeJob(converter.config, bytes);
   const began = performance.now();
   try {
-    const run = spawnSync('docker', args, { windowsHide: true, timeout: 35000, encoding: 'utf8' });
-    if (run.error || run.status !== 0)
-      throw Object.assign(new Error('IMAGE_SANDBOX_FAILED'), {
-        details: { status: run.status, signal: run.signal, stderr: run.stderr, name, output },
-      });
-    const result = JSON.parse(await readFile(resolve(output, 'result.json'), 'utf8'));
-    return { ...result, wallMs: performance.now() - began, output };
+    await exchange.writeSource(job, createReadStream(path), bytes, hash.digest('base64'), () => {});
+    const { result, privatePath } = await exchange.convertExchange(
+      job,
+      converter.config,
+      bytes,
+      () => {},
+    );
+    return { ...result, wallMs: performance.now() - began, output: privatePath };
   } finally {
-    spawnSync('docker', ['rm', '--force', name], {
-      windowsHide: true,
-      stdio: 'ignore',
-      timeout: 10000,
-    });
-    // Exact file and empty directory created above; no recursive deletion.
-    await unlink(resolve(input, 'source'));
-    await rmdir(input);
+    await exchange.removeJob(job.path);
   }
 }

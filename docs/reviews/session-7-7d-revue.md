@@ -20,18 +20,18 @@ Les horloges sont locales à chaque processus. Les échantillons sont reliés pa
 
 ## Contrôles restant à clôturer
 
-| Obligation                                         | État de cette fiche intermédiaire                                                                                                             |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Matrice R12/S5-R11 consolidée et attaques          | [Matrice intermédiaire](session-7-7d-matrice.md), inventaire fermé et suites relancées ; futur convertisseur et charge encore non couverts    |
-| Fuites et proxy                                    | Canaris SDK, HTTP/retry/audit/outbox, signatures observées et clés absentes des journaux Caddy/RustFS ; configurations externes non couvertes |
-| Gros transferts, charge mixte, conversions 8K, NAT | Non qualifiés par les durées de tests fonctionnels ; campagnes finales restantes                                                              |
-| CONTROL_UNAVAILABLE et reconnexion sans perte      | Saturation volontaire et parcours réel à exécuter ; absence de preuve de reprise automatique globale du serveur collaboratif                  |
-| Décomposition WSS contenu/historique               | [24 cas conformes](session-7-7d-wss.md) ; réception chez les autres clients et délai du front final à compléter en charge mixte               |
-| Gateway après perte LISTEN et redémarrage PG       | Test réel réussi ; journal et observation temporelle versionnés, sans les présenter comme un p95                                              |
-| Convertisseur permanent sans socket Docker         | Décision de transport demandée : dossier d'échange sans réseau ou HTTP privé ; implémentation dépendante en attente de réponse                |
-| Antivirus facultatif                               | [Option locale préparée](session-7-7d-antivirus.md), coût éditeur et limites ; aucune capacité locale déclarée mesurée                        |
-| Comparaison alternée main                          | À exécuter sur la candidate finale ; main distant vérifié `56c52b4b5cb4c4df94841328398d141955b48394`                                          |
-| Risques, guide consolidé, description PR           | [Tableau de travail](session-7-7d-risques.md) sans acceptation ; guide/description finale à terminer après les preuves restantes              |
+| Obligation                                         | État de cette fiche intermédiaire                                                                                                                   |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Matrice R12/S5-R11 consolidée et attaques          | [Matrice intermédiaire](session-7-7d-matrice.md), inventaire fermé et suites relancées ; convertisseur désormais attaqué, charge restant à clôturer |
+| Fuites et proxy                                    | Canaris SDK, HTTP/retry/audit/outbox, signatures observées et clés absentes des journaux Caddy/RustFS ; configurations externes non couvertes       |
+| Gros transferts, charge mixte, conversions 8K, NAT | Non qualifiés par les durées de tests fonctionnels ; campagnes finales restantes                                                                    |
+| CONTROL_UNAVAILABLE et reconnexion sans perte      | Saturation volontaire et parcours réel à exécuter ; absence de preuve de reprise automatique globale du serveur collaboratif                        |
+| Décomposition WSS contenu/historique               | [24 cas conformes](session-7-7d-wss.md) ; réception chez les autres clients et délai du front final à compléter en charge mixte                     |
+| Gateway après perte LISTEN et redémarrage PG       | Test réel réussi ; journal et observation temporelle versionnés, sans les présenter comme un p95                                                    |
+| Convertisseur permanent sans socket Docker         | [Livré et attaqué](session-7-7d-convertisseur.md), six séries 8K conformes ; charge mixte arrêtée à une fermeture dès l'échauffement                |
+| Antivirus facultatif                               | [Option locale préparée](session-7-7d-antivirus.md), coût éditeur et limites ; aucune capacité locale déclarée mesurée                              |
+| Comparaison alternée main                          | À exécuter sur la candidate finale ; main distant vérifié `56c52b4b5cb4c4df94841328398d141955b48394`                                                |
+| Risques, guide consolidé, description PR           | [Tableau de travail](session-7-7d-risques.md) sans acceptation ; guide/description finale à terminer après les preuves restantes                    |
 
 ## Contrôles de ce point intermédiaire
 
@@ -67,3 +67,9 @@ Le [guide consolidé à deux navigateurs](session-7-guide-manuel.md) couvre éga
 4. Relire le contrôle d'époque dans le gateway : une réponse d'autorisation retardée au-delà d'une coupure reste refusée même après retour de PostgreSQL.
 
 Ce qui pourrait encore casser : panne prolongée ou intermittente du réseau, redémarrage de la pile entière, charge élevée des contrôles par flux et saturation CPU. La reprise du gateway ne prouve ni la reprise du leadership collaboratif ni la capacité de cinquante personnes. Ces points restent ouverts avant clôture de 7d.
+
+## Point du 30 octobre — convertisseur et arrêt de charge
+
+Le [convertisseur permanent](session-7-7d-convertisseur.md) utilise le dossier privé retenu par le développeur, sans socket Docker applicatif, avec confinement, expirations, quota et revalidation indépendante des sorties. Six séries 8K passent ; l’interface finale passe avec ce service.
+
+Le développeur a validé la fixture mixte d’une page de 1 Mio et quatre pages typiques, toujours dix rédacteurs et le budget de 1 Gio. Une série sans conversion passe ; le palier avec conversion ferme un client dès la vague d’échauffement 0. **Arrêt avant nouveau benchmark ou optimisation.** La fermeture n’est pas identifiée comme CONTROL_UNAVAILABLE. Le timeout d’inactivité du client synthétique pendant la préparation est une hypothèse à confirmer. Aucun p95 mixte avec conversion, aucune qualification CPU, aucun résultat historique mixte ni comparaison finale annoncé. Diagnostic, chiffres, journaux et recommandation dans la fiche dédiée.

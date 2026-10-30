@@ -17,8 +17,9 @@ export type FileLoadClientConfig = {
   imageId: string;
   fileId: string;
   trace?: boolean;
+  observe?: boolean;
 };
-type Edit = { wave: number; references: boolean };
+type Edit = { wave: number; references: boolean; insertOnly?: boolean };
 type Reply = { id: number; result?: unknown; error?: string };
 export type FileLoadReceipt = {
   wireMs: number;
@@ -27,6 +28,8 @@ export type FileLoadReceipt = {
   beforeSendMs?: number;
   transitMs?: number;
   receiptHandlingMs?: number;
+  startedNs?: string;
+  clock?: number;
 };
 
 /** Timers start and end in this real WSS client, never across process clocks. */
@@ -36,6 +39,13 @@ async function client(config: FileLoadClientConfig) {
   await until(() => peer.provider.synced || peer.closed || peer.failed, 'file load client sync');
   assert(!peer.closed && !peer.failed, peer.reason);
   assert.equal(peer.doc.clientID, 0xefffff00 + config.index);
+  const observed = new Map<string, string>();
+  if (config.observe)
+    peer.doc.on('update', (update: Uint8Array) => {
+      const now = process.hrtime.bigint().toString();
+      for (const s of Y.decodeUpdate(update).structs)
+        observed.set(`${s.id.client}:${s.id.clock + s.length}`, now);
+    });
   const sent = new Map<string, number>(),
     received = new Map<string, number>();
   if (config.trace) {
@@ -58,9 +68,17 @@ async function client(config: FileLoadClientConfig) {
   const check = () => assert(!peer.closed && !peer.failed, peer.reason);
   return {
     check,
-    async edit({ wave, references }: Edit): Promise<FileLoadReceipt> {
+    observe(client: number, clock: number) {
+      return observed.get(`${client}:${clock}`);
+    },
+    snapshot() {
+      return Array.from(Y.encodeStateAsUpdate(peer.doc));
+    },
+    async edit({ wave, references, insertOnly }: Edit): Promise<FileLoadReceipt> {
       check();
       const started = performance.now();
+      const startedNs = config.observe ? process.hrtime.bigint().toString() : undefined;
+      let clock = 0;
       let key = '';
       let receive!: (event: { payload: string }) => void;
       let record!: (update: Uint8Array) => void;
@@ -72,6 +90,9 @@ async function client(config: FileLoadClientConfig) {
         };
         record = (update) => {
           key = receiptFor(update);
+          if (config.observe)
+            for (const s of Y.decodeUpdate(update).structs)
+              if (s.id.client === peer.doc.clientID) clock = Math.max(clock, s.id.clock + s.length);
         };
         timer = setTimeout(
           () =>
@@ -97,7 +118,7 @@ async function client(config: FileLoadClientConfig) {
         } else {
           const text = nodes.filter((n): n is Y.XmlText => n instanceof Y.XmlText)[config.index]!;
           peer.doc.transact(() => {
-            if (wave % 2) text.delete(0, 1);
+            if (wave % 2 && !insertOnly) text.delete(0, 1);
             else text.insert(0, 'x');
           });
         }
@@ -119,6 +140,7 @@ async function client(config: FileLoadClientConfig) {
           wireMs: finished - started,
           editMs,
           receipt: key,
+          ...(config.observe ? { startedNs: startedNs!, clock } : {}),
           ...(config.trace
             ? {
                 beforeSendMs: send! - started,
@@ -145,7 +167,14 @@ export function serveFileLoadClient() {
   let busy = false;
   process.on(
     'message',
-    (m: { id: number; op: string; config?: FileLoadClientConfig; edit?: Edit }) => {
+    (m: {
+      id: number;
+      op: string;
+      config?: FileLoadClientConfig;
+      edit?: Edit;
+      client?: number;
+      clock?: number;
+    }) => {
       void (async () => {
         assert(!busy, 'Concurrent commands to one load client');
         busy = true;
@@ -156,6 +185,9 @@ export function serveFileLoadClient() {
             peer = await client(m.config!);
             result = { pid: process.pid, clientID: 0xefffff00 + m.config!.index };
           } else if (m.op === 'edit') result = await peer!.edit(m.edit!);
+          else if (m.op === 'clock') result = process.hrtime.bigint().toString();
+          else if (m.op === 'observe') result = peer!.observe(m.client!, m.clock!);
+          else if (m.op === 'snapshot') result = peer!.snapshot();
           else if (m.op === 'check') peer!.check();
           else if (m.op === 'close') {
             peer?.close();
@@ -238,6 +270,10 @@ export async function fileLoadClient(entry: string, config: FileLoadClientConfig
     pid: child.pid!,
     edit: (edit: Edit) => request('edit', { edit }) as Promise<FileLoadReceipt>,
     check: () => request('check'),
+    clock: () => request('clock') as Promise<string>,
+    observe: (client: number, clock: number) =>
+      request('observe', { client, clock }) as Promise<string | undefined>,
+    snapshot: () => request('snapshot') as Promise<number[]>,
     async close() {
       if (closed) return;
       try {

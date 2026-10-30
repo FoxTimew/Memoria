@@ -1,3 +1,4 @@
+import { converterFixture } from '../../../scripts/file-converter-fixture.mjs';
 import { guardTestDocker } from '../../../scripts/docker-test-isolation.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -16,13 +17,16 @@ import { FileValidator } from '@memoria/storage/validate';
 import { createDatabase } from '@memoria/db';
 import { fileGateway } from '../../files/src/gateway.ts';
 import { initialDocument } from '@memoria/collaboration-core';
-import { imageId, imageFixture } from '../../../scripts/file-image-fixture.mjs';
+import { imageFixture } from '../../../scripts/file-image-fixture.mjs';
 
 // Product UI on built Next.js, real Nest, WSS, RustFS and isolated Caddy. No mocked file routes.
 await test(
   '7c product UI: cells/editor, uploads, previews, warnings, guests and cache resurrection',
   { timeout: 300000 },
-  async () => {
+  async (t) => {
+    const converter = await converterFixture();
+    t.after(() => converter.close());
+
     const docker = (args: string[]) => {
       const result = spawnSync('docker', guardTestDocker(args), {
         encoding: 'utf8',
@@ -273,11 +277,7 @@ await test(
           await new Promise((r) => setTimeout(r, 250));
         }
       }
-      const validator = new FileValidator(jobs, {
-        image: imageId(),
-        directory: resolve(directory, 'validator'),
-        guard: guardTestDocker,
-      });
+      const validator = new FileValidator(jobs, converter.config);
       const source = await imageFixture();
       const href = `/workspaces/${workspace}/databases/${h.f.bases[0]}`;
       const rowHref = href + '/rows/' + row;
