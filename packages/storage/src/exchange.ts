@@ -51,7 +51,25 @@ export async function atomicFile(path: string, value: string) {
   } finally {
     await h.close();
   }
-  await rename(path + '.tmp', path);
+  // A short Windows/WSL reader can deny delete-sharing while polling the marker.
+  // Retry only the atomic rename: never remove the destination or republish bytes.
+  const deadline = Date.now() + 250;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await rename(path + '.tmp', path);
+      return;
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (
+        process.platform !== 'win32' ||
+        !['EPERM', 'EACCES', 'EBUSY'].includes(code ?? '') ||
+        attempt >= 5 ||
+        Date.now() >= deadline
+      )
+        throw error;
+      await delay(Math.min(5 * 2 ** attempt, Math.max(0, deadline - Date.now())));
+    }
+  }
 }
 export async function readBounded(path: string, max: number) {
   const st = await lstat(path);

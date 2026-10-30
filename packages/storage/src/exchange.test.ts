@@ -2,6 +2,8 @@ import { it, expect } from 'vitest';
 import { mkdir, mkdtemp, writeFile, readFile, readdir, rm, link } from 'node:fs/promises';
 import { resolve, sep } from 'node:path';
 import { createHash } from 'node:crypto';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
 import { setTimeout as delay } from 'node:timers/promises';
 import {
   createExchangeJob,
@@ -14,6 +16,62 @@ import {
   atomicFile,
 } from './exchange.ts';
 import { webpDimensions } from './derivative.ts';
+
+it.runIf(process.platform === 'win32')(
+  'atomic publication survives a real temporary Windows reader but fails closed for a persistent one',
+  async () => {
+    const f = await fixture();
+    try {
+      for (const temporary of [true, false]) {
+        const path = resolve(f.root, temporary ? 'temporary.json' : 'persistent.json');
+        await writeFile(path, '{"old":true}');
+        const script =
+          '$converterLock = [System.IO.File]::Open($env:MEMORIA_RENAME_TEST_FILE, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::ReadWrite); try { [Console]::WriteLine("LOCKED"); [Console]::ReadLine() | Out-Null } finally { $converterLock.Dispose() }';
+        const reader = spawn(
+          'powershell.exe',
+          ['-NoProfile', '-NonInteractive', '-Command', script],
+          {
+            windowsHide: true,
+            stdio: ['pipe', 'pipe', 'pipe'],
+            env: { ...process.env, MEMORIA_RENAME_TEST_FILE: path },
+            timeout: 10000,
+          },
+        );
+        const ended = once(reader, 'exit');
+        try {
+          const [message] = await once(reader.stdout, 'data');
+          expect(message.toString()).toContain('LOCKED');
+          const result = atomicFile(path, '{"new":true}').then(
+            () => ({ ok: true as const }),
+            (error: NodeJS.ErrnoException) => ({ ok: false as const, code: error.code }),
+          );
+          if (temporary) {
+            await delay(35);
+            expect(await readFile(path, 'utf8')).toBe('{"old":true}');
+            reader.stdin.end('\n');
+            await ended;
+            expect(await result).toEqual({ ok: true });
+            expect(await readFile(path, 'utf8')).toBe('{"new":true}');
+          } else {
+            const failed = await result;
+            expect(failed.ok).toBe(false);
+            if (!failed.ok) expect(['EPERM', 'EACCES', 'EBUSY']).toContain(failed.code);
+            expect(await readFile(path, 'utf8')).toBe('{"old":true}');
+            expect(await readFile(path + '.tmp', 'utf8')).toBe('{"new":true}');
+          }
+        } finally {
+          if (reader.exitCode === null) {
+            reader.stdin.end('\n');
+            await ended;
+          }
+        }
+      }
+    } finally {
+      await f.close();
+    }
+  },
+  30000,
+);
 
 async function fixture() {
   const parent = resolve('.local/exchange-unit');
