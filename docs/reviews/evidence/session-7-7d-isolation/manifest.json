@@ -1,0 +1,496 @@
+{
+  "date": "2026-10-30T15:06:40.008Z",
+  "baseCommit": "d389b68e86a71d0e44a9342b8444b2e592baba26",
+  "scope": "Authorized proof only, not production integration; original thresholds. Includes failed setup and Windows atomic rename attempt, followed by full requalification. No secrets/environment copied.",
+  "artifacts": [
+    {
+      "name": "cold.json.gz",
+      "source": ".local/isolation/cold.json",
+      "bytes": 3365,
+      "sha256": "71d5235556d1b773b21912f5c0a114173ecb2a2fecdb8041e2245392f6a717d6"
+    },
+    {
+      "name": "capacity.json.gz",
+      "source": ".local/isolation/capacity.json",
+      "bytes": 4514,
+      "sha256": "61ceb3bf0b108ffa553b02662e7389bb86e9d0e4c012b5ccdea2bf41826d2100"
+    },
+    {
+      "name": "mixed.json.gz",
+      "source": ".local/isolation/mixed.json",
+      "bytes": 2757693,
+      "sha256": "ec1401c4d8b4d3fd8d9235608bc92de3dafb9b264ee938f0b397bc4adb95c402"
+    },
+    {
+      "name": "recovery.json.gz",
+      "source": ".local/isolation/recovery.json",
+      "bytes": 486,
+      "sha256": "bb54bcdb04ad8324cee43fe6ac9550bc4d8de483cdacff8b275c3402daa2d53c"
+    },
+    {
+      "name": "mixed-rename-failure.json.gz",
+      "source": ".local/isolation/mixed-rename-failure.json",
+      "bytes": 225559,
+      "sha256": "dfc2f0810b7b09b6b99930c96a7ba39cafa4f77b10be759fab8ad28b2386dce1"
+    },
+    {
+      "name": "summary.json",
+      "source": ".local/isolation/summary.json",
+      "bytes": 45141,
+      "sha256": "95b0b07f1d350d8da7dd9fdf8a72f250922aee6dedb8678dc5a96f241ad14c4b"
+    },
+    {
+      "name": "session-7-7d-isolation-build-2.txt.gz",
+      "source": ".local/session-7-7d-isolation-build-2.log",
+      "bytes": 58,
+      "sha256": "60f28a9f87867c44808feac7c826add3fae281406cd1b466c5b0a29e6b81ba93"
+    },
+    {
+      "name": "session-7-7d-isolation-build.txt.gz",
+      "source": ".local/session-7-7d-isolation-build.log",
+      "bytes": 637,
+      "sha256": "755e93b84d0ec444557bb696450bb3916a9fd13bd7dc060a2beac4d7ee715d7e"
+    },
+    {
+      "name": "session-7-7d-isolation-capacity.txt.gz",
+      "source": ".local/session-7-7d-isolation-capacity.log",
+      "bytes": 4125,
+      "sha256": "20b157caa7aefda9b5ab7bb80b15782c6001686999696207b8af2a0ff1713d31"
+    },
+    {
+      "name": "session-7-7d-isolation-check.txt.gz",
+      "source": ".local/session-7-7d-isolation-check.log",
+      "bytes": 678,
+      "sha256": "03cc940ad4ccd59b21fc812f1c3b35221e3fdc430720baaaab83893920c90cb5"
+    },
+    {
+      "name": "session-7-7d-isolation-cold.txt.gz",
+      "source": ".local/session-7-7d-isolation-cold.log",
+      "bytes": 3604,
+      "sha256": "cb9ae18a6b0bcf214db40afc687beee4915b23bc1348a5b813eaae7bd6fdbcf4"
+    },
+    {
+      "name": "session-7-7d-isolation-converter-tests.txt.gz",
+      "source": ".local/session-7-7d-isolation-converter-tests.log",
+      "bytes": 511,
+      "sha256": "45a57124136702309f386f37fc70e0c217a1f100b13385a44832e44f8674e092"
+    },
+    {
+      "name": "session-7-7d-isolation-exchange-tests.txt.gz",
+      "source": ".local/session-7-7d-isolation-exchange-tests.log",
+      "bytes": 171,
+      "sha256": "c3563dc00a0953baba37cf1e15d19e4aec81d27fd4fcece657b1c3fb09881730"
+    },
+    {
+      "name": "session-7-7d-isolation-files-wire.txt.gz",
+      "source": ".local/session-7-7d-isolation-files-wire.log",
+      "bytes": 749,
+      "sha256": "e8bb5deb95793cfe78b18968a5236aa09f661637462cfa78d447735d15582766"
+    },
+    {
+      "name": "session-7-7d-isolation-mixed-rename-failure.txt.gz",
+      "source": ".local/session-7-7d-isolation-mixed-rename-failure.log",
+      "bytes": 1728,
+      "sha256": "e9fbff15d2788bcd39cac5b4a6b1a3b40965fe5b0a78eafcc80695e1516a2900"
+    },
+    {
+      "name": "session-7-7d-isolation-mixed.txt.gz",
+      "source": ".local/session-7-7d-isolation-mixed.log",
+      "bytes": 4485,
+      "sha256": "f6ef49e659964385b399cdb6692feeda1cde60033ac27c18c405bb91ecf6f354"
+    },
+    {
+      "name": "session-7-7d-isolation-recovery.txt.gz",
+      "source": ".local/session-7-7d-isolation-recovery.log",
+      "bytes": 294,
+      "sha256": "d8e0f08374dde18d38600886390ec76f550a65d35d0ca745f459b937d832ba07"
+    },
+    {
+      "name": "session-7-7d-isolation-transport-2.txt.gz",
+      "source": ".local/session-7-7d-isolation-transport-2.log",
+      "bytes": 1364,
+      "sha256": "3d880e8d286f991564d276012fa1e47d2cce97004cb045be6111fc534b35851a"
+    },
+    {
+      "name": "session-7-7d-isolation-transport.txt.gz",
+      "source": ".local/session-7-7d-isolation-transport.log",
+      "bytes": 545,
+      "sha256": "7aec3d1aa7e5dd20a9377957c1cd2b0326322b882396a317c755bb6aec423b7e"
+    },
+    {
+      "name": "session-7-7d-isolation.txt.gz",
+      "source": ".local/session-7-7d-isolation.log",
+      "bytes": 209,
+      "sha256": "4b3072eb37193e8c98674ca6eb3f92fd7f564327558b7a4fc43a238cbccf5bbd"
+    },
+    {
+      "name": "session-7-7d-rename-repro.txt.gz",
+      "source": ".local/session-7-7d-rename-repro.log",
+      "bytes": 140,
+      "sha256": "60ee5596673d5101483d885bc84805ee560ed26db1b2a6795e4fe19fd4a6b775"
+    },
+    {
+      "name": "rename-sharing-repro.mjs.gz",
+      "source": ".local/rename-sharing-repro.mjs",
+      "bytes": 770,
+      "sha256": "8471605ed7faa58a9bc7828113d329ba345599a725b02e00a40a3c97207d5c77"
+    },
+    {
+      "name": "hygiene-isolation-capacity-content-200k-1-attempt-1-8d6883f5-8fa8-4d33-819e-5a5c5961deb2.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-content-200k-1-attempt-1-8d6883f5-8fa8-4d33-819e-5a5c5961deb2.json",
+      "bytes": 2771,
+      "sha256": "c162fa550dac8c3d399916bc619b29547eb330c08bca681af3dc5fc43db27280"
+    },
+    {
+      "name": "hygiene-isolation-capacity-content-200k-1-preparation-a303b3f4-959f-4b7d-9e86-b901b1d8c1a3.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-content-200k-1-preparation-a303b3f4-959f-4b7d-9e86-b901b1d8c1a3.json",
+      "bytes": 382,
+      "sha256": "7e3742c357062ba0f8cea3cd6aecb5693a1eea6220f17395c880e19d5ea74975"
+    },
+    {
+      "name": "hygiene-isolation-capacity-content-200k-2-attempt-1-ce1e8154-273f-4077-bc8a-4f20bd6471d2.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-content-200k-2-attempt-1-ce1e8154-273f-4077-bc8a-4f20bd6471d2.json",
+      "bytes": 2846,
+      "sha256": "726f68ce6a7c72a6e1ba23185a384873d23a67a99d700f934670234a5e3fcb54"
+    },
+    {
+      "name": "hygiene-isolation-capacity-content-200k-2-preparation-1be1245a-b964-4824-97f0-b8d686ac7aee.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-content-200k-2-preparation-1be1245a-b964-4824-97f0-b8d686ac7aee.json",
+      "bytes": 379,
+      "sha256": "8ef7ef11c2f12ea8d1210f6a136a7a9cd142fecd07386be1654a65e4211136c5"
+    },
+    {
+      "name": "hygiene-isolation-capacity-content-200k-3-attempt-1-eda7a27a-a485-40be-8954-52c2dbd2b922.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-content-200k-3-attempt-1-eda7a27a-a485-40be-8954-52c2dbd2b922.json",
+      "bytes": 2772,
+      "sha256": "2d1562768736b2acc8059148893ee2326707dd4a88f4275507a536c1a32e25d0"
+    },
+    {
+      "name": "hygiene-isolation-capacity-content-200k-3-preparation-41de5741-4f33-475f-a11c-bf003c235f96.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-content-200k-3-preparation-41de5741-4f33-475f-a11c-bf003c235f96.json",
+      "bytes": 378,
+      "sha256": "bb65c266425dc198bcc8de97ab048d42c222fa36e44d49f91312fce3abf53fa5"
+    },
+    {
+      "name": "hygiene-isolation-capacity-history-200k-1-attempt-1-f871be80-196a-4d61-b41c-96b951165948.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-history-200k-1-attempt-1-f871be80-196a-4d61-b41c-96b951165948.json",
+      "bytes": 2824,
+      "sha256": "0e52f7e6c893d69c1b49c70282c4ad66c9113ada149c593aac89581c297908e7"
+    },
+    {
+      "name": "hygiene-isolation-capacity-history-200k-1-preparation-df5900dc-c920-4b8a-b3ff-3a5654b2c4be.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-history-200k-1-preparation-df5900dc-c920-4b8a-b3ff-3a5654b2c4be.json",
+      "bytes": 377,
+      "sha256": "305f91fcc4ecdab19424ee1b8f8312e76a86574f57f141142f3b202d07fba2f9"
+    },
+    {
+      "name": "hygiene-isolation-capacity-history-200k-2-attempt-1-bcdbdeed-c27d-4166-bd03-1faacbd7ccd3.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-history-200k-2-attempt-1-bcdbdeed-c27d-4166-bd03-1faacbd7ccd3.json",
+      "bytes": 2844,
+      "sha256": "724cafd57170744e1256af6068824a766ff2cb08546e5a0ccaf7ec58a6875925"
+    },
+    {
+      "name": "hygiene-isolation-capacity-history-200k-2-preparation-2aea7a37-d9cf-41d9-89f4-0e55f639e6b2.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-history-200k-2-preparation-2aea7a37-d9cf-41d9-89f4-0e55f639e6b2.json",
+      "bytes": 378,
+      "sha256": "a0fa00dbd14ee8f27065ee14a5e3224adb9898bd43f84efcf026908a78686532"
+    },
+    {
+      "name": "hygiene-isolation-capacity-history-200k-3-attempt-1-45781db6-cd28-4bd1-9086-f69d392a46b7.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-history-200k-3-attempt-1-45781db6-cd28-4bd1-9086-f69d392a46b7.json",
+      "bytes": 2854,
+      "sha256": "ed966ab1563e6d17203db2dbdad7af123c3a75f2e2a260ba5d27f9068a9d179a"
+    },
+    {
+      "name": "hygiene-isolation-capacity-history-200k-3-preparation-6e57d0b4-2696-46cc-a6a8-e3f1a70991f5.json.gz",
+      "source": ".local/measurement-hygiene/isolation-capacity-history-200k-3-preparation-6e57d0b4-2696-46cc-a6a8-e3f1a70991f5.json",
+      "bytes": 378,
+      "sha256": "e1a6e4d9d43a7d38c0e921018f1c4ab54dd3dbdf30b09a59356ac67ec96cd3bb"
+    },
+    {
+      "name": "hygiene-isolation-cold-content-1m-1-attempt-1-5cc73225-f205-482f-a843-b8ab819e8203.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-content-1m-1-attempt-1-5cc73225-f205-482f-a843-b8ab819e8203.json",
+      "bytes": 1826,
+      "sha256": "fb87b720f1d9c7a5ab9c5e5032524734039e9fed2d7a9a75209b9efb5f3cc6b2"
+    },
+    {
+      "name": "hygiene-isolation-cold-content-1m-1-preparation-46bf89c6-c15c-4359-886b-b137e0a28c3a.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-content-1m-1-preparation-46bf89c6-c15c-4359-886b-b137e0a28c3a.json",
+      "bytes": 376,
+      "sha256": "8c16778e65d1eadbe28acfc8d812132127bd2854c0306b8a5bb4ee905802fcac"
+    },
+    {
+      "name": "hygiene-isolation-cold-content-1m-2-attempt-1-609cefae-5e5c-44b0-a1b8-2b338f130580.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-content-1m-2-attempt-1-609cefae-5e5c-44b0-a1b8-2b338f130580.json",
+      "bytes": 1802,
+      "sha256": "570ff1259368cea799336612251bcbed8b6954c7f299b8d29779783fc341990f"
+    },
+    {
+      "name": "hygiene-isolation-cold-content-1m-2-preparation-3b797925-2724-4d8c-82e9-cb5b08a643e0.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-content-1m-2-preparation-3b797925-2724-4d8c-82e9-cb5b08a643e0.json",
+      "bytes": 374,
+      "sha256": "1d4ec41a5ffab2997ee8b2d69e18fefe96fe61654ba16643e983812b20c97ebc"
+    },
+    {
+      "name": "hygiene-isolation-cold-content-1m-3-attempt-1-7ce42312-252c-4d6e-944c-577c9b5b524e.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-content-1m-3-attempt-1-7ce42312-252c-4d6e-944c-577c9b5b524e.json",
+      "bytes": 1796,
+      "sha256": "0427349fc2efbe53b60990048aa191e538bbd26cb062f34830bc7d6b8f3a2d7f"
+    },
+    {
+      "name": "hygiene-isolation-cold-content-1m-3-preparation-b3fcd6e9-735b-400b-9e4c-ff57336cb521.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-content-1m-3-preparation-b3fcd6e9-735b-400b-9e4c-ff57336cb521.json",
+      "bytes": 373,
+      "sha256": "209ad2e7bb0abb09630c692b8d6f5fb425c5a6175a8517a516ef1a97e9398f3e"
+    },
+    {
+      "name": "hygiene-isolation-cold-history-1m-1-attempt-1-8ac7848e-de9b-4cc3-af95-5cb29eabcf3d.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-history-1m-1-attempt-1-8ac7848e-de9b-4cc3-af95-5cb29eabcf3d.json",
+      "bytes": 2056,
+      "sha256": "5d5e063fc9aebad09a1a4417000faaaff9f93e4ba9effa163c084e70a0f49eaf"
+    },
+    {
+      "name": "hygiene-isolation-cold-history-1m-1-preparation-2e45ce90-bd76-4e14-bb4a-f5ed9640a50c.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-history-1m-1-preparation-2e45ce90-bd76-4e14-bb4a-f5ed9640a50c.json",
+      "bytes": 373,
+      "sha256": "dc380baadf7b5bba8e331700af980dfef576a3e61a2d508bbe2b92d5c6cfa5aa"
+    },
+    {
+      "name": "hygiene-isolation-cold-history-1m-2-attempt-1-46a8c1ea-a790-4e2a-90c6-503caa10bd13.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-history-1m-2-attempt-1-46a8c1ea-a790-4e2a-90c6-503caa10bd13.json",
+      "bytes": 2002,
+      "sha256": "b5b422ff48bc97cc0585d60f799dc51c9ea6c2df0c0b329677be25cc08f26a0c"
+    },
+    {
+      "name": "hygiene-isolation-cold-history-1m-2-preparation-686fabdb-2080-486d-8940-6ba5ac60a685.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-history-1m-2-preparation-686fabdb-2080-486d-8940-6ba5ac60a685.json",
+      "bytes": 371,
+      "sha256": "7c24897b1d22175b862cd9ec8403e7783c51b80904a723cf4ec525c25650d53c"
+    },
+    {
+      "name": "hygiene-isolation-cold-history-1m-3-attempt-1-fe684371-4466-4fc5-8276-277a0d20fcbe.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-history-1m-3-attempt-1-fe684371-4466-4fc5-8276-277a0d20fcbe.json",
+      "bytes": 2029,
+      "sha256": "b75623489aaead0eb3997a86e1b6db09c7369504d187e8f3736bc229a8e5743d"
+    },
+    {
+      "name": "hygiene-isolation-cold-history-1m-3-preparation-031dc140-dbf1-4064-b376-27f68c56fea6.json.gz",
+      "source": ".local/measurement-hygiene/isolation-cold-history-1m-3-preparation-031dc140-dbf1-4064-b376-27f68c56fea6.json",
+      "bytes": 373,
+      "sha256": "4e737d1762feb147274822489d98d3ea5cf9b1df4a696eece53e5a97acfc4fc0"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-false-1-attempt-1-4b331bbd-0451-4938-abf1-03dc30e97c66.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-false-1-attempt-1-4b331bbd-0451-4938-abf1-03dc30e97c66.json",
+      "bytes": 222537,
+      "sha256": "109ef0701321884328478b022c5b20473f62c44f7e931701e6101cb91d4617b8"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-false-1-attempt-1-a14af2b0-5320-4748-afaa-d8720e528bf4.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-false-1-attempt-1-a14af2b0-5320-4748-afaa-d8720e528bf4.json",
+      "bytes": 222480,
+      "sha256": "afaf8203bae25dcde4dcf919328b627eb93dd6d14a674a98fa11f958a09b4065"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-false-1-preparation-295622bc-a304-48f4-bd88-32e7660e33e9.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-false-1-preparation-295622bc-a304-48f4-bd88-32e7660e33e9.json",
+      "bytes": 378,
+      "sha256": "2f674f7cdd40e69e957ef84b4a3e6951e0704945d848fba84ed8b846bcc6692c"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-false-1-preparation-f0ca6cf4-800e-4678-a6af-ec5d33134e27.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-false-1-preparation-f0ca6cf4-800e-4678-a6af-ec5d33134e27.json",
+      "bytes": 379,
+      "sha256": "0cec9068063dbf17f7d8a2a135f56d0ff597a0a162d63e2547f2a3d7cfd6dfcd"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-false-2-attempt-1-9c01b03c-e1c7-4dc5-a4fa-9afbe3021cc5.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-false-2-attempt-1-9c01b03c-e1c7-4dc5-a4fa-9afbe3021cc5.json",
+      "bytes": 222142,
+      "sha256": "b94c482e59900e8fabae2730477553a3970d624c923d4b8bd9c6a855f6ba1126"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-false-2-preparation-b24984b1-48ae-4e40-9763-eb1ad5b3b71c.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-false-2-preparation-b24984b1-48ae-4e40-9763-eb1ad5b3b71c.json",
+      "bytes": 381,
+      "sha256": "a42f5384380861569cb1d9321bfcae83de43e43d25cd68487cf7e644a8bfb386"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-false-3-attempt-1-a91a365a-a19f-421a-b64b-92a7dfac8e90.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-false-3-attempt-1-a91a365a-a19f-421a-b64b-92a7dfac8e90.json",
+      "bytes": 222519,
+      "sha256": "e4c5e19a7a636270b5194c304c1f099b1770456789378c811fd8ce31a7db33f7"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-false-3-preparation-eb53375f-db77-4393-9692-7593ff5c8fc0.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-false-3-preparation-eb53375f-db77-4393-9692-7593ff5c8fc0.json",
+      "bytes": 380,
+      "sha256": "c5dc2638f3ca3efab8dc89ec5789ed7a8ac3ff37b995ecb8dd56d4fb86aea110"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-true-1-attempt-1-7421594f-6978-4171-a74d-713d1b3b5a65.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-true-1-attempt-1-7421594f-6978-4171-a74d-713d1b3b5a65.json",
+      "bytes": 224132,
+      "sha256": "d08932a02f18f8db544ac5038a83936ccc1dc5097db224ac45b4049e1a3b09b6"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-true-1-attempt-1-be663c66-2e81-40c1-afa2-c99f08adb7a7.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-true-1-attempt-1-be663c66-2e81-40c1-afa2-c99f08adb7a7.json",
+      "bytes": 1797,
+      "sha256": "95bb76327ba80eb3aff2ccdbbfaed7369d5f75cd860e856c6319ca380a36e627"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-true-1-preparation-04d8027a-b17f-4883-9dac-6926b574ca10.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-true-1-preparation-04d8027a-b17f-4883-9dac-6926b574ca10.json",
+      "bytes": 379,
+      "sha256": "2ab81b11935a3f5e4343ad333902fb7a629bf43ddd3c8328c00881cf47945b8a"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-true-1-preparation-6f8f987b-9723-401f-ac8e-b519fbb2e21f.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-true-1-preparation-6f8f987b-9723-401f-ac8e-b519fbb2e21f.json",
+      "bytes": 379,
+      "sha256": "182eb4498863dda95e746ddd9f71374df52ef7058826cae431e8051813b07515"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-true-2-attempt-1-e64a2cdd-04f8-4bd5-99c0-61a47a83e761.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-true-2-attempt-1-e64a2cdd-04f8-4bd5-99c0-61a47a83e761.json",
+      "bytes": 223862,
+      "sha256": "e4c5efcf97e5fc91574c52ef2ba827ab170fe7ea4b9487bb699615fc8ca84e00"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-true-2-preparation-7f8166ea-cd09-4d56-ac54-e8220c67836d.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-true-2-preparation-7f8166ea-cd09-4d56-ac54-e8220c67836d.json",
+      "bytes": 378,
+      "sha256": "f5b1d70e480bdc7967b8bcd946672fca212ec9f173b37a3b8c8f57fe13fbd7bf"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-true-3-attempt-1-7c022114-8070-4540-b6d5-06a764a0add1.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-true-3-attempt-1-7c022114-8070-4540-b6d5-06a764a0add1.json",
+      "bytes": 224322,
+      "sha256": "5219398283b13b48110159149e163ec223183fa52c31f7188a53a92f82b24046"
+    },
+    {
+      "name": "hygiene-isolation-mixed-content-1m-true-3-preparation-ceb68a5c-d9f2-4914-87bb-1561c58a325e.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-content-1m-true-3-preparation-ceb68a5c-d9f2-4914-87bb-1561c58a325e.json",
+      "bytes": 379,
+      "sha256": "13082a4571258fa149e1bc945ff9af322dd39255521579c4c0110295916af4e9"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-false-1-attempt-1-3a1604f5-3d43-4960-852d-7a62a623fef1.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-false-1-attempt-1-3a1604f5-3d43-4960-852d-7a62a623fef1.json",
+      "bytes": 232760,
+      "sha256": "67450ff3ece6c22b58273daf03264f704f250e017b4c19969cd08a28723e1e94"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-false-1-preparation-b47188fd-a336-487e-aac2-8c45e25f1c18.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-false-1-preparation-b47188fd-a336-487e-aac2-8c45e25f1c18.json",
+      "bytes": 378,
+      "sha256": "f7f4fe94628a2ad908f1adf8ff5483a3dffe78836feb9e141f9de591c68acbc4"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-false-2-attempt-1-d807c6fd-2700-4544-9cf8-e602f4c53ab5.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-false-2-attempt-1-d807c6fd-2700-4544-9cf8-e602f4c53ab5.json",
+      "bytes": 232269,
+      "sha256": "f0963e481b36da08fc9158d0c2313647feb72aecbdd9c146b6393d3c97fc6f24"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-false-2-preparation-b21851ed-b675-4de2-b1d7-bf3516c7feda.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-false-2-preparation-b21851ed-b675-4de2-b1d7-bf3516c7feda.json",
+      "bytes": 382,
+      "sha256": "d88d8040256995bd2a7a1a9f00593f1c223b77aef1a5cfefa6aca2d76f5efef2"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-false-3-attempt-1-a079ab1a-a70e-4237-968f-6bb3a83959c5.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-false-3-attempt-1-a079ab1a-a70e-4237-968f-6bb3a83959c5.json",
+      "bytes": 232708,
+      "sha256": "1426ddc28de460f343adc01a0ae39cff9ccca98195405e3b8cc5aea484d3c495"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-false-3-preparation-5bf4210b-7b42-40de-8d16-e1e875feacf4.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-false-3-preparation-5bf4210b-7b42-40de-8d16-e1e875feacf4.json",
+      "bytes": 378,
+      "sha256": "89cbc7f4dc92b0060c5bdeb1b25f25582d7ebd74fa07c73e9f3fa424fba22c37"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-true-1-attempt-1-41364d0a-1e4b-4695-be91-bbad773559ec.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-true-1-attempt-1-41364d0a-1e4b-4695-be91-bbad773559ec.json",
+      "bytes": 235819,
+      "sha256": "25d5a5d7d7ec19ca11fa5261525d5b7a7b2c787b07528aa6ebf3de113f6458d0"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-true-1-preparation-1ccd204d-f4c0-4dbe-9e56-ebd6426ba806.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-true-1-preparation-1ccd204d-f4c0-4dbe-9e56-ebd6426ba806.json",
+      "bytes": 380,
+      "sha256": "31feb1389a67bc2fffef657505988bf4afbc532a60386f1cc25218bb3da4f531"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-true-2-attempt-1-d8a55d47-6ca5-4b13-974b-676c25bbf5e0.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-true-2-attempt-1-d8a55d47-6ca5-4b13-974b-676c25bbf5e0.json",
+      "bytes": 235207,
+      "sha256": "295cf2b286c2b72fe39194db083e595c511c55b29fda96ecca7b06d5f3e7799d"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-true-2-preparation-bef26a51-78fb-4323-89a4-aba688919ea0.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-true-2-preparation-bef26a51-78fb-4323-89a4-aba688919ea0.json",
+      "bytes": 379,
+      "sha256": "20bcc963eaa82c4a3f38b2a7af8de804a355a52d36b541c46ca4821b226e31bd"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-true-3-attempt-1-7301eeff-327d-464e-997e-750b6ba30afd.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-true-3-attempt-1-7301eeff-327d-464e-997e-750b6ba30afd.json",
+      "bytes": 235373,
+      "sha256": "d5e6c4c5b9051ff27dd35ea6ea4fcca83a27d3c089f1b2d21bacf1829f9ef72a"
+    },
+    {
+      "name": "hygiene-isolation-mixed-history-1m-true-3-preparation-8a09daff-9740-460e-a35a-47fc74f9113f.json.gz",
+      "source": ".local/measurement-hygiene/isolation-mixed-history-1m-true-3-preparation-8a09daff-9740-460e-a35a-47fc74f9113f.json",
+      "bytes": 380,
+      "sha256": "57670bb9deba424ef45e93c59cbb199294404cd37ca52a0bec4dd3c8589fae1e"
+    },
+    {
+      "name": "generated-patches.json.gz",
+      "source": ".local/isolation-source/patches.json",
+      "bytes": 377,
+      "sha256": "5f44994378f7eca6bdf4581334d9ae6cbd86ab208d038d3489d5cac4d9a706c3"
+    },
+    {
+      "name": "generated-room.ts.txt.gz",
+      "source": ".local/isolation-source/room.ts.txt",
+      "bytes": 2746,
+      "sha256": "4bca64d879278d8925570f2d845e35a8873b0500626cb93e2c28b201b0d35409"
+    },
+    {
+      "name": "generated-server.ts.txt.gz",
+      "source": ".local/isolation-source/server.ts.txt",
+      "bytes": 5224,
+      "sha256": "d9119a5d08584208457b50ac2f2a4a7dc52c8659ceba7ac644fd2815c3552e35"
+    },
+    {
+      "name": "host.json",
+      "source": ".local/isolation/host.json",
+      "bytes": 342,
+      "sha256": "d6eba61f1d2a68f9ed30cf2f0d1ed2fcd2d97ff6e8551b80aa382edc7fa0d8c7"
+    }
+  ],
+  "candidateSources": {
+    "apps/collab/src/service/server.ts": "d6cab6a857392e15c2dc24acdb9c11ce395c8f6276e1eeff63f4441d28cb79a0",
+    "apps/collab/src/service/room.ts": "9f931882334a6571c9e05ab0c2795690e8c8462f320c8ebb7aabf8bacdd135d2",
+    "apps/collab/src/testing/files-mixed.e2e.ts": "1a1b1c13ec90e2b0ce058a5c2cca0199c14f0cdd904ced4b5ff4ff48f0c6cb2d",
+    "apps/collab/src/testing/cold.e2e.ts": "ab3fa580de39b28638c467f237f00234cd5e1ab60c045df79d16377a3873b73d",
+    "apps/collab/src/testing/capacity.e2e.ts": "94dd30e60ef97b2934fe34ad55eac792b241c0d663e2cfdd950348f45cf5f653",
+    "scripts/test-collab.mjs": "4ec4b233475a613e1513f031b0c8b1b3b9774c0169e83094cba47f9a1ea3d808",
+    "scripts/file-mixed-converter.mjs": "81093e60e75c73b5dc9a3ff5cb7c572006e50df5c1b711f04b8828f86f413193",
+    "packages/storage/src/exchange.ts": "31109f1a827bf6632003729baa7b57e4338e0c075b0790beb7b6d728cfcc5b5d",
+    "packages/storage/src/exchange.test.ts": "9879d98431832b51ede4d63d1530c4268de8181d9c42ddcd294c5ab53090c005",
+    "proof/7d-isolation/admission.mjs": "1f3dc9a46530f8a71ef3a61a254e271b749541579c8da20a200dca7a9f3da0b7",
+    "proof/7d-isolation/build.mjs": "f0b9d834b45b10c019d23d5bba11116fc1f6448112720281f16d454c1ad77445",
+    "proof/7d-isolation/measure.mjs": "d0bd7f6df4894409ec0b40bda41903b5358f6db8812b633d34f38455616b7055",
+    "proof/7d-isolation/publication-worker.mjs": "c890393b37d1bc41d5885297fbc3b31a830a21c48bd751263d08fe9a1b27a954",
+    "proof/7d-isolation/README.md": "088ff2936959f79b9577db37e8b3ceef20559df5db9c623cf306df8891d0312f",
+    "proof/7d-isolation/recovery.mjs": "fdeb3b481fe8f36a868dd85675bcc70cfc1f82eab66134f4b57728abb361797a",
+    "proof/7d-isolation/remote-hocus.mjs": "69427ecb55f2e0643c8474617ecddc7a1797646bdce5270a987e927b2f90cd78",
+    "proof/7d-isolation/rpc.mjs": "3748b4ca841c74a3327f715e3f1c956c95c48829477fb93a23d38d59d49c45a8",
+    "proof/7d-isolation/run.mjs": "40a81e4566e1dac3a6fc0f6179b208c5a8f4bc3f697d4e9527f225bd3a4abd7f",
+    "proof/7d-isolation/summarize.mjs": "38f7eb27804ba458bc6ee166aab3424ce3cdc79a070398d5f45a2e539ac80af5"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "recordedAt": "2026-10-30T15:06:40.006Z",
+  "cpu": "AMD Ryzen 7 5800H with Radeon Graphics",
+  "logicalCpus": 16,
+  "totalRamBytes": 14877257728,
+  "operatingSystem": "Windows 11 Home",
+  "node": "v24.21.0",
+  "note": "Host inventory after the campaign; per-series power and memory are in hygiene records. Not a dedicated 4-vCPU host."
+}

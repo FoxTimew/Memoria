@@ -1,0 +1,1671 @@
+{
+  "generatedAt": "2026-10-30T15:00:49.693Z",
+  "scope": "Limited publication-isolation proof. Not integrated, no alternate comparison with main, no true-front CPU saturation qualification.",
+  "cold": [
+    {
+      "series": 1,
+      "code": 0,
+      "profile": "content-1M",
+      "publication": {
+        "memory": {
+          "rss": 343388160,
+          "heapTotal": 38653952,
+          "heapUsed": 23550792,
+          "external": 9439292,
+          "arrayBuffers": 3935115
+        },
+        "documents": 0
+      },
+      "encodedBytes": 1045110,
+      "businessBytes": 1040382,
+      "warmup": 2,
+      "iterations": 30,
+      "p95": 162.8631000000005,
+      "max": 167.70889999999963
+    },
+    {
+      "series": 1,
+      "code": 0,
+      "profile": "history-1M",
+      "publication": {
+        "memory": {
+          "rss": 475594752,
+          "heapTotal": 78417920,
+          "heapUsed": 62454016,
+          "external": 9434012,
+          "arrayBuffers": 3929835
+        },
+        "documents": 0
+      },
+      "encodedBytes": 1042470,
+      "businessBytes": 100802,
+      "warmup": 2,
+      "iterations": 30,
+      "p95": 335.52189999999973,
+      "max": 394.14959999999974
+    },
+    {
+      "series": 2,
+      "code": 0,
+      "profile": "content-1M",
+      "publication": {
+        "memory": {
+          "rss": 339820544,
+          "heapTotal": 38391808,
+          "heapUsed": 23590896,
+          "external": 9439292,
+          "arrayBuffers": 3935115
+        },
+        "documents": 0
+      },
+      "encodedBytes": 1045110,
+      "businessBytes": 1040382,
+      "warmup": 2,
+      "iterations": 30,
+      "p95": 162.9404000000004,
+      "max": 171.07520000000022
+    },
+    {
+      "series": 2,
+      "code": 0,
+      "profile": "history-1M",
+      "publication": {
+        "memory": {
+          "rss": 454250496,
+          "heapTotal": 82247680,
+          "heapUsed": 65855544,
+          "external": 9434012,
+          "arrayBuffers": 3929835
+        },
+        "documents": 0
+      },
+      "encodedBytes": 1042470,
+      "businessBytes": 100802,
+      "warmup": 2,
+      "iterations": 30,
+      "p95": 352.14100000000053,
+      "max": 373.2995000000001
+    },
+    {
+      "series": 3,
+      "code": 0,
+      "profile": "content-1M",
+      "publication": {
+        "memory": {
+          "rss": 341307392,
+          "heapTotal": 39440384,
+          "heapUsed": 23605048,
+          "external": 9439292,
+          "arrayBuffers": 3935115
+        },
+        "documents": 0
+      },
+      "encodedBytes": 1045110,
+      "businessBytes": 1040382,
+      "warmup": 2,
+      "iterations": 30,
+      "p95": 161.40440000000035,
+      "max": 175.44980000000032
+    },
+    {
+      "series": 3,
+      "code": 0,
+      "profile": "history-1M",
+      "publication": {
+        "memory": {
+          "rss": 448389120,
+          "heapTotal": 83161088,
+          "heapUsed": 63486120,
+          "external": 9434012,
+          "arrayBuffers": 3929835
+        },
+        "documents": 0
+      },
+      "encodedBytes": 1042470,
+      "businessBytes": 100802,
+      "warmup": 2,
+      "iterations": 30,
+      "p95": 340.7521999999999,
+      "max": 383.67069999999967
+    }
+  ],
+  "capacity": [
+    {
+      "profile": "content-200K",
+      "series": 1,
+      "code": 0,
+      "pages": 30,
+      "authenticatedSockets": 30,
+      "chargedBytes": 1056964608,
+      "fixedBytes": 301989888,
+      "peakRss": 631107584,
+      "processLifetimePeakRss": 633286656,
+      "publicationBaseline": {
+        "memory": {
+          "rss": 359653376,
+          "heapTotal": 30789632,
+          "heapUsed": 11426552,
+          "external": 5744028,
+          "arrayBuffers": 253155
+        },
+        "documents": 0
+      },
+      "publication": {
+        "memory": {
+          "rss": 451452928,
+          "heapTotal": 65916928,
+          "heapUsed": 62409984,
+          "external": 5715750,
+          "arrayBuffers": 208305
+        },
+        "documents": 30
+      },
+      "workerDistribution": [
+        {
+          "id": 1,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 3,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 5,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 7,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "profile": "history-200K",
+      "series": 1,
+      "code": 0,
+      "pages": 30,
+      "authenticatedSockets": 30,
+      "chargedBytes": 1056964608,
+      "fixedBytes": 301989888,
+      "peakRss": 805695488,
+      "processLifetimePeakRss": 805695488,
+      "publicationBaseline": {
+        "memory": {
+          "rss": 407236608,
+          "heapTotal": 30265344,
+          "heapUsed": 12255784,
+          "external": 5744028,
+          "arrayBuffers": 253155
+        },
+        "documents": 0
+      },
+      "publication": {
+        "memory": {
+          "rss": 753627136,
+          "heapTotal": 131452928,
+          "heapUsed": 106828000,
+          "external": 5764021,
+          "arrayBuffers": 257735
+        },
+        "documents": 30
+      },
+      "workerDistribution": [
+        {
+          "id": 1,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 3,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 5,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 7,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "profile": "content-200K",
+      "series": 2,
+      "code": 0,
+      "pages": 30,
+      "authenticatedSockets": 30,
+      "chargedBytes": 1056964608,
+      "fixedBytes": 301989888,
+      "peakRss": 627187712,
+      "processLifetimePeakRss": 631062528,
+      "publicationBaseline": {
+        "memory": {
+          "rss": 358793216,
+          "heapTotal": 30789632,
+          "heapUsed": 11280640,
+          "external": 5697468,
+          "arrayBuffers": 206595
+        },
+        "documents": 0
+      },
+      "publication": {
+        "memory": {
+          "rss": 545263616,
+          "heapTotal": 66441216,
+          "heapUsed": 62615392,
+          "external": 5723108,
+          "arrayBuffers": 215663
+        },
+        "documents": 30
+      },
+      "workerDistribution": [
+        {
+          "id": 1,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 3,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 5,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 7,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "profile": "history-200K",
+      "series": 2,
+      "code": 0,
+      "pages": 30,
+      "authenticatedSockets": 30,
+      "chargedBytes": 1056964608,
+      "fixedBytes": 301989888,
+      "peakRss": 818216960,
+      "processLifetimePeakRss": 818434048,
+      "publicationBaseline": {
+        "memory": {
+          "rss": 406786048,
+          "heapTotal": 30527488,
+          "heapUsed": 11274840,
+          "external": 5697468,
+          "arrayBuffers": 206595
+        },
+        "documents": 0
+      },
+      "publication": {
+        "memory": {
+          "rss": 753967104,
+          "heapTotal": 136957952,
+          "heapUsed": 112144072,
+          "external": 5814007,
+          "arrayBuffers": 307721
+        },
+        "documents": 30
+      },
+      "workerDistribution": [
+        {
+          "id": 1,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 3,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 5,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 7,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "profile": "content-200K",
+      "series": 3,
+      "code": 0,
+      "pages": 30,
+      "authenticatedSockets": 30,
+      "chargedBytes": 1056964608,
+      "fixedBytes": 301989888,
+      "peakRss": 629395456,
+      "processLifetimePeakRss": 629854208,
+      "publicationBaseline": {
+        "memory": {
+          "rss": 359976960,
+          "heapTotal": 30265344,
+          "heapUsed": 12254496,
+          "external": 5744028,
+          "arrayBuffers": 253155
+        },
+        "documents": 0
+      },
+      "publication": {
+        "memory": {
+          "rss": 448892928,
+          "heapTotal": 65916928,
+          "heapUsed": 62980840,
+          "external": 5747020,
+          "arrayBuffers": 237737
+        },
+        "documents": 30
+      },
+      "workerDistribution": [
+        {
+          "id": 1,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 3,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 5,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 7,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "profile": "history-200K",
+      "series": 3,
+      "code": 0,
+      "pages": 30,
+      "authenticatedSockets": 30,
+      "chargedBytes": 1056964608,
+      "fixedBytes": 301989888,
+      "peakRss": 805740544,
+      "processLifetimePeakRss": 805773312,
+      "publicationBaseline": {
+        "memory": {
+          "rss": 407060480,
+          "heapTotal": 30527488,
+          "heapUsed": 11278616,
+          "external": 5697468,
+          "arrayBuffers": 206595
+        },
+        "documents": 0
+      },
+      "publication": {
+        "memory": {
+          "rss": 753672192,
+          "heapTotal": 136957952,
+          "heapUsed": 113905280,
+          "external": 5838947,
+          "arrayBuffers": 332661
+        },
+        "documents": 30
+      },
+      "workerDistribution": [
+        {
+          "id": 1,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 3,
+          "replicas": 8,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 5,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        },
+        {
+          "id": 7,
+          "replicas": 7,
+          "waiting": 0,
+          "bytes": 0
+        }
+      ]
+    }
+  ],
+  "mixed": {
+    "groups": [
+      {
+        "key": "content-1M:false",
+        "series": 3,
+        "primary": {
+          "server": {
+            "values": [14.550300000002608, 14.411000000000058, 15.732799999997951],
+            "median": 14.550300000002608
+          },
+          "transaction": {
+            "values": [10.877100000005157, 10.027099999999336, 11.251100000001315],
+            "median": 10.877100000005157
+          },
+          "wire": {
+            "values": [36.28580000000511, 35.81529999999839, 38.502300000000105],
+            "median": 36.28580000000511
+          },
+          "otherClient": {
+            "values": [36.2265, 35.50015, 38.38645],
+            "median": 36.2265
+          }
+        },
+        "maximumTypicalP95": {
+          "server": {
+            "values": [14.861399999994319, 15.329200000000128, 16.214500000001863],
+            "median": 15.329200000000128
+          },
+          "wire": {
+            "values": [40.613900000000285, 40.352600000001985, 43.623099999997066],
+            "median": 40.613900000000285
+          },
+          "otherClient": {
+            "values": [40.60265, 39.78425, 43.27505],
+            "median": 40.60265
+          }
+        }
+      },
+      {
+        "key": "content-1M:true",
+        "series": 3,
+        "primary": {
+          "server": {
+            "values": [18.940199999997276, 17.74699999999575, 20.218699999997625],
+            "median": 18.940199999997276
+          },
+          "transaction": {
+            "values": [13.36590000000433, 12.619300000005751, 15.126300000003539],
+            "median": 13.36590000000433
+          },
+          "wire": {
+            "values": [45.541300000000774, 43.10080000000016, 47.74409999999625],
+            "median": 45.541300000000774
+          },
+          "otherClient": {
+            "values": [44.75085, 43.178, 47.67765],
+            "median": 44.75085
+          }
+        },
+        "maximumTypicalP95": {
+          "server": {
+            "values": [18.50209999999788, 17.430899999999383, 19.83339999999589],
+            "median": 18.50209999999788
+          },
+          "wire": {
+            "values": [47.728800000000774, 46.87700000000041, 52.675999999999476],
+            "median": 47.728800000000774
+          },
+          "otherClient": {
+            "values": [46.54195, 46.7263, 52.295],
+            "median": 46.7263
+          }
+        }
+      },
+      {
+        "key": "history-1M:false",
+        "series": 3,
+        "primary": {
+          "server": {
+            "values": [64.50879999999597, 63.41089999998803, 61.28889999999956],
+            "median": 63.41089999998803
+          },
+          "transaction": {
+            "values": [11.626900000002934, 11.82369999999355, 11.655299999998533],
+            "median": 11.655299999998533
+          },
+          "wire": {
+            "values": [299.7338000000018, 295.0561999999991, 296.604800000001],
+            "median": 296.604800000001
+          },
+          "otherClient": {
+            "values": [326.54555, 321.17145, 329.0215],
+            "median": 326.54555
+          }
+        },
+        "maximumTypicalP95": {
+          "server": {
+            "values": [20.119299999998475, 21.973400000002584, 23.65129999999772],
+            "median": 21.973400000002584
+          },
+          "wire": {
+            "values": [85.17840000000069, 80.2780999999959, 87.24309999999969],
+            "median": 85.17840000000069
+          },
+          "otherClient": {
+            "values": [90.51235, 87.59235, 98.6377],
+            "median": 90.51235
+          }
+        }
+      },
+      {
+        "key": "history-1M:true",
+        "series": 3,
+        "primary": {
+          "server": {
+            "values": [86.28819999999541, 72.86820000001171, 76.80190000000584],
+            "median": 76.80190000000584
+          },
+          "transaction": {
+            "values": [13.293599999997241, 12.160599999995611, 13.113200000007055],
+            "median": 13.113200000007055
+          },
+          "wire": {
+            "values": [426.85579999999027, 388.7474000000002, 402.7997000000032],
+            "median": 402.7997000000032
+          },
+          "otherClient": {
+            "values": [452.1194, 422.17305, 432.5717],
+            "median": 432.5717
+          }
+        },
+        "maximumTypicalP95": {
+          "server": {
+            "values": [23.36040000000503, 23.817300000002433, 24.34320000000298],
+            "median": 23.817300000002433
+          },
+          "wire": {
+            "values": [104.72249999999622, 103.01900000000023, 102.55419999999867],
+            "median": 103.01900000000023
+          },
+          "otherClient": {
+            "values": [116.56965, 115.8949, 114.8801],
+            "median": 115.8949
+          }
+        }
+      }
+    ],
+    "rows": [
+      {
+        "profile": "content-1M",
+        "series": 1,
+        "conversions": false,
+        "code": 0,
+        "primary": {
+          "server": 14.550300000002608,
+          "transaction": 10.877100000005157,
+          "wire": 36.28580000000511,
+          "otherClient": 36.2265
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 14.738499999999476,
+            "transaction": 11.02560000000085,
+            "wire": 36.1362999999983,
+            "otherClient": 36.04795
+          },
+          {
+            "index": 2,
+            "server": 14.861399999994319,
+            "transaction": 10.903299999998126,
+            "wire": 40.613900000000285,
+            "otherClient": 40.60265
+          },
+          {
+            "index": 3,
+            "server": 13.746600000005856,
+            "transaction": 10.422600000005332,
+            "wire": 34.492400000001,
+            "otherClient": 34.4626
+          },
+          {
+            "index": 4,
+            "server": 14.336100000000442,
+            "transaction": 10.85229999999865,
+            "wire": 35.4900000000016,
+            "otherClient": 35.3066
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 14.861399999994319,
+          "transaction": 11.02560000000085,
+          "wire": 40.613900000000285,
+          "otherClient": 40.60265
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 450785280,
+              "heapTotal": 36294656,
+              "heapUsed": 26498400,
+              "external": 5731857,
+              "arrayBuffers": 216642
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 20,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "content-1M",
+        "series": 1,
+        "conversions": true,
+        "code": 0,
+        "primary": {
+          "server": 18.940199999997276,
+          "transaction": 13.36590000000433,
+          "wire": 45.541300000000774,
+          "otherClient": 44.75085
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 16.84259999999631,
+            "transaction": 13.586300000002666,
+            "wire": 44.455299999997806,
+            "otherClient": 44.31925
+          },
+          {
+            "index": 2,
+            "server": 18.265800000001036,
+            "transaction": 13.156600000002072,
+            "wire": 47.728800000000774,
+            "otherClient": 46.54195
+          },
+          {
+            "index": 3,
+            "server": 17.438499999996566,
+            "transaction": 13.664800000005926,
+            "wire": 41.77110000000175,
+            "otherClient": 41.53195
+          },
+          {
+            "index": 4,
+            "server": 18.50209999999788,
+            "transaction": 13.43119999999908,
+            "wire": 44.88940000000002,
+            "otherClient": 44.6998
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 18.50209999999788,
+          "transaction": 13.664800000005926,
+          "wire": 47.728800000000774,
+          "otherClient": 46.54195
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 577.989126,
+            "wallMs": 1048.1948000000048,
+            "cgroupPeakBytes": 93827072
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 15653.693640000001,
+            "wallMs": 16557.9202,
+            "cgroupPeakBytes": 95064064
+          }
+        ],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 549625856,
+              "heapTotal": 43896832,
+              "heapUsed": 26124024,
+              "external": 5773996,
+              "arrayBuffers": 258781
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 22,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "content-1M",
+        "series": 2,
+        "conversions": false,
+        "code": 0,
+        "primary": {
+          "server": 14.411000000000058,
+          "transaction": 10.027099999999336,
+          "wire": 35.81529999999839,
+          "otherClient": 35.50015
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 13.570800000001327,
+            "transaction": 10.711800000004587,
+            "wire": 34.20999999999913,
+            "otherClient": 34.8451
+          },
+          {
+            "index": 2,
+            "server": 15.329200000000128,
+            "transaction": 10.229700000003504,
+            "wire": 40.352600000001985,
+            "otherClient": 39.78425
+          },
+          {
+            "index": 3,
+            "server": 13.318500000001222,
+            "transaction": 10.680500000002212,
+            "wire": 34.1857,
+            "otherClient": 34.30335
+          },
+          {
+            "index": 4,
+            "server": 15.180999999996857,
+            "transaction": 11.810299999997369,
+            "wire": 36.548399999999674,
+            "otherClient": 37.25965
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 15.329200000000128,
+          "transaction": 11.810299999997369,
+          "wire": 40.352600000001985,
+          "otherClient": 39.78425
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 501256192,
+              "heapTotal": 34197504,
+              "heapUsed": 23458176,
+              "external": 5728214,
+              "arrayBuffers": 212999
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 19,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "content-1M",
+        "series": 2,
+        "conversions": true,
+        "code": 0,
+        "primary": {
+          "server": 17.74699999999575,
+          "transaction": 12.619300000005751,
+          "wire": 43.10080000000016,
+          "otherClient": 43.178
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 17.430899999999383,
+            "transaction": 12.691200000001118,
+            "wire": 43.0821999999971,
+            "otherClient": 42.9934
+          },
+          {
+            "index": 2,
+            "server": 17.411299999999756,
+            "transaction": 13.578100000006089,
+            "wire": 46.87700000000041,
+            "otherClient": 46.7263
+          },
+          {
+            "index": 3,
+            "server": 15.845499999995809,
+            "transaction": 12.48859999999695,
+            "wire": 40.63130000000092,
+            "otherClient": 40.5926
+          },
+          {
+            "index": 4,
+            "server": 17.014999999999418,
+            "transaction": 13.249599999995553,
+            "wire": 40.66330000000016,
+            "otherClient": 40.7451
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 17.430899999999383,
+          "transaction": 13.578100000006089,
+          "wire": 46.87700000000041,
+          "otherClient": 46.7263
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 571.5166360000001,
+            "wallMs": 1045.1910000000062,
+            "cgroupPeakBytes": 93843456
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 15881.833235,
+            "wallMs": 16785.8911,
+            "cgroupPeakBytes": 94408704
+          }
+        ],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 504066048,
+              "heapTotal": 43634688,
+              "heapUsed": 26360008,
+              "external": 5782964,
+              "arrayBuffers": 267749
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 22,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "content-1M",
+        "series": 3,
+        "conversions": false,
+        "code": 0,
+        "primary": {
+          "server": 15.732799999997951,
+          "transaction": 11.251100000001315,
+          "wire": 38.502300000000105,
+          "otherClient": 38.38645
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 16.214500000001863,
+            "transaction": 11.355300000002899,
+            "wire": 36.56629999999859,
+            "otherClient": 36.30475
+          },
+          {
+            "index": 2,
+            "server": 15.962400000003981,
+            "transaction": 11.176900000005844,
+            "wire": 43.623099999997066,
+            "otherClient": 43.27505
+          },
+          {
+            "index": 3,
+            "server": 14.678099999997357,
+            "transaction": 11.359199999998964,
+            "wire": 35.38839999999982,
+            "otherClient": 35.70265
+          },
+          {
+            "index": 4,
+            "server": 14.587200000001758,
+            "transaction": 10.980500000005122,
+            "wire": 36.74539999999979,
+            "otherClient": 36.1541
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 16.214500000001863,
+          "transaction": 11.359199999998964,
+          "wire": 43.623099999997066,
+          "otherClient": 43.27505
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 445763584,
+              "heapTotal": 35246080,
+              "heapUsed": 25526432,
+              "external": 5780204,
+              "arrayBuffers": 264989
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 20,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "content-1M",
+        "series": 3,
+        "conversions": true,
+        "code": 0,
+        "primary": {
+          "server": 20.218699999997625,
+          "transaction": 15.126300000003539,
+          "wire": 47.74409999999625,
+          "otherClient": 47.67765
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 19.83339999999589,
+            "transaction": 15.019099999997707,
+            "wire": 46.68039999999746,
+            "otherClient": 46.393
+          },
+          {
+            "index": 2,
+            "server": 18.920699999995122,
+            "transaction": 14.252099999997881,
+            "wire": 52.675999999999476,
+            "otherClient": 52.295
+          },
+          {
+            "index": 3,
+            "server": 18.843400000005204,
+            "transaction": 14.565599999994447,
+            "wire": 44.321500000000015,
+            "otherClient": 44.5872
+          },
+          {
+            "index": 4,
+            "server": 18.916700000001583,
+            "transaction": 15.270100000001548,
+            "wire": 47.46590000000106,
+            "otherClient": 47.377
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 19.83339999999589,
+          "transaction": 15.270100000001548,
+          "wire": 52.675999999999476,
+          "otherClient": 52.295
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 596.37194,
+            "wallMs": 1047.1385999999984,
+            "cgroupPeakBytes": 93331456
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16341.206614,
+            "wallMs": 17083.6679,
+            "cgroupPeakBytes": 94806016
+          }
+        ],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 503836672,
+              "heapTotal": 43634688,
+              "heapUsed": 26063064,
+              "external": 5774960,
+              "arrayBuffers": 259745
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 23,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "history-1M",
+        "series": 1,
+        "conversions": false,
+        "code": 0,
+        "primary": {
+          "server": 64.50879999999597,
+          "transaction": 11.626900000002934,
+          "wire": 299.7338000000018,
+          "otherClient": 326.54555
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 20.119299999998475,
+            "transaction": 12.247600000002421,
+            "wire": 78.39899999999761,
+            "otherClient": 90.51235
+          },
+          {
+            "index": 2,
+            "server": 19.249799999997776,
+            "transaction": 13.274099999995087,
+            "wire": 85.17840000000069,
+            "otherClient": 90.2475
+          },
+          {
+            "index": 3,
+            "server": 18.005000000004657,
+            "transaction": 12.382499999999709,
+            "wire": 75.01239999999962,
+            "otherClient": 88.9312
+          },
+          {
+            "index": 4,
+            "server": 19.086100000000442,
+            "transaction": 13.115000000005239,
+            "wire": 75.24820000000182,
+            "otherClient": 90.35895
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 20.119299999998475,
+          "transaction": 13.274099999995087,
+          "wire": 85.17840000000069,
+          "otherClient": 90.51235
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 655773696,
+              "heapTotal": 82595840,
+              "heapUsed": 64498056,
+              "external": 5714603,
+              "arrayBuffers": 208378
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 50,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "history-1M",
+        "series": 1,
+        "conversions": true,
+        "code": 0,
+        "primary": {
+          "server": 86.28819999999541,
+          "transaction": 13.293599999997241,
+          "wire": 426.85579999999027,
+          "otherClient": 452.1194
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 22.226000000009662,
+            "transaction": 13.372499999997672,
+            "wire": 97.68729999999778,
+            "otherClient": 115.6497
+          },
+          {
+            "index": 2,
+            "server": 22.887199999997392,
+            "transaction": 14.174700000003213,
+            "wire": 104.72249999999622,
+            "otherClient": 116.56965
+          },
+          {
+            "index": 3,
+            "server": 22.318599999998696,
+            "transaction": 14.125700000004144,
+            "wire": 94.97729999999865,
+            "otherClient": 113.79045
+          },
+          {
+            "index": 4,
+            "server": 23.36040000000503,
+            "transaction": 13.897100000001956,
+            "wire": 97.08349999999336,
+            "otherClient": 114.5295
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 23.36040000000503,
+          "transaction": 14.174700000003213,
+          "wire": 104.72249999999622,
+          "otherClient": 116.56965
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 619.893537,
+            "wallMs": 1034.6367000000027,
+            "cgroupPeakBytes": 92962816
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16653.933647,
+            "wallMs": 17623.3295,
+            "cgroupPeakBytes": 94519296
+          },
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 780.219473,
+            "wallMs": 1286.0179999999964,
+            "cgroupPeakBytes": 95834112
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 17173.130362999997,
+            "wallMs": 18391.781499999997,
+            "cgroupPeakBytes": 125030400
+          },
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 974.269366,
+            "wallMs": 1558.4725999999937,
+            "cgroupPeakBytes": 125030400
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16270.512133999999,
+            "wallMs": 17110.7359,
+            "cgroupPeakBytes": 125030400
+          }
+        ],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 739790848,
+              "heapTotal": 85446656,
+              "heapUsed": 64834384,
+              "external": 5718438,
+              "arrayBuffers": 211023
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 62,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "history-1M",
+        "series": 2,
+        "conversions": false,
+        "code": 0,
+        "primary": {
+          "server": 63.41089999998803,
+          "transaction": 11.82369999999355,
+          "wire": 295.0561999999991,
+          "otherClient": 321.17145
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 19.150500000003376,
+            "transaction": 12.54030000000057,
+            "wire": 72.18249999999534,
+            "otherClient": 84.0132
+          },
+          {
+            "index": 2,
+            "server": 21.50669999999809,
+            "transaction": 12.348600000004808,
+            "wire": 80.2780999999959,
+            "otherClient": 87.59235
+          },
+          {
+            "index": 3,
+            "server": 17.57839999999851,
+            "transaction": 12.293999999994412,
+            "wire": 71.56130000000121,
+            "otherClient": 84.05265
+          },
+          {
+            "index": 4,
+            "server": 21.973400000002584,
+            "transaction": 12.352499999993597,
+            "wire": 75.0782999999974,
+            "otherClient": 85.02375
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 21.973400000002584,
+          "transaction": 12.54030000000057,
+          "wire": 80.2780999999959,
+          "otherClient": 87.59235
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 659320832,
+              "heapTotal": 83906560,
+              "heapUsed": 64458048,
+              "external": 5714603,
+              "arrayBuffers": 208378
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 49,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "history-1M",
+        "series": 2,
+        "conversions": true,
+        "code": 0,
+        "primary": {
+          "server": 72.86820000001171,
+          "transaction": 12.160599999995611,
+          "wire": 388.7474000000002,
+          "otherClient": 422.17305
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 23.056100000001607,
+            "transaction": 14.23300000000745,
+            "wire": 91.31719999999768,
+            "otherClient": 112.14015
+          },
+          {
+            "index": 2,
+            "server": 23.817300000002433,
+            "transaction": 13.357799999997951,
+            "wire": 103.01900000000023,
+            "otherClient": 115.8949
+          },
+          {
+            "index": 3,
+            "server": 22.70230000000447,
+            "transaction": 14.476699999999255,
+            "wire": 89.47539999999935,
+            "otherClient": 112.2391
+          },
+          {
+            "index": 4,
+            "server": 22.758799999995972,
+            "transaction": 14.10059999999794,
+            "wire": 92.25530000000435,
+            "otherClient": 111.424
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 23.817300000002433,
+          "transaction": 14.476699999999255,
+          "wire": 103.01900000000023,
+          "otherClient": 115.8949
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 622.367839,
+            "wallMs": 1054.8367999999973,
+            "cgroupPeakBytes": 93519872
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16675.477068,
+            "wallMs": 17627.2662,
+            "cgroupPeakBytes": 95297536
+          },
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 798.8830419999999,
+            "wallMs": 1295.5245000000068,
+            "cgroupPeakBytes": 95793152
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16534.896705,
+            "wallMs": 17371.9148,
+            "cgroupPeakBytes": 97046528
+          },
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 713.486673,
+            "wallMs": 1032.5904999999912,
+            "cgroupPeakBytes": 98004992
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16084.545186,
+            "wallMs": 17095.81700000001,
+            "cgroupPeakBytes": 98004992
+          }
+        ],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 717332480,
+              "heapTotal": 90165248,
+              "heapUsed": 64665640,
+              "external": 5717992,
+              "arrayBuffers": 210577
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 61,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "history-1M",
+        "series": 3,
+        "conversions": false,
+        "code": 0,
+        "primary": {
+          "server": 61.28889999999956,
+          "transaction": 11.655299999998533,
+          "wire": 296.604800000001,
+          "otherClient": 329.0215
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 23.65129999999772,
+            "transaction": 15.233200000002398,
+            "wire": 79.95859999999811,
+            "otherClient": 87.82545
+          },
+          {
+            "index": 2,
+            "server": 21.61479999999574,
+            "transaction": 14.46650000000227,
+            "wire": 87.24309999999969,
+            "otherClient": 98.6377
+          },
+          {
+            "index": 3,
+            "server": 18.791299999997136,
+            "transaction": 13.308799999998882,
+            "wire": 70.65680000000066,
+            "otherClient": 85.4109
+          },
+          {
+            "index": 4,
+            "server": 23.124400000000605,
+            "transaction": 15.85070000000269,
+            "wire": 75.94830000000366,
+            "otherClient": 87.1043
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 23.65129999999772,
+          "transaction": 15.85070000000269,
+          "wire": 87.24309999999969,
+          "otherClient": 98.6377
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 617533440,
+              "heapTotal": 72835072,
+              "heapUsed": 50033616,
+              "external": 5718796,
+              "arrayBuffers": 207548
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 49,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      },
+      {
+        "profile": "history-1M",
+        "series": 3,
+        "conversions": true,
+        "code": 0,
+        "primary": {
+          "server": 76.80190000000584,
+          "transaction": 13.113200000007055,
+          "wire": 402.7997000000032,
+          "otherClient": 432.5717
+        },
+        "typical": [
+          {
+            "index": 1,
+            "server": 22.816600000005565,
+            "transaction": 14.008599999993748,
+            "wire": 95.26720000000205,
+            "otherClient": 112.9306
+          },
+          {
+            "index": 2,
+            "server": 22.210500000001048,
+            "transaction": 14.311000000001513,
+            "wire": 102.55419999999867,
+            "otherClient": 114.8801
+          },
+          {
+            "index": 3,
+            "server": 22.10930000001099,
+            "transaction": 14.048099999999977,
+            "wire": 92.95799999999872,
+            "otherClient": 111.5018
+          },
+          {
+            "index": 4,
+            "server": 24.34320000000298,
+            "transaction": 15.255199999999604,
+            "wire": 95.05479999999807,
+            "otherClient": 111.2405
+          }
+        ],
+        "maximumTypicalP95": {
+          "server": 24.34320000000298,
+          "transaction": 15.255199999999604,
+          "wire": 102.55419999999867,
+          "otherClient": 114.8801
+        },
+        "converged": true,
+        "measuredContributions": 1000,
+        "closures": [],
+        "conversionsDone": [
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 597.2495690000001,
+            "wallMs": 1059.8858000000037,
+            "cgroupPeakBytes": 93446144
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16861.825339,
+            "wallMs": 17669.6443,
+            "cgroupPeakBytes": 95203328
+          },
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 682.9566829999999,
+            "wallMs": 1028.471900000004,
+            "cgroupPeakBytes": 96661504
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16617.771341,
+            "wallMs": 17585.465299999996,
+            "cgroupPeakBytes": 122941440
+          },
+          {
+            "profile": "solid",
+            "decodeAndEncodeMs": 703.372903,
+            "wallMs": 1303.4039000000048,
+            "cgroupPeakBytes": 122941440
+          },
+          {
+            "profile": "noise",
+            "decodeAndEncodeMs": 16192.399372,
+            "wallMs": 17305.971699999995,
+            "cgroupPeakBytes": 122941440
+          }
+        ],
+        "memory": {
+          "publication": {
+            "memory": {
+              "rss": 722964480,
+              "heapTotal": 88854528,
+              "heapUsed": 64877096,
+              "external": 5718438,
+              "arrayBuffers": 211023
+            },
+            "documents": 5
+          },
+          "chargedBytes": 603979776,
+          "fixedBytes": 301989888,
+          "workerCount": 4
+        },
+        "hygiene": {
+          "valid": true,
+          "reason": null,
+          "intervals": 61,
+          "deltaInPages": 0,
+          "deltaOutPages": 0
+        }
+      }
+    ]
+  },
+  "hygiene": {
+    "series": 24,
+    "allValid": true,
+    "intervals": 638,
+    "minimumWindowsAfterPreparationGiB": 2.3619003295898438,
+    "minimumWslAfterPreparationGiB": 5.4846343994140625
+  }
+}
