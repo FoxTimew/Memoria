@@ -19,9 +19,14 @@ await new Promise((resolve) => process.once('message', resolve));
 let i = 0;
 try {
   while (!stopping) {
-    const profile = i++ % 2 ? 'solid' : 'noise';
+    // Exercise both input classes even when the writes finish during the first long decode.
+    const profile = i++ % 2 ? 'noise' : 'solid';
+    const startedAt = Date.now();
     const result = await decodeFixture(fixture + '/' + profile + '.png');
-    process.send?.({ kind: 'conversion', result: { profile, ...result, output: undefined } });
+    process.send?.({
+      kind: 'conversion',
+      result: { profile, startedAt, completedAt: Date.now(), ...result, output: undefined },
+    });
     if (
       result.status !== 'validated' ||
       result.preview !== 'available' ||

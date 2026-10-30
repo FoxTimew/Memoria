@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-30",
+  "scope": "Synthetic-client idle diagnostic, fixture correction and memory stop; not a completed mixed-load qualification",
+  "artifacts": [
+    {
+      "name": "idle-diagnostic.json.gz",
+      "bytes": 2326,
+      "sha256": "03319fd908033dbea8b0631cfed0d2536df5d66474b2008d0fea3cf5ad3b6ecd"
+    },
+    {
+      "name": "idle-diagnostic.txt",
+      "bytes": 5670,
+      "sha256": "a09639dcdca6c93d3170db9b08fcb3e301532badc02ebbe70e5d5ca6ec93bfe2"
+    },
+    {
+      "name": "overlap-refusal.json.gz",
+      "bytes": 453164,
+      "sha256": "daaac1aa4282f9490cb3b1f55c88951dd1dcebdee2352db482e7f556cb47ed23"
+    },
+    {
+      "name": "overlap-refusal.txt",
+      "bytes": 10358,
+      "sha256": "a7b2f4d17d49268823479dd32bbf6c7b64516602aeda3599d1bbf94051ced5e8"
+    },
+    {
+      "name": "memory-refusal.txt",
+      "bytes": 2762,
+      "sha256": "e2e76947860f528706b09009c83d43ca952d43b303c88f275c95367b1d58075d"
+    },
+    {
+      "name": "check.txt",
+      "bytes": 1887,
+      "sha256": "c2609a8b5f42095d3510032295e980045cc54e6b59251612c8fade60ef4dbd37"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-1-attempt-1-bbc70aa1-ad60-485a-aab6-3612011ae698.json.gz",
+      "bytes": 3336,
+      "sha256": "ee4327c9c51cf116968023dc1e93ed9168441035aaf2c5d7996d4cc046470c29"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-1-attempt-1-b90d4f2b-1e86-4de7-b464-a4217dfaaedb.json.gz",
+      "bytes": 223646,
+      "sha256": "ef5665c419ddaeefa8859b4125ba6c791a776818526e692a34ba775f76cb0ab3"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-1-attempt-1-5f3758e7-f437-4142-bfde-5cafb027b89a.json.gz",
+      "bytes": 225677,
+      "sha256": "34daf148fe4e3aa1d09f55e7689249cd8e8f18419d89bbfca00ee7668fdfbbde"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-1-preparation-757689c9-5e2d-4736-804f-d0de384f2054.json.gz",
+      "bytes": 422,
+      "sha256": "4bf614d17374e172ff165e870b27714c0be46722cb6af1c65166b0a135d4ccb3"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-1-preparation-ffb20d3f-c47b-426d-beb1-0328fddb40a0.json.gz",
+      "bytes": 377,
+      "sha256": "0238009f2267dc3f0551bb8ce231b0c98e593ee17a747e824f8daa1203e695b6"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-1-preparation-aeeb3904-516c-45d1-aee6-d6cddbd7cfb0.json.gz",
+      "bytes": 377,
+      "sha256": "ee5d7cbafd99ca66b7dd5033e2add0034041a4cbc13fc88ae275ad12f2b39b85"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-1-preparation-95fd2088-ad7d-4384-bf96-408c9da0ed6b.json.gz",
+      "bytes": 377,
+      "sha256": "4178e97920e8d15d6421d651c4d4e557369ed46dd6e85424987e230c1c863051"
+    }
+  ]
+}

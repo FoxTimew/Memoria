@@ -1,0 +1,49 @@
+Power: {"observedAt":"2026-10-30T11:41:07.879Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-30T11:41:09.060Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-30T11:41:11.119Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/mixed-content-1m-false-1-preparation-757689c9-5e2d-4736-804f-d0de384f2054.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"mixed-content-1m-false-1","phase":"before-preparation","status":"refused","observation":{"observedAt":"2026-10-30T11:41:11.819Z","windowsFreeBytes":2911031296,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5231128576,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:41:11.819Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}},"reason":"WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB"}
+file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:106121
+var fail2 = (reason, observation) => Object.assign(new Error(reason), { reason, observation });
+                                                   ^
+
+Error: WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB
+    at fail2 (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:106121:52)
+    at assertMemoryStage (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:106167:11)
+    at prepareMeasurement (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:106195:5)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:123579:102
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  reason: 'WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB',
+  observation: {
+    observedAt: '2026-10-30T11:41:11.819Z',
+    windowsFreeBytes: 2911031296,
+    wsl: {
+      bootId: 'dc1818ce-057f-406e-9e82-a0bb01fa6a48',
+      memAvailableBytes: 5231128576,
+      swapInPages: 386,
+      swapOutPages: 2163
+    },
+    power: {
+      observedAt: '2026-10-30T11:41:11.819Z',
+      platform: 'win32',
+      batteries: [ { BatteryStatus: 2, EstimatedChargeRemaining: 95 } ],
+      allowed: true,
+      reason: null
+    }
+  }
+}
+
+Node.js v24.21.0
+Collaboration files-mixed.e2e.ts: EXIT_CODE=1

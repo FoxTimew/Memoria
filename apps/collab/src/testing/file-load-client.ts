@@ -39,6 +39,32 @@ async function client(config: FileLoadClientConfig) {
   await until(() => peer.provider.synced || peer.closed || peer.failed, 'file load client sync');
   assert(!peer.closed && !peer.failed, peer.reason);
   assert.equal(peer.doc.clientID, 0xefffff00 + config.index);
+  const connectedAt = Date.now(),
+    lifecycle: object[] = [];
+  if (config.observe) {
+    const wire = peer.socket.webSocket as unknown as import('ws').default;
+    const close = wire.close.bind(wire);
+    wire.close = (code, reason) => {
+      lifecycle.push({
+        kind: 'local-close',
+        at: Date.now(),
+        code,
+        reason: reason?.toString(),
+        idleMs: Date.now() - peer.socket.lastMessageReceived,
+        stack: new Error('Synthetic client close caller').stack,
+      });
+      return close(code, reason);
+    };
+    wire.on('close', (code, reason) =>
+      lifecycle.push({
+        kind: 'wire-close',
+        at: Date.now(),
+        code,
+        reason: reason.toString(),
+        idleMs: Date.now() - peer.socket.lastMessageReceived,
+      }),
+    );
+  }
   const observed = new Map<string, string>();
   if (config.observe)
     peer.doc.on('update', (update: Uint8Array) => {
@@ -65,9 +91,23 @@ async function client(config: FileLoadClientConfig) {
       },
     );
   }
-  const check = () => assert(!peer.closed && !peer.failed, peer.reason);
+  const check = () =>
+    assert(!peer.closed && !peer.failed, peer.reason || 'LOAD_CLIENT_DISCONNECTED');
   return {
     check,
+    diagnostics() {
+      return {
+        index: config.index,
+        connectedAt,
+        at: Date.now(),
+        closed: peer.closed,
+        failed: peer.failed,
+        reason: peer.reason,
+        lastMessageReceived: peer.socket.lastMessageReceived,
+        messageReconnectTimeout: peer.socket.configuration.messageReconnectTimeout,
+        lifecycle,
+      };
+    },
     observe(client: number, clock: number) {
       return observed.get(`${client}:${clock}`);
     },
@@ -188,6 +228,7 @@ export function serveFileLoadClient() {
           else if (m.op === 'clock') result = process.hrtime.bigint().toString();
           else if (m.op === 'observe') result = peer!.observe(m.client!, m.clock!);
           else if (m.op === 'snapshot') result = peer!.snapshot();
+          else if (m.op === 'diagnostics') result = peer!.diagnostics();
           else if (m.op === 'check') peer!.check();
           else if (m.op === 'close') {
             peer?.close();
@@ -233,7 +274,7 @@ export async function fileLoadClient(entry: string, config: FileLoadClientConfig
     if (!p) return;
     pending.delete(m.id);
     clearTimeout(p.timer);
-    if (m.error) p.no(new Error(m.error));
+    if (typeof m.error === 'string') p.no(new Error(m.error || 'Load client command failed'));
     else p.yes(m.result);
   });
   child.on('error', rejectPending);
@@ -274,6 +315,7 @@ export async function fileLoadClient(entry: string, config: FileLoadClientConfig
     observe: (client: number, clock: number) =>
       request('observe', { client, clock }) as Promise<string | undefined>,
     snapshot: () => request('snapshot') as Promise<number[]>,
+    diagnostics: () => request('diagnostics'),
     async close() {
       if (closed) return;
       try {

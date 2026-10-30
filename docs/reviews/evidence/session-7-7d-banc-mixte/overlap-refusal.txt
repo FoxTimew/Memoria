@@ -1,0 +1,328 @@
+Power: {"observedAt":"2026-10-30T11:36:50.429Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+Power: {"observedAt":"2026-10-30T11:36:51.674Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}
+{
+  "observedAt": "2026-10-30T11:36:53.649Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"preparation":".local/measurement-hygiene/mixed-content-1m-false-1-preparation-aeeb3904-516c-45d1-aee6-d6cddbd7cfb0.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"mixed-content-1m-false-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-30T11:36:54.358Z","windowsFreeBytes":3555110912,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5581975552,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:36:54.358Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-30T11:36:56.080Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:03.463Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:05.829Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:07.936Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:10.043Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:12.007Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:14.171Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:16.275Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:18.568Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:20.785Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:37:22.845Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{"profile":"content-1M","conversions":false,"p95":{"server":14.323199999998906,"transaction":10.98359999999957,"wire":36.22219999999652,"otherClient":36.3727}}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"mixed:content-1M:conversions=false:wave=109"}
+{"diagnostic":"control-ended","control":"leadership","stage":"mixed:content-1M:conversions=false:wave=109"}
+{"hygiene":".local/measurement-hygiene/mixed-content-1m-false-1-attempt-1-b90d4f2b-1e86-4de7-b464-a4217dfaaedb.json","status":"valid","label":"mixed-content-1m-false-1","attempt":1,"before":{"observedAt":"2026-10-30T11:37:26.422Z","windowsFreeBytes":2364317696,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5543305216,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:37:26.422Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-30T11:37:45.425Z","windowsFreeBytes":3719831552,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5544628224,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:37:45.425Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":20,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/mixed-content-1m-true-1-preparation-95fd2088-ad7d-4384-bf96-408c9da0ed6b.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"mixed-content-1m-true-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-10-30T11:37:46.328Z","windowsFreeBytes":3716706304,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5545750528,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:37:46.328Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}}}
+{
+  "observedAt": "2026-10-30T11:37:48.085Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:12.665Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:14.864Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:17.047Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:19.338Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:21.486Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:23.920Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:26.052Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:28.752Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:31.083Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+{
+  "observedAt": "2026-10-30T11:38:33.489Z",
+  "platform": "win32",
+  "batteries": [
+    {
+      "BatteryStatus": 2,
+      "EstimatedChargeRemaining": 95
+    }
+  ],
+  "allowed": true,
+  "reason": null
+}
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+[beforeUnloadDocument] RESIDENT_REPLICA
+{"diagnostic":"control-ended","control":"revocations","stage":"mixed:content-1M:conversions=true:wave=109"}
+{"diagnostic":"slow-control-query","control":"leadership","stage":"mixed:content-1M:conversions=true:wave=109","elapsedMs":1042.676099999997}
+{"diagnostic":"control-ended","control":"leadership","stage":"mixed:content-1M:conversions=true:wave=109"}
+AssertionError [ERR_ASSERTION]: Insufficient conversion overlap
+    at scenario (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:123467:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:123550:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+{"hygiene":".local/measurement-hygiene/mixed-content-1m-true-1-attempt-1-5f3758e7-f437-4142-bfde-5cafb027b89a.json","status":"valid","label":"mixed-content-1m-true-1","attempt":1,"before":{"observedAt":"2026-10-30T11:38:37.219Z","windowsFreeBytes":1790566400,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5246279680,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:38:37.219Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-10-30T11:38:59.208Z","windowsFreeBytes":3196772352,"wsl":{"bootId":"dc1818ce-057f-406e-9e82-a0bb01fa6a48","memAvailableBytes":5039575040,"swapInPages":386,"swapOutPages":2163},"power":{"observedAt":"2026-10-30T11:38:59.208Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":95}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":23,"deltaInPages":0,"deltaOutPages":0}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: STOP_MIXED_KEEP_REPORT
+
+1 !== 0
+
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/collab/dist/test-files-mixed.e2e.mjs:123613:19 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+Collaboration files-mixed.e2e.ts: EXIT_CODE=1

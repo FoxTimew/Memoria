@@ -59,6 +59,8 @@ Le palier avec conversion échoue **à la vague d'échauffement 0** : `DURABLE_R
 
 Piste de diagnostic : le banc connecte ses clients sans présence avant la préparation des textures. Le provider Hocuspocus applique `messageReconnectTimeout=30000` et peut appeler `webSocket.close()` sans raison après cette inactivité. Les premiers déchargements apparaissent pendant la préparation ; le journal actuel ne donne pas le code et l'heure de fermeture de chaque client. **Hypothèse à confirmer**, pas une cause prouvée. Recommandation : instrumenter ces événements et la dernière réception, puis préparer les textures avant connexion si l'hypothèse est confirmée ; ne changer ni timeout produit, ni contrôle de droits, ni seuil.
 
+**Suivi autorisé du 30 octobre :** cette hypothèse est désormais [prouvée par les piles de fermeture](session-7-7d-banc-mixte.md), puis corrigée dans le banc. La nouvelle campagne complète reste en attente de mémoire suffisante ; la présente fiche conserve l'état et les preuves du premier arrêt.
+
 Gros transferts, NAT, charge mixte complète avec transferts, saturation CPU volontaire/reconnexion du vrai front, historique mixte et comparaison finale restent **non qualifiés**. La description de PR demeure un brouillon non fusionnable ; aucun risque accepté.
 
 ## Guide manuel

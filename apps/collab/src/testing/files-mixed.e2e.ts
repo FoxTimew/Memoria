@@ -49,6 +49,9 @@ async function typicalProfile(profile: string) {
 }
 
 async function scenario(profile: string, conversions: boolean) {
+  const timeline: { stage: string; at: number }[] = [];
+  const mark = (stage: string) => timeline.push({ stage, at: Date.now() });
+  mark('fixture-start');
   const db = await testDatabase(),
     auth = await testAuth(db),
     accounts = [];
@@ -124,8 +127,38 @@ async function scenario(profile: string, conversions: boolean) {
     start = new Map<string, number>();
   let collecting = false,
     published = false;
+  const prepareConverter = async () => {
+    if (!conversions) return;
+    mark('textures-prepare-start');
+    converter = fork(resolve('scripts/file-mixed-converter.mjs'), [], {
+      windowsHide: true,
+      stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
+    });
+    converterEnded = once(converter, 'exit');
+    await new Promise<void>((yes, no) => {
+      converter!.on('message', (m: { kind: string; result?: object; error?: string }) => {
+        if (m.kind === 'prepared') yes();
+        if (m.kind === 'conversion') conversionsDone.push(m.result!);
+        if (m.kind === 'failure') {
+          conversionError = m.error;
+          no(Error(m.error));
+        }
+      });
+      converter!.once('error', no);
+      converter!.once('exit', (code) => {
+        if (code) {
+          conversionError = 'Converter exited ' + code;
+          no(Error(conversionError));
+        }
+      });
+    });
+    mark('textures-prepared');
+  };
   try {
+    // The explicit diagnostic mode retains the old order as a reproducible red witness.
+    if (process.env.MEMORIA_MIXED_DIAGNOSE_IDLE !== 'true') await prepareConverter();
     proxy = await caddyFixture(Number(new URL(host.ingress.url).port));
+    mark('clients-connect-start');
     for (let i = 0; i < 10; i++) {
       const page = pages[Math.floor(i / 2)]!,
         a = accounts[i]!;
@@ -153,6 +186,7 @@ async function scenario(profile: string, conversions: boolean) {
       }
       calibration.push(best);
     }
+    mark('clients-connected');
     const traces = pages.map((p) =>
       fileServerTrace(host, host.rooms.get(`${db.workspace}:${p.page}:${p.generation}`)!),
     );
@@ -176,32 +210,11 @@ async function scenario(profile: string, conversions: boolean) {
       }
       return r;
     };
-    if (conversions) {
-      converter = fork(resolve('scripts/file-mixed-converter.mjs'), [], {
-        windowsHide: true,
-        stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
-      });
-      converterEnded = once(converter, 'exit');
-      await new Promise<void>((yes, no) => {
-        converter!.on('message', (m: { kind: string; result?: object; error?: string }) => {
-          if (m.kind === 'prepared') yes();
-          if (m.kind === 'conversion') conversionsDone.push(m.result!);
-          if (m.kind === 'failure') {
-            conversionError = m.error;
-            no(Error(m.error));
-          }
-        });
-        converter!.once('error', no);
-        converter!.once('exit', (code) => {
-          if (code) {
-            conversionError = 'Converter exited ' + code;
-            no(Error(conversionError));
-          }
-        });
-      });
-    }
+    if (process.env.MEMORIA_MIXED_DIAGNOSE_IDLE === 'true') await prepareConverter();
+    mark('fixture-prepared');
     process.send?.({ kind: 'prepared' });
     await once(process, 'message');
+    mark('warmup-start');
     converter?.send({ kind: 'start' });
     for (let wave = 0; wave < 110; wave++) {
       setFileLoadStage(`mixed:${profile}:conversions=${conversions}:wave=${wave}`);
@@ -237,6 +250,7 @@ async function scenario(profile: string, conversions: boolean) {
       }
       await delay(100);
     }
+    mark('writes-finished');
     collecting = false;
     for (let i = 0; i < 10; i += 2) {
       const a = new Y.Doc(),
@@ -250,7 +264,18 @@ async function scenario(profile: string, conversions: boolean) {
     converter?.send({ kind: 'stop' });
     if (converterEnded) await converterEnded;
     assert(!conversionError, conversionError);
-    if (conversions) assert(conversionsDone.length >= 2, 'Insufficient conversion overlap');
+    if (conversions) {
+      const from = timeline.find((t) => t.stage === 'warmup-start')!.at;
+      const to = timeline.find((t) => t.stage === 'writes-finished')!.at;
+      for (const profile of ['solid', 'noise'])
+        assert(
+          conversionsDone.some((entry) => {
+            const c = entry as { profile: string; startedAt: number; completedAt: number };
+            return c.profile === profile && c.startedAt < to && c.completedAt > from;
+          }),
+          `Insufficient conversion overlap: ${profile}`,
+        );
+    }
     const values = samples as { pageIndex: number; wireMs: number; remoteAppliedMs: number }[];
     const result = {
       profile,
@@ -262,6 +287,8 @@ async function scenario(profile: string, conversions: boolean) {
       warmup: 10,
       waves: 100,
       converged: true,
+      timeline,
+      lifecycle: await Promise.all(peers.map((p) => p.diagnostics())),
       calibration: calibration.map((c) => ({ ...c, offsetNs: String(c.offsetNs) })),
       samples,
       totals,
@@ -309,6 +336,8 @@ async function scenario(profile: string, conversions: boolean) {
           totals,
           transactions,
           conversionsDone,
+          timeline,
+          lifecycle: await Promise.allSettled(peers.map((p) => p.diagnostics())),
         },
       });
     throw e;
@@ -343,9 +372,10 @@ else if (process.env.MEMORIA_MIXED_PROFILE) {
   }
 } else {
   const reports: object[] = [];
-  for (const profile of ['content-1M', 'history-1M'])
-    for (let series = 1; series <= 3; series++)
-      for (const conversions of [false, true]) {
+  const diagnoseIdle = process.env.MEMORIA_MIXED_DIAGNOSE_IDLE === 'true';
+  for (const profile of diagnoseIdle ? ['content-1M'] : ['content-1M', 'history-1M'])
+    for (let series = 1; series <= (diagnoseIdle ? 1 : 3); series++)
+      for (const conversions of diagnoseIdle ? [true] : [false, true]) {
         const label = `mixed-${profile.toLowerCase()}-${conversions}-${series}`,
           preparation = await prepareMeasurement(label),
           results: object[] = [];
@@ -384,7 +414,9 @@ else if (process.env.MEMORIA_MIXED_PROFILE) {
           );
           reports.push({ profile, series, conversions, ...measured });
           await writeFile(
-            '.local/session-7-7d-mixed.json',
+            diagnoseIdle
+              ? '.local/session-7-7d-mixed-idle-diagnostic.json'
+              : '.local/session-7-7d-mixed.json',
             JSON.stringify(
               {
                 date: new Date().toISOString(),
