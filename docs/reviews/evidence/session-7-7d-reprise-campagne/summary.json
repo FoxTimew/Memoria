@@ -1,0 +1,435 @@
+{
+  "date": "2026-10-30",
+  "measuredUpdates": 10000,
+  "series": [
+    {
+      "profile": "content-1M",
+      "series": 1,
+      "conversions": false,
+      "code": 0,
+      "windowsBeforeGiB": 4.426059722900391,
+      "windowsAfterPreparationGiB": 3.1436805725097656,
+      "wslAfterPreparationGiB": 5.6466217041015625,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 20,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 17.949800000002142,
+        "transaction": 12.551500000001397,
+        "wire": 41.96640000000116,
+        "otherClient": 42.92845
+      },
+      "maxTypicalServer": 16.645599999996193,
+      "maxTypicalWire": 42.95560000000114,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 0,
+      "maxConversionMs": 0,
+      "maxConverterCgroupMiB": 0
+    },
+    {
+      "profile": "content-1M",
+      "series": 1,
+      "conversions": true,
+      "code": 0,
+      "windowsBeforeGiB": 4.439605712890625,
+      "windowsAfterPreparationGiB": 2.9662094116210938,
+      "wslAfterPreparationGiB": 5.563617706298828,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 23,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 20.55659999999625,
+        "transaction": 15.417300000000978,
+        "wire": 47.88880000000063,
+        "otherClient": 47.8551
+      },
+      "maxTypicalServer": 21.220399999998335,
+      "maxTypicalWire": 51.96180000000095,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 2,
+      "maxConversionMs": 16601.549812,
+      "maxConverterCgroupMiB": 91.44140625
+    },
+    {
+      "profile": "content-1M",
+      "series": 2,
+      "conversions": false,
+      "code": 0,
+      "windowsBeforeGiB": 4.127742767333984,
+      "windowsAfterPreparationGiB": 2.9572601318359375,
+      "wslAfterPreparationGiB": 5.571537017822266,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 20,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 16.557200000002922,
+        "transaction": 12.0596000000005,
+        "wire": 39.053799999997864,
+        "otherClient": 38.94605
+      },
+      "maxTypicalServer": 16.839500000001863,
+      "maxTypicalWire": 40.219600000000355,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 0,
+      "maxConversionMs": 0,
+      "maxConverterCgroupMiB": 0
+    },
+    {
+      "profile": "content-1M",
+      "series": 2,
+      "conversions": true,
+      "code": 0,
+      "windowsBeforeGiB": 4.208316802978516,
+      "windowsAfterPreparationGiB": 2.8182907104492188,
+      "wslAfterPreparationGiB": 5.5640869140625,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 22,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 17.94419999999809,
+        "transaction": 12.696700000000419,
+        "wire": 42.259900000000926,
+        "otherClient": 42.69945
+      },
+      "maxTypicalServer": 18.966099999997823,
+      "maxTypicalWire": 43.91159999999945,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 2,
+      "maxConversionMs": 15863.952893,
+      "maxConverterCgroupMiB": 90.9921875
+    },
+    {
+      "profile": "content-1M",
+      "series": 3,
+      "conversions": false,
+      "code": 0,
+      "windowsBeforeGiB": 3.95794677734375,
+      "windowsAfterPreparationGiB": 2.7788658142089844,
+      "wslAfterPreparationGiB": 5.566642761230469,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 19,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 16.69140000000334,
+        "transaction": 10.517200000002049,
+        "wire": 38.75420000000304,
+        "otherClient": 38.7323
+      },
+      "maxTypicalServer": 15.608500000002095,
+      "maxTypicalWire": 44.662100000001374,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 0,
+      "maxConversionMs": 0,
+      "maxConverterCgroupMiB": 0
+    },
+    {
+      "profile": "content-1M",
+      "series": 3,
+      "conversions": true,
+      "code": 0,
+      "windowsBeforeGiB": 4.0238189697265625,
+      "windowsAfterPreparationGiB": 2.925090789794922,
+      "wslAfterPreparationGiB": 5.574195861816406,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 22,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 17.778599999997823,
+        "transaction": 12.485899999999674,
+        "wire": 41.38249999999971,
+        "otherClient": 41.53745
+      },
+      "maxTypicalServer": 17.443599999998696,
+      "maxTypicalWire": 45.59909999999945,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 2,
+      "maxConversionMs": 15669.9727,
+      "maxConverterCgroupMiB": 90.01953125
+    },
+    {
+      "profile": "history-1M",
+      "series": 1,
+      "conversions": false,
+      "code": 0,
+      "windowsBeforeGiB": 4.195400238037109,
+      "windowsAfterPreparationGiB": 2.837127685546875,
+      "wslAfterPreparationGiB": 5.542655944824219,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 52,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 51.2583999999988,
+        "transaction": 12.48410000000149,
+        "wire": 316.17319999999745,
+        "otherClient": 356.09865
+      },
+      "maxTypicalServer": 32.132799999999406,
+      "maxTypicalWire": 73.00350000000253,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 0,
+      "maxConversionMs": 0,
+      "maxConverterCgroupMiB": 0
+    },
+    {
+      "profile": "history-1M",
+      "series": 1,
+      "conversions": true,
+      "code": 0,
+      "windowsBeforeGiB": 4.239967346191406,
+      "windowsAfterPreparationGiB": 2.711505889892578,
+      "wslAfterPreparationGiB": 5.560028076171875,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 60,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 67.70239999999467,
+        "transaction": 14.19550000000163,
+        "wire": 345.57549999999173,
+        "otherClient": 392.9033
+      },
+      "maxTypicalServer": 40.18950000000041,
+      "maxTypicalWire": 90.4929000000011,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 6,
+      "maxConversionMs": 16401.893932000003,
+      "maxConverterCgroupMiB": 117.3671875
+    },
+    {
+      "profile": "history-1M",
+      "series": 2,
+      "conversions": false,
+      "code": 0,
+      "windowsBeforeGiB": 4.120361328125,
+      "windowsAfterPreparationGiB": 2.731037139892578,
+      "wslAfterPreparationGiB": 5.577312469482422,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 48,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 51.79450000000361,
+        "transaction": 11.479099999996834,
+        "wire": 257.51580000000104,
+        "otherClient": 290.98765
+      },
+      "maxTypicalServer": 30.896400000005087,
+      "maxTypicalWire": 91.58169999999518,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 0,
+      "maxConversionMs": 0,
+      "maxConverterCgroupMiB": 0
+    },
+    {
+      "profile": "history-1M",
+      "series": 2,
+      "conversions": true,
+      "code": 1,
+      "windowsBeforeGiB": 4.284275054931641,
+      "windowsAfterPreparationGiB": 2.613658905029297,
+      "wslAfterPreparationGiB": 5.574916839599609,
+      "battery": [2],
+      "swap": {
+        "valid": true,
+        "reason": null,
+        "intervals": 60,
+        "deltaInPages": 0,
+        "deltaOutPages": 0
+      },
+      "primary": {
+        "server": 67.16159999999945,
+        "transaction": 13.68519999999262,
+        "wire": 347.9628999999986,
+        "otherClient": 394.62995
+      },
+      "maxTypicalServer": 53.9545000000071,
+      "maxTypicalWire": 114.02260000000388,
+      "closureEvents": [],
+      "failedClients": 0,
+      "conversionsCompleted": 6,
+      "maxConversionMs": 16729.522748,
+      "maxConverterCgroupMiB": 117.27734375
+    }
+  ],
+  "contentMedians": [
+    {
+      "conversions": false,
+      "count": 3,
+      "server": 16.69140000000334,
+      "wire": 39.053799999997864,
+      "otherClient": 38.94605
+    },
+    {
+      "conversions": true,
+      "count": 3,
+      "server": 17.94419999999809,
+      "wire": 42.259900000000926,
+      "otherClient": 42.69945
+    }
+  ],
+  "failure": {
+    "profile": "history-1M",
+    "series": 2,
+    "page": {
+      "index": 2,
+      "encodedBytes": 175992,
+      "sha256": "6188ed20cd420f5d1cd89b8c893a854d6929ee571ec239ea1a0aa67789a4f5af",
+      "p95": {
+        "server": 53.9545000000071,
+        "transaction": 24.024700000001758,
+        "wire": 114.02260000000388,
+        "otherClient": 115.70105
+      }
+    },
+    "pageSamples": 200,
+    "pairedSampleP95": {
+      "receipt": "22563095-a5c2-99dd-09ef-187147b6fba9",
+      "total": 53.93550000000687,
+      "validationIncludingPoolAndTransport": 36.46490000000631,
+      "sqlWall": 17.47060000000056,
+      "queue": 0.00849999999627471,
+      "serverResidence": 72.24169999999867,
+      "wire": 84.26780000000144
+    },
+    "sampleP95Validation": 31.03530000000319,
+    "sampleP95Sql": 23.99949999999808,
+    "slowSamples": [
+      {
+        "receipt": "d150429d-d085-00f9-9516-ed22874c298d",
+        "total": 50.992800000007264,
+        "validation": 20.815800000011222,
+        "sql": 30.176999999996042,
+        "queue": 47.09790000000794
+      },
+      {
+        "receipt": "22563095-a5c2-99dd-09ef-187147b6fba9",
+        "total": 53.93550000000687,
+        "validation": 36.46490000000631,
+        "sql": 17.47060000000056,
+        "queue": 0.00849999999627471
+      },
+      {
+        "receipt": "1c8ab867-d671-c166-8938-294b19fc63d9",
+        "total": 54.78519999999844,
+        "validation": 37.64059999999881,
+        "sql": 17.144599999999627,
+        "queue": 0.023600000000442378
+      },
+      {
+        "receipt": "da2b1d07-7bc2-5c72-6710-3b8bd12aa71e",
+        "total": 57.01040000001376,
+        "validation": 42.0002000000095,
+        "sql": 15.01020000000426,
+        "queue": 0.014499999990221113
+      },
+      {
+        "receipt": "9db30b3d-b01d-fc6c-dca2-b20795c0aefe",
+        "total": 57.88060000000405,
+        "validation": 47.413100000005215,
+        "sql": 10.467499999998836,
+        "queue": 0.020399999993969686
+      },
+      {
+        "receipt": "c538f9a5-311b-d8d4-3693-03b330d83a6b",
+        "total": 58.25819999999658,
+        "validation": 41.78720000000612,
+        "sql": 16.470999999990454,
+        "queue": 0.012099999992642552
+      },
+      {
+        "receipt": "f6b5f456-6bec-7b34-737a-fbf6577758c5",
+        "total": 58.83150000000023,
+        "validation": 31.03530000000319,
+        "sql": 27.796199999997043,
+        "queue": 0.009200000000419095
+      },
+      {
+        "receipt": "a1341886-907a-4f8b-0e7c-ac10e73e800c",
+        "total": 68.33980000000156,
+        "validation": 49.54200000000128,
+        "sql": 18.79780000000028,
+        "queue": 0.016700000007404014
+      },
+      {
+        "receipt": "65d11656-1cbf-32a2-4699-7c564e95710d",
+        "total": 70.00079999999434,
+        "validation": 53.62399999999616,
+        "sql": 16.376799999998184,
+        "queue": 0.02929999999469146
+      },
+      {
+        "receipt": "8c344fa5-bddb-f13b-7f2f-87b3e79d3cd9",
+        "total": 84.28540000000794,
+        "validation": 63.15589999999793,
+        "sql": 21.12950000001001,
+        "queue": 0.020900000003166497
+      },
+      {
+        "receipt": "99453128-a9a9-2415-d453-ba7961b7bb34",
+        "total": 85.44920000000275,
+        "validation": 68.48489999999583,
+        "sql": 16.964300000006915,
+        "queue": 0.021500000002561137
+      },
+      {
+        "receipt": "e47a7281-ae1e-bf0c-f606-d0d312418a10",
+        "total": 88.36139999999432,
+        "validation": 74.20859999999811,
+        "sql": 14.152799999996205,
+        "queue": 0.03940000000875443
+      }
+    ]
+  }
+}

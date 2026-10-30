@@ -18,11 +18,15 @@ import { createDatabase } from '@memoria/db';
 import { fileGateway } from '../../files/src/gateway.ts';
 import { initialDocument } from '@memoria/collaboration-core';
 import { imageFixture } from '../../../scripts/file-image-fixture.mjs';
+import { idleFront } from './testing/collaboration-idle-front.ts';
 
 // Product UI on built Next.js, real Nest, WSS, RustFS and isolated Caddy. No mocked file routes.
+const idleOnly = process.argv.includes('--idle');
 await test(
-  '7c product UI: cells/editor, uploads, previews, warnings, guests and cache resurrection',
-  { timeout: 300000 },
+  idleOnly
+    ? '7d real front: one idle editor for at least five minutes'
+    : '7c product UI: cells/editor, uploads, previews, warnings, guests and cache resurrection',
+  { timeout: idleOnly ? 420000 : 300000 },
   async (t) => {
     const converter = await converterFixture();
     t.after(() => converter.close());
@@ -278,9 +282,13 @@ await test(
         }
       }
       const validator = new FileValidator(jobs, converter.config);
-      const source = await imageFixture();
       const href = `/workspaces/${workspace}/databases/${h.f.bases[0]}`;
       const rowHref = href + '/rows/' + row;
+      if (idleOnly) {
+        await idleFront(page, db, row, origin + rowHref, directory);
+        return;
+      }
+      const source = await imageFixture();
       const errors: string[] = [];
       page.on('pageerror', (e) => errors.push(e.message));
       const quota: number[] = [];

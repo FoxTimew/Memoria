@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-30",
+  "scope": "Resumed mixed-load campaign: stopped at typical page p95 53.955 ms in second history/conversions series; 305-second real front idle proof passed. 7d remains incomplete.",
+  "code": "4f285a0fc129f410ce00e0267d00b85ed6b79b16 (application and mixed benchmark unchanged)",
+  "converterImage": "sha256:a81a1233e3149456572289790c91cc8528553f1ebb90a39f91443746dfd486d6",
+  "artifacts": [
+    {
+      "name": "summary.json",
+      "bytes": 12515,
+      "sha256": "bce474c3067e835d75f80356c859caa520862da8b99bd8216da5020fc40cadcf"
+    },
+    {
+      "name": "mixed.json.gz",
+      "bytes": 2298041,
+      "sha256": "15106ab789c18c13e39773eb69b97df10cfb66a80b40ffd4b960a7e535e68920"
+    },
+    {
+      "name": "mixed.txt.gz",
+      "bytes": 4573,
+      "sha256": "92ae647a866923e932bbe66fd9e0910aea349e9a133eba4ce7a2d8b8b74f89f5"
+    },
+    {
+      "name": "infrastructure-refusal.txt.gz",
+      "bytes": 899,
+      "sha256": "632d618cc5257fc7dafd7cdef0d4cd7dd6c30903e623379916fd85187768a88f"
+    },
+    {
+      "name": "memory-refusal.txt.gz",
+      "bytes": 1008,
+      "sha256": "a940dc1fcd10714bf3f71a7b686a7c2333408db9dd9c3f84ac5fb691c4127b7d"
+    },
+    {
+      "name": "idle-report.json",
+      "bytes": 13132,
+      "sha256": "0483450d530ce61f1c9eedc15521c44162b07b1df42b4e8ce4e942aefa90eae1"
+    },
+    {
+      "name": "idle-front.txt.gz",
+      "bytes": 400,
+      "sha256": "440008b9b8496a76dc9f54ba96713c9637c6c9e0eda3508a9b6fe404333d00ca"
+    },
+    {
+      "name": "idle-after-reload.png",
+      "bytes": 36347,
+      "sha256": "c2c6b56856bc846a5d8529d9f40534dfb53d424b2a3df029f8ecba535b4ce8d7"
+    },
+    {
+      "name": "check.txt.gz",
+      "bytes": 666,
+      "sha256": "fd2d810285f479d730a12adbe546616ca63c1d13f9f08ef5d8f6e6b428d4f60c"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-1-attempt-1-bea29117-838c-4a59-88eb-e279f4499f44.json.gz",
+      "bytes": 223928,
+      "sha256": "36f8d3a3887a7723f4d9eb4b18325403ae48cbad58829bd75a9421bf681d2056"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-1-attempt-1-4ad1e8ad-57c3-414d-a8be-12c4a0ce15e2.json.gz",
+      "bytes": 225228,
+      "sha256": "aa9bc308e3e466c5b8703f73c2793757df45f1370ccef511de18b375f614925a"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-2-attempt-1-8783dfdb-9567-4631-9f5c-03b8199225ab.json.gz",
+      "bytes": 223181,
+      "sha256": "ce79b5e821d039d89c3b5158196e5784d50e0aef1a051cde3b74674868170adb"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-2-attempt-1-340f65dd-522a-41b5-926c-b029ee5848ab.json.gz",
+      "bytes": 224377,
+      "sha256": "c9281746111e110183121d9597791418f57660af1edc2e6460d9c889cfab6348"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-3-attempt-1-6724f3e4-e8be-49ad-91ae-ee1113988459.json.gz",
+      "bytes": 222890,
+      "sha256": "5cb5bcecc16bc81834a63092dbeb29081b055402ceb949bb59dd59eda5f029cd"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-3-attempt-1-1dab15ad-f661-404b-9869-c068281cb3b4.json.gz",
+      "bytes": 224681,
+      "sha256": "044e7353082f16bb56689a124d62e5efad6f99817c044a774c01089118749940"
+    },
+    {
+      "name": "hygiene-mixed-history-1m-false-1-attempt-1-644e6c16-2990-4729-83fa-e1ffba216871.json.gz",
+      "bytes": 233775,
+      "sha256": "31820b5b50687553e0242b24d74ce230560670a45fb4362d975a2f631c23bfd8"
+    },
+    {
+      "name": "hygiene-mixed-history-1m-true-1-attempt-1-4ae3f391-8c20-43e8-b685-16fa506d3303.json.gz",
+      "bytes": 235719,
+      "sha256": "54f0c8cd7764027649f8395fdb869c4551e1f8b30476a69f3ca5ddbce8752522"
+    },
+    {
+      "name": "hygiene-mixed-history-1m-false-2-attempt-1-c5467307-eca0-4296-b999-93f71f6ecdb7.json.gz",
+      "bytes": 232959,
+      "sha256": "27bda7e94c878680296bc17b1e304e376b3fce90241473c7efc55c204c5e3e13"
+    },
+    {
+      "name": "hygiene-mixed-history-1m-true-2-attempt-1-d5cdd4b0-a5a9-41df-bb5a-127b1822277a.json.gz",
+      "bytes": 237278,
+      "sha256": "7c8482a2b6763cdc130fe997c7070b7d573802fd5860da95588d1216f6d0a6b3"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-1-preparation-588c341a-2709-4912-84c1-6e885ad90af3.json.gz",
+      "bytes": 372,
+      "sha256": "e45ead317df821f384976839c30ba8ebabe564e7ad45167a251588b53b8e399e"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-1-preparation-d220903d-205e-48f3-81b4-70d63a7a9423.json.gz",
+      "bytes": 372,
+      "sha256": "b97399e1b4fe49618e6114e2378b96017b49831adfa1e784ebf87818faa6bfda"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-2-preparation-57c15c92-a078-40d8-8f01-36f9ffdadae0.json.gz",
+      "bytes": 373,
+      "sha256": "2b1b78d811a59be679f346435388eda78dff269eb42ed97356535af810fcf6d3"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-2-preparation-9721b15a-5c38-4350-84ff-0a90c191d2f8.json.gz",
+      "bytes": 371,
+      "sha256": "79646c0284f3f2091d61eb510bae9125495f08631903049e89d714d5d1325027"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-3-preparation-04b3314d-81f1-42da-aa45-eef2d31eeda1.json.gz",
+      "bytes": 373,
+      "sha256": "b3d3a22e62ca7d3ba726ea758d9ac644e4d371da6154f73aa32f7bdcf33d0c12"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-true-3-preparation-b06e4090-d03c-43f9-b1c9-5d377e3bfcf6.json.gz",
+      "bytes": 371,
+      "sha256": "6f9cd43b45ea80bd22ac79b8f41eeef607e9b4b692f7b49114016e15d62e6b01"
+    },
+    {
+      "name": "hygiene-mixed-history-1m-false-1-preparation-1f21eac9-fd4c-4ad5-808c-26d041a566a7.json.gz",
+      "bytes": 373,
+      "sha256": "302ffeb8ed65e8e427487c8d3466a3f0033c36a507b2938a1b20c01e81c67d20"
+    },
+    {
+      "name": "hygiene-mixed-history-1m-true-1-preparation-e06e18bc-31fd-4db9-bd96-7c2bf542ec1a.json.gz",
+      "bytes": 372,
+      "sha256": "31014bcd3016c5ebcb2b4f031f02b0787e3435cd04e074442705545bd173b8ff"
+    },
+    {
+      "name": "hygiene-mixed-history-1m-false-2-preparation-92546f3c-a580-4e93-8ad8-a7006d039375.json.gz",
+      "bytes": 373,
+      "sha256": "0ef09f4fc46e8a11ab86834a676a2830978b1653a8d411e82710530a7953abd4"
+    },
+    {
+      "name": "hygiene-mixed-history-1m-true-2-preparation-4e434aef-be0c-418f-b8bc-9966d6dcf222.json.gz",
+      "bytes": 373,
+      "sha256": "d518d9351cef7be4aff4f9dd6409daff32a8b42cb5560141a3fb11844326fb49"
+    },
+    {
+      "name": "hygiene-mixed-content-1m-false-1-preparation-51adf9ff-9f2a-4e06-a3ef-99482b96ab75.json.gz",
+      "bytes": 419,
+      "sha256": "5f964b0072e38054bc3fd0737ef391a8f61787268d58758334594ffa26d21248"
+    }
+  ]
+}

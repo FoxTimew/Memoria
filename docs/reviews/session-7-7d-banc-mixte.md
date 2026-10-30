@@ -30,3 +30,5 @@ Les [journaux et relevés complets](evidence/session-7-7d-banc-mixte/manifest.js
 - Lire les événements de fermeture avant ceux du nettoyage ; ne pas confondre les connexions fermées à la fin du test avec une perte pendant l'édition.
 
 Ce qui peut encore casser : préparation des clients exceptionnellement longue, ressources insuffisantes, latence pendant les conversions et contrôle d'accès sous saturation. Le diagnostic actuel ne prouve pas la reprise du produit après une saturation CPU.
+
+**Suite du 30 octobre :** après libération de mémoire, la [reprise publiée](session-7-7d-reprise-campagne.md) passe les trois séries contenu puis s'arrête sur une page typique à 53,955 ms serveur pendant la deuxième série historique avec conversions. Aucun nouveau problème de préparation ni fermeture observée ; plafond inchangé. Le [vrai front inactif cinq minutes](session-7-7d-front-inactif.md) passe séparément.

@@ -1,0 +1,802 @@
+{
+  "date": "2026-10-30T12:33:41.858Z",
+  "scope": "One visible real Next.js editor, real Nest/PostgreSQL/WSS/Caddy; sentinel saved before observation, no input or reload during observation",
+  "startedAt": 1793363316767,
+  "finishedAt": 1793363621846,
+  "durationMs": 305079,
+  "revisionBefore": "1",
+  "revisionAfter": "1",
+  "visible": {
+    "statuses": ["Enregistré sur le serveur"],
+    "alerts": [],
+    "hidden": false
+  },
+  "failures": [],
+  "rateLimits": [],
+  "events": [
+    {
+      "at": 1793363331079,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363331082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363331082,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363331082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363331087,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363331088,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363334181,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363334187,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363346085,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363346087,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363346087,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363346087,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363346113,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363346114,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363349184,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363349189,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363361077,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363361079,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363361079,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363361079,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363361084,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363361084,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363367183,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363367216,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363376080,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363376082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363376082,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363376082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363376091,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363376091,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363385187,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363385219,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363391079,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363391081,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363391081,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363391081,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363391090,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363391090,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363400187,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363400193,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363406078,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363406080,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363406080,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363406080,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363406090,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363406090,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363418181,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363418186,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363421077,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363421080,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363421080,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363421080,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363421084,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363421085,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363433186,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363433191,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363436077,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363436080,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363436080,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363436080,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363436084,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363436084,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363448186,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363448191,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363451076,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363451079,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363451079,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363451079,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363451084,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363451084,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363463205,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363463211,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363466082,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363466085,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363466085,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363466085,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363466089,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363466089,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363481082,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363481085,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363481085,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363481085,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363481089,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363481090,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363481185,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363481216,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363496081,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363496084,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363496084,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363496084,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363496088,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363496088,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363499184,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363499190,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363511084,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363511087,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363511087,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363511087,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363511091,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363511091,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363514183,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363514189,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363526080,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363526082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363526082,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363526082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363526086,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363526086,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363532205,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363532230,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363541080,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363541082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363541082,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363541082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363541090,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363541090,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363550188,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363550198,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363556079,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363556082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363556082,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363556082,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363556089,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363556090,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363568181,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363568186,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363571078,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363571081,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363571081,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363571081,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363571085,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363571085,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363583187,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363583192,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363586078,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363586081,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363586081,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363586081,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363586085,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363586086,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363601077,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363601079,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363601079,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363601079,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363601083,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363601084,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363601181,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363601213,
+      "kind": "received",
+      "type": 1
+    },
+    {
+      "at": 1793363616077,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363616079,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363616079,
+      "kind": "sent",
+      "type": 0
+    },
+    {
+      "at": 1793363616079,
+      "kind": "received",
+      "type": 0
+    },
+    {
+      "at": 1793363616086,
+      "kind": "received",
+      "type": 5
+    },
+    {
+      "at": 1793363616086,
+      "kind": "received",
+      "type": 8
+    },
+    {
+      "at": 1793363616180,
+      "kind": "sent",
+      "type": 1
+    },
+    {
+      "at": 1793363616185,
+      "kind": "received",
+      "type": 1
+    }
+  ],
+  "presenceFrames": 18,
+  "receivedFrames": 98,
+  "closures": 0,
+  "openAtEnd": 1
+}
