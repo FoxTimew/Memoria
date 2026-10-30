@@ -90,13 +90,15 @@ for (const file of files) {
         stdio: 'inherit',
         windowsHide: true,
         timeout:
-          file === 'database-table-load.e2e.ts' ||
-          file === 'files-load.e2e.ts' ||
+          // Twelve independent guarded fixtures include texture preparation and teardown.
+          // This outer watchdog does not change any measured/service deadline.
           file === 'files-mixed.e2e.ts'
-            ? 900000
-            : process.env.MEMORIA_MEASURE_DATABASE_TREE === 'true'
-              ? 360000
-              : 180000,
+            ? 1800000
+            : file === 'database-table-load.e2e.ts' || file === 'files-load.e2e.ts'
+              ? 900000
+              : process.env.MEMORIA_MEASURE_DATABASE_TREE === 'true'
+                ? 360000
+                : 180000,
       },
     );
     child.on('error', (e) => {

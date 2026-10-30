@@ -1,6 +1,7 @@
 import { ReplicaMemory, poolReservation } from './memory.ts';
 import { ValidationPool } from './validation-pool.ts';
 import { randomUUID } from 'node:crypto';
+import { setImmediate as yieldToIo } from 'node:timers/promises';
 import { fromNodeHeaders } from 'better-auth/node';
 import type { Pool } from 'pg';
 import type { IncomingMessage } from 'node:http';
@@ -206,6 +207,9 @@ export async function collaborationServer(
           throw new CollaborationError('READ_ONLY', 403);
         const receipt = await rooms.get(documentName)!.update(context.identity, payload);
         receipts.set(connection, receipt);
+        // Hocuspocus now performs its idempotent native apply. Keep its protocol
+        // and checks intact, but give other rooms' I/O a turn between both applies.
+        await yieldToIo();
       } catch (error) {
         if (
           (error instanceof CandidateRejected || error instanceof CollaborationError) &&

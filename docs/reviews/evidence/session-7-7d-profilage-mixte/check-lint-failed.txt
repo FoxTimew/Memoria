@@ -1,0 +1,13 @@
+$ pnpm hooks:check && pnpm lint && pnpm typecheck && pnpm test:bootstrap && pnpm test
+$ node scripts/check-git-hooks.mjs
+Hooks Memoria installés et à jour dans ce clone.
+$ eslint . --max-warnings=0 && prettier --check .
+
+C:\Users\Foxti\Documents\Projets\Memoria\.local\test-mixed-observer.mjs
+  16:15  error  'setTimeout' is not defined    no-undef
+  25:12  error  'clearTimeout' is not defined  no-undef
+
+✖ 2 problems (2 errors, 0 warnings)
+
+[ELIFECYCLE] Command failed with exit code 1.
+[ELIFECYCLE] Command failed with exit code 1.

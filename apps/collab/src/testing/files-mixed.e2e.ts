@@ -20,6 +20,7 @@ import { decodeDocument } from '../codec.ts';
 import { receiptFor } from '../service/store.ts';
 import { fileServerTrace } from './file-load-trace.ts';
 import { traceFileLoadControls, setFileLoadStage } from './file-load-controls.ts';
+import { mixedProfile } from './mixed-profile.ts';
 const p95 = (v: number[]) => [...v].sort((a, b) => a - b)[Math.ceil(v.length * 0.95) - 1]!;
 async function typicalProfile(profile: string) {
   const path = `.local/incremental/mixed-${profile}-typical.bin`;
@@ -127,6 +128,8 @@ async function scenario(profile: string, conversions: boolean) {
     start = new Map<string, number>();
   let collecting = false,
     published = false;
+  let diagnostic: Awaited<ReturnType<typeof mixedProfile>> | undefined;
+  let diagnosticResult: Awaited<ReturnType<NonNullable<typeof diagnostic>['finish']>>;
   const prepareConverter = async () => {
     if (!conversions) return;
     mark('textures-prepare-start');
@@ -211,9 +214,19 @@ async function scenario(profile: string, conversions: boolean) {
       return r;
     };
     if (process.env.MEMORIA_MIXED_DIAGNOSE_IDLE === 'true') await prepareConverter();
+    if (process.env.MEMORIA_MIXED_DIAGNOSTIC_DIR)
+      diagnostic = await mixedProfile(
+        host,
+        db.pool,
+        db.url,
+        process.env.MEMORIA_MIXED_DIAGNOSTIC_DIR,
+        'series-' + process.env.MEMORIA_MIXED_SERIES,
+      );
     mark('fixture-prepared');
     process.send?.({ kind: 'prepared' });
-    await once(process, 'message');
+    const [admission] = await once(process, 'message');
+    if (admission.kind !== 'start') return;
+    await diagnostic?.start();
     mark('warmup-start');
     converter?.send({ kind: 'start' });
     for (let wave = 0; wave < 110; wave++) {
@@ -252,6 +265,7 @@ async function scenario(profile: string, conversions: boolean) {
     }
     mark('writes-finished');
     collecting = false;
+    diagnosticResult = await diagnostic?.finish();
     for (let i = 0; i < 10; i += 2) {
       const a = new Y.Doc(),
         b = new Y.Doc();
@@ -278,6 +292,7 @@ async function scenario(profile: string, conversions: boolean) {
     }
     const values = samples as { pageIndex: number; wireMs: number; remoteAppliedMs: number }[];
     const result = {
+      diagnostic: diagnosticResult,
       profile,
       conversions,
       encodedBytes: bytes.length,
@@ -315,6 +330,21 @@ async function scenario(profile: string, conversions: boolean) {
     process.send?.({ kind: 'result', result });
     published = true;
     console.log(JSON.stringify({ profile, conversions, p95: result.p95 }));
+    if (diagnostic) {
+      // CPU sampling perturbs latency. Record breaches, never certify this mode as qualification.
+      console.log(
+        JSON.stringify({
+          diagnosticOnly: true,
+          thresholds: result.perPage.map((p) => ({
+            page: p.index,
+            server: p.p95.server,
+            limit: p.index === 0 && profile === 'history-1M' ? 100 : 50,
+            wire: p.p95.wire,
+          })),
+        }),
+      );
+      return;
+    }
     for (const p of result.perPage) {
       assert(
         p.p95.server < (p.index === 0 && profile === 'history-1M' ? 100 : 50),
@@ -343,6 +373,7 @@ async function scenario(profile: string, conversions: boolean) {
     throw e;
   } finally {
     collecting = false;
+    await diagnostic?.finish();
     if (converter?.connected) {
       converter.send({ kind: 'stop' });
       await converterEnded;
@@ -373,10 +404,15 @@ else if (process.env.MEMORIA_MIXED_PROFILE) {
 } else {
   const reports: object[] = [];
   const diagnoseIdle = process.env.MEMORIA_MIXED_DIAGNOSE_IDLE === 'true';
-  for (const profile of diagnoseIdle ? ['content-1M'] : ['content-1M', 'history-1M'])
+  const diagnostic = process.env.MEMORIA_MIXED_DIAGNOSTIC_DIR;
+  for (const profile of diagnostic
+    ? ['history-1M']
+    : diagnoseIdle
+      ? ['content-1M']
+      : ['content-1M', 'history-1M'])
     for (let series = 1; series <= (diagnoseIdle ? 1 : 3); series++)
-      for (const conversions of diagnoseIdle ? [true] : [false, true]) {
-        const label = `mixed-${profile.toLowerCase()}-${conversions}-${series}`,
+      for (const conversions of diagnostic || diagnoseIdle ? [true] : [false, true]) {
+        const label = `${diagnostic ? 'diagnostic-' : ''}mixed-${profile.toLowerCase()}-${conversions}-${series}`,
           preparation = await prepareMeasurement(label),
           results: object[] = [];
         const child = fork(import.meta.filename, [], {
@@ -385,6 +421,7 @@ else if (process.env.MEMORIA_MIXED_PROFILE) {
               ...process.env,
               MEMORIA_MIXED_PROFILE: profile,
               MEMORIA_MIXED_CONVERSIONS: String(conversions),
+              MEMORIA_MIXED_SERIES: String(series),
             },
             stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
           }),
@@ -414,12 +451,15 @@ else if (process.env.MEMORIA_MIXED_PROFILE) {
           );
           reports.push({ profile, series, conversions, ...measured });
           await writeFile(
-            diagnoseIdle
-              ? '.local/session-7-7d-mixed-idle-diagnostic.json'
-              : '.local/session-7-7d-mixed.json',
+            diagnostic
+              ? resolve(diagnostic, 'measurement.json')
+              : diagnoseIdle
+                ? '.local/session-7-7d-mixed-idle-diagnostic.json'
+                : '.local/session-7-7d-mixed.json',
             JSON.stringify(
               {
                 date: new Date().toISOString(),
+                diagnosticOnly: !!diagnostic,
                 scope:
                   '10 real WSS clients in separate processes, 5 pages, actual other-client application; optional permanent 8K converter. No uploads yet: staged mixed-load qualification, stop at first failed ceiling.',
                 reports,

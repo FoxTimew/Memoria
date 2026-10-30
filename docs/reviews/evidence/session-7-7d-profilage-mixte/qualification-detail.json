@@ -1,0 +1,505 @@
+{
+  "groups": [
+    {
+      "profile": "content-1M",
+      "conversions": false,
+      "count": 3,
+      "values": [
+        {
+          "series": 1,
+          "exit": 0,
+          "primary": {
+            "server": 14.636200000000827,
+            "transaction": 10.152999999998428,
+            "wire": 34.790899999999965,
+            "otherClient": 34.6984
+          },
+          "typicalMax": {
+            "server": 14.11239999999816,
+            "transaction": 11.089899999999034,
+            "wire": 36.52880000000005,
+            "otherClient": 36.49805
+          }
+        },
+        {
+          "series": 2,
+          "exit": 0,
+          "primary": {
+            "server": 14.122299999995448,
+            "transaction": 10.463400000000547,
+            "wire": 34.01639999999679,
+            "otherClient": 34.031
+          },
+          "typicalMax": {
+            "server": 15.911099999997532,
+            "transaction": 11.234199999998964,
+            "wire": 42.22350000000006,
+            "otherClient": 42.09945
+          }
+        },
+        {
+          "series": 3,
+          "exit": 0,
+          "primary": {
+            "server": 16.01009999999951,
+            "transaction": 10.757499999999709,
+            "wire": 36.88270000000193,
+            "otherClient": 36.7831
+          },
+          "typicalMax": {
+            "server": 16.06090000000404,
+            "transaction": 12.561600000000908,
+            "wire": 42.50010000000111,
+            "otherClient": 42.44
+          }
+        }
+      ],
+      "medians": {
+        "primary": {
+          "server": 14.636200000000827,
+          "transaction": 10.463400000000547,
+          "wire": 34.790899999999965,
+          "otherClient": 34.6984
+        },
+        "typicalMax": {
+          "server": 15.911099999997532,
+          "transaction": 11.234199999998964,
+          "wire": 42.22350000000006,
+          "otherClient": 42.09945
+        }
+      }
+    },
+    {
+      "profile": "content-1M",
+      "conversions": true,
+      "count": 3,
+      "values": [
+        {
+          "series": 1,
+          "exit": 0,
+          "primary": {
+            "server": 17.205399999998917,
+            "transaction": 12.068899999998393,
+            "wire": 42.1971999999987,
+            "otherClient": 42.1459
+          },
+          "typicalMax": {
+            "server": 19.575400000001537,
+            "transaction": 13.376499999998487,
+            "wire": 43.59360000000015,
+            "otherClient": 43.1861
+          }
+        },
+        {
+          "series": 2,
+          "exit": 0,
+          "primary": {
+            "server": 17.046000000002095,
+            "transaction": 11.762000000002445,
+            "wire": 41.40830000000278,
+            "otherClient": 41.22095
+          },
+          "typicalMax": {
+            "server": 16.239300000001094,
+            "transaction": 12.376200000006065,
+            "wire": 41.562300000001414,
+            "otherClient": 41.2568
+          }
+        },
+        {
+          "series": 3,
+          "exit": 0,
+          "primary": {
+            "server": 18.551100000004226,
+            "transaction": 12.24029999999766,
+            "wire": 44.77549999999974,
+            "otherClient": 44.4988
+          },
+          "typicalMax": {
+            "server": 18.423399999999674,
+            "transaction": 13.928500000001804,
+            "wire": 48.33380000000034,
+            "otherClient": 48.1287
+          }
+        }
+      ],
+      "medians": {
+        "primary": {
+          "server": 17.205399999998917,
+          "transaction": 12.068899999998393,
+          "wire": 42.1971999999987,
+          "otherClient": 42.1459
+        },
+        "typicalMax": {
+          "server": 18.423399999999674,
+          "transaction": 13.376499999998487,
+          "wire": 43.59360000000015,
+          "otherClient": 43.1861
+        }
+      }
+    },
+    {
+      "profile": "history-1M",
+      "conversions": false,
+      "count": 3,
+      "values": [
+        {
+          "series": 1,
+          "exit": 0,
+          "primary": {
+            "server": 59.8292999999976,
+            "transaction": 12.17500000000291,
+            "wire": 288.53639999999723,
+            "otherClient": 315.85055
+          },
+          "typicalMax": {
+            "server": 46.75500000000466,
+            "transaction": 22.468800000002375,
+            "wire": 95.95639999999548,
+            "otherClient": 95.97635
+          }
+        },
+        {
+          "series": 2,
+          "exit": 0,
+          "primary": {
+            "server": 51.90230000000156,
+            "transaction": 11.265100000004168,
+            "wire": 256.68850000000384,
+            "otherClient": 284.3792
+          },
+          "typicalMax": {
+            "server": 30.795799999999872,
+            "transaction": 22.871299999998882,
+            "wire": 80.99269999999888,
+            "otherClient": 81.7632
+          }
+        },
+        {
+          "series": 3,
+          "exit": 0,
+          "primary": {
+            "server": 52.75859999999375,
+            "transaction": 11.931799999998475,
+            "wire": 265.33150000000023,
+            "otherClient": 291.9755
+          },
+          "typicalMax": {
+            "server": 32.65660000000207,
+            "transaction": 24.044899999993504,
+            "wire": 83.53789999999935,
+            "otherClient": 84.5166
+          }
+        }
+      ],
+      "medians": {
+        "primary": {
+          "server": 52.75859999999375,
+          "transaction": 11.931799999998475,
+          "wire": 265.33150000000023,
+          "otherClient": 291.9755
+        },
+        "typicalMax": {
+          "server": 32.65660000000207,
+          "transaction": 22.871299999998882,
+          "wire": 83.53789999999935,
+          "otherClient": 84.5166
+        }
+      }
+    },
+    {
+      "profile": "history-1M",
+      "conversions": true,
+      "count": 3,
+      "values": [
+        {
+          "series": 1,
+          "exit": 0,
+          "primary": {
+            "server": 75.50530000000435,
+            "transaction": 13.377499999995052,
+            "wire": 370.6402999999991,
+            "otherClient": 402.64725
+          },
+          "typicalMax": {
+            "server": 41.58209999999963,
+            "transaction": 30.809500000003027,
+            "wire": 107.92829999999958,
+            "otherClient": 108.9784
+          }
+        },
+        {
+          "series": 2,
+          "exit": 0,
+          "primary": {
+            "server": 68.63850000000093,
+            "transaction": 12.453800000002957,
+            "wire": 348.2930999999953,
+            "otherClient": 381.27525
+          },
+          "typicalMax": {
+            "server": 39.805099999997765,
+            "transaction": 28.036800000001676,
+            "wire": 101.88700000000244,
+            "otherClient": 102.9189
+          }
+        },
+        {
+          "series": 3,
+          "exit": 1,
+          "primary": {
+            "server": 72.99700000000303,
+            "transaction": 12.518500000005588,
+            "wire": 368.2459999999992,
+            "otherClient": 400.7067
+          },
+          "typicalMax": {
+            "server": 55.624199999991106,
+            "transaction": 26.362999999997555,
+            "wire": 112.1740000000027,
+            "otherClient": 112.7436
+          }
+        }
+      ],
+      "medians": {
+        "primary": {
+          "server": 72.99700000000303,
+          "transaction": 12.518500000005588,
+          "wire": 368.2459999999992,
+          "otherClient": 400.7067
+        },
+        "typicalMax": {
+          "server": 41.58209999999963,
+          "transaction": 28.036800000001676,
+          "wire": 107.92829999999958,
+          "otherClient": 108.9784
+        }
+      }
+    }
+  ],
+  "failedPage": {
+    "n": 200,
+    "p95validation": 38.989400000005844,
+    "p95sql": 23.870100000000093,
+    "slow": [
+      {
+        "total": 69.72340000000258,
+        "validation": 51.4999000000098,
+        "sql": 18.223499999992782,
+        "wire": 90.86049999999523,
+        "apply": 3.0384000000049127,
+        "start": 83083.2174
+      },
+      {
+        "total": 67.39370000000054,
+        "validation": 59.0060000000085,
+        "sql": 8.387699999992037,
+        "wire": 82.05199999999604,
+        "apply": 1.4795000000012806,
+        "start": 85500.0425
+      },
+      {
+        "total": 67.26149999999325,
+        "validation": 49.54780000000028,
+        "sql": 17.71369999999297,
+        "wire": 81.82230000000709,
+        "apply": 1.4759999999951106,
+        "start": 97897.1527
+      },
+      {
+        "total": 66.59870000000228,
+        "validation": 56.9265000000014,
+        "sql": 9.672200000000885,
+        "wire": 85.37999999999738,
+        "apply": 2.5599999999976717,
+        "start": 86287.0245
+      },
+      {
+        "total": 65.77010000000882,
+        "validation": 58.19470000000729,
+        "sql": 7.575400000001537,
+        "wire": 83.20570000000589,
+        "apply": 2.3941999999951804,
+        "start": 75698.976
+      },
+      {
+        "total": 63.569699999992736,
+        "validation": 55.34750000000349,
+        "sql": 8.222199999989243,
+        "wire": 80.67750000000524,
+        "apply": 1.9544000000023516,
+        "start": 77313.1244
+      },
+      {
+        "total": 62.153299999998126,
+        "validation": 44.81560000000172,
+        "sql": 17.337699999996403,
+        "wire": 82.66740000000209,
+        "apply": 4.0143000000025495,
+        "start": 55608.8493
+      },
+      {
+        "total": 61.72299999999814,
+        "validation": 54.3917999999976,
+        "sql": 7.3312000000005355,
+        "wire": 75.86910000000353,
+        "apply": 2.149699999994482,
+        "start": 88780.7032
+      },
+      {
+        "total": 60.35779999999795,
+        "validation": 45.067699999999604,
+        "sql": 15.290099999998347,
+        "wire": 75.98210000000108,
+        "apply": 1.837599999998929,
+        "start": 87898.837
+      },
+      {
+        "total": 59.79769999999553,
+        "validation": 38.989400000005844,
+        "sql": 20.808299999989686,
+        "wire": 78.19989999999962,
+        "apply": 3.1821000000054482,
+        "start": 76510.0732
+      },
+      {
+        "total": 55.6134999999922,
+        "validation": 39.66370000000461,
+        "sql": 15.94979999998759,
+        "wire": 78.76299999999901,
+        "apply": 6.90240000000631,
+        "start": 84688.1186
+      },
+      {
+        "total": 54.568299999999,
+        "validation": 38.368699999991804,
+        "sql": 16.199600000007194,
+        "wire": 74.70449999999983,
+        "apply": 4.671199999997043,
+        "start": 65950.2719
+      }
+    ]
+  },
+  "conversions": [
+    {
+      "elapsed": 601.305206,
+      "memory": 94105600,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 15624.801379,
+      "memory": 95137792,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 588.582555,
+      "memory": 93814784,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 15712.026428,
+      "memory": 121303040,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 618.939493,
+      "memory": 92954624,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 15737.952929000001,
+      "memory": 95248384,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 674.410473,
+      "memory": 92721152,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 16457.56454,
+      "memory": 94822400,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 853.372502,
+      "memory": 121204736,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 16609.479900000002,
+      "memory": 121204736,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 678.697168,
+      "memory": 121204736,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 15112.1333,
+      "memory": 121204736,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 699.1927459999999,
+      "memory": 92950528,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 16230.497209000001,
+      "memory": 94375936,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 789.63392,
+      "memory": 95891456,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 16539.297348999997,
+      "memory": 96845824,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 700.5842250000001,
+      "memory": 98054144,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 15121.63528,
+      "memory": 98054144,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 710.721864,
+      "memory": 118263808,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 16461.213589000003,
+      "memory": 118263808,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 695.924739,
+      "memory": 118263808,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 16739.288262,
+      "memory": 122552320,
+      "profile": "noise"
+    },
+    {
+      "elapsed": 686.804092,
+      "memory": 122552320,
+      "profile": "solid"
+    },
+    {
+      "elapsed": 15382.009571999999,
+      "memory": 122552320,
+      "profile": "noise"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-30T13:25:34.122Z",
+  "diagnosticOnly": true,
+  "node": "v24.21.0",
+  "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+  "commit": "a82105b9b819ff08bcc915c1888b0324d1f3bbb9",
+  "sources": {
+    "apps/collab/src/testing/files-mixed.e2e.ts": "1a1b1c13ec90e2b0ce058a5c2cca0199c14f0cdd904ced4b5ff4ff48f0c6cb2d",
+    "apps/collab/src/testing/mixed-profile.ts": "e69e56f49d8750d6dba2beab0149739e85a556be07db3c40bfd803db948d906c",
+    "scripts/mixed-sql-observer.mjs": "12ce0a81e9b22a52c20033ce23a6a313b5c0e1c9c5cdacf4119e2a9de3bcbc76",
+    "apps/collab/src/service/validation-pool.ts": "1b1135968fb557b2eb2bff6d13f092db94b4e397c40c023865815dfaa5b61842",
+    "apps/collab/src/service/projection.ts": "79c4080d7851f56be79e28d83433263a50c779b85f561f52f2c438dfdc348e81",
+    "apps/collab/src/service/store.ts": "2c27355a43d5cd201363d5c3c8ea697bf50bc0842595cfe3f127232f9710ac81"
+  },
+  "protocol": "Three diagnostic series of the unchanged history + 8K conversions workload, ten independent clients. CPU/pool/main-loop/SQL observers enabled. Latencies are diagnostic, never qualification; existing thresholds recorded, connection/resource failures still stop. Power/memory/swap guards unchanged."
+}

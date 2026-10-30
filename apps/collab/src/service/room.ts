@@ -1,4 +1,5 @@
 import * as Y from 'yjs';
+import { setImmediate as yieldToIo } from 'node:timers/promises';
 import type { CollaborationCommand } from '@memoria/contracts';
 import type { AccessRequest } from './access.ts';
 import { CandidateRejected } from '../validator.ts';
@@ -192,6 +193,10 @@ export class Room {
       );
       committed = true;
       await this.replica.commit();
+      // A historical Yjs tree can monopolize the main thread. Drain pending I/O
+      // before publication; the room queue still owns this committed batch, and
+      // neither its broadcast nor its durable receipt is emitted before apply.
+      await yieldToIo();
       Y.applyUpdate(this.doc, update);
       this.revision = next.revision;
       this.encodedUpperBound = validation.encodedUpperBound;
