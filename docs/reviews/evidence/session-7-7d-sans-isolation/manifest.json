@@ -6,14 +6,14 @@
     {
       "name": "check.txt",
       "source": ".local/session-7-7d-without-isolation-check.log",
-      "bytes": 1937,
-      "sha256": "d0ad737ab5d59e1b8b8fa97cda60da0111f46d9bc1a94a0a1ce52041ca3d37f1"
+      "bytes": 1887,
+      "sha256": "b58af678ebcbb8632167eba62b0b7633733abc01f4492752c184cb2b7730f539"
     },
     {
       "name": "admission.txt",
       "source": ".local/session-7-7d-cpu-admission.log",
-      "bytes": 2203,
-      "sha256": "e52dff9791c4cef3d897da7ff8ed17819882d73b48de8d768e5fab8016ee3def"
+      "bytes": 2168,
+      "sha256": "2bcbda96ea6e9edc974e667024c34a01e0cc7999acccdc198ed26e8874459f81"
     },
     {
       "name": "admission.json",
@@ -24,32 +24,33 @@
     {
       "name": "web-build.txt",
       "source": ".local/session-7-7d-cpu-web-build.log",
-      "bytes": 1160,
-      "sha256": "284092b7ad62a43a0dd3dd39599de25069ff73ea643d78c1f3310df92e4910ab"
+      "bytes": 1124,
+      "sha256": "be3798be1fbce6c4c44420d4701e5e5c503c469eaad2eb8ce2440f075b6eb974"
     },
     {
       "name": "waiver-test.txt",
       "source": ".local/session-7-7d-waiver-tests.log",
-      "bytes": 209,
-      "sha256": "4e89f15bca1bf929ea1422413694b335a60b8204b2c7fdbe73fdf46d03690b9c"
+      "bytes": 200,
+      "sha256": "02cf2864b4795f18f0ba000b2b85da9a45efeede003c6a3288f231fb028843da"
     },
     {
       "name": "types-first-attempt.txt",
       "source": ".local/session-7-7d-cpu-types.log",
-      "bytes": 2289,
-      "sha256": "d3b105b0a757f6dd69dd91e4cde384722649433b78f828bc282c6db2f4204162"
+      "bytes": 2271,
+      "sha256": "e9bc489092bc995da9f63b716d0a9f9038db19eacd4dff31bd345f754ca57ef1"
     },
     {
       "name": "types-second-attempt.txt",
       "source": ".local/session-7-7d-cpu-types-2.log",
-      "bytes": 759,
-      "sha256": "1909247ca369fa075d33baf17c790a191fa3ead469de49d5ada70d55be108be7"
+      "bytes": 749,
+      "sha256": "04164e8d21be4f67bd72ef8ac60d7324832f893757cc56ba1cab1bd28f3bd7a2"
     },
     {
       "name": "types-final-api.txt",
       "source": ".local/session-7-7d-cpu-types-3.log",
-      "bytes": 16,
-      "sha256": "5a3973f79ed9becd5f23c4feff467513814de7ea381d75a4d2e339aa8b8edca9"
+      "bytes": 15,
+      "sha256": "8366207267355d3e3d5bf3bf6e8c94c5f93f6078c34f08973fa2b38cdda6cc92"
     }
-  ]
+  ],
+  "normalization": "Text artifacts normalized to LF, matching repository storage; hashes cover the published bytes."
 }
