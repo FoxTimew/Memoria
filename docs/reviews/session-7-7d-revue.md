@@ -1,5 +1,7 @@
 # Session 7d — revue adverse et mesures finales
 
+**État courant après profilage autorisé, 6 novembre :** [correction ciblée du chargement et comparaison finale](session-7-7d-froid.md). Les références validées sont retournées avec l'initialisation, sans copie supplémentaire du contenu complet ; vérification SQL inchangée. 42 résultats fonctionnels ciblés réussis. Le froid contenu respecte la marge, mais le froid historique atteint **272,246 ms contre 240,685 ms (+13,11 %)** : nouvel arrêt, aucun seuil relevé ni autre optimisation. Les points suivants sont historiques.
+
 **État courant, 6 novembre, après correction de reprise :** la [comparaison alternée avec main](session-7-7d-comparaison.md) passe les plafonds absolus, mais échoue sur la non-régression du froid contenu : 145,649 → 161,508 ms, **+10,89 %**, marge de 10 % dépassée de 1,294 ms. Douze séries valides, 213 intervalles sans swap. Arrêt avant nouvelle optimisation, arbitrage demandé. Aucun résultat de charge restant n'est déclaré acquis.
 
 **Suite du diagnostic, 6 novembre :** [reprise ciblée après refus de leadership](session-7-7d-reconnexion.md). La transaction périmée est bien rejetée ; sa traduction en refus permanent de contenu est corrigée. Cette fiche distingue les preuves de reconnexion du chemin global `CONTROL_UNAVAILABLE`, toujours ouvert. Les constats d'arrêt ci-dessous sont historiques, pas une clôture de 7d.

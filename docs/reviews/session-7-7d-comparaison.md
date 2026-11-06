@@ -1,5 +1,7 @@
 # Session 7d — comparaison alternée finale, arrêt sur le froid contenu
 
+**Suite autorisée :** [profilage et transfert réduit au chargement](session-7-7d-froid.md). La comparaison suivante passe le froid contenu, mais s'arrête sur le froid historique (+13,11 %). Le présent rapport reste le résultat antérieur conservé.
+
 6 novembre 2026. Application candidate **`b31dd28adf98c7c16067955d6979bba2a358ddbd`**, incluant la [reprise ciblée](session-7-7d-reconnexion.md), comparée à main **`56c52b4b5cb4c4df94841328398d141955b48394`**. **La campagne s'arrête : une médiane dépasse la règle de non-régression.** Aucun seuil changé, aucune optimisation après ce résultat. Cette fiche ne clôture pas 7d.
 
 ## Protocole et portée

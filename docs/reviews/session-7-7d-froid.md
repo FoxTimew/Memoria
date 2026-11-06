@@ -1,6 +1,6 @@
 # Session 7d — profilage puis réduction du transfert au chargement
 
-6 novembre 2026. Suite autorisée du [dépassement de non-régression](session-7-7d-comparaison.md), référence de diagnostic `29eb2dd` (application `b31dd28`). Profilage présenté au développeur avant modification applicative ; aucun contrôle ni délai relevé. **La correction attend encore la comparaison alternée non instrumentée avant qualification.**
+6 novembre 2026. Suite autorisée du [dépassement de non-régression](session-7-7d-comparaison.md), référence de diagnostic `29eb2dd` (application `b31dd28`). Profilage présenté au développeur avant modification applicative ; aucun contrôle ni délai relevé. **Correction fonctionnellement testée, mais comparaison finale refusée sur le froid historique : +13,11 %. Nouvel arrêt avant optimisation supplémentaire.**
 
 ## Diagnostic mesuré avant correction
 
@@ -43,4 +43,21 @@ Lire d'abord `apps/collab/src/service/room.ts`, puis `incremental-worker.ts`, `i
 
 Dans deux navigateurs autorisés, ouvrir une page contenant une image, un fichier et un bloc fichier vide. Modifier une légende, fermer les deux onglets et attendre le déchargement de la page ; la rouvrir et vérifier contenu, aperçus, téléchargements et reprise de la collaboration. Refaire après retrait de l'accès de l'autre compte : ce compte ne doit plus ouvrir le document. Ne pas corrompre le registre de développement manuellement : le scénario de registre incomplet utilise une base de test isolée via `node scripts/test-collab.mjs --suite files`.
 
-La qualification finale reste conditionnée à trois paires alternées avec main, plafonds absolus et marge `max(10 %, 2 ms)` inchangés. Un nouvel échec impose un nouvel arrêt ; aucune sélection de séries favorables.
+## Comparaison finale : froid contenu conforme, froid historique refusé
+
+Candidate immuable **`cbfd14acc931c50ebcb1a8c28d3982849a814f40`**, main **`56c52b4b5cb4c4df94841328398d141955b48394`**. Même banc non instrumenté, mêmes fixtures, versions et protocole que la campagne précédente ; trois paires AB/BA/AB, douze processus. Aucun build/test parallèle. Les [56 artefacts de comparaison](evidence/session-7-7d-froid-comparaison/artifacts.json) conservent les trois séries sans sélection, les sources du protocole, journaux et empreintes.
+
+| Mesure            | Main : trois p95 (ms)       | Candidate : trois p95 (ms)  | Médiane main → candidate | Écart        | Résultat  |
+| ----------------- | --------------------------- | --------------------------- | ------------------------ | ------------ | --------- |
+| Update contenu    | 8,834 / 10,211 / 9,061      | 9,003 / 8,925 / 8,804       | 9,061 → 8,925            | −1,50 %      | Conforme  |
+| Update historique | 33,748 / 33,250 / 37,087    | 34,132 / 34,395 / 33,461    | 33,748 → 34,132          | +1,14 %      | Conforme  |
+| Froid contenu     | 149,341 / 149,129 / 152,210 | 161,658 / 171,650 / 158,585 | 149,341 → 161,658        | +8,25 %      | Conforme  |
+| Froid historique  | 240,114 / 240,685 / 245,225 | 296,049 / 253,424 / 272,246 | **240,685 → 272,246**    | **+13,11 %** | **Arrêt** |
+
+Les douze séries passent leurs plafonds absolus. Le froid historique dépasse cependant la marge de **24,069 ms** : surcoût **31,561 ms**, soit **7,493 ms au-delà de l'autorisation**. Limite résultante : **264,754 ms**. Le plafond absolu de 500 ms et la dérogation spécifique aux pages typiques pendant historique/8K n'autorisent pas ce dépassement de non-régression. La commande sort avec le code 1, une entrée `failures`, aucune série invalide.
+
+Secteur reconnu dans chaque série ; minima Windows **5,39 Gio avant et après préparation**, WSL **5,59 Gio après préparation** ; **214 intervalles vmstat sans swap**, compteurs inchangés. Aucun refus d'hygiène. Les douze processus de mesure réussissent leurs assertions absolues ; seule la décision de comparaison est rouge.
+
+Le froid contenu respecte désormais la marge dans cette campagne, mais sa médiane candidate n'est pas inférieure à celle de la précédente (161,658 contre 161,508 ms) ; la référence a aussi changé de valeur. **Ne pas présenter ces campagnes successives comme une preuve isolée d'accélération de bout en bout.** Le travail inutile identifié a été supprimé ; l'effet global reste soumis à cette comparaison et à sa variabilité.
+
+Le nouveau surcoût historique n'est pas encore attribué : la comparaison n'instrumente pas initialisation, transfert et transaction séparément. Le profilage précédait la correction ; il ne mesure donc pas ce nouveau résultat. Aucun nouvel essai ni optimisation après l'échec. Recommandation : **profiler le froid historique et comparer de façon alternée la version avant correction à cette candidate**, pour isoler l'effet du changement avant une autre correction. Alternative : dérogation explicite limitée à ces 272,246 ms (+13,11 %) sur ce portable ; **aucune dérogation appliquée**. 7d reste ouverte, gros transferts et autres obligations toujours différés.
