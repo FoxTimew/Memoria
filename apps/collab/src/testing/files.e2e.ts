@@ -433,6 +433,44 @@ test('7a actual Room journal: author attribution, rollback, independent usages a
       },
     );
     await t.test(
+      'cold load still rejects a missing usage and accepts the exact restored ledger',
+      async () => {
+        const saved = (
+          await db.pool.query('SELECT * FROM file_usages WHERE page_id=$1 LIMIT 1', [db.page])
+        ).rows[0];
+        assert(saved);
+        const reopen = async () => {
+          const reopenedDoc = new Y.Doc(),
+            reopened = new Room(store, db.page, state.generation, reopenedDoc, () => {});
+          try {
+            await reopened.load();
+          } finally {
+            await reopened.close();
+            reopenedDoc.destroy();
+          }
+        };
+        await reopen();
+        await db.pool.query('DELETE FROM file_usages WHERE id=$1', [saved.id]);
+        try {
+          await assert.rejects(reopen(), /FILE_LEDGER_REBUILD_REQUIRED/);
+        } finally {
+          await db.pool.query(
+            "INSERT INTO file_usages(id,workspace_id,file_id,page_id,slot_kind,slot_id,generation,revision) VALUES($1,$2,$3,$4,'block',$5,$6,$7)",
+            [
+              saved.id,
+              saved.workspace_id,
+              saved.file_id,
+              saved.page_id,
+              saved.slot_id,
+              saved.generation,
+              saved.revision,
+            ],
+          );
+        }
+        await reopen();
+      },
+    );
+    await t.test(
       'legacy document without a verified ledger stays closed; opening never infers rights from projection',
       async () => {
         const saved = (

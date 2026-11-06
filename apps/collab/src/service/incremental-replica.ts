@@ -161,6 +161,20 @@ export class IncrementalReplica {
   inspect() {
     return this.blocks;
   }
+  initialState() {
+    // reset() has already validated the complete document. Transfer only the
+    // references needed for the cold-load ledger check, never the whole content.
+    return {
+      encodedBytes: this.encodedUpperBound,
+      files: this.blocks
+        .filter(
+          (b) =>
+            (b.type === 'core.image' || b.type === 'core.file') &&
+            typeof b.content.fileId === 'string',
+        )
+        .map((b) => ({ slot: b.id, file: b.content.fileId as string })),
+    };
+  }
   get encodedUpperBound() {
     return this.upper;
   }

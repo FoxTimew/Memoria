@@ -18,9 +18,9 @@ export class IncrementalValidator {
   }
   async init(snapshot: Uint8Array, updates: Uint8Array[] = []) {
     if (updates.reduce((sum, update) => sum + update.length, snapshot.length) <= 8 * 1024 ** 2)
-      return (await this.request('init', { snapshot, updates }, 30000)).result as {
-        encodedBytes: number;
-      };
+      return (await this.request('init', { snapshot, updates }, 30000)).result as ReturnType<
+        IncrementalReplica['initialState']
+      >;
     // A delayed projection can leave a long journal for a small document. Stream bounded
     // chunks through the same worker instead of permanently rejecting its reload.
     await this.request('init-start', { snapshot }, 30000);
@@ -36,7 +36,9 @@ export class IncrementalValidator {
       bytes += update.length;
     }
     if (chunk.length) await this.request('init-chunk', { updates: chunk }, 30000);
-    return (await this.request('init-finish', {}, 30000)).result as { encodedBytes: number };
+    return (await this.request('init-finish', {}, 30000)).result as ReturnType<
+      IncrementalReplica['initialState']
+    >;
   }
   private async request(operation: string, data: object = {}, deadline = 250) {
     if (this.busy) throw new Error('Replica worker busy');

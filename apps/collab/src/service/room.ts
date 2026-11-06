@@ -87,23 +87,12 @@ export class Room {
         ? Y.mergeUpdates([loaded.snapshot, ...loaded.updates])
         : loaded.snapshot,
     );
-    this.encodedUpperBound = (await init).encodedBytes;
+    const initialized = await init;
+    this.encodedUpperBound = initialized.encodedBytes;
     await this.reserve(this.encodedUpperBound);
     this.replica.resize(replicaReservation(this.encodedUpperBound));
     this.revision = Number(loaded.state.content_revision);
-    const blocks = await this.replica.inspect();
-    await this.store.verifyFileLedger(
-      this.page,
-      this.generation,
-      this.revision,
-      blocks
-        .filter(
-          (b) =>
-            (b.type === 'core.image' || b.type === 'core.file') &&
-            typeof b.content.fileId === 'string',
-        )
-        .map((b) => ({ slot: b.id, file: b.content.fileId as string })),
-    );
+    await this.store.verifyFileLedger(this.page, this.generation, this.revision, initialized.files);
   }
   private async enqueue(entry: Entry) {
     this.pending++;

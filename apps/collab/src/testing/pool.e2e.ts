@@ -10,6 +10,8 @@ import { decodeDocument } from '../codec.ts';
 import { firstText, peer, seedPage, until } from './pool-helpers.ts';
 import { ValidationPool } from '../service/validation-pool.ts';
 import { IncrementalValidator } from '../service/incremental-validator.ts';
+import { randomUUID } from 'node:crypto';
+import { applyCommands } from '../service/commands.ts';
 
 test(
   'Shared worker failure reloads every affected replica, including an in-flight durable commit',
@@ -137,6 +139,97 @@ test('A long replay crosses bounded worker messages and keeps independent replic
   } finally {
     await first.close();
     await second.close();
+    await pool.close();
+    fixture.doc.destroy();
+  }
+});
+
+test('Cold init returns validated final file references for normal and chunked replay', async () => {
+  const fixture = await representativeDocument(300, 8),
+    pool = new ValidationPool(1);
+  const replicas = Array.from({ length: 4 }, () => new IncrementalValidator(pool));
+  const imageSlot = randomUUID(),
+    fileSlot = randomUUID(),
+    imageFile = randomUUID(),
+    oldFile = randomUUID(),
+    nextFile = randomUUID();
+  const parent = decodeDocument(fixture.doc)[0]!.id;
+  try {
+    applyCommands(fixture.doc, [
+      {
+        op: 'insert',
+        id: imageSlot,
+        parentId: parent,
+        afterId: null,
+        type: 'core.image',
+        schemaVersion: 1,
+        content: { fileId: imageFile, alt: '', caption: '', width: 512 },
+      },
+      {
+        op: 'insert',
+        id: fileSlot,
+        parentId: null,
+        afterId: null,
+        type: 'core.file',
+        schemaVersion: 1,
+        content: { fileId: oldFile, caption: '' },
+      },
+      {
+        op: 'insert',
+        id: randomUUID(),
+        parentId: null,
+        afterId: null,
+        type: 'core.file',
+        schemaVersion: 1,
+        content: { fileId: null, caption: 'Empty attachment' },
+      },
+    ]);
+    const snapshot = Y.encodeStateAsUpdate(fixture.doc),
+      originalBlocks = decodeDocument(fixture.doc);
+    const sort = (refs: { slot: string; file: string }[]) =>
+      [...refs].sort((a, b) => a.slot.localeCompare(b.slot));
+    const initial = await replicas[0]!.init(snapshot);
+    assert.deepEqual(
+      sort(initial.files),
+      sort([
+        { slot: imageSlot, file: imageFile },
+        { slot: fileSlot, file: oldFile },
+      ]),
+    );
+    const vector = Y.encodeStateVector(fixture.doc);
+    applyCommands(fixture.doc, [
+      {
+        op: 'update',
+        id: fileSlot,
+        schemaVersion: 1,
+        content: { fileId: nextFile, caption: 'Changed in journal' },
+      },
+    ]);
+    const tail = Y.encodeStateAsUpdate(fixture.doc, vector);
+    const normal = await replicas[1]!.init(snapshot, [tail]);
+    const chunked = await replicas[2]!.init(snapshot, [
+      ...Array.from({ length: Math.ceil((17 * 1024 ** 2) / snapshot.length) }, () => snapshot),
+      tail,
+    ]);
+    const expected = sort([
+      { slot: imageSlot, file: imageFile },
+      { slot: fileSlot, file: nextFile },
+    ]);
+    assert.deepEqual(sort(normal.files), expected);
+    assert.deepEqual(sort(chunked.files), expected);
+    assert.deepEqual(await replicas[1]!.inspect(), decodeDocument(fixture.doc));
+    assert.deepEqual(await replicas[2]!.inspect(), await replicas[1]!.inspect());
+    assert.deepEqual(await replicas[0]!.inspect(), originalBlocks);
+    const image = [...fixture.doc.getXmlFragment('prosemirror').createTreeWalker(() => true)].find(
+      (node) => node instanceof Y.XmlElement && node.nodeName === 'memoriaImage',
+    ) as Y.XmlElement;
+    image.setAttribute('fileId', 'not-a-valid-uuid');
+    await assert.rejects(
+      replicas[3]!.init(Y.encodeStateAsUpdate(fixture.doc)),
+      /REPLICA_OPERATION_FAILED/,
+    );
+  } finally {
+    for (const replica of replicas) await replica.close();
     await pool.close();
     fixture.doc.destroy();
   }

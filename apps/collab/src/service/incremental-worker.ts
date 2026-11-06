@@ -33,7 +33,7 @@ parentPort!.on(
         replicas.delete(replicaId);
         const initialized = new IncrementalReplica(snapshot, updates);
         replicas.set(replicaId, initialized);
-        result = { encodedBytes: initialized.encodedUpperBound };
+        result = initialized.initialState();
       } else if (operation === 'dispose') {
         replica?.close();
         replicas.delete(replicaId);
@@ -56,7 +56,7 @@ parentPort!.on(
         initializing.delete(replicaId);
         const initialized = new IncrementalReplica(bytes);
         replicas.set(replicaId, initialized);
-        result = { encodedBytes: initialized.encodedUpperBound };
+        result = initialized.initialState();
       } else if (operation === 'metrics') {
         if (collect && typeof global.gc === 'function') global.gc();
         const memory = process.memoryUsage();
