@@ -1,5 +1,7 @@
 # Session 7d — profilage puis réduction du transfert au chargement
 
+**Suite du 7 novembre :** le [diagnostic alterné du froid historique](session-7-7d-diagnostic-historique.md) compare avant/après correction puis main/candidate. Il ne démontre pas de cause imputable au correctif IPC ; aucune nouvelle modification applicative. Les séries instrumentées ne remplacent pas le résultat non instrumenté rouge ci-dessous. Nouvel arbitrage attendu, 7d toujours ouverte.
+
 6 novembre 2026. Suite autorisée du [dépassement de non-régression](session-7-7d-comparaison.md), référence de diagnostic `29eb2dd` (application `b31dd28`). Profilage présenté au développeur avant modification applicative ; aucun contrôle ni délai relevé. **Correction fonctionnellement testée, mais comparaison finale refusée sur le froid historique : +13,11 %. Nouvel arrêt avant optimisation supplémentaire.**
 
 ## Diagnostic mesuré avant correction

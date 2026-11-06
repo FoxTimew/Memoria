@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { createWriteStream } from 'node:fs';
 import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { availableParallelism, cpus, freemem, platform, release, totalmem } from 'node:os';
-import { resolve, relative } from 'node:path';
+import { resolve, relative, basename, dirname } from 'node:path';
 import { finished } from 'node:stream/promises';
 import { prepareMeasurement, runMeasuredSeries } from './measurement-memory.mjs';
 import { assessRegression } from './measurement-regression.mjs';
@@ -12,6 +12,10 @@ import { assessRegression } from './measurement-regression.mjs';
 // Immutable application snapshots, one common harness, no compiler during measurements.
 const repo = resolve('.');
 const args = process.argv.slice(2);
+const profileCold = args.includes('--profile-cold');
+const profileWorker = args.includes('--profile-worker');
+if (profileWorker && !profileCold) throw new Error('--profile-worker requires --profile-cold');
+const suites = profileCold ? ['cold'] : ['warm', 'cold'];
 const session6 = args.includes('--session6');
 const session5 = args.includes('--session5') || session6;
 const session4 = args.includes('--session4') || session5;
@@ -55,6 +59,8 @@ const protocolHash = hash(
     await readFile(new URL('./measurement-memory.mjs', import.meta.url)),
     await readFile(new URL('./docker-test-isolation.mjs', import.meta.url)),
     await readFile(new URL('./measurement-regression.mjs', import.meta.url)),
+    ...(profileCold ? [await readFile('apps/collab/src/testing/cold-profile.ts')] : []),
+    ...(profileWorker ? [await readFile('apps/collab/src/testing/cold-worker-profile.ts')] : []),
   ]),
 );
 let manifest;
@@ -73,6 +79,8 @@ if (option('--resume')) {
   await mkdir(directory, { recursive: true });
   manifest = {
     commits,
+    profileCold,
+    profileWorker,
     profiles,
     protocolHash,
     lockfileHash: hash(await readFile('pnpm-lock.yaml')),
@@ -95,9 +103,19 @@ if (option('--resume')) {
     artifacts: {},
     series: [],
   };
+  if (profileCold)
+    manifest.protocol +=
+      ' Diagnostic cold-only instrumentation shared by both versions; not a release qualification.';
   const common = {};
   for (const name of ['warm.e2e.ts', 'cold.e2e.ts', 'database.ts', 'profiles.ts'])
     common[name] = git('show', `${commits.candidate}:apps/collab/src/testing/${name}`).toString();
+  if (profileCold)
+    common['cold-profile.ts'] = await readFile('apps/collab/src/testing/cold-profile.ts', 'utf8');
+  if (profileWorker)
+    common['cold-worker-profile.ts'] = await readFile(
+      'apps/collab/src/testing/cold-worker-profile.ts',
+      'utf8',
+    );
   if (session4) {
     const target = '    return {\n      pool,';
     if (!common['database.ts'].includes(target)) throw new Error('Review changed database fixture');
@@ -214,11 +232,13 @@ export function createValidationContext() {
           resolve(folder, 'packages/db/drizzle'),
         );
       }
-      for (const entry of ['incremental-worker', 'warm', 'cold']) {
+      for (const entry of ['incremental-worker', ...suites]) {
         const source =
           entry === 'incremental-worker'
             ? `${folder}/apps/collab/src/service/${entry}.ts`
-            : `${testing}/${entry}.e2e.ts`;
+            : profileCold && entry === 'cold'
+              ? `${testing}/cold-profile.ts`
+              : `${testing}/${entry}.e2e.ts`;
         const output = `${bundleRoot}/${configuration}/${entry}.mjs`;
         await build({
           entryPoints: [source],
@@ -234,19 +254,84 @@ export function createValidationContext() {
             resolve('node_modules'),
             ...packageFolders,
           ],
-          plugins: session4
-            ? [
-                {
-                  name: 'immutable-workspace-packages',
-                  setup(builder) {
-                    builder.onResolve({ filter: /^@memoria\// }, ({ path }) => {
-                      if (!exports.has(path)) throw new Error(`Missing snapshot export: ${path}`);
-                      return { path: exports.get(path) };
-                    });
+          plugins: [
+            ...(session4
+              ? [
+                  {
+                    name: 'immutable-workspace-packages',
+                    setup(builder) {
+                      builder.onResolve({ filter: /^@memoria\// }, ({ path }) => {
+                        if (!exports.has(path)) throw new Error(`Missing snapshot export: ${path}`);
+                        return { path: exports.get(path) };
+                      });
+                    },
                   },
-                },
-              ]
-            : [],
+                ]
+              : []),
+            ...(profileWorker && entry === 'incremental-worker'
+              ? [
+                  {
+                    name: 'diagnostic-worker-spans',
+                    setup(builder) {
+                      builder.onLoad(
+                        { filter: /incremental-(worker|replica)\.ts$/ },
+                        async ({ path }) => {
+                          let contents = await readFile(path, 'utf8');
+                          if (basename(path) === 'incremental-replica.ts') {
+                            const loop =
+                              '    for (const entries of this.doc.store.clients.values())';
+                            const end =
+                              '      for (const item of entries) this.index.structures += item.length;';
+                            if (!contents.includes(loop) || !contents.includes(end))
+                              throw new Error('Review changed structure loop');
+                            contents = contents
+                              .replaceAll('Y.applyUpdate(', 'profileApply(')
+                              .replaceAll('decodeDocument(', 'profileDecode(')
+                              .replace(
+                                loop,
+                                '    const structuresStarted = performance.now();\n' + loop,
+                              )
+                              .replace(
+                                end,
+                                end + "\n    recordWorkerStage('structures', structuresStarted);",
+                              );
+                            contents =
+                              `import {measureWorkerStage,recordWorkerStage} from '../testing/cold-worker-profile.ts';\n` +
+                              contents +
+                              `
+const profileApply = (...args: Parameters<typeof Y.applyUpdate>) => measureWorkerStage('applyYjs',()=>Y.applyUpdate(...args));
+const profileDecode = (...args: Parameters<typeof decodeDocument>) => measureWorkerStage('decodeModels',()=>decodeDocument(...args));
+`;
+                          } else {
+                            const reply =
+                              'parentPort!.postMessage({ id, result, elapsed: performance.now() - started });';
+                            if (!contents.includes(reply))
+                              throw new Error('Review changed worker reply');
+                            contents = contents
+                              .replace(
+                                'const started = performance.now();',
+                                'const started = performance.now();\n    beginWorkerProfile();',
+                              )
+                              .replace(
+                                reply,
+                                'parentPort!.postMessage({ id, result, elapsed: performance.now() - started, profileWorker: endWorkerProfile() });',
+                              );
+                            contents =
+                              `import {beginWorkerProfile,endWorkerProfile} from '../testing/cold-worker-profile.ts';\n` +
+                              contents;
+                          }
+                          const name = `${configuration}-${basename(path)}.instrumented.txt`;
+                          await writeFile(`${directory}/${name}`, contents);
+                          (manifest.artifacts[configuration].instrumentedSources ??= {})[name] =
+                            hash(contents);
+                          return { contents, loader: 'ts', resolveDir: dirname(path) };
+                        },
+                      );
+                    },
+                  },
+                ]
+              : []),
+          ],
         });
         manifest.artifacts[configuration].bundles[entry] = {
           path: relative(repo, output),
@@ -261,7 +346,7 @@ export function createValidationContext() {
 }
 console.log(`Results: ${directory}`);
 for (let iteration = 1; iteration <= 3; iteration++) {
-  for (const suite of ['warm', 'cold']) {
+  for (const suite of suites) {
     for (const configuration of iteration === 2
       ? ['candidate', 'reference']
       : ['reference', 'candidate']) {
@@ -325,6 +410,11 @@ for (let iteration = 1; iteration <= 3; iteration++) {
           if ((await stat(path)).mtimeMs < start)
             throw new Error(`No fresh ${name} report; complete log retained`);
           const report = JSON.parse(await readFile(path, 'utf8'));
+          if (profileCold) {
+            const profilePath = '.local/7d-cold-profile.json';
+            if ((await stat(profilePath)).mtimeMs < start) throw new Error('No fresh cold profile');
+            await writeFile(`${directory}/${name}-profile.json`, await readFile(profilePath));
+          }
           if (!report.reports.every((r) => r.memoryAfterPreparation))
             throw new Error(
               'Missing post-preparation memory evidence; use the updated common harness',
@@ -359,7 +449,7 @@ for (let iteration = 1; iteration <= 3; iteration++) {
 const median = (values) => [...values].sort((a, b) => a - b)[1];
 const metrics = {},
   failures = [];
-for (const suite of ['warm', 'cold'])
+for (const suite of suites)
   for (const profile of Object.keys(profiles)) {
     const key = `${suite}:${profile}`,
       metric = {};
@@ -390,6 +480,8 @@ for (const suite of ['warm', 'cold'])
   }
 const summary = {
   commits,
+  profileCold,
+  profileWorker,
   profiles,
   protocolHash,
   metrics,
