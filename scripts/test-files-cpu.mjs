@@ -5,6 +5,21 @@ import { setTimeout, clearTimeout } from 'node:timers';
 import { resolve } from 'node:path';
 import { prepareMeasurement, runMeasuredSeries } from './measurement-memory.mjs';
 
+const seriesOption = (name, fallback) => {
+  const index = process.argv.indexOf(name);
+  return index < 0 ? fallback : Number(process.argv[index + 1]);
+};
+const first = seriesOption('--first-series', 1),
+  last = seriesOption('--last-series', 3);
+const extended = process.argv.includes('--extended-cpu');
+if (![first, last].every((n) => Number.isInteger(n) && n >= 1 && n <= 3) || first > last)
+  throw Error('CPU_SERIES_RANGE_INVALID');
+const campaignPrefix = extended ? 'cpu-extended-campaign' : 'cpu-campaign';
+const campaignPath =
+  first === 1 && last === 3
+    ? `.local/7d/${campaignPrefix}.json`
+    : `.local/7d/${campaignPrefix}-${first}-${last}.json`;
+
 const run = async (file, args, cwd) => {
   const child = spawn(process.execPath, [resolve(file), ...args], {
     stdio: 'inherit',
@@ -20,14 +35,18 @@ await run('scripts/build-server.mjs', ['api', '--files-ui-e2e']);
 if (!process.argv.includes('--built-web'))
   await run('scripts/run-web.mjs', ['build'], resolve('apps/web'));
 const reports = [];
-for (let series = 1; series <= 3; series++) {
-  const label = 'files-cpu-front-' + series;
+for (let series = first; series <= last; series++) {
+  const label = (extended ? 'files-cpu-extended-' : 'files-cpu-front-') + series;
   const preparation = await prepareMeasurement(label);
-  const child = fork('apps/api/dist/files-ui.e2e.mjs', ['--cpu'], {
-    execArgv: ['--env-file=.env', '--use-system-ca'],
-    stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
-    windowsHide: true,
-  });
+  const child = fork(
+    'apps/api/dist/files-ui.e2e.mjs',
+    ['--cpu', ...(extended ? ['--extended-cpu'] : [])],
+    {
+      execArgv: ['--env-file=.env', '--use-system-ca'],
+      stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
+      windowsHide: true,
+    },
+  );
   const ended = once(child, 'exit');
   let closed = false;
   void ended.then(() => {
@@ -53,7 +72,7 @@ for (let series = 1; series <= 3; series++) {
     reports.push({ series, ...measured });
     await mkdir('.local/7d', { recursive: true });
     await writeFile(
-      '.local/7d/cpu-campaign.json',
+      campaignPath,
       JSON.stringify({ date: new Date().toISOString(), diagnostic: true, reports }, null, 2) + '\n',
     );
     if (measured.result.code !== 0) throw Error('STOP_CPU_FRONT_KEEP_DIAGNOSTIC');

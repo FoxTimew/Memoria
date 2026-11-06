@@ -1,0 +1,242 @@
+[
+  {
+    "label": "series-1",
+    "outcome": "no-control-closure-observed",
+    "tokens": 78,
+    "revisionDelta": 78,
+    "controlClosed": false,
+    "errors": [],
+    "quotas": [],
+    "controlQueryCount": 165,
+    "controlQueryP95": 11.96730000000025,
+    "controlQueryMax": 2198.7091,
+    "failedControlQueries": 0,
+    "bursts": [347.5600000000013, 924.1564999999973, 2197.419399999999],
+    "maxCpuCores": 5.431548883939962,
+    "maxLoopLagMs": 2216.689663,
+    "conversionMaxMs": 23444.859343,
+    "conversionPeakMiB": 93.1640625,
+    "conversionCount": 4,
+    "windowsBeforeGiB": 3.3341445922851562,
+    "windowsAfterPreparationGiB": 1.9293937683105469,
+    "wslAfterPreparationGiB": 5.54217529296875,
+    "windowsAfterGiB": 3.0167999267578125,
+    "wslAfterGiB": 5.647472381591797,
+    "hygiene": {
+      "valid": true,
+      "reason": null,
+      "intervals": 55,
+      "deltaInPages": 0,
+      "deltaOutPages": 0
+    },
+    "clients": [
+      {
+        "client": "author",
+        "status": "Enregistré sur le serveur",
+        "present": 78,
+        "sockets": [
+          {
+            "at": 1793998760090,
+            "event": "open"
+          }
+        ]
+      },
+      {
+        "client": "peer",
+        "status": "Enregistré sur le serveur",
+        "present": 78,
+        "sockets": [
+          {
+            "at": 1793998761330,
+            "event": "open"
+          }
+        ]
+      }
+    ],
+    "quietWindowMs": 2240
+  },
+  {
+    "label": "series-2",
+    "outcome": "no-control-closure-observed",
+    "tokens": 78,
+    "revisionDelta": 78,
+    "controlClosed": false,
+    "errors": [],
+    "quotas": [],
+    "controlQueryCount": 161,
+    "controlQueryP95": 18.940800000003946,
+    "controlQueryMax": 1943.1903999999995,
+    "failedControlQueries": 0,
+    "bursts": [360.8193999999967, 847.5838000000003, 1941.827599999997],
+    "maxCpuCores": 5.456560040584645,
+    "maxLoopLagMs": 1947.205631,
+    "conversionMaxMs": 21215.561264999997,
+    "conversionPeakMiB": 91.79296875,
+    "conversionCount": 4,
+    "windowsBeforeGiB": 3.0284690856933594,
+    "windowsAfterPreparationGiB": 2.239185333251953,
+    "wslAfterPreparationGiB": 5.548118591308594,
+    "windowsAfterGiB": 3.2170753479003906,
+    "wslAfterGiB": 5.645755767822266,
+    "hygiene": {
+      "valid": true,
+      "reason": null,
+      "intervals": 53,
+      "deltaInPages": 0,
+      "deltaOutPages": 0
+    },
+    "clients": [
+      {
+        "client": "author",
+        "status": "Enregistré sur le serveur",
+        "present": 78,
+        "sockets": [
+          {
+            "at": 1793998953250,
+            "event": "open"
+          }
+        ]
+      },
+      {
+        "client": "peer",
+        "status": "Enregistré sur le serveur",
+        "present": 78,
+        "sockets": [
+          {
+            "at": 1793998954532,
+            "event": "open"
+          }
+        ]
+      }
+    ],
+    "quietWindowMs": 2286
+  },
+  {
+    "label": "series-3",
+    "outcome": "no-control-closure-observed",
+    "tokens": 79,
+    "revisionDelta": 79,
+    "controlClosed": false,
+    "errors": [],
+    "quotas": [],
+    "controlQueryCount": 157,
+    "controlQueryP95": 15.70509999999922,
+    "controlQueryMax": 1896.2114000000001,
+    "failedControlQueries": 0,
+    "bursts": [313.2811999999976, 820.8859999999986, 1895.1447000000044],
+    "maxCpuCores": 5.398982972644274,
+    "maxLoopLagMs": 1913.651199,
+    "conversionMaxMs": 20604.387791,
+    "conversionPeakMiB": 92.13671875,
+    "conversionCount": 4,
+    "windowsBeforeGiB": 3.2197227478027344,
+    "windowsAfterPreparationGiB": 2.1593093872070312,
+    "wslAfterPreparationGiB": 5.5083465576171875,
+    "windowsAfterGiB": 3.276714324951172,
+    "wslAfterGiB": 5.6556396484375,
+    "hygiene": {
+      "valid": true,
+      "reason": null,
+      "intervals": 52,
+      "deltaInPages": 0,
+      "deltaOutPages": 0
+    },
+    "clients": [
+      {
+        "client": "author",
+        "status": "Enregistré sur le serveur",
+        "present": 79,
+        "sockets": [
+          {
+            "at": 1793999042224,
+            "event": "open"
+          }
+        ]
+      },
+      {
+        "client": "peer",
+        "status": "Enregistré sur le serveur",
+        "present": 79,
+        "sockets": [
+          {
+            "at": 1793999043391,
+            "event": "open"
+          }
+        ]
+      }
+    ],
+    "quietWindowMs": 2454
+  },
+  {
+    "label": "extended-stop",
+    "outcome": "stopped",
+    "tokens": 90,
+    "revisionDelta": 78,
+    "controlClosed": false,
+    "errors": [],
+    "quotas": [],
+    "controlQueryCount": 257,
+    "controlQueryP95": 7.7731000000003405,
+    "controlQueryMax": 3723.1858999999968,
+    "failedControlQueries": 0,
+    "bursts": [442.97009999999864, 958.2540999999983, 2002.8729999999996, 3721.0174000000043],
+    "maxCpuCores": 5.421030714240124,
+    "maxLoopLagMs": 2017.460223,
+    "conversionMaxMs": 25723.239584000003,
+    "conversionPeakMiB": 118.0859375,
+    "conversionCount": 4,
+    "windowsBeforeGiB": 3.319995880126953,
+    "windowsAfterPreparationGiB": 2.0318756103515625,
+    "wslAfterPreparationGiB": 5.5464630126953125,
+    "windowsAfterGiB": 3.2315902709960938,
+    "wslAfterGiB": 5.64202880859375,
+    "hygiene": {
+      "valid": true,
+      "reason": null,
+      "intervals": 90,
+      "deltaInPages": 0,
+      "deltaOutPages": 0
+    },
+    "clients": [
+      {
+        "client": "author",
+        "status": "Édition arrêtée",
+        "present": 90,
+        "sockets": [
+          {
+            "at": 1793999198654,
+            "event": "open"
+          },
+          {
+            "at": 1793999241797,
+            "event": "close",
+            "code": 1000,
+            "reason": "other"
+          },
+          {
+            "at": 1793999243403,
+            "event": "open"
+          },
+          {
+            "at": 1793999243472,
+            "event": "close",
+            "code": 1008,
+            "reason": "other"
+          }
+        ]
+      },
+      {
+        "client": "peer",
+        "status": "Enregistré sur le serveur",
+        "present": 78,
+        "sockets": [
+          {
+            "at": 1793999199885,
+            "event": "open"
+          }
+        ]
+      }
+    ],
+    "quietWindowMs": 30864
+  }
+]

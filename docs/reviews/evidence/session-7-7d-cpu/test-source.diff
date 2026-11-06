@@ -1,0 +1,162 @@
+diff --git a/apps/api/src/files-ui.e2e.ts b/apps/api/src/files-ui.e2e.ts
+index 9d86491..779d596 100644
+--- a/apps/api/src/files-ui.e2e.ts
++++ b/apps/api/src/files-ui.e2e.ts
+@@ -325,6 +325,7 @@ await test(
+           server: collaboration,
+           observations: cpuObservations,
+           converter: cpuConversions!,
++          extended: process.argv.includes('--extended-cpu'),
+         });
+         return;
+       }
+diff --git a/apps/api/src/testing/collaboration-cpu-front.ts b/apps/api/src/testing/collaboration-cpu-front.ts
+index ab79d9c..00a4fc7 100644
+--- a/apps/api/src/testing/collaboration-cpu-front.ts
++++ b/apps/api/src/testing/collaboration-cpu-front.ts
+@@ -91,6 +91,7 @@ export async function cpuFront(options: {
+   server: ChildProcess;
+   observations: Observation[];
+   converter: Awaited<ReturnType<typeof prepareCpuConversions>>;
++  extended?: boolean;
+ }) {
+   const { page, secondContext, href, pool, pageId, server, observations, converter } = options;
+   const directory = resolve(options.directory);
+@@ -165,7 +166,7 @@ export async function cpuFront(options: {
+     await until(12000, 'workers');
+     // A bounded, explicit main-loop workload exposes the suspected callback starvation.
+     // It does not claim that normal admitted edits generate these bursts in production.
+-    for (const duration of [250, 750, 1800]) {
++    for (const duration of [250, 750, 1800, ...(options.extended ? [3500] : [])]) {
+       if (controlClosed) break;
+       phases.push({
+         stage: 'yjs-burst-during-real-control-query',
+@@ -218,20 +219,6 @@ export async function cpuFront(options: {
+         timeout: 30000,
+       });
+     }
+-    for (const [name, p] of [
+-      ['author', page],
+-      ['peer', peer],
+-    ] as const) {
+-      const text = (await p.locator('.bn-editor').textContent()) ?? '';
+-      locallyVisible.push({
+-        client: name,
+-        baseline: text.includes(baseline),
+-        tokens: typed.map((token) => text.includes(token)),
+-        status: await p.getByTestId('save-status').textContent(),
+-        sockets: await socketEvents(p),
+-      });
+-      await p.screenshot({ path: resolve(directory, 'cpu-' + name + '.png'), fullPage: true });
+-    }
+     assert.deepEqual(errors, [], 'Front JavaScript failure');
+     assert.deepEqual(quotas, [], 'STOP_CPU_QUOTA');
+     if (controlClosed && !recoveredAt)
+@@ -257,8 +244,33 @@ export async function cpuFront(options: {
+   } finally {
+     if (server.connected) server.send({ kind: 'cpu-stop' });
+     await converter.stop();
++    // Preserve evidence even if the save-status assertion failed before recovery.
++    for (const [name, p] of [
++      ['author', page],
++      ['peer', peer],
++    ] as const) {
++      const text =
++        (await p
++          .locator('.bn-editor')
++          .textContent({ timeout: 3000 })
++          .catch(() => null)) ?? '';
++      locallyVisible.push({
++        client: name,
++        baseline: text.includes(baseline),
++        tokens: typed.map((token) => text.includes(token)),
++        status: await p
++          .getByTestId('save-status')
++          .textContent({ timeout: 3000 })
++          .catch(() => null),
++        sockets: await socketEvents(p).catch(() => []),
++      });
++      await p
++        .screenshot({ path: resolve(directory, 'cpu-' + name + '.png'), fullPage: true })
++        .catch(() => {});
++    }
+     const report = {
+       date: new Date().toISOString(),
++      extended: options.extended ?? false,
+       scope:
+         'Diagnostic on real built front, real server/Caddy/PostgreSQL; four bounded CPU workers plus explicit Yjs main-loop bursts during real control queries; no injected SQL delay or fail() call. Not a latency qualification or a claim of a normal-client attack.',
+       start,
+diff --git a/apps/collab/src/testing/cpu-front-server.ts b/apps/collab/src/testing/cpu-front-server.ts
+index 4a1cb1a..fe9e5ae 100644
+--- a/apps/collab/src/testing/cpu-front-server.ts
++++ b/apps/collab/src/testing/cpu-front-server.ts
+@@ -142,7 +142,7 @@ process.on('message', (message: { kind?: string; burstMs?: number }) => {
+     }, 500);
+     send({ event: 'cpu-started', workers: count, logicalCpus: availableParallelism() });
+   } else if (message.kind === 'cpu-burst') {
+-    if (![250, 750, 1800].includes(message.burstMs ?? 0))
++    if (![250, 750, 1800, 3500].includes(message.burstMs ?? 0))
+       throw Error('INVALID_CPU_DIAGNOSTIC_STEP');
+     pendingBurst = message.burstMs!;
+     send({ event: 'burst-armed', milliseconds: pendingBurst });
+diff --git a/scripts/test-files-cpu.mjs b/scripts/test-files-cpu.mjs
+index c6db3a8..cb9859d 100644
+--- a/scripts/test-files-cpu.mjs
++++ b/scripts/test-files-cpu.mjs
+@@ -5,6 +5,21 @@ import { setTimeout, clearTimeout } from 'node:timers';
+ import { resolve } from 'node:path';
+ import { prepareMeasurement, runMeasuredSeries } from './measurement-memory.mjs';
+ 
++const seriesOption = (name, fallback) => {
++  const index = process.argv.indexOf(name);
++  return index < 0 ? fallback : Number(process.argv[index + 1]);
++};
++const first = seriesOption('--first-series', 1),
++  last = seriesOption('--last-series', 3);
++const extended = process.argv.includes('--extended-cpu');
++if (![first, last].every((n) => Number.isInteger(n) && n >= 1 && n <= 3) || first > last)
++  throw Error('CPU_SERIES_RANGE_INVALID');
++const campaignPrefix = extended ? 'cpu-extended-campaign' : 'cpu-campaign';
++const campaignPath =
++  first === 1 && last === 3
++    ? `.local/7d/${campaignPrefix}.json`
++    : `.local/7d/${campaignPrefix}-${first}-${last}.json`;
++
+ const run = async (file, args, cwd) => {
+   const child = spawn(process.execPath, [resolve(file), ...args], {
+     stdio: 'inherit',
+@@ -20,14 +35,18 @@ await run('scripts/build-server.mjs', ['api', '--files-ui-e2e']);
+ if (!process.argv.includes('--built-web'))
+   await run('scripts/run-web.mjs', ['build'], resolve('apps/web'));
+ const reports = [];
+-for (let series = 1; series <= 3; series++) {
+-  const label = 'files-cpu-front-' + series;
++for (let series = first; series <= last; series++) {
++  const label = (extended ? 'files-cpu-extended-' : 'files-cpu-front-') + series;
+   const preparation = await prepareMeasurement(label);
+-  const child = fork('apps/api/dist/files-ui.e2e.mjs', ['--cpu'], {
+-    execArgv: ['--env-file=.env', '--use-system-ca'],
+-    stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
+-    windowsHide: true,
+-  });
++  const child = fork(
++    'apps/api/dist/files-ui.e2e.mjs',
++    ['--cpu', ...(extended ? ['--extended-cpu'] : [])],
++    {
++      execArgv: ['--env-file=.env', '--use-system-ca'],
++      stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
++      windowsHide: true,
++    },
++  );
+   const ended = once(child, 'exit');
+   let closed = false;
+   void ended.then(() => {
+@@ -53,7 +72,7 @@ for (let series = 1; series <= 3; series++) {
+     reports.push({ series, ...measured });
+     await mkdir('.local/7d', { recursive: true });
+     await writeFile(
+-      '.local/7d/cpu-campaign.json',
++      campaignPath,
+       JSON.stringify({ date: new Date().toISOString(), diagnostic: true, reports }, null, 2) + '\n',
+     );
+     if (measured.result.code !== 0) throw Error('STOP_CPU_FRONT_KEEP_DIAGNOSTIC');

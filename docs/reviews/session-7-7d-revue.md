@@ -1,6 +1,8 @@
 # Session 7d — revue adverse et mesures finales
 
-**État au 6 novembre 2026 :** [poursuite sans isolation](session-7-7d-sans-isolation.md). Le prototype reste un repli ; la dérogation bornée du développeur permet de poursuivre sur le service actuel. Banc CPU préparé et compilé, mais refusé avant préparation faute de mémoire Windows : aucune nouvelle preuve de reprise. Cette décision remplace les recommandations d'intégration et blocages historiques ci-dessous, sans clore les autres obligations.
+**Dernier état, 6 novembre à 22 h 08 :** [diagnostic CPU et arrêt sur la reprise](session-7-7d-cpu.md). Trois séries conformes, puis un palier de 3,72 s laisse l'auteur en « Édition arrêtée » : 90 saisies locales, 78 reçues par l'autre navigateur. Fermetures 1000 puis 1008, aucun `CONTROL_UNAVAILABLE`. La campagne s'arrête avant correction ; les preuves mémoire/swap sont conformes. Le blocage courant est ce défaut fonctionnel, et non le manque de mémoire du point préparatoire ci-dessous. Aucun correctif applicatif ni clôture de 7d.
+
+**État préparatoire antérieur du 6 novembre :** [poursuite sans isolation](session-7-7d-sans-isolation.md). Le prototype reste un repli ; la dérogation bornée du développeur permet de poursuivre sur le service actuel. Banc CPU préparé et compilé, mais refusé avant préparation faute de mémoire Windows : aucune nouvelle preuve de reprise. Cette décision remplace les recommandations d'intégration et blocages historiques ci-dessous, sans clore les autres obligations.
 
 29 octobre 2026. Branche `codex/session-7-files`. **En cours : ne pas fusionner sur la base de cette fiche intermédiaire.** Les validations de 7a, 7b et 7c restent datées dans leurs propres fiches ; elles ne remplacent pas les contrôles finaux de 7d. Aucun risque résiduel accepté ici.
 
@@ -22,18 +24,18 @@ Les horloges sont locales à chaque processus. Les échantillons sont reliés pa
 
 ## Contrôles restant à clôturer
 
-| Obligation                                         | État de cette fiche intermédiaire                                                                                                                   |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Matrice R12/S5-R11 consolidée et attaques          | [Matrice intermédiaire](session-7-7d-matrice.md), inventaire fermé et suites relancées ; convertisseur désormais attaqué, charge restant à clôturer |
-| Fuites et proxy                                    | Canaris SDK, HTTP/retry/audit/outbox, signatures observées et clés absentes des journaux Caddy/RustFS ; configurations externes non couvertes       |
-| Gros transferts, charge mixte, conversions 8K, NAT | Non qualifiés par les durées de tests fonctionnels ; campagnes finales restantes                                                                    |
-| CONTROL_UNAVAILABLE et reconnexion sans perte      | Saturation volontaire et parcours réel à exécuter ; absence de preuve de reprise automatique globale du serveur collaboratif                        |
-| Décomposition WSS contenu/historique               | [24 cas conformes](session-7-7d-wss.md) ; réception chez les autres clients et délai du front final à compléter en charge mixte                     |
-| Gateway après perte LISTEN et redémarrage PG       | Test réel réussi ; journal et observation temporelle versionnés, sans les présenter comme un p95                                                    |
-| Convertisseur permanent sans socket Docker         | [Livré et attaqué](session-7-7d-convertisseur.md), six séries 8K conformes ; charge mixte arrêtée à une fermeture dès l'échauffement                |
-| Antivirus facultatif                               | [Option locale préparée](session-7-7d-antivirus.md), coût éditeur et limites ; aucune capacité locale déclarée mesurée                              |
-| Comparaison alternée main                          | À exécuter sur la candidate finale ; main distant vérifié `56c52b4b5cb4c4df94841328398d141955b48394`                                                |
-| Risques, guide consolidé, description PR           | [Tableau de travail](session-7-7d-risques.md) sans acceptation ; guide/description finale à terminer après les preuves restantes                    |
+| Obligation                                         | État de cette fiche intermédiaire                                                                                                                                             |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Matrice R12/S5-R11 consolidée et attaques          | [Matrice intermédiaire](session-7-7d-matrice.md), inventaire fermé et suites relancées ; convertisseur désormais attaqué, charge restant à clôturer                           |
+| Fuites et proxy                                    | Canaris SDK, HTTP/retry/audit/outbox, signatures observées et clés absentes des journaux Caddy/RustFS ; configurations externes non couvertes                                 |
+| Gros transferts, charge mixte, conversions 8K, NAT | Non qualifiés par les durées de tests fonctionnels ; campagnes finales restantes                                                                                              |
+| CONTROL_UNAVAILABLE et reconnexion sans perte      | [Diagnostic CPU réel](session-7-7d-cpu.md) : trois séries passent, puis reprise 1008 bloquée au palier de 3,72 s. CONTROL_UNAVAILABLE non reproduit ; arrêt avant correction. |
+| Décomposition WSS contenu/historique               | [24 cas conformes](session-7-7d-wss.md) ; réception chez les autres clients et délai du front final à compléter en charge mixte                                               |
+| Gateway après perte LISTEN et redémarrage PG       | Test réel réussi ; journal et observation temporelle versionnés, sans les présenter comme un p95                                                                              |
+| Convertisseur permanent sans socket Docker         | [Livré et attaqué](session-7-7d-convertisseur.md), six séries 8K conformes ; charge mixte arrêtée à une fermeture dès l'échauffement                                          |
+| Antivirus facultatif                               | [Option locale préparée](session-7-7d-antivirus.md), coût éditeur et limites ; aucune capacité locale déclarée mesurée                                                        |
+| Comparaison alternée main                          | À exécuter sur la candidate finale ; main distant vérifié `56c52b4b5cb4c4df94841328398d141955b48394`                                                                          |
+| Risques, guide consolidé, description PR           | [Tableau de travail](session-7-7d-risques.md) sans acceptation ; guide/description finale à terminer après les preuves restantes                                              |
 
 ## Contrôles de ce point intermédiaire
 

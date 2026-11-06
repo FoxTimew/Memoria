@@ -1,0 +1,32 @@
+{"preparation":".local/measurement-hygiene/files-cpu-front-1-preparation-a0656cf9-47b0-44ba-8301-84548036cce6.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-cpu-front-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-11-06T20:57:53.896Z","windowsFreeBytes":3815919616,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6228799488,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T20:57:53.897Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+✖ 7d real front: controlled CPU saturation, 8K and automatic recovery (21164.5979ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21176.9688
+
+✖ failing tests:
+
+test at apps\api\dist\files-ui.e2e.mjs:84678:7
+✖ 7d real front: controlled CPU saturation, 8K and automatic recovery (21164.5979ms)
+  Error: Start local Caddy first
+      at TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/files-ui.e2e.mjs:84697:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/files-ui.e2e.mjs:84678:1
+file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/test-files-cpu.mjs:42
+      child.once('exit', () => no(Error('CPU_FRONT_PREPARATION_FAILED')));
+                                  ^
+
+Error: CPU_FRONT_PREPARATION_FAILED
+    at ChildProcess.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/test-files-cpu.mjs:42:35)
+    at ChildProcess.wrapper (node:events:639:12)
+    at ChildProcess.emit (node:events:526:24)
+    at ChildProcess._handle.onexit (node:internal/child_process:295:12)
+
+Node.js v24.21.0

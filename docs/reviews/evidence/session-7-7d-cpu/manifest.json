@@ -1,0 +1,134 @@
+{
+  "date": "2026-11-06T21:12:55.919Z",
+  "baseCommit": "b98695c48a35fe11892921f89cba9f935aeb063f",
+  "scope": "Three original CPU diagnostics pass; a fourth extended diagnostic stops on real-front recovery failure. No CONTROL_UNAVAILABLE observed, no timeout/ceiling or application control changed. Source diff includes resume selection, bounded 3500ms test workload and failure evidence capture. No further campaign after failure.",
+  "normalization": "Text uses LF; JSON formatting only, source JSON data equality verified; digests cover published bytes.",
+  "artifacts": [
+    {
+      "name": "series-1.json",
+      "source": ".local/files-browser/memoria-files-ui-3386dc1b-ead6-4a78-b04d-179a818a53db/cpu-report.json",
+      "bytes": 73034,
+      "sha256": "e31095fde082d9773a12bd2e0977e7154ba81e10ca7a063c9f883d16c4795c6a"
+    },
+    {
+      "name": "series-1-hygiene.json",
+      "source": ".local/measurement-hygiene/files-cpu-front-1-attempt-1-cd8941a4-3418-4eaf-8864-3d4f5d592f2d.json",
+      "bytes": 21445,
+      "sha256": "fde7cec76072918fee9e96b970906d455cac090611e3998efe16b7ab385b2e2e"
+    },
+    {
+      "name": "series-1-preparation.json",
+      "source": ".local/measurement-hygiene/files-cpu-front-1-preparation-51d2bb8a-7547-488e-b3be-218a53b11a6b.json",
+      "bytes": 673,
+      "sha256": "2bc3fa8aa81ff560c276b079230b0745bc9168c30acaf9825352ba19894c9b30"
+    },
+    {
+      "name": "series-2.json",
+      "source": ".local/files-browser/memoria-files-ui-df07c30b-a288-4531-bcf8-7e6a8e970900/cpu-report.json",
+      "bytes": 72263,
+      "sha256": "f28f127f188b32dcecb4416853e75644030b709fc028bbfc1228fe211ad7965f"
+    },
+    {
+      "name": "series-2-hygiene.json",
+      "source": ".local/measurement-hygiene/files-cpu-front-2-attempt-1-f9db7de3-ce10-48dc-8a3f-3bc4fda4b6c3.json",
+      "bytes": 20801,
+      "sha256": "6fc9eaee180b1290b355721bb44fd80867f1410bac3ceb6d5a48c00634496306"
+    },
+    {
+      "name": "series-2-preparation.json",
+      "source": ".local/measurement-hygiene/files-cpu-front-2-preparation-27a16a31-b652-4736-8793-50682dfcad45.json",
+      "bytes": 673,
+      "sha256": "3438aef092371c9412e2fd5eb6965a1a8eaf9c4e42c065dbe2e69e9d7dd5bac1"
+    },
+    {
+      "name": "series-3.json",
+      "source": ".local/files-browser/memoria-files-ui-394ca58c-7fe6-4e29-9c22-d722287ccff7/cpu-report.json",
+      "bytes": 71527,
+      "sha256": "c424f80b0c16be1b68d401627fbe448a71328a6f4da0750b183f0418c30fb8a9"
+    },
+    {
+      "name": "series-3-hygiene.json",
+      "source": ".local/measurement-hygiene/files-cpu-front-3-attempt-1-327d9844-a3d4-42f8-821a-fdf8ac58e9e3.json",
+      "bytes": 20475,
+      "sha256": "aac3aca9e53b0d90a958f3687abfb533cc0805aac14c041938a30e582caaeaad"
+    },
+    {
+      "name": "series-3-preparation.json",
+      "source": ".local/measurement-hygiene/files-cpu-front-3-preparation-624788f8-6d0a-44a4-83f0-af61e3c8bd1b.json",
+      "bytes": 673,
+      "sha256": "8d98c2b14d955dc658e770ce809c9314c4f638fd585cc434250b7901e49f32e4"
+    },
+    {
+      "name": "extended-stop.json",
+      "source": ".local/files-browser/memoria-files-ui-7a271a3c-e7b5-4170-8e21-79d23e122df1/cpu-report.json",
+      "bytes": 96033,
+      "sha256": "0694cd75214d4aadca75e6433068feabe86c87f749bf54a909aedd5348754aa8"
+    },
+    {
+      "name": "extended-stop-hygiene.json",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-attempt-1-84e36723-bd92-4da4-9c58-010326c86858.json",
+      "bytes": 32831,
+      "sha256": "7cca46aeb91b064693f488ff064d3fd6d680750ff5417ac2c76842ee5d39fd4f"
+    },
+    {
+      "name": "extended-stop-preparation.json",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-preparation-13a2ad51-f3bd-49c0-8dd3-ca530a10756d.json",
+      "bytes": 676,
+      "sha256": "343f9c977590327b771de20f227e9af1ba5ffb80310ebfc855c2060f19efff7d"
+    },
+    {
+      "name": "stopped-author.png",
+      "source": ".local/files-browser/memoria-files-ui-7a271a3c-e7b5-4170-8e21-79d23e122df1/cpu-author.png",
+      "bytes": 111951,
+      "sha256": "dd7b38804ee39434e659a6ee6740e33131913470863c7f02bd4ee889f4ea0bd9"
+    },
+    {
+      "name": "stopped-peer.png",
+      "source": ".local/files-browser/memoria-files-ui-7a271a3c-e7b5-4170-8e21-79d23e122df1/cpu-peer.png",
+      "bytes": 99691,
+      "sha256": "852fccbcca5a17891cc291e3ff684814a6e1f3243f79960895e8d4c9e90312f1"
+    },
+    {
+      "name": "setup-caddy.txt",
+      "source": ".local/session-7-7d-cpu-front-setup-caddy.log",
+      "bytes": 1987,
+      "sha256": "8a4d1a4b24b6d49fe3cdd26f92d9884ed5edb35befe08b13fc12fb756b96e687"
+    },
+    {
+      "name": "series-1-and-memory-stop.txt",
+      "source": ".local/session-7-7d-cpu-front-run.log",
+      "bytes": 3838,
+      "sha256": "521a92930cdf857e9d4035b1123f34e8592da73b27ff063b9e26a7902476dfa9"
+    },
+    {
+      "name": "series-2-3.txt",
+      "source": ".local/session-7-7d-cpu-front-series-2-3.log",
+      "bytes": 3905,
+      "sha256": "ac2a9a171a7c9b8aa850adf12fd1e61142dfcc391974276c98a364588ffa4a32"
+    },
+    {
+      "name": "extended-stop.txt",
+      "source": ".local/session-7-7d-cpu-extended.log",
+      "bytes": 3461,
+      "sha256": "3166b5bdc66bd2c63d31381115a832bf61367bd680f5e3a6fbdd901cce308cce"
+    },
+    {
+      "name": "check.txt",
+      "source": ".local/session-7-7d-cpu-check.log",
+      "bytes": 1887,
+      "sha256": "a47f360243c366033cd29088b38d3e829d158e335599470766e691d0363090cc"
+    },
+    {
+      "name": "summary.json",
+      "source": "Derived only from the four raw reports and hygiene records.",
+      "bytes": 6205,
+      "sha256": "d1a65975b5bcc95025e5e8c01ef080659989fcfa76bb07a503e7ab3190722039"
+    },
+    {
+      "name": "test-source.diff",
+      "source": "Test-only delta relative to b98695c; no application source change.",
+      "bytes": 7211,
+      "sha256": "6c88991653a39906df0c06811fb5dfa4be939c3ae53b41b445b283d75a9a7c90"
+    }
+  ]
+}

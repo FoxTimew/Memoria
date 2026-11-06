@@ -325,6 +325,7 @@ await test(
           server: collaboration,
           observations: cpuObservations,
           converter: cpuConversions!,
+          extended: process.argv.includes('--extended-cpu'),
         });
         return;
       }

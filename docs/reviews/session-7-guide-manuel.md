@@ -1,5 +1,7 @@
 # Session 7 — guide consolidé à deux navigateurs
 
+**Blocage 7d au 6 novembre :** le [diagnostic de saturation CPU](session-7-7d-cpu.md) laisse le vrai front bloqué après une fermeture 1008, avec des saisies uniquement locales. Ce guide couvre les parcours déjà livrés ; il ne constitue pas une validation de cette reprise. Garder le contenu exportable, ne pas provoquer cette panne sur un studio réel. Aucun merge tant que ce point et les autres obligations 7d ne sont pas arbitrés puis éprouvés.
+
 Version intermédiaire 7d du 29 octobre 2026. Environ 30 minutes hors durée d'envoi des gros assets. Ce guide couvre le produit livré ; il **ne clôt pas** les essais CPU, gros volumes, convertisseur permanent et comparaison finale encore ouverts dans la [fiche 7d](session-7-7d-revue.md).
 
 Utiliser un workspace de test et deux comptes distincts : A propriétaire avec facteur fort récent, B invité dans un autre navigateur ou une fenêtre privée. Ne pas exécuter les fichiers téléchargés pour ce test. Préparer une petite image JPEG/PNG, un script texte inoffensif, une archive sans contenu dangereux et un fichier d'au moins 81 Mio. Vérifier que les services API, web, collaboration, worker, stockage et files sont démarrés ; aucun contournement d'alerte TLS.

@@ -1,0 +1,43 @@
+{"preparation":".local/measurement-hygiene/files-cpu-extended-1-preparation-13a2ad51-f3bd-49c0-8dd3-ca530a10756d.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-cpu-extended-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-11-06T21:06:07.437Z","windowsFreeBytes":3564818432,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6095400960,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:06:07.438Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+CPU diagnostic report: C:\Users\Foxti\Documents\Projets\Memoria\.local\files-browser\memoria-files-ui-7a271a3c-e7b5-4170-8e21-79d23e122df1\cpu-report.json
+✖ 7d real front: controlled CPU saturation, 8K and automatic recovery (120892.6438ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 120897.006
+
+✖ failing tests:
+
+test at apps\api\dist\files-ui.e2e.mjs:84680:7
+✖ 7d real front: controlled CPU saturation, 8K and automatic recovery (120892.6438ms)
+  Error: expect(locator).toHaveText(expected) failed
+  
+  Locator:  getByTestId('save-status')
+  Expected: "Enregistré sur le serveur"
+  Received: "Édition arrêtée"
+  Timeout:  30000ms
+  
+  Call log:
+    - Expect "toHaveText" getByTestId('save-status') with timeout 30000ms
+    - waiting for getByTestId('save-status')
+      63 × locator resolved to <span role="status" aria-live="polite" data-testid="save-status">Édition arrêtée</span>
+         - unexpected value "Édition arrêtée"
+  
+      at cpuFront (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/files-ui.e2e.mjs:84674:11)
+      at async TestContext.<anonymous> (file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/files-ui.e2e.mjs:84935:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      at async file:///C:/Users/Foxti/Documents/Projets/Memoria/apps/api/dist/files-ui.e2e.mjs:84680:1
+{"hygiene":".local/measurement-hygiene/files-cpu-extended-1-attempt-1-84e36723-bd92-4da4-9c58-010326c86858.json","status":"valid","label":"files-cpu-extended-1","attempt":1,"before":{"observedAt":"2026-11-06T21:06:43.249Z","windowsFreeBytes":2181709824,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":5955469312,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:06:43.249Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-11-06T21:08:12.301Z","windowsFreeBytes":3469893632,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6058082304,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:08:12.301Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":90,"deltaInPages":0,"deltaOutPages":0}}
+file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/test-files-cpu.mjs:78
+    if (measured.result.code !== 0) throw Error('STOP_CPU_FRONT_KEEP_DIAGNOSTIC');
+                                          ^
+
+Error: STOP_CPU_FRONT_KEEP_DIAGNOSTIC
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/test-files-cpu.mjs:78:43
+
+Node.js v24.21.0

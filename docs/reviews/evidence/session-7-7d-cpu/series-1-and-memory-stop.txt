@@ -1,0 +1,43 @@
+{"preparation":".local/measurement-hygiene/files-cpu-front-1-preparation-51d2bb8a-7547-488e-b3be-218a53b11a6b.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-cpu-front-1","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-11-06T20:58:47.926Z","windowsFreeBytes":3580010496,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6149255168,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T20:58:47.927Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+CPU diagnostic report: C:\Users\Foxti\Documents\Projets\Memoria\.local\files-browser\memoria-files-ui-3386dc1b-ead6-4a78-b04d-179a818a53db\cpu-report.json
+✔ 7d real front: controlled CPU saturation, 8K and automatic recovery (86717.1621ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 86721.7807
+{"hygiene":".local/measurement-hygiene/files-cpu-front-1-attempt-1-cd8941a4-3418-4eaf-8864-3d4f5d592f2d.json","status":"valid","label":"files-cpu-front-1","attempt":1,"before":{"observedAt":"2026-11-06T20:59:24.805Z","windowsFreeBytes":2071670784,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":5950865408,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T20:59:24.805Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-11-06T21:00:18.834Z","windowsFreeBytes":3239264256,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6063927296,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:00:18.834Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":55,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-cpu-front-2-preparation-98aeeda6-b035-4d56-b551-d2ca0a2ab383.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-cpu-front-2","phase":"before-preparation","status":"refused","observation":{"observedAt":"2026-11-06T21:00:19.784Z","windowsFreeBytes":3213897728,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6068305920,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:00:19.784Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"reason":"WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB"}
+file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/measurement-memory.mjs:10
+const fail = (reason, observation) => Object.assign(new Error(reason), { reason, observation });
+                                                    ^
+
+Error: WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB
+    at fail (file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/measurement-memory.mjs:10:53)
+    at assertMemoryStage (file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/measurement-memory.mjs:62:11)
+    at prepareMeasurement (file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/measurement-memory.mjs:97:5)
+    at file:///C:/Users/Foxti/Documents/Projets/Memoria/scripts/test-files-cpu.mjs:25:29 {
+  reason: 'WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB',
+  observation: {
+    observedAt: '2026-11-06T21:00:19.784Z',
+    windowsFreeBytes: 3213897728,
+    wsl: {
+      bootId: 'f543fd8d-7290-4de6-a324-1eb3e37c9a6f',
+      memAvailableBytes: 6068305920,
+      swapInPages: 0,
+      swapOutPages: 0
+    },
+    power: {
+      observedAt: '2026-11-06T21:00:19.784Z',
+      platform: 'win32',
+      batteries: [ { BatteryStatus: 2, EstimatedChargeRemaining: 100 } ],
+      allowed: true,
+      reason: null
+    }
+  }
+}
+
+Node.js v24.21.0

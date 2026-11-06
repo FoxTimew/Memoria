@@ -91,6 +91,7 @@ export async function cpuFront(options: {
   server: ChildProcess;
   observations: Observation[];
   converter: Awaited<ReturnType<typeof prepareCpuConversions>>;
+  extended?: boolean;
 }) {
   const { page, secondContext, href, pool, pageId, server, observations, converter } = options;
   const directory = resolve(options.directory);
@@ -165,7 +166,7 @@ export async function cpuFront(options: {
     await until(12000, 'workers');
     // A bounded, explicit main-loop workload exposes the suspected callback starvation.
     // It does not claim that normal admitted edits generate these bursts in production.
-    for (const duration of [250, 750, 1800]) {
+    for (const duration of [250, 750, 1800, ...(options.extended ? [3500] : [])]) {
       if (controlClosed) break;
       phases.push({
         stage: 'yjs-burst-during-real-control-query',
@@ -218,20 +219,6 @@ export async function cpuFront(options: {
         timeout: 30000,
       });
     }
-    for (const [name, p] of [
-      ['author', page],
-      ['peer', peer],
-    ] as const) {
-      const text = (await p.locator('.bn-editor').textContent()) ?? '';
-      locallyVisible.push({
-        client: name,
-        baseline: text.includes(baseline),
-        tokens: typed.map((token) => text.includes(token)),
-        status: await p.getByTestId('save-status').textContent(),
-        sockets: await socketEvents(p),
-      });
-      await p.screenshot({ path: resolve(directory, 'cpu-' + name + '.png'), fullPage: true });
-    }
     assert.deepEqual(errors, [], 'Front JavaScript failure');
     assert.deepEqual(quotas, [], 'STOP_CPU_QUOTA');
     if (controlClosed && !recoveredAt)
@@ -257,8 +244,33 @@ export async function cpuFront(options: {
   } finally {
     if (server.connected) server.send({ kind: 'cpu-stop' });
     await converter.stop();
+    // Preserve evidence even if the save-status assertion failed before recovery.
+    for (const [name, p] of [
+      ['author', page],
+      ['peer', peer],
+    ] as const) {
+      const text =
+        (await p
+          .locator('.bn-editor')
+          .textContent({ timeout: 3000 })
+          .catch(() => null)) ?? '';
+      locallyVisible.push({
+        client: name,
+        baseline: text.includes(baseline),
+        tokens: typed.map((token) => text.includes(token)),
+        status: await p
+          .getByTestId('save-status')
+          .textContent({ timeout: 3000 })
+          .catch(() => null),
+        sockets: await socketEvents(p).catch(() => []),
+      });
+      await p
+        .screenshot({ path: resolve(directory, 'cpu-' + name + '.png'), fullPage: true })
+        .catch(() => {});
+    }
     const report = {
       date: new Date().toISOString(),
+      extended: options.extended ?? false,
       scope:
         'Diagnostic on real built front, real server/Caddy/PostgreSQL; four bounded CPU workers plus explicit Yjs main-loop bursts during real control queries; no injected SQL delay or fail() call. Not a latency qualification or a claim of a normal-client attack.',
       start,

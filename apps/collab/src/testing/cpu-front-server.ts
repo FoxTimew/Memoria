@@ -142,7 +142,7 @@ process.on('message', (message: { kind?: string; burstMs?: number }) => {
     }, 500);
     send({ event: 'cpu-started', workers: count, logicalCpus: availableParallelism() });
   } else if (message.kind === 'cpu-burst') {
-    if (![250, 750, 1800].includes(message.burstMs ?? 0))
+    if (![250, 750, 1800, 3500].includes(message.burstMs ?? 0))
       throw Error('INVALID_CPU_DIAGNOSTIC_STEP');
     pendingBurst = message.burstMs!;
     send({ event: 'burst-armed', milliseconds: pendingBurst });

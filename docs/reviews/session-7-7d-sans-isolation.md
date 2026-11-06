@@ -1,5 +1,7 @@
 # Session 7d — poursuite sans isolation
 
+**Suite exécutée le 6 novembre :** [trois séries et échec au palier CPU étendu](session-7-7d-cpu.md). La mémoire a permis les essais. Cette fiche conserve l'état préparatoire ; le blocage courant concerne la reprise du front après fermeture 1008.
+
 6 novembre 2026. **Point préparatoire, 7d non clôturée. Aucun résultat de saturation CPU ni de reconnexion n'est revendiqué par cette fiche.**
 
 ## Décision appliquée

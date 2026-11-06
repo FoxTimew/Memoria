@@ -1,0 +1,24 @@
+{"preparation":".local/measurement-hygiene/files-cpu-front-2-preparation-27a16a31-b652-4736-8793-50682dfcad45.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-cpu-front-2","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-11-06T21:02:02.099Z","windowsFreeBytes":3251793920,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6105587712,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:02:02.101Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+CPU diagnostic report: C:\Users\Foxti\Documents\Projets\Memoria\.local\files-browser\memoria-files-ui-df07c30b-a288-4531-bcf8-7e6a8e970900\cpu-report.json
+✔ 7d real front: controlled CPU saturation, 8K and automatic recovery (84481.3399ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 84485.641
+{"hygiene":".local/measurement-hygiene/files-cpu-front-2-attempt-1-f9db7de3-ce10-48dc-8a3f-3bc4fda4b6c3.json","status":"valid","label":"files-cpu-front-2","attempt":1,"before":{"observedAt":"2026-11-06T21:02:38.396Z","windowsFreeBytes":2404306944,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":5957246976,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:02:38.396Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-11-06T21:03:30.387Z","windowsFreeBytes":3454308352,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6062084096,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:03:30.387Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":53,"deltaInPages":0,"deltaOutPages":0}}
+{"preparation":".local/measurement-hygiene/files-cpu-front-3-preparation-624788f8-6d0a-44a4-83f0-af61e3c8bd1b.json","protocol":"2026-10-26-windows-wsl-no-swap-v1","label":"files-cpu-front-3","phase":"before-preparation","status":"allowed","observation":{"observedAt":"2026-11-06T21:03:31.292Z","windowsFreeBytes":3457150976,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6061371392,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:03:31.292Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}}}
+CPU diagnostic report: C:\Users\Foxti\Documents\Projets\Memoria\.local\files-browser\memoria-files-ui-394ca58c-7fe6-4e29-9c22-d722287ccff7\cpu-report.json
+✔ 7d real front: controlled CPU saturation, 8K and automatic recovery (82811.8768ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 82816.4795
+{"hygiene":".local/measurement-hygiene/files-cpu-front-3-attempt-1-327d9844-a3d4-42f8-821a-fdf8ac58e9e3.json","status":"valid","label":"files-cpu-front-3","attempt":1,"before":{"observedAt":"2026-11-06T21:04:06.749Z","windowsFreeBytes":2318540800,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":5914542080,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:04:06.749Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"after":{"observedAt":"2026-11-06T21:04:57.720Z","windowsFreeBytes":3518345216,"wsl":{"bootId":"f543fd8d-7290-4de6-a324-1eb3e37c9a6f","memAvailableBytes":6072696832,"swapInPages":0,"swapOutPages":0},"power":{"observedAt":"2026-11-06T21:04:57.720Z","platform":"win32","batteries":[{"BatteryStatus":2,"EstimatedChargeRemaining":100}],"allowed":true,"reason":null}},"assessment":{"valid":true,"reason":null,"intervals":52,"deltaInPages":0,"deltaOutPages":0}}
