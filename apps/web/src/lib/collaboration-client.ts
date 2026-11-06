@@ -1,6 +1,7 @@
 import { HocuspocusProvider, HocuspocusProviderWebsocket } from '@hocuspocus/provider';
 import type { HocuspocusProviderWebsocketConfiguration } from '@hocuspocus/provider';
 import * as Y from 'yjs';
+import * as decoding from 'lib0/decoding';
 import { DurableState } from './collaboration-state.ts';
 import { presenceUserSchema } from '@memoria/contracts';
 import { CollaborationCache } from './collaboration-cache.ts';
@@ -97,6 +98,7 @@ export class CollaborationClient {
     this.durable = new DurableState(generation, () => this.emit());
     this.doc.on('update', this.edit);
     const tracker = this.durable;
+    let sentReconnectionDiff = false;
     const beforeConnect = async () => {
       await this.recheck(true);
       if (this.destroyed || this.blocked || (typeof document !== 'undefined' && document.hidden))
@@ -107,11 +109,27 @@ export class CollaborationClient {
       override async createWebSocketConnection() {
         // The provider's own retry loop MUST pass the same gate; onClose alone is too late.
         await beforeConnect();
+        sentReconnectionDiff = false;
         return super.createWebSocketConnection();
       }
       override send(message: Uint8Array) {
         // Do not keep an unbounded offline wire queue. Reconnection sends the Yjs diff.
         if (this.webSocket?.readyState !== 1) return;
+        // A newly typed incremental update can depend on offline clocks that the
+        // server has never received. Keep those edits in Y.Doc until its response
+        // to the server state vector (SyncStep2) is sent first on this socket.
+        // The provider's synced flag only proves receipt of the opposite diff.
+        try {
+          const decoder = decoding.createDecoder(message);
+          decoding.readVarString(decoder);
+          if (decoding.readVarUint(decoder) === 0) {
+            const kind = decoding.readVarUint(decoder);
+            if (kind === 2 && !sentReconnectionDiff) return;
+            if (kind === 1) sentReconnectionDiff = true;
+          }
+        } catch {
+          // Heartbeat frames have no document envelope; leave admission unchanged.
+        }
         tracker.sent(message);
         super.send(message);
       }
@@ -151,7 +169,11 @@ export class CollaborationClient {
       },
       onStateless: ({ payload }) => this.durable.received(payload),
       onAwarenessChange: () => this.emit(),
-      onAuthenticationFailed: ({ reason }) => this.stop(reason),
+      onAuthenticationFailed: ({ reason }) => {
+        // The server also closes this socket with 1013. Its normal retry loop
+        // performs verifyAccess again. All actual authentication denials still stop.
+        if (reason !== 'LEADERSHIP_UNAVAILABLE') this.stop(reason);
+      },
       onClose: ({ event }) => {
         this.connected = false;
         this.disconnected = true;

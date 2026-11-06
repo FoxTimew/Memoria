@@ -1,5 +1,7 @@
 # Session 7d — revue adverse et mesures finales
 
+**Suite du diagnostic, 6 novembre :** [reprise ciblée après refus de leadership](session-7-7d-reconnexion.md). La transaction périmée est bien rejetée ; sa traduction en refus permanent de contenu est corrigée. Cette fiche distingue les preuves de reconnexion du chemin global `CONTROL_UNAVAILABLE`, toujours ouvert. Les constats d'arrêt ci-dessous sont historiques, pas une clôture de 7d.
+
 **Dernier état, 6 novembre à 22 h 08 :** [diagnostic CPU et arrêt sur la reprise](session-7-7d-cpu.md). Trois séries conformes, puis un palier de 3,72 s laisse l'auteur en « Édition arrêtée » : 90 saisies locales, 78 reçues par l'autre navigateur. Fermetures 1000 puis 1008, aucun `CONTROL_UNAVAILABLE`. La campagne s'arrête avant correction ; les preuves mémoire/swap sont conformes. Le blocage courant est ce défaut fonctionnel, et non le manque de mémoire du point préparatoire ci-dessous. Aucun correctif applicatif ni clôture de 7d.
 
 **État préparatoire antérieur du 6 novembre :** [poursuite sans isolation](session-7-7d-sans-isolation.md). Le prototype reste un repli ; la dérogation bornée du développeur permet de poursuivre sur le service actuel. Banc CPU préparé et compilé, mais refusé avant préparation faute de mémoire Windows : aucune nouvelle preuve de reprise. Cette décision remplace les recommandations d'intégration et blocages historiques ci-dessous, sans clore les autres obligations.

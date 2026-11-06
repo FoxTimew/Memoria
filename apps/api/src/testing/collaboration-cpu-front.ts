@@ -61,9 +61,12 @@ async function observeContext(context: BrowserContext) {
             at: Date.now(),
             event: 'close',
             code: e.code,
-            reason: ['CONTROL_UNAVAILABLE', 'SERVICE_UNAVAILABLE', 'ROOM_RELOAD_REQUIRED'].includes(
-              e.reason,
-            )
+            reason: [
+              'CONTROL_UNAVAILABLE',
+              'SERVICE_UNAVAILABLE',
+              'ROOM_RELOAD_REQUIRED',
+              'LEADERSHIP_UNAVAILABLE',
+            ].includes(e.reason)
               ? e.reason
               : 'other',
           }),
@@ -143,6 +146,7 @@ export async function cpuFront(options: {
     error: string | undefined,
     controlClosed = false;
   let cpuStoppedAt: number | undefined, recoveredAt: number | undefined;
+  let authorSocketsBeforeReload: Observation[] = [];
   const locallyVisible: object[] = [];
   try {
     converter.child.send({ kind: 'start' });
@@ -228,6 +232,7 @@ export async function cpuFront(options: {
       typed.every((token) => text.includes(token)),
       'CPU_TEXT_NOT_CONVERGED',
     );
+    authorSocketsBeforeReload = await socketEvents(page);
     await page.reload();
     await expect(page.getByTestId('save-status')).toHaveText('Enregistré sur le serveur', {
       timeout: 30000,
@@ -263,6 +268,7 @@ export async function cpuFront(options: {
           .textContent({ timeout: 3000 })
           .catch(() => null),
         sockets: await socketEvents(p).catch(() => []),
+        socketsBeforeReload: name === 'author' ? authorSocketsBeforeReload : [],
       });
       await p
         .screenshot({ path: resolve(directory, 'cpu-' + name + '.png'), fullPage: true })

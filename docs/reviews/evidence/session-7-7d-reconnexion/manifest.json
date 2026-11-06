@@ -1,0 +1,419 @@
+{
+  "date": "2026-11-06T22:06:34.647Z",
+  "base": "eb2d1fdbdce771367798fa9d17f479a7f2e92f25",
+  "files": [
+    {
+      "file": "diagnostic-1.log.gz",
+      "source": ".local/session-7-7d-cpu-cause.log",
+      "bytes": 1977,
+      "sha256": "bd3d4ed2f5ee3dca644ace75201dca3e4736cfeb5bff9b8611811602694901a4",
+      "uncompressedSha256": "cfa95fe60410f891586d8052216e00946f2cf05296ba0b35d3d1627d39fbbb17"
+    },
+    {
+      "file": "diagnostic-1-1.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-140f69c6-68cd-40e1-9682-af891dbb4732\\cpu-report.json",
+      "bytes": 78400,
+      "sha256": "87f5ac8b6a6e18f8ec86fe23a5f74d143b86d219311c2258bec7be04857d85ed",
+      "uncompressedSha256": "67588b4da5b6b80c330fea9136582239622980baaf56716c38627277d10e975b"
+    },
+    {
+      "file": "diagnostic-1-files-cpu-extended-1-preparation-e6a722a7-fa11-49f2-bae9-6032dcf26c79.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-preparation-e6a722a7-fa11-49f2-bae9-6032dcf26c79.json",
+      "bytes": 676,
+      "sha256": "2bf1a94cdf86e1cd4c39fbad1c50140c5c554ac28b0d0a4ab150e9ff68427a92",
+      "uncompressedSha256": "bf0c062d5c82a85142c904effe9e580965fd4ae52f13ec0b001e0786259bfe16"
+    },
+    {
+      "file": "diagnostic-1-files-cpu-extended-1-attempt-1-28b536d9-4b28-48ce-bd1a-53c05f747907.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-attempt-1-28b536d9-4b28-48ce-bd1a-53c05f747907.json",
+      "bytes": 22445,
+      "sha256": "aba50614b9a4edcf9b015c761d89eb2dec9273cd48661c9061420b24b09f1380",
+      "uncompressedSha256": "de1f8250b0908f2eaf3cafe455f03953560fd7aa3ade2d3eb7e3dc5885bfa3d8"
+    },
+    {
+      "file": "diagnostic-2.log.gz",
+      "source": ".local/session-7-7d-cpu-cause-2-3.log",
+      "bytes": 3502,
+      "sha256": "5cb01a3380eee9b7b8a8d89f1f0c0714a1578e978c3f63afe22e528a49386238",
+      "uncompressedSha256": "700ab62c0641ac60588860f13e510cb37eec22a9938ec2a3858b36cbce7641d5"
+    },
+    {
+      "file": "diagnostic-2-1.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-a862f2c5-fd8f-458e-9cfe-dc441fbfbc00\\cpu-report.json",
+      "bytes": 94016,
+      "sha256": "09d8476031ea4336ff1321c5ad7394bf99f0b99cdf5d67191a91f3c1cf32d255",
+      "uncompressedSha256": "3274f739dafbe7bcb21b6ace18b5596d371dc0581cedc561e35ba3d2f81af39e"
+    },
+    {
+      "file": "diagnostic-2-files-cpu-extended-2-preparation-be3c16cb-0052-479c-b186-7e210e0c4805.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-preparation-be3c16cb-0052-479c-b186-7e210e0c4805.json",
+      "bytes": 676,
+      "sha256": "32c64932588ce9239b7d365b2d0919e15df9d1c4f3ee9129571f763ff05968ae",
+      "uncompressedSha256": "1edae92ef15c76fca81b31ded7a4ab661bd01a0f3ff21a7e9f387ab3ea26e9f8"
+    },
+    {
+      "file": "diagnostic-2-files-cpu-extended-2-attempt-1-a526cb1b-8a2e-4690-ac80-6420b97d3c8f.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-attempt-1-a526cb1b-8a2e-4690-ac80-6420b97d3c8f.json",
+      "bytes": 30863,
+      "sha256": "2b59a334da87034bafabdccd7c3bccbdc72af5577258af2c50ba8fabec4a9918",
+      "uncompressedSha256": "865d0f7bd1c576712ed03387cc438f386bde4de2eebf33b73948704cc598049b"
+    },
+    {
+      "file": "correction-partielle.log.gz",
+      "source": ".local/session-7-7d-reconnect-cpu.log",
+      "bytes": 8581,
+      "sha256": "fbf1fc9d258331fa89f8137474592e09b27d28117c697228ed2ec2543a5c4bb1",
+      "uncompressedSha256": "0c249a1ce4ff3a16deb4f79037dc8dce2b4dbbb6aa02a650d863ebb8d266985a"
+    },
+    {
+      "file": "correction-partielle-1.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-1900f2f6-11bd-4b9b-b509-12db87e903d3\\cpu-report.json",
+      "bytes": 78201,
+      "sha256": "a2b99608b97563c44aa89cec6e7ce7d297dba99fab21ce900d22e14872c36e3b",
+      "uncompressedSha256": "c5d99953ac2d04d79ceaf476adaadaa430963c8c7994a550be1d8d670c16fad0"
+    },
+    {
+      "file": "correction-partielle-2.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-21764fe5-4796-4aa9-9e13-c2656c6b93b2\\cpu-report.json",
+      "bytes": 79287,
+      "sha256": "2d3eaf4518399465067fd15ca03d2fa94ae9ad766f9c1556e071cdaae5e39611",
+      "uncompressedSha256": "0ff9fc078ce6ff86c303eac0a98b53e252b70b855230f1994024d27a48985aca"
+    },
+    {
+      "file": "correction-partielle-3.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-b1a0269a-9e68-4b0a-86ba-4b553ad18cb4\\cpu-report.json",
+      "bytes": 96533,
+      "sha256": "9e57bdff1ae222b982d1776e4d6bb334ba8526d6fba1de3707b1ca2484e662da",
+      "uncompressedSha256": "a27a5e247ee4684ebeb1b8dec9811c16e627f0fa180acbc1948a27fd916a8656"
+    },
+    {
+      "file": "correction-partielle-files-cpu-extended-1-preparation-56ebce20-d694-4a4e-b95a-b5e360e0f999.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-preparation-56ebce20-d694-4a4e-b95a-b5e360e0f999.json",
+      "bytes": 676,
+      "sha256": "47563e500674b6e521185f63ce5e0e3936cf1bba648e8f91696c37c15adaae0d",
+      "uncompressedSha256": "49eadef882c4cf6505e67719aab8bffe7bd03abfb2c2c0ad52ff0b46949224d1"
+    },
+    {
+      "file": "correction-partielle-files-cpu-extended-1-attempt-1-2cbb28e1-e789-45d7-8b2b-2af15667b656.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-attempt-1-2cbb28e1-e789-45d7-8b2b-2af15667b656.json",
+      "bytes": 22117,
+      "sha256": "4a80f9d2e1e32b6b83dc41796057e81b1a024e48c2a6d6880b95b6d96c6c66b0",
+      "uncompressedSha256": "72c32c24707c6c69d6bc87a3ff6718b0adcc97d9b79363a93d7e87ae81f2cc7a"
+    },
+    {
+      "file": "correction-partielle-files-cpu-extended-2-preparation-e5f9c4d2-ed92-42d1-b0ba-2db499bc0100.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-preparation-e5f9c4d2-ed92-42d1-b0ba-2db499bc0100.json",
+      "bytes": 676,
+      "sha256": "2ad3985088a31a4265778032ccb38e3058dcd6033c593fd540797a962eeec4c8",
+      "uncompressedSha256": "788cc28d7e19768ded543675f26683e997f1dbd7d72bf4c72b46f7d1f213aa35"
+    },
+    {
+      "file": "correction-partielle-files-cpu-extended-2-attempt-1-6aac5a96-38e8-4c0b-af2a-f726b854eb8e.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-attempt-1-6aac5a96-38e8-4c0b-af2a-f726b854eb8e.json",
+      "bytes": 22437,
+      "sha256": "a1ba2166fb860552eb7f8c543093c824115f6b0b429cac3dbdcf2eb3922b0b5d",
+      "uncompressedSha256": "aa2332199089b07ee34d799ea6fd5b4d05a8ba507855dfc606bb48f5002f8e2a"
+    },
+    {
+      "file": "correction-partielle-files-cpu-extended-3-preparation-5e9760bd-d8f3-4119-a727-8d27820189a1.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-3-preparation-5e9760bd-d8f3-4119-a727-8d27820189a1.json",
+      "bytes": 676,
+      "sha256": "b3ed052a67d710da2fd1546c06f289e0db29af6140956d4f058017d826628082",
+      "uncompressedSha256": "0628e1b3b340d5d0e0972b7a6755939b5cb6a367df3198c7d4a01999f4758f74"
+    },
+    {
+      "file": "correction-partielle-files-cpu-extended-3-attempt-1-07f2adc3-8eb6-4e41-a6e8-9b4259125b3e.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-3-attempt-1-07f2adc3-8eb6-4e41-a6e8-9b4259125b3e.json",
+      "bytes": 31525,
+      "sha256": "430022d318bc47efca86373c4766dd4f16dc6bdb264d47e23ae695d6e4222a9c",
+      "uncompressedSha256": "fcb05caa7731a0509468a229fb055486004ee17bf65f981874c496544d37cc41"
+    },
+    {
+      "file": "diagnostic-candidat.log.gz",
+      "source": ".local/session-7-7d-reconnect-candidate-cause.log",
+      "bytes": 5929,
+      "sha256": "40478e1f41518fad8046099d84b42299ef1c265c04104f1aa6bae5d38d84ec78",
+      "uncompressedSha256": "a8b526e3e06058542aa8985c10cefdffcb7cdcdeb484956e3825223c0c65021c"
+    },
+    {
+      "file": "diagnostic-candidat-1.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-6ce094ba-5c25-4d98-8c57-cf540c35a898\\cpu-report.json",
+      "bytes": 78158,
+      "sha256": "5ec72b7e32384e7c5ef991d4ab61a33fbb506a05fb0947d950f520c1fda63007",
+      "uncompressedSha256": "8c8f85e0bfe57ab295ce73353cac272559ab693fa66d715112165d1d84eb6c77"
+    },
+    {
+      "file": "diagnostic-candidat-2.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-d8ebc86c-749f-4ad8-b066-764cac542d4e\\cpu-report.json",
+      "bytes": 77952,
+      "sha256": "404592333f14d32cc28e9bae49df5312791795ba9a1f60c1827d306797d9ba1c",
+      "uncompressedSha256": "04c76a420267395963aaf8ad5bb17ff3de9e1315f064711b842be60d2a0e592e"
+    },
+    {
+      "file": "diagnostic-candidat-3.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-bfe6be39-5787-4206-b8ab-d520b54b6414\\cpu-report.json",
+      "bytes": 77331,
+      "sha256": "448583c70f3b88b923435af46f1cccc53e635f31aa5c991782d67295fd087138",
+      "uncompressedSha256": "5822b263f9043978f9b49357e12af4bd68926c616790b16615d7d0f872e40744"
+    },
+    {
+      "file": "diagnostic-candidat-files-cpu-extended-1-preparation-50c45b00-431a-40d0-bc5b-fc4c0742c43a.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-preparation-50c45b00-431a-40d0-bc5b-fc4c0742c43a.json",
+      "bytes": 676,
+      "sha256": "1cbdfeb910cdddfe2852e45ac73846ec47b63288e686e43f6cf28fa263040a30",
+      "uncompressedSha256": "86bdb6f940753dce8965dbf382e4ae492d93f6511ceaf1c261825833e1f3471d"
+    },
+    {
+      "file": "diagnostic-candidat-files-cpu-extended-1-attempt-1-49f5c725-e44f-4d46-b476-54dfb83e940d.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-attempt-1-49f5c725-e44f-4d46-b476-54dfb83e940d.json",
+      "bytes": 21791,
+      "sha256": "c335b7f1e9d04524305169d350134375262be1cfb59889b78e8be5721d31bc90",
+      "uncompressedSha256": "8f24ac42827e00d2c24d876e15bd45e5e53fd734a80507b79a7e538c1ab8e39c"
+    },
+    {
+      "file": "diagnostic-candidat-files-cpu-extended-2-preparation-3ef44736-a860-435c-b8be-08a360875031.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-preparation-3ef44736-a860-435c-b8be-08a360875031.json",
+      "bytes": 676,
+      "sha256": "f792ff25a84f9de67b4b0a9bad28fb601e3086790681ef935efb079b9581c359",
+      "uncompressedSha256": "3ebfce7275bd27612892fcf2c390218d34b8e4f955a57b3042476a637d9c631b"
+    },
+    {
+      "file": "diagnostic-candidat-files-cpu-extended-2-attempt-1-3d5a289f-3b2d-4e1b-9ebb-bd5022426773.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-attempt-1-3d5a289f-3b2d-4e1b-9ebb-bd5022426773.json",
+      "bytes": 20811,
+      "sha256": "54306b00fcc7fc9c86964d1d70d9aa189f85cf2fd721669f1626d1d7d7d26bf6",
+      "uncompressedSha256": "4ac2653a7fb3bac53c8fb7b62b9c6a6745d32a03e726d8243cac93b2c2037dc9"
+    },
+    {
+      "file": "diagnostic-candidat-files-cpu-extended-3-preparation-f3670bcc-6329-4fb6-8ba3-acca9dca91ac.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-3-preparation-f3670bcc-6329-4fb6-8ba3-acca9dca91ac.json",
+      "bytes": 676,
+      "sha256": "dee2fef6930432ce43ce520bf238de49a926e5fc6244cd40548a94661790ab7e",
+      "uncompressedSha256": "bf687d6f1b838fbc68eceebac970632469c19133f21da233adc01527b5dc4e1e"
+    },
+    {
+      "file": "diagnostic-candidat-files-cpu-extended-3-attempt-1-8788c382-afd6-42bd-bd59-f0cb77e4184c.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-3-attempt-1-8788c382-afd6-42bd-bd59-f0cb77e4184c.json",
+      "bytes": 20485,
+      "sha256": "235ee9e470c4a6ce54f5fa921756a234d11e24139f15b63b6477d7c3c892c8d8",
+      "uncompressedSha256": "2ec60a9f5a942f0b38e8b951d58def5e1c43555e9496a7ed1814864cf8a62ab0"
+    },
+    {
+      "file": "qualification-finale.log.gz",
+      "source": ".local/session-7-7d-reconnect-final-cpu.log",
+      "bytes": 7050,
+      "sha256": "9568e0106e2a3df801b539984cc79defb4ca1f3393266eadb99683bdb8029290",
+      "uncompressedSha256": "3d0e274fe6960b049267910a50b6dc0075ddcb3b91ebeffe52594e5e185a755a"
+    },
+    {
+      "file": "qualification-finale-1.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-63fd42b1-ffa9-4f97-b292-68d1b0d0943f\\cpu-report.json",
+      "bytes": 76341,
+      "sha256": "c2c57154360742d1afea781f449d798e94636288727d9b09fbf5a69116ce9189",
+      "uncompressedSha256": "be7bfbbf1b71c1e2aa4d22f1c2f0411826c7301b3c88e544021e248daeaa0042"
+    },
+    {
+      "file": "qualification-finale-2.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-b2546a9f-829a-496f-a6fb-8a212b5a1d14\\cpu-report.json",
+      "bytes": 75965,
+      "sha256": "2a2bfe11efd13a0d1c44b43350a53e162a8f4a9e75879c750304c9e53cb55a59",
+      "uncompressedSha256": "e1b2e693f871d5a764d309b84eeef9b90bcb49ec61fa74f59cdfc02443a0ecde"
+    },
+    {
+      "file": "qualification-finale-3.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-7f342bec-8e79-4a50-88c4-dd05efd572be\\cpu-report.json",
+      "bytes": 76572,
+      "sha256": "5b05700e4b042a49fe837db85c9f3174ed064fd1d4d8101a68c9945789c94b96",
+      "uncompressedSha256": "4e910da4f100ad8a80cba58c3d7ae376b24d1ad0b183bb78e38e4d76f0a85393"
+    },
+    {
+      "file": "qualification-finale-files-cpu-extended-1-preparation-f076aa20-d240-4346-8a2b-2c3e7a1ff53a.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-preparation-f076aa20-d240-4346-8a2b-2c3e7a1ff53a.json",
+      "bytes": 676,
+      "sha256": "3b60e555180591ff013f917d03941d191f806c2bddb840c12be38a875bfb401d",
+      "uncompressedSha256": "b4fc99a30c5519d128a9d42a0c1f4a7c3d577dfd498324bcb36ebd6abb35551d"
+    },
+    {
+      "file": "qualification-finale-files-cpu-extended-1-attempt-1-2d4fa8d7-ae1b-45c0-b557-8b97bb9b34cc.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-attempt-1-2d4fa8d7-ae1b-45c0-b557-8b97bb9b34cc.json",
+      "bytes": 20817,
+      "sha256": "8d52fb958c51d2bfb8683526300a40ea20c632d6728b691f3d2760610cbe9def",
+      "uncompressedSha256": "3f4874e0629d302252f1094e989d2330f069a19b17bf0d98d726f4c531eedd30"
+    },
+    {
+      "file": "qualification-finale-files-cpu-extended-2-preparation-4281d9ca-7e60-4c69-885c-ce19a1ca6253.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-preparation-4281d9ca-7e60-4c69-885c-ce19a1ca6253.json",
+      "bytes": 676,
+      "sha256": "abb48a472bf5a4e74121af8d53f1f62d53a2d5c2f192f86c36bd556fe112ee20",
+      "uncompressedSha256": "b34bc3c2bbd9cb619d0ec58172665ddbf5913cb07bbb456494055e87db13686a"
+    },
+    {
+      "file": "qualification-finale-files-cpu-extended-2-attempt-1-3e504550-242a-4ad7-9a55-487403ae064f.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-attempt-1-3e504550-242a-4ad7-9a55-487403ae064f.json",
+      "bytes": 21139,
+      "sha256": "666a33378359c58344fd305119b2609dda977ffd20335fb23bda0cd896e25604",
+      "uncompressedSha256": "3c3c94339bf63daf92e4ea3c9024f5132fe1d0c71b7a8fcda1871ce1778f15e1"
+    },
+    {
+      "file": "qualification-finale-files-cpu-extended-3-preparation-3f9ac62d-a81d-40eb-a607-dd8c32e01f8f.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-3-preparation-3f9ac62d-a81d-40eb-a607-dd8c32e01f8f.json",
+      "bytes": 676,
+      "sha256": "68c821b61c567d2dce5191959f2b13db789b99d1008f4a322d3b6f360345fa7d",
+      "uncompressedSha256": "c4d51d44d2539eeaa0d8be1789001a01baac96aa516a188cd305b28da43cd6a9"
+    },
+    {
+      "file": "qualification-finale-files-cpu-extended-3-attempt-1-cc9ecb54-bc7a-4726-9821-f0ade00cd314.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-3-attempt-1-cc9ecb54-bc7a-4726-9821-f0ade00cd314.json",
+      "bytes": 20817,
+      "sha256": "ae1b7377eb859b0223afd0ad413238a4fc3d61cf3394d76912fd9675bf5156c4",
+      "uncompressedSha256": "661e3a2a1d9407f57cd5aa8264d2d36dbec35d869b25511cec5018b9235da044"
+    },
+    {
+      "file": "qualification-finale2.log.gz",
+      "source": ".local/session-7-7d-reconnect-final2-cpu.log",
+      "bytes": 5931,
+      "sha256": "d41c2e74985df8badeb00d2184c267fa0fc12d71368c55f43ec70f75b9ea957d",
+      "uncompressedSha256": "b17a5f45d579d3178be0c86461f5e861edfab31e5a0e2099813849961b4cd7a6"
+    },
+    {
+      "file": "qualification-finale2-1.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-5367ed0c-71cf-46d8-acdc-06cc683b60b6\\cpu-report.json",
+      "bytes": 76718,
+      "sha256": "23f417b62e528c971ff848296ae87832a99aa0337d5926411f5c546e2ba8ad50",
+      "uncompressedSha256": "509d1b92ee3aaa2432bff79b57f88ac2cc2fd2d73816c51e7f9523059d48e267"
+    },
+    {
+      "file": "qualification-finale2-2.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-a683e92e-0ba4-4c85-9508-a32d54275590\\cpu-report.json",
+      "bytes": 75829,
+      "sha256": "3caf172363d5c9dc5d058a12c8877c78c7facddc2455380aa08c31e788e39064",
+      "uncompressedSha256": "e3be0c3cb27902adb699998f16b7b95a623a4570d1587812b99c9607271c21d1"
+    },
+    {
+      "file": "qualification-finale2-3.json.gz",
+      "source": "C:\\Users\\Foxti\\Documents\\Projets\\Memoria\\.local\\files-browser\\memoria-files-ui-d5e01986-baa6-43a5-ba72-c3627cf83afb\\cpu-report.json",
+      "bytes": 76629,
+      "sha256": "88070019a15b504cafbcfe6e6d377783fbaa43f6c7ca37eef3dfb45c87d63d18",
+      "uncompressedSha256": "cfffd85df2bf7b0e54c652f68b635a23454d7ce851636b356fbf10f46ec577cf"
+    },
+    {
+      "file": "qualification-finale2-files-cpu-extended-1-preparation-567be406-8624-4fd9-bfe3-cde546fd9afe.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-preparation-567be406-8624-4fd9-bfe3-cde546fd9afe.json",
+      "bytes": 676,
+      "sha256": "bec75799923d683f46d6e2667aaf7f2c7b4ea45224a807fc3bbc43107c614514",
+      "uncompressedSha256": "b61a5c5886decdddf9478fba7fe64c6b205d1ecc1dba95975222079e286de7f7"
+    },
+    {
+      "file": "qualification-finale2-files-cpu-extended-1-attempt-1-5c673658-5c75-411f-901e-816ca40ed2cd.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-1-attempt-1-5c673658-5c75-411f-901e-816ca40ed2cd.json",
+      "bytes": 21145,
+      "sha256": "28f73b182780c88762f751d9234f3d0a0e34e91ef72b6d52d65edb299c27a256",
+      "uncompressedSha256": "52adb512e8b5c1d598ef00221e7e236e8a8e03240380fe2b37d5069ca89e9255"
+    },
+    {
+      "file": "qualification-finale2-files-cpu-extended-2-preparation-948453b2-cc0b-4176-9b59-49a2f80b9ce8.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-preparation-948453b2-cc0b-4176-9b59-49a2f80b9ce8.json",
+      "bytes": 676,
+      "sha256": "24b96a69bebc193bb3915c76c4ef7b5fe85db959fa9c1b4445bbc2f857084223",
+      "uncompressedSha256": "33835341f33b696d18d9723b08215f77dc064585d6adadb3993de44b99895f17"
+    },
+    {
+      "file": "qualification-finale2-files-cpu-extended-2-attempt-1-70be7915-a979-400d-8305-46ac1219f103.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-2-attempt-1-70be7915-a979-400d-8305-46ac1219f103.json",
+      "bytes": 20485,
+      "sha256": "f626f0d93f867f81923c8fb82a81c96d6a20683c42e49fd88b75093d9488c392",
+      "uncompressedSha256": "2093bb8f8156c0c4b7b37c82dc10fa0ab48181c20b9d1d0c1665f5558a0c9b7f"
+    },
+    {
+      "file": "qualification-finale2-files-cpu-extended-3-preparation-ff9e73d2-1936-4b93-a040-90c26cc91a86.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-3-preparation-ff9e73d2-1936-4b93-a040-90c26cc91a86.json",
+      "bytes": 676,
+      "sha256": "8478eb4ebe97a82e06fc1942d82501258aa92248394f0e3a286a3484000ac68f",
+      "uncompressedSha256": "ca1d3eec0612829dc2abd9ffa205400c3315831399e10ce7bd1b6d963e2bdff5"
+    },
+    {
+      "file": "qualification-finale2-files-cpu-extended-3-attempt-1-068ec088-b1be-40f9-8e77-82f44888ff6e.json.gz",
+      "source": ".local/measurement-hygiene/files-cpu-extended-3-attempt-1-068ec088-b1be-40f9-8e77-82f44888ff6e.json",
+      "bytes": 20487,
+      "sha256": "0514b4584e1a3ff487056cf201cd128a065300e4799b134b5f1cb09249fad93b",
+      "uncompressedSha256": "5fdad8437573960594e16d3db9ed0743c4307bef11dbf5e4ce212f83f448eafb"
+    },
+    {
+      "file": "functional-first.log.gz",
+      "source": ".local/session-7-7d-reconnect-functional.log",
+      "bytes": 5674,
+      "sha256": "bacd8a90276f563176cee91035ee376ec40afa14632f1c942f4ada3da659d814",
+      "uncompressedSha256": "06996ebaa02e535fb7ebcadeeaf038c8752b879c9b896f57d11a5b5533180137"
+    },
+    {
+      "file": "handshake-inactive-fixture-1.log.gz",
+      "source": ".local/session-7-7d-handshake-red.log",
+      "bytes": 6136,
+      "sha256": "9ecb395154add6bd489bff6eb86add0da9561db2c2255926a5ce42885060238d",
+      "uncompressedSha256": "794a787b18a1143b75ccf8b55f449044d81e166102422af9af7f3d6c51cba367"
+    },
+    {
+      "file": "handshake-inactive-fixture-2.log.gz",
+      "source": ".local/session-7-7d-handshake-order.log",
+      "bytes": 6138,
+      "sha256": "17d9b295c932c5c7c89611e76fec72df063444f661290080ea33bf2712d379b5",
+      "uncompressedSha256": "e7f9e99e80d38a8bc8e1a4fcb488e59f45651c1f269fce31dc112c8155b2e85c"
+    },
+    {
+      "file": "handshake-red.log.gz",
+      "source": ".local/session-7-7d-handshake-confirmed.log",
+      "bytes": 8585,
+      "sha256": "53a039238319b38a02ad084363a144e2acbc7d7553f3f81bfd05f88c0317c8ca",
+      "uncompressedSha256": "676288425e0ba0ca816e66a0ceba3f478cd9d49dd31004d925185434c506c08f"
+    },
+    {
+      "file": "functional-final.log.gz",
+      "source": ".local/session-7-7d-reconnect-functional-final.log",
+      "bytes": 6244,
+      "sha256": "9f3c17668a944844edd5173d8d57483369b7418b2c42f4d79dae930c34929e1e",
+      "uncompressedSha256": "0a8eabc2443632e768f9282542e1cd8e7da2477ad715e20bf16577db9bdeb0b0"
+    },
+    {
+      "file": "functional-final2.log.gz",
+      "source": ".local/session-7-7d-reconnect-functional-final2.log",
+      "bytes": 6242,
+      "sha256": "68953323fdbd2fb09e97309098d912468829cfd4458e60c37d02b40900643e4e",
+      "uncompressedSha256": "b1298305d3797c28608043409e1cc36cb6e69ea1b32be40f7e6d0e502cec9f81"
+    },
+    {
+      "file": "transport-final2.log.gz",
+      "source": ".local/session-7-7d-reconnect-transport-final2.log",
+      "bytes": 7856,
+      "sha256": "4f9757adcc68ded9e48ce7615905b73278299a9d66839c3049b74739ece52e9e",
+      "uncompressedSha256": "f253dfdcdc051f8ca70929c627fc49bf5f968676b8e7caddb587297bf6e2fc68"
+    },
+    {
+      "file": "regressions.log.gz",
+      "source": ".local/session-7-7d-reconnect-regressions.log",
+      "bytes": 8675,
+      "sha256": "dced5a2b120c0c581071c0cbe5e744543fddf9113f2c42c5b2d7f795583338b3",
+      "uncompressedSha256": "e98bc2f1a75bfbad178aba168b1413c99f86c67a64525290f35f6e5d86064123"
+    },
+    {
+      "file": "check.log.gz",
+      "source": ".local/session-7-7d-reconnect-check-final.log",
+      "bytes": 1937,
+      "sha256": "c7756415490cb58f8b98d683d11ae42ef2cff1f23f366aa7ff24ea016d24a799",
+      "uncompressedSha256": "0949034018a1f7c0e1371e0ca84067bc0bdf6e1237b25efbf6bc32f91528e72a"
+    },
+    {
+      "file": "source.diff.gz",
+      "source": ".local/7d/reconnect-source.diff",
+      "bytes": 15967,
+      "sha256": "00457e3a699de21911025ddadd50f1242ec351faca3c33914803c408b97ca3cb",
+      "uncompressedSha256": "753f0c4aee44d07981764fae0be074a65c64afd66a5444fecbc671f874a80161"
+    },
+    {
+      "file": "reconnect-fence.e2e.ts.gz",
+      "source": "apps/collab/src/testing/reconnect-fence.e2e.ts",
+      "bytes": 11343,
+      "sha256": "f9fa19fd66c1e21e78a06cb9b7207567c7d7740fe11aca3e4fa712dffc51d9ba",
+      "uncompressedSha256": "e4d7f64161f8491ffb64d5dc346f53921bbd11354c958a1333a3e3cbf84c7ca2"
+    }
+  ]
+}

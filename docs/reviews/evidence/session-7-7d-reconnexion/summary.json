@@ -1,0 +1,1281 @@
+[
+  {
+    "name": "diagnostic-1-1",
+    "outcome": "no-control-closure-observed",
+    "typed": 94,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 94,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 94,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 83,
+    "controlClosed": false,
+    "bursts": [533.7763999999988, 895.925299999999, 1977.7560000000012, 3527.3834999999963],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794000302198,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 3904,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000302210,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000302218,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000316380,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000316384,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "OTHER"
+      }
+    ],
+    "reconnects": [],
+    "maxConversionMs": 23460.300717,
+    "peakConversionMiB": 115.640625,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "diagnostic-2-1",
+    "outcome": "stopped",
+    "typed": 89,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 88,
+        "status": "Édition arrêtée"
+      },
+      {
+        "client": "peer",
+        "tokens": 80,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 80,
+    "controlClosed": false,
+    "bursts": [352.52720000000045, 832.0589999999975, 2004.8111999999965, 3572.455399999999],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794000478847,
+        "event": "room-update-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "fatal": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000478847,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1008,
+        "reason": "UPDATE_REJECTED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000478859,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000478863,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1008,
+        "reason": "UPDATE_REJECTED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1008,
+        "reason": "other",
+        "reopenMs": null
+      }
+    ],
+    "maxConversionMs": 21801.239550000002,
+    "peakConversionMiB": 99.73046875,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "correction-partielle-1",
+    "outcome": "no-control-closure-observed",
+    "typed": 96,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 85,
+    "controlClosed": false,
+    "bursts": [469.02590000000055, 1008.5709000000024, 1822.5303000000058, 3784.4635000000053],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794000992459,
+        "event": "room-update-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "fatal": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000992459,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000992469,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794000992471,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001004957,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001004964,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1486
+      }
+    ],
+    "maxConversionMs": 22585.850863,
+    "peakConversionMiB": 90.56640625,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "correction-partielle-2",
+    "outcome": "no-control-closure-observed",
+    "typed": 95,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 84,
+    "controlClosed": false,
+    "bursts": [403.7104999999974, 887.6800000000003, 1954.7877999999982, 3712.697899999999],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794001083970,
+        "event": "room-update-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "fatal": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001083971,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001083979,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001083982,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001084432,
+        "event": "store-rejected",
+        "operation": "open",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001097265,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001097269,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1602
+      }
+    ],
+    "maxConversionMs": 23917.050621000002,
+    "peakConversionMiB": 90.80078125,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "correction-partielle-3",
+    "outcome": "stopped",
+    "typed": 90,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 90,
+        "status": "Édition arrêtée"
+      },
+      {
+        "client": "peer",
+        "tokens": 78,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 70,
+    "controlClosed": false,
+    "bursts": [497.20310000000245, 991.1401000000005, 2130.0046999999977, 3503.7500999999975],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794001167321,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 2540,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001167321,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001167329,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001167330,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001175868,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 3934,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001175868,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001175871,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001175875,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001177491,
+        "event": "room-update-rejected",
+        "reason": "UNCLASSIFIED",
+        "candidateRejected": true,
+        "fatal": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001177492,
+        "event": "socket-close-requested",
+        "socket": 3,
+        "code": 1008,
+        "reason": "UPDATE_REJECTED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001177495,
+        "event": "socket-close-requested",
+        "socket": 3,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001177497,
+        "event": "socket-close-requested",
+        "socket": 3,
+        "code": 1008,
+        "reason": "UPDATE_REJECTED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1764
+      },
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1547
+      },
+      {
+        "code": 1008,
+        "reason": "other",
+        "reopenMs": null
+      }
+    ],
+    "maxConversionMs": 24574.223987,
+    "peakConversionMiB": 111.9453125,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "diagnostic-candidat-1",
+    "outcome": "no-control-closure-observed",
+    "typed": 95,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 84,
+    "controlClosed": false,
+    "bursts": [580.3558000000012, 884.4277999999977, 1875.454700000002, 3700.116600000001],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794001402738,
+        "event": "room-update-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "fatal": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001402739,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001402748,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001402750,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001415346,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001415352,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1599
+      }
+    ],
+    "maxConversionMs": 22137.874792,
+    "peakConversionMiB": 90.73828125,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "diagnostic-candidat-2",
+    "outcome": "no-control-closure-observed",
+    "typed": 96,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 85,
+    "controlClosed": false,
+    "bursts": [497.942500000001, 801.4939000000013, 1810.262499999997, 3556.1405000000013],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794001494298,
+        "event": "room-update-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "fatal": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001494299,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001494308,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001494310,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001494588,
+        "event": "store-rejected",
+        "operation": "open",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001504298,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001504303,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1336
+      }
+    ],
+    "maxConversionMs": 20248.660716,
+    "peakConversionMiB": 91.0546875,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "diagnostic-candidat-3",
+    "outcome": "no-control-closure-observed",
+    "typed": 96,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 85,
+    "controlClosed": false,
+    "bursts": [338.7305000000015, 753.2767999999996, 1814.0613999999987, 3555.5984000000026],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794001581021,
+        "event": "room-update-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "fatal": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001581022,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001581030,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001581032,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001581326,
+        "event": "store-rejected",
+        "operation": "open",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001590277,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001590281,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1317
+      }
+    ],
+    "maxConversionMs": 19162.824039000003,
+    "peakConversionMiB": 92.7890625,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "qualification-finale-1",
+    "outcome": "no-control-closure-observed",
+    "typed": 96,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 86,
+    "controlClosed": false,
+    "bursts": [290.1707000000024, 835.4231999999975, 1808.9455000000016, 3582.5602999999974],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794001915619,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 4007,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001915619,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001915626,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001915627,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001924961,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794001924966,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1417
+      }
+    ],
+    "maxConversionMs": 19678.822667999997,
+    "peakConversionMiB": 90.78515625,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "qualification-finale-2",
+    "outcome": "no-control-closure-observed",
+    "typed": 95,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 85,
+    "controlClosed": false,
+    "bursts": [332.1787000000004, 868.1947, 2048.637299999995, 3528.556199999999],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794002001957,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 3971,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002001958,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002001968,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002001969,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002012040,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002012044,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1337
+      }
+    ],
+    "maxConversionMs": 19324.71373,
+    "peakConversionMiB": 115.2578125,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "qualification-finale-3",
+    "outcome": "no-control-closure-observed",
+    "typed": 95,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 77,
+    "controlClosed": false,
+    "bursts": [335.3714, 862.9553999999989, 2147.946799999998, 3656.1487999999954],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794002081036,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 2581,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002081037,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002081048,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002081049,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002089722,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 4065,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002089722,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002089723,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002089726,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002099418,
+        "event": "socket-close-requested",
+        "socket": 3,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002099422,
+        "event": "socket-close-requested",
+        "socket": 3,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1419
+      },
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1399
+      }
+    ],
+    "maxConversionMs": 21099.407321000002,
+    "peakConversionMiB": 113.57421875,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "qualification-finale2-1",
+    "outcome": "no-control-closure-observed",
+    "typed": 96,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 96,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 85,
+    "controlClosed": false,
+    "bursts": [482.3679000000011, 931.9395000000004, 2164.4547999999995, 3590.3476999999984],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794002469574,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 4051,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002469575,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002469598,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002469600,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002479907,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002479911,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1365
+      }
+    ],
+    "maxConversionMs": 19202.646163,
+    "peakConversionMiB": 91.46875,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "qualification-finale2-2",
+    "outcome": "no-control-closure-observed",
+    "typed": 95,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 84,
+    "controlClosed": false,
+    "bursts": [323.3601000000017, 794.7489999999998, 2019.6693999999989, 3583.203999999998],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794002556665,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 4030,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002556666,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002556673,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002556674,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002565884,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002565890,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1559
+      }
+    ],
+    "maxConversionMs": 19584.972289,
+    "peakConversionMiB": 115.73046875,
+    "errors": [],
+    "quotas": []
+  },
+  {
+    "name": "qualification-finale2-3",
+    "outcome": "no-control-closure-observed",
+    "typed": 95,
+    "seen": [
+      {
+        "client": "author",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      },
+      {
+        "client": "peer",
+        "tokens": 95,
+        "status": "Enregistré sur le serveur"
+      }
+    ],
+    "revisionDelta": 77,
+    "controlClosed": false,
+    "bursts": [331.5656000000017, 869.1165999999976, 2094.4950000000026, 3639.8663000000015],
+    "refusals": [
+      {
+        "kind": "cpu-observation",
+        "at": 1794002633787,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 2503,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002633809,
+        "event": "room-update-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "fatal": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002633810,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002633817,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002633820,
+        "event": "socket-close-requested",
+        "socket": 1,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002642439,
+        "event": "fence-rejected",
+        "reason": "COLLAB_LEADERSHIP_LOST",
+        "candidateRejected": false,
+        "ageMs": 4054,
+        "stopped": false
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002642439,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002642440,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002642444,
+        "event": "socket-close-requested",
+        "socket": 2,
+        "code": 1013,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002651723,
+        "event": "socket-close-requested",
+        "socket": 3,
+        "code": null,
+        "reason": "OTHER"
+      },
+      {
+        "kind": "cpu-observation",
+        "at": 1794002651727,
+        "event": "socket-close-requested",
+        "socket": 3,
+        "code": 1000,
+        "reason": "DOCUMENT_CLOSED"
+      }
+    ],
+    "reconnects": [
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1492
+      },
+      {
+        "code": 1013,
+        "reason": "LEADERSHIP_UNAVAILABLE",
+        "reopenMs": 1397
+      }
+    ],
+    "maxConversionMs": 19767.19612,
+    "peakConversionMiB": 91.21484375,
+    "errors": [],
+    "quotas": []
+  }
+]

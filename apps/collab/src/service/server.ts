@@ -17,7 +17,7 @@ import {
   presenceUser,
 } from '@memoria/contracts';
 import type { Auth } from '@memoria/auth';
-import { Leadership } from './leadership.ts';
+import { Leadership, LeadershipLost } from './leadership.ts';
 import { Store, receiptFor } from './store.ts';
 import type { AccessResolver } from './store.ts';
 import type { AccessRequest } from './access.ts';
@@ -76,6 +76,13 @@ export async function collaborationServer(
     if (!available) throw new CollaborationError('SERVICE_UNAVAILABLE', 503);
     void leadership.fence;
   };
+  const retryLeadership = (error: unknown, socket: WebSocket) => {
+    if (!(error instanceof LeadershipLost)) return false;
+    // The failed transaction stays rejected. Reconnect must pass authentication,
+    // authorization and fencing again; no receipt or broadcast is fabricated.
+    socket.close(1013, 'LEADERSHIP_UNAVAILABLE');
+    return true;
+  };
   const evicting = new Set<string>();
   const hocus = new Hocuspocus<Context>({
     quiet: true,
@@ -121,6 +128,8 @@ export async function collaborationServer(
         context.budget.ready = true;
         return { identity };
       } catch (error) {
+        if (retryLeadership(error, context.socket))
+          throw publicError(error, 'LEADERSHIP_UNAVAILABLE');
         throw publicError(error, 'AUTH_REJECTED');
       }
     },
@@ -184,7 +193,14 @@ export async function collaborationServer(
       if (!evicting.has(documentName)) throw new Error('RESIDENT_REPLICA');
     },
     async beforeSync({ connection, context, document, documentName, type, payload }) {
-      assertAvailable();
+      try {
+        assertAvailable();
+      } catch (error) {
+        if (retryLeadership(error, context.socket))
+          throw publicError(error, 'LEADERSHIP_UNAVAILABLE');
+        // Keep a global control outage outside the client's content rejection budget.
+        throw error;
+      }
       if (type === 0) return;
       try {
         if (rooms.get(documentName)?.fatal) throw new Error('ROOM_RELOAD_REQUIRED');
@@ -211,6 +227,8 @@ export async function collaborationServer(
         // and checks intact, but give other rooms' I/O a turn between both applies.
         await yieldToIo();
       } catch (error) {
+        if (retryLeadership(error, context.socket))
+          throw publicError(error, 'LEADERSHIP_UNAVAILABLE');
         if (
           (error instanceof CandidateRejected || error instanceof CollaborationError) &&
           !charged.has(context.socket)
@@ -259,6 +277,8 @@ export async function collaborationServer(
         context.presenceId = id;
         presenceOwners.set(key, context.socket);
       } catch (error) {
+        if (context && retryLeadership(error, context.socket))
+          throw publicError(error, 'LEADERSHIP_UNAVAILABLE');
         context?.socket.close(1008, 'PRESENCE_REJECTED');
         throw publicError(error, 'PRESENCE_REJECTED');
       }

@@ -1,5 +1,7 @@
 # Risques résiduels session 7 — tableau de travail 7d
 
+**Mise à jour S7-R07, 6 novembre :** la [correction ciblée de reconnexion](session-7-7d-reconnexion.md) distingue le refus temporaire de leadership d'un contenu invalide. Les refus d'accès restent bloquants. Ce correctif ne clôture pas le risque global `CONTROL_UNAVAILABLE` et ne constitue pas une acceptation.
+
 29 octobre 2026, complété le **6 novembre 2026**. **Aucune acceptation générale des risques.** La seule dérogation de performance décidée explicitement par le développeur est inscrite ci-dessous ; les autres décisions restent à soumettre. Ce tableau ne vaut pas clôture de 7d.
 
 | ID     | Risque et preuve/limite                                                                                                                                                           | Recommandation                                                                                                                                                                                                    | Décision                          |

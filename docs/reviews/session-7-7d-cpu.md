@@ -1,5 +1,7 @@
 # Session 7d — saturation CPU et arrêt sur la reprise du front
 
+**Suite :** le développeur a autorisé le diagnostic exact puis la correction ciblée. La [fiche de reconnexion](session-7-7d-reconnexion.md) conserve les nouvelles traces, la correction et ses contrôles. Le texte ci-dessous reste le constat du témoin rouge `eb2d1fd`.
+
 6 novembre 2026. **7d arrêtée, non prête à fusionner.** Trois séries du diagnostic initial passent ; le premier essai au palier supplémentaire révèle un défaut de reprise. Aucun correctif applicatif, aucune intégration de l'isolation, aucun délai relevé. La dérogation historique/8K ne couvre pas ce défaut fonctionnel.
 
 ## Résultat à retenir

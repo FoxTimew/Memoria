@@ -2,6 +2,12 @@ import pg from 'pg';
 import type { PoolClient } from 'pg';
 import { randomUUID } from 'node:crypto';
 const namespace = 1296387393;
+/** Technical fencing refusal, never a content or authorization rejection. */
+export class LeadershipLost extends Error {
+  constructor() {
+    super('COLLAB_LEADERSHIP_LOST');
+  }
+}
 export interface Fence {
   owner: string;
   epoch: number;
@@ -53,7 +59,7 @@ export class Leadership {
   }
   get fence() {
     if (this.stopped || !this.token || Date.now() - this.acknowledged > 2500)
-      throw new Error('COLLAB_LEADERSHIP_LOST');
+      throw new LeadershipLost();
     return this.token;
   }
   private schedule() {
@@ -99,5 +105,5 @@ export async function assertFence(client: PoolClient, fence: Fence) {
  AND EXISTS(SELECT 1 FROM pg_locks WHERE locktype='advisory' AND granted AND pid=l.backend_pid AND classid=$3::oid AND objid=(hashtext(current_schema())::bigint & 4294967295)::oid AND objsubid=2) FOR SHARE OF l`,
     values: [fence.owner, fence.epoch, namespace],
   });
-  if (result.rowCount !== 1) throw new Error('COLLAB_LEADERSHIP_LOST');
+  if (result.rowCount !== 1) throw new LeadershipLost();
 }

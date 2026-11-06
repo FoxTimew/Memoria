@@ -1,5 +1,7 @@
 # Matrice adverse session 7 — état de la revue 7d
 
+**Suite du 6 novembre :** [refus de leadership et reprise ciblée](session-7-7d-reconnexion.md). Le test permanent `reconnect-fence.e2e.ts` couvre annulation SQL sans diffusion, reprise avec reçu, révocation avant reprise et maintien du refus de contenu invalide. La requalification navigateur est consignée dans cette fiche ; elle ne couvre pas la reprise globale `CONTROL_UNAVAILABLE`. Aucun nouveau chemin HTTP ni changement de quota. Les constats ci-dessous restent historiques.
+
 **Dernière preuve, 6 novembre à 22 h 08 :** [CPU avec vrai front](session-7-7d-cpu.md). Trois séries : 235 contributions convergentes et conservées après rechargement. Palier supplémentaire : échec réel de reprise, code 1000 puis 1008, 12 saisies non confirmées ; toutes restent visibles chez l'auteur. `CONTROL_UNAVAILABLE` demeure non reproduit. Les journaux donnent 250 intervalles sans swap ; aucun code applicatif, route ou quota changé. Reconnexion automatique de ce cas : **test rouge**, pas absence de test ni acceptation. Survie des 12 saisies à une fermeture de navigateur dans cet état : **absence de test**.
 
 **Point préparatoire antérieur du 6 novembre :** décision de ne pas intégrer le prototype ; [banc de saturation du vrai front préparé](session-7-7d-sans-isolation.md), non exécuté à cause du garde-fou mémoire. La ligne `CONTROL_UNAVAILABLE` reste donc en absence de preuve. Aucun endpoint applicatif ni quota modifié ; le test de dérogation ne modifie aucun contrôle d'accès.
