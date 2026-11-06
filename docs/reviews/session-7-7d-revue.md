@@ -1,5 +1,7 @@
 # Session 7d — revue adverse et mesures finales
 
+**État au 6 novembre 2026 :** [poursuite sans isolation](session-7-7d-sans-isolation.md). Le prototype reste un repli ; la dérogation bornée du développeur permet de poursuivre sur le service actuel. Banc CPU préparé et compilé, mais refusé avant préparation faute de mémoire Windows : aucune nouvelle preuve de reprise. Cette décision remplace les recommandations d'intégration et blocages historiques ci-dessous, sans clore les autres obligations.
+
 29 octobre 2026. Branche `codex/session-7-files`. **En cours : ne pas fusionner sur la base de cette fiche intermédiaire.** Les validations de 7a, 7b et 7c restent datées dans leurs propres fiches ; elles ne remplacent pas les contrôles finaux de 7d. Aucun risque résiduel accepté ici.
 
 ## Livré et vérifié à ce stade

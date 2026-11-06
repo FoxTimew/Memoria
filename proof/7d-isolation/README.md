@@ -1,5 +1,7 @@
 # Preuve 7d : publication Yjs isolée
 
+**Décision du développeur, 6 novembre 2026 : pas d'intégration.** Prototype conservé comme repli, hors build de production et hors Compose. Motifs : couplage aux sources/interfaces internes Hocuspocus à maintenir, complexité IPC et modes de panne, surcoût historique apparent. La suite de 7d utilise le service normal. Réexamen uniquement si le rebasage pré-pilote ne suffit pas à ramener les pages typiques du scénario historique + conversions 8K sous 50 ms ; voir [ADR 021](../../docs/adr/021-transferts-et-service-des-fichiers.md#décision-du-6-novembre-2026--service-sans-isolation-et-dérogation-bornée). Les résultats ci-dessous restent des preuves datées, pas une recommandation d'intégration courante.
+
 30 octobre 2026, autorisation du développeur après le diagnostic `d389b68`. **Prototype, pas intégration de production.** Aucun changement de plafond, de politique d'accès ou de quota.
 
 Le build normal de `apps/collab` reste identique. `build.mjs` adapte uniquement le bundle de preuve, par remplacements explicites dont l'absence ou la multiplicité fait échouer la construction. Les sources générées et leurs empreintes sont conservées dans `.local/isolation-source`. Les contrôles du service existant sont réutilisés ; la dépendance Hocuspocus installée n'est pas modifiée.

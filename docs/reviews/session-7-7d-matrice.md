@@ -1,5 +1,7 @@
 # Matrice adverse session 7 — état de la revue 7d
 
+**6 novembre 2026 :** décision de ne pas intégrer le prototype ; [banc de saturation du vrai front préparé](session-7-7d-sans-isolation.md), non exécuté à cause du garde-fou mémoire. La ligne `CONTROL_UNAVAILABLE` reste donc en absence de preuve. Aucun endpoint applicatif ni quota modifié ; le test de dérogation ne modifie aucun contrôle d'accès.
+
 29 octobre 2026. À lire avec la [fiche 7d](session-7-7d-revue.md). **Revue en cours, aucune acceptation de risque.** Les preuves antérieures restent dans les fiches [7a](session-7-7a-cloture.md), [7b](session-7-7b-validation-lecture.md) et [7c](session-7-7c-interface-fichiers.md). Une ligne « absence de test » ne constitue pas une validation.
 
 ## Routes et quotas réellement appliqués

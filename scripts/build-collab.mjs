@@ -17,6 +17,9 @@ const options = {
   entryPoints: {
     main: 'apps/collab/src/main.ts',
     'incremental-worker': 'apps/collab/src/service/incremental-worker.ts',
+    ...(process.argv.includes('--cpu-front')
+      ? { 'cpu-front': 'apps/collab/src/testing/cpu-front-server.ts' }
+      : {}),
   },
   outdir: 'apps/collab/dist',
   outExtension: { '.js': '.mjs' },

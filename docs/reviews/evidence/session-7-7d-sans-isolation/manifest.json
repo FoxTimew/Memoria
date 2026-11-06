@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-06T20:38:44.862Z",
+  "baseCommit": "e4ce31a6bfa98c77f7767ed120e9746f9fbcfe49",
+  "scope": "Decision and preparation only. No CPU series started: Windows memory admission refused. Full check complete; initial type failures retained. CPU/API bundles compile after removing the UI generator import; production no-UI boundary unchanged. Pre-push must run checks again.",
+  "artifacts": [
+    {
+      "name": "check.txt",
+      "source": ".local/session-7-7d-without-isolation-check.log",
+      "bytes": 1937,
+      "sha256": "d0ad737ab5d59e1b8b8fa97cda60da0111f46d9bc1a94a0a1ce52041ca3d37f1"
+    },
+    {
+      "name": "admission.txt",
+      "source": ".local/session-7-7d-cpu-admission.log",
+      "bytes": 2203,
+      "sha256": "e52dff9791c4cef3d897da7ff8ed17819882d73b48de8d768e5fab8016ee3def"
+    },
+    {
+      "name": "admission.json",
+      "source": ".local/measurement-hygiene/files-cpu-front-admission-preparation-b967ea52-43c3-4532-a6bd-6846247820d9.json",
+      "bytes": 734,
+      "sha256": "4761aa82091fa175c68c2a52ec277d6e12982008a015acf0dd8886bda0f4e40a"
+    },
+    {
+      "name": "web-build.txt",
+      "source": ".local/session-7-7d-cpu-web-build.log",
+      "bytes": 1160,
+      "sha256": "284092b7ad62a43a0dd3dd39599de25069ff73ea643d78c1f3310df92e4910ab"
+    },
+    {
+      "name": "waiver-test.txt",
+      "source": ".local/session-7-7d-waiver-tests.log",
+      "bytes": 209,
+      "sha256": "4e89f15bca1bf929ea1422413694b335a60b8204b2c7fdbe73fdf46d03690b9c"
+    },
+    {
+      "name": "types-first-attempt.txt",
+      "source": ".local/session-7-7d-cpu-types.log",
+      "bytes": 2289,
+      "sha256": "d3b105b0a757f6dd69dd91e4cde384722649433b78f828bc282c6db2f4204162"
+    },
+    {
+      "name": "types-second-attempt.txt",
+      "source": ".local/session-7-7d-cpu-types-2.log",
+      "bytes": 759,
+      "sha256": "1909247ca369fa075d33baf17c790a191fa3ead469de49d5ada70d55be108be7"
+    },
+    {
+      "name": "types-final-api.txt",
+      "source": ".local/session-7-7d-cpu-types-3.log",
+      "bytes": 16,
+      "sha256": "5a3973f79ed9becd5f23c4feff467513814de7ea381d75a4d2e339aa8b8edca9"
+    }
+  ]
+}

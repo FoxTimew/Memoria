@@ -1,0 +1,18 @@
+Scope: 2 of 16 workspace projects
+apps/api typecheck$ tsc --noEmit
+apps/collab typecheck$ tsc --noEmit
+apps/collab typecheck: src/testing/cpu-front-server.ts(87,18): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+apps/collab typecheck: src/testing/cpu-front-server.ts(88,33): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+apps/collab typecheck: src/testing/files-mixed.e2e.ts(333,54): error TS2379: Argument of type '{ platform: NodeJS.Platform; waiver: string | undefined; isolated: boolean; }' is not assignable to parameter of type '{ platform: string; waiver?: string; isolated: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+apps/collab typecheck:   Types of property 'waiver' are incompatible.
+apps/collab typecheck:     Type 'string | undefined' is not assignable to type 'string'.
+apps/collab typecheck:       Type 'undefined' is not assignable to type 'string'.
+apps/collab typecheck: src/testing/mixed-limits.test.ts(24,53): error TS2379: Argument of type '{ platform: string; waiver: string; isolated: boolean; } | { readonly waiver: undefined; readonly platform: string; readonly isolated: boolean; } | { readonly waiver: "invalid"; readonly platform: string; readonly isolated: boolean; } | { ...; } | { ...; }' is not assignable to parameter of type '{ platform: string; waiver?: string; isolated: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+apps/collab typecheck:   Type '{ readonly waiver: undefined; readonly platform: string; readonly isolated: boolean; }' is not assignable to type '{ platform: string; waiver?: string; isolated: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+apps/collab typecheck:     Types of property 'waiver' are incompatible.
+apps/collab typecheck:       Type 'undefined' is not assignable to type 'string'.
+apps/collab typecheck: Failed
+C:\Users\Foxti\Documents\Projets\Memoria\apps\collab:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @memoria/collab@ typecheck: `tsc --noEmit`
+Exit status 2
+apps/api typecheck: Failed

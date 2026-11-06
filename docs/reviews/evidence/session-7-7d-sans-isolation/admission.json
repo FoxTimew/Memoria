@@ -1,0 +1,29 @@
+{
+  "protocol": "2026-10-26-windows-wsl-no-swap-v1",
+  "label": "files-cpu-front-admission",
+  "phase": "before-preparation",
+  "status": "refused",
+  "observation": {
+    "observedAt": "2026-11-06T20:36:12.359Z",
+    "windowsFreeBytes": 2718003200,
+    "wsl": {
+      "bootId": "262e0c76-9e88-4957-89f6-aa117160bfd1",
+      "memAvailableBytes": 5262061568,
+      "swapInPages": 1,
+      "swapOutPages": 2
+    },
+    "power": {
+      "observedAt": "2026-11-06T20:36:12.360Z",
+      "platform": "win32",
+      "batteries": [
+        {
+          "BatteryStatus": 2,
+          "EstimatedChargeRemaining": 97
+        }
+      ],
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "reason": "WINDOWS_BEFORE_PREPARATION_BELOW_3_GIB"
+}

@@ -1,0 +1,10 @@
+Scope: 2 of 16 workspace projects
+apps/collab typecheck$ tsc --noEmit
+apps/api typecheck$ tsc --noEmit
+apps/collab typecheck: Done
+apps/api typecheck: src/testing/collaboration-cpu-front.ts(9,27): error TS7016: Could not find a declaration file for module 'pg'. 'C:/Users/Foxti/Documents/Projets/Memoria/node_modules/.pnpm/pg@8.23.1/node_modules/pg/esm/index.mjs' implicitly has an 'any' type.
+apps/api typecheck:   If the 'pg' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/pg'
+apps/api typecheck: Failed
+C:\Users\Foxti\Documents\Projets\Memoria\apps\api:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @memoria/api@ typecheck: `tsc --noEmit`
+Exit status 2

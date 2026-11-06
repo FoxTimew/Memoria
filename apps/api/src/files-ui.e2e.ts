@@ -19,17 +19,23 @@ import { fileGateway } from '../../files/src/gateway.ts';
 import { initialDocument } from '@memoria/collaboration-core';
 import { imageFixture } from '../../../scripts/file-image-fixture.mjs';
 import { idleFront } from './testing/collaboration-idle-front.ts';
+import { cpuFront, prepareCpuConversions } from './testing/collaboration-cpu-front.ts';
 
 // Product UI on built Next.js, real Nest, WSS, RustFS and isolated Caddy. No mocked file routes.
 const idleOnly = process.argv.includes('--idle');
+const cpuOnly = process.argv.includes('--cpu');
 await test(
-  idleOnly
-    ? '7d real front: one idle editor for at least five minutes'
-    : '7c product UI: cells/editor, uploads, previews, warnings, guests and cache resurrection',
-  { timeout: idleOnly ? 420000 : 300000 },
+  cpuOnly
+    ? '7d real front: controlled CPU saturation, 8K and automatic recovery'
+    : idleOnly
+      ? '7d real front: one idle editor for at least five minutes'
+      : '7c product UI: cells/editor, uploads, previews, warnings, guests and cache resurrection',
+  { timeout: idleOnly || cpuOnly ? 420000 : 300000 },
   async (t) => {
     const converter = await converterFixture();
     t.after(() => converter.close());
+    const cpuConversions = cpuOnly ? await prepareCpuConversions() : undefined;
+    if (cpuConversions) t.after(() => cpuConversions.stop());
 
     const docker = (args: string[]) => {
       const result = spawnSync('docker', guardTestDocker(args), {
@@ -68,12 +74,13 @@ await test(
     const h = await databaseHttpFixture(),
       owner = await h.account('owner');
     const guest = await h.account('guest');
+    const cpuMember = cpuOnly ? await h.account('member') : undefined;
     const children: ReturnType<typeof spawn>[] = [];
-    const start = (args: string[], extra: NodeJS.ProcessEnv = {}) => {
+    const start = (args: string[], extra: NodeJS.ProcessEnv = {}, ipc = false) => {
       const child = spawn(process.execPath, args, {
         env: { ...process.env, ...extra },
         windowsHide: true,
-        stdio: ['ignore', 'pipe', 'pipe'],
+        stdio: ipc ? ['ignore', 'pipe', 'pipe', 'ipc'] : ['ignore', 'pipe', 'pipe'],
       });
       children.push(child);
       child.stdout?.on('data', () => {});
@@ -92,11 +99,20 @@ await test(
       ],
       { NODE_ENV: 'production' },
     );
-    start(['apps/collab/dist/main.mjs'], {
-      COLLAB_HOST: '0.0.0.0',
-      COLLAB_PORT: String(collabPort),
-      COLLAB_INTERNAL_PORT: String(controlPort),
-    });
+    const collaboration = start(
+      [cpuOnly ? 'apps/collab/dist/cpu-front.mjs' : 'apps/collab/dist/main.mjs'],
+      {
+        COLLAB_HOST: '0.0.0.0',
+        COLLAB_PORT: String(collabPort),
+        COLLAB_INTERNAL_PORT: String(controlPort),
+      },
+      cpuOnly,
+    );
+    const cpuObservations: { at: number; event?: string; [key: string]: unknown }[] = [];
+    if (cpuOnly)
+      collaboration.on('message', (m: { kind?: string; at: number; event?: string }) => {
+        if (m.kind === 'cpu-observation') cpuObservations.push(m);
+      });
     const property = randomUUID(),
       row = h.f.rows[0]!,
       workspace = h.f.db.workspace,
@@ -284,6 +300,34 @@ await test(
       const validator = new FileValidator(jobs, converter.config);
       const href = `/workspaces/${workspace}/databases/${h.f.bases[0]}`;
       const rowHref = href + '/rows/' + row;
+      if (cpuOnly) {
+        const secondContext = await browser.newContext();
+        await secondContext.addCookies(
+          cpuMember!.cookie.split('; ').map((pair) => {
+            const i = pair.indexOf('=');
+            return {
+              name: pair.slice(0, i),
+              value: pair.slice(i + 1),
+              url: origin,
+              httpOnly: true,
+              secure: true,
+              sameSite: 'Lax' as const,
+            };
+          }),
+        );
+        await cpuFront({
+          page,
+          secondContext,
+          href: origin + rowHref,
+          directory,
+          pool: db,
+          pageId: row,
+          server: collaboration,
+          observations: cpuObservations,
+          converter: cpuConversions!,
+        });
+        return;
+      }
       if (idleOnly) {
         await idleFront(page, db, row, origin + rowHref, directory);
         return;

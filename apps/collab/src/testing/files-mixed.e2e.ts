@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { assessMixedPage } from './mixed-limits.ts';
 import { randomUUID, randomBytes, createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { fork } from 'node:child_process';
@@ -327,6 +328,15 @@ async function scenario(profile: string, conversions: boolean) {
         otherClient: p95(values.map((r) => r.remoteAppliedMs)),
       },
     };
+    const assessment = result.perPage.map((page) => ({
+      page: page.index,
+      ...assessMixedPage(profile, conversions, page, {
+        platform: process.platform,
+        waiver: process.env.MEMORIA_FILES_DEVELOPMENT_WAIVER,
+        isolated: process.argv[1]?.includes('proof-isolation-') ?? false,
+      }),
+    }));
+    Object.assign(result, { assessment });
     process.send?.({ kind: 'result', result });
     published = true;
     console.log(JSON.stringify({ profile, conversions, p95: result.p95 }));
@@ -347,11 +357,22 @@ async function scenario(profile: string, conversions: boolean) {
     }
     for (const p of result.perPage) {
       assert(
-        p.p95.server < (p.index === 0 && profile === 'history-1M' ? 100 : 50),
+        assessment[p.index]!.serverPassed,
         `STOP_MIXED_SERVER_LIMIT page=${p.index} p95=${p.p95.server}`,
       );
-      if (p.index > 0 || profile === 'content-1M')
-        assert(p.p95.wire < 200, `STOP_MIXED_WSS_LIMIT page=${p.index} p95=${p.p95.wire}`);
+      assert(
+        assessment[p.index]!.wirePassed,
+        `STOP_MIXED_WSS_LIMIT page=${p.index} p95=${p.p95.wire}`,
+      );
+      if (assessment[p.index]!.waived)
+        console.log(
+          JSON.stringify({
+            decision: 'DEVELOPMENT_HISTORY_8K_WAIVER',
+            date: '2026-11-06',
+            page: p.index,
+            serverP95: p.p95.server,
+          }),
+        );
     }
   } catch (e) {
     if (!published)
