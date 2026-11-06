@@ -150,3 +150,9 @@ Le critère de sortie du **rebasage automatique pré-pilote** inclut désormais 
 Diagnostic puis correction autorisés par le développeur, sans modification des contrôles ni des délais. Une expiration temporaire du fencing reste un refus de transaction ; elle doit provoquer une fermeture technique 1013, pas un 1008 de contenu invalide. Toute reconnexion repasse par les contrôles courants et toute contribution par validation/journalisation. Le client conserve son document Yjs et envoie son diff de reprise avant les nouvelles mises à jour qui en dépendent. Les dépendances manquantes restent refusées côté serveur. La distinction repose sur une erreur typée du serveur, jamais sur une chaîne fournie par le client.
 
 La [fiche de reconnexion](../reviews/session-7-7d-reconnexion.md) conserve les échecs, le test permanent et la requalification. Cette décision ne vaut ni hausse des délais, ni résolution de la panne globale `CONTROL_UNAVAILABLE`, ni clôture de la campagne 7d.
+
+## Arrêt de la comparaison finale — 6 novembre 2026
+
+La candidate avec reprise ciblée `b31dd28`, comparée à main `56c52b4`, passe tous les plafonds absolus. La médiane des trois p95 du froid contenu passe cependant de **145,649 à 161,508 ms (+10,89 %)**, au-delà de la marge `max(10 %, 2 ms)` de 14,565 ms. Les trois autres mesures passent ; douze séries conformes au protocole d'hygiène, aucune supprimée. [Valeurs complètes, preuves et diagnostic](../reviews/session-7-7d-comparaison.md).
+
+La dérogation historique/8K ne couvre pas ce cas. **Arrêt avant nouvelle optimisation, aucun seuil relevé et aucune acceptation déduite.** Le travail ajouté au chargement pour l'inspection et la vérification du registre de fichiers est une piste à profiler, pas une cause mesurée. La recommandation est un profilage suivi d'une correction ciblée sans retrait de contrôle ; toute dérogation exige une décision explicite du développeur.

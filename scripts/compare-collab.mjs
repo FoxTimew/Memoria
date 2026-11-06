@@ -53,6 +53,7 @@ const protocolHash = hash(
     await readFile(import.meta.filename),
     await readFile(new URL('./measurement-power.mjs', import.meta.url)),
     await readFile(new URL('./measurement-memory.mjs', import.meta.url)),
+    await readFile(new URL('./docker-test-isolation.mjs', import.meta.url)),
     await readFile(new URL('./measurement-regression.mjs', import.meta.url)),
   ]),
 );
@@ -160,7 +161,11 @@ export async function loadProfile(profile: string) {
       const folder = `${directory}/sources/${configuration}`;
       await mkdir(folder, { recursive: true });
       await mkdir(`${folder}/scripts`, { recursive: true });
-      for (const name of ['measurement-memory.mjs', 'measurement-power.mjs'])
+      for (const name of [
+        'measurement-memory.mjs',
+        'measurement-power.mjs',
+        'docker-test-isolation.mjs',
+      ])
         await writeFile(`${folder}/scripts/${name}`, await readFile(`scripts/${name}`));
       const archive = git('archive', commit, 'apps/collab', ...(session4 ? ['packages'] : []));
       execFileSync('tar', ['-xf', '-', '-C', folder], { input: archive, windowsHide: true });

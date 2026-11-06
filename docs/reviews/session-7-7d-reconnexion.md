@@ -1,5 +1,7 @@
 # Session 7d — refus de leadership et reprise ciblée
 
+**Suite de qualification :** la [comparaison alternée](session-7-7d-comparaison.md) de cette candidate avec main échoue ensuite sur la marge du froid contenu (+10,89 %). Les preuves fonctionnelles ci-dessous restent acquises ; la session 7d attend un nouvel arbitrage, sans optimisation supplémentaire.
+
 6 novembre 2026. Diagnostic et correction autorisés par le développeur après le point `eb2d1fd`. Cette fiche complète le [témoin rouge CPU](session-7-7d-cpu.md) ; elle ne clôture pas la session 7d.
 
 ## Diagnostic avant correction

@@ -1,0 +1,408 @@
+{
+  "date": "2026-11-06T22:14:41.325Z",
+  "commits": {
+    "reference": "56c52b4b5cb4c4df94841328398d141955b48394",
+    "candidate": "b31dd28adf98c7c16067955d6979bba2a358ddbd"
+  },
+  "files": [
+    {
+      "file": "candidate-cold-1-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-cold-1-attempt-1.txt",
+      "bytes": 2795,
+      "sha256": "f8f94dfda92135b0e4eb36d1fcdb45da021a7913f532bd8e913b49fc90740582",
+      "uncompressedSha256": "e28ad7bdb0ca63c24ce8e10317167efcd108e2f28a7a85c671b619de0b7eb726"
+    },
+    {
+      "file": "candidate-cold-1.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-cold-1.json",
+      "bytes": 3646,
+      "sha256": "855bbf53ed9334012406398d8e51cbdd0c7aaf69a0283c9e4cd6a24050b4462b",
+      "uncompressedSha256": "b1f271fc6a9241063dd7296a997f24d2c810697b8470739fac437bb2aa8eb7b9"
+    },
+    {
+      "file": "candidate-cold-2-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-cold-2-attempt-1.txt",
+      "bytes": 2831,
+      "sha256": "343aca30c51f9309cc2726162e561758d6559077057332baec19ae8b8597e4a8",
+      "uncompressedSha256": "8023f056f55893ff67d3039dab6b47f3939797918ff3defa8e4b8ef090cf667c"
+    },
+    {
+      "file": "candidate-cold-2.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-cold-2.json",
+      "bytes": 3682,
+      "sha256": "1cb6bbf8974ce669af4272095360519a3ce621ea6615ba59da0d9e84f17f286f",
+      "uncompressedSha256": "39fea66e55b28cb8e5d5fc150650b8b26d0cbefcc2d3d1716d8c09cd790d2294"
+    },
+    {
+      "file": "candidate-cold-3-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-cold-3-attempt-1.txt",
+      "bytes": 2833,
+      "sha256": "6676b433b148a7298e9b37222cc8b65461ba29a05d9dd87d1fb1a999f63eb33c",
+      "uncompressedSha256": "7193d95b1224254adca377707ba4b5c6536e76036b9e550466f7a7c766862f50"
+    },
+    {
+      "file": "candidate-cold-3.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-cold-3.json",
+      "bytes": 3684,
+      "sha256": "12074db85f87d76c4a0e07772884e337cdbb3bb52aaba396028d910cba2a2a2b",
+      "uncompressedSha256": "d797a8d3e779d57b1ade64444963206177a5d20dcabcadf0e7476f7efc4a5fcd"
+    },
+    {
+      "file": "candidate-warm-1-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-warm-1-attempt-1.txt",
+      "bytes": 2282,
+      "sha256": "241192146225b2f38b38e0f21da9cc6fc41aa4020260bc18a22f8ef0240f44b0",
+      "uncompressedSha256": "92cbc8adb3facae58e02f7bebe7f5679b9f3e9fca1f454b480451101eec7836c"
+    },
+    {
+      "file": "candidate-warm-1.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-warm-1.json",
+      "bytes": 61655,
+      "sha256": "7e19894e6edc331f5061cdeb14291681c07c4c0d338f29cd24b1ef9d5e0e2db6",
+      "uncompressedSha256": "621fe744a3a2c8582e846fe4bc82fbd6f6e494f898077d9f4e32913273696b78"
+    },
+    {
+      "file": "candidate-warm-2-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-warm-2-attempt-1.txt",
+      "bytes": 2282,
+      "sha256": "734239ea1479b62e353f5a7f1d369c8a71214726b20861a03a98f32bf5ecb5c2",
+      "uncompressedSha256": "b2eeccb8b4b839b9aa8c1131f4574321a81fd3279f00b2ef0e38cc087d8ff8c3"
+    },
+    {
+      "file": "candidate-warm-2.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-warm-2.json",
+      "bytes": 61631,
+      "sha256": "d8ab2365472cd4fa9d333acc6a9b65f53c731299b699ec1e21db9d48f63d9734",
+      "uncompressedSha256": "5d754f6d28e9caf365da1c8e80a16db011523c2569688646feca1d65fb3ebdbe"
+    },
+    {
+      "file": "candidate-warm-3-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-warm-3-attempt-1.txt",
+      "bytes": 2282,
+      "sha256": "990911cf507c86ba15f027dfb3bb37b12a983a7dd0a5d7aada9f6e388661ac94",
+      "uncompressedSha256": "830d062c6a124af464ea88ea2b253ce735cfbd0cb977ef83b32e6006b4ad44dd"
+    },
+    {
+      "file": "candidate-warm-3.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/candidate-warm-3.json",
+      "bytes": 61674,
+      "sha256": "4e09fe9982439d94dd16f14a510ed3683547870938ca897e08c720220d08634e",
+      "uncompressedSha256": "5ca8682b1f138c82ae9265fa823ffed377b2d47093d51c2f8c8b64d442412965"
+    },
+    {
+      "file": "manifest.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/manifest.json",
+      "bytes": 43994,
+      "sha256": "401649ccc6a1014c681439a523ffc3279e695ce226995926a7b340fbecda70d0",
+      "uncompressedSha256": "974d2b5629e498fb3f830bca32e3021a8ea13e9ba5144f44a403ce9e67cc9d0f"
+    },
+    {
+      "file": "reference-cold-1-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-cold-1-attempt-1.txt",
+      "bytes": 2836,
+      "sha256": "4b1d2a4e459f1139495644e04212b2ead77e20eca48d6e315ee3302bdc1251c7",
+      "uncompressedSha256": "105c89aa5524c9cfee5ebaa3ad72df80ba44548737fc735a3f55349a703253cf"
+    },
+    {
+      "file": "reference-cold-1.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-cold-1.json",
+      "bytes": 3687,
+      "sha256": "b8c6b96681e039291088817e9575957afda16714b57c196c5a73a1bba12de2e6",
+      "uncompressedSha256": "58c6ad5264c6931e2789cc3c41f71e165a682867eb07cde6226c83bfc3375668"
+    },
+    {
+      "file": "reference-cold-2-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-cold-2-attempt-1.txt",
+      "bytes": 2824,
+      "sha256": "018ee5009ecef025920a5666a66d735fd1d5960f7dc28977bd8b3037feb4deeb",
+      "uncompressedSha256": "61243cfbd88af7c1ead38c22c789c21dc078a6cd57e0dee3e8687d3dfeefd1f9"
+    },
+    {
+      "file": "reference-cold-2.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-cold-2.json",
+      "bytes": 3675,
+      "sha256": "aad825c166db602ac1172ec1b17be8c8a658be2012070f443ab55ad630f83d3c",
+      "uncompressedSha256": "d8c959dba35a37eef848ba3176e381cc8f488e41aea0d298e737a5e6dc502f12"
+    },
+    {
+      "file": "reference-cold-3-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-cold-3-attempt-1.txt",
+      "bytes": 2821,
+      "sha256": "5173a70669cad14ea817e8ac8e5392bd95b5d26b99804f9bab6edb2bd2ce0d7e",
+      "uncompressedSha256": "5901c0ddc260e396402885e5e2f862dbb52875d74dfcf6cbe5356305da4b86ad"
+    },
+    {
+      "file": "reference-cold-3.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-cold-3.json",
+      "bytes": 3673,
+      "sha256": "899514d30d827896427911d7c8a9a592d0be61bbc0c8228a42e6af66fe1aced2",
+      "uncompressedSha256": "4696bddd34f8abc4c722f009b34d388eaeb9c8e12f1a50fd1fcb35df61f77c7b"
+    },
+    {
+      "file": "reference-warm-1-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-warm-1-attempt-1.txt",
+      "bytes": 2283,
+      "sha256": "d6aaea1da8ae30d07fbea94f964f81523407696ec4ef6a532d958163e8345775",
+      "uncompressedSha256": "27bf1c936e1670f986a6c037d2605c682c672fc96071eee30dc48385277c91a3"
+    },
+    {
+      "file": "reference-warm-1.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-warm-1.json",
+      "bytes": 61672,
+      "sha256": "0d6f8e34e52242baab797b2c6625cba370446fdcd09c1945ade3a39cd3da9d54",
+      "uncompressedSha256": "fb03a92d6c13de1d76c946bf316e3c4cd3df96e09def2b0de9a0f4c660dea57d"
+    },
+    {
+      "file": "reference-warm-2-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-warm-2-attempt-1.txt",
+      "bytes": 2282,
+      "sha256": "989205be1ec9e308c1c1f36ed0747df6d8871b3eb87d50ef44c85ff58a77a4f9",
+      "uncompressedSha256": "aa7f5f84481f2752332db2d156f2e5f5aca3d8dae27bd9ab8b6836b7cada6c00"
+    },
+    {
+      "file": "reference-warm-2.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-warm-2.json",
+      "bytes": 61650,
+      "sha256": "3699af7ccb655cce47787618496097e04ba1a218887c33803acd1545206aba65",
+      "uncompressedSha256": "d5f47837c21c262eaeea4b831881a86f90e97a55ae96b8c13a00894d66a84027"
+    },
+    {
+      "file": "reference-warm-3-attempt-1.txt.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-warm-3-attempt-1.txt",
+      "bytes": 2284,
+      "sha256": "0b39e437e2e081ea5e9ecae8999238e147c9869d3c58bb5ae6c7e3e576ba26ab",
+      "uncompressedSha256": "75f437b1eeb30303a017ab162d516316c26fba435300e1d7f1a0f5583fecc89f"
+    },
+    {
+      "file": "reference-warm-3.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/reference-warm-3.json",
+      "bytes": 61627,
+      "sha256": "4ce2371b8b826231c18b5403766ee894a97bb83380c70e119335926849b6c893",
+      "uncompressedSha256": "295c176ef5f554d0be4fdc17c5c188b91d7fcdb15ffafd77869fa03254669016"
+    },
+    {
+      "file": "summary.json.gz",
+      "source": ".local/3d-alternating/2026-11-06T22-09-37-613Z/summary.json",
+      "bytes": 3383,
+      "sha256": "8ce12080b9585e2f89c6793315d5fe01963447bb30d6b5db85fb91cb2874a400",
+      "uncompressedSha256": "219772a72659d783cd709f581447cab868464fe8398f3a81e48cfb60d0612fcf"
+    },
+    {
+      "file": "reference-warm-1-preparation-c727a5fe-28d7-40d5-97bb-f22717b9841f.json.gz",
+      "source": ".local/measurement-hygiene/reference-warm-1-preparation-c727a5fe-28d7-40d5-97bb-f22717b9841f.json",
+      "bytes": 672,
+      "sha256": "85e3c8b9ac05acdea171222d061c248c2ed667998c94f8a82013314b41934220",
+      "uncompressedSha256": "a824b5961bdd95021ce1ce6665ddd473d101b3b6bacb251d5866183fb5e1ee25"
+    },
+    {
+      "file": "reference-warm-1-attempt-1-9a509d83-cf3f-45e0-9434-1a21ea468076.json.gz",
+      "source": ".local/measurement-hygiene/reference-warm-1-attempt-1-9a509d83-cf3f-45e0-9434-1a21ea468076.json",
+      "bytes": 79834,
+      "sha256": "0208a048c8064ff025cfe121735c1a42371ed29f6873a25072ebf5b149d927bd",
+      "uncompressedSha256": "9558231f296b15dd51f66ef71198a5535a6ec02a9b78d7c4e2b93576b9a7fa09"
+    },
+    {
+      "file": "candidate-warm-1-preparation-e472c9a9-060b-426a-bc4a-1ef6a0cc41be.json.gz",
+      "source": ".local/measurement-hygiene/candidate-warm-1-preparation-e472c9a9-060b-426a-bc4a-1ef6a0cc41be.json",
+      "bytes": 672,
+      "sha256": "11d3bd3db5b1d08a9e5382fa9080169db457451881fa7ece49106d6e031d729f",
+      "uncompressedSha256": "424e2ecc0ff34fec4fda0b1db34769d7de36e72a267d8166e879ee3fc0c711d9"
+    },
+    {
+      "file": "candidate-warm-1-attempt-1-a0b67d67-08ca-4f79-9e89-1c0332c2735a.json.gz",
+      "source": ".local/measurement-hygiene/candidate-warm-1-attempt-1-a0b67d67-08ca-4f79-9e89-1c0332c2735a.json",
+      "bytes": 79815,
+      "sha256": "2d000b77a47288c60d87211ba7305dcb11866eac94d1b6a98d8f786e2556ff8b",
+      "uncompressedSha256": "fce11ca947ed78ff12268923891fec7b9e05f9e038815ac1a66861dac337f02f"
+    },
+    {
+      "file": "reference-cold-1-preparation-9c14e412-95ae-47f5-ad25-1d5962d90f63.json.gz",
+      "source": ".local/measurement-hygiene/reference-cold-1-preparation-9c14e412-95ae-47f5-ad25-1d5962d90f63.json",
+      "bytes": 672,
+      "sha256": "9b8170fce19827254a0fe2c79202801d9b7aa5a0b3b8803d882083bd7faee0dc",
+      "uncompressedSha256": "269b71e668e27677c9888ad268aa3110afab5c0c037799a04bd66d5b10484693"
+    },
+    {
+      "file": "reference-cold-1-attempt-1-4c78f9ee-7777-4d4f-af42-0afc133db956.json.gz",
+      "source": ".local/measurement-hygiene/reference-cold-1-attempt-1-4c78f9ee-7777-4d4f-af42-0afc133db956.json",
+      "bytes": 12905,
+      "sha256": "963aa1d6ac6920e3f041688524326e1464ce8ea96c8383fe0c1330074e4b1b87",
+      "uncompressedSha256": "6d09b70d4afc5293220fc21210f9eee7a2ba990fbc362d894c569f138ae75ee3"
+    },
+    {
+      "file": "candidate-cold-1-preparation-017de0f7-4443-4ac6-9a4c-ff7a61065b02.json.gz",
+      "source": ".local/measurement-hygiene/candidate-cold-1-preparation-017de0f7-4443-4ac6-9a4c-ff7a61065b02.json",
+      "bytes": 672,
+      "sha256": "5191b91384b4171095c49d4bd152d74a23ce92e83e193ae424754ecd07d034b8",
+      "uncompressedSha256": "a87ddcae03ff5602c0046b9bdd557d2c34f3d08dee794bde5944b16d90e5876d"
+    },
+    {
+      "file": "candidate-cold-1-attempt-1-ff3344ab-5202-44f9-aa88-43d3b749e292.json.gz",
+      "source": ".local/measurement-hygiene/candidate-cold-1-attempt-1-ff3344ab-5202-44f9-aa88-43d3b749e292.json",
+      "bytes": 13514,
+      "sha256": "5c5a68545352b5a41fb428351e6b8f5b8c8e00cd03302572924c097fafbf03cc",
+      "uncompressedSha256": "33f16407bf81c7c03f327da9053e5fdc655e21b48337fdff1bf8ab467c49a820"
+    },
+    {
+      "file": "candidate-warm-2-preparation-4949360b-03f1-45c0-a2c2-177575274d8d.json.gz",
+      "source": ".local/measurement-hygiene/candidate-warm-2-preparation-4949360b-03f1-45c0-a2c2-177575274d8d.json",
+      "bytes": 672,
+      "sha256": "15478ca4a2e85042753d6461d8ca607a88db339722f48a806c69caa53c7f07fb",
+      "uncompressedSha256": "ecca7a9a61e4e467f0a208b4f0c618fe2de9bd9a9e7c59249dd7201b80b48439"
+    },
+    {
+      "file": "candidate-warm-2-attempt-1-bda7c55d-fdf0-49ee-8f58-91ceb46c43ed.json.gz",
+      "source": ".local/measurement-hygiene/candidate-warm-2-attempt-1-bda7c55d-fdf0-49ee-8f58-91ceb46c43ed.json",
+      "bytes": 79791,
+      "sha256": "44c40a42f70e47e7c68d50dc771a4825843e970816d6334c576de1c3cfda776d",
+      "uncompressedSha256": "f97a846059e46f30010edca354fb848f8d46e1403ee1c91fbab8464fc82ada5b"
+    },
+    {
+      "file": "reference-warm-2-preparation-cbe595b5-2f30-4fbb-9301-eca884e171e4.json.gz",
+      "source": ".local/measurement-hygiene/reference-warm-2-preparation-cbe595b5-2f30-4fbb-9301-eca884e171e4.json",
+      "bytes": 672,
+      "sha256": "938eaa33a5ebeb9c6fd14217af936fe6044d93a935c1da72189d09d851091479",
+      "uncompressedSha256": "b142b23b5153bbab91d294643a46d2e8e68922a90b537457c176282ce6974943"
+    },
+    {
+      "file": "reference-warm-2-attempt-1-584e6e52-a96c-4e26-9f0a-c9b1e62b3062.json.gz",
+      "source": ".local/measurement-hygiene/reference-warm-2-attempt-1-584e6e52-a96c-4e26-9f0a-c9b1e62b3062.json",
+      "bytes": 79808,
+      "sha256": "597489010b1bb7231984d724c49ef968297d9e1c27c1b21fe74932eb2d96d698",
+      "uncompressedSha256": "8e6017b57f227de71cd3fae5f43efedc7b6d1a6e2313e766229b9b342804dfe6"
+    },
+    {
+      "file": "candidate-cold-2-preparation-72169c48-7fbb-42ed-9d9a-5ec410347054.json.gz",
+      "source": ".local/measurement-hygiene/candidate-cold-2-preparation-72169c48-7fbb-42ed-9d9a-5ec410347054.json",
+      "bytes": 672,
+      "sha256": "c9b62c6fba1edafa330a792b3abeeafb2c6106177c2b0276e4bc890bcc6e12d1",
+      "uncompressedSha256": "ce9511ef4d28ada22ed3947a8ada9e077e7b6455c32da547c010f1425d19104c"
+    },
+    {
+      "file": "candidate-cold-2-attempt-1-79ec15be-f9fd-46fb-ac4c-2197a9ab2541.json.gz",
+      "source": ".local/measurement-hygiene/candidate-cold-2-attempt-1-79ec15be-f9fd-46fb-ac4c-2197a9ab2541.json",
+      "bytes": 13226,
+      "sha256": "14f80eb3c5090601fe7bef4e2bc35601c963f56d2f64dbdf2d74400eb7c77944",
+      "uncompressedSha256": "ff7cfede7da66a00d2cde78ea92b333b9074e5891d3daf0e31bf692f44834744"
+    },
+    {
+      "file": "reference-cold-2-preparation-c23d3b49-b49e-437f-aebe-56b1281de737.json.gz",
+      "source": ".local/measurement-hygiene/reference-cold-2-preparation-c23d3b49-b49e-437f-aebe-56b1281de737.json",
+      "bytes": 672,
+      "sha256": "2fc1d1fd42eb62ea2a7e8f424c2e7b777bfec946e070bdde334aec3de8f46694",
+      "uncompressedSha256": "fab40f0c261e0d531fb5c971eb83ac0fb226124481a88179b4f7344701c647b1"
+    },
+    {
+      "file": "reference-cold-2-attempt-1-1bdeae3c-2bb3-4241-b6c0-248cebc01a4f.json.gz",
+      "source": ".local/measurement-hygiene/reference-cold-2-attempt-1-1bdeae3c-2bb3-4241-b6c0-248cebc01a4f.json",
+      "bytes": 12893,
+      "sha256": "7949dd3c3b18cad0750785c0a8a8358e2b7e0d8bd1c7765236d8099201819f20",
+      "uncompressedSha256": "1d207c388b8b41484f9ba81635595b73d2a14ebda407d19736aa3522052e7758"
+    },
+    {
+      "file": "reference-warm-3-preparation-33708d2a-45bf-46ae-bf90-740a30498a52.json.gz",
+      "source": ".local/measurement-hygiene/reference-warm-3-preparation-33708d2a-45bf-46ae-bf90-740a30498a52.json",
+      "bytes": 672,
+      "sha256": "5c0b000d62e065d5f268e947ac82502fba3207e106bd8f56f36a7b735aa30f09",
+      "uncompressedSha256": "2b7b647d272a2aeac6c9d215a4e5c6fb2e748a1d6c3f0a649eb75fe4f006a562"
+    },
+    {
+      "file": "reference-warm-3-attempt-1-0dba5fa3-3458-4193-892e-8e0da1cb7185.json.gz",
+      "source": ".local/measurement-hygiene/reference-warm-3-attempt-1-0dba5fa3-3458-4193-892e-8e0da1cb7185.json",
+      "bytes": 79783,
+      "sha256": "5ace7bb8c06fb1e37073a94c5b9406fcc6442d1571782bd2eabf1c1b4e70e7ec",
+      "uncompressedSha256": "d49a078f76d72bd41754abb394df4bfc2abf48e7da04731c49badf4fdeff3777"
+    },
+    {
+      "file": "candidate-warm-3-preparation-9159a164-dd3a-4c30-b0a9-0a76fc7ce63b.json.gz",
+      "source": ".local/measurement-hygiene/candidate-warm-3-preparation-9159a164-dd3a-4c30-b0a9-0a76fc7ce63b.json",
+      "bytes": 672,
+      "sha256": "cce20d99e86f0fb8b1513362d1b99989028f66a2ac09c4b76275a5d529dd61f8",
+      "uncompressedSha256": "7c836466e42d27ff22e96b27fdd218846d4cdf62240c8f2f521e6c6c82290b45"
+    },
+    {
+      "file": "candidate-warm-3-attempt-1-a4880deb-217b-4514-b9b4-af2b88c8529d.json.gz",
+      "source": ".local/measurement-hygiene/candidate-warm-3-attempt-1-a4880deb-217b-4514-b9b4-af2b88c8529d.json",
+      "bytes": 79510,
+      "sha256": "1b37d65c83eb4225d80e089e6ed8559bbb81562ec913ef2f2926b9bd56b6f9da",
+      "uncompressedSha256": "f90b59c372bb5b08006322069c1a7f42c28b55778a423cb699ed17944052b687"
+    },
+    {
+      "file": "reference-cold-3-preparation-74bfc2a7-a11e-4fb3-a220-99fc0e895b1a.json.gz",
+      "source": ".local/measurement-hygiene/reference-cold-3-preparation-74bfc2a7-a11e-4fb3-a220-99fc0e895b1a.json",
+      "bytes": 672,
+      "sha256": "167db1008475345ade793df3ad6f493f13a87fbc84d805fee86bad3782282e60",
+      "uncompressedSha256": "f8d44cd7d1d35eaae1c2c2edc7514d7c60dc0a79089d532f21b069748b7229d2"
+    },
+    {
+      "file": "reference-cold-3-attempt-1-057f47f9-d716-4e75-b87a-a6185725dab9.json.gz",
+      "source": ".local/measurement-hygiene/reference-cold-3-attempt-1-057f47f9-d716-4e75-b87a-a6185725dab9.json",
+      "bytes": 12891,
+      "sha256": "4c3c4ff57dbe7e91d5c4ccbd1db6b27410b99640d350ea62755fa36b6b988d01",
+      "uncompressedSha256": "840d60b9fe3b2ca034788d6c25c95890f6a5fa6fe3551934b21d960f61315d03"
+    },
+    {
+      "file": "candidate-cold-3-preparation-6cc79310-3136-414c-a6ff-a5bd39f09d05.json.gz",
+      "source": ".local/measurement-hygiene/candidate-cold-3-preparation-6cc79310-3136-414c-a6ff-a5bd39f09d05.json",
+      "bytes": 672,
+      "sha256": "c7cf31bc10a1924a7987eb414a4308e6d9e0d34431f1bc3ef5b6336fb85f60ea",
+      "uncompressedSha256": "632bb9fb09178ced705990ca1f9e0fd1ea18df3ea7cb04c4856be43ddc99ca61"
+    },
+    {
+      "file": "candidate-cold-3-attempt-1-3147c139-9492-48d5-bab0-c32221bf6826.json.gz",
+      "source": ".local/measurement-hygiene/candidate-cold-3-attempt-1-3147c139-9492-48d5-bab0-c32221bf6826.json",
+      "bytes": 13230,
+      "sha256": "fab16028f1f4cde468c61dd2a34b2bca530b0beb03a8212896e075321a0a1a7a",
+      "uncompressedSha256": "bcc2bf0b60c7c83c4efa6886d740e7489ad571f1352a9ea3ed461bf3d1f7272a"
+    },
+    {
+      "file": "setup-refusal.log.gz",
+      "source": ".local/session-7-7d-final-comparison.log",
+      "bytes": 1989,
+      "sha256": "30d2f26f85318752319a7f637e26056f93975578926793f91dfb5cb3b40b3be1",
+      "uncompressedSha256": "46972f88b78d4e3643b016b4638dcfee1f49df7bf6a953227a17e720f054d4af"
+    },
+    {
+      "file": "comparison.log.gz",
+      "source": ".local/session-7-7d-final-comparison-run.log",
+      "bytes": 46419,
+      "sha256": "f17c9a5c22410e8b986d4bb60c7375c9eea500b66f755ee2f4557c5d20977466",
+      "uncompressedSha256": "8d0572b84e045474c17ea0975b2f837135a652181a408e4ff777e2c5ef474683"
+    },
+    {
+      "file": "compare-collab.mjs.gz",
+      "source": "scripts/compare-collab.mjs",
+      "bytes": 18852,
+      "sha256": "9e70f024d5d695ad6bea83c8be3c9477d4e2144ea56e01553b073de4f61f3f6d",
+      "uncompressedSha256": "4b10a402da87b44e5f42556fdf1e5b7ec4bc432e6c21bb497b5bf0095681f306"
+    },
+    {
+      "file": "docker-test-isolation.mjs.gz",
+      "source": "scripts/docker-test-isolation.mjs",
+      "bytes": 9789,
+      "sha256": "33d7dbe3b2a6fcc8b004eff95a94a82c5f0b6f603fe44c6de776ed47bd01a05c",
+      "uncompressedSha256": "c051ca73fcb0dd7c17bffe03be424f18c28d45374b080c8e63e361ab758f344a"
+    },
+    {
+      "file": "measurement-memory.mjs.gz",
+      "source": "scripts/measurement-memory.mjs",
+      "bytes": 11424,
+      "sha256": "8573d641ea375e64ba96631ef2b50b5e5cf682ee221e758302a625aeaa29129b",
+      "uncompressedSha256": "35b6a4921036168845e4590c4a4f10a62e3afbd50d16d691034778e688b01dd2"
+    },
+    {
+      "file": "measurement-power.mjs.gz",
+      "source": "scripts/measurement-power.mjs",
+      "bytes": 2231,
+      "sha256": "315db1a912d7bbda53595a0e362750681cea7f4e095144fe1f1e8bac4a2faded",
+      "uncompressedSha256": "c018fce92e2efe464a5318fa29a533ce763b74993b0f04d02897d9e897a1e1c7"
+    },
+    {
+      "file": "measurement-regression.mjs.gz",
+      "source": "scripts/measurement-regression.mjs",
+      "bytes": 552,
+      "sha256": "d6cccfc25013631c6a6cffcc28261ba51baa07668e36951e1f973ca9f278dd54",
+      "uncompressedSha256": "faf15aa3018f74db39cb2c5feb8cec984837226c5e70b0e746e0553ef7404cc8"
+    }
+  ]
+}
