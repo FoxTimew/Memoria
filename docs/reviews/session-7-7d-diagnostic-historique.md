@@ -1,5 +1,7 @@
 # Session 7d — diagnostic alterné du chargement historique
 
+**Suite autorisée le 7 novembre :** [affinement du protocole et nouvelle comparaison](session-7-7d-protocole-froid.md), sans changement applicatif. Les quatre mesures d'origine passent dans cette campagne ; la première ouverture du contenu avec pool vide dépasse la marge (+19,74 %). Nouvel arrêt, anciens résultats conservés.
+
 7 novembre 2026, campagnes réalisées dans la nuit du 6 au 7 (horodatages UTC conservés). **Le profilage ne démontre pas de régression causée par le dernier correctif. Aucun nouveau changement applicatif n'est justifié par ces résultats. La qualification non instrumentée reste rouge et 7d reste ouverte.**
 
 ## Question et méthode

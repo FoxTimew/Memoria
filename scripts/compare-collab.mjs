@@ -7,15 +7,19 @@ import { availableParallelism, cpus, freemem, platform, release, totalmem } from
 import { resolve, relative, basename, dirname } from 'node:path';
 import { finished } from 'node:stream/promises';
 import { prepareMeasurement, runMeasuredSeries } from './measurement-memory.mjs';
-import { assessRegression } from './measurement-regression.mjs';
+import { summarizeComparison } from './collab-comparison.mjs';
 
 // Immutable application snapshots, one common harness, no compiler during measurements.
 const repo = resolve('.');
 const args = process.argv.slice(2);
 const profileCold = args.includes('--profile-cold');
 const profileWorker = args.includes('--profile-worker');
+const coldLifecycle = args.includes('--cold-lifecycle');
 if (profileWorker && !profileCold) throw new Error('--profile-worker requires --profile-cold');
-const suites = profileCold ? ['cold'] : ['warm', 'cold'];
+if (coldLifecycle && profileCold) throw new Error('Lifecycle qualification must be uninstrumented');
+const suites = profileCold
+  ? ['cold']
+  : ['warm', 'cold', ...(coldLifecycle ? ['cold-lifecycle'] : [])];
 const session6 = args.includes('--session6');
 const session5 = args.includes('--session5') || session6;
 const session4 = args.includes('--session4') || session5;
@@ -52,17 +56,19 @@ for (const name of ['content-1M', 'history-1M']) {
   const bytes = await readFile(`.local/incremental/${name}.bin`);
   profiles[name] = { bytes: bytes.length, sha256: hash(bytes) };
 }
-const protocolHash = hash(
-  Buffer.concat([
-    await readFile(import.meta.filename),
-    await readFile(new URL('./measurement-power.mjs', import.meta.url)),
-    await readFile(new URL('./measurement-memory.mjs', import.meta.url)),
-    await readFile(new URL('./docker-test-isolation.mjs', import.meta.url)),
-    await readFile(new URL('./measurement-regression.mjs', import.meta.url)),
-    ...(profileCold ? [await readFile('apps/collab/src/testing/cold-profile.ts')] : []),
-    ...(profileWorker ? [await readFile('apps/collab/src/testing/cold-worker-profile.ts')] : []),
-  ]),
-);
+const protocolPaths = [
+  'scripts/compare-collab.mjs',
+  'scripts/measurement-power.mjs',
+  'scripts/measurement-memory.mjs',
+  'scripts/docker-test-isolation.mjs',
+  'scripts/measurement-regression.mjs',
+  'scripts/collab-comparison.mjs',
+  ...(coldLifecycle ? ['apps/collab/src/testing/cold-lifecycle.ts'] : []),
+  ...(profileCold ? ['apps/collab/src/testing/cold-profile.ts'] : []),
+  ...(profileWorker ? ['apps/collab/src/testing/cold-worker-profile.ts'] : []),
+];
+const protocolInputs = await Promise.all(protocolPaths.map((path) => readFile(path)));
+const protocolHash = hash(Buffer.concat(protocolInputs));
 let manifest;
 const manifestPath = `${directory}/manifest.json`;
 const save = () => writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
@@ -77,12 +83,20 @@ if (option('--resume')) {
     throw new Error('Commits, profiles, protocol or Node changed; start a new comparison');
 } else {
   await mkdir(directory, { recursive: true });
+  const protocolFiles = [];
+  for (let i = 0; i < protocolPaths.length; i++) {
+    const file = `protocol-${basename(protocolPaths[i])}.txt`;
+    await writeFile(`${directory}/${file}`, protocolInputs[i]);
+    protocolFiles.push({ source: protocolPaths[i], file, sha256: hash(protocolInputs[i]) });
+  }
   manifest = {
     commits,
     profileCold,
     profileWorker,
+    coldLifecycle,
     profiles,
     protocolHash,
+    protocolFiles,
     lockfileHash: hash(await readFile('pnpm-lock.yaml')),
     startedAt: new Date().toISOString(),
     host: {
@@ -106,11 +120,19 @@ if (option('--resume')) {
   if (profileCold)
     manifest.protocol +=
       ' Diagnostic cold-only instrumentation shared by both versions; not a release qualification.';
+  if (coldLifecycle)
+    manifest.protocol +=
+      ' Legacy warm/cold gates unchanged. Additional cold opens distinguish empty versus fully ready pool; all complete opens require <500 ms and max(10%, 2 ms) non-regression. Additional states never replace legacy gates. No forced GC or instrumentation.';
   const common = {};
   for (const name of ['warm.e2e.ts', 'cold.e2e.ts', 'database.ts', 'profiles.ts'])
     common[name] = git('show', `${commits.candidate}:apps/collab/src/testing/${name}`).toString();
   if (profileCold)
     common['cold-profile.ts'] = await readFile('apps/collab/src/testing/cold-profile.ts', 'utf8');
+  if (coldLifecycle)
+    common['cold-lifecycle.ts'] = await readFile(
+      'apps/collab/src/testing/cold-lifecycle.ts',
+      'utf8',
+    );
   if (profileWorker)
     common['cold-worker-profile.ts'] = await readFile(
       'apps/collab/src/testing/cold-worker-profile.ts',
@@ -236,9 +258,11 @@ export function createValidationContext() {
         const source =
           entry === 'incremental-worker'
             ? `${folder}/apps/collab/src/service/${entry}.ts`
-            : profileCold && entry === 'cold'
-              ? `${testing}/cold-profile.ts`
-              : `${testing}/${entry}.e2e.ts`;
+            : entry === 'cold-lifecycle'
+              ? `${testing}/cold-lifecycle.ts`
+              : profileCold && entry === 'cold'
+                ? `${testing}/cold-profile.ts`
+                : `${testing}/${entry}.e2e.ts`;
         const output = `${bundleRoot}/${configuration}/${entry}.mjs`;
         await build({
           entryPoints: [source],
@@ -446,45 +470,20 @@ for (let iteration = 1; iteration <= 3; iteration++) {
     }
   }
 }
-const median = (values) => [...values].sort((a, b) => a - b)[1];
-const metrics = {},
-  failures = [];
-for (const suite of suites)
-  for (const profile of Object.keys(profiles)) {
-    const key = `${suite}:${profile}`,
-      metric = {};
-    const ceiling = suite === 'cold' ? 500 : profile === 'content-1M' ? 50 : 100;
-    for (const configuration of Object.keys(commits)) {
-      const values = manifest.series
-        .filter((s) => s.suite === suite && s.configuration === configuration)
-        .map((s) => s.p95[profile]);
-      if (values.length !== 3 || values.some((v) => !Number.isFinite(v)))
-        throw new Error('Three complete series required');
-      metric[configuration] = { values, median: median(values) };
-      if (
-        suite === 'warm' && profile === 'history-1M'
-          ? median(values) > ceiling
-          : median(values) >= ceiling
-      )
-        failures.push(`${configuration} ${key}: median ${median(values)} outside ${ceiling} ms`);
-    }
-    Object.assign(metric, assessRegression(metric.reference.median, metric.candidate.median));
-    metric.pairedChangePercent = metric.candidate.values.map(
-      (value, i) => (value / metric.reference.values[i] - 1) * 100,
-    );
-    if (metric.exceedsRegression)
-      failures.push(
-        `${key}: regression ${metric.changeMs.toFixed(3)} ms > allowance ${metric.allowedRegressionMs.toFixed(3)} ms (max of 10% or 2 ms)`,
-      );
-    metrics[key] = metric;
-  }
+const { metrics, supplementaryMetrics, failures } = summarizeComparison(
+  manifest.series,
+  suites,
+  Object.keys(profiles),
+);
 const summary = {
   commits,
   profileCold,
   profileWorker,
+  coldLifecycle,
   profiles,
   protocolHash,
   metrics,
+  supplementaryMetrics,
   failures,
   failedSeries: manifest.series
     .filter((s) => s.code !== 0)
